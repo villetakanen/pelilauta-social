@@ -30,6 +30,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 | Complete | Start the development server and smoke-test it against remote Firebase. | `/` and remote-backed account, channel, site, and thread endpoints returned `200`; rendered HTML contains remote data. |
 | Complete | Review the final diff and commit each completed, independently reversible step. | No secrets, generated output, or unrelated changes are tracked. |
 | Complete | Add the root pnpm workspace manifest, lockfile, and development dispatcher. | Root `pnpm dev` launches every available app development server in parallel; a frozen root install preserves baseline versions. |
+| Complete | Configure the default Netlify site from the workspace root. | Root-default and package-directory builds publish `apps/pelilauta` while retaining imported app policies and SSR output. |
 
 ## Recovery
 
@@ -56,6 +57,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - Automated checks establish process startup, SSR, and read access. Interactive browser behavior and authenticated writes remain human acceptance gates.
 - Root `pnpm install --frozen-lockfile --ignore-scripts` succeeds across the workspace, preserving the imported Astro 5.15.4 baseline.
 - Root `pnpm dev` dispatches `apps/pelilauta`, and the resulting development server returns `200` with remote-backed content.
+- Root `pnpm build` succeeds, publishes static assets from `apps/pelilauta/dist`, and stages the Astro SSR function at root `.netlify/v1/functions/ssr`.
 
 ## Lessons
 
@@ -68,3 +70,6 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - Root scripts should filter `./apps/*` instead of naming current applications so future app additions participate without introducing orchestration tooling.
 - Pnpm workspace settings in an application manifest are ignored. Existing dependency build policy must live in the root manifest once the imported app joins the workspace.
 - Generating a new workspace lockfile from semver ranges changed the verified dependency baseline. The root lockfile must instead retain the imported resolutions and change only the importer path from `.` to `apps/pelilauta`.
+- The default Netlify site needs root-relative build and publish paths because its base directory remains the workspace root.
+- Astro's Netlify adapter writes Frameworks API output under the Astro project root. A root-default Netlify build must stage `apps/pelilauta/.netlify/v1` at root `.netlify/v1` after building.
+- Netlify's package-directory flow still runs commands relative to the root base directory, so the app-local config also needs root-relative build and publish paths.
