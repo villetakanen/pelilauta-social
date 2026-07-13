@@ -82,19 +82,5 @@
     "vitest": "^2.1.8",
     "wait-on": "^8.0.4",
     "workbox-cli": "^7.3.0"
-  },
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "@firebase/util"
-    ],
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@firebase/util",
-      "@sentry/cli",
-      "esbuild",
-      "lefthook",
-      "protobufjs",
-      "sharp"
-    ]
   }
 }

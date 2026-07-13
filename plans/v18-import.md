@@ -29,6 +29,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 | Complete | Run deterministic baseline checks. | All 456 unit tests and the production build pass. |
 | Complete | Start the development server and smoke-test it against remote Firebase. | `/` and remote-backed account, channel, site, and thread endpoints returned `200`; rendered HTML contains remote data. |
 | Complete | Review the final diff and commit each completed, independently reversible step. | No secrets, generated output, or unrelated changes are tracked. |
+| Complete | Add the root pnpm workspace manifest, lockfile, and development dispatcher. | Root `pnpm dev` launches every available app development server in parallel; a frozen root install preserves baseline versions. |
 
 ## Recovery
 
@@ -53,6 +54,8 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - `pnpm run dev --host 127.0.0.1` started Astro 5.15.4 successfully. `/` returned `200` with 176,637 bytes of rendered HTML.
 - Remote-backed `/api/accounts/active.json`, `/api/meta/channels.json`, `/api/sites`, and `/api/threads.json` requests returned `200`, and the rendered page included site and thread data.
 - Automated checks establish process startup, SSR, and read access. Interactive browser behavior and authenticated writes remain human acceptance gates.
+- Root `pnpm install --frozen-lockfile --ignore-scripts` succeeds across the workspace, preserving the imported Astro 5.15.4 baseline.
+- Root `pnpm dev` dispatches `apps/pelilauta`, and the resulting development server returns `200` with remote-backed content.
 
 ## Lessons
 
@@ -62,3 +65,6 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - Running the imported `postinstall` from a nested app made Lefthook search the repository root and generate an example root config. The generated file was removed; workspace-level hook configuration requires a separate decision.
 - `pnpm run dev -- --host 127.0.0.1` forwards a literal separator to Astro and leaves it bound to `localhost`; use `pnpm run dev --host 127.0.0.1` for an address-specific smoke probe.
 - The exact import includes a nested legacy `apps/pelilauta/AGENTS.md`. It documents the baseline application but may need replacement with scoped v21 guidance in a separate, explicit change so it does not compete with the root constitution.
+- Root scripts should filter `./apps/*` instead of naming current applications so future app additions participate without introducing orchestration tooling.
+- Pnpm workspace settings in an application manifest are ignored. Existing dependency build policy must live in the root manifest once the imported app joins the workspace.
+- Generating a new workspace lockfile from semver ranges changed the verified dependency baseline. The root lockfile must instead retain the imported resolutions and change only the importer path from `.` to `apps/pelilauta`.
