@@ -1,0 +1,53 @@
+---
+import { PageSchema } from 'src/schemas/PageSchema';
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { systemToNoun } from 'src/utils/schemaHelpers';
+import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
+import BackgroundPoster from '../../../../components/server/ui/BackgroundPoster.astro';
+import PageHistoryApp from '../../../../components/svelte/sites/history/PageHistoryApp.svelte';
+import PageWithTray from '../../../../layouts/PageWithTray.astro';
+
+interface Props {
+  siteKey: string;
+  pageKey: string;
+}
+
+const { siteKey, pageKey } = Astro.params;
+
+// Fetch site and page data from the API
+const siteResponse = await fetch(`${Astro.url.origin}/api/sites/${siteKey}`);
+const pageResponse = await fetch(
+  `${Astro.url.origin}/api/sites/${siteKey}/pages/${pageKey}.json`,
+);
+
+if (!siteResponse.ok || !pageResponse.ok) {
+  return Astro.redirect('/404');
+}
+
+const site = SiteSchema.parse(await siteResponse.json());
+const page = PageSchema.parse(await pageResponse.json());
+
+const title = `${t('site:page.history.title')} – ${site.name} / ${page.name || pageKey}`;
+const noun = systemToNoun(site.system);
+const image = site.backgroundURL || '';
+const revision = Number(
+  Astro.url.searchParams.get('revision') ||
+    (page.revisionHistory?.length || 0) + 1,
+);
+---
+<PageWithTray 
+  {title}
+  shortTitle={t('site:page.history.title')} 
+  description={site.description} 
+  noun={noun} 
+  {image}
+  noSharing={true}>
+
+    <PageHistoryApp {site} {page} {revision} client:only="svelte"/>
+
+    <SiteTray slot="app-tray" site={site}/>
+  { site.backgroundURL && 
+    <BackgroundPoster src={site.backgroundURL} slot="app-background-poster"/>
+  }
+</PageWithTray>

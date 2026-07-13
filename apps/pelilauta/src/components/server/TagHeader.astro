@@ -1,0 +1,36 @@
+---
+import type { getTagDisplayInfo } from '../../schemas/TagSynonyms';
+import { t } from '../../utils/i18n';
+
+interface Props {
+  displayName: string;
+  tagInfo: ReturnType<typeof getTagDisplayInfo>;
+}
+
+const { displayName, tagInfo } = Astro.props;
+---
+
+<header class="mb-2 pb-2 border-b">
+  <h1 class="text-h2">
+    {tagInfo?.icon && <cn-icon noun={tagInfo.icon} />}
+    {displayName}
+  </h1>
+
+  <!-- If we are on popular tag, we get a host of extra description -->
+  {tagInfo?.description && <p>{tagInfo.description}</p>}
+
+  {
+    tagInfo?.synonyms && tagInfo.synonyms.length > 0 && (
+      <>
+        <p class="text-low">
+          {t("tag:synonymsInfo", { count: tagInfo.synonyms.length })}:
+        </p>
+        <div class="flex flex-wrap">
+          {tagInfo.synonyms.map((syn) => (
+            <span class="cn-chip">#{syn}</span>
+          ))}
+        </div>
+      </>
+    )
+  }
+</header>

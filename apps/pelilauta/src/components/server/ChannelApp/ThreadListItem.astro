@@ -1,0 +1,37 @@
+---
+import type { Thread } from 'src/schemas/ThreadSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+import { t } from 'src/utils/i18n';
+import ProfileLink from '../../svelte/app/ProfileLink.svelte';
+import ThreadSubsciber from '../../svelte/threads/ThreadSubscriber.svelte';
+
+interface Props {
+  thread: Thread;
+}
+const { thread } = Astro.props;
+---
+
+<article class="cols-2" id={`thread-${thread.key}`}>
+  <div>
+    <h4 class="downscaled m-0">
+      <a href={`/threads/${thread.key}`} class="no-decoration">
+        {thread.title}
+      </a>
+    </h4>
+    <p class="text-caption m-0">
+      <ProfileLink uid={thread.author} client:only="svelte" />
+      {thread.tags?.map((tag) => <span class="pill">{tag}</span>)}
+    </p>
+    <ThreadSubsciber thread={thread} client:only="svelte" />
+  </div>
+
+  <!-- Grid col 2 -->
+  <div class="border-l pl-2">
+    <a href={`/threads/${thread.key}?jumpTo=unread#discussion`}>
+      {
+        t("threads:info.flowTime", { time: toDisplayString(thread.flowTime) })
+      }<br />
+      {t("threads:info.replies", { count: thread.replyCount || 0 })}
+    </a>
+  </div>
+</article>

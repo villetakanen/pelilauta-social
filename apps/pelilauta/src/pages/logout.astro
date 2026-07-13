@@ -1,0 +1,23 @@
+---
+// Clear any server-side session
+Astro.cookies.delete('session', { path: '/' });
+---
+
+<script>
+  // Clear client-side auth and redirect
+  import('../stores/session').then(({ logout }) => {
+    logout().then(() => {
+      window.location.href = '/';
+    });
+  });
+</script>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Signing out...</title>
+</head>
+<body>
+  <p>Signing out...</p>
+</body>
+</html>

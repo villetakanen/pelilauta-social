@@ -1,0 +1,44 @@
+---
+import { PageSchema } from 'src/schemas/PageSchema';
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import PageEditorForm from '../../../../components/svelte/page-editor/PageEditorForm.svelte';
+import EditorPage from '../../../../layouts/EditorPage.astro';
+
+interface Props {
+  siteKey: string;
+  pageKey: string;
+}
+const { siteKey, pageKey } = Astro.params;
+
+// We want to fetch the site and the page server side - if we don't have
+// the siteKey or pageKey, we should redirect to a 404 page
+if (!siteKey || !pageKey) {
+  logError('siteKey or pageKey not found', { siteKey, pageKey });
+  Astro.redirect('/404');
+}
+
+// Fetch the site and page data from the api
+const siteResponse = await fetch(`${Astro.url.origin}/api/sites/${siteKey}`);
+const pageResponse = await fetch(
+  `${Astro.url.origin}/api/sites/${siteKey}/pages/${pageKey}.json`,
+);
+
+// If any of the requests fail, we should redirect to a 404 page
+if (!siteResponse.ok || !pageResponse.ok) {
+  if (!siteResponse.ok) {
+    logError('site not found', { siteKey });
+  } else {
+    logError('page not found', { siteKey, pageKey });
+  }
+  Astro.redirect('/404');
+}
+// Any client side conversions are already done in the API,
+// so we can just parse the the entities to typed objects
+const site = SiteSchema.parse(await siteResponse.json());
+const page = PageSchema.parse(await pageResponse.json());
+---
+<EditorPage title={t('site:editor.title')}>
+  <PageEditorForm site={site} page={page} client:only="svelte"/>
+</EditorPage>

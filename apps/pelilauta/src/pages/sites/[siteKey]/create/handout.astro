@@ -1,0 +1,28 @@
+---
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import CreateHandout from '../../../../components/svelte/sites/CreateHandout.svelte';
+import ModalPage from '../../../../layouts/ModalPage.astro';
+
+const { siteKey } = Astro.params;
+
+const origin = new URL(Astro.request.url).origin;
+
+// Fetch site data from the api
+const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  // Site not found, creating a page for a non-existent site is not
+  // really possible, so redirect to 404. Maybe we should show a
+  // more user-friendly error message or redirect to a more
+  // appropriate code, like 403.
+  return Astro.redirect('/404');
+}
+const site = SiteSchema.parse({
+  ...toClientEntry(await siteResponse.json()),
+  key: siteKey,
+});
+---
+
+<ModalPage>
+  <CreateHandout site={site} client:only="svelte" />
+</ModalPage>

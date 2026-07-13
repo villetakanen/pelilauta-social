@@ -1,0 +1,38 @@
+---
+import { getSiteData } from '@firebase/server/sites';
+import { verifySession } from '@utils/server/auth/verifySession';
+import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
+import SettingsApp from '../../../components/svelte/sites/settings/SettingsApp.svelte';
+import ModalPage from '../../../layouts/ModalPage.astro';
+
+const { siteKey } = Astro.params;
+
+// Verify authentication
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+if (!siteKey) {
+  return new Response('Bad request', { status: 400 });
+}
+
+// Fetch site data server-side
+const site = await getSiteData(siteKey);
+
+if (!site) {
+  return Astro.redirect('/404');
+}
+
+// Verify site access - only owners and players can access settings
+const siteAccess = await verifySiteAccess(site, session.uid);
+if (!siteAccess.isMember) {
+  return new Response('Forbidden', { status: 403 });
+}
+---
+
+<ModalPage>
+  <SettingsApp {site} client:only="svelte" />
+</ModalPage>

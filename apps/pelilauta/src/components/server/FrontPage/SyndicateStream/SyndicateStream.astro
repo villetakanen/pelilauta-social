@@ -1,0 +1,74 @@
+---
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import SyndicatePost from './SyndicatePost.astro';
+
+type RSSItem = {
+  title: string;
+  link: string;
+  pubDate: string;
+  contentSnippet: string;
+};
+
+type FeedData = {
+  myrrys: RSSItem[];
+  roolipelitiedotus: RSSItem[];
+};
+
+let posts: RSSItem[] = [];
+let posts2: RSSItem[] = [];
+
+try {
+  // Fetch from our cached API instead of external feeds directly
+  // Use AbortController to timeout the request after 5 seconds
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+  const response = await fetch(`${Astro.url.origin}/api/rss-feeds.json`, {
+    signal: controller.signal,
+  });
+
+  clearTimeout(timeoutId);
+
+  if (response.ok) {
+    const feedData: FeedData = await response.json();
+    posts = feedData.myrrys || [];
+    posts2 = feedData.roolipelitiedotus || [];
+  }
+} catch (error) {
+  logError('SyndicateStream', 'Failed to fetch RSS feeds', error);
+}
+---
+<div class="column-s flex flex-col">
+  <div>
+    <h3 class="text-h4">
+      <cn-icon noun="myrrys-scarlet" aria-label="Myrrys.com logo"></cn-icon>
+      Myrrys.com
+    </h3>
+    <img src="/myrrys-proprietary/letl/letl_gm_screen_splash-690.webp" alt="Myrrys logo" class="w-16-9 poster" />
+    {posts.map((post:RSSItem) => <SyndicatePost post={post} /> )}
+
+    <div class="toolbar justify-center">
+      <a href="https://myrrys.com" class="text button">
+        {t('actions:readMore')}
+      </a>
+    </div>
+  </div>
+
+  <div class="flex items-center my-2">
+    <cn-icon noun="d20" large></cn-icon><br/>
+  </div>
+
+  <div>
+  <h3 class="text-h5">
+    <img src="/myrrys-proprietary/fair-use/srs-logo.webp" class="icon" alt="roolipelitiedotus.fi logo"/>
+    Roolipelitiedotus.fi</h3>
+    {posts2.map((post) => <SyndicatePost post={post} /> )}
+
+    <div class="toolbar justify-center">
+      <a href="https://roolipelitiedotus.fi" class="text button">
+        {t('actions:readMore')}
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+---
+import { t } from 'src/utils/i18n';
+
+interface Props {
+  title?: string;
+  shortTitle?: string;
+  modal?: boolean;
+  sticky?: boolean;
+  noun?: string;
+  noSharing?: boolean;
+  search?: boolean;
+  description?: string;
+}
+
+const {
+  title,
+  modal,
+  noun,
+  sticky,
+  shortTitle,
+  noSharing,
+  search,
+  description,
+} = Astro.props;
+const barTitle = title || t('app:meta.title');
+const mode = modal ? 'modal' : sticky ? 'sticky' : undefined;
+const shareButton = !noSharing;
+---
+
+<cn-app-bar title={barTitle} shortTitle={shortTitle} mode={mode} noun={noun}>
+  <slot />
+  {
+    search && (
+      <a href="/search" aria-label={t("actions:search")} class="button text">
+        <cn-icon noun="search" />
+      </a>
+    )
+  }
+  {
+    shareButton && (
+      <cn-share-button
+        url={Astro.url}
+        title={barTitle}
+        text={description}
+        label={t("actions:share")}
+      />
+    )
+  }
+</cn-app-bar>

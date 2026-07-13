@@ -1,0 +1,41 @@
+---
+import { verifySession } from '@utils/server/auth/verifySession';
+import { t } from 'src/utils/i18n';
+import LibraryTray from '../../components/server/library/LibraryTray.astro';
+import BackgroundPoster from '../../components/server/ui/BackgroundPoster.astro';
+import LibrarySitesFabs from '../../components/svelte/site-library/LibrarySitesFabs.svelte';
+import UserSitesList from '../../components/svelte/site-library/UserSitesList.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+// Server-side authentication check
+const session = await verifySession(Astro);
+
+if (!session?.uid) {
+  // Redirect unauthenticated users to public sites list
+  return Astro.redirect('/sites');
+}
+
+// Set cache control headers for authenticated content
+Astro.response.headers.set(
+  'Cache-Control',
+  'private, no-cache, no-store, must-revalidate',
+);
+
+const title = `${t('app:shortname')} – ${t('library:title')}`;
+const shortTitle = t('library:title');
+const description = t('library:description');
+---
+
+<PageWithTray title={title} description={description} shortTitle={shortTitle}>
+  <LibraryTray slot="app-tray" />
+  <UserSitesList client:only="svelte" />
+  <LibrarySitesFabs slot="fab-tray" client:only="svelte"/>
+  <BackgroundPoster
+      slot="app-background-poster"
+      src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp"
+      md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2-960.webp"
+    />
+    <p class="text-caption text-center" style="opacity:0.44" slot="app-footer-credits">
+      Taustakuva © Juno Viinikka (<a href="https://linktr.ee/junowski">https://linktr.ee/junowski</a>)
+    </p>
+</PageWithTray>

@@ -1,0 +1,116 @@
+---
+import type { Channel } from 'src/schemas/ChannelSchema';
+import { parseThread, type Thread } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
+import { logDebug, logError } from 'src/utils/logHelpers';
+import ChannelInfoSection from './ChannelInfoSection.astro';
+import PaginationToolbar from './PagingToolbar.astro';
+import ThreadListItem from './ThreadListItem.astro';
+
+/**
+ * Channel application component that displays a paginated list of threads
+ * for a specific channel with server-side rendering.
+ */
+export interface Props {
+  /** Channel data to display */
+  channel: Channel;
+  /** Starting position for pagination (1-based) */
+  startAt: number;
+}
+
+const { channel, startAt } = Astro.props;
+const origin = Astro.url.origin;
+
+let threads: Thread[] = [];
+let lastThreadFlowTime = 0;
+let hasNextPage = false;
+let hasError = false;
+
+// Set appropriate cache headers
+if (startAt === 1) {
+  Astro.response.headers.set(
+    'Cache-Control',
+    'public, max-age=300, s-maxage=600',
+  );
+} else {
+  Astro.response.headers.set(
+    'Cache-Control',
+    'public, max-age=60, s-maxage=120',
+  );
+}
+
+try {
+  const queryString =
+    startAt > 1
+      ? `${origin}/api/threads.json?channel=${channel.slug}&limit=10&startAt=${startAt}`
+      : `${origin}/api/threads.json?channel=${channel.slug}&limit=10`;
+
+  logDebug('ChannelApp', 'Fetching threads:', queryString);
+
+  const threadListResponse = await fetch(queryString);
+
+  if (!threadListResponse.ok) {
+    throw new Error(`Failed to fetch threads: ${threadListResponse.status}`);
+  }
+
+  const threadsJSON = await threadListResponse.json();
+
+  if (!Array.isArray(threadsJSON)) {
+    throw new Error('Invalid response format: expected array');
+  }
+
+  threads = threadsJSON.map((thread: Thread) =>
+    parseThread(thread, thread.key),
+  );
+  lastThreadFlowTime = threads[threads.length - 1]?.flowTime || 0;
+  hasNextPage = threads.length === 10;
+
+  logDebug('ChannelApp', 'Loaded threads:', threads.length);
+} catch (error) {
+  logError('ChannelApp', 'Failed to load threads:', error);
+  hasError = true;
+}
+---
+
+{!hasError && (
+<section class="content-listing surface">
+  <header>
+    <nav>
+      <nav aria-label="Breadcrumb">
+          <ol class="toolbar list-none">
+            <li>
+              <a href="/channels/" class="text-link">{t('threads:forum.title')}</a>
+            </li>
+            <li>
+              <cn-icon noun="chevron-left" small aria-hidden="true"></cn-icon>
+            </li>
+            <li aria-current="page" class="grow">
+              <span>{channel.name}</span>
+            </li>
+          </ol>
+        </nav>
+    </nav>
+    <PaginationToolbar
+        channel={channel}
+        lastThreadFlowTime={lastThreadFlowTime}
+        hasNextPage={hasNextPage}
+      />
+  </header>
+
+  <div class="listing-items">
+    {threads.map((thread: Thread) => <ThreadListItem thread={thread} />)}
+  </div>
+
+  <aside>
+    <ChannelInfoSection channel={channel} startAt={startAt} />
+  </aside>
+
+  <footer>
+    <PaginationToolbar
+        channel={channel}
+        lastThreadFlowTime={lastThreadFlowTime}
+        hasNextPage={hasNextPage}
+      />
+  </footer>
+</section>
+)}

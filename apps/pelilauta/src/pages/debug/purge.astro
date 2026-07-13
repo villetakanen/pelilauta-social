@@ -1,0 +1,23 @@
+---
+import SessionPurge from '../../components/svelte/debug/SessionPurge.svelte';
+import ModalPage from '../../layouts/ModalPage.astro';
+
+// No server-side session check needed as this page is for clearing session
+---
+
+<ModalPage title="Debug: Session Purge">
+  <main>
+    <div class="content-columns">
+      <div class="column-l">
+        <h1>Session Purge</h1>
+        <p>Debug tool for clearing client-side state.</p>
+      </div>
+    </div>
+
+    <div class="content-columns">
+      <div class="column-l">
+        <SessionPurge client:only="svelte" />
+      </div>
+    </div>
+  </main>
+</ModalPage>

@@ -1,0 +1,39 @@
+---
+import { type Site, SiteSchema } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import CreatePageForm from '../../../../components/svelte/sites/CreatePageForm.svelte';
+// This page is modal, and thus does not contain
+// SEO metadata or a header.
+import ModalPage from '../../../../layouts/ModalPage.astro';
+
+const { siteKey } = Astro.params;
+
+const origin = new URL(Astro.request.url).origin;
+let site: Site | undefined;
+// Fetch site data from the api
+try {
+  const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+
+  if (siteResponse.status === 404) {
+    return Astro.redirect('/404');
+  }
+
+  if (!siteResponse.ok) {
+    logError('CreatePageRoute', `Failed to fetch site: ${siteResponse.status}`);
+    return Astro.redirect('/500');
+  }
+
+  // The site is converted to a client side entry at the BFF,
+  // no need to do it here, parsing is sufficient
+  site = SiteSchema.parse(await siteResponse.json());
+} catch (error) {
+  logError('CreatePageRoute', 'Failed to load site data:', error);
+  return Astro.redirect('/500');
+}
+
+const name = Astro.url.searchParams.get('name') || '';
+---
+<ModalPage title={t('site:create.page.title', { name: site?.name || 'Unknown Site' })}>
+  {site && <CreatePageForm site={site} name={name} client:only="svelte"/> }
+</ModalPage>

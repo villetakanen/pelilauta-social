@@ -1,0 +1,80 @@
+---
+import { t } from 'src/utils/i18n';
+// filepath: /Users/ville.takanen/dev/pelilauta-16/src/pages/offline.astro
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
+
+const title = t('app:offline.title');
+const description = t('app:offline.description');
+---
+
+<!doctype html>
+<html lang="en">
+  <BaseHead title={title} description={description} />
+  <body>
+    <main  style="min-widht: 100vw; min-height: 100vh;">
+      <div class="content-columns">
+      <section class="column-l">
+        <div class="flex items-center">
+          <cn-icon noun="fox" large></cn-icon>
+        </div>
+        
+        <h1 class="text-title mb-2">{title}</h1>
+        
+        <p class="text-body mb-3">
+          {t('app:offline.message') || 'Looks like you\'ve lost your connection to the realm! Don\'t worry, your adventure continues once you\'re back online.'}
+        </p>
+        
+        <div class="flex flex-row gap-2 justify-center mb-4">
+          <button 
+            onclick="window.location.reload()" 
+          >
+            {t('app:offline.tryAgain')}
+          </button>
+          
+          <button 
+            onclick="window.history.back()" 
+          >
+            {t('actions:cancel') || 'Go Back'}
+          </button>
+        </div>
+      </section>
+      </div>
+    </main>
+
+    <script is:inline>
+      // Auto-reload when connection returns
+      function checkConnectivity() {
+        if (navigator.onLine) {
+          window.location.reload();
+        }
+      }
+
+      window.addEventListener('online', checkConnectivity);
+
+      // Periodic connectivity check with favicon
+      setInterval(() => {
+        fetch('/favicon.svg', { 
+          method: 'HEAD',
+          cache: 'no-cache' 
+        })
+        .then(() => {
+          if (navigator.onLine) {
+            window.location.reload();
+          }
+        })
+        .catch(() => {
+          // Still offline
+        });
+      }, 10000);
+
+      // Update page title based on connection status
+      function updateConnectionStatus() {
+        const isOnline = navigator.onLine;
+        document.title = isOnline ? 'Back Online - Pelilauta 16' : 'Offline - Pelilauta 16';
+      }
+
+      window.addEventListener('online', updateConnectionStatus);
+      window.addEventListener('offline', updateConnectionStatus);
+    </script>
+  </body>
+</html>

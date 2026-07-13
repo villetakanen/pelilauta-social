@@ -1,0 +1,16 @@
+---
+/*
+ * This is a placeholder component for a server:defer component.
+ *
+ * It's used to display the loader animation while the actual component is being loaded.
+ */
+interface Props {
+  class?: string; // for settting the column-type if needed, eg. 'column-l, column-s or full-width'
+  noun?: string; // the icon to show
+}
+const { class: columnClass, noun: customNoun } = Astro.props;
+const noun = customNoun || 'fox';
+---
+<section class={`flex flex-col items-center ${columnClass}`}>
+  <cn-loader {noun} x-large/>
+</section>

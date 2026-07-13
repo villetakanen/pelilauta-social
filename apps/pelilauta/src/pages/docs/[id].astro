@@ -1,0 +1,27 @@
+---
+import { getEntry, render } from 'astro:content';
+import DocsTray from '../../components/server/docs/DocsTray.astro';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+// 2. For your template, you can get the entry directly from the prop
+const { id } = Astro.params;
+const post = await getEntry('docs', `${id}`);
+
+if (!post) {
+  return {
+    status: 404,
+    error: new Error('Post not found'),
+  };
+}
+
+const { Content } = await render(post);
+---
+<PageWithTray>
+  <DocsTray slot="app-tray" />
+  <div class="content-columns">
+    <article class="column-l">
+      <h1>{post.data.name}</h1>
+      <Content/>
+    </article>
+  </div>
+</PageWithTray>

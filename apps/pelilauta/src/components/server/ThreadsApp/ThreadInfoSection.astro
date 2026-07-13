@@ -1,0 +1,88 @@
+---
+import { isAdmin } from '@firebase/server/admin';
+import { verifySession } from '@utils/server/auth/verifySession';
+import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
+import type { Thread } from 'src/schemas/ThreadSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+import { t } from 'src/utils/i18n';
+import ProfileLink from '../../svelte/app/ProfileLink.svelte';
+import ReactionButton from '../../svelte/app/ReactionButton.svelte';
+import BlueskyCard from '../../svelte/threads/BlueskyCard.svelte';
+import ThreadInfoActions from '../../svelte/threads/ThreadInfoActions.svelte';
+import BlueskyPostCard from '../app/BlueskyPostCard.astro';
+import EntryTagsWithLabelsSection from '../app/EntryTagsWithLabelsSection.astro';
+
+interface Props {
+  thread: Thread;
+}
+
+const { thread } = Astro.props;
+
+const author = `${thread?.owners[0] || ''}`;
+const channel = `${thread?.channel || '-'}`;
+
+// Check if current user is author or admin
+const session = await verifySession(Astro);
+const currentUid = session?.uid || '';
+const userIsAdmin = currentUid ? await isAdmin(currentUid) : false;
+const isAuthorOrAdmin = thread.owners.includes(currentUid) || userIsAdmin;
+
+// Check if Bluesky feature is enabled
+const bskyFeatureEnabled = import.meta.env.FEATURE_BSKY === 'true';
+
+// Fetch Bluesky post data if we have a post URI
+let blueskyPost = null;
+if (thread.blueskyPostUri) {
+  blueskyPost = await fetchBskyPost(thread.blueskyPostUri);
+}
+---
+
+<section class="column-s flex flex-col">
+  <cn-card title={t("threads:info.title")} noun="discussion">
+    <p>
+      {toDisplayString(thread.flowTime)}
+    </p>
+    <p class="mb-0">
+      <ProfileLink uid={author} client:only="svelte" />
+      {t("threads:info.inTopic")}
+      <a href={`/channels/${channel}`} class="link">
+        {channel.charAt(0).toUpperCase() + channel.slice(1)}
+      </a>
+      <div slot="actions" class="toolbar items-center">
+        <div class="flex align-center">
+          <cn-icon noun="send" small></cn-icon>
+          <span class="text-caption decoration-none">
+            {thread.replyCount}
+          </span>
+        </div>
+        <ReactionButton
+          target="thread"
+          key={thread.key}
+          title={thread.title}
+          client:only="svelte"
+        />
+      </div>
+    </p>
+  </cn-card>
+
+  <EntryTagsWithLabelsSection thread={thread} />
+
+  {
+    blueskyPost && thread.blueskyPostUrl ? (
+      <BlueskyPostCard
+        post={blueskyPost}
+        postUrl={thread.blueskyPostUrl}
+        server:defer
+      />
+    ) : (
+      <BlueskyCard
+        thread={thread}
+        isAuthorOrAdmin={isAuthorOrAdmin}
+        bskyFeatureEnabled={bskyFeatureEnabled}
+        client:only="svelte"
+      />
+    )
+  }
+
+  <ThreadInfoActions {thread} client:only="svelte" />
+</section>

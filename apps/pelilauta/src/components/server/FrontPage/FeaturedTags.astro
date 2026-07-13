@@ -1,0 +1,40 @@
+---
+import { t } from '@utils/i18n';
+
+const featuredTags = [
+  {
+    tag: 'd&d',
+    displayName: 'D&D',
+    icon: 'dd5',
+  },
+  {
+    tag: 'pathfinder',
+    displayName: 'Pathfinder',
+    icon: 'pathfinder',
+  },
+  {
+    tag: encodeURI('Legendoja & lohikäärmeitä'),
+    displayName: 'L&L',
+    icon: 'll-ampersand',
+  },
+  {
+    tag: 'pbta',
+    displayName: 'PbtA',
+    icon: 'pbta-logo',
+  },
+];
+---
+
+<section class="mt-2 pt-2 border-t">
+  <h2 class="text-h5">{t('frontPage:featuredTags.title')}</h2>
+  <p class="text-caption">{t('frontPage:featuredTags.description')}</p>
+  
+  <div class="flex flex-wrap">
+    {featuredTags.map((item) => (
+      <a href={`/tags/${encodeURIComponent(item.tag)}`} class="cn-chip flex-none">
+        <cn-icon noun={item.icon} xsmall />
+        <span>{item.displayName}</span>
+      </a>
+    ))}
+  </div>
+</section>

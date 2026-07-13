@@ -1,0 +1,22 @@
+---
+import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import UserAdmin from '../../components/svelte/admin/UserAdmin.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+// This feature is hidden in the production env with a feature flag
+// SECRET_FEATURE_FLAG_Admin_tools
+
+const visible = import.meta.env.SECRET_FEATURE_FLAG_Admin_tools === 'true';
+
+if (!visible) {
+  // Redirect to the home page if the feature is disabled
+  return Astro.redirect('/');
+}
+---
+<PageWithTray title="Admin" description="Admin tools for pelilauta">
+  { visible ? (
+    <AdminTray client:only="svelte" showLocalTools={visible} slot="app-tray" /> 
+  ): <div>Feature Disabled</div> }
+
+{ visible ? ( <UserAdmin client:only="svelte"/> ) : <div>Feature Disabled</div> }
+</PageWithTray>

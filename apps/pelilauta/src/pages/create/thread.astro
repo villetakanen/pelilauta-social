@@ -1,0 +1,53 @@
+---
+import { type Channel, ChannelSchema } from 'src/schemas/ChannelSchema';
+import { t } from 'src/utils/i18n';
+import { verifySession } from 'src/utils/server/auth/verifySession';
+import ThreadEditorForm from '../../components/svelte/thread-editor/ThreadEditorForm.svelte';
+import EditorPage from '../../layouts/EditorPage.astro';
+
+// Ensure we have a logged-in user before proceeding
+const session = await verifySession(Astro);
+
+if (!session) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+const title = `${t('app:shortname')} – ${t('actions:create.thread')}`;
+const shortTitle = t('actions:create.thread');
+const channel = Astro.url.searchParams.get('channel') || undefined;
+
+// Fetch channels from the server
+const channelsResponse = await fetch(
+  `${Astro.url.origin}/api/meta/channels.json`,
+);
+
+if (!channelsResponse.ok) {
+  console.error(
+    'Failed to fetch channels:',
+    channelsResponse.status,
+    channelsResponse.statusText,
+  );
+  return Astro.redirect('/channels?error=channels-unavailable');
+}
+
+const channelsData = await channelsResponse.json();
+
+// Validate that we received an array
+if (!Array.isArray(channelsData)) {
+  console.error('Channels API returned non-array data:', channelsData);
+  return Astro.redirect('/channels?error=channels-invalid');
+}
+
+const channels = channelsData.map((channel: Partial<Channel>) =>
+  ChannelSchema.parse(channel),
+);
+---
+
+<EditorPage title={title} shortTitle={shortTitle}>
+  <ThreadEditorForm
+    topic={channel}
+    channels={channels}
+    client:only="svelte"/>
+</EditorPage>

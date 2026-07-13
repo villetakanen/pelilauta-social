@@ -1,0 +1,27 @@
+---
+import ChannelsApp from '@components/server/channels/ChannelsApp.astro';
+import { t } from 'src/utils/i18n';
+import BackgroundPoster from '../../components/server/ui/BackgroundPoster.astro';
+import FrontpageFabs from '../../components/svelte/frontpage/FrontpageFabs.svelte';
+import Page from '../../layouts/Page.astro';
+
+const title = t('seo:channels.title');
+const description = t('seo:channels.description');
+const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp`;
+---
+<Page title={title} description={description} image={image}>
+  <!-- Direct SSR rendering - no defer needed with aggregated endpoint -->
+  <ChannelsApp />
+
+  <FrontpageFabs client:only="svelte" slot="fab-tray"/>
+
+  <BackgroundPoster
+      slot="app-background-poster"
+      src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp"
+      md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2-960.webp"
+    />
+  
+  <p class="text-caption text-center" style="opacity:0.44" slot="app-footer-credits">
+    Taustakuva © Juno Viinikka (<a href="https://linktr.ee/junowski">https://linktr.ee/junowski</a>)
+  </p>
+</Page>

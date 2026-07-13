@@ -1,0 +1,91 @@
+---
+import type { Channel } from 'src/schemas/ChannelSchema';
+import { parseThread, type Thread } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
+import { logDebug, logError } from 'src/utils/logHelpers';
+import ChannelInfoSection from './ChannelInfoSection.astro';
+import ChannelSearchBox from './ChannelSearchBox.astro';
+import ThreadListItem from './ThreadListItem.astro';
+
+export interface Props {
+  channel: Channel;
+}
+
+const { channel } = Astro.props;
+const origin = Astro.url.origin;
+
+let threads: Thread[] = [];
+let lastThreadFlowTime = 0;
+let hasError = false;
+
+// Always fetch first 11 threads (no pagination)
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, max-age=300, s-maxage=600',
+);
+
+try {
+  const queryString = `${origin}/api/threads.json?channel=${channel.slug}&limit=11`;
+  logDebug('SimplifiedChannelApp', 'Fetching threads:', queryString);
+
+  const threadListResponse = await fetch(queryString);
+  if (!threadListResponse.ok) {
+    throw new Error(`Failed to fetch threads: ${threadListResponse.status}`);
+  }
+
+  const threadsJSON = await threadListResponse.json();
+  threads = threadsJSON.map((thread: Thread) =>
+    parseThread(thread, thread.key),
+  );
+  lastThreadFlowTime = threads[threads.length - 1]?.flowTime || 0;
+
+  logDebug('SimplifiedChannelApp', 'Loaded threads:', threads.length);
+} catch (error) {
+  logError('SimplifiedChannelApp', 'Failed to load threads:', error);
+  hasError = true;
+}
+---
+
+{!hasError && (
+<section class="content-listing surface">
+  <header>
+    <nav aria-label="Breadcrumb">
+      <ol class="toolbar list-none">
+        <li>
+          <a href="/" class="text-link">{t('app:shortname')}</a>
+        </li>
+        <li>
+          <cn-icon noun="chevron-right" small aria-hidden="true"></cn-icon>
+        </li>
+        <li>
+          <a href="/channels/" class="text-link">{t('threads:forum.title')}</a>
+        </li>
+        <li>
+          <cn-icon noun="chevron-right" small aria-hidden="true"></cn-icon>
+        </li>
+        <li aria-current="page" class="grow">
+          <span>{channel.name}</span>
+        </li>
+      </ol>
+    </nav>
+    
+    <!-- Add search box to header -->
+    <ChannelSearchBox channel={channel} />
+  </header>
+
+  <div class="listing-items">
+    {threads.map((thread: Thread) => <ThreadListItem thread={thread} />)}
+    
+    <!-- Client-side load more functionality -->
+    <div id="load-more-container" 
+         data-channel={channel.slug} 
+         data-last-flow-time={lastThreadFlowTime}
+         data-has-more={threads.length === 11}>
+    </div>
+  </div>
+
+  <aside>
+    <ChannelInfoSection channel={channel} />
+  </aside>
+</section>
+)}

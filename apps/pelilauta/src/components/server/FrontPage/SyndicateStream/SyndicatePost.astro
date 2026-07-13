@@ -1,0 +1,36 @@
+---
+import { t } from 'src/utils/i18n';
+
+/* Example post in XML
+<item>
+<title>Kultainen lohikäärme Jukka Sorsalle</title>
+<link>https://www.myrrys.com/blog/24-08-02-kultainen-lohik%C3%A4%C3%A4rme-sorsa/</link>
+<guid isPermaLink="true">https://www.myrrys.com/blog/24-08-02-kultainen-lohik%C3%A4%C3%A4rme-sorsa/</guid>
+<description>Kultainen lohikäärme palkinnon voitti yksi L&L:n pääsuunnittelijoista, Jukka Sorsa. Hän otti palkinnon vastaan todeten “ei ole kovin pahasti kihahatanut hattuun, että kaikillahan meillä on kaksi henkivartijaa mukana,” kahden peikon turvatessa patsaan vastaanottoa Ropeconin Gaalassa.</description>
+<pubDate>Fri, 02 Aug 2024 11:50:00 GMT</pubDate>
+<image>
+<url>/blog-images/kultainen-lohikaarme-sorsa.webp</url>
+<title>Kultainen lohikäärme Jukka Sorsalle</title>
+<link>/blog/24-08-02-kultainen-lohikäärme-sorsa/</link>
+</image>
+</item>
+*/
+
+type Props = {
+  post: {
+    title: string;
+    contentSnippet: string;
+    link: string;
+  };
+};
+
+const { post } = Astro.props;
+---
+<section class="border-t pt-1 mb-2">
+  <h4 class="text-h5"><a href={post.link} class="hoverable" style="text-decoration: none;">{post.title}</a></h4>
+  <p class="text-small">{post.contentSnippet}</p>
+  <p class="text-caption text-right">
+    <a href={post.link}>
+      {t('actions:readMore')}
+    </a></p>
+</section>

@@ -1,0 +1,44 @@
+---
+import { parsePage } from 'src/schemas/PageSchema';
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
+import DeletePageView from '../../../../components/svelte/sites/DeletePageView.svelte';
+import ModalPage from '../../../../layouts/ModalPage.astro';
+
+interface Props {
+  siteKey: string;
+  pageKey: string;
+}
+
+const { siteKey, pageKey } = Astro.params;
+const origin = new URL(Astro.request.url).origin;
+
+// Fetch site data from the api
+const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+// Fetch page data from the api
+const pageResponse = await fetch(
+  `${origin}/api/sites/${siteKey}/pages/${pageKey}.json`,
+);
+
+if (siteResponse.status === 404 || pageResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+
+// Get the site and page data
+const site = SiteSchema.parse({
+  ...toClientEntry(await siteResponse.json()),
+  key: siteKey,
+});
+const page = parsePage(
+  toClientEntry(await pageResponse.json()),
+  pageKey,
+  siteKey,
+);
+
+const title = `${t('actions:delete')} – ${page.name}`;
+---
+
+<ModalPage title={title}>
+  <DeletePageView {site} {page} client:only="svelte" />
+</ModalPage>

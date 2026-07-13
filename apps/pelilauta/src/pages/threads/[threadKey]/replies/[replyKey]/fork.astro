@@ -1,0 +1,40 @@
+---
+import { ChannelsSchema } from 'src/schemas/ChannelSchema';
+import { ReplySchema } from 'src/schemas/ReplySchema';
+import { ThreadSchema } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
+import ForkThreadApp from '../../../../../components/svelte/thread-editor/ForkThreadApp.svelte';
+import ModalPage from '../../../../../layouts/ModalPage.astro';
+
+// We want to fetch the thread and the reply server side, and pass those to
+// the client form. All authz for ui will happen on the client side, and for
+// write the authz lives in the Firestore rules.
+
+const { threadKey, replyKey } = Astro.params;
+const origin = new URL(Astro.request.url).origin;
+
+if (!threadKey || !replyKey) {
+  Astro.redirect('/404');
+}
+
+// Fetch the thread, the reply, and channnels server side
+const threadResponse = await fetch(`${origin}/api/threads/${threadKey}.json`);
+const replyResponse = await fetch(
+  `${origin}/api/replies/${threadKey}/${replyKey}.json`,
+);
+const channelsResponse = await fetch(`${origin}/api/meta/channels.json`);
+
+// If any of the requests fail, we should redirect to a 404 page
+if (!threadResponse.ok || !replyResponse.ok || !channelsResponse.ok) {
+  //logDebug('thread or reply not found', { threadKey, replyKey });
+  Astro.redirect('/404');
+}
+
+// Parse the responses using the schemas (these come from the API, so this is a bit of extra)
+const thread = ThreadSchema.parse(await threadResponse.json());
+const reply = ReplySchema.parse(await replyResponse.json());
+const channels = ChannelsSchema.parse(await channelsResponse.json());
+---
+<ModalPage title={t('threads:fork.title')}>
+  <ForkThreadApp {thread} {reply} {channels} client:only="svelte"/>
+</ModalPage>

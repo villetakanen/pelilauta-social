@@ -1,0 +1,39 @@
+---
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import AssetEditor from '../../../../components/server/SiteApp/AssetEditor.astro';
+import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
+import PageWithTray from '../../../../layouts/PageWithTray.astro';
+
+const { siteKey, assetName } = Astro.params;
+
+if (!siteKey) {
+  throw new Error('No site key provided');
+}
+
+// Fetch site data from the api
+const origin = new URL(Astro.request.url).origin;
+const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+
+// Parse the site data and create the site object
+const siteData = await siteResponse.json();
+const site = SiteSchema.parse({
+  ...toClientEntry(siteData),
+  key: siteKey,
+});
+const title = `${site.name} – ${assetName}`;
+---
+
+<PageWithTray
+  title={title}
+  description={site.description}
+  image={site.backgroundURL}
+  noSharing={true}
+>
+  <SiteTray slot="app-tray" site={site} />
+
+  <AssetEditor site={site} assetName={`${assetName}`} />
+</PageWithTray>

@@ -1,0 +1,21 @@
+---
+import type { Handout } from 'src/schemas/HandoutSchema';
+import type { Site } from 'src/schemas/SiteSchema';
+import HandoutMeta from '../../svelte/sites/handouts/HandoutMeta.svelte';
+
+interface Props {
+  handout: Handout;
+  site: Site;
+}
+
+const { handout, site } = Astro.props as Props;
+---
+<div class="content-columns">
+  <section class="column-l elevation-1 p-2">
+    <h1>{handout.title}</h1>
+    <div set:html={handout.htmlContent}></div>
+  </section>
+  <div class="column-s">
+    <HandoutMeta handout={handout} site={site} client:only="svelte"/>
+  </div>
+</div>

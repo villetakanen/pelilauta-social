@@ -1,0 +1,12 @@
+---
+import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import SocialMediaPoster from '../../components/svelte/admin/SocialMediaPoster.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+const showLocalTools =
+  import.meta.env.SECRET_FEATURE_FLAG_Admin_tools === 'true';
+---
+<PageWithTray title="Social media poster" description="Tool for sending messages to social media">
+  <AdminTray client:only="svelte" {showLocalTools} slot="app-tray"/> 
+  <SocialMediaPoster client:only="svelte"/>
+</PageWithTray>

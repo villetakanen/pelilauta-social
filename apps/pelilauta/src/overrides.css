@@ -1,0 +1,179 @@
+body {
+  --cn-story-clock-border-color: var(--color-border);
+  --cn-story-clock-tick-color: var(--color-text);
+  --cn-story-clock-slice-color: var(--color-surface-1);
+}
+main > footer {
+  text-shadow: 1px 1px 12px var(--color-background);
+}
+main > footer cn-avatar {
+  text-shadow: none;
+}
+main > footer a {
+  color: light-dark(var(--chroma-surface-90), var(--chroma-surface-10));
+}
+main > footer h4 {
+  margin-bottom: var(--cn-grid);
+}
+
+/* Font performance: Add font-display swap to Lato font faces from lato-font npm package */
+@font-face {
+  font-family: Lato;
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-hairline/lato-hairline.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-hairline/lato-hairline.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-hairline-italic/lato-hairline-italic.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-hairline-italic/lato-hairline-italic.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-thin/lato-thin.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-thin/lato-thin.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-thin-italic/lato-thin-italic.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-thin-italic/lato-thin-italic.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-light/lato-light.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-light/lato-light.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-light-italic/lato-light-italic.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-light-italic/lato-light-italic.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-black/lato-black.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-black/lato-black.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: Lato;
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility;
+  src:
+    url("../node_modules/lato-font/fonts/lato-black-italic/lato-black-italic.woff2")
+    format("woff2"),
+    url("../node_modules/lato-font/fonts/lato-black-italic/lato-black-italic.woff")
+    format("woff");
+}
+@media (max-width: 620px) {
+  nav#rail.sm-hidden {
+    display: none;
+  }
+}

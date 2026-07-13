@@ -1,0 +1,23 @@
+---
+export const prerender = true;
+
+import { getCollection } from 'astro:content';
+import { t } from 'src/utils/i18n';
+
+const allComponents = await getCollection('docs');
+---
+
+<h3 class="cn-tray-title">{t('app:docs.title')}</h3>
+<ul>
+  {
+    allComponents.sort(
+      (a, b) => a.id.localeCompare(b.id)
+    ).map(p => (
+      <li>
+        <a href={'/docs/' + p.id}>
+          {p.data.noun && <cn-icon noun={p.data.noun} small></cn-icon>}
+          {p.data.shortname || p.data.name}</a>
+      </li>
+    ))
+  }
+</ul>

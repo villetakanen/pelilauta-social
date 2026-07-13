@@ -1,0 +1,15 @@
+---
+import type { Site } from 'src/schemas/SiteSchema';
+import LatestChanges from './LatestChanges.astro';
+
+interface Props {
+  site: Site;
+}
+const { site } = Astro.props as Props;
+const withPosterCSS = site.posterURL ? 'surface p-2' : 'p-1';
+---
+{site.useRecentChanges && (
+<section class={`column-s ${withPosterCSS}`}>
+  <LatestChanges site={site} />
+</section>
+)}

@@ -1,0 +1,48 @@
+---
+import FeaturedTags from '@components/server/FrontPage/FeaturedTags.astro';
+import DeferredSection from '../components/server/app/DeferredSection.astro';
+import SyndicateStream from '../components/server/FrontPage/SyndicateStream/SyndicateStream.astro';
+import TopSitesStream from '../components/server/FrontPage/TopSitesStream.astro';
+import TopThreadsStream from '../components/server/FrontPage/TopThreadsStream.astro';
+import BackgroundPoster from '../components/server/ui/BackgroundPoster.astro';
+import FrontpageFabs from '../components/svelte/frontpage/FrontpageFabs.svelte';
+import Page from '../layouts/Page.astro';
+import { t } from '../utils/i18n';
+
+const title = t('seo:frontPage.title');
+const description = t('seo:frontPage.description');
+const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-1.webp`;
+---
+<Page
+  search 
+  {title}
+  {description}
+  {image}>
+    <div class="content-columns">
+      
+      <section class="column-m">
+        <TopThreadsStream/>
+        <FeaturedTags />
+      </section>
+
+      
+      
+      
+      <SyndicateStream server:defer>
+        <DeferredSection class="column-s" slot="fallback" />
+      </SyndicateStream>
+      <section class="column-s">
+        <TopSitesStream />
+      </section>
+
+    </div>
+    <FrontpageFabs client:only="svelte" slot="fab-tray"/>
+    <BackgroundPoster
+      slot="app-background-poster"
+      src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-1.webp"
+      md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-1-960.webp"
+    />
+    <p class="text-caption text-center" style="opacity:0.44" slot="app-footer-credits">
+      Taustakuva © Juno Viinikka (<a href="https://linktr.ee/junowski">https://linktr.ee/junowski</a>)
+    </p>
+</Page>

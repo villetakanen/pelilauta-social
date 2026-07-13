@@ -1,0 +1,33 @@
+---
+import type { Thread } from 'src/schemas/ThreadSchema';
+import { markdownToHTML } from 'src/utils/marked';
+import QuoteBubble from './QuoteBubble.astro';
+
+interface Props {
+  thread: Thread;
+}
+const { thread } = Astro.props;
+const htmlContent = await markdownToHTML(
+  thread.markdownContent || thread.content || '',
+);
+
+const figures =
+  thread.images?.map((image) => ({
+    src: image.url,
+    caption: image.alt,
+  })) || [];
+---
+<article class="column-l">
+  <h1 class="downscaled">
+    {thread.title}
+  </h1>
+  { thread.quoteRef && (
+    <QuoteBubble 
+      threadKey={thread.quoteRef.split('/')[0]}
+      replyKey={thread.quoteRef.split('/')[1]}
+    />
+  )}
+  { figures.length > 0 && <cn-lightbox images={JSON.stringify(figures)}></cn-lightbox> }
+  <section set:html={htmlContent} />
+  
+</article>

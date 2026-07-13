@@ -1,0 +1,32 @@
+---
+const isWorkboxEnabled = import.meta.env.PUBLIC_FEATURE_FLAG_Workbox === 'true';
+---
+
+{isWorkboxEnabled && (
+  <script is:inline>
+    addEventListener('load', async () => {
+      if (!('serviceWorker' in navigator)) return;
+
+      try {
+        const registration = await navigator.serviceWorker.register('/service-worker.js');
+        console.log('Service Worker registered successfully');
+        
+        // Handle updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (newWorker?.state === 'installed' && navigator.serviceWorker.controller) {
+            console.log('New version available');
+          }
+        });
+      } catch (error) {
+        console.error('Service Worker registration failed:', error);
+      }
+    });
+  </script>
+)}
+
+{!isWorkboxEnabled && (
+  <script is:inline>
+    console.warn('Service Worker is disabled: PUBLIC_FEATURE_FLAG_Workbox is not set to true');
+  </script>
+)}

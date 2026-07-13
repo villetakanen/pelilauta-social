@@ -1,0 +1,23 @@
+---
+import BetaHeader from '@components/server/app/BetaHeader.astro';
+import { t } from 'src/utils/i18n';
+import LibraryTray from '../../components/server/library/LibraryTray.astro';
+// import BackgroundPoster from '../../components/server/ui/BackgroundPoster.astro';
+import CharacterLibraryApp from '../../components/svelte/characters/library/CharacterLibraryApp.svelte';
+import CharacterLibraryFabs from '../../components/svelte/characters/library/CharacterLibraryFabs.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+const title = `${t('app:shortname')} – ${t('library:characters.title')}`;
+const shortTitle = t('library:characters.title');
+const description = t('library:characters.description');
+---
+
+<PageWithTray title={title} description={description} shortTitle={shortTitle} noSharing={true}>
+  <LibraryTray slot="app-tray" />
+
+  <BetaHeader />
+
+  <CharacterLibraryApp client:only="svelte" />
+  <CharacterLibraryFabs client:only="svelte" slot="fab-tray"/>
+
+</PageWithTray>

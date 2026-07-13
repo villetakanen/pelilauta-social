@@ -1,0 +1,19 @@
+---
+import type { Channel } from 'src/schemas/ChannelSchema';
+import { t } from 'src/utils/i18n';
+
+interface Props {
+  channel: Channel;
+  lastThreadFlowTime: number;
+  hasNextPage: boolean;
+}
+const { channel, lastThreadFlowTime, hasNextPage } = Astro.props;
+---
+<div class="toolbar elevation-1 px-2">
+  <p>
+    <a href={`/channels/${channel.slug}/1`}>{t('threads:channel.toFirstPage')}</a>
+  </p>
+  {hasNextPage && <p>
+    <a href={`/channels/${channel.slug}/${lastThreadFlowTime}`}>{t('threads:channel.nextPage')}</a>
+  </p>}
+</div>

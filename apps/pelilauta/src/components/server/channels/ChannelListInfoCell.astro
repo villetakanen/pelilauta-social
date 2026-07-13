@@ -1,0 +1,32 @@
+---
+import ProfileLink from '@svelte/app/ProfileLink.svelte';
+import type { ChannelWithStats } from 'src/schemas/ChannelSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+import { t } from 'src/utils/i18n';
+
+export interface Props {
+  channelWithStats: ChannelWithStats;
+}
+const { channelWithStats } = Astro.props;
+const { stats } = channelWithStats;
+const { latestThread, latestUpdatedThread } = stats;
+---
+{latestThread && (
+  <p class="text-caption m-0 text-low border-b">{t('threads:channel.latest.createdAt')}</p>
+  <p class="text-small m-0">
+    <a href={`/threads/${latestThread.key}`}>{latestThread.title}</a><br/>
+  </p>
+  <p class="text-caption m-0">
+    {toDisplayString(latestThread.createdAt)} - <ProfileLink uid={latestThread.owners?.[0] || ''} client:only="svelte"/>
+  </p>
+)}
+{latestUpdatedThread && (
+  <p class="text-caption mb-0 mt-2 border-b">{t('threads:channel.latest.flowTime')}</p>
+  <p class="text-small m-0">
+    <a href={`/threads/${latestUpdatedThread.key}`}>{latestUpdatedThread.title}</a><br/>
+    {toDisplayString(latestUpdatedThread.updatedAt)} - <ProfileLink uid={latestUpdatedThread.owners?.[0] || ''} client:only="svelte"/>
+  </p>
+)}
+{(!latestUpdatedThread || latestUpdatedThread.key === latestThread?.key) && (
+  <p class="text-caption text-low m-0"><i>{t('threads:channel.latest.latestIsNewest')}</i></p>
+)}

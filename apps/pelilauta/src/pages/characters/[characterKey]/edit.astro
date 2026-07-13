@@ -1,0 +1,16 @@
+---
+import { t } from 'src/utils/i18n';
+import CharacterEditorApp from '../../../components/svelte/characters/CharacterEditorApp/CharacterEditorApp.svelte';
+import EditorPage from '../../../layouts/EditorPage.astro';
+
+const { characterKey } = Astro.params;
+const title = `${t('app:shortname')} – ${t('characters:edit.title')}`;
+const shortTitle = t('characters:edit.title');
+---
+<EditorPage
+  title={title} 
+  shortTitle={shortTitle}>
+
+  <CharacterEditorApp {characterKey} client:only="svelte"/>
+
+</EditorPage>

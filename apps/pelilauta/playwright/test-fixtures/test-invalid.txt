@@ -1,0 +1,11 @@
+E2E Test Text File
+==================
+
+This is a test text file used for validating file type restrictions.
+It should NOT be uploadable to threads (images only).
+It MAY be uploadable to sites (if text files are allowed).
+
+Test Details:
+- Created: 2025-10-28T11:34:13.669Z
+- Purpose: E2E file validation testing
+- Expected: Should be rejected by thread image uploads

@@ -1,0 +1,39 @@
+---
+import { verifySession } from '@utils/server/auth/verifySession';
+import type { Channel } from 'src/schemas/ChannelSchema';
+
+interface Props {
+  channel: Channel;
+}
+
+const { channel } = Astro.props;
+
+// Check if user is authenticated for search access
+const session = await verifySession(Astro);
+const isAuthenticated = !!session?.uid;
+---
+
+<div class="my-2">
+  {isAuthenticated ? (
+    <div class="flex items-center bg-surface border border-color p-2 radius-m">
+      <input 
+        type="search" 
+        placeholder={`Search in ${channel.name}...`}
+        class="flex-1 border-none bg-transparent text-body"
+        data-channel={channel.slug}
+      />
+      <cn-icon noun="search" small></cn-icon>
+    </div>
+    
+    <!-- This will be enhanced with Svelte for Algolia integration -->
+    <div id="channel-search-results" class="hidden absolute top-full left-0 right-0 bg-surface border border-color radius-m max-h-96 overflow-y-auto z-10"></div>
+  ) : (
+    <div class="flex items-center gap-2 p-2 bg-surface-variant border border-color radius-m opacity-70">
+      <div class="flex items-center gap-1 text-caption text-secondary m-0">
+        <cn-icon noun="search" small></cn-icon>
+        <span>Search requires login</span>
+      </div>
+      <a href="/login" class="text-caption text-primary no-underline hover:underline">Sign in to search</a>
+    </div>
+  )}
+</div>

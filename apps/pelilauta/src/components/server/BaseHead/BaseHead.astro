@@ -1,0 +1,108 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { t } from 'src/utils/i18n';
+import ServiceWorker from './ServiceWorker.astro';
+import '@11thdeg/cyan-css';
+import '../../../overrides.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noSharing?: boolean;
+}
+
+const { title, description, image, noSharing = false } = Astro.props;
+const metaDescription = description || t('app:meta.description');
+const metaTitle = title ? title : t('app:meta.title');
+const canonicalURL = Astro.url;
+const ogImage = image || `${Astro.url.origin}favicons/fox-ico-512.png`;
+---
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{metaTitle}</title>
+
+  <!-- Preconnect to external domains -->
+
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
+
+  <!-- SEO -->
+  <link rel="canonical" href={canonicalURL} />
+  <meta name="description" content={metaDescription} />
+  <meta name="generator" content={Astro.generator} />
+  {noSharing && <meta name="robots" content="noindex, nofollow" />}
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#00304f" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Pelilauta 16" />
+
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicons/fox-ico-192.png" />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="/favicons/fox-ico-192.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="512x512"
+    href="/favicons/fox-ico-512.png"
+  />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={metaTitle} />
+  <meta property="og:description" content={metaDescription} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Pelilauta 16" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={metaTitle} />
+  <meta name="twitter:description" content={metaDescription} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- Astro Transitions -->
+  <ClientRouter />
+
+  <!-- Service Worker -->
+  <ServiceWorker />
+
+  <!-- Cyan Components -->
+  <script>
+    import "@11thdeg/cyan-lit";
+    import "@11thdeg/cn-d20-ability-score";
+  </script>
+
+  <!-- Client-side Sentry initialization -->
+  <script>
+    import { initSentry } from "@utils/client/sentry";
+    import { initIDBErrorHandler } from "@utils/client/idbErrorHandler";
+
+    // Initialize Sentry when the page loads
+    document.addEventListener("DOMContentLoaded", () => {
+      initSentry();
+      initIDBErrorHandler();
+    });
+
+    // Also initialize on Astro view transitions
+    document.addEventListener("astro:page-load", () => {
+      initSentry();
+      initIDBErrorHandler();
+    });
+  </script>
+
+  <!-- 100% privacy-first analytics -->
+  <script is:inline async src="https://scripts.simpleanalyticscdn.com/latest.js"
+  ></script>
+</head>

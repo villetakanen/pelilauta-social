@@ -1,0 +1,24 @@
+---
+import { verifySession } from '@utils/server/auth/verifySession';
+import { t } from 'src/utils/i18n';
+import SettingsAppT from '../components/svelte/settings/SettingsApp.svelte';
+import ModalPage from '../layouts/ModalPage.astro';
+
+/* A server side rendered settings page: requires authentication */
+const session = await verifySession(Astro);
+
+if (!session?.uid) {
+  // Redirect unauthenticated users to login
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+const title = `${t('app:shortname')} - ${t('app:settings.title')}`;
+const description = t('settings:description');
+const debug = import.meta.env.SECRET_FEATURE_FLAG_DEBUG === 'true';
+---
+<ModalPage title={title} description={description}>
+  <SettingsAppT client:only="svelte"/>
+  <div>{debug && <span>DEBUG MODE ACTIVE</span>}</div>
+</ModalPage>

@@ -1,0 +1,27 @@
+---
+import { t } from 'src/utils/i18n';
+import Page from '../layouts/Page.astro';
+---
+<Page>
+  <div class="content-columns">
+    <article>
+      <div class="flex justify-center">
+        <cn-icon noun="monsters" xlarge />
+      </div>
+      <h1>{t("app:404.title")}</h1>
+      <p class="subtitle">{t("app:404.subtitle")}</p>
+      <p>{t("app:404.info")}</p>
+      <ul>
+        <li>
+            <a href="/">{t("app:404.go-home")}</a>
+        </li>
+        <li>
+            <a href="/sites">{t("app:404.go-sites")}</a>
+        </li>
+        <li>
+            <a href="/threads">{t("app:404.go-threads")}</a>
+        </li>
+      </ul>
+    </article>
+  </div>  
+</Page>

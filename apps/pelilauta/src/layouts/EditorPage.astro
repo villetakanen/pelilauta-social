@@ -1,0 +1,37 @@
+---
+import AppBar from '../components/server/AppBar.astro';
+import AppRail from '../components/server/AppRail.astro';
+import Snackbar from '../components/server/app/Snackbar.astro';
+import EditorHead from '../components/server/BaseHead/EditorHead.astro';
+
+// NOTE: EditorPage intentionally does not include AuthManager.
+// This layout is only used for server-side authenticated pages where
+// authentication is verified during server-side rendering.
+// Client-side auth state management is not needed for these pages.
+
+const { title, shortTitle, description } = Astro.props;
+---
+
+<html lang="fi">
+  <EditorHead title={title} description={description} />
+  <body>
+    <!-- Modal top bar (with back-link) -->
+    <AppBar title={title} shortTitle={shortTitle} modal>
+      <slot name="app-bar" />
+    </AppBar>
+
+    <!-- We will not show the botton bar on mobile for editor views -->
+
+    <!-- AppRail is always shown on desktop, it does not take that much space -->
+    <AppRail hideOnMobile />
+
+    <!-- The main application content area -->
+    <main>
+      <!-- The main content area is expected to contain a form with .content-editor class -->
+      <slot />
+    </main>
+
+    <!-- Editor does not have the tailer - so we need to import snackbar here -->
+    <Snackbar />
+  </body>
+</html>

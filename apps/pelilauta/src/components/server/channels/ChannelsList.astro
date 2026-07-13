@@ -1,0 +1,43 @@
+---
+import type { ChannelWithStats } from 'src/schemas/ChannelSchema';
+import ChannelInfoRow from './ChannelInfoRow.astro';
+
+/**
+ * Takes in ChannelWithStats[] and prints a section for each category
+ * */
+interface Props {
+  channelsWithStats: ChannelWithStats[];
+}
+
+const { channelsWithStats } = Astro.props;
+
+function categories(): string[] {
+  return Array.from(
+    new Set(
+      channelsWithStats.map(
+        (channelWithStats: ChannelWithStats) =>
+          channelWithStats.category || 'Pelilauta',
+      ),
+    ),
+  ) as string[];
+}
+
+function inCategory(cat: string) {
+  return channelsWithStats.filter(
+    (channelWithStats: ChannelWithStats) =>
+      (channelWithStats.category || 'Pelilauta') === cat,
+  );
+}
+---
+{ categories().map((cat: string) => (
+  <section class="content-listing">
+    <header class="border-b">
+      <h2 class="text-h4 m-0">{cat}</h2>
+    </header>
+    <div class="listing-items">
+      { inCategory(cat).map((channelWithStats: ChannelWithStats) => (
+        <ChannelInfoRow channelWithStats={channelWithStats} />
+      )) }
+    </div>
+  </section>
+))}

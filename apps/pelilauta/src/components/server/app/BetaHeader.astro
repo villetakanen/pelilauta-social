@@ -1,0 +1,19 @@
+---
+import { t } from '@utils/i18n';
+---
+<div class="beta-header flex items-center mb-2">
+  <h3 class="m-0 px-1" style="flex-grow:0">
+    <i>{t('app:beta.title')}</i>
+  </h3>
+  <p class="m-0" style="flex-grow:1">{t('app:beta.description')}</p>
+</div>
+
+<style>
+/* This is a local component, intentionally not using CDS container classes */
+  .beta-header {
+    background-color: var(--color-secondary);
+    color: var(--color-on-secondary);
+    padding: var(--cn-grid);
+    width: 100cqw;
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import { t } from '@utils/i18n';
+import { logError } from '@utils/logHelpers';
+import {
+  ChannelsWithStatsSchema,
+  type ChannelWithStats,
+} from 'src/schemas/ChannelSchema';
+import ChannelsList from './ChannelsList.astro';
+
+let channelsWithStats: ChannelWithStats[] = [];
+
+try {
+  const origin = new URL(Astro.request.url).origin;
+  const response = await fetch(`${origin}/api/channels-with-stats.json`);
+
+  if (response.ok) {
+    const data = await response.json();
+    channelsWithStats = ChannelsWithStatsSchema.parse(data);
+  } else {
+    logError(
+      'ChannelsApp',
+      `Failed to fetch channels with stats, status: ${response.status}`,
+    );
+  }
+} catch (error) {
+  logError('ChannelsApp', 'Error fetching channels with stats:', error);
+}
+---
+<h1 class="sr-only">{t('threads:forum.title')}</h1>
+<ChannelsList channelsWithStats={channelsWithStats} />

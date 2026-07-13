@@ -1,0 +1,35 @@
+---
+import type { PageRef, Site } from 'src/schemas/SiteSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+import { t } from 'src/utils/i18n';
+import ProfileLink from '../../svelte/app/ProfileLink.svelte';
+
+/**
+ * The Table of contents section used in the SiteApp -microfrontend.
+ *
+ * @param {Site} site - The site this tray is for.
+ *
+ * The base-tray visible to anonymoous users is loaded SSR, and all
+ * _authz_ requiring components are islands on the client side
+ */
+
+interface Props {
+  site: Site;
+}
+const { site } = Astro.props;
+const changes: Array<PageRef> = [...(site.pageRefs || [])];
+changes.sort((a, b) => (b.flowTime || 0) - (a.flowTime || 0));
+if (changes.length > 7) {
+  changes.length = 7;
+}
+---
+<article>
+  <h3 class="downscaled mb-1">{t('site:latestChanges.title')}</h3>
+    {changes.map((page) => (<p class="text-small">
+      <a href={`/sites/${site.key}/${page.key}`} class="link">{page.name}</a><br>
+      <span class="text-caption">
+        {toDisplayString(page.flowTime)}
+        <ProfileLink uid={page.author} client:only="svelte"/>
+      </span>
+    </p>))}
+</article>

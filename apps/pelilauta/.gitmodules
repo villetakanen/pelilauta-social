@@ -1,0 +1,3 @@
+[submodule "public/myrrys-proprietary"]
+	path = public/myrrys-proprietary
+	url = https://github.com/villetakanen/myrrys-proprietary.git

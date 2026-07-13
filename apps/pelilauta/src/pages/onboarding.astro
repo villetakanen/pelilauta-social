@@ -1,0 +1,19 @@
+--- 
+import { getEntry, render } from 'astro:content';
+import EulaForm from '../components/svelte/eula/EulaForm.svelte';
+import ModalPage from '../layouts/ModalPage.astro';
+
+const eulaDoc = await getEntry('docs', '03-eula');
+if (!eulaDoc) {
+  throw new Error('EULA document not found');
+}
+const { Content } = await render(eulaDoc);
+---
+
+<ModalPage title="Welcome to Pelilauta">
+  <div class="p-4">
+    <EulaForm client:only="svelte">
+      <Content />
+    </EulaForm>
+  </div>
+</ModalPage>

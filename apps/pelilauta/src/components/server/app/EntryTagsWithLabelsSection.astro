@@ -1,0 +1,34 @@
+---
+import type { Thread } from '@schemas/ThreadSchema';
+import { isLabel } from '@utils/shared/threadTagHelpers';
+
+export interface Props {
+  thread: Thread;
+}
+const { thread } = Astro.props;
+
+// Combine tags and labels, using getAllThreadTags helper
+const { getAllThreadTags } = await import('@utils/shared/threadTagHelpers');
+const allTags = getAllThreadTags(thread);
+---
+
+{
+  allTags && allTags.length > 0 && (
+    <div class="flex flex-wrap items-start mt-2">
+      {allTags.map((tag) => {
+        const label = isLabel(thread, tag);
+        return (
+          <a
+            href={`/tags/${tag}`}
+            class={`cn-chip ${label ? "secondary" : ""}`}
+            style="flex:none"
+            title={label ? "label" : undefined}
+          >
+            {label && <cn-icon noun="label-tag" small />}
+            {tag}
+          </a>
+        );
+      })}
+    </div>
+  )
+}

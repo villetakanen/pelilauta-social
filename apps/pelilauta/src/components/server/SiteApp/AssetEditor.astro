@@ -1,0 +1,30 @@
+---
+import { parseAsset } from 'src/schemas/AssetSchema';
+import type { Site } from 'src/schemas/SiteSchema';
+import AssetEditorComp from '../../svelte/sites/assets/AssetEditor.svelte';
+
+interface Props {
+  site: Site;
+  assetName: string;
+}
+
+const { site, assetName } = Astro.props as Props;
+const assetData = site.assets?.find((asset) => asset.name === assetName);
+
+if (!assetData) {
+  throw new Error(`Asset ${assetName} not found`);
+}
+
+const asset = parseAsset(assetData);
+---
+<div class="content-columns">
+  <article class="column-l elevation-1 p-2">
+    <figure>
+        <img src={asset.url} alt={asset.name} />
+        <figcaption>{asset.name}</figcaption>
+    </figure>
+  </article>
+  <article class="column-s">
+    <AssetEditorComp {site} {asset} client:only="svelte" />
+  </article>
+</div>

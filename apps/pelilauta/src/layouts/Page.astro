@@ -1,0 +1,52 @@
+---
+import AuthManager from '@components/svelte/AuthManager.svelte';
+import AppBar from '../components/server/AppBar.astro';
+import AppRail from '../components/server/AppRail.astro';
+import AppFooter from '../components/server/app/AppFooter.astro';
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
+import BaseTail from '../components/server/BaseTail.astro';
+
+// NOTE: Page layout includes AuthManager for client-side authentication.
+// This layout is used for public pages that need to detect user auth state
+// and handle onboarding flows (EULA acceptance, account creation).
+
+type Props = {
+  title?: string;
+  shortTitle?: string;
+  description?: string;
+  image?: string;
+  noSharing?: boolean;
+  search?: boolean;
+};
+
+const { title, description, image, shortTitle, noSharing, search } =
+  Astro.props;
+---
+
+<html lang="fi">
+  <BaseHead {title} {description} {image} {noSharing} />
+  <body>
+    <AppBar
+      title={title}
+      shortTitle={shortTitle}
+      description={description}
+      search={search}
+      noSharing={noSharing}
+    >
+      <slot name="app-bar" />
+    </AppBar>
+    <AppRail />
+    <main>
+      <slot />
+      <AppFooter>
+        <slot name="app-footer-credits" slot="app-footer-credits" />
+      </AppFooter>
+    </main>
+    <nav id="fab-tray">
+      <slot name="fab-tray" />
+    </nav>
+    <slot name="app-background-poster" />
+    <AuthManager client:only="svelte" />
+    <BaseTail />
+  </body>
+</html>

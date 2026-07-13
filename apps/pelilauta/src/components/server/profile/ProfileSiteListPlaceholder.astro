@@ -1,0 +1,24 @@
+---
+import { createSite, type Site } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import SiteCard from '../ui/SiteCard.astro';
+
+// A placeholder when loading user's sites.
+
+const loadingSite: Site = createSite({
+  key: 'loading',
+  name: 'Loading...',
+  system: 'mekanismi',
+});
+---
+
+<section class="column-s">
+  <h2>{t("profile:siteList.title")}</h2>
+  <div class="flex flex-col">
+    <SiteCard site={loadingSite}>
+      <div class="flex justify-center">
+        <cn-loader></cn-loader>
+      </div>
+    </SiteCard>
+  </div>
+</section>

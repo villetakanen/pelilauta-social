@@ -1,0 +1,23 @@
+---
+import type { Page } from '@schemas/PageSchema';
+import type { Site } from '@schemas/SiteSchema';
+import PageArticleFooter from './PageArticleFooter.astro';
+
+interface Props {
+  page: Page;
+  site: Site;
+}
+const { site, page } = Astro.props as Props;
+---
+
+<article class="surface column-l">
+
+  <div 
+    style="min-height: 70dvh" 
+    set:html={page.htmlContent}>
+  </div>
+
+  <PageArticleFooter page={page} site={site}/>
+</article>
+
+ 

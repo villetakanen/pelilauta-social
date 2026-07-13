@@ -1,0 +1,15 @@
+---
+import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import SnackbarTestApp from '../../components/svelte/admin/SnackbarTestApp.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+const showLocalTools =
+  import.meta.env.SECRET_FEATURE_FLAG_Admin_tools === 'true';
+---
+<PageWithTray 
+  title="Snackbar Test Utility" 
+  description="Test snackbar notifications" 
+  noSharing>
+  <AdminTray client:only="svelte" {showLocalTools} slot="app-tray"/> 
+  <SnackbarTestApp client:only="svelte" />
+</PageWithTray>

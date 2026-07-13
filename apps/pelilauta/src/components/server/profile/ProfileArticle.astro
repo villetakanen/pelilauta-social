@@ -1,0 +1,10 @@
+---
+import type { Profile } from 'src/schemas/ProfileSchema';
+import ProfileSection from '../../shared/ProfileSection.svelte';
+
+interface Props {
+  profile: Profile;
+}
+const { profile } = Astro.props;
+---
+<ProfileSection {profile} />

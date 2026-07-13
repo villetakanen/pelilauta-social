@@ -1,0 +1,21 @@
+---
+import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+// This feature is hidden in the production env with a feature flag
+// SECRET_FEATURE_FLAG_Admin_tools
+
+const showLocalTools =
+  import.meta.env.SECRET_FEATURE_FLAG_Admin_tools === 'true';
+---
+<PageWithTray title="Admin" description="Admin tools for pelilauta">
+  <AdminTray client:only="svelte" {showLocalTools} slot="app-tray"/> 
+  <div class="content-columns">
+    <div class="flex align-center items-center justify-center flex-col">
+      <cn-icon noun="admin" xlarge></cn-icon>
+    { showLocalTools ? (
+      <p class="text-center">ADMIN TOOLS ACTIVE</p>
+    ) : <p class="text-center">MOD TOOLS ACTIVE</p> }
+    </div>
+  </div>
+</PageWithTray>

@@ -1,0 +1,25 @@
+---
+import { isAdmin } from '@firebase/server/admin';
+import { verifySession } from '@utils/server/auth/verifySession';
+import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import ChannelsAdmin from '../../components/svelte/admin/channels/ChannelsAdmin.svelte';
+import PageWithTray from '../../layouts/PageWithTray.astro';
+
+// Server-side authentication check
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+// Verify admin privileges
+const userIsAdmin = await isAdmin(session.uid);
+if (!userIsAdmin) {
+  return Astro.redirect('/403');
+}
+---
+<PageWithTray title="Forum Administration" description="Comprehensive forum channel management tools" noSharing>
+  <AdminTray client:only="svelte" slot="app-tray" /> 
+  <ChannelsAdmin client:only="svelte" />
+</PageWithTray>
