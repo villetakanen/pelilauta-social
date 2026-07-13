@@ -31,7 +31,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 | Complete | Review the final diff and commit each completed, independently reversible step. | No secrets, generated output, or unrelated changes are tracked. |
 | Complete | Add the root pnpm workspace manifest, lockfile, and development dispatcher. | Root `pnpm dev` launches every available app development server in parallel; a frozen root install preserves baseline versions. |
 | Complete | Configure the default Netlify site from the workspace root. | Root-default and package-directory builds publish `apps/pelilauta` while retaining imported app policies and SSR output. |
-| In progress | Expose the imported proprietary-assets gitlink to root Git and Netlify. | A fresh recursive checkout initializes `apps/pelilauta/public/myrrys-proprietary` at its pinned commit. |
+| Complete | Expose the imported proprietary-assets gitlink to root Git and Netlify. | A fresh recursive checkout initializes `apps/pelilauta/public/myrrys-proprietary` at its pinned commit. |
 
 ## Recovery
 
@@ -59,6 +59,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - Root `pnpm install --frozen-lockfile --ignore-scripts` succeeds across the workspace, preserving the imported Astro 5.15.4 baseline.
 - Root `pnpm dev` dispatches `apps/pelilauta`, and the resulting development server returns `200` with remote-backed content.
 - Root `pnpm build` succeeds, publishes static assets from `apps/pelilauta/dist`, and stages the Astro SSR function at root `.netlify/v1/functions/ssr`.
+- A fresh `git clone --recurse-submodules` registers the relocated proprietary-assets submodule and checks out pinned commit `b34789ab5beaf5d91c29870d51e6ff692a8b0675`.
 
 ## Lessons
 
