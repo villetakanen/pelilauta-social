@@ -1,0 +1,3 @@
+[submodule "apps/pelilauta/public/myrrys-proprietary"]
+	path = apps/pelilauta/public/myrrys-proprietary
+	url = https://github.com/villetakanen/myrrys-proprietary.git

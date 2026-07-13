@@ -31,6 +31,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 | Complete | Review the final diff and commit each completed, independently reversible step. | No secrets, generated output, or unrelated changes are tracked. |
 | Complete | Add the root pnpm workspace manifest, lockfile, and development dispatcher. | Root `pnpm dev` launches every available app development server in parallel; a frozen root install preserves baseline versions. |
 | Complete | Configure the default Netlify site from the workspace root. | Root-default and package-directory builds publish `apps/pelilauta` while retaining imported app policies and SSR output. |
+| In progress | Expose the imported proprietary-assets gitlink to root Git and Netlify. | A fresh recursive checkout initializes `apps/pelilauta/public/myrrys-proprietary` at its pinned commit. |
 
 ## Recovery
 
@@ -73,3 +74,4 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - The default Netlify site needs root-relative build and publish paths because its base directory remains the workspace root.
 - Astro's Netlify adapter writes Frameworks API output under the Astro project root. A root-default Netlify build must stage `apps/pelilauta/.netlify/v1` at root `.netlify/v1` after building.
 - Netlify's package-directory flow still runs commands relative to the root base directory, so the app-local config also needs root-relative build and publish paths.
+- Git reads submodule mappings only from the repository-root `.gitmodules`; the imported app's nested mapping does not configure its relocated gitlink.
