@@ -1,0 +1,49 @@
+---
+import { t } from '@utils/i18n';
+import type { BskyPost } from '@utils/server/bsky/fetchBskyPost';
+
+interface Props {
+  post: BskyPost;
+  postUrl: string;
+}
+
+const { post, postUrl } = Astro.props;
+---
+
+<article>
+  <div class="toolbar items-center">
+    <h4 class="text-h5">
+      {t("threads:info.blueskyTitle")}
+    </h4>
+    <a
+      href={postUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="button text"
+      aria-label={t("threads:info.viewOnBluesky")}
+    >
+      <cn-icon noun="bsky" small></cn-icon>
+    </a>
+  </div>
+
+  <div class="flex flex-row items-center">
+    <div class="flex flex-row items-start border-t p-1">
+      <cn-icon noun="love" small></cn-icon>
+      <span>
+        {post.likeCount}
+      </span>
+    </div>
+    <div class="flex flex-row items-start border-t p-1">
+      <cn-icon noun="discussion" small></cn-icon>
+      <span>
+        {post.replyCount}
+      </span>
+    </div>
+    <div class="flex flex-row items-start border-t p-1">
+      <cn-icon noun="send" small></cn-icon>
+      <span>
+        {post.repostCount}
+      </span>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,29 @@
+---
+import type { Channel } from 'src/schemas/ChannelSchema';
+import { t } from 'src/utils/i18n';
+
+interface Props {
+  channel: Channel;
+  startAt?: number;
+}
+
+const { channel, startAt } = Astro.props;
+
+const pages = Math.ceil((channel.threadCount || 0) / 10);
+const currentPage = startAt
+  ? startAt < 1
+    ? 1
+    : startAt > pages
+      ? pages
+      : startAt
+  : 1;
+---
+<article class="border surface">
+  <cn-icon noun={channel.icon} large />
+  <h2 class="downscaled m-0 full-width">{channel.name}</h2>
+  <p class="my-0 full-width">
+    {t('threads:channel.threadCount', {count: channel.threadCount})}<br />
+    {startAt && t('threads:channel.pageCount', {count: pages, current: currentPage})}
+  </p>
+  {channel.description && <p class="text-small">{channel.description}</p>}
+</article>

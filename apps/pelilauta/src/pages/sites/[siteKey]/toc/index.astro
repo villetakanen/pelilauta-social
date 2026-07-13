@@ -1,0 +1,43 @@
+---
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
+import SiteTocApp from '../../../../components/server/SiteApp/SiteTocApp.astro';
+import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
+import BackgroundPoster from '../../../../components/server/ui/BackgroundPoster.astro';
+import PageWithTray from '../../../../layouts/PageWithTray.astro';
+
+const { siteKey } = Astro.params;
+
+if (!siteKey) {
+  throw new Error('No site key provided');
+}
+
+const origin = new URL(Astro.request.url).origin;
+
+// Fetch site data from the api
+const siteData = await fetch(`${origin}/api/sites/${siteKey}`).then((res) =>
+  res.json(),
+);
+const site = SiteSchema.parse({
+  ...toClientEntry(siteData),
+  key: siteKey,
+});
+const title = `${site.name} – ${t('site:toc.title')}`;
+const image = site.avatarURL || site.posterURL || site.backgroundURL;
+---
+
+<PageWithTray
+  title={title}
+  description={site.description}
+  image={image}
+  noSharing={site.hidden}
+>
+  <SiteTray slot="app-tray" site={site} />
+  <SiteTocApp site={site} />
+  {
+    site.backgroundURL && (
+      <BackgroundPoster src={site.backgroundURL} slot="app-background-poster" />
+    )
+  }
+</PageWithTray>

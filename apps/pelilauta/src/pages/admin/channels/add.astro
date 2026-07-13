@@ -1,0 +1,43 @@
+---
+import { isAdmin } from '@firebase/server/admin';
+import { verifySession } from '@utils/server/auth/verifySession';
+import AddChannelForm from '../../../components/svelte/admin/channels/AddChannelForm.svelte';
+import ModalPage from '../../../layouts/ModalPage.astro';
+import { t } from '../../../utils/i18n';
+
+// Server-side authentication check
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+// Verify admin privileges
+const userIsAdmin = await isAdmin(session.uid);
+if (!userIsAdmin) {
+  return Astro.redirect('/403');
+}
+---
+
+---
+<ModalPage title={t('admin:channels.add.title')} shortTitle={t('admin:channels.add.shortTitle')}>
+  <section class="content-columns">
+    <article class="column-l">
+
+      <header class="mb-2">
+        <h1>{t('admin:channels.add.title')}</h1>
+        <p class="text-small text-low">
+          {t('admin:channels.add.description')}
+        </p>
+      </header>
+      
+      <AddChannelForm client:only="svelte" />
+      
+      <aside class="surface mt-2">
+        <h3>{t('admin:channels.add.guidelines.title')}</h3>
+        <p>{t('admin:channels.add.guidelines.items.unique')}</p>
+      </aside>
+    </article>
+  </section>
+</ModalPage>

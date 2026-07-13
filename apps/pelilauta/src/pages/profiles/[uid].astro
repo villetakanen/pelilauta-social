@@ -1,0 +1,39 @@
+---
+import { t } from '@utils/i18n';
+import { createPlainSnippet } from '@utils/snippetHelpers';
+import { parseProfile } from 'src/schemas/ProfileSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import ProfileApp from '../../components/server/profile/ProfileApp.astro';
+import Page from '../../layouts/Page.astro';
+
+const { uid } = Astro.params;
+
+if (!uid) {
+  return Astro.redirect('/404');
+}
+
+// Fetch Profile data from the api
+const origin = new URL(Astro.request.url).origin;
+const profileRequest = await fetch(`${origin}/api/profiles/${uid}.json`);
+
+if (profileRequest.status === 404) {
+  return Astro.redirect('/404');
+}
+
+const profileResponse = await profileRequest.json();
+const profile = parseProfile(toClientEntry(profileResponse), uid);
+
+// Create SEO description: use bio if available, otherwise use i18n fallback
+const description = profile.bio?.trim()
+  ? createPlainSnippet(profile.bio, 160)
+  : t('seo:profile.fallback', { nick: profile.nick });
+
+// Set a 1h cache time for profiles
+Astro.response.headers.set(
+  'Cache-Control',
+  's-maxage=3600, stale-while-revalidate',
+);
+---
+<Page title={profile.nick} description={description}>
+  <ProfileApp profile={profile} />
+</Page>

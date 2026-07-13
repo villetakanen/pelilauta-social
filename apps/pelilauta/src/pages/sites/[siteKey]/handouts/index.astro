@@ -1,0 +1,63 @@
+---
+import { getSiteData } from '@firebase/server/sites';
+import { verifySession } from '@utils/server/auth/verifySession';
+import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
+import { t } from 'src/utils/i18n';
+import { logWarn } from 'src/utils/logHelpers';
+import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
+import BackgroundPoster from '../../../../components/server/ui/BackgroundPoster.astro';
+import HandoutsApp from '../../../../components/svelte/sites/handouts/HandoutsApp.svelte';
+import HandoutsFabs from '../../../../components/svelte/sites/handouts/HandoutsFabs.svelte';
+import SiteStoreInitializer from '../../../../components/svelte/sites/SiteStoreInitializer.svelte';
+import PageWithTray from '../../../../layouts/PageWithTray.astro';
+
+const { siteKey } = Astro.params;
+
+// Verify authentication first
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+if (!siteKey) {
+  logWarn('HandoutsPage', 'No siteKey provided in params');
+  return Astro.redirect('/404');
+}
+
+// Fetch site data server-side
+const site = await getSiteData(siteKey);
+
+if (!site) {
+  logWarn('HandoutsPage', `Site not found: ${siteKey}`);
+  return Astro.redirect('/404');
+}
+
+// Verify site access
+const siteAccess = await verifySiteAccess(site, session.uid);
+if (!siteAccess.isMember) {
+  return new Response('Forbidden', { status: 403 });
+}
+const title = `${site.name} – ${t('site:handouts.title')}`;
+const description = site.description || t('site:handouts.description');
+const image = site.avatarURL || site.posterURL || site.backgroundURL;
+---
+
+<PageWithTray
+  title={title}
+  description={description}
+  image={image}
+  noun="books"
+  shortTitle={site.name}
+  noSharing={true}
+>
+  <SiteStoreInitializer site={site} client:only="svelte" />
+  <HandoutsApp client:only="svelte"/>
+  <HandoutsFabs site={site} client:only="svelte" slot="fab-tray"/>
+  <SiteTray site={site} slot="app-tray"/>
+  { site.backgroundURL && 
+    <BackgroundPoster src={site.backgroundURL} slot="app-background-poster"/>
+  }
+
+</PageWithTray>

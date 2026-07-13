@@ -1,0 +1,20 @@
+---
+/**
+ * A very simple wrapper for a background poster. Supports srcset for
+ * different screen sizes of the Cyan Design System: sm, md, [lg+].
+ */
+type Props = {
+  src: string;
+  md?: string;
+  // sm?: string
+};
+
+const { src, md } = Astro.props;
+---
+<div id="cn-background-poster" class="sm-hidden">
+  <picture>
+    { md && <source media="(min-width:960px)" srcset={md} /> }
+    { /* sm && <source media="(min-width:620px)" srcset={sm} /> // .sm-hidden  */ }
+    <img src={src} alt="" loading="lazy">
+  </picture>
+</div> 

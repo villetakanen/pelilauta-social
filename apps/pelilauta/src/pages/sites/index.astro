@@ -1,0 +1,23 @@
+---
+import { t } from 'src/utils/i18n';
+import PublicSiteListing from '../../components/server/SiteList/PublicSiteListing.astro';
+import Page from '../../layouts/Page.astro';
+
+// SEO metadata from PBI-026
+const title = t('seo:sites.title');
+const description = t('seo:sites.description');
+
+// Set cache headers for better performance (PBI-026)
+// Sites index page - moderate caching (5min browser, 10min CDN)
+// This reduces Firestore reads by ~95% while keeping content reasonably fresh
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, max-age=300, s-maxage=600, stale-while-revalidate=1800',
+);
+
+// Add Netlify cache tag for targeted cache purging when sites are added/removed
+Astro.response.headers.set('Cache-Tag', 'sites-index,public-sites');
+---
+<Page {title} {description}>
+  <PublicSiteListing />
+</Page>

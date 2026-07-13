@@ -1,0 +1,20 @@
+---
+import Page from '@layouts/Page.astro';
+import AlgoliaSearchApp from '@svelte/search/AlgoliaSearchApp.svelte';
+import { t } from '@utils/i18n';
+import { verifySession } from '@utils/server/auth/verifySession';
+
+/* The search page: can be accessed by anyone, but requires a session to use Algolia
+ * for cost-optimization */
+const session = await verifySession(Astro);
+
+if (!session?.uid) {
+  // Redirect unauthenticated users to login
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+---
+<Page title={t('search:title')} search>
+  <AlgoliaSearchApp client:only="svelte" />
+</Page>

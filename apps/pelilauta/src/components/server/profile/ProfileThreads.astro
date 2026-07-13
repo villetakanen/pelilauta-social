@@ -1,0 +1,66 @@
+---
+import { type Channel, ChannelsSchema } from 'src/schemas/ChannelSchema';
+import { type Thread, ThreadSchema } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import { z } from 'zod';
+import ThreadCard from '../FrontPage/ThreadCard.astro';
+
+// This is a server-side rendered part of the profile page that fetches
+// the users threads and their channels, and displays them in a card format.
+//
+// Technically, this could be rendered as a server-island, if we would
+// have a nice looking placeholder to avoid layout shifts.
+
+let threads: Array<Thread> = [];
+let channels: Array<Channel> = [];
+let hasError = false;
+const ThreadList = z.array(ThreadSchema);
+
+interface Props {
+  uid: string;
+}
+
+const { uid } = Astro.params;
+
+try {
+  const channelsRequest = await fetch(
+    `${Astro.url.origin}/api/meta/channels.json`,
+  );
+  channels = ChannelsSchema.parse(await channelsRequest.json());
+
+  // Fetch the threads for the user
+  const threadsRequest = await fetch(
+    `${Astro.url.origin}/api/threads.json?uid=${uid}&limit=11`,
+  );
+  threads = ThreadList.parse(await threadsRequest.json());
+} catch (error) {
+  logError('ProfileThreads failed to fetch the users channels', error);
+  hasError = true;
+}
+
+function getNoun(slug: string | undefined): string {
+  if (!slug) return 'fox';
+  const channel = channels.find((c: Channel) => c.slug === slug);
+  return channel ? channel.icon : 'fox';
+}
+---
+<section>
+{hasError && (
+  <div class="error">
+    {t('app:errors.fetchingThreads')}
+  </div>
+)}
+
+  <h2>{t('profile:threadList.title')}</h2>
+
+  { threads.length > 0 ? (
+    <div class="flex flex-col">
+      {threads.map((thread) => (
+       <ThreadCard {thread} noun={getNoun(thread.channel)}/>
+      ))}
+    </div>
+    ) : (
+        <p>{t('profile:threadList.empty')}</p>
+    )}
+</sectoon>

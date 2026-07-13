@@ -1,0 +1,48 @@
+---
+import BetaHeader from '@components/server/app/BetaHeader.astro';
+import SiteTray from '@components/server/SiteApp/SiteTray.astro';
+import CharacterKeeperApp from '@components/svelte/keepers/CharacterKeeperApp.svelte';
+import SiteStoreInitializer from '@components/svelte/sites/SiteStoreInitializer.svelte';
+import { getSiteData } from '@firebase/server/sites';
+import PageWithTray from '@layouts/PageWithTray.astro';
+import { verifySession } from '@utils/server/auth/verifySession';
+import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
+
+const { siteKey } = Astro.params;
+
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
+if (!siteKey) {
+  return new Response('Bad request', { status: 400 });
+}
+
+const site = await getSiteData(siteKey);
+
+if (!site) {
+  return new Response('Site not found', { status: 404 });
+}
+
+if (!site.useCharacters) {
+  return new Response('Characters feature not enabled', { status: 404 });
+}
+if (!site.useCharacterKeeper) {
+  return new Response('Character Keeper feature not enabled', { status: 404 });
+}
+
+const siteAccess = await verifySiteAccess(site, session.uid);
+if (!siteAccess.isMember) {
+  return new Response('Forbidden', { status: 403 });
+}
+---
+<PageWithTray title={`Character Keeper - ${site.name}`} noSharing>
+    <SiteStoreInitializer {site} client:only="svelte" />
+    <SiteTray slot="app-tray" {site} />
+    <BetaHeader />    
+    <CharacterKeeperApp siteKey={siteKey} client:only="svelte" />
+    </div>
+</PageWithTray>

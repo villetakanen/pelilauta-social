@@ -1,0 +1,90 @@
+---
+import BetaHeader from '@components/server/app/BetaHeader.astro';
+import { getCharacter } from '@firebase/server/characters/getCharacter';
+import { getCharacterSheet } from '@firebase/server/characters/getCharacterSheet';
+import { getSiteData } from '@firebase/server/sites';
+import type { Character } from '@schemas/CharacterSchema';
+import type { CharacterSheet } from '@schemas/CharacterSheetSchema';
+import { type Site } from '@schemas/SiteSchema';
+import { t } from '@utils/i18n';
+import { logError } from '@utils/logHelpers';
+import { verifySession } from '@utils/server/auth/verifySession';
+import BackgroundPoster from '../../../components/server/ui/BackgroundPoster.astro';
+import CharacterApp from '../../../components/svelte/characters/CharacterApp/CharacterApp.svelte';
+import Page from '../../../layouts/Page.astro';
+
+const { characterKey } = Astro.params;
+
+const hasSession = await verifySession(Astro);
+
+if (!hasSession) {
+  // Note: characters are for logged-in users only
+  Astro.redirect(`/login?redirect=/characters/${characterKey}`);
+}
+
+let character: Character | undefined;
+let sheet: CharacterSheet | undefined;
+let site: Site | undefined;
+
+// Fetch character data
+try {
+  character = await getCharacter(characterKey);
+} catch (error) {
+  logError('CharacterIndex', 'Failed to get character:', error);
+  if (error instanceof Error && error.message.includes('not_found')) {
+    return Astro.redirect('/404');
+  } else {
+    return Astro.redirect('/500');
+  }
+}
+
+// If character has a sheet, pre-fetch the sheet data
+if (character?.sheetKey) {
+  try {
+    sheet = await getCharacterSheet(character.sheetKey);
+  } catch (error) {
+    logError('CharacterIndex', 'Failed to fetch character sheet:', error);
+    // If sheet fetch fails, we can still render the character without sheet data
+    sheet = undefined;
+  }
+}
+
+// If we have siteKey, pre-fetch the site data using server function
+if (character?.siteKey) {
+  try {
+    site = (await getSiteData(character.siteKey)) || undefined;
+  } catch (error) {
+    logError('CharacterIndex', 'Failed to fetch site data:', error);
+    // If site data fetch fails, we can still render the character without site info
+    site = undefined;
+  }
+}
+
+// Lets see if we have a background image for the character
+const poster = character?.avatar || site?.posterURL || undefined;
+
+const title = `${t('app:shortname')} – ${t('characters:character.title')}`;
+const shortTitle = t('characters:character.title');
+const description = t('characters:character.description');
+---
+<Page
+  title={title}
+  shortTitle={shortTitle}
+  description={description}
+  >
+
+  <BetaHeader />
+
+    {character && 
+      <CharacterApp
+        {character} 
+        {sheet}
+        {site} 
+        client:only="svelte"/>}
+    {poster && (
+      <BackgroundPoster
+        src={poster}
+        slot="app-background-poster"
+      />
+    )}
+</Page>

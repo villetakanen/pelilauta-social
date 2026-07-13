@@ -1,0 +1,115 @@
+[build]
+  command = "pnpm build"
+  publish = "apps/pelilauta/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# PBI-037: Netlify Image CDN remote image domains
+[images]
+  remote_images = [
+    "https://storage.googleapis.com/*",
+    "https://firebasestorage.googleapis.com/*"
+  ]
+
+# PBI-005, PBI-024: Front page caching for users and SEO crawlers
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "s-maxage=300, stale-while-revalidate=86400"
+    # 5 min cache, 24h stale-while-revalidate
+    # Allows fresh content for users while ensuring crawlers get fast responses
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+
+# PBI-037: Netlify Image CDN optimization caching
+[[headers]]
+  for = "/.netlify/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+# More specific API routes first
+
+[[headers]]
+  for = "/api/rss-feeds.json"
+  [headers.values]
+    Cache-Control = "s-maxage=600, stale-while-revalidate=86400"
+    # 10 min cache, 24 hour stale-while-revalidate
+    # RSS feeds update infrequently, aggressive caching is safe
+
+[[headers]]
+  for = "/sites/*"
+  [headers.values]
+    Cache-Control = "s-maxage=120, stale-while-revalidate=600"
+    # 2 min cache, 10 min stale-while-revalidate for site pages
+    # Short cache for authenticated users with real-time updates
+
+[[headers]]
+  for = "/api/meta/*"
+  [headers.values]
+    Cache-Control = "s-maxage=3600, stale-while-revalidate=86400"
+    # 1 hour cache, 24 hour stale-while-revalidate for metadata
+
+[[headers]]
+  for = "/api/threads.json"
+  [headers.values]
+    Cache-Control = "s-maxage=60, stale-while-revalidate=300"
+    # 1 min cache, 5 min stale-while-revalidate for threads
+
+[[headers]]
+  for = "/api/sites*"
+  [headers.values]
+    Cache-Control = "s-maxage=180, stale-while-revalidate=600"
+    # 3 min cache, 10 min stale-while-revalidate for sites
+
+# Then, a general catch-all for other API routes that should not be cached
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# PBI-034: Security Headers (production only to avoid blocking local dev)
+[context.production]
+  [[context.production.headers]]
+    for = "/*"
+    [context.production.headers.values]
+      # Content Security Policy
+      Content-Security-Policy = """
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval'
+          https://*.simpleanalyticscdn.com
+          https://browser.sentry-cdn.com
+          https://*.firebaseio.com
+          https://*.firebaseapp.com
+          https://storage.googleapis.com
+          https://apis.google.com
+          https://securetoken.googleapis.com
+          https://identitytoolkit.googleapis.com;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: https: blob:;
+        font-src 'self' data:;
+        connect-src 'self'
+          https://*.firebaseio.com
+          https://*.firebaseapp.com
+          https://*.googleapis.com
+          https://apis.google.com
+          https://securetoken.googleapis.com
+          https://identitytoolkit.googleapis.com
+          https://*.simpleanalyticscdn.com
+          https://sentry.io;
+        worker-src 'self' blob:;
+        frame-src 'self'
+          https://*.firebaseapp.com;
+        frame-ancestors 'self';
+      """
+
+      # Security Headers
+      X-Content-Type-Options = "nosniff"
+      X-Frame-Options = "SAMEORIGIN"
+      X-XSS-Protection = "1; mode=block"
+      Referrer-Policy = "strict-origin-when-cross-origin"
+      Permissions-Policy = "camera=(), microphone=(), geolocation=()"

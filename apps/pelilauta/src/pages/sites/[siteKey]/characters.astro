@@ -1,0 +1,116 @@
+---
+import { type Character, CharacterSchema } from 'src/schemas/CharacterSchema';
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
+import { logWarn } from 'src/utils/logHelpers';
+import SiteTray from '../../../components/server/SiteApp/SiteTray.astro';
+import BackgroundPoster from '../../../components/server/ui/BackgroundPoster.astro';
+import CharacterCard from '../../../components/svelte/characters/CharacterCard.svelte';
+import CharactersFab from '../../../components/svelte/characters/CharactersFab.svelte';
+import PageWithTray from '../../../layouts/PageWithTray.astro';
+
+interface Props {
+  siteKey: string;
+}
+const { siteKey } = Astro.params;
+
+// if no siteKey is provided, redirect to 404
+if (!siteKey) {
+  return Astro.redirect('/404');
+}
+
+// Fetch site data from the api
+const siteResponse = await fetch(`${Astro.url.origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+const siteData = await siteResponse.json();
+const site = SiteSchema.parse({
+  ...toClientEntry(siteData),
+  key: siteKey,
+});
+
+if (!site) {
+  return Astro.redirect('/404');
+}
+
+// Check if characters are enabled for this site
+if (!site.useCharacters) {
+  return Astro.redirect(`/sites/${siteKey}`);
+}
+
+// Fetch characters for this site
+const charactersResponse = await fetch(
+  `${Astro.url.origin}/api/sites/${siteKey}/characters.json`,
+);
+let characters: Character[] = [];
+
+if (charactersResponse.ok) {
+  const charactersData = await charactersResponse.json();
+  // Parse each character with Zod for type safety
+  characters = charactersData
+    .map((characterData: unknown) => {
+      try {
+        return CharacterSchema.parse(characterData);
+      } catch (error) {
+        logWarn('Failed to parse character:', error);
+        return null;
+      }
+    })
+    .filter((character: Character | null) => character !== null);
+}
+
+const title = `${site.name} – ${t('site:characters.title')}`;
+const image = site.avatarURL || site.posterURL || site.backgroundURL;
+---
+
+<PageWithTray
+  title={title}
+  description={site.description}
+  image={image}
+  noSharing={site.hidden}
+>
+  <SiteTray slot="app-tray" site={site} />
+
+  <div class="content-cards">
+    <!-- Header for the list -->
+    <header class="surface">
+      <h1 class="downscaled m-0">{t("site:characters.title")}</h1>
+      <p class="downscaled text-low">{site.description}</p>
+    </header>
+
+    <!-- Display the characters as cards -->
+    {
+      characters.length > 0 ? (
+        characters.map((character) => (
+          <CharacterCard character={character} client:only="svelte" />
+        ))
+      ) : (
+        <section
+          style="grid-column: 1/-1;"
+          class="secondary surface flex items-center"
+        >
+          <cn-icon noun="adventurer" xlarge />
+          <p class="downscaled">
+            {t("site:characters.empty") || "No characters found for this site."}
+          </p>
+        </section>
+      )
+    }
+
+    <footer class="mb-2">
+      <p>
+        {t("site:characters.count", { count: characters.length })}
+      </p>
+    </footer>
+  </div>
+
+  <CharactersFab site={site} client:only="svelte" slot="fab-tray" />
+
+  {
+    site.backgroundURL && (
+      <BackgroundPoster src={site.backgroundURL} slot="app-background-poster" />
+    )
+  }
+</PageWithTray>

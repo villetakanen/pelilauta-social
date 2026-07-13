@@ -1,0 +1,44 @@
+---
+import { type Channel, parseChannel } from 'src/schemas/ChannelSchema';
+import { t } from 'src/utils/i18n';
+
+// Lets fetch the channels from the API
+const origin = new URL(Astro.request.url).origin;
+// Fetch site data from the api
+const channelsResponse = await fetch(`${origin}/api/meta/channels.json`);
+const channelsData = await channelsResponse.json();
+
+const channels = channelsData.map((channel: Partial<Channel>) =>
+  parseChannel(channel),
+);
+
+function categories(): string[] {
+  return Array.from(
+    new Set(channels.map((channel: Channel) => channel.category)),
+  ) as string[];
+}
+
+function inCategory(cat: string) {
+  return channels.filter((channel: Channel) => channel.category === cat);
+}
+---
+<nav>
+    <h3>{t('threads:tray.title')}</h3>
+    {categories().map((category) => (
+      <section>
+        <h4>{category}</h4>
+        <ul>
+          {inCategory(category).map((topic: Channel) => (
+            <li>
+              <a href={`/channels/${topic.slug}`} class="tray-button">
+                <cn-icon noun={topic.icon} xsmall />
+                <span>
+                  {topic.name} ({topic.threadCount})
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </nav>

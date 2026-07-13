@@ -1,0 +1,51 @@
+---
+import AuthManager from '@components/svelte/AuthManager.svelte';
+import AppBar from '../components/server/AppBar.astro';
+import AppRail from '../components/server/AppRail.astro';
+import AppFooter from '../components/server/app/AppFooter.astro';
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
+import BaseTail from '../components/server/BaseTail.astro';
+
+// NOTE: PageWithTray layout includes AuthManager for client-side authentication.
+// This layout is used for interactive pages that need to detect user auth state
+// and handle onboarding flows (EULA acceptance, account creation).
+
+type Props = {
+  title?: string;
+  description?: string;
+  image?: string;
+  noun?: string;
+  shortTitle?: string;
+  noSharing?: boolean;
+};
+
+const { title, description, image, noun, shortTitle, noSharing } = Astro.props;
+---
+
+<html lang="en">
+  <BaseHead title={title} description={description} image={image} {noSharing} />
+  <body>
+    <AppBar title={title} noun={noun} shortTitle={shortTitle}>
+      <slot name="app-bar" />
+    </AppBar>
+    <AppRail />
+
+    <cn-tray-button></cn-tray-button>
+    <nav id="tray">
+      <slot name="app-tray" />
+    </nav>
+
+    <main>
+      <div class="view-patch">
+        <slot />
+      </div>
+      <AppFooter />
+    </main>
+    <nav id="fab-tray" style="container: tray / inline-size">
+      <slot name="fab-tray" />
+    </nav>
+    <slot name="app-background-poster" />
+    <AuthManager client:only="svelte" />
+    <BaseTail />
+  </body>
+</html>

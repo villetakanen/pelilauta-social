@@ -1,0 +1,46 @@
+import type { Locale } from 'src/utils/i18n';
+
+export const actions: Locale = {
+  add: 'Add',
+  cancel: 'Cancel',
+  create: {
+    page: 'Create page',
+    thread: 'New thread',
+    site: 'New site',
+    clock: 'New clock',
+    tick: 'New tick',
+    handout: 'Create secret',
+    character: 'Create character',
+  },
+  choose: 'Choose',
+  confirm: {
+    delete: 'Confirm deletion',
+  },
+  delete: 'Delete',
+  edit: 'Edit',
+  export: {
+    asZippedFolder: 'Export as zip',
+  },
+  fork: 'Fork thread',
+  import: 'Import',
+  login: 'Sign in',
+  logout: 'Sign out',
+  send: 'Send',
+  save: 'Save',
+  share: 'Share',
+  showMore: 'Show more',
+  show: {
+    options: 'Show advanced options',
+  },
+  readMore: 'Read more',
+  submit: 'Submit',
+  title: 'Actions',
+  deregister: 'Delete account permanently',
+  learnMore: 'Learn more',
+  reset: 'Reset',
+  reposted: 'Reposted successfully',
+  upload: 'Upload',
+  loadMore: 'Load more',
+  loading: 'Loading...',
+  retry: 'Retry',
+};

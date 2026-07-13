@@ -1,0 +1,33 @@
+---
+import { t } from 'src/utils/i18n';
+---
+<nav class="flex flex-col h-full pb-1">
+<h3 class="flex-none">{t('library:title')}</h3>
+<ul>
+  <!-- SITES -->
+  <li>
+    <a href="/library" class="tray-button">
+      <cn-icon noun="mekanismi" small/>
+      {t('library:sites.title')}
+    </a>
+  </li>
+  <!-- CHARACTERS -->
+  <li>
+    <a href="/library/characters" class="tray-button">
+      <cn-icon noun="adventurer" small/>
+      {t('library:characters.title')}
+    </a>
+  </li>
+</ul>
+<div class="grow"></div>
+<hr  class="flex-none">
+  <ul  class="flex-none">
+    <li>
+      <a href="/sites" class="tray-button">
+        <cn-icon noun="mekanismi" small/>
+        {t('site:siteList.title')}
+      </a>
+    </li>
+  </ul>  
+</div>
+</nav>

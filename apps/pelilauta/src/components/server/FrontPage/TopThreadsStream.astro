@@ -1,0 +1,63 @@
+---
+import { type Channel, ChannelsSchema } from 'src/schemas/ChannelSchema';
+import { type Thread, ThreadSchema } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import { z } from 'zod';
+import ThreadCard from './ThreadCard.astro';
+
+// This is a server-side rendered part of the front page that fetches
+// the latest threads and channels, and displays them in a card format.
+//
+// Technically, this could be rendered as a server-island, if we would
+// have a nice looking placeholder to avoid layout shifts.
+
+let threads: Array<Thread> = [];
+let channels: Array<Channel> = [];
+let hasError = false;
+
+const ThreadList = z.array(ThreadSchema);
+
+try {
+  const channelsResponse = await fetch(
+    `${Astro.url.origin}/api/meta/channels.json`,
+  );
+  channels = ChannelsSchema.parse(await channelsResponse.json());
+
+  const threadsResponse = await fetch(
+    `${Astro.url.origin}/api/threads.json?limit=5`,
+  );
+  const threadsJSON = await threadsResponse.json();
+
+  // Note: we can expect these to be valid client-side objects from the API, so we can
+  // parse them directly
+  threads = ThreadList.parse(threadsJSON);
+} catch (error) {
+  logError('Error fetching threads or channels', error);
+  hasError = true;
+}
+
+function getNoun(slug: string | undefined): string {
+  if (!slug) return 'fox';
+  const channel = channels.find((c: Channel) => c.slug === slug);
+  return channel ? channel.icon : 'fox';
+}
+---
+<section>
+  {hasError && (
+    <div class="error">
+      {t('app:errors.fetchingThreads')}
+    </div>
+  )}
+  <div class="flex flex-col">
+    {threads.map((thread) => (
+      <ThreadCard {thread} noun={getNoun(thread.channel)}/>
+    ))} 
+  </div>
+  <div class="flex items-center mt-2">
+    <a href="/channels" class="button">
+      {t('actions:showMore')}
+    </a>
+  </div>
+</section>
+

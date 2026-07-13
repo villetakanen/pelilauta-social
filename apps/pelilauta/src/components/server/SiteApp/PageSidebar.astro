@@ -1,0 +1,67 @@
+---
+import type { Page } from 'src/schemas/PageSchema';
+import type { Site } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { logWarn } from 'src/utils/logHelpers';
+import ReactionButton from '../../svelte/app/ReactionButton.svelte';
+import SiteTocSection from './SiteTocSection.astro';
+
+interface Props {
+  site: Site;
+}
+const { site } = Astro.props as Props;
+const withPosterCSS = site.posterURL ? 'surface p-2' : 'p-1';
+
+// If a sidebarKey is set, fetch the custom sidebar page
+let sidebarPage: Page | null = null;
+if (site.useSidebar && site.sidebarKey) {
+  try {
+    const origin = new URL(Astro.request.url).origin;
+    const pageResponse = await fetch(
+      `${origin}/api/sites/${site.key}/pages/${site.sidebarKey}.json`,
+    );
+
+    if (pageResponse.ok) {
+      sidebarPage = await pageResponse.json();
+    } else {
+      logWarn(
+        'PageSidebar',
+        `Failed to fetch sidebar page ${site.sidebarKey}: ${pageResponse.status}`,
+      );
+    }
+  } catch (error) {
+    // If fetching fails, we'll fall back to the default sidebar
+    logWarn('PageSidebar', 'Failed to fetch sidebar page:', error);
+  }
+}
+---
+{site.useSidebar && (
+<article class={`column-s ${withPosterCSS}`}>
+  <h3 class="downscaled">{site.name}</h3>
+  {site.posterURL && (
+    <img src={site.posterURL} alt={site.name} class="poster" />
+  )}
+  <ReactionButton
+    key={site.key}
+    target="site" 
+    title={site.name}
+    client:only="svelte"/>
+  
+  {site.description && <p>{site.description}</p>}
+  
+  {sidebarPage ? (
+    <!-- Custom sidebar page content -->
+    <div set:html={sidebarPage.htmlContent} class="border-t"/>
+    <div class="mt-2 flex justify-end text-small">
+      <a 
+        href={`/sites/${site.key}/pages/${sidebarPage.key}`}
+        class="text-right">
+        {t('site:navigation.sidebar', {name: sidebarPage.name})}
+      </a>
+    </div>
+  ) : (
+    <!-- Default sidebar content -->
+    <SiteTocSection site={site} />
+  )}
+</article>
+)}

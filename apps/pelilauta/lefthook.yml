@@ -1,0 +1,16 @@
+# Lefthook Git Hooks Configuration
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  commands:
+    # Lint and format staged files only
+    lint-and-format:
+      glob: "*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc,astro,svelte}"
+      run: pnpm biome check --write --staged --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    # Validate commit message format
+    commitlint:
+      run: pnpm commitlint --edit {1}

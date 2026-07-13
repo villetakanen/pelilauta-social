@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /settings
+Disallow: /create/
+Disallow: /onboarding
+Disallow: /*/edit
+Disallow: /*/delete
+Disallow: /*/settings
+Disallow: /*/options
+Disallow: /*/import
+Disallow: /*/data
+Disallow: /*/keeper
+Disallow: /*/members
+Disallow: /*/assets
+Disallow: /*/confirmDelete
+
+Sitemap: https://pelilauta.social/sitemap.xml

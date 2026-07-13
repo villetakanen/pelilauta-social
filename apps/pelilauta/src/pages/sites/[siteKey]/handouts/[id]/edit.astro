@@ -1,0 +1,41 @@
+---
+import { handoutFrom } from 'src/schemas/HandoutSchema';
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import HandoutEditor from '../../../../../components/svelte/sites/handouts/HandoutEditor.svelte';
+import EditorPage from '../../../../../layouts/EditorPage.astro';
+
+interface Props {
+  siteKey: string;
+  id: string;
+}
+const { siteKey, id } = Astro.params;
+const { origin } = new URL(Astro.request.url);
+
+// Fetch site data from the api
+const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+const site = SiteSchema.parse({
+  ...toClientEntry(await siteResponse.json()),
+  key: siteKey,
+});
+
+// Fetch handout data from the api
+const handoutResponse = await fetch(
+  `${origin}/api/sites/${siteKey}/handouts/${id}.json`,
+);
+if (handoutResponse.status === 404) {
+  return Astro.redirect(`/sites/${siteKey}/handout/`);
+}
+const handout = handoutFrom(
+  toClientEntry(await handoutResponse.json()),
+  id,
+  siteKey,
+);
+---
+
+<EditorPage>
+  <HandoutEditor handout={handout} site={site} client:only="svelte" />
+</EditorPage>

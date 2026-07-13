@@ -1,0 +1,50 @@
+---
+import { type Site, SiteSchema } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import MySitesButton from '../../svelte/sites/MySitesButton.svelte';
+import SiteCard from '../ui/SiteCard.astro';
+
+const origin = Astro.url.origin;
+let sites: Site[] = [];
+
+try {
+  const siteListResponse = await fetch(`${origin}/api/sites`);
+
+  if (!siteListResponse.ok) {
+    throw new Error(`Failed to fetch sites: ${siteListResponse.status}`);
+  }
+
+  const sitesJSON = await siteListResponse.json();
+  sites = (sitesJSON as Array<Site>).map((siteData) =>
+    // API provides valid client-side objects, so we can parse them directly
+    // to validate/type them
+    SiteSchema.parse(siteData),
+  );
+} catch (error) {
+  logError('SiteListColumn', 'Failed to fetch sites:', error);
+  // sites remains empty array, component will render without sites
+}
+---
+<section class="content-cards">
+  <header>
+    <div class="toolbar">
+      <h1>{t('site:siteList.title')}</h1>
+      <MySitesButton client:only="svelte"/>
+    </div>
+  </header>
+
+  {sites && sites.map((site) => (
+    <SiteCard site={site}></SiteCard>
+  ))}
+
+  <footer>
+    <div class="toolbar">
+      <p>{t('site:siteList.footer', { count: sites.length })}</p>
+      <MySitesButton client:only="svelte"/>
+    </div>
+  </footer>
+
+</section>
+
+

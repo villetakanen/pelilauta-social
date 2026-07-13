@@ -1,0 +1,40 @@
+---
+import AppBar from '../components/server/AppBar.astro';
+import AppRail from '../components/server/AppRail.astro';
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
+import BaseTail from '../components/server/BaseTail.astro';
+
+// NOTE: ModalPage intentionally does not include AuthManager.
+// This layout is only used for server-side authenticated pages where
+// authentication is verified during server-side rendering.
+// Client-side auth state management is not needed for these pages.
+
+// IMPORTANT: ModalPages are popup-like interfaces for authenticated actions
+// and should NEVER be indexed by search engines, similar to editor pages.
+
+export interface Props {
+  title?: string;
+  shortTitle?: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, shortTitle, description, image } = Astro.props;
+---
+
+<html lang="fi">
+  <BaseHead {title} {description} {image} noSharing={true} />
+  <body>
+    <AppBar title={title} shortTitle={shortTitle} modal noSharing={true}>
+      <slot name="app-bar" />
+    </AppBar>
+    <AppRail hideOnMobile />
+    <main>
+      <slot />
+    </main>
+    <nav id="fab-tray">
+      <slot name="fab-tray" />
+    </nav>
+    <BaseTail />
+  </body>
+</html>

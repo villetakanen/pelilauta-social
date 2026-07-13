@@ -1,0 +1,58 @@
+---
+import { t } from 'src/utils/i18n';
+import AdminNavigationButton from '../svelte/admin/AdminNavigationButton.svelte';
+import SettingNavigationButton from '../svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '../svelte/inbox/InboxNavigationButton.svelte';
+
+export interface Props {
+  hideOnMobile?: boolean;
+}
+const { hideOnMobile } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+
+function isThreadsRoute() {
+  if (currentPath.startsWith('/channels')) {
+    return true;
+  }
+  if (currentPath.startsWith('/threads/')) {
+    return true;
+  }
+  return false;
+}
+---
+
+<nav
+  id="rail"
+  class={hideOnMobile ? "sm-hidden" : ""}
+  aria-label={t("navigation:main")}
+>
+  <a href="/" aria-label={t("app:shortName")}>
+    <cn-navigation-icon
+      active={currentPath === "/" ? true : undefined}
+      noun="fox"></cn-navigation-icon>
+  </a>
+  <a href="/channels" aria-label={t("navigation:threads")}>
+    <cn-navigation-icon
+      active={isThreadsRoute() ? true : undefined}
+      noun="discussion"
+      label={t("navigation:threads")}></cn-navigation-icon>
+  </a>
+  <a href="/library" aria-label={t("navigation:library")}>
+    <cn-navigation-icon
+      active={currentPath === "/library" ? true : undefined}
+      noun="books"
+      label={t("navigation:library")}></cn-navigation-icon>
+  </a>
+
+  <InboxNavigationButton client:only="svelte" />
+  <div class="grow sm-hidden"></div>
+  <AdminNavigationButton client:only="svelte" />
+  <a href="/docs/01-index" class="sm-hidden" aria-label={t("navigation:docs")}>
+    <cn-navigation-icon
+      noun="design"
+      label={t("navigation:docs")}
+      checked={currentPath.startsWith("/docs")}></cn-navigation-icon>
+  </a>
+  <SettingNavigationButton client:only="svelte" />
+</nav>

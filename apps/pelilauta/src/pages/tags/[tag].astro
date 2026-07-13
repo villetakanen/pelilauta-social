@@ -1,0 +1,162 @@
+---
+import { logError } from '@utils/logHelpers';
+import type { Tag } from 'src/schemas/TagSchema';
+import { t } from 'src/utils/i18n';
+import TagHeader from '../../components/server/TagHeader.astro';
+import ProfileLink from '../../components/svelte/app/ProfileLink.svelte';
+import Page from '../../layouts/Page.astro';
+import {
+  getTagDisplayInfo,
+  resolveTagSynonym,
+} from '../../schemas/TagSynonyms';
+
+const { tag } = Astro.params;
+
+if (!tag) {
+  logError('Tag page accessed without tag');
+  return Astro.redirect('/404');
+}
+
+// Resolve synonym to canonical tag
+const canonicalTag = resolveTagSynonym(tag);
+const tagInfo = getTagDisplayInfo(canonicalTag);
+
+// If tag is a synonym (not canonical), redirect to canonical with 301
+if (canonicalTag !== tag.toLowerCase()) {
+  return Astro.redirect(`/tags/${encodeURIComponent(canonicalTag)}`, 301);
+}
+
+const origin = new URL(Astro.request.url).origin;
+
+// Fetch site data from the api
+const tagResponse = await fetch(`${origin}/api/tags/${canonicalTag}.json`);
+
+// Handle 404 based on whether this is a featured tag
+if (tagResponse.status === 404) {
+  logError(`Tag not found: ${canonicalTag}`);
+
+  // If this is a featured tag (has synonyms in TAG_SYNONYMS), show the page anyway
+  // Otherwise redirect to 404
+  if (!tagInfo) {
+    return Astro.redirect('/404');
+  }
+  // For featured tags, continue to render the page with no entries
+}
+
+let tagData: {
+  entries: Tag[];
+  displayName?: string;
+  description?: string;
+  synonymCount?: number;
+};
+if (tagResponse.status === 404) {
+  tagData = {
+    entries: [],
+    displayName: tagInfo?.displayName || tag,
+    description: tagInfo?.description,
+    synonymCount: tagInfo?.synonyms.length || 0,
+  };
+} else if (!tagResponse.ok) {
+  // Handle other errors (500, etc.) that might return HTML
+  logError(`Tag API error: ${tagResponse.status} ${tagResponse.statusText}`);
+  const errorText = await tagResponse.text();
+  logError(`Tag API error body: ${errorText.substring(0, 200)}`);
+
+  // Show empty results for featured tags, redirect to 404 for others
+  if (tagInfo) {
+    tagData = {
+      entries: [],
+      displayName: tagInfo?.displayName || tag,
+      description: tagInfo?.description,
+      synonymCount: tagInfo?.synonyms.length || 0,
+    };
+  } else {
+    return Astro.redirect('/404');
+  }
+} else {
+  try {
+    tagData = await tagResponse.json();
+  } catch (error) {
+    logError(`Failed to parse tag API response as JSON: ${error}`);
+    return Astro.redirect('/404');
+  }
+}
+
+const entries = tagData.entries as Tag[];
+
+// SEO metadata
+const displayName = tagData.displayName || tag;
+const title = `${t('tags:title')} - #${displayName}`;
+const description =
+  tagData.description || t('seo:tag.fallback', { tag: displayName });
+
+// Cache headers - tag pages can be cached aggressively
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, max-age=300, s-maxage=600, stale-while-revalidate=1800',
+);
+Astro.response.headers.set('Cache-Tag', `tag-${canonicalTag},public-tags`);
+
+// Separate threads and pages
+const threads = entries.filter((e) => e.type === 'thread');
+const pages = entries.filter((e) => e.type === 'page');
+
+function parseUrl(tag: Tag) {
+  if (tag.type === 'page') {
+    return `/sites/${tag.key}`;
+  }
+  return `/threads/${tag.key}`;
+}
+---
+
+<Page {title} {description}>
+  <div class="content-columns">
+    <article class="column-l">
+      <TagHeader {displayName} {tagInfo} />
+
+      {
+        threads.length > 0 && (
+          <section style="margin-bottom: calc(3 * var(--cn-grid))">
+            <h2 class="text-title">
+              <cn-icon name="discussion" small />
+              {t("tag:discussions")} ({threads.length})
+            </h2>
+            <ul>
+              {threads.map((entry) => (
+                <li class="flex items-center">
+                  <span style="flex: 1">
+                    <a href={parseUrl(entry)}>{entry.title}</a>
+                  </span>
+                  <ProfileLink uid={entry.author} client:only="svelte" />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        pages.length > 0 && (
+          <section>
+            <h2 class="text-title">
+              <cn-icon noun="card" small />
+              {t("tag:pages")} ({pages.length})
+            </h2>
+            <ul>
+              {pages.map((entry) => (
+                <li class="flex items-center">
+                  <span style="flex: 1">
+                    <a href={parseUrl(entry)}>{entry.title}</a>
+                  </span>
+                  <ProfileLink uid={entry.author} client:only="svelte" />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {entries.length === 0 && <p class="text-caption">{t("tag:noEntries")}</p>}
+    </article>
+  </div>
+</Page>

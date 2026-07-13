@@ -1,0 +1,97 @@
+---
+import { t } from '@utils/i18n';
+import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
+import type { Thread } from 'src/schemas/ThreadSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+import { createRichSnippet } from 'src/utils/snippetHelpers';
+import ProfileLink from '../../svelte/app/ProfileLink.svelte';
+import ReactionButton from '../../svelte/app/ReactionButton.svelte';
+import CardSubscription from '../../svelte/frontpage/CardSubscription.svelte';
+
+export interface Props {
+  thread: Thread;
+  noun: string;
+}
+
+const { thread, noun } = Astro.props;
+
+const posterUrl = thread.poster
+  ? thread.poster
+  : thread.images && thread.images.length > 0
+    ? thread.images[0].url
+    : undefined;
+
+// Generate optimized image URLs for the thread poster
+// Cards are 170-450px wide, so we use appropriate sizes
+// Only use Netlify CDN in production (not available in local dev)
+const isProduction = import.meta.env.PROD;
+const poster = posterUrl
+  ? isProduction
+    ? netlifyImage(posterUrl, { width: 450, format: 'webp', quality: 85 })
+    : posterUrl
+  : undefined;
+const posterSrcset = posterUrl
+  ? isProduction
+    ? generateSrcset(posterUrl, [170, 300, 450], {
+        format: 'webp',
+        quality: 85,
+      })
+    : undefined
+  : undefined;
+
+const snippet = await createRichSnippet(thread.markdownContent || '', {
+  maxLength: 220,
+  headerClasses: ['text-h5'],
+});
+
+const channel = thread.channel || 'Yleinen';
+const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
+---
+
+<div style="flex-basis: auto; width: 100%">
+  <cn-card
+    href={`/threads/${thread.key}`}
+    title={thread.title}
+    cover={poster}
+    srcset={posterSrcset}
+    sizes="(max-width: 768px) 100vw, 450px"
+    elevation="1"
+    {noun}
+    id={`thread-card-${thread.key}`}
+  >
+    <p class="text-caption pb-1 mb-1 border-b">
+      {t("threads:card.inChannel")}
+      <a href={`/channels/${channelSlug}`} class="no-decoration">
+        {channel}
+      </a>
+    </p>
+    <Fragment set:html={snippet} />
+    <CardSubscription thread={thread} client:only="svelte" />
+
+    <div slot="actions" class="toolbar">
+      <div class="grow">
+        <p class="m-0 px-1 text-small">
+          <ProfileLink uid={thread.owners?.[0] || ""} client:only="svelte" />
+          <br />
+          {toDisplayString(thread.flowTime)}
+        </p>
+      </div>
+
+      <ReactionButton
+        key={thread.key}
+        title={thread.title}
+        target="thread"
+        client:only="svelte"
+      />
+
+      <!-- Link to discussion -->
+      <a
+        href={`/threads/${thread.key}?jumpTo=unread#discussion`}
+        class="px-1 no-decoration flex"
+      >
+        <cn-icon noun="discussion" small></cn-icon>
+        <span class="text-caption">{thread.replyCount || 0}</span>
+      </a>
+    </div>
+  </cn-card>
+</div>

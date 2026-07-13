@@ -1,0 +1,42 @@
+---
+import { ThreadSchema } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
+import { createPlainSnippet } from 'src/utils/snippetHelpers';
+import DiscussionApp from '../../../components/server/DiscussionApp/DiscussionApp.astro';
+import ThreadArticle from '../../../components/server/ThreadsApp/ThreadArticle.astro';
+import ThreadInfoSection from '../../../components/server/ThreadsApp/ThreadInfoSection.astro';
+import Page from '../../../layouts/Page.astro';
+
+const { threadKey } = Astro.params;
+
+if (!threadKey) {
+  return Astro.redirect('/404');
+}
+// Fetch the tread data from the API
+const threadResponse = await fetch(
+  `${Astro.url.origin}/api/threads/${threadKey}.json`,
+);
+
+if (!threadResponse.ok) {
+  return Astro.redirect('/404');
+}
+
+// We can expect the Thread to be in client-side format, so
+// we'll simply parse it to verify the structure.
+const thread = ThreadSchema.parse(await threadResponse.json());
+
+// SEO-optimized title and description
+const title = thread.title
+  ? `${thread.title} - ${t('app:shortname')}`
+  : `${t('app:shortname')} - ${thread.channel}`;
+
+const snippet = createPlainSnippet(thread.markdownContent || '', 160);
+---
+
+<Page title={title} description={snippet}>
+  <div class="content-columns">
+    <ThreadArticle thread={thread} />
+    <ThreadInfoSection thread={thread} />
+  </div>
+  <DiscussionApp thread={thread} />
+</Page>

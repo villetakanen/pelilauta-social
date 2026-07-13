@@ -1,0 +1,47 @@
+---
+import { t } from 'src/utils/i18n';
+import { verifySession } from 'src/utils/server/auth/verifySession';
+import EmailLoginSection from '../components/svelte/login/EmailLoginSection.svelte';
+import PasswordLoginSection from '../components/svelte/login/PasswordLoginSection.svelte';
+import SyndicatedLoginSection from '../components/svelte/login/SyndicatedLoginSection.svelte';
+import ModalPage from '../layouts/ModalPage.astro';
+
+// Move session verification to the very top, before any other logic
+const session = await verifySession(Astro);
+
+if (session) {
+  // If the user is logged in, redirect them to the redirect URL or the home page
+  return Astro.redirect(Astro.url.searchParams.get('redirect') || '/');
+}
+
+/* A server side rendered login page: we only provide client side session, as all
+ * reactive/interactive elements are handled by the client side solid apps.
+ */
+const showPasswordLoginFlag =
+  import.meta.env.SECRET_FEATURE_FLAG_PASSWORD_LOGIN === 'true';
+
+const redirect = Astro.url.searchParams.get('redirect') || '/';
+---
+<ModalPage title={t('login:title')}>
+  <main>
+    <div class="content-columns">
+      <div class="column-l">
+        <h1>{t('login:title')}</h1>
+        <p>{t('login:info')}</p>
+      </div>
+    </div>
+    <div class="content-columns">
+      { showPasswordLoginFlag &&
+        <div>
+          <PasswordLoginSection client:only="svelte" redirect={redirect} />
+        </div>
+      }
+      <div>
+        <EmailLoginSection client:only="svelte" redirect={redirect} />
+      </div>
+      <div>
+        <SyndicatedLoginSection client:only="svelte" redirect={redirect} />
+      </div>
+    </div>
+  </main>
+</ModalPage>

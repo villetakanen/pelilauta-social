@@ -1,0 +1,47 @@
+---
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
+import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
+import BackgroundPoster from '../../../../components/server/ui/BackgroundPoster.astro';
+import AssetList from '../../../../components/svelte/sites/AssetList.svelte';
+import UploadAssetFab from '../../../../components/svelte/sites/assets/UploadAssetFab.svelte';
+import PageWithTray from '../../../../layouts/PageWithTray.astro';
+
+const { siteKey } = Astro.params;
+
+if (!siteKey) {
+  throw new Error('No site key provided');
+}
+
+// Fetch site data from the api
+const origin = new URL(Astro.request.url).origin;
+const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+
+// Parse the site data and create the site object
+const siteData = await siteResponse.json();
+const site = SiteSchema.parse({
+  ...toClientEntry(siteData),
+  key: siteKey,
+});
+const title = `${site.name} – ${t('site:assets.title')}`;
+---
+
+<PageWithTray
+  title={title}
+  description={site.description}
+  image={site.backgroundURL}
+  noSharing={true}
+>
+  <SiteTray slot="app-tray" site={site} />
+  <AssetList site={site} client:only="svelte" />
+  <UploadAssetFab site={site} client:only="svelte" slot="fab-tray" />
+  {
+    site.backgroundURL && (
+      <BackgroundPoster src={site.backgroundURL} slot="app-background-poster" />
+    )
+  }
+</PageWithTray>

@@ -1,0 +1,27 @@
+---
+import Page from '../layouts/Page.astro';
+---
+
+<Page title="Access Forbidden" noSharing>
+  <main class="content-columns">
+    <section class="column-l">
+      <div class="flex flex-col items-center p-4">
+        <cn-icon noun="admin" large></cn-icon>
+        <h1>Access Forbidden</h1>
+        <p class="text-center text-low pb-4">
+          You don't have the necessary permissions to access this resource.
+        </p>
+        <div class="toolbar">
+          <a href="/" class="btn">
+            <cn-icon noun="arrow-left" small></cn-icon>
+            Back to Home
+          </a>
+          <a href="/profile" class="btn">
+            <cn-icon noun="avatar" small></cn-icon>
+            My Profile
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Page>

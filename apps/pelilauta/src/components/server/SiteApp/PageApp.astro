@@ -1,0 +1,20 @@
+---
+import PageArticle from '@components/server/sites/pages/PageArticle.astro';
+import type { Page } from 'src/schemas/PageSchema';
+import type { Site } from 'src/schemas/SiteSchema';
+import LatestPagesSection from './LatestPagesSection.astro';
+import PageSidebar from './PageSidebar.astro';
+
+interface Props {
+  page: Page;
+  site: Site;
+}
+const { site, page } = Astro.props as Props;
+---
+<div class="content-columns">
+
+  <PageArticle {page} {site} />
+  <PageSidebar site={site} />
+  <LatestPagesSection site={site} />
+  
+</div>

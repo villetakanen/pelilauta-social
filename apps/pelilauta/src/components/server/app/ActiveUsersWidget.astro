@@ -1,0 +1,44 @@
+---
+import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
+import AvatarLink from '../../svelte/app/AvatarLink.svelte';
+
+// Fetch active users from the API and dislplay the first 11 users
+// in the footer of the app.
+//
+// On error, the widget will simply not be displayed -
+// and the error will be logged.
+
+let activeUids: string[] = [];
+
+try {
+  const activeUidsRequest = await fetch(
+    `${Astro.url.origin}/api/accounts/active.json`,
+  );
+  const response = await activeUidsRequest.json();
+  if (!Array.isArray(response)) {
+    throw new Error('Invalid response format: expected array');
+  }
+  // Limit to 11 latest users
+  activeUids = response.slice(0, 11);
+} catch (e) {
+  logError(e, 'Failed to fetch active users');
+}
+---
+{activeUids.length > 0 && (
+  <section class="active-users-widget">
+    <h4>{t('app:footer.activeUsers.title')}</h4>
+    <div class="grid aug">
+      {activeUids.map((uid: string) => (
+        <AvatarLink uid={uid} client:only="svelte"/>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+.aug {
+  --gw: 7;
+  grid-template-columns: calc(var(--cn-grid) * var(--gw)) calc(var(--cn-grid) * var(--gw)) calc(var(--cn-grid) * var(--gw)) calc(var(--cn-grid) * var(--gw));
+}
+</style>

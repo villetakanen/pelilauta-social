@@ -1,0 +1,20 @@
+---
+import type { Page } from 'src/schemas/PageSchema';
+import type { Site } from 'src/schemas/SiteSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+
+interface Props {
+  page: Page;
+  site: Site;
+}
+
+const { page, site } = Astro.props as Props;
+---
+
+<header class="downscaled flex justify-space-between border-b">
+    <p class="m-0 p-0">
+      <a href={`/sites/${site.key}`}>{site.name}</a> /
+      <a href={`/sites/${site.key}/${page.key}`}>{page.name}</a>
+    </p>
+    <p class="m-0 p-0">{toDisplayString(page.flowTime)}</p>
+  </header>

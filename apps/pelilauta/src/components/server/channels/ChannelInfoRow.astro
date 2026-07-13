@@ -1,0 +1,30 @@
+---
+import { t } from '@utils/i18n';
+import type { ChannelWithStats } from 'src/schemas/ChannelSchema';
+import ChannelListInfoCell from './ChannelListInfoCell.astro';
+
+interface Props {
+  channelWithStats: ChannelWithStats;
+}
+const { channelWithStats } = Astro.props;
+---
+<article class="surface cols-2">
+  <div class="flex flex-row">
+    <cn-icon noun={channelWithStats.icon} class="flex-none"></cn-icon>
+    <div>
+    <a href={`/channels/${channelWithStats.slug}`} class="no-underline hover-underline">
+      <h3 class="text-h5 m-0">
+          {channelWithStats.name}
+      </h3>
+      <p class="text-small text-low">{channelWithStats.description}</p>
+    </a>
+    <p class="text-caption mt-1 mb-0">
+      {t('threads:channel.threadCount', { count: channelWithStats.threadCount })}
+    </p>
+    </div>
+  </div>
+  <div class="sm-only" style="height: var(--cn-line)"></div>
+  <div>
+    <ChannelListInfoCell channelWithStats={channelWithStats} />
+  </div>
+</article>

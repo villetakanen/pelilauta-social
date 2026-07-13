@@ -1,0 +1,29 @@
+---
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
+import SiteMembersApp from '../../../components/svelte/sites/SiteMembersApp.svelte';
+import ModalPage from '../../../layouts/ModalPage.astro';
+
+const { siteKey: siteKeyParam } = Astro.params;
+const siteKey = siteKeyParam || 'mekanismi'; // This should not happen, but just in case
+
+const origin = new URL(Astro.request.url).origin;
+
+// Fetch site data from the api
+const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+
+const site = SiteSchema.parse({
+  ...toClientEntry(await siteResponse.json()),
+  key: siteKey,
+});
+---
+
+<ModalPage title={t("site:members.title")}>
+  <div class="content-columns">
+    <SiteMembersApp site={site} client:only="svelte" />
+  </div>
+</ModalPage>

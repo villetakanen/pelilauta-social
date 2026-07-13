@@ -1,0 +1,22 @@
+---
+import { ReplySchema } from 'src/schemas/ReplySchema';
+import ReplyArticle from '../../svelte/discussion/ReplyArticle.svelte';
+
+interface Props {
+  threadKey: string;
+  replyKey: string;
+}
+
+const { threadKey, replyKey } = Astro.props;
+
+const replyResponse = await fetch(
+  `${Astro.url.origin}/api/replies/${threadKey}/${replyKey}.json`,
+);
+---
+{ replyResponse.ok ? (
+  <ReplyArticle reply={ReplySchema.parse(await replyResponse.json())} client:only="svelte"/>
+) : (
+  <blockquote>
+    {threadKey || '-'} / {replyKey || '-'} 404
+  </blockquote>
+)}

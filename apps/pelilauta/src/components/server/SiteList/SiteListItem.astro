@@ -1,0 +1,110 @@
+---
+import { systemToNounMapping } from 'src/schemas/nouns';
+import type { Site } from 'src/schemas/SiteSchema';
+import { toDisplayString } from 'src/utils/contentHelpers';
+import { createPlainSnippet } from 'src/utils/snippetHelpers';
+
+interface Props {
+  site: Site;
+}
+
+const { site }: Props = Astro.props;
+
+function systemToNoun(system?: string): string {
+  if (!system) return 'homebrew';
+  const map = systemToNounMapping as Record<string, string>;
+  return map[system] || 'homebrew';
+}
+---
+
+<article>
+  {site.posterURL ? ( 
+    <img 
+      src={site.posterURL} 
+      alt={site.name}
+      class="background-poster-for-site-list-item"
+      loading="lazy"
+    />
+    <div class="background-poster-for-site-list-item-shader"></div>
+  ) : ( 
+    <div class="elevation-1 item-background border-radius"></div>
+  )}
+  <a class="flex flex-col hoverable p-2 no-decoration border-radius flex-no-wrap" href={`/sites/${site.key}`}>
+    <div class="flex flex-row flex-no-wrap">
+    <!-- Poster/Icon -->
+    <div class="flex-none">
+      {site.avatarURL ? (
+        <img 
+          src={site.avatarURL} 
+          alt={site.name}
+          class="icon"
+          loading="lazy"
+        />
+      ) : (
+        <cn-icon noun={systemToNoun(site.system)} />
+      )}
+    </div>
+    <div>
+      <h4 class="downscaled">{site.name}</h4>
+      {site.description && (
+            <p class="downscaled">{
+              createPlainSnippet(site.description, 220)
+            }</p>
+          )}
+    </div>
+    <div class="flex-none">
+      {toDisplayString(site.flowTime)}
+    </div>
+  </div>
+  <div class="toolbar">
+    <div class="flex flex-row flex-no-wrap items-center">
+      <cn-icon noun='books' small></cn-icon>
+      <span class="downscaled">{site.pageRefs?.length}</span>
+    </div>
+    {(site.players?.length || 0) > 0 && (
+      <div class="flex flex-row flex-no-wrap items-center">
+        <cn-icon noun='adventurer' small></cn-icon>
+        <span class="downscaled">{site.players?.length}</span>
+      </div>
+    )}
+  </div>
+      
+</article>
+
+<style>
+.item-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface-1);
+  border-radius: var(--cn-border-radius);
+  z-index: -1;
+}
+.background-poster-for-site-list-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  display: block;
+  border-radius: var(--cn-border-radius);
+}
+.background-poster-for-site-list-item-shader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    color-mix(in hsl, var(--color-surface-1), transparent 70%) 0%,
+    var(--color-surface-1) 44%
+  );
+  z-index: -1;
+  border-radius: var(--cn-border-radius);
+}
+</style>

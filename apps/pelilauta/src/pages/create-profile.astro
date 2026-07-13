@@ -1,0 +1,8 @@
+--- 
+import CreateProfileForm from '@components/svelte/CreateProfileForm.svelte';
+import ModalPage from '@layouts/ModalPage.astro';
+---
+
+<ModalPage title="Create Your Profile">
+  <CreateProfileForm client:only="svelte" />
+</ModalPage>

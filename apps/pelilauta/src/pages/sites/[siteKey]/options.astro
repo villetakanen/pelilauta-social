@@ -1,0 +1,22 @@
+---
+import ModalPage from '@layouts/ModalPage.astro';
+import SiteOptionsApp from '@svelte/sites/options/SiteOptionsApp.svelte';
+import { SiteSchema } from 'src/schemas/SiteSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+
+const { siteKey } = Astro.params;
+
+const siteResponse = await fetch(`${Astro.url.origin}/api/sites/${siteKey}`);
+if (siteResponse.status === 404) {
+  return Astro.redirect('/404');
+}
+
+const site = SiteSchema.parse({
+  ...toClientEntry(await siteResponse.json()),
+  key: siteKey,
+});
+---
+
+<ModalPage>
+  <SiteOptionsApp site={site} client:only="svelte" />
+</ModalPage>
