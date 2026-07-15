@@ -37,6 +37,23 @@ The desired commit, push, and pull-request gates need one coherent repository po
 
 Candidate writeback: after root test, non-mutating check, and CI commands exist, add root-owned Lefthook configuration and align its commands with required GitHub checks. Remove nested ownership ambiguity in the same bounded tooling PBI.
 
+### 4. Deterministic Gate Policy Is Undefined
+
+The epic asks agents to add root test, non-mutating check, CI, and later Lefthook gates, but the repository does not explain the intended gate model. There is no durable practice describing which checks run during authoring, commit, push, pull request, deployment, or human acceptance; which commands may modify files; or why local and remote gates differ.
+
+This left issue #6 to infer both command names and policy from one mutating legacy script. In particular, a non-mutating Biome command only has clear value when tied to a verification boundary such as local CI parity, pre-push, or pull-request enforcement. A separate explicit write command serves the authoring/fix workflow.
+
+The intended model should distinguish:
+
+- Authoring commands may apply deterministic fixes and always require diff review.
+- Verification commands report drift and fail without modifying the worktree.
+- Commit gates stay fast and operate on the smallest relevant scope.
+- Push gates run broader local verification.
+- Pull-request gates run the authoritative deterministic CI set from a clean checkout.
+- Deployment smoke checks and human acceptance cover behavior that static gates cannot establish.
+
+Candidate writeback: validate the model through issues #6 and #7, then document it in a focused engineering verification practice or tooling spec. Root `AGENTS.md` should contain only the stable requirement to use repository-defined gates and treat failures as blockers, with detailed command ownership referenced rather than duplicated.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -44,3 +61,4 @@ Candidate writeback: after root test, non-mutating check, and CI commands exist,
 | Reusable delegated-PBI structure | `.github/ISSUE_TEMPLATE/` | Validate through one accepted delegated delivery cycle |
 | Assigned issues are mandatory context | Root `AGENTS.md` and delegation prompt | Confirm explicit assignment works without broad tracker scanning |
 | Commit, push, and PR gates have root ownership | Root Lefthook configuration, root package setup, GitHub CI, and branch protection | Root test/check commands and minimal CI exist and pass |
+| Deterministic gate purpose and ownership are explicit | Focused engineering verification practice or tooling spec, referenced briefly from root guidance | Validate command boundaries through issues #6 and #7 before documenting them as durable policy |
