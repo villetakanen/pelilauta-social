@@ -150,7 +150,8 @@ pnpm test:e2e     # Run end-to-end tests
 This project uses [Biome](https://biomejs.dev/) for fast linting and formatting.
 
 ```bash
-pnpm check        # Check and fix ALL files in the project
+pnpm check        # Verify ALL files (Biome + Astro/TypeScript) without modifying them
+pnpm check:write  # Explicitly fix Biome issues in ALL files
 ```
 
 **Git Hooks (Lefthook)**:
@@ -158,12 +159,14 @@ pnpm check        # Check and fix ALL files in the project
 - **Commit-msg**: Validates commit message format (Conventional Commits)
 
 **When to use each**:
-- `pnpm check` - Run manually to check the **entire codebase** (recommended after pulling changes)
+- `pnpm check` - Run manually to verify the **entire codebase** without changing files (recommended after pulling changes)
+- `pnpm check:write` - Run manually when you want Biome to **fix** issues across all files
 - Git hooks - Run automatically on commit to check **only your staged changes** (fast)
 
 **Key differences**:
 - Pre-commit hook: `biome check --write --staged {staged_files}` (staged files only)
-- Manual check: `biome check --write .` (all files)
+- Manual verification: `biome check . && astro check` (all files, non-mutating)
+- Manual fix: `biome check --write .` (all files)
 
 See [docs/lefthook.md](docs/lefthook.md) for more details.
 

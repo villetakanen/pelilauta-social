@@ -6,7 +6,8 @@
   "scripts": {
     "build": "pnpm --filter pelilauta build && node scripts/stage-default-netlify-output.mjs",
     "dev": "pnpm --filter './apps/*' --parallel --if-present run dev",
-    "test": "pnpm --filter './apps/*' --filter './packages/*' --if-present test"
+    "test": "pnpm --filter './apps/*' --filter './packages/*' --if-present test",
+    "check": "pnpm --filter './apps/*' --filter './packages/*' --if-present check"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
