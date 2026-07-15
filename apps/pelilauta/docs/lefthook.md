@@ -13,7 +13,8 @@ This project uses Lefthook to manage Git hooks. We run fast checks on `pre-commi
 
 ### Manual Check (Full Project)
 - Run manually with `pnpm check`
-- Checks **all files** in the project using `biome check --write .`
+- Verifies **all files** in the project using `biome check . && astro check` without modifying them
+- To explicitly fix Biome issues across all files, run `pnpm check:write` (`biome check --write .`)
 - Use this when:
   - You want to check the entire codebase
   - You've pulled changes from others
@@ -61,7 +62,8 @@ The following file types are checked:
 
 ### Inconsistent results between pre-commit and `pnpm check`
 - This is expected! Pre-commit only checks **staged files** while `pnpm check` checks **all files**
-- If you see issues in CI but not locally, run `pnpm check` to check all files
+- If you see issues in CI but not locally, run `pnpm check` to verify all files
+- Fix reported Biome issues with `pnpm check:write`
 - Consider running `pnpm check` before pushing to avoid CI failures
 
 ### Bypassing hooks (not recommended)
@@ -73,5 +75,5 @@ git commit --no-verify -m "your message"
 ## Acceptance Criteria
 - Pre-commit should auto-format staged files and block commits with unfixable issues
 - Commit messages violating Conventional Commits should be rejected
-- `pnpm check` should check and fix all files in the project
+- `pnpm check` should verify all files in the project without modifying them; `pnpm check:write` fixes Biome issues explicitly
 - CI should pass if `pnpm check` and `pnpm test` pass locally
