@@ -276,27 +276,27 @@ Delivery is intentionally serial for delegated implementation and review. Task `
 
 | Order | PBI | Starts after |
 | --- | --- | --- |
-| 1 | Add root test dispatch | Epic plan approved |
-| 2 | Add a non-mutating root check | 1 accepted |
-| 3 | Add minimal CI | 2 accepted |
-| 4 | Add `ds-spec-writer` | 3 accepted |
-| 5 | Add `ds-developer` | 4 accepted |
-| 6 | Approve design-system architecture and naming intent | 5 accepted |
-| 7 | Scaffold `packages/design-system` | 6 accepted |
-| 8 | Add deterministic DTCG-to-CSS projection | 7 accepted |
-| 9 | Scaffold `apps/design` | 8 accepted |
-| 10 | Integrate root commands and CI | 9 accepted |
-| 11 | Add `ds-doc-page-writer` | 10 accepted |
-| 12 | Deploy the design-site skeleton | 11 accepted and deployment approved |
-| 13 | Port color reference tokens | 12 accepted |
-| 14 | Port spatial and radius reference tokens | 13 accepted |
-| 15 | Port typography reference tokens | 14 accepted |
-| 16 | Capture exact Cyan 4 primitive inventory | 15 accepted |
-| 17 | Implement Cyan 4 compatibility stylesheet | 16 accepted |
-| 18 | Document Cyan 4 compatibility behavior | 17 accepted |
-| 19 | Run clean-workspace acceptance | 18 accepted |
-| 20 | Run human visual and architecture acceptance | 19 accepted |
-| 21 | Verify live site and close the loop | 20 accepted |
+| 1 | [#5 Add root test dispatch](https://github.com/villetakanen/pelilauta-social/issues/5) | Epic plan approved |
+| 2 | [#6 Add a non-mutating root check](https://github.com/villetakanen/pelilauta-social/issues/6) | 1 accepted |
+| 3 | [#7 Add minimal CI](https://github.com/villetakanen/pelilauta-social/issues/7) | 2 accepted |
+| 4 | [#8 Add `ds-spec-writer`](https://github.com/villetakanen/pelilauta-social/issues/8) | 3 accepted |
+| 5 | [#9 Add `ds-developer`](https://github.com/villetakanen/pelilauta-social/issues/9) | 4 accepted |
+| 6 | [#10 Approve design-system architecture and naming intent](https://github.com/villetakanen/pelilauta-social/issues/10) | 5 accepted |
+| 7 | [#11 Scaffold `packages/design-system`](https://github.com/villetakanen/pelilauta-social/issues/11) | 6 accepted |
+| 8 | [#12 Add deterministic DTCG-to-CSS projection](https://github.com/villetakanen/pelilauta-social/issues/12) | 7 accepted |
+| 9 | [#13 Scaffold `apps/design`](https://github.com/villetakanen/pelilauta-social/issues/13) | 8 accepted |
+| 10 | [#14 Integrate root commands and CI](https://github.com/villetakanen/pelilauta-social/issues/14) | 9 accepted |
+| 11 | [#15 Add `ds-doc-page-writer`](https://github.com/villetakanen/pelilauta-social/issues/15) | 10 accepted |
+| 12 | [#16 Deploy the design-site skeleton](https://github.com/villetakanen/pelilauta-social/issues/16) | 11 accepted and deployment approved |
+| 13 | [#17 Port color reference tokens](https://github.com/villetakanen/pelilauta-social/issues/17) | 12 accepted |
+| 14 | [#18 Port spatial and radius reference tokens](https://github.com/villetakanen/pelilauta-social/issues/18) | 13 accepted |
+| 15 | [#19 Port typography reference tokens](https://github.com/villetakanen/pelilauta-social/issues/19) | 14 accepted |
+| 16 | [#20 Capture exact Cyan 4 primitive inventory](https://github.com/villetakanen/pelilauta-social/issues/20) | 15 accepted |
+| 17 | [#21 Implement Cyan 4 compatibility stylesheet](https://github.com/villetakanen/pelilauta-social/issues/21) | 16 accepted |
+| 18 | [#22 Document Cyan 4 compatibility behavior](https://github.com/villetakanen/pelilauta-social/issues/22) | 17 accepted |
+| 19 | [#23 Run clean-workspace acceptance](https://github.com/villetakanen/pelilauta-social/issues/23) | 18 accepted |
+| 20 | [#24 Run human visual and architecture acceptance](https://github.com/villetakanen/pelilauta-social/issues/24) | 19 accepted |
+| 21 | [#25 Verify live site and close the loop](https://github.com/villetakanen/pelilauta-social/issues/25) | 20 accepted |
 
 Every delegated task receives only its issue, the linked plan sections, relevant current specs, and exact allowed paths. Review evaluates the actual diff and check output before advancing the sequence.
 
