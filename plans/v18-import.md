@@ -32,6 +32,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 | Complete | Add the root pnpm workspace manifest, lockfile, and development dispatcher. | Root `pnpm dev` launches every available app development server in parallel; a frozen root install preserves baseline versions. |
 | Complete | Configure the default Netlify site from the workspace root. | Root-default and package-directory builds publish `apps/pelilauta` while retaining imported app policies and SSR output. |
 | Complete | Expose the imported proprietary-assets gitlink to root Git and Netlify. | A fresh recursive checkout initializes `apps/pelilauta/public/myrrys-proprietary` at its pinned commit. |
+| Complete | Pin the default Netlify site's base to the workspace root. | Netlify resolves the publish directory once as `apps/pelilauta/dist`. |
 
 ## Recovery
 
@@ -60,6 +61,7 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - Root `pnpm dev` dispatches `apps/pelilauta`, and the resulting development server returns `200` with remote-backed content.
 - Root `pnpm build` succeeds, publishes static assets from `apps/pelilauta/dist`, and stages the Astro SSR function at root `.netlify/v1/functions/ssr`.
 - A fresh `git clone --recurse-submodules` registers the relocated proprietary-assets submodule and checks out pinned commit `b34789ab5beaf5d91c29870d51e6ff692a8b0675`.
+- Production deploy `6a57220ba617081b2af2e2f0` is live at `https://pelilauta-social-dev.netlify.app`; the home page and Firebase-backed thread, channel, and site endpoints respond successfully.
 
 ## Lessons
 
@@ -76,3 +78,4 @@ Establish v21 from an exact, runnable import of the current `pelilauta-17/main` 
 - Astro's Netlify adapter writes Frameworks API output under the Astro project root. A root-default Netlify build must stage `apps/pelilauta/.netlify/v1` at root `.netlify/v1` after building.
 - Netlify's package-directory flow still runs commands relative to the root base directory, so the app-local config also needs root-relative build and publish paths.
 - Git reads submodule mappings only from the repository-root `.gitmodules`; the imported app's nested mapping does not configure its relocated gitlink.
+- Netlify project setup may persist the selected package as its UI base directory. Root `netlify.toml` must explicitly set `base = "."` so its root-relative workspace paths cannot be prefixed twice.
