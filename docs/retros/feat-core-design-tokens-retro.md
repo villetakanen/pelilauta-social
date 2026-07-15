@@ -24,9 +24,23 @@ The durable rule should not require agents to scan every open issue. Delegation 
 
 Candidate writeback: after the first delegated PBI validates this workflow, add one short root `AGENTS.md` rule stating that an explicitly assigned issue and its linked artifacts are mandatory implementation context. Keep issue discovery and assignment in the delegation prompt.
 
+### 3. Root Lefthook Gates Are Missing
+
+Commits succeeded with `Can't find lefthook in PATH`, confirming that the repository has neither a reliably available root Lefthook executable nor root-owned hook rules. The imported application still declares Lefthook and a nested `postinstall`, but hook ownership is not established at the workspace root.
+
+The desired commit, push, and pull-request gates need one coherent repository policy implemented at the correct enforcement points:
+
+- Root Lefthook `pre-commit` runs the smallest fast, non-mutating checks appropriate for a commit.
+- Root Lefthook `pre-push` runs the approved broader local test/check gate.
+- GitHub CI and branch protection enforce pull-request checks; a local Git hook cannot guarantee PR policy.
+- Root package setup makes the pinned Lefthook executable available without relying on a global installation or nested package lifecycle behavior.
+
+Candidate writeback: after root test, non-mutating check, and CI commands exist, add root-owned Lefthook configuration and align its commands with required GitHub checks. Remove nested ownership ambiguity in the same bounded tooling PBI.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
 | --- | --- | --- |
 | Reusable delegated-PBI structure | `.github/ISSUE_TEMPLATE/` | Validate through one accepted delegated delivery cycle |
 | Assigned issues are mandatory context | Root `AGENTS.md` and delegation prompt | Confirm explicit assignment works without broad tracker scanning |
+| Commit, push, and PR gates have root ownership | Root Lefthook configuration, root package setup, GitHub CI, and branch protection | Root test/check commands and minimal CI exist and pass |
