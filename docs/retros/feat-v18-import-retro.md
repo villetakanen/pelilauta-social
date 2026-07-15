@@ -105,7 +105,6 @@ The loop did not stop at a local build. It verified the deployed SSR page and Fi
 | Installing all vendor agent skills created excessive context | External guidance was installed without selecting a minimal subset | Installation was removed | Inspect and install only task-specific skills; more context is not automatically better |
 | Homebrew CLI installation pulled a large dependency graph | Tool installation method was selected for convenience, not footprint | CLI now works globally | Prefer existing or ephemeral tooling unless durable local use justifies installation |
 | Import PR displayed extensive historical commits | Subtree import retained source ancestry | Kept history as imported | Decide history topology before import; use first-parent review now |
-| Epic decomposition found no repository issue template | A reusable PBI handoff schema had not been established | Authored the first delegated issue set with a consistent manual structure | Validate the structure through use, then encode it as a project issue template |
 
 ## Harness Assessment
 
@@ -135,7 +134,6 @@ The loop did not stop at a local build. It verified the deployed SSR page and Fi
 - Imported package scripts still contain `npm` and `npx` calls despite the pnpm workspace contract.
 - The application `check` command mutates files, so it is unsuitable as a CI gate.
 - Cache warming is a non-failing network side effect during build rather than an observable post-deploy operation.
-- No repository issue template standardizes objective, scope, exclusions, dependencies, acceptance evidence, and review gates for delegated PBIs.
 
 ## Candidate Writebacks
 
@@ -150,7 +148,6 @@ These are proposed compound outputs, not automatically approved changes.
 | Stable compatibility and workspace constraints | Root `AGENTS.md` | Already present; no expansion needed now |
 | Legacy component-specific behavior | Per-surface compatibility specs | Reverse from v18 before each migration |
 | Tool-specific procedural knowledge | Small scripts or scoped runbooks | Prefer deterministic enforcement over prose |
-| Reusable delegated-PBI handoff structure | `.github/ISSUE_TEMPLATE/` | Validate the manually authored core-design-token issues through at least one accepted delivery sequence |
 
 ## Atomic Next Steps
 
