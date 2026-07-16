@@ -62,6 +62,16 @@ The failure validates keeping Netlify as an independent deployment gate, but als
 
 Candidate writeback: update the Netlify runbook with the distinction between environment-secret scanning and smart detection, record the narrow public-value safelist procedure without values, and verify both production and deploy-preview contexts after configuration changes.
 
+### 6. Skills Were Planned Into A Tool-Specific Directory
+
+The epic planned the three project skills under `.opencode/skills/`, binding tool-agnostic markdown artifacts to one agent product even though the repository is worked on with several agent tools and none of them is privileged.
+
+The corrected layout keeps one canonical copy per skill under `.agents/skills/<name>/SKILL.md` and gives each configured tool a discovery symlink (for example `.claude/skills/<name>` pointing at the canonical folder). The skill content stays on the shared frontmatter subset (`name`, `description`) so a single file remains valid across tools. Claude Code discovered `ds-spec-writer` through the symlink in-session, confirming symlink discovery works for at least one tool; other tools should be verified once when their symlink is added.
+
+Issue #8 was amended accordingly. Issues #9 and #15 and the plan's repository-layout and skill sections still describe `.opencode/skills/` and need the same amendment before those PBIs start.
+
+Candidate writeback: record the canonical-skill-plus-symlink layout as the durable convention once a second tool has verified discovery, and amend the remaining skill PBIs and plan sections before they are delegated.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -71,3 +81,4 @@ Candidate writeback: update the Netlify runbook with the distinction between env
 | Commit, push, and PR gates have root ownership | Root Lefthook configuration, root package setup, GitHub CI, and branch protection | Root test/check commands and minimal CI exist and pass |
 | Deterministic gate purpose and ownership are explicit | Focused engineering verification practice or tooling spec, referenced briefly from root guidance | Validate command boundaries through issues #6 and #7 before documenting them as durable policy |
 | Netlify secret-scan modes and public-value safelisting are explicit | Netlify deployment runbook | Deploy preview passes with standard and smart secret scanning still enabled |
+| Skills live in canonical `.agents/skills/` with per-tool symlinks | Plan skill sections, issues #9 and #15, and a short layout note where skills are documented | A second agent tool discovers a symlinked skill after restart |
