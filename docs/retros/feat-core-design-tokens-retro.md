@@ -54,6 +54,14 @@ The intended model should distinguish:
 
 Candidate writeback: validate the model through issues #6 and #7, then document it in a focused engineering verification practice or tooling spec. Root `AGENTS.md` should contain only the stable requirement to use repository-defined gates and treat failures as blockers, with detailed command ownership referenced rather than duplicated.
 
+### 5. Netlify Smart Detection Rejected A Public Client Key
+
+Opening the draft epic PR activated the Netlify deploy-preview gate and exposed a deployment configuration gap. The build generated the intentionally public Firebase API key into client and SSR bundles. Although `SECRETS_SCAN_OMIT_KEYS=PUBLIC_apiKey` was configured, Netlify's separate smart-detection scanner still classified the `AIza`-shaped value as a potential secret and failed the deploy preview.
+
+The failure validates keeping Netlify as an independent deployment gate, but also shows that a configured standard secret-scan omission does not imply smart-detection parity. Public client values require a narrow smart-detection safelist; secret scanning itself should remain enabled.
+
+Candidate writeback: update the Netlify runbook with the distinction between environment-secret scanning and smart detection, record the narrow public-value safelist procedure without values, and verify both production and deploy-preview contexts after configuration changes.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -62,3 +70,4 @@ Candidate writeback: validate the model through issues #6 and #7, then document 
 | Assigned issues are mandatory context | Root `AGENTS.md` and delegation prompt | Confirm explicit assignment works without broad tracker scanning |
 | Commit, push, and PR gates have root ownership | Root Lefthook configuration, root package setup, GitHub CI, and branch protection | Root test/check commands and minimal CI exist and pass |
 | Deterministic gate purpose and ownership are explicit | Focused engineering verification practice or tooling spec, referenced briefly from root guidance | Validate command boundaries through issues #6 and #7 before documenting them as durable policy |
+| Netlify secret-scan modes and public-value safelisting are explicit | Netlify deployment runbook | Deploy preview passes with standard and smart secret scanning still enabled |
