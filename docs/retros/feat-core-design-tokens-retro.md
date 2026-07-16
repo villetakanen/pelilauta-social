@@ -72,6 +72,14 @@ Issue #8 was amended accordingly. Issues #9 and #15 and the plan's repository-la
 
 Candidate writeback: record the canonical-skill-plus-symlink layout as the durable convention once a second tool has verified discovery, and amend the remaining skill PBIs and plan sections before they are delegated.
 
+### 7. The First Skill Draft Was Principle-Heavy And Procedure-Light
+
+Review of `ds-spec-writer` found a concise boundary and useful spec-anchored principles, but little ordered procedure for loading context, selecting a mode, producing the artifact, validating it, and handing adjacent work to another skill. Abstract guidance such as treating specs as hypotheses did not tell the executing agent what to do next, while an overly strict verification rule incorrectly excluded explicit human acceptance criteria.
+
+A proposed meta-skill supplied the useful correction: define exact triggers, outputs, neighboring handoffs, affirmative targets, and optional external assets before writing instructions. Its original language was itself somewhat abstract and implied creating supporting directories unconditionally, so the persisted version was reduced to concrete steps and creates `references/` or `scripts/` only when they contain necessary material.
+
+Candidate writeback: use `.agents/skills/meta-skill-architect/SKILL.md` to revise `ds-spec-writer`, then validate one positive trigger, one neighboring non-trigger, and discovery through both configured tools before accepting either skill convention as durable.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -82,3 +90,4 @@ Candidate writeback: record the canonical-skill-plus-symlink layout as the durab
 | Deterministic gate purpose and ownership are explicit | Focused engineering verification practice or tooling spec, referenced briefly from root guidance | Validate command boundaries through issues #6 and #7 before documenting them as durable policy |
 | Netlify secret-scan modes and public-value safelisting are explicit | Netlify deployment runbook | Deploy preview passes with standard and smart secret scanning still enabled |
 | Skills live in canonical `.agents/skills/` with per-tool symlinks | Plan skill sections, issues #9 and #15, and a short layout note where skills are documented | A second agent tool discovers a symlinked skill after restart |
+| Skill authoring starts from triggers, outputs, procedure, and handoffs | `.agents/skills/meta-skill-architect/SKILL.md` | Revise and successfully trigger `ds-spec-writer` without activating it for implementation or docs-page work |
