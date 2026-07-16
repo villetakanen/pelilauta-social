@@ -312,7 +312,7 @@ Every delegated task receives only its issue, the linked plan sections, relevant
 
 3. Add minimal CI.
 
-   Verify recursive checkout, frozen install, tests, non-mutating checks, and root build. Keep deployment outside PR CI.
+   Verify recursive checkout, repository-pinned Node/pnpm setup, frozen install, tests, and non-mutating checks. PR CI does not run `pnpm build`: Netlify deploy previews own production build and adapter verification, and final acceptance runs complete workspace builds. Keep deployment outside PR CI. Issue 14 later extends test/check coverage for the design package and app. Lefthook remains a later local-feedback mechanism and does not replace clean-runner PR verification.
 
 These are direct writebacks from the v18 import retrospective and gate implementation work in the new workspace surfaces.
 
