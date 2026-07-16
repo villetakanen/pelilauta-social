@@ -8,7 +8,7 @@ Iteration outcome: establish the v21 design-system foundation without changing t
 
 This iteration creates a small, independently deployable design-system workspace and its first stable foundation: the lowest-level visual tokens derived from v20. The tokens are specified, implemented, and demonstrated in living design-system books. A separate Cyan 4 compatibility stylesheet maps legacy custom-property names to the canonical v21 names so later component migrations can preserve old consumers deliberately.
 
-The iteration also creates three project-local OpenCode skills that keep future design-system work inside the correct spec, package, documentation, and app boundaries.
+The iteration also creates three project-local agent skills that keep future design-system work inside the correct spec, package, documentation, and app boundaries.
 
 The epic does not migrate a Pelilauta component or load the new design system into `apps/pelilauta`.
 
@@ -44,7 +44,7 @@ Confirmed on 2026-07-15:
 | v20 provenance is explicit | Specs record an immutable repository URL, commit, repository-relative source path, and selection intent; DTCG code contains the reviewed values |
 | Books reflect implementation | Published token tables and examples derive from the canonical DTCG token data |
 | Cyan 4 compatibility is bounded | `cyan-4.css` contains aliases to canonical tokens, has no independent visual literals, and is not loaded by `apps/pelilauta` |
-| Skills enforce ownership | Each skill has narrow write boundaries and can be discovered after OpenCode restarts |
+| Skills enforce ownership | Each skill has narrow write boundaries and can be discovered by each configured agent tool after restart |
 | Deployment is observable | A Git-triggered production deploy and read-only HTTP smoke check pass at the canonical design-site URL |
 
 ## Artifact Roles
@@ -220,10 +220,13 @@ specs/design-system/
   tokens/
   living-books/
 
-.opencode/skills/
+.agents/skills/
   ds-doc-page-writer/SKILL.md
   ds-spec-writer/SKILL.md
   ds-developer/SKILL.md
+
+.claude/skills/              # relative discovery symlinks
+.opencode/skills/            # relative discovery symlinks
 ```
 
 Source-level links use one Vite alias mirrored by TypeScript paths. No workspace package linking or build orchestrator is introduced for design-system source.
@@ -264,7 +267,7 @@ Source-level links use one Vite alias mirrored by TypeScript paths. No workspace
 - Does not invent behavior or production APIs; missing capability is reported as a package gap.
 - Runs the narrow design-site build and route checks.
 
-Each skill is created as a separate reversible PBI under `.opencode/skills/<name>/SKILL.md`. OpenCode must be restarted before discovery is accepted.
+Each skill is created as a separate reversible PBI with one canonical copy under `.agents/skills/<name>/SKILL.md` and relative discovery symlinks for configured tools. Each configured tool must be restarted before discovery is accepted. Local tool settings and duplicate skill copies remain untracked.
 
 ## Delivery Sequence
 
