@@ -78,6 +78,8 @@ Review of `ds-spec-writer` found a concise boundary and useful spec-anchored pri
 
 A proposed meta-skill supplied the useful correction: define exact triggers, outputs, neighboring handoffs, affirmative targets, and optional external assets before writing instructions. Its original language was itself somewhat abstract and implied creating supporting directories unconditionally, so the persisted version was reduced to concrete steps and creates `references/` or `scripts/` only when they contain necessary material.
 
+The complete proposal also mandated one exact template and a root `.agent-state.json` update after every execution. Those mechanisms were not adopted: skill shapes need to follow workflow complexity, and an unowned shared state file would become stale, create merge contention, and duplicate issue/session state. The persisted meta-skill reports handoff through the active task unless the repository later defines a state contract.
+
 Candidate writeback: use `.agents/skills/meta-skill-architect/SKILL.md` to revise `ds-spec-writer`, then validate one positive trigger, one neighboring non-trigger, and discovery through both configured tools before accepting either skill convention as durable.
 
 ## Candidate Writebacks
