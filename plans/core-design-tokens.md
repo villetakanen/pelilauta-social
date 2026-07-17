@@ -226,7 +226,7 @@ specs/design-system/
   ds-developer/SKILL.md
 
 .claude/skills/              # relative discovery symlinks
-.opencode/skills/            # relative discovery symlinks
+opencode.json                # registers the canonical skill path
 ```
 
 Source-level links use one Vite alias mirrored by TypeScript paths. No workspace package linking or build orchestrator is introduced for design-system source.
@@ -267,7 +267,7 @@ Source-level links use one Vite alias mirrored by TypeScript paths. No workspace
 - Does not invent behavior or production APIs; missing capability is reported as a package gap.
 - Runs the narrow design-site build and route checks.
 
-Each skill is created as a separate reversible PBI with one canonical copy under `.agents/skills/<name>/SKILL.md` and relative discovery symlinks for configured tools. Each configured tool must be restarted before discovery is accepted. Local tool settings and duplicate skill copies remain untracked.
+Each skill is created as a separate reversible PBI with one canonical copy under `.agents/skills/<name>/SKILL.md` and the smallest discovery adapter required by each configured tool. Claude uses relative symlinks; OpenCode registers `.agents/skills` once through `opencode.json`. Each configured tool must be restarted before in-session discovery is accepted. Local tool settings and duplicate skill copies remain untracked.
 
 ## Delivery Sequence
 
