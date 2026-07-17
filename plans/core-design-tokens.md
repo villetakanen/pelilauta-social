@@ -154,7 +154,7 @@ Rules:
 - DTCG token paths are the canonical platform-neutral identities.
 - `--cn-*` is the only generated public web namespace.
 - Paths and generated names identify category, role, and optional scale in that order.
-- Public size suffixes use one vocabulary: `xs`, `sm`, `md`, `lg`, `xl`.
+- Public ordinal size suffixes use one vocabulary: `xs`, `sm`, `md`, `lg`, `xl`; `radius.full` is the non-ordinal fully rounded endpoint.
 - Numeric color steps remain numeric because they identify tonal references, not semantic roles.
 - DTCG types are explicit and never inferred from names.
 - Canonical token files never refer to Cyan 4 aliases.
