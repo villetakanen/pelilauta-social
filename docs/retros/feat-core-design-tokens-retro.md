@@ -82,6 +82,14 @@ The complete proposal also mandated one exact template and a root `.agent-state.
 
 Candidate writeback: use `.agents/skills/meta-skill-architect/SKILL.md` to revise `ds-spec-writer`, then validate one positive trigger, one neighboring non-trigger, and discovery through both configured tools before accepting either skill convention as durable.
 
+### 8. Spec Validation Confused Evidence With Planned Targets
+
+The first real `ds-spec-writer` task required design-system specs before package scaffolding. The skill initially required every referenced repository path to exist, which made a spec-first architecture task impossible whenever it needed to name the path that a later PBI would create.
+
+The corrected rule distinguishes existing evidence, which must resolve, from planned implementation targets, which must be labeled as planned. This preserves provenance checks without forcing implementation to precede intent.
+
+Candidate writeback: validate the distinction during issue #10 review and retain it in `ds-spec-writer` if reviewers can distinguish planned targets from broken references without ambiguity.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -93,3 +101,4 @@ Candidate writeback: use `.agents/skills/meta-skill-architect/SKILL.md` to revis
 | Netlify secret-scan modes and public-value safelisting are explicit | Netlify deployment runbook | Deploy preview passes with standard and smart secret scanning still enabled |
 | Skills live in canonical `.agents/skills/` with minimal per-tool discovery adapters | Plan skill sections, issues #9 and #15, and a short layout note where skills are documented | Claude and OpenCode discover the same canonical skills and pass trigger tests after restart |
 | Skill authoring starts from triggers, outputs, procedure, and handoffs | `.agents/skills/meta-skill-architect/SKILL.md` | Revise and successfully trigger `ds-spec-writer` without activating it for implementation or docs-page work |
+| Spec validation distinguishes evidence from planned implementation paths | `.agents/skills/ds-spec-writer/SKILL.md` | Issue #10 specs label planned targets while all evidence references resolve |
