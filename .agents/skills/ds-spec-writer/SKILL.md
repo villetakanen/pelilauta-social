@@ -28,13 +28,16 @@ Produce one bounded design-system intent artifact under `specs/design-system/**`
 4. Write the spec.
    - Follow the nearest current spec structure; include only sections relevant to this surface.
    - When no repository pattern exists, use `Context`, `Architecture`, and `Acceptance` as the minimal structure.
+   - Include YAML frontmatter with exactly one status: `draft`, `approved`, or `deprecated`. New and reverse-engineered specs start as `draft` until human approval.
    - Capture context, ownership, architecture constraints, and observable quality criteria without narrating code.
    - State constraints as affirmative system behavior where practical. Use explicit prohibitions when they protect scope, compatibility, security, or data.
    - Label acceptance as deterministic verification, probabilistic review, or human acceptance as appropriate.
    - Cite external evidence with repository URL, immutable commit, and repository-relative path.
 
 5. Validate and report.
-   - Confirm every referenced repository path exists and no committed text contains workstation paths.
+   - Confirm frontmatter contains one allowed status and reflects the current human decision.
+   - Confirm existing-source references resolve. Mark implementation paths that do not exist yet as planned targets.
+   - Confirm no committed text contains workstation paths.
    - Confirm the spec does not claim behavior unsupported by code, evidence, or an explicit human decision.
    - Report the spec path, provenance used, assumptions, reconciliation gates, and required handoff.
 
