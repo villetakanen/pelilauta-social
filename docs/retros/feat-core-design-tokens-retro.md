@@ -90,6 +90,14 @@ The corrected rule distinguishes existing evidence, which must resolve, from pla
 
 Candidate writeback: validate the distinction during issue #10 review and retain it in `ds-spec-writer` if reviewers can distinguish planned targets from broken references without ambiguity.
 
+### 9. Spec Lifecycle State Was Missing
+
+The first design-system specs were written without lifecycle metadata because neither repository guidance nor `ds-spec-writer` defined how approval state is represented. Human review established a three-state frontmatter contract: `draft`, `approved`, or `deprecated`.
+
+New and reverse-engineered specs begin as `draft`, human acceptance promotes them to `approved`, and superseded intent remains discoverable as `deprecated` when removal would hide a still-relevant lifecycle fact.
+
+Candidate writeback: retain the status check in `ds-spec-writer` and apply the same frontmatter contract to future spec templates or validation tooling once enough specs exist to justify automation.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -102,3 +110,4 @@ Candidate writeback: validate the distinction during issue #10 review and retain
 | Skills live in canonical `.agents/skills/` with minimal per-tool discovery adapters | Plan skill sections, issues #9 and #15, and a short layout note where skills are documented | Claude and OpenCode discover the same canonical skills and pass trigger tests after restart |
 | Skill authoring starts from triggers, outputs, procedure, and handoffs | `.agents/skills/meta-skill-architect/SKILL.md` | Revise and successfully trigger `ds-spec-writer` without activating it for implementation or docs-page work |
 | Spec validation distinguishes evidence from planned implementation paths | `.agents/skills/ds-spec-writer/SKILL.md` | Issue #10 specs label planned targets while all evidence references resolve |
+| Specs expose lifecycle state in frontmatter | `.agents/skills/ds-spec-writer/SKILL.md` and future spec validation | New specs use `draft`; only explicit human acceptance sets `approved` |
