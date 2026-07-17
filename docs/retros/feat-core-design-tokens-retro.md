@@ -68,7 +68,7 @@ The epic planned the three project skills under `.opencode/skills/`, binding too
 
 The corrected layout keeps one canonical copy per skill under `.agents/skills/<name>/SKILL.md` and gives each configured tool the smallest discovery adapter it needs. Claude uses relative symlinks; OpenCode registers `.agents/skills` once through `opencode.json` instead of maintaining one symlink per skill. The skill content stays on the shared frontmatter subset (`name`, `description`) so a single file remains valid across tools. Claude Code discovered `ds-spec-writer` through its symlink, and `opencode debug skill` discovered all four canonical skills through the configured path.
 
-Issue #8 was amended accordingly. Issues #9 and #15 and the plan's repository-layout and skill sections still describe `.opencode/skills/` and need the same amendment before those PBIs start.
+Issues #8, #9, and #15 and the epic plan were amended to use the canonical skill directory and tool-appropriate discovery adapters before the remaining skill PBIs start.
 
 Candidate writeback: record the canonical-skill-plus-adapter layout as the durable convention after restarted sessions verify trigger behavior, and amend the remaining skill PBIs and plan sections before they are delegated.
 
