@@ -1,0 +1,3 @@
+{
+  "$description": "Canonical v21 reference tokens. Structure and values conform to DTCG 2025.10; see specs/design-system/tokens/spec.md for intent and docs/adrs/0001-use-dtcg-paths-and-generated-css-names.md for naming. Token families are added one reviewed vertical slice at a time."
+}
