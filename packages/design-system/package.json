@@ -8,6 +8,7 @@
   },
   "scripts": {
     "check": "node scripts/validate-tokens.mjs",
+    "generate": "node scripts/generate-css.mjs",
     "test": "node --test \"tests/*.test.mjs\""
   }
 }

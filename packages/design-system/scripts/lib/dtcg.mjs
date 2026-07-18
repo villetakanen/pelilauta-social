@@ -1,7 +1,7 @@
 /**
  * Dependency-free conformance checks for the canonical DTCG 2025.10 token
  * source under `tokens/`. This module owns the supported input scope; the
- * deterministic `--cn-*` projection builds on it in a later issue.
+ * deterministic `--cn-*` projection consumes its validated token map.
  *
  * Supported scope (DTCG 2025.10 Format + Color):
  * - Plain-object token trees from `*.tokens.json` files.
@@ -44,6 +44,7 @@ const GROUP_PROPERTIES = new Set([
 ]);
 
 const ALIAS_PATTERN = /^\{([^{}]+)\}$/;
+const CANONICAL_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DIMENSION_UNITS = new Set(["px", "rem"]);
 const FONT_WEIGHT_KEYWORDS = new Set([
   "thin",
@@ -103,9 +104,9 @@ function validateName(name, parentPath, errors) {
     errors.push(`empty token or group name under "${where}"`);
     return false;
   }
-  if (/[{}.]/.test(name)) {
+  if (!CANONICAL_NAME_PATTERN.test(name)) {
     errors.push(
-      `name "${name}" under "${where}" must not contain "{", "}", or "."`,
+      `name "${name}" under "${where}" must use lowercase letters, digits, and single hyphens`,
     );
     return false;
   }
@@ -133,8 +134,46 @@ function validateConcreteValue(path, type, value, errors) {
           `token "${path}" has color components that are not numbers or "none"`,
         );
       }
-      if ("alpha" in value && typeof value.alpha !== "number") {
-        errors.push(`token "${path}" has a non-numeric color alpha`);
+      if (value.components.length !== 3) {
+        errors.push(`token "${path}" color must have exactly three components`);
+      }
+      if (
+        "alpha" in value &&
+        (!Number.isFinite(value.alpha) || value.alpha < 0 || value.alpha > 1)
+      ) {
+        errors.push(`token "${path}" color alpha must be a number from 0 to 1`);
+      }
+      if (componentsValid && value.components.length === 3) {
+        const numericInRange = (
+          component,
+          minimum,
+          maximum,
+          includeMaximum = true,
+        ) =>
+          component === "none" ||
+          (Number.isFinite(component) &&
+            component >= minimum &&
+            (includeMaximum ? component <= maximum : component < maximum));
+        if (
+          value.colorSpace === "srgb" &&
+          !value.components.every((component) =>
+            numericInRange(component, 0, 1),
+          )
+        ) {
+          errors.push(
+            `token "${path}" srgb components must be from 0 to 1 or "none"`,
+          );
+        }
+        if (
+          value.colorSpace === "oklch" &&
+          (!numericInRange(value.components[0], 0, 1) ||
+            !numericInRange(value.components[1], 0, Number.POSITIVE_INFINITY) ||
+            !numericInRange(value.components[2], 0, 360, false))
+        ) {
+          errors.push(
+            `token "${path}" oklch components must be lightness 0-1, non-negative chroma, and hue 0-360 or "none"`,
+          );
+        }
       }
       return;
     }

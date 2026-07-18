@@ -65,11 +65,16 @@ test("unknown $-prefixed properties are rejected, not ignored", () => {
   assert.ok(errors.some((e) => e.includes('unsupported property "$root"')));
 });
 
-test("names may not contain braces or dots", () => {
+test("names use the canonical lowercase path-segment grammar", () => {
   const { errors } = validateTokenTree({
     "color.primary": { red: RED },
+    "bad name": { red: RED },
+    "bad;name": { red: RED },
+    Uppercase: { red: RED },
+    "double--hyphen": { red: RED },
   });
-  assert.ok(errors.some((e) => e.includes('must not contain')));
+  assert.equal(errors.length, 5);
+  assert.ok(errors.every((error) => error.includes("lowercase letters")));
 });
 
 test("a token may not contain child nodes", () => {
@@ -104,6 +109,45 @@ test("concrete values must match their DTCG type", () => {
     font: { weight: { bad: { $type: "fontWeight", $value: 1200 } } },
   });
   assert.equal(errors.length, 3);
+});
+
+test("projected color spaces enforce DTCG component and alpha ranges", () => {
+  const { errors } = validateTokenTree({
+    color: {
+      short: {
+        $type: "color",
+        $value: { colorSpace: "srgb", components: [1, 0] },
+      },
+      translucent: {
+        $type: "color",
+        $value: { colorSpace: "srgb", components: [1, 0, 0], alpha: 2 },
+      },
+      "out-of-gamut": {
+        $type: "color",
+        $value: { colorSpace: "srgb", components: [1.1, 0, 0] },
+      },
+      "invalid-oklch": {
+        $type: "color",
+        $value: { colorSpace: "oklch", components: [1.1, -0.1, 360] },
+      },
+    },
+  });
+  assert.ok(errors.some((error) => error.includes("exactly three components")));
+  assert.ok(
+    errors.some((error) =>
+      error.includes("alpha must be a number from 0 to 1"),
+    ),
+  );
+  assert.ok(
+    errors.some((error) =>
+      error.includes("srgb components must be from 0 to 1"),
+    ),
+  );
+  assert.ok(
+    errors.some((error) =>
+      error.includes("oklch components must be lightness 0-1"),
+    ),
+  );
 });
 
 test("merging rejects the same top-level group from two files", () => {
