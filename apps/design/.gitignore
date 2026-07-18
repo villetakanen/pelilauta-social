@@ -5,5 +5,9 @@ dist/
 # generated types
 .astro/
 
+# browser test output
+playwright-report/
+test-results/
+
 # dependencies
 node_modules/
