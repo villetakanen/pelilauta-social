@@ -1,0 +1,94 @@
+---
+import "@design-system/styles/color.css";
+
+const title = "Pelilauta Design System";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">PELILAUTA / V21</p>
+      <h1>{title}</h1>
+      <p class="intro">
+        Living books connect design intent to the exact contracts used by
+        Pelilauta. Each book is shipped with its specification and production
+        implementation.
+      </p>
+      <section>
+        <p class="index">01 / COLOR SYSTEM</p>
+        <h2><a href="/tokens/color">Light and Dark color themes</a></h2>
+        <p>
+          The established v20 OKLCH references, semantic roles, and Cyan 4
+          compatibility contract now loaded by <code>pelilauta.social</code>.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+  :global(body) {
+    margin: 0;
+    min-block-size: 100vh;
+    color: var(--cn-text);
+    background:
+      radial-gradient(circle at 85% 10%, var(--cn-hover), transparent 35rem),
+      var(--cn-background);
+    font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+  }
+  main {
+    margin-inline: auto;
+    padding: clamp(2rem, 8vw, 7rem) clamp(1.25rem, 5vw, 4rem);
+    max-inline-size: 72rem;
+  }
+  .eyebrow,
+  .index {
+    color: var(--cn-text-low);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+  h1 {
+    margin-block: 0.5rem 1.5rem;
+    max-inline-size: 10ch;
+    color: var(--cn-text-high);
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 600;
+    letter-spacing: -0.06em;
+    line-height: 0.88;
+  }
+  .intro {
+    max-inline-size: 42rem;
+    color: var(--cn-text-low);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.5;
+  }
+  section {
+    margin-block-start: clamp(4rem, 12vw, 10rem);
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--cn-border);
+  }
+  h2 {
+    margin-block: 1rem;
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+  }
+  a {
+    color: var(--cn-link);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.15em;
+  }
+  a:hover {
+    color: var(--cn-link-hover);
+  }
+  code {
+    color: var(--cn-text-high);
+  }
+</style>

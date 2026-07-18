@@ -82,12 +82,17 @@ components. Cyan 4 remains installed because this slice replaces its color
 contract, not its typography, layout utilities, component styles, or Lit
 components.
 
+`packages/design-system/pages/tokens/ColorPage.astro` is the living DS book for
+this intent and contract. It parses the committed reference and compatibility
+CSS at build time, renders both semantic modes, and is exposed by the thin
+`apps/design/src/pages/tokens/color.astro` route.
+
 The source-level link uses a Vite alias mirrored by a TypeScript path alias. No
 workspace package dependency or build orchestration is introduced.
 
 CSS is canonical for this web-only consumer. This slice does not introduce a
-JSON token manifest, DTCG schema, generator, projection, design-site page, or
-new dependency.
+JSON token manifest, DTCG schema, generator, projection, or a new third-party
+package version. The design app and book are required verification consumers.
 
 ## Translation Rules
 
@@ -127,7 +132,7 @@ This feature must not:
 - repair the existing CodeMirror `.dark` class detection mismatch;
 - alter PWA metadata or browser chrome colors;
 - migrate spatial, radius, typography, or motion tokens;
-- add design-site or token-generation infrastructure.
+- add token-generation infrastructure or unrelated design-site functionality.
 
 ## Delivery Plan
 
@@ -137,6 +142,7 @@ This feature must not:
 | Complete | Add the static v20 reference, semantic, and Cyan 4 compatibility CSS under `packages/design-system/styles`. | Exact reference values match the immutable v20 CSS; every production-consumed legacy property resolves without fallback. |
 | Complete | Import the local theme after Cyan 4 in both Pelilauta head components and update only direct application chroma consumers that cannot be translated safely. | Normal and editor builds load the local theme after Cyan 4 without changing routes or behavior. |
 | Complete | Add deterministic color-contract and browser checks for Light and Dark modes. | Contract tests cover exact references, layer order, transitive local/Cyan property resolution, and head imports; Playwright verifies canonical computed roles, CodeMirror styles, and inherited custom-element color in both modes. |
+| Complete | Publish the intent and contract as a package-owned DS book. | `/tokens/color` builds from current CSS, renders Light and Dark semantics, lists all 42 references, and exposes the Cyan 4 translation table. |
 | In progress | Run repository checks, deploy a preview, and complete human visual acceptance before release. | Unit tests, check, build, focused Playwright checks, preview smoke tests, and the route matrix below pass. |
 
 If the production import and first browser evidence are not working within one
@@ -160,6 +166,9 @@ delay.
 - All 462 unit tests pass, including six color-theme contract tests.
 - `pnpm --filter pelilauta check` reports no new errors.
 - `pnpm --filter pelilauta build` succeeds.
+- `pnpm --filter design build` succeeds and emits `/tokens/color`.
+- `pnpm --filter design test:e2e` verifies the CSS-derived book content and
+  Light/Dark computed values in Chromium.
 - Focused Playwright checks run through the repository-defined script rather
   than invoking the binary directly.
 
