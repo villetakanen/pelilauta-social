@@ -10,6 +10,7 @@
 - Migrate one bounded surface at a time: preserve its behavior first, then replace its Lit.js dependency with the equivalent local Svelte component.
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
 - For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
+- A design-system functionality is complete only when the same delivery slice includes its intent spec, contract implementation, and package-owned DS book integrated into `apps/design`.
 - Record durable behavior and architecture in `specs/` and irreversible decisions in `docs/adrs/` when those directories are introduced. A PBI describes one change; its linked spec remains the source of truth.
 
 ## Workspace Contract
