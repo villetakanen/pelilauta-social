@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import netlify from '@astrojs/netlify';
 import svelte from '@astrojs/svelte';
 import { defineConfig } from 'astro/config';
@@ -11,6 +12,13 @@ export default defineConfig({
   output: 'server',
 
   vite: {
+    resolve: {
+      alias: {
+        '@design-system': fileURLToPath(
+          new URL('../../packages/design-system', import.meta.url),
+        ),
+      },
+    },
     plugins: [
       tsconfigPaths(),
       visualizer({

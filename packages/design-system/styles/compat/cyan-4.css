@@ -1,0 +1,199 @@
+:root {
+  /* Cyan 4 chroma names retain their names but resolve to v20 references. */
+  --chroma-K-S: var(--cn-color-surface-100);
+  --chroma-S-K: var(--cn-color-surface-0);
+  --chroma-primary-10: var(--cn-color-primary-10);
+  --chroma-primary-20: var(--cn-color-primary-20);
+  --chroma-primary-30: var(--cn-color-primary-30);
+  --chroma-primary-40: var(--cn-color-primary-40);
+  --chroma-primary-50: var(--cn-color-primary-50);
+  --chroma-primary-60: var(--cn-color-primary-60);
+  --chroma-primary-70: var(--cn-color-primary-70);
+  --chroma-primary-80: var(--cn-color-primary-80);
+  --chroma-primary-90: var(--cn-color-primary-90);
+  --chroma-primary-95: var(--cn-color-primary-95);
+  --chroma-primary-99: var(--cn-color-primary-99);
+  --chroma-surface-10: var(--cn-color-surface-10);
+  --chroma-surface-20: var(--cn-color-surface-20);
+  --chroma-surface-30: var(--cn-color-surface-30);
+  --chroma-surface-40: var(--cn-color-surface-40);
+  --chroma-surface-50: var(--cn-color-surface-50);
+  --chroma-surface-60: var(--cn-color-surface-60);
+  --chroma-surface-70: var(--cn-color-surface-70);
+  --chroma-surface-80: var(--cn-color-surface-80);
+  --chroma-surface-90: var(--cn-color-surface-90);
+  --chroma-surface-95: var(--cn-color-surface-95);
+  --chroma-surface-99: var(--cn-color-surface-99);
+  --chroma-info: var(--cn-color-info);
+  --chroma-warning: var(--cn-color-warning);
+  --chroma-error: var(--cn-color-error);
+  --chroma-info-tint: color-mix(
+    in oklch,
+    var(--cn-color-info),
+    transparent 90%
+  );
+  --chroma-warning-tint: color-mix(
+    in oklch,
+    var(--cn-color-warning),
+    transparent 90%
+  );
+  --chroma-error-tint: color-mix(
+    in oklch,
+    var(--cn-color-error),
+    transparent 90%
+  );
+
+  /* Cyan 4 semantic names map to established v20 roles. */
+  --color-surface: var(--cn-surface);
+  --color-surface-1: var(--cn-surface-1);
+  --color-surface-2: var(--cn-surface-2);
+  --color-surface-3: var(--cn-surface-3);
+  --color-surface-4: var(--cn-surface-4);
+  --color-surface-hover: var(--cn-hover);
+  --color-on-surface: var(--cn-on-surface);
+  --color-on-surface-secondary: var(--cn-on-surface-secondary);
+  --color-on: var(--cn-on-surface);
+  --color-on-primary: var(--cn-on-button);
+  --color-secondary: var(--cn-surface-4);
+  --color-secondary-1: var(--cn-surface-3);
+  --color-on-secondary: var(--cn-on-surface);
+  --color-background: var(--cn-background);
+  --color-on-background: var(--cn-on-background);
+  --color-text: var(--cn-text);
+  --color-text-primary: var(--cn-text);
+  --color-text-secondary: var(--cn-text-low);
+  --color-text-high: var(--cn-text-high);
+  --color-text-low: var(--cn-text-low);
+  --color-text-low-emphasis: var(--cn-text-low);
+  --color-heading-1: var(--cn-text-heading);
+  --color-heading-2: var(--cn-text-subheading);
+  --color-link: var(--cn-link);
+  --color-link-hover: var(--cn-link-hover);
+  --color-link-active: var(--cn-link-active);
+  --color-on-rail-button: var(--cn-on-surface-secondary);
+  --color-alert: var(--cn-color-warning);
+  --color-on-alert: var(--cn-on-surface);
+  --color-notify: var(--cn-color-warning);
+  --color-on-notify: var(--cn-on-surface);
+  --color-code: var(--cn-input);
+  --color-on-code: var(--cn-on-input);
+  --color-on-code-strong: var(--cn-link-hover);
+  --color-on-code-emphasis: var(--cn-text-subheading);
+  --color-focus: var(--cn-focus-ring);
+  --color-on-focus: var(--cn-on-button);
+  --color-primary: var(--cn-link);
+  --color-primary-low: color-mix(in oklch, var(--cn-link), transparent 80%);
+  --color-reaction-red: var(--cn-color-love);
+  --color-hover: var(--cn-hover);
+  --color-button: var(--cn-button);
+  --color-button-light: var(--cn-button-light);
+  --color-button-accent: var(--cn-color-primary-70);
+  --color-button-cta: var(--cn-button-cta);
+  --color-on-button: var(--cn-on-button);
+  --color-on-button-cta: var(--cn-on-button-cta);
+  --color-button-disabled: var(--cn-text-low);
+  --color-button-text: color-mix(in oklch, var(--cn-link), transparent 90%);
+  --color-button-text-hover: color-mix(
+    in oklch,
+    var(--cn-link),
+    transparent 80%
+  );
+  --color-button-text-active: color-mix(
+    in oklch,
+    var(--cn-link),
+    transparent 70%
+  );
+  --color-on-toggle-button: var(--cn-on-button);
+  --color-on-toggle-button-off: var(--cn-on-surface-secondary);
+  --color-border: var(--cn-border);
+  --color-border-subtle: var(--cn-border);
+  --color-border-hover: var(--cn-border-hover);
+  --color-border-focus: var(--cn-border-focus);
+  --color-selection: var(--cn-selection);
+  --color-on-selection: var(--cn-on-selection);
+  --color-success: var(--cn-color-success);
+  --color-warning: var(--cn-color-warning);
+  --color-error: var(--cn-color-error);
+  --color-info: var(--cn-color-info);
+  --color-shadow: var(--cn-shadow-color);
+  --color-elevation-1: var(--cn-surface-1);
+  --color-elevation-2: var(--cn-surface-2);
+  --color-elevation-3: var(--cn-surface-3);
+  --color-input: var(--cn-input);
+  --color-on-input: var(--cn-on-input);
+  --color-input-hover: var(--cn-input-hover);
+  --color-input-focus: var(--cn-input-focus);
+  --color-input-disabled: var(--cn-input-disabled);
+  --color-halo: var(--cn-focus-ring);
+  --color-on-label: var(--cn-on-surface);
+  --color-field: var(--cn-input);
+  --color-on-field: var(--cn-on-input);
+  --color-on-field-placeholder: var(--cn-on-surface-secondary);
+  --color-field-hover: var(--cn-input-hover);
+  --color-on-field-hover: var(--cn-on-input);
+  --color-field-focus: var(--cn-input-focus);
+  --color-bubble: var(--cn-bubble);
+  --color-on-bubble: var(--cn-on-bubble);
+  --color-reply-bubble: var(--cn-reply-bubble);
+  --color-on-reply-bubble: var(--cn-on-reply-bubble);
+  --color-scrollbar-thumb: color-mix(
+    in oklch,
+    var(--cn-text-low),
+    transparent 50%
+  );
+  --color-scrollbar-thumb-hover: color-mix(
+    in oklch,
+    var(--cn-text-low),
+    transparent 30%
+  );
+
+  /* Older cn-color consumers remain available during component migration. */
+  --cn-color-primary: var(--cn-color-primary-70);
+  --cn-color-primary-variant: var(--cn-color-primary-80);
+  --cn-color-on-primary: var(--cn-on-button);
+  --cn-color-secondary: var(--cn-surface-4);
+  --cn-color-secondary-variant: var(--cn-surface-3);
+  --cn-color-on-secondary: var(--cn-on-surface);
+  --cn-color-surface: var(--cn-surface);
+  --cn-color-surface-variant: var(--cn-surface-1);
+  --cn-color-on-surface: var(--cn-on-surface);
+  --cn-color-on-surface-variant: var(--cn-on-surface-secondary);
+  --cn-color-background: var(--cn-background);
+  --cn-color-on-background: var(--cn-on-background);
+  --cn-color-hover: var(--cn-hover);
+  --cn-color-focus: var(--cn-focus-ring);
+  --cn-color-active: var(--cn-active);
+  --cn-color-on-field-active: var(--cn-on-button);
+  --cn-color-on-button-hover: var(--cn-on-button);
+  --cn-color-on-button-active: var(--cn-on-button);
+  --cn-color-text-secondary: var(--cn-text-low);
+  --cn-color-avatar-1: var(--cn-surface-4);
+  --cn-color-avatar-2: var(--cn-color-primary-50);
+  --cn-color-error-bg: color-mix(
+    in oklch,
+    var(--cn-color-error),
+    transparent 85%
+  );
+  --cn-color-status-error: var(--cn-color-error);
+  --cn-color-on-status-error: var(--cn-on-button);
+
+  --background-dialog-backdrop: var(--cn-backdrop);
+  --background-alert-tint: color-mix(
+    in oklch,
+    var(--cn-color-warning),
+    transparent 90%
+  );
+  --background-button: linear-gradient(
+    120deg,
+    var(--cn-button-light),
+    var(--cn-button)
+  );
+  --background-button-hover: var(--cn-hover);
+  --background-button-active: var(--cn-active);
+  --background-toggle-button: var(--cn-button);
+  --background-toggle-button-off: var(--cn-surface-4);
+  --background-mobile-nav-bar: var(--cn-surface);
+  --background-editor: var(--cn-input);
+  --cn-input-border: 1px solid var(--cn-border);
+  --cn-loader-color: var(--cn-link);
+}
