@@ -1,0 +1,142 @@
+---
+/**
+ * Living book for the color reference tokens. Scales, names, and values
+ * are derived at build time from the canonical DTCG data through the same
+ * validation and projection modules that generate styles/tokens.css, so
+ * this page cannot drift from the implementation.
+ */
+import { validateTokenTree } from '@design-system/scripts/lib/dtcg.mjs';
+import { projectTokens } from '@design-system/scripts/lib/projection.mjs';
+import tokens from '@design-system/tokens/reference.tokens.json';
+import '@design-system/styles/tokens.css';
+
+const validated = validateTokenTree(tokens);
+const projected = projectTokens(validated.tokens);
+const problems = [...validated.errors, ...projected.errors];
+if (problems.length > 0) {
+  throw new Error(`canonical token data is invalid:\n${problems.join('\n')}`);
+}
+
+const palettes = Object.entries(tokens.color)
+  .filter(([key]) => !key.startsWith('$'))
+  .map(([key, group]) => ({
+    key,
+    description: group.$description,
+    steps: projected.declarations.filter(({ path }) =>
+      path.startsWith(`color.${key}.`),
+    ),
+  }));
+
+const title = 'Color Reference Tokens';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <nav><a href="/">Pelilauta Design System</a></nav>
+      <h1>{title}</h1>
+    </header>
+    <main>
+      <p>
+        The color reference layer contains context-free OKLCH scales:
+        tonal palettes and accent scales identified by numeric steps, where
+        0 is black and 100 is white. Reference tokens carry no semantic
+        meaning on their own; semantic roles are assigned in later layers.
+      </p>
+      <p>
+        Canonical identities are DTCG paths such as
+        <code>color.primary.70</code>, projected one-to-one to public
+        custom properties such as <code>--cn-color-primary-70</code> in the
+        generated <code>styles/tokens.css</code>. Swatches below render
+        through those generated properties.
+      </p>
+      {palettes.map((palette) => (
+        <section>
+          <h2><code>color.{palette.key}</code></h2>
+          {palette.description && <p>{palette.description}</p>}
+          <ul class="swatches" role="list">
+            {palette.steps.map((step) => (
+              <li>
+                <span class="swatch" style={`background: var(${step.name});`}
+                ></span>
+                <code>{step.path.split('.').at(-1)}</code>
+              </li>
+            ))}
+          </ul>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Token path</th>
+                  <th scope="col">Custom property</th>
+                  <th scope="col">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {palette.steps.map((step) => (
+                  <tr>
+                    <td><code>{step.path}</code></td>
+                    <td><code>{step.name}</code></td>
+                    <td><code>{step.value}</code></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  body {
+    margin: 0 auto;
+    padding: 1rem;
+    max-width: 60rem;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+  }
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .swatches li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .swatch {
+    display: block;
+    inline-size: 3.5rem;
+    block-size: 3.5rem;
+    border: 1px solid color-mix(in oklch, CanvasText 30%, transparent);
+    border-radius: 0.25rem;
+  }
+  .table-scroll {
+    overflow-x: auto;
+  }
+  table {
+    border-collapse: collapse;
+    margin-block: 1rem;
+  }
+  th,
+  td {
+    padding: 0.375rem 1rem 0.375rem 0;
+    text-align: left;
+    border-block-end: 1px solid color-mix(in oklch, CanvasText 20%, transparent);
+  }
+</style>
