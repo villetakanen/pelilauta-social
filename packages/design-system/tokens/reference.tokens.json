@@ -1,3 +1,67 @@
 {
-  "$description": "Canonical v21 reference tokens. Structure and values conform to DTCG 2025.10; see specs/design-system/tokens/spec.md for intent and docs/adrs/0001-use-dtcg-paths-and-generated-css-names.md for naming. Token families are added one reviewed vertical slice at a time."
+  "$description": "Canonical v21 reference tokens. Structure and values conform to DTCG 2025.10; see specs/design-system/tokens/spec.md for intent and docs/adrs/0001-use-dtcg-paths-and-generated-css-names.md for naming. Token families are added one reviewed vertical slice at a time.",
+  "color": {
+    "$type": "color",
+    "$description": "Reference color scales ported from pelilauta-20 commit 02880fbc995b45d459ce4f264b29d5283b1d8ced, packages/cyan/src/tokens/chroma.css. The v20 private --_surface-hue custom property (242) is inlined because canonical data carries no CSS implementation details.",
+    "primary": {
+      "$description": "13 MD3 tonal steps on an OKLCH perceptive scale with a neon hue rotation from teal 185 to highlighter 110; 0 is black and 100 is white.",
+      "0": { "$value": { "colorSpace": "oklch", "components": [0, 0, 185] } },
+      "10": { "$value": { "colorSpace": "oklch", "components": [0.12, 0.09, 185] } },
+      "20": { "$value": { "colorSpace": "oklch", "components": [0.2, 0.14, 180] } },
+      "30": { "$value": { "colorSpace": "oklch", "components": [0.3, 0.18, 175] } },
+      "40": { "$value": { "colorSpace": "oklch", "components": [0.4, 0.22, 170] } },
+      "50": { "$value": { "colorSpace": "oklch", "components": [0.5, 0.24, 162] } },
+      "60": { "$value": { "colorSpace": "oklch", "components": [0.6, 0.26, 150] } },
+      "70": { "$value": { "colorSpace": "oklch", "components": [0.7, 0.27, 135] } },
+      "80": { "$value": { "colorSpace": "oklch", "components": [0.8, 0.27, 120] } },
+      "90": { "$value": { "colorSpace": "oklch", "components": [0.9, 0.27, 110] } },
+      "95": { "$value": { "colorSpace": "oklch", "components": [0.95, 0.18, 110] } },
+      "99": { "$value": { "colorSpace": "oklch", "components": [0.99, 0.05, 110] } },
+      "100": { "$value": { "colorSpace": "oklch", "components": [1, 0, 110] } }
+    },
+    "surface": {
+      "$description": "13 MD3 tonal steps on a cerulean hue 242 with a hand-tuned chroma curve peaking at 0.17 at mid-tones 60-70; 0 is black and 100 is white.",
+      "0": { "$value": { "colorSpace": "oklch", "components": [0, 0, 242] } },
+      "10": { "$value": { "colorSpace": "oklch", "components": [0.1, 0.05, 242] } },
+      "20": { "$value": { "colorSpace": "oklch", "components": [0.2, 0.07, 242] } },
+      "30": { "$value": { "colorSpace": "oklch", "components": [0.3, 0.09, 242] } },
+      "40": { "$value": { "colorSpace": "oklch", "components": [0.4, 0.12, 242] } },
+      "50": { "$value": { "colorSpace": "oklch", "components": [0.5, 0.14, 242] } },
+      "60": { "$value": { "colorSpace": "oklch", "components": [0.6, 0.17, 242] } },
+      "70": { "$value": { "colorSpace": "oklch", "components": [0.7, 0.17, 242] } },
+      "80": { "$value": { "colorSpace": "oklch", "components": [0.8, 0.12, 242] } },
+      "90": { "$value": { "colorSpace": "oklch", "components": [0.9, 0.06, 242] } },
+      "95": { "$value": { "colorSpace": "oklch", "components": [0.95, 0.03, 242] } },
+      "99": { "$value": { "colorSpace": "oklch", "components": [0.99, 0.015, 242] } },
+      "100": { "$value": { "colorSpace": "oklch", "components": [1, 0, 242] } }
+    },
+    "error": {
+      "$description": "Magenta accent scale, hue 318.",
+      "20": { "$value": { "colorSpace": "oklch", "components": [0.2, 0.15, 318] } },
+      "40": { "$value": { "colorSpace": "oklch", "components": [0.4, 0.18, 318] } },
+      "60": { "$value": { "colorSpace": "oklch", "components": [0.6, 0.2, 318] } },
+      "90": { "$value": { "colorSpace": "oklch", "components": [0.9, 0.1, 318] } }
+    },
+    "warning": {
+      "$description": "Yellow accent scale, hue 65.",
+      "20": { "$value": { "colorSpace": "oklch", "components": [0.2, 0.15, 65] } },
+      "40": { "$value": { "colorSpace": "oklch", "components": [0.4, 0.2, 65] } },
+      "60": { "$value": { "colorSpace": "oklch", "components": [0.6, 0.25, 65] } },
+      "90": { "$value": { "colorSpace": "oklch", "components": [0.9, 0.2, 65] } }
+    },
+    "info": {
+      "$description": "Teal accent scale, hue 170.",
+      "20": { "$value": { "colorSpace": "oklch", "components": [0.2, 0.12, 170] } },
+      "40": { "$value": { "colorSpace": "oklch", "components": [0.4, 0.15, 170] } },
+      "60": { "$value": { "colorSpace": "oklch", "components": [0.6, 0.18, 170] } },
+      "90": { "$value": { "colorSpace": "oklch", "components": [0.9, 0.1, 170] } }
+    },
+    "love": {
+      "$description": "Red accent scale, hue 30.",
+      "20": { "$value": { "colorSpace": "oklch", "components": [0.2, 0.15, 30] } },
+      "40": { "$value": { "colorSpace": "oklch", "components": [0.4, 0.18, 30] } },
+      "60": { "$value": { "colorSpace": "oklch", "components": [0.6, 0.2, 30] } },
+      "90": { "$value": { "colorSpace": "oklch", "components": [0.9, 0.1, 30] } }
+    }
+  }
 }
