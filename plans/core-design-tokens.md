@@ -271,137 +271,30 @@ Each skill is created as a separate reversible PBI with one canonical copy under
 
 ## Delivery Sequence
 
-Each numbered item is one candidate PBI unless implementation proves it must be split further. Every PBI ends with deterministic checks and a reviewable commit before the next begins.
+The completed foundation comprises issues #5 through #10 and the three design-system workflow skills. The remaining critical path has four outcome milestones. Work stays on `feat/core-design-tokens`; agents produce local changes, review checks the actual diff, and accepted changes land as small commits on the epic branch.
 
-### Expected Delivery Order
-
-Delivery is intentionally serial for delegated implementation and review. Task `N+1` starts only after task `N` is implemented, its checks pass, the result is reviewed, and its commit is present on `feat/core-design-tokens`. A blocked or rejected task keeps the sequence at that task; later tasks do not work around it.
-
-| Order | PBI | Starts after |
+| Order | Outcome | Done when |
 | --- | --- | --- |
-| 1 | [#5 Add root test dispatch](https://github.com/villetakanen/pelilauta-social/issues/5) | Epic plan approved |
-| 2 | [#6 Add a non-mutating root check](https://github.com/villetakanen/pelilauta-social/issues/6) | 1 accepted |
-| 3 | [#7 Add minimal CI](https://github.com/villetakanen/pelilauta-social/issues/7) | 2 accepted |
-| 4 | [#8 Add `ds-spec-writer`](https://github.com/villetakanen/pelilauta-social/issues/8) | 3 accepted |
-| 5 | [#9 Add `ds-developer`](https://github.com/villetakanen/pelilauta-social/issues/9) | 4 accepted |
-| 6 | [#10 Approve design-system architecture and naming intent](https://github.com/villetakanen/pelilauta-social/issues/10) | 5 accepted |
-| 7 | [#11 Scaffold `packages/design-system`](https://github.com/villetakanen/pelilauta-social/issues/11) | 6 accepted |
-| 8 | [#12 Add deterministic DTCG-to-CSS projection](https://github.com/villetakanen/pelilauta-social/issues/12) | 7 accepted |
-| 9 | [#13 Scaffold `apps/design`](https://github.com/villetakanen/pelilauta-social/issues/13) | 8 accepted |
-| 10 | [#14 Integrate root commands and CI](https://github.com/villetakanen/pelilauta-social/issues/14) | 9 accepted |
-| 11 | [#15 Add `ds-doc-page-writer`](https://github.com/villetakanen/pelilauta-social/issues/15) | 10 accepted |
-| 12 | [#16 Deploy the design-site skeleton](https://github.com/villetakanen/pelilauta-social/issues/16) | 11 accepted and deployment approved |
-| 13 | [#17 Port color reference tokens](https://github.com/villetakanen/pelilauta-social/issues/17) | 12 accepted |
-| 14 | [#18 Port spatial and radius reference tokens](https://github.com/villetakanen/pelilauta-social/issues/18) | 13 accepted |
-| 15 | [#19 Port typography reference tokens](https://github.com/villetakanen/pelilauta-social/issues/19) | 14 accepted |
-| 16 | [#20 Capture exact Cyan 4 primitive inventory](https://github.com/villetakanen/pelilauta-social/issues/20) | 15 accepted |
-| 17 | [#21 Implement Cyan 4 compatibility stylesheet](https://github.com/villetakanen/pelilauta-social/issues/21) | 16 accepted |
-| 18 | [#22 Document Cyan 4 compatibility behavior](https://github.com/villetakanen/pelilauta-social/issues/22) | 17 accepted |
-| 19 | [#23 Run clean-workspace acceptance](https://github.com/villetakanen/pelilauta-social/issues/23) | 18 accepted |
-| 20 | [#24 Run human visual and architecture acceptance](https://github.com/villetakanen/pelilauta-social/issues/24) | 19 accepted |
-| 21 | [#25 Verify live site and close the loop](https://github.com/villetakanen/pelilauta-social/issues/25) | 20 accepted |
+| 1 | [#11 Launch the design-system foundation](https://github.com/villetakanen/pelilauta-social/issues/11) | Package and app boundaries exist, root commands and CI include them, and `design.pelilauta.social` is live |
+| 2 | [#12 Deliver reference tokens end to end](https://github.com/villetakanen/pelilauta-social/issues/12) | DTCG data, minimal CSS projection, color/spatial/radius/typography references, checks, and living books agree |
+| 3 | [#21 Deliver the Cyan 4 adapter](https://github.com/villetakanen/pelilauta-social/issues/21) | Exact beta.39 inventory, opt-in aliases, checks, spec, and documentation ship together |
+| 4 | [#25 Accept and close the iteration](https://github.com/villetakanen/pelilauta-social/issues/25) | Clean checks, human visual acceptance, live smoke verification, and retrospective close decision are complete |
 
-Every delegated task receives only its issue, the linked plan sections, relevant current specs, and exact allowed paths. Review evaluates the actual diff and check output before advancing the sequence.
+### 1. Launch The Design-System Foundation
 
-### Phase 0: Harness Preconditions
+Create `packages/design-system` and `apps/design` together with the actual package-owned home page, thin Astro route, mirrored aliases, root workspace commands, CI coverage, app-local Netlify configuration, and live site. Dependency and deployment changes remain human gates inside this milestone.
 
-1. Add root test dispatch.
+### 2. Deliver Reference Tokens End To End
 
-   Add a read-only `pnpm test` that can include the design package and app as they appear. Preserve imported Pelilauta test behavior.
+Implement only the DTCG subset required by the approved reference tokens. Port color, spatial, radius, and typography references with small reviewable commits inside one milestone. Generate committed `--cn-*` CSS, fail on invalid references or stale output, and derive living-book pages from canonical data. Exact values and font assets remain human gates at the point they matter.
 
-2. Add a non-mutating root check.
+### 3. Deliver The Cyan 4 Adapter
 
-   Separate verification from formatting. The command must be safe for local review and CI.
+Extract the exact primitive inventory from `@11thdeg/cyan-css@4.0.0-beta.39`, map included legacy names to canonical generated properties, verify that aliases contain no independent visual literals, and document that names are preserved while v21 values are substituted.
 
-3. Add minimal CI.
+### 4. Accept And Close The Iteration
 
-   Verify recursive checkout, repository-pinned Node/pnpm setup, frozen install, tests, and non-mutating checks. PR CI does not run `pnpm build`: Netlify deploy previews own production build and adapter verification, and final acceptance runs complete workspace builds. Keep deployment outside PR CI. Issue 14 later extends test/check coverage for the design package and app. Lefthook remains a later local-feedback mechanism and does not replace clean-runner PR verification.
-
-These are direct writebacks from the v18 import retrospective and gate implementation work in the new workspace surfaces.
-
-### Phase 1: Skills And Intent
-
-4. Add `ds-spec-writer`.
-
-   Distill the useful v20 spec and reverse-spec behavior into one v21 skill. Verify its frontmatter, path, boundaries, and discovery after restart.
-
-5. Add `ds-developer`.
-
-   Encode the package/app boundary and focused verification workflow. Verify discovery after restart.
-
-6. Approve the design-system architecture and naming intent.
-
-   Add the parent design-system spec, token parent spec, and a naming ADR. Confirm the primitive scope, DTCG path grammar, and web projection before token code exists.
-
-### Phase 2: Deployable Skeleton
-
-7. Scaffold `packages/design-system`.
-
-   Add only the DTCG source structure and package-local conformance test harness needed by this epic. Add dependencies only after human approval.
-
-8. Add the deterministic web projection.
-
-   Transform a minimal DTCG fixture into committed `--cn-*` CSS, reject unsupported types and naming collisions, and fail when generated output is stale. Keep this PBI independent of the visual token values.
-
-9. Scaffold `apps/design`.
-
-   Add the latest approved Astro and Svelte integration, mirrored Vite/TypeScript source alias, one thin home route, and one package-owned home-page implementation.
-
-10. Integrate root commands and CI.
-
-   Add explicit design and all-workspace commands without changing the existing root `build` command used by the Pelilauta Netlify site. Both applications must be independently filterable, and CI must call the all-workspace verification path explicitly.
-
-11. Add `ds-doc-page-writer`.
-
-    Base the skill on the actual v21 route and page structure rather than anticipated v20 paths. Verify discovery after restart.
-
-12. Deploy the design-site skeleton.
-
-    Add app-local Netlify configuration, provision/link the separate site, configure the canonical domain, and verify a Git-triggered deployment. Document configuration and rollback without environment values. Deployment configuration and domain activation require a human gate.
-
-### Phase 3: Primitive Token Vertical Slices
-
-13. Port color reference tokens.
-
-    Review the pinned v20 `packages/cyan/src/tokens/chroma.css`, approve the values, write the color-reference spec, implement typed DTCG `color.*` tokens, generate `--cn-color-*` properties, add conformance and generation checks, and publish a light/dark-neutral living-book page derived from the token data.
-
-14. Port spatial and radius reference tokens.
-
-    Reconcile the pinned v20 `units.css` with its duplicate `radii.css`, approve one scale, implement typed DTCG `space.*` and `radius.*` tokens, generate their `--cn-*` properties, test alias resolution, and publish the corresponding living book from token data. Component dimensions remain excluded.
-
-15. Port typography reference tokens.
-
-    Reconcile the pinned v20 source values with its stale specs and docs, approve exact precision and role names, implement typed DTCG typography references without global element styling, generate their `--cn-*` properties, test the projection, and publish a typography living book from token data. Font asset loading is a separate decision if required.
-
-Each vertical slice updates its spec, code, checks, and book together. A slice is not complete when any one of those surfaces disagrees.
-
-### Phase 4: Cyan 4 Adapter
-
-16. Capture the exact Cyan 4 primitive inventory.
-
-    Extract custom-property names from `@11thdeg/cyan-css@4.0.0-beta.39`, record package integrity/provenance, and classify only aliases covered by this epic. Do not infer beta.39 from the beta.38 v20 snapshot.
-
-17. Implement the Cyan 4 compatibility stylesheet.
-
-    Add an explicit alias map to canonical tokens, a package export/entry point, and deterministic checks for completeness, target existence, cycle absence, and literal absence.
-
-18. Document compatibility behavior.
-
-    Add the compatibility spec and living-book reference table. Clearly state that aliases preserve property names while substituting v21 values; they do not claim Cyan 4 visual parity.
-
-### Phase 5: Acceptance And Compound
-
-19. Run clean-workspace acceptance.
-
-    Verify frozen installation, root tests/check/build, independent design build, package token tests, route smoke tests, and a clean recursive checkout where practical.
-
-20. Run human visual and architecture acceptance.
-
-    Review token scales, typography, both browser color schemes, responsive documentation, naming clarity, and the package/app boundary. Confirm that `apps/pelilauta` is unchanged and does not import the new package or compatibility file.
-
-21. Verify the live site and close the loop.
-
-    Merge through a gated PR, verify the Git-triggered deployment and canonical domain, then write the iteration retrospective. Candidate lessons go to focused specs, skills, checks, or runbooks rather than expanding root `AGENTS.md` automatically.
+Run frozen installation, tests, non-mutating checks, complete workspace builds, generated-output freshness, route and hosted smoke checks, and human visual review. Confirm `apps/pelilauta` remains disconnected from the new package. Complete the retrospective and merge the gated epic PR.
 
 ## Verification Strategy
 
@@ -472,7 +365,6 @@ Each vertical slice updates its spec, code, checks, and book together. A slice i
 ## Remaining Implementation Gates
 
 1. Approve each dependency addition when the package and app manifests are proposed.
-2. Approve the DTCG path and generated CSS naming ADR text before the first canonical token file lands.
-3. Approve exact v20 values and precision one token family at a time.
-4. Decide whether font assets belong in the typography slice after licensing and loading are established.
-5. Approve the Netlify project configuration and `design.pelilauta.social` domain activation.
+2. Approve exact v20 values and precision one token family at a time.
+3. Decide whether font assets belong in the typography slice after licensing and loading are established.
+4. Approve the Netlify project configuration and `design.pelilauta.social` domain activation.
