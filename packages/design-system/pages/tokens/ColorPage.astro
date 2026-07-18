@@ -5,19 +5,37 @@
  * validation and projection modules that generate styles/tokens.css, so
  * this page cannot drift from the implementation.
  */
-import { validateTokenTree } from '@design-system/scripts/lib/dtcg.mjs';
+import {
+  mergeTokenTrees,
+  validateTokenTree,
+} from '@design-system/scripts/lib/dtcg.mjs';
 import { projectTokens } from '@design-system/scripts/lib/projection.mjs';
-import tokens from '@design-system/tokens/reference.tokens.json';
+import referenceTokens from '@design-system/tokens/reference.tokens.json';
 import '@design-system/styles/tokens.css';
 
-const validated = validateTokenTree(tokens);
+const tokenModules = import.meta.glob('../../tokens/*.tokens.json', {
+  eager: true,
+  import: 'default',
+});
+const tokenTrees = new Map(
+  Object.entries(tokenModules).map(([path, tree]) => [path, tree]),
+);
+const merged = mergeTokenTrees(tokenTrees);
+const validated = validateTokenTree(merged.merged);
+const sourceErrors = [...merged.errors, ...validated.errors];
+if (sourceErrors.length > 0) {
+  throw new Error(
+    `canonical token data is invalid:\n${sourceErrors.join('\n')}`,
+  );
+}
 const projected = projectTokens(validated.tokens);
-const problems = [...validated.errors, ...projected.errors];
-if (problems.length > 0) {
-  throw new Error(`canonical token data is invalid:\n${problems.join('\n')}`);
+if (projected.errors.length > 0) {
+  throw new Error(
+    `canonical token projection is invalid:\n${projected.errors.join('\n')}`,
+  );
 }
 
-const palettes = Object.entries(tokens.color)
+const palettes = Object.entries(referenceTokens.color)
   .filter(([key]) => !key.startsWith('$'))
   .map(([key, group]) => ({
     key,
@@ -57,7 +75,7 @@ const title = 'Color Reference Tokens';
       </p>
       {palettes.map((palette) => (
         <section>
-          <h2><code>color.{palette.key}</code></h2>
+          <h2 id={`color-${palette.key}`}><code>color.{palette.key}</code></h2>
           {palette.description && <p>{palette.description}</p>}
           <ul class="swatches" role="list">
             {palette.steps.map((step) => (
@@ -68,7 +86,12 @@ const title = 'Color Reference Tokens';
               </li>
             ))}
           </ul>
-          <div class="table-scroll">
+          <div
+            class="table-scroll"
+            role="region"
+            aria-labelledby={`color-${palette.key}`}
+            tabindex="0"
+          >
             <table>
               <thead>
                 <tr>
