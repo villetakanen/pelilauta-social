@@ -1,0 +1,33 @@
+---
+/**
+ * Package-owned home page for design.pelilauta.social.
+ * App routes render this implementation through the @design-system alias
+ * and must not add their own markup or styles.
+ */
+const title = 'Pelilauta Design System';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{title}</h1>
+    </header>
+    <main>
+      <p>
+        Living documentation for the v21 Pelilauta design system. Reference
+        tokens, generated styles, and component books are published here as
+        they are implemented in <code>packages/design-system</code>.
+      </p>
+      <p>
+        The canonical token data is authored as DTCG 2025.10
+        <code>.tokens.json</code> files and projected deterministically to
+        <code>--cn-*</code> CSS custom properties.
+      </p>
+    </main>
+  </body>
+</html>
