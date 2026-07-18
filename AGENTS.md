@@ -8,6 +8,8 @@
 - Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and user-visible interactions as compatibility contracts unless an approved spec says otherwise.
 - Keep each release candidate deployable and reversible. Do not combine unrelated refactors or migration steps.
 - Migrate one bounded surface at a time: preserve its behavior first, then replace its Lit.js dependency with the equivalent local Svelte component.
+- Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
+- For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
 - Record durable behavior and architecture in `specs/` and irreversible decisions in `docs/adrs/` when those directories are introduced. A PBI describes one change; its linked spec remains the source of truth.
 
 ## Workspace Contract
