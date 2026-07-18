@@ -1,6 +1,6 @@
 # v20 Color Theme Compatibility Specification
 
-Status: Draft for implementation review
+Status: Implemented; human visual acceptance pending
 
 ## Production Outcome
 
@@ -111,7 +111,7 @@ new dependency.
   this slice. The application continues to rely on OS preference.
 - Keep fixed browser `theme-color` and PWA manifest colors unchanged.
 
-Before activation, the compatibility stylesheet must contain a reviewable table
+Before release, the compatibility stylesheet must contain a reviewable table
 or grouping that shows every translated legacy property and its v20 target.
 Missing production-consumed properties are release blockers.
 
@@ -134,10 +134,10 @@ This feature must not:
 | Status | Task | Gate |
 | --- | --- | --- |
 | Complete | Establish v18 behavior, immutable v20 sources, approved visual scope, and compatibility exclusions. | This specification records the whole-application exception and OS-driven selection contract. |
-| Pending | Add the static v20 reference, semantic, and Cyan 4 compatibility CSS under `packages/design-system/styles`. | Exact reference values match the immutable v20 CSS; every production-consumed legacy property resolves without fallback. |
-| Pending | Import the local theme after Cyan 4 in both Pelilauta head components and update only direct application chroma consumers that cannot be translated safely. | Home, modal, editor, and Lit-component surfaces render from the local theme without changing routes or behavior. |
-| Pending | Add deterministic color-contract and browser checks for Light and Dark modes. | Tests verify representative computed surfaces, text, links, statuses, inputs, footer, editor, and inherited Lit properties in both modes. |
-| Pending | Run repository checks, deploy a preview, and complete human visual acceptance before release. | Unit tests, check, build, focused Playwright checks, preview smoke tests, and the route matrix below pass. |
+| Complete | Add the static v20 reference, semantic, and Cyan 4 compatibility CSS under `packages/design-system/styles`. | Exact reference values match the immutable v20 CSS; every production-consumed legacy property resolves without fallback. |
+| Complete | Import the local theme after Cyan 4 in both Pelilauta head components and update only direct application chroma consumers that cannot be translated safely. | Normal and editor builds load the local theme after Cyan 4 without changing routes or behavior. |
+| Complete | Add deterministic color-contract and browser checks for Light and Dark modes. | Contract tests cover exact references, layer order, transitive local/Cyan property resolution, and head imports; Playwright verifies canonical computed roles, CodeMirror styles, and inherited custom-element color in both modes. |
+| In progress | Run repository checks, deploy a preview, and complete human visual acceptance before release. | Unit tests, check, build, focused Playwright checks, preview smoke tests, and the route matrix below pass. |
 
 If the production import and first browser evidence are not working within one
 working day, stop and re-scope. Do not add token infrastructure to solve the
@@ -157,7 +157,7 @@ delay.
   and at least one inherited Cyan Lit/custom-element surface.
 - Switching the emulated OS preference updates `light-dark()` values without a
   route change.
-- Existing 456 unit tests pass.
+- All 462 unit tests pass, including six color-theme contract tests.
 - `pnpm --filter pelilauta check` reports no new errors.
 - `pnpm --filter pelilauta build` succeeds.
 - Focused Playwright checks run through the repository-defined script rather
@@ -181,7 +181,7 @@ and `color-mix()`.
 
 ## Remaining Human Gates
 
-- Approve the legacy-only semantic mapping table before activation.
+- Approve the legacy-only semantic mapping table before merge and release.
 - Accept the deploy-preview appearance in both modes across the route matrix.
 - Decide separately whether a future feature should activate or remove
   `account.lightMode`; this feature must not make that decision implicitly.
