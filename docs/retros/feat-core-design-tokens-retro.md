@@ -98,6 +98,16 @@ New and reverse-engineered specs begin as `draft`, human acceptance promotes the
 
 Candidate writeback: retain the status check in `ds-spec-writer` and apply the same frontmatter contract to future spec templates or validation tooling once enough specs exist to justify automation.
 
+### 10. Delivery Process Became The Product
+
+The epic expanded seven outcome goals into 21 serial issues, separate tasks for scaffolding, generation, token families, documentation, deployment, multiple acceptance modes, and several agent-workflow refinements. The amount of planning and coordination began to exceed the design-system implementation it was meant to support.
+
+Several controls were useful, especially root tests, non-mutating checks, clean-runner CI, explicit package ownership, and the naming decision. The failure was putting every useful concern on the epic's critical path and treating each internal layer as an independently scheduled deliverable. Retrospective findings also risked becoming immediate scope instead of candidate improvements.
+
+The remaining work should be reorganized around visible vertical outcomes: a working design-site foundation, one complete reference-token slice, one Cyan 4 adapter slice, deployment, and loop closure. Specs, code, checks, and documentation for one outcome ship together. Human approvals remain gates inside those slices rather than separate issues.
+
+Candidate writeback: replace the remaining serial issue graph with a maximum of five outcome milestones, keep work on the epic branch for local review, and defer issue templates, root Lefthook ownership, runbooks, and other process improvements unless they directly block delivery.
+
 ## Candidate Writebacks
 
 | Learning | Destination | Gate |
@@ -111,3 +121,4 @@ Candidate writeback: retain the status check in `ds-spec-writer` and apply the s
 | Skill authoring starts from triggers, outputs, procedure, and handoffs | `.agents/skills/meta-skill-architect/SKILL.md` | Revise and successfully trigger `ds-spec-writer` without activating it for implementation or docs-page work |
 | Spec validation distinguishes evidence from planned implementation paths | `.agents/skills/ds-spec-writer/SKILL.md` | Issue #10 specs label planned targets while all evidence references resolve |
 | Specs expose lifecycle state in frontmatter | `.agents/skills/ds-spec-writer/SKILL.md` and future spec validation | New specs use `draft`; only explicit human acceptance sets `approved` |
+| Epic planning stays proportional to product output | Remaining core-token plan and issue set | No more than five outcome milestones remain on the critical path |
