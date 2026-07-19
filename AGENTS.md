@@ -42,3 +42,9 @@
 ## Working Model
 
 Human approval governs product scope, compatibility exceptions, dependencies, data changes, and releases. Agents may investigate, implement a specified bounded change, run deterministic checks, and prepare reviewable artifacts. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step.
+
+## Workflow Guides
+
+- Intent specs: `.agents/skills/spec/SKILL.md`
+- Retrospectives and compound decisions: `.agents/skills/retro/SKILL.md` and `docs/practices/retrospectives.md`
+- Root releases: `.agents/skills/release/SKILL.md` and `docs/runbooks/releases.md`

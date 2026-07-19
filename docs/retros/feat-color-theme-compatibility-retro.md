@@ -10,9 +10,9 @@ Cyan 4 application and components continue to work through a bounded
 compatibility layer. The same delivery publishes the color intent and contract
 as a package-owned book in the design application.
 
-The outcome was reviewed, approved, and verified by the owner on 2026-07-19.
-It is suitable for the first v21 beta release. This is a theme-contract
-migration; Lit-to-Svelte component migration has not started.
+The outcome was reviewed, approved, and verified by the owner on 2026-07-19,
+then released as `v21.0.0-beta.1`. This is the first design-system migration.
+It migrates the token and theme capability rather than a Lit component.
 
 ## Outcome
 
@@ -39,6 +39,9 @@ migration; Lit-to-Svelte component migration has not started.
   without pretending to replace human acceptance.
 - Small commits kept planning, production integration, tests, documentation,
   and generated-output cleanup independently reviewable.
+- A root-owned release version, merge commit, deploy preview, and annotated tag
+  made the first v21 release identifiable without changing the imported app's
+  package version.
 
 ## What Could Improve
 
@@ -51,6 +54,20 @@ migration; Lit-to-Svelte component migration has not started.
   application correctly retained its legacy `18.13.3` package version.
 - The superseded core-token branch and open PR can be mistaken for current
   direction unless they are explicitly closed.
+- The browser check described the footer icon as an inheritance probe even
+  though that icon has an inline color. It did not prove that an unstyled
+  `cn-icon` inherits contextual foreground color.
+- The compatibility inventory verified that consumed properties resolved, but
+  did not verify the effect of defining a formerly absent property. Mapping
+  global `--color-on` to a surface color disabled `cn-icon`'s `currentColor`
+  fallback and broke contextual icon colors.
+- Release verification was repeatable only from session history. The project
+  had no release runbook or small workflow aid.
+- The imported app still owned Lefthook installation even though releases and
+  Git history are owned by the workspace root. A frozen install recreated an
+  unwanted example root configuration.
+- Retrospective writebacks were proposed without a durable accept, defer, or
+  reject step, making it too easy to turn every finding into immediate scope.
 
 ## Writebacks
 
@@ -62,6 +79,25 @@ migration; Lit-to-Svelte component migration has not started.
 - The root README provides the current project and release position.
 - The root package owns the v21 release version; imported application versions
   remain evidence of their baseline.
+- The superseded core-token PR is closed. Its useful evidence remains available
+  without presenting the stopped foundation as current direction.
+
+## Compound Decisions
+
+| Finding | Decision | Follow-up |
+| --- | --- | --- |
+| Pull-request CI could repeat local checks | Reject for now | Reconsider only after a concrete failure shows local and deploy-preview gates are insufficient |
+| Root verification commands are incomplete | Defer except tests | Add one root test dispatcher and a root pre-push test hook in the next production iteration |
+| Lefthook ownership is nested under the imported app | Accept | Move installation, configuration, and commit-message tooling to the workspace root |
+| Release steps exist only in session history | Accept | Add a rudimentary root release runbook and release skill |
+| Authenticated-write compatibility remains unaccepted | Defer | Do not pull it into the next design-system migration |
+| The theme was treated as preparation rather than migration | Correct | Record tokens and themes as the first design-system migration |
+| Retro findings can expand scope automatically | Accept | Add a small retro/compound practice and skill with explicit human decisions |
+| Spec purpose and location were unclear | Accept | Add a rudimentary intent-spec skill anchored under `specs/` |
+| Contextual icon colors regressed | Accept as next product work | Restore legacy inheritance and migrate the first local icon consumers in the `cn-icon` iteration |
+
+No broader root `check`, workspace build orchestration, CI, authenticated-write
+work, or generic token infrastructure is authorized by this retrospective.
 
 ## Close Decision
 
@@ -69,7 +105,9 @@ The color-theme compatibility loop is complete and approved for
 `v21.0.0-beta.1`. It proves that v21 can ship a production-integrated
 design-system improvement while preserving legacy consumers.
 
-The next delivery should select one bounded Lit surface, document that
-component's intent and v18 compatibility, replace it with a local Svelte
-component, and demonstrate the result in both Pelilauta and the design-system
-book. Broader token infrastructure is not a prerequisite.
+The next delivery addresses `cn-icon`, because the theme compatibility layer
+exposed a real contextual-color regression. It should first restore inherited
+color for existing icons, then migrate a bounded public set to the local icon
+capability and demonstrate the same intent in Pelilauta and the design-system
+book. The iteration may add one root test dispatcher and pre-push test hook.
+Everything else in the deferred harness backlog remains outside its scope.
