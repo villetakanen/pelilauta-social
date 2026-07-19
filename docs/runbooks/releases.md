@@ -7,7 +7,7 @@ bookkeeping.
 
 ## Prepare
 
-1. Confirm the delivery spec, plan, retrospective, and human acceptance state.
+1. Confirm the delivery spec, plan, lessons, and human acceptance state.
 2. Choose the approved root semantic version. Use `beta.X` for deployable
    product increments that are not yet claimed as complete v18 replacements.
 3. Update the root version and project status together.

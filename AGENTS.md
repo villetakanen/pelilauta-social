@@ -45,6 +45,7 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 
 ## Workflow Guides
 
+- Active lessons: `docs/practices/lessons.md`. Every delivery task reads and updates the current branch file under `docs/lessons/` as new evidence appears; do not wait for a close prompt.
 - Intent specs: `.agents/skills/spec/SKILL.md`
-- Retrospectives and compound decisions: `.agents/skills/retro/SKILL.md` and `docs/practices/retrospectives.md`
+- Lessons and compound decisions: `.agents/skills/lessons/SKILL.md`
 - Root releases: `.agents/skills/release/SKILL.md` and `docs/runbooks/releases.md`

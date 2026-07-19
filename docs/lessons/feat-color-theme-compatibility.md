@@ -1,4 +1,4 @@
-# feat/color-theme-compatibility Retrospective
+# feat/color-theme-compatibility Lessons
 
 Status: Complete; approved for `v21.0.0-beta.1`
 
@@ -66,7 +66,7 @@ It migrates the token and theme capability rather than a Lit component.
 - The imported app still owned Lefthook installation even though releases and
   Git history are owned by the workspace root. A frozen install recreated an
   unwanted example root configuration.
-- Retrospective writebacks were proposed without a durable accept, defer, or
+- Lesson writebacks were proposed without a durable accept, defer, or
   reject step, making it too easy to turn every finding into immediate scope.
 
 ## Writebacks
@@ -92,12 +92,12 @@ It migrates the token and theme capability rather than a Lit component.
 | Release steps exist only in session history | Accept | Add a rudimentary root release runbook and release skill |
 | Authenticated-write compatibility remains unaccepted | Defer | Do not pull it into the next design-system migration |
 | The theme was treated as preparation rather than migration | Correct | Record tokens and themes as the first design-system migration |
-| Retro findings can expand scope automatically | Accept | Add a small retro/compound practice and skill with explicit human decisions |
+| Lessons can expand scope automatically | Accept | Maintain one lessons file with explicit human compound decisions |
 | Spec purpose and location were unclear | Accept | Add a rudimentary intent-spec skill anchored under `specs/` |
 | Contextual icon colors regressed | Accept as next product work | Restore legacy inheritance and migrate the first local icon consumers in the `cn-icon` iteration |
 
 No broader root `check`, workspace build orchestration, CI, authenticated-write
-work, or generic token infrastructure is authorized by this retrospective.
+work, or generic token infrastructure is authorized by these lessons.
 
 ## Close Decision
 

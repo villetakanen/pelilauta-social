@@ -1,4 +1,4 @@
-# feat/v18-import Retrospective
+# feat/v18-import Lessons
 
 ## Loop Summary
 
@@ -53,7 +53,7 @@ Review remained too manual. No repository CI workflow enforced these checks on t
 
 The durable lessons should not all be added to `AGENTS.md`. ASDLC's compound loop calls for scoped storage and human-gated writeback. The root constitution already contains the stable compatibility and workspace contracts. Operational discoveries belong in a deployment runbook, bootstrap guide, deterministic scripts, and CI configuration.
 
-This retrospective records candidate learnings. Each proposed writeback below should be accepted through its own bounded change rather than bundled into this document.
+This lessons record contains candidate writebacks. Each proposed writeback should be accepted through its own bounded change rather than bundled into this document.
 
 ## What Worked
 
@@ -235,7 +235,7 @@ Reverse its v18 behavior into a compatibility spec, define one PBI, replace only
 - Approve compatibility assumptions and any exception from v18 behavior.
 - Accept authenticated and write-path behavior.
 - Approve dependencies, Firebase contract changes, deployment changes, and releases.
-- Gate candidate retrospective learnings before persistent writeback.
+- Gate candidate lessons before persistent writeback.
 
 ## Residual Risks
 

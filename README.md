@@ -28,14 +28,15 @@ component migration has not started.
 - `specs` records approved product and design intent.
 - `plans` records bounded delivery scope, implementation decisions, and
   acceptance evidence.
-- `docs/retros` records completed delivery loops and candidate improvements.
+- `docs/lessons` records active and completed delivery learning and compound
+  decisions.
 
 ## Delivery History
 
 | Delivery | State | Evidence |
 | --- | --- | --- |
-| v18 import baseline | Complete and deployed | `plans/v18-import.md`, `docs/retros/feat-v18-import-retro.md` |
-| Color-theme compatibility | Complete and approved | `plans/color-theme-compatibility.md`, `docs/retros/feat-color-theme-compatibility-retro.md` |
+| v18 import baseline | Complete and deployed | `plans/v18-import.md`, `docs/lessons/feat-v18-import.md` |
+| Color-theme compatibility | Complete and approved | `plans/color-theme-compatibility.md`, `docs/lessons/feat-color-theme-compatibility.md` |
 | Lit-to-Svelte components | Not started | Each component will be a separate intent-specified compatibility slice |
 
 ## Release Boundaries

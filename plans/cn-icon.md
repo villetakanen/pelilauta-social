@@ -3,7 +3,8 @@
 Status: Proposed for human approval
 Branch: `feat/cn-icon`
 Intent: `specs/design-system/components/cn-icon/spec.md`
-Prior loop: `docs/retros/feat-color-theme-compatibility-retro.md`
+Prior lessons: `docs/lessons/feat-color-theme-compatibility.md`
+Active lessons: `docs/lessons/feat-cn-icon.md`
 
 ## Production Outcome
 
@@ -138,7 +139,7 @@ general sizing tokens, and token generation remain outside this iteration.
    fallback, accessibility, and computed color.
 9. Add one root `test` dispatcher and a root Lefthook pre-push test hook. Do not
    add CI, root check/build orchestration, or other harness work.
-10. Complete human review, update the retrospective, and decide the next beta
+10. Complete human review, finalize the cycle lessons, and decide the next beta
    only after the production and book surfaces are accepted.
 
 ## Compatibility Boundaries
