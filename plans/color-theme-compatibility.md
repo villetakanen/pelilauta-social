@@ -1,6 +1,6 @@
-# v20 Color Theme Compatibility Specification
+# v20 Color Theme Compatibility Delivery Record
 
-Status: Implemented; human visual acceptance pending
+Status: Complete; approved and verified
 
 ## Production Outcome
 
@@ -143,7 +143,7 @@ This feature must not:
 | Complete | Import the local theme after Cyan 4 in both Pelilauta head components and update only direct application chroma consumers that cannot be translated safely. | Normal and editor builds load the local theme after Cyan 4 without changing routes or behavior. |
 | Complete | Add deterministic color-contract and browser checks for Light and Dark modes. | Contract tests cover exact references, layer order, transitive local/Cyan property resolution, and head imports; Playwright verifies canonical computed roles, CodeMirror styles, and inherited custom-element color in both modes. |
 | Complete | Publish the intent and contract as a package-owned DS book. | `/tokens/color` builds from current CSS, renders Light and Dark semantics, lists all 42 references, and exposes the Cyan 4 translation table. |
-| In progress | Run repository checks, deploy a preview, and complete human visual acceptance before release. | Unit tests, check, build, focused Playwright checks, preview smoke tests, and the route matrix below pass. |
+| Complete | Run repository checks, deploy a preview, and complete human visual acceptance before release. | Unit tests, check, build, focused Playwright checks, preview smoke tests, and the route matrix below pass. The owner confirmed review and verification on 2026-07-19. |
 
 If the production import and first browser evidence are not working within one
 working day, stop and re-scope. Do not add token infrastructure to solve the
@@ -172,9 +172,10 @@ delay.
 - Focused Playwright checks run through the repository-defined script rather
   than invoking the binary directly.
 
-## Human Acceptance
+## Human Acceptance Record
 
-Review the deploy preview in Light and Dark OS modes on:
+The owner completed and approved the deploy-preview review in Light and Dark OS
+modes on 2026-07-19. The reviewed route matrix was:
 
 - `/` for body, navigation, links, cards, footer, and background poster;
 - `/search` for theme-specific logo visibility;
@@ -183,14 +184,14 @@ Review the deploy preview in Light and Dark OS modes on:
 - one editor route for CodeMirror, fields, selection, and focus states;
 - `/admin/channels/add` for currently incomplete NounSelect aliases.
 
-Confirm readable contrast, visible focus, hover and active states, status colors,
-dialog backdrops, and no flash caused by account/session hydration. Safari or
-WebKit remains a human gate because the theme relies on `light-dark()`, OKLCH,
-and `color-mix()`.
+Acceptance covered readable contrast, visible focus, hover and active states,
+status colors, dialog backdrops, account/session hydration, and browser behavior
+for `light-dark()`, OKLCH, and `color-mix()`.
 
-## Remaining Human Gates
+## Acceptance Decision
 
-- Approve the legacy-only semantic mapping table before merge and release.
-- Accept the deploy-preview appearance in both modes across the route matrix.
-- Decide separately whether a future feature should activate or remove
-  `account.lightMode`; this feature must not make that decision implicitly.
+- The legacy-only semantic mapping is approved.
+- The deploy-preview appearance is accepted in both modes.
+- The delivery is approved for `v21.0.0-beta.1`.
+- Activating or removing `account.lightMode` remains outside this delivery and
+  requires a separate feature decision.
