@@ -59,36 +59,86 @@ The selected public consumers provide a bounded vertical slice:
   `specs/cyan-ds/components/cn-icon/spec.md` at that commit.
 - Component source:
   `packages/cyan/src/components/CnIcon.svelte` at that commit.
+- Fallback source:
+  `packages/cyan/src/components/CnIconFallback.ts` at that commit.
+- Registry generator:
+  `scripts/generate-icon-registry.ts` at that commit.
+- Community registry and source assets:
+  `packages/pelilauta-icons/src/` at that commit.
+- Icon sizing authority:
+  `packages/cyan/src/tokens/units.css` at that commit.
 - v20 renders trusted catalog SVG in the initial response, uses a five-value
   size API, inherits `currentColor` for monochrome artwork, preserves colors
   encoded in branded artwork, provides a visible missing fallback, and treats
   icons as decorative by default.
-- v20 evidence is direction, not code to copy blindly. Its public and managed
-  catalogs do not contain every noun currently used by v18.
+- v20's source precedence is community icons, managed/proprietary icons,
+  built-in fallbacks, and finally the mandatory missing glyph. The source SVG,
+  rather than component-side recoloring, determines whether artwork is
+  monochrome or branded.
+- This source, color, fallback, and sizing model is the target architecture for
+  v21. The implementation must still reconcile it with current production:
+  v20's catalogs do not contain every noun currently used by v18.
+
+### Current-only compatibility assets
+
+The tracked `apps/pelilauta/public/icons/` directory is the compatibility
+authority for production nouns missing from v20. Relevant current-only assets
+include `search`, `bsky`, `label-tag`, `undo`, and `pbta-logo`.
+
+Required current-only SVGs may be copied into the design-system catalog with
+their contents and provenance preserved. They must not be moved while legacy
+`cn-icon` consumers still request `/icons/{noun}.svg`. Nouns absent from both
+v20 and the current public directory remain explicit product decisions; this
+iteration must not invent aliases or artwork for them.
+
+### Required sizing tokens
+
+The local icon cannot satisfy its five-size contract until v21 owns the
+established component sizing tokens. This is not a separate token foundation.
+The icon iteration pulls in only the tokens required by its production
+consumer:
+
+| Property | Value | Size |
+| --- | --- | --- |
+| `--cn-icon-size-xsmall` | `1rem` | 16px at the default root size |
+| `--cn-icon-size-small` | `1.5rem` | 24px |
+| `--cn-icon-size` | `2.25rem` | 36px, the medium default |
+| `--cn-icon-size-large` | `4.5rem` | 72px |
+| `--cn-icon-size-xlarge` | `8rem` | 128px |
+
+The names and values match Cyan 4 and immutable v20 evidence. Spatial scales,
+general sizing tokens, and token generation remain outside this iteration.
 
 ## Approved-Scope Proposal
 
 1. Correct the Cyan 4 compatibility mapping so legacy icons recover their
    original `currentColor` fallback everywhere. Verify other production
    consumers do not require a global `--color-on` definition.
-2. Add the smallest local icon catalog needed by the selected consumers and the
-   missing fallback. Reconcile `search`, `fox`, `dd5`, `pathfinder`,
-   `ll-ampersand`, and `pbta-logo` against current assets and immutable v20
-   provenance before moving or copying artwork.
-3. Implement the local icon capability in `packages/design-system` from the
+2. Add the five exact icon sizing tokens under `packages/design-system` and
+   make them visible in the icon book. Do not add unrelated token families.
+3. Port the established v20 trusted-registry model and precedence for the
+   production-required catalog. Adapt the v20 icon registry generator when it
+   is the smallest way to keep source SVGs and the consumed registry aligned;
+   this is feature-owned catalog maintenance, not generic token infrastructure.
+4. Reconcile `search`, `fox`, `dd5`, `pathfinder`, `ll-ampersand`, and
+   `pbta-logo` against immutable v20 sources and current v18 assets. Copy
+   current-only assets into the local catalog without removing their public
+   originals. Include the stable missing fallback.
+5. Implement the local icon capability in `packages/design-system` from the
    approved intent spec. It must render on the server and require no new
    dependency.
-4. Migrate only `AppBar.astro`, `FeaturedTags.astro`, and `AppFooter.astro` to
+6. Migrate only `AppBar.astro`, `FeaturedTags.astro`, and `AppFooter.astro` to
    direct local component imports. Leave the global Cyan Lit registration in
    place for all remaining consumers.
-5. Publish a package-owned icon book through a thin `/components/icon` route in
+7. Publish a package-owned icon book through a thin `/components/icon` route in
    `apps/design`. Demonstrate all sizes, contextual monochrome color, branded
-   artwork, and the unknown-noun fallback in Light and Dark modes.
-6. Add focused package, Pelilauta, and design-book tests for server output,
-   noun resolution, sizes, fallback, accessibility, and computed color.
-7. Add one root `test` dispatcher and a root Lefthook pre-push test hook. Do not
+   artwork, source tiers, and the unknown-noun fallback in Light and Dark modes.
+8. Add focused package, Pelilauta, and design-book tests for server output,
+   registry precedence, noun resolution, size tokens, computed dimensions,
+   fallback, accessibility, and computed color.
+9. Add one root `test` dispatcher and a root Lefthook pre-push test hook. Do not
    add CI, root check/build orchestration, or other harness work.
-8. Complete human review, update the retrospective, and decide the next beta
+10. Complete human review, update the retrospective, and decide the next beta
    only after the production and book surfaces are accepted.
 
 ## Compatibility Boundaries
@@ -101,8 +151,9 @@ This iteration must not:
 - repair the unsupported `name="discussion"` call or currently missing asset
   nouns unless one enters the selected surface;
 - announce decorative icons or otherwise perform a global accessibility rewrite;
-- add a generic icon-generation pipeline, package-linking architecture, or new
-  dependency;
+- add generic token generation, package-linking architecture, or a new
+  dependency; the directly consumed icon registry and its v20-derived generator
+  are inside scope;
 - add CI, authenticated-write verification, or unrelated root check/build
   dispatch;
 - redesign, normalize, or recolor approved source artwork.
@@ -111,11 +162,17 @@ This iteration must not:
 
 - A contract test proves the legacy `--color-on` regression is removed without
   leaving a production-consumed color property unresolved.
+- The five icon sizing properties exactly match the immutable v20 values and no
+  unrelated token family is introduced.
 - Existing Pelilauta unit tests pass.
 - The selected consumers contain no `cn-icon` custom elements and render local
   icon markup in server output.
-- Known selected nouns resolve to reviewed artwork; an unknown noun renders the
-  stable missing fallback.
+- Registry generation is deterministic. Community, managed, fallback, and
+  missing precedence follows the v20 model, and every generated entry comes
+  from a reviewed repository-owned SVG.
+- Known selected nouns resolve to reviewed artwork, current-only assets remain
+  available at their legacy public paths, and an unknown noun renders the stable
+  missing fallback.
 - All five sizes produce the approved square dimensions.
 - Monochrome icons match their parent's computed foreground in both modes and
   interaction states; branded artwork retains reviewed internal colors.
@@ -138,7 +195,9 @@ Review Light and Dark rendering for:
   design-system book.
 
 Approve the selected asset provenance and confirm that decorative-by-default
-semantics are acceptable for the migrated consumers.
+semantics are acceptable for the migrated consumers. Confirm that the v20
+registry precedence and source-owned monochrome/branded color model are the v21
+target.
 
 ## Deferred Inventory
 
@@ -150,5 +209,6 @@ evidence for future scope, not work authorized by this plan.
 ## Stop Rule
 
 If the selected consumers cannot render from a small reviewed catalog within
-one working day, stop and re-scope the asset model. Do not introduce a registry
-generator or migrate additional consumers to justify the delay.
+one working day, stop and re-scope the asset model. Reuse the v20 generator only
+for the catalog this iteration consumes; do not expand the catalog or migrate
+additional consumers merely to justify the mechanism.
