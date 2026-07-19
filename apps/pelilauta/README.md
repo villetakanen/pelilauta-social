@@ -153,19 +153,9 @@ This project uses [Biome](https://biomejs.dev/) for fast linting and formatting.
 pnpm check        # Check and fix ALL files in the project
 ```
 
-**Git Hooks (Lefthook)**:
-- **Pre-commit**: Automatically checks and fixes **staged files only** when you commit
-- **Commit-msg**: Validates commit message format (Conventional Commits)
-
-**When to use each**:
-- `pnpm check` - Run manually to check the **entire codebase** (recommended after pulling changes)
-- Git hooks - Run automatically on commit to check **only your staged changes** (fast)
-
-**Key differences**:
-- Pre-commit hook: `biome check --write --staged {staged_files}` (staged files only)
-- Manual check: `biome check --write .` (all files)
-
-See [docs/lefthook.md](docs/lefthook.md) for more details.
+Git hooks and commit-message validation are owned by the workspace root. This
+imported application retains its own Biome command, but it does not install or
+configure Lefthook.
 
 ## Core Features
 

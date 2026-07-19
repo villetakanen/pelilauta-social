@@ -1,5 +1,11 @@
 # Lefthook setup and usage
 
+> Historical v18 documentation. In the v21 workspace, Lefthook installation,
+> configuration, and release gates are owned only by the repository root. See
+> the root `lefthook.yml`, `package.json`, and `docs/runbooks/releases.md` for
+> current behavior. The details below describe the imported baseline and are
+> not current workspace instructions.
+
 This project uses Lefthook to manage Git hooks. We run fast checks on `pre-commit` and validate commit messages with `commitlint`.
 
 ## Commands Overview

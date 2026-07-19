@@ -6,7 +6,17 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      '@commitlint/cli':
+        specifier: ^19.8.1
+        version: 19.8.1(@types/node@24.10.0)(typescript@5.9.3)
+      '@commitlint/config-conventional':
+        specifier: ^19.8.1
+        version: 19.8.1
+      lefthook:
+        specifier: ^1.13.4
+        version: 1.13.6
 
   apps/design:
     dependencies:
@@ -150,12 +160,6 @@ importers:
       '@biomejs/biome':
         specifier: 2.2.3
         version: 2.2.3
-      '@commitlint/cli':
-        specifier: ^19.8.1
-        version: 19.8.1(@types/node@24.10.0)(typescript@5.9.3)
-      '@commitlint/config-conventional':
-        specifier: ^19.8.1
-        version: 19.8.1
       '@playwright/test':
         specifier: ^1.50.0
         version: 1.56.1
@@ -174,9 +178,6 @@ importers:
       dotenv:
         specifier: ^16.5.0
         version: 16.6.1
-      lefthook:
-        specifier: ^1.13.4
-        version: 1.13.6
       rollup-plugin-visualizer:
         specifier: ^6.0.3
         version: 6.0.5(rollup@2.79.2)
