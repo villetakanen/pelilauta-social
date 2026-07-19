@@ -1,0 +1,49 @@
+:root {
+  --cn-color-primary-0: oklch(0 0 185);
+  --cn-color-primary-10: oklch(0.12 0.09 185);
+  --cn-color-primary-20: oklch(0.2 0.14 180);
+  --cn-color-primary-30: oklch(0.3 0.18 175);
+  --cn-color-primary-40: oklch(0.4 0.22 170);
+  --cn-color-primary-50: oklch(0.5 0.24 162);
+  --cn-color-primary-60: oklch(0.6 0.26 150);
+  --cn-color-primary-70: oklch(0.7 0.27 135);
+  --cn-color-primary-80: oklch(0.8 0.27 120);
+  --cn-color-primary-90: oklch(0.9 0.27 110);
+  --cn-color-primary-95: oklch(0.95 0.18 110);
+  --cn-color-primary-99: oklch(0.99 0.05 110);
+  --cn-color-primary-100: oklch(1 0 110);
+
+  --cn-color-surface-0: oklch(0 0 242);
+  --cn-color-surface-10: oklch(0.1 0.05 242);
+  --cn-color-surface-20: oklch(0.2 0.07 242);
+  --cn-color-surface-30: oklch(0.3 0.09 242);
+  --cn-color-surface-40: oklch(0.4 0.12 242);
+  --cn-color-surface-50: oklch(0.5 0.14 242);
+  --cn-color-surface-60: oklch(0.6 0.17 242);
+  --cn-color-surface-70: oklch(0.7 0.17 242);
+  --cn-color-surface-80: oklch(0.8 0.12 242);
+  --cn-color-surface-90: oklch(0.9 0.06 242);
+  --cn-color-surface-95: oklch(0.95 0.03 242);
+  --cn-color-surface-99: oklch(0.99 0.015 242);
+  --cn-color-surface-100: oklch(1 0 242);
+
+  --cn-color-error-20: oklch(0.2 0.15 318);
+  --cn-color-error-40: oklch(0.4 0.18 318);
+  --cn-color-error-60: oklch(0.6 0.2 318);
+  --cn-color-error-90: oklch(0.9 0.1 318);
+
+  --cn-color-warning-20: oklch(0.2 0.15 65);
+  --cn-color-warning-40: oklch(0.4 0.2 65);
+  --cn-color-warning-60: oklch(0.6 0.25 65);
+  --cn-color-warning-90: oklch(0.9 0.2 65);
+
+  --cn-color-info-20: oklch(0.2 0.12 170);
+  --cn-color-info-40: oklch(0.4 0.15 170);
+  --cn-color-info-60: oklch(0.6 0.18 170);
+  --cn-color-info-90: oklch(0.9 0.1 170);
+
+  --cn-color-love-20: oklch(0.2 0.15 30);
+  --cn-color-love-40: oklch(0.4 0.18 30);
+  --cn-color-love-60: oklch(0.6 0.2 30);
+  --cn-color-love-90: oklch(0.9 0.1 30);
+}

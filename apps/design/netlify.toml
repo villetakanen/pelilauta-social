@@ -1,0 +1,8 @@
+# design.pelilauta.social is separate from pelilauta.social.
+[build]
+  base = "."
+  command = "pnpm --filter design build"
+  publish = "apps/design/dist"
+
+[build.environment]
+  NODE_VERSION = "22"

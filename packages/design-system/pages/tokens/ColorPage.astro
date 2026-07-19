@@ -1,0 +1,339 @@
+---
+import "@design-system/styles/color.css";
+import referenceSource from "@design-system/styles/color-reference.css?raw";
+import semanticSource from "@design-system/styles/color-theme.css?raw";
+import compatibilitySource from "@design-system/styles/compat/cyan-4.css?raw";
+
+type Declaration = {
+	name: string;
+	value: string;
+};
+
+const declarationPattern = /(--[\w-]+)\s*:\s*([^;]+);/g;
+const readDeclarations = (source: string): Declaration[] => {
+	return [...source.matchAll(declarationPattern)].map((match) => ({
+		name: match[1],
+		value: match[2].replace(/\s+/g, " ").trim(),
+	}));
+};
+
+const references = readDeclarations(referenceSource);
+const semantics = readDeclarations(semanticSource);
+const compatibility = readDeclarations(compatibilitySource);
+const paletteOrder = ["primary", "surface", "error", "warning", "info", "love"];
+const palettes = paletteOrder.map((name) => ({
+	name,
+	tokens: references.filter((token) =>
+		token.name.startsWith(`--cn-color-${name}-`),
+	),
+}));
+
+const title = "Color themes";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="The Pelilauta v21 color-theme intent, implementation contract, and compatibility book."
+    />
+    <title>{title} / Pelilauta Design System</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">Pelilauta DS</a>
+      <span>BOOK 01</span>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="kicker">INTENT / CONTRACT / BOOK</p>
+        <h1>{title}</h1>
+        <p class="lede">
+          A perceptual OKLCH system with one shared reference palette and two
+          semantic modes. The browser or operating system selects Light or
+          Dark; the persisted Pelilauta account preference remains outside this
+          contract.
+        </p>
+        <dl class="facts">
+          <div><dt>Reference colors</dt><dd>{references.length}</dd></div>
+          <div><dt>Semantic roles</dt><dd>{semantics.length}</dd></div>
+          <div><dt>Modes</dt><dd>Light / Dark</dd></div>
+          <div><dt>Compatibility</dt><dd>Cyan 4</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="semantic-title">
+        <div class="section-heading">
+          <p>01 / SEMANTIC THEMES</p>
+          <h2 id="semantic-title">One contract, two conditions</h2>
+          <p>
+            Both panels use the production <code>color-theme.css</code>. Scoped
+            <code>color-scheme</code> forces each mode without account state or
+            JavaScript theme classes.
+          </p>
+        </div>
+        <div class="theme-split">
+          {['light', 'dark'].map((mode) => (
+            <article class={`theme-panel ${mode}`} data-theme-panel>
+              <header>
+                <span class="mode-dot"></span>
+                <h3>{mode}</h3>
+              </header>
+              <div class="surface-stack">
+                {[1, 2, 3, 4].map((level) => (
+                  <div
+                    class="surface"
+                    style={`background: var(--cn-surface-${level});`}
+                  >
+                    <code>surface-{level}</code>
+                  </div>
+                ))}
+              </div>
+              <div class="type-sample">
+                <h4>Heading carries structure</h4>
+                <p>
+                  Body text stays quiet enough for long conversations while
+                  <a href="#contract">links identify a possible action</a>.
+                </p>
+              </div>
+              <div class="controls">
+                <button type="button">Primary action</button>
+                <label>
+                  <span>Field label</span>
+                  <input value="Readable input" readonly />
+                </label>
+              </div>
+              <div
+                class="statuses"
+                role="group"
+                aria-label={`${mode} status colors`}
+              >
+                {['success', 'warning', 'error', 'info', 'love'].map((status) => (
+                  <span>
+                    <i style={`--status-color: var(--cn-color-${status});`}></i>
+                    {status}
+                  </span>
+                ))}
+              </div>
+              <dl class="computed-values">
+                {['--cn-background', '--cn-text', '--cn-link', '--cn-border'].map(
+                  (property) => (
+                    <div>
+                      <dt><code>{property}</code></dt>
+                      <dd data-computed={property}>computed in browser</dd>
+                    </div>
+                  ),
+                )}
+              </dl>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="reference-title">
+        <div class="section-heading">
+          <p>02 / REFERENCE PALETTES</p>
+          <h2 id="reference-title">The 42 exact source colors</h2>
+          <p>
+            Values are parsed at build time from
+            <code>color-reference.css</code>. The book cannot silently maintain
+            a second palette.
+          </p>
+        </div>
+        {palettes.map((palette) => (
+          <article class="palette">
+            <h3>{palette.name}</h3>
+            <ul class="swatches">
+              {palette.tokens.map((token) => (
+                <li data-reference-token={token.name}>
+                  <span
+                    class="swatch"
+                    style={`background: var(${token.name});`}
+                  ></span>
+                  <code>{token.name.replace(`--cn-color-${palette.name}-`, '')}</code>
+                  <small>{token.value}</small>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </section>
+
+      <section id="contract" aria-labelledby="contract-title">
+        <div class="section-heading">
+          <p>03 / CYAN 4 TRANSLATION</p>
+          <h2 id="contract-title">Old names, v21 decisions</h2>
+          <p>
+            Pelilauta loads this adapter after Cyan 4. Existing consumers keep
+            their property names while resolving through the v20 theme. The
+            table is parsed directly from <code>compat/cyan-4.css</code>.
+          </p>
+        </div>
+        <details>
+          <summary>{semantics.length} semantic declarations</summary>
+          <section
+            class="table-scroll"
+            aria-label="Semantic color roles"
+            tabindex="0"
+          >
+            <table>
+              <thead><tr><th scope="col">Semantic property</th><th scope="col">Definition</th></tr></thead>
+              <tbody>
+                {semantics.map((token) => (
+                  <tr data-semantic-token={token.name}>
+                    <td><code>{token.name}</code></td>
+                    <td><code>{token.value}</code></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        </details>
+        <details>
+          <summary>{compatibility.length} compatibility declarations</summary>
+          <section
+            class="table-scroll"
+            aria-label="Cyan 4 aliases"
+            tabindex="0"
+          >
+            <table>
+              <thead><tr><th scope="col">Legacy property</th><th scope="col">v21 target</th></tr></thead>
+              <tbody>
+                {compatibility.map((token) => (
+                  <tr data-compat-token={token.name}><td><code>{token.name}</code></td><td><code>{token.value}</code></td></tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        </details>
+      </section>
+    </main>
+    <footer>
+      <a href="/">Index</a>
+      <span>Source: <code>packages/design-system/styles</code></span>
+    </footer>
+    <script>
+      for (const panel of document.querySelectorAll('[data-theme-panel]')) {
+        for (const output of panel.querySelectorAll('[data-computed]')) {
+          const property = output.getAttribute('data-computed');
+          if (!property) continue;
+          const probe = document.createElement('span');
+          probe.style.color = `var(${property})`;
+          panel.append(probe);
+          output.textContent = getComputedStyle(probe).color;
+          probe.remove();
+        }
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(html) { scroll-behavior: smooth; }
+  :global(body) {
+    margin: 0;
+    color: var(--cn-text);
+    background: var(--cn-background);
+    font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+    line-height: 1.5;
+  }
+  :global(code) { font-family: "SFMono-Regular", Consolas, monospace; }
+  .site-header,
+  body > footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem clamp(1.25rem, 4vw, 3rem);
+    color: var(--cn-text-low);
+    border-block-end: 1px solid var(--cn-border);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  body > footer { border-block: 1px solid var(--cn-border) 0; }
+  a { color: var(--cn-link); text-underline-offset: 0.18em; }
+  a:hover { color: var(--cn-link-hover); }
+  main { overflow: hidden; }
+  main > section { padding: clamp(4rem, 9vw, 8rem) clamp(1.25rem, 4vw, 3rem); }
+  .hero {
+    min-block-size: min(48rem, 86vh);
+    display: grid;
+    align-content: center;
+    background:
+      linear-gradient(130deg, transparent 45%, var(--cn-hover)),
+      var(--cn-surface);
+  }
+  .kicker,
+  .section-heading > p:first-child {
+    color: var(--cn-text-low);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+  h1 {
+    margin: 0.3rem 0 1.5rem;
+    max-inline-size: 10ch;
+    color: var(--cn-text-high);
+    font-size: clamp(4rem, 14vw, 10rem);
+    font-weight: 600;
+    letter-spacing: -0.075em;
+    line-height: 0.82;
+  }
+  .lede { max-inline-size: 45rem; color: var(--cn-text-low); font-size: clamp(1.1rem, 2.2vw, 1.6rem); }
+  .facts { display: flex; flex-wrap: wrap; gap: 2rem 5rem; margin-block-start: 4rem; }
+  .facts div { display: grid; gap: 0.25rem; }
+  .facts dt { color: var(--cn-text-low); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .facts dd { margin: 0; color: var(--cn-text-high); font-size: 1.5rem; }
+  .section-heading { max-inline-size: 48rem; margin-block-end: 3rem; }
+  .section-heading h2 { margin: 0.4rem 0 1rem; color: var(--cn-text-high); font-size: clamp(2.3rem, 6vw, 5rem); letter-spacing: -0.05em; line-height: 0.95; }
+  .section-heading > p:last-child { color: var(--cn-text-low); font-size: 1.05rem; }
+  .theme-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--cn-border); }
+  .theme-panel { padding: clamp(1rem, 3vw, 2rem); background: var(--cn-background); color: var(--cn-text); }
+  .theme-panel + .theme-panel { border-inline-start: 1px solid var(--cn-border); }
+  .theme-panel.light { color-scheme: light; }
+  .theme-panel.dark { color-scheme: dark; }
+  .theme-panel > header { display: flex; align-items: center; gap: 0.7rem; margin-block-end: 2rem; }
+  .theme-panel h3 { margin: 0; text-transform: capitalize; }
+  .mode-dot { inline-size: 0.75rem; block-size: 0.75rem; border-radius: 50%; background: var(--cn-focus-ring); }
+  .surface-stack { display: grid; grid-template-columns: repeat(4, 1fr); min-block-size: 8rem; }
+  .surface { display: grid; place-items: end start; padding: 0.6rem; color: var(--cn-on-surface); }
+  .surface code { font-size: 0.62rem; }
+  .type-sample { padding-block: 2rem; }
+  .type-sample h4 { margin: 0; color: var(--cn-text-heading); font-size: 1.5rem; }
+  .type-sample p { color: var(--cn-text-low); }
+  .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; align-items: end; }
+  button { padding: 0.7rem 1rem; color: var(--cn-on-button); background: var(--cn-button); border: 0; border-radius: 999px; font: inherit; }
+  label { display: grid; gap: 0.35rem; color: var(--cn-text-low); font-size: 0.75rem; }
+  input { min-inline-size: 0; padding: 0.7rem; color: var(--cn-on-input); background: var(--cn-input); border: 1px solid var(--cn-border); border-radius: 0.4rem; font: inherit; }
+  .statuses { display: flex; gap: 0.5rem; margin-block: 2rem; }
+  .statuses span { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--cn-text-low); font-size: 0.66rem; text-transform: capitalize; }
+  .statuses i { display: block; inline-size: 0.85rem; block-size: 0.85rem; border-radius: 50%; background: var(--status-color); }
+  .computed-values { margin: 0; }
+  .computed-values div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.45rem; border-block-start: 1px solid var(--cn-border); }
+  .computed-values dd { margin: 0; color: var(--cn-text-low); font-family: monospace; font-size: 0.72rem; }
+  .palette { margin-block: 4rem; }
+  .palette h3 { text-transform: capitalize; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: 1px; padding: 1px; background: var(--cn-border); list-style: none; }
+  .swatches li { display: grid; gap: 0.5rem; padding: 0.65rem; background: var(--cn-background); }
+  .swatch { aspect-ratio: 1.5; border: 1px solid color-mix(in oklch, CanvasText 15%, transparent); }
+  .swatches small { overflow-wrap: anywhere; color: var(--cn-text-low); font-family: monospace; font-size: 0.62rem; }
+  details { border-block: 1px solid var(--cn-border); }
+  summary { padding-block: 1rem; cursor: pointer; font-weight: 700; }
+  .table-scroll { overflow-x: auto; }
+  table { inline-size: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  th, td { padding: 0.65rem 1rem 0.65rem 0; text-align: start; border-block-start: 1px solid var(--cn-border); }
+  th { color: var(--cn-text-low); }
+  @media (max-width: 48rem) {
+    .theme-split { grid-template-columns: 1fr; }
+    .theme-panel + .theme-panel { border-inline-start: 0; border-block-start: 1px solid var(--cn-border); }
+    .controls { grid-template-columns: 1fr; }
+    body > footer { align-items: flex-start; flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) { scroll-behavior: auto; }
+  }
+</style>

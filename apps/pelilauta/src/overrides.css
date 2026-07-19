@@ -10,7 +10,7 @@ main > footer cn-avatar {
   text-shadow: none;
 }
 main > footer a {
-  color: light-dark(var(--chroma-surface-90), var(--chroma-surface-10));
+  color: var(--cn-link);
 }
 main > footer h4 {
   margin-bottom: var(--cn-grid);

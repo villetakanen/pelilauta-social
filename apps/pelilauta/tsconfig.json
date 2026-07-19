@@ -13,7 +13,8 @@
       "@styles/*": ["src/styles/*"],
       "@locales/*": ["src/locales/*"],
       "@firebase/*": ["src/firebase/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@design-system/*": ["../../packages/design-system/*"]
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js",

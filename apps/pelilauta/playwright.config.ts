@@ -22,6 +22,13 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 3, // Reduce workers to minimize conflicts
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? [['html'], ['github']] : [['list']],
+  webServer: process.env.THEME_E2E
+    ? {
+        command: 'pnpm run dev --host 127.0.0.1',
+        url: 'http://127.0.0.1:4321',
+        reuseExistingServer: !process.env.CI,
+      }
+    : undefined,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

@@ -1,0 +1,186 @@
+:root {
+  color-scheme: light dark;
+
+  --cn-surface: light-dark(
+    var(--cn-color-surface-99),
+    var(--cn-color-surface-20)
+  );
+  --cn-surface-1: light-dark(
+    var(--cn-color-surface-100),
+    var(--cn-color-surface-30)
+  );
+  --cn-surface-2: light-dark(
+    var(--cn-color-surface-100),
+    var(--cn-color-surface-30)
+  );
+  --cn-surface-3: light-dark(
+    var(--cn-color-surface-100),
+    var(--cn-color-surface-40)
+  );
+  --cn-surface-4: light-dark(
+    var(--cn-color-surface-80),
+    var(--cn-color-surface-50)
+  );
+  --cn-on-surface: light-dark(
+    var(--cn-color-surface-10),
+    var(--cn-color-surface-90)
+  );
+  --cn-on-surface-secondary: light-dark(
+    var(--cn-color-surface-40),
+    var(--cn-color-surface-60)
+  );
+  --cn-background: var(--cn-surface);
+  --cn-on-background: var(--cn-on-surface);
+
+  --cn-text: light-dark(var(--cn-color-surface-10), var(--cn-color-surface-95));
+  --cn-text-high: light-dark(black, var(--cn-color-surface-100));
+  --cn-text-low: light-dark(
+    var(--cn-color-surface-30),
+    var(--cn-color-surface-60)
+  );
+  --cn-text-heading: light-dark(
+    var(--cn-color-surface-30),
+    var(--cn-color-surface-99)
+  );
+  --cn-text-subheading: light-dark(
+    var(--cn-color-surface-40),
+    var(--cn-color-surface-80)
+  );
+
+  --cn-link: light-dark(var(--cn-color-primary-50), var(--cn-color-surface-80));
+  --cn-link-hover: light-dark(
+    var(--cn-color-surface-50),
+    var(--cn-color-primary-80)
+  );
+  --cn-link-active: light-dark(
+    var(--cn-color-primary-30),
+    var(--cn-color-surface-70)
+  );
+
+  --cn-button: light-dark(
+    var(--cn-color-surface-50),
+    var(--cn-color-surface-40)
+  );
+  --cn-button-light: var(--cn-color-primary-50);
+  --cn-button-cta: var(--cn-color-error-40);
+  --cn-on-button: var(--cn-color-surface-100);
+  --cn-on-button-cta: var(--cn-color-surface-100);
+  --cn-fab: var(--cn-color-primary-70);
+  --cn-fab-blend: var(--cn-color-surface-50);
+  --cn-on-fab: var(--cn-color-surface-100);
+  --cn-fab-cta: var(--cn-color-error-60);
+  --cn-fab-cta-blend: var(--cn-color-surface-50);
+  --cn-on-fab-cta: var(--cn-color-surface-100);
+  --cn-fab-secondary: var(--cn-color-surface-30);
+  --cn-fab-secondary-blend: var(--cn-color-surface-60);
+  --cn-on-fab-secondary: var(--cn-color-surface-100);
+  --cn-hover: light-dark(
+    color-mix(in oklch, var(--cn-color-surface-50), transparent 90%),
+    color-mix(in oklch, var(--cn-color-surface-50), transparent 80%)
+  );
+  --cn-active: light-dark(
+    color-mix(in oklch, var(--cn-color-surface-50), transparent 80%),
+    color-mix(in oklch, var(--cn-color-surface-50), transparent 70%)
+  );
+  --cn-focus-ring: light-dark(
+    var(--cn-color-primary-60),
+    var(--cn-color-primary-40)
+  );
+
+  --cn-border: light-dark(
+    var(--cn-color-surface-70),
+    var(--cn-color-surface-30)
+  );
+  --cn-border-hover: light-dark(
+    var(--cn-color-surface-50),
+    var(--cn-color-surface-40)
+  );
+  --cn-border-focus: light-dark(
+    var(--cn-color-primary-70),
+    var(--cn-color-primary-40)
+  );
+
+  --cn-color-success: var(--cn-color-primary-60);
+  --cn-color-warning: light-dark(
+    var(--cn-color-warning-40),
+    var(--cn-color-warning-60)
+  );
+  --cn-color-error: light-dark(
+    var(--cn-color-error-40),
+    var(--cn-color-error-60)
+  );
+  --cn-color-info: light-dark(var(--cn-color-info-20), var(--cn-color-info-60));
+  --cn-color-love: light-dark(var(--cn-color-love-40), var(--cn-color-love-60));
+
+  --cn-bubble: light-dark(
+    var(--cn-color-surface-90),
+    var(--cn-color-surface-30)
+  );
+  --cn-on-bubble: light-dark(
+    var(--cn-color-surface-20),
+    var(--cn-color-surface-95)
+  );
+  --cn-reply-bubble: light-dark(
+    var(--cn-color-primary-70),
+    var(--cn-color-primary-40)
+  );
+  --cn-on-reply-bubble: light-dark(
+    var(--cn-color-surface-100),
+    var(--cn-color-surface-95)
+  );
+  --cn-reply-context-bg: light-dark(
+    var(--cn-color-primary-90),
+    var(--cn-color-primary-20)
+  );
+  --cn-reply-context-text: light-dark(
+    var(--cn-color-primary-20),
+    var(--cn-color-primary-90)
+  );
+  --cn-reply-dock-bg: light-dark(
+    var(--cn-color-surface-100),
+    var(--cn-color-surface-20)
+  );
+  --cn-reply-dock-border: light-dark(
+    var(--cn-color-surface-80),
+    var(--cn-color-surface-30)
+  );
+
+  --cn-input: light-dark(var(--cn-color-surface-80), var(--cn-color-surface-0));
+  --cn-on-input: var(--cn-on-surface);
+  --cn-input-hover: light-dark(
+    var(--cn-color-surface-70),
+    var(--cn-color-surface-0)
+  );
+  --cn-input-focus: light-dark(
+    var(--cn-color-surface-70),
+    var(--cn-color-surface-0)
+  );
+  --cn-input-disabled: light-dark(
+    var(--cn-color-surface-80),
+    var(--cn-color-surface-20)
+  );
+
+  --cn-shadow-color: light-dark(
+    var(--cn-color-surface-30),
+    var(--cn-color-surface-0)
+  );
+  --cn-shadow-elevation-1: calc(var(--cn-grid) * 0.125)
+    calc(var(--cn-grid) * 0.125) calc(var(--cn-grid) * 0.5)
+    var(--cn-shadow-color);
+  --cn-shadow-elevation-2: calc(var(--cn-grid) * 0.25)
+    calc(var(--cn-grid) * 0.25) var(--cn-grid) var(--cn-shadow-color);
+  --cn-shadow-button-hover: var(--cn-shadow-elevation-2);
+  --cn-shadow-elevation-3: calc(var(--cn-grid) * 0.5) calc(var(--cn-grid) * 0.5)
+    calc(var(--cn-grid) * 2) var(--cn-shadow-color);
+  --cn-shadow-elevation-4: calc(var(--cn-grid) * 0.75)
+    calc(var(--cn-grid) * 0.75) calc(var(--cn-grid) * 3) var(--cn-shadow-color);
+  --cn-reply-dock-shadow: var(--cn-shadow-elevation-3);
+  --cn-selection: light-dark(
+    color-mix(in oklch, var(--cn-color-primary-60), transparent 70%),
+    color-mix(in oklch, var(--cn-color-primary-40), transparent 70%)
+  );
+  --cn-on-selection: var(--cn-on-surface);
+  --cn-backdrop: light-dark(rgb(0 0 0 / 50%), rgb(0 0 0 / 70%));
+  --cn-lightbox-background: var(--cn-color-surface-30);
+  --cn-lightbox-color: var(--cn-color-surface-95);
+}
