@@ -1,5 +1,10 @@
 ---
 status: draft
+provenance:
+  - "v18 icon contract: @11thdeg/cyan-lit@4.0.0-beta.30 cn-icon (noun attribute, xsmall/small/large/xlarge with medium default, /icons/{noun}.svg#icon)"
+  - "v20 target model: immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced (trusted registries, precedence, server-rendered markup, source-owned color)"
+  - "Current-only compatibility assets: apps/pelilauta/public/icons/ (search, bsky, label-tag, undo, pbta-logo)"
+  - "Findings and decisions: docs/lessons/feat-cn-icon.md"
 ---
 
 # Icon

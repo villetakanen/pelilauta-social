@@ -11,7 +11,8 @@
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
 - For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
 - A design-system functionality is complete only when the same delivery slice includes its intent spec, contract implementation, and package-owned DS book integrated into `apps/design`.
-- Record durable behavior and architecture in `specs/` and irreversible decisions in `docs/adrs/` when those directories are introduced. A PBI describes one change; its linked spec remains the source of truth.
+- Record durable behavior and architecture as intent specs under `specs/` (anatomy: `specs/TEMPLATE.md`), and irreversible decisions in `docs/adrs/` once that directory is introduced. A PBI describes one change; its linked spec remains the source of truth.
+- Specs carry `provenance:` frontmatter naming the v18 sources, immutable upstream commits, or human decisions their claims rest on, and pass the adversarial review gate in the spec skill before a human approves them.
 
 ## Workspace Contract
 
@@ -45,7 +46,9 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 
 ## Workflow Guides
 
+Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
+
 - Active lessons: `docs/practices/lessons.md`. Every delivery task reads and updates the current branch file under `docs/lessons/` as new evidence appears; do not wait for a close prompt.
-- Intent specs: `.agents/skills/spec/SKILL.md`
+- Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Lessons and compound decisions: `.agents/skills/lessons/SKILL.md`
 - Root releases: `.agents/skills/release/SKILL.md` and `docs/runbooks/releases.md`

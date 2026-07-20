@@ -127,6 +127,21 @@ cycle close. Finalize its outcome and compound decisions in place. Existing
 closed cycle records move to `docs/lessons/`, and the separate close-time skill
 and practice are removed.
 
+### 9. Spec Conventions Needed Consolidation Before Implementation
+
+Spec work was governed by a skill without a template, provenance for spec
+claims lived only in the plan and this lessons file, no review step gated
+`draft` → `approved`, and the imported `apps/pelilauta/AGENTS.md` still
+described the superseded persona and PBI workflow alongside the root contract.
+
+Decision: align spec conventions with the ASDLC.io Living Specs practice
+before starting cn-icon implementation. `specs/TEMPLATE.md` defines the
+Intent + Contract anatomy; specs carry `provenance:` frontmatter; the spec
+skill gains an adversarial review gate before human approval; the legacy
+nested AGENTS.md is removed and root `CLAUDE.md` symlinks to `AGENTS.md`.
+The cn-icon spec adopts provenance frontmatter now and passes the review gate
+before its approval.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |
@@ -141,9 +156,12 @@ and practice are removed.
 | CI and broader root orchestration | Reject for now | None |
 | Active lessons file was absent | Accept correction | This file plus root and skill workflow rules |
 | Separate close-time summary duplicates lessons | Reject separate artifact | Finalize the same lessons file at cycle close |
+| Spec conventions were fragmented | Accept | `specs/TEMPLATE.md`, provenance frontmatter, adversarial review gate in the spec skill |
+| Legacy nested AGENTS.md contradicted root contract | Accept removal | Root `AGENTS.md` (symlinked as `CLAUDE.md`) is the single agent contract |
 
 ## Open Gates
 
+- Adversarial review of `specs/design-system/components/cn-icon/spec.md` per the spec skill's review gate.
 - Human approval of `specs/design-system/components/cn-icon/spec.md`.
 - Human approval of `plans/cn-icon.md`, including selected consumers.
 - Approval of source provenance for the selected current-only assets.
