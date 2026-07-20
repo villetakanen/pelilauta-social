@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 provenance:
   - "v18 icon contract: @11thdeg/cyan-lit@4.0.0-beta.30 cn-icon (noun attribute, xsmall/small/large/xlarge with medium default, /icons/{noun}.svg#icon, empty noun renders the design icon, unknown noun renders a blank sized box, SVG title announces the noun)"
   - "v20 target model: immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced (trusted registries, precedence, server-rendered markup, source-owned color, missing glyph)"

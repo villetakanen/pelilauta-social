@@ -219,7 +219,7 @@ Recorded in `plans/cn-icon.md` under Further Work.
 ## Open Gates
 
 - ~~Adversarial review of `specs/design-system/components/cn-icon/spec.md` per the spec skill's review gate.~~ Completed 2026-07-20; findings resolved in the spec, decisions in Finding 10.
-- Human approval of `specs/design-system/components/cn-icon/spec.md`.
-- Human approval of `plans/cn-icon.md`, including selected consumers, after its accessibility notes are reconciled with the retained v18 noun announcement.
+- ~~Human approval of `specs/design-system/components/cn-icon/spec.md`.~~ Approved 2026-07-20.
+- ~~Human approval of `plans/cn-icon.md`, including selected consumers, after its accessibility notes are reconciled with the retained v18 noun announcement.~~ Approved 2026-07-20 with the reconciled accessibility notes and the beta.3 iconography follow-on logged.
 - Approval of source provenance for the selected current-only assets.
 - Implementation, deterministic checks, visual review, and release decision.
