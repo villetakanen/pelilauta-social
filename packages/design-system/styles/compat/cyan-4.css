@@ -52,7 +52,8 @@
   --color-surface-hover: var(--cn-hover);
   --color-on-surface: var(--cn-on-surface);
   --color-on-surface-secondary: var(--cn-on-surface-secondary);
-  --color-on: var(--cn-on-surface);
+  /* Bare --color-on stays undefined: legacy cn-icon relies on
+     var(--color-on, currentColor) falling back to its contextual color. */
   --color-on-primary: var(--cn-on-button);
   --color-secondary: var(--cn-surface-4);
   --color-secondary-1: var(--cn-surface-3);

@@ -62,6 +62,42 @@ test('v20 theme follows the browser color scheme', async ({ page }) => {
   expect(dark.footerLinkColor).not.toBe(light.footerLinkColor);
 });
 
+test('legacy icons inherit the contextual foreground color', async ({
+  page,
+}) => {
+  for (const colorScheme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme });
+    await page.goto('http://127.0.0.1:4321/');
+
+    const probe = await page.evaluate(async () => {
+      await customElements.whenDefined('cn-icon');
+      const parent = document.createElement('div');
+      parent.style.color = 'rgb(11, 22, 33)';
+      const icon = document.createElement('cn-icon');
+      icon.setAttribute('noun', 'search');
+      parent.append(icon);
+      document.body.append(parent);
+      await (icon as HTMLElement & { updateComplete: Promise<void> })
+        .updateComplete;
+      const iconColor = getComputedStyle(icon).color;
+      const bareColorOn = getComputedStyle(document.documentElement)
+        .getPropertyValue('--color-on')
+        .trim();
+      parent.remove();
+      return { iconColor, bareColorOn };
+    });
+
+    // The contract behind lessons Finding 1: a legacy icon without an
+    // explicit color resolves to its parent's currentColor, which requires
+    // the bare --color-on custom property to stay undefined.
+    expect(probe.bareColorOn, `${colorScheme}: --color-on must stay undefined`)
+      .toBe('');
+    expect(probe.iconColor, `${colorScheme}: icon inherits parent color`).toBe(
+      'rgb(11, 22, 33)',
+    );
+  }
+});
+
 async function readTheme(page: import('@playwright/test').Page) {
   return page.evaluate(() => {
     const probe = document.createElement('div');

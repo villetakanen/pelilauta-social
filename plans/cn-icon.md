@@ -1,6 +1,6 @@
 # cn-icon Migration Plan
 
-Status: Proposed for human approval
+Status: Approved 2026-07-20
 Branch: `feat/cn-icon`
 Intent: `specs/design-system/components/cn-icon/spec.md`
 Prior lessons: `docs/lessons/feat-color-theme-compatibility.md`
