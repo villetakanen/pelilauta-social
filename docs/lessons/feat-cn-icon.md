@@ -198,6 +198,70 @@ of catalog governance that the component spec then anchors to. It ships as
 its own slice targeted for `v21.0.0-beta.3`, not in this production slice.
 Recorded in `plans/cn-icon.md` under Further Work.
 
+### 13. Proprietary Icons Are A Separate Non-Licensed Submodule Tier
+
+Investigating the v20 source model (`~/dev/pelilauta-20` at the pinned commit
+`02880fbc`) before starting step 3–5 showed the source-tier precedence is not
+just a resolution nicety — it is a **licensing boundary**.
+
+- The community tier `@pelilauta/icons` (`packages/pelilauta-icons`) holds
+  project-licensed artwork such as `fox`.
+- The managed tier `@myrrys/proprietary` is a **separate nested git repo**
+  (submodule), README: "All rights reserved. No license is granted to use these
+  assets outside of the pelilauta.social site... not licensed under the main
+  project license." It holds `dd5`, `pathfinder`, `ll-ampersand`, `pbta`,
+  `discussion`, and other branded nouns.
+- The v20 registry generator (`scripts/generate-icon-registry.ts`) runs once per
+  tier and inlines each SVG's source as a string into an `index.ts` **inside
+  that tier's own package**. The proprietary artwork's generated registry
+  therefore stays within the private submodule; it is never inlined into the
+  open packages. `CnIcon.svelte` resolves community → managed → bundled fallback
+  → missing glyph.
+
+This directly contradicts the pre-investigation wording of plan step 4 ("copy
+`search`, `fox`, `dd5`, `pathfinder`, `ll-ampersand`, `pbta-logo` into the local
+catalog"). Four of those six nouns are proprietary. `packages/design-system` is
+a public, reusable package; inlining all-rights-reserved artwork into it would
+spread proprietary art into exactly the surface v20 keeps clean. The three
+selected consumers split across the boundary: `AppBar` → `search`, `AppFooter`
+→ `fox` (both community), and **`FeaturedTags` → `dd5`, `pathfinder`,
+`ll-ampersand`, `pbta-logo` (all proprietary)** — so the first slice cannot
+avoid the managed tier.
+
+Decision (human, 2026-07-20): adopt the v20 two-tier model in v21 now.
+Community artwork lives in the public design-system catalog; proprietary
+artwork is consumed from the `@myrrys/proprietary` submodule via a generated
+registry that stays inside the private boundary, never copied into the public
+design-system source.
+
+### 14. v21 State: Submodule Pinned Before The Icon Registry Existed
+
+The `@myrrys/proprietary` submodule is already declared in v21 at
+`apps/pelilauta/public/myrrys-proprietary`, but only as a **public asset
+directory** — legacy pages serve `/myrrys-proprietary/*.webp` images from it; no
+v21 code consumes it as a package. Its pinned commit `b34789a` predates the icon
+work and contains only the webp asset folders (`fair-use`, `juno-viinikka`,
+`letl`, `public-domain`) — no `icons/`, no generated `index.ts`, no
+`package.json`. The icon registry (`icons/`, generated `index.ts`,
+`@myrrys/proprietary` `package.json`) exists only from `13857fc` onward, which
+is the submodule repo's current `origin/main`. `origin/main` still carries all
+four webp folders, so advancing the pointer adds the icon tier without
+disturbing the assets already served.
+
+- `dd5`, `pathfinder`, `ll-ampersand` exist verbatim in the submodule tier.
+- `fox` and `search` are community, not proprietary. `fox` is in v20
+  `pelilauta-icons`; `search` is a v18 current-only asset present in neither v20
+  package (only `apps/pelilauta/public/icons/search.svg`).
+- **`pbta-logo` noun reconciliation:** `FeaturedTags` requests `pbta-logo`. The
+  submodule tier has `pbta`, not `pbta-logo`, and its `pbta` artwork **differs**
+  from the artwork production shows today. In v18, `public/icons/pbta-logo.svg`
+  and `public/icons/pbta.svg` are byte-identical, and that is the artwork on the
+  live front page. Mapping `pbta-logo` → submodule `pbta` would silently change
+  the rendered logo — a compatibility break the spec's no-invent/no-alias rule
+  forbids. Preserving appearance means the exact v18 `pbta-logo` artwork must be
+  the source; being branded, it belongs in the proprietary submodule tier, not
+  the public catalog.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |
@@ -215,6 +279,9 @@ Recorded in `plans/cn-icon.md` under Further Work.
 | Spec conventions were fragmented | Accept | `specs/TEMPLATE.md`, provenance frontmatter, adversarial review gate in the spec skill |
 | Legacy nested AGENTS.md contradicted root contract | Accept removal | Root `AGENTS.md` (symlinked as `CLAUDE.md`) is the single agent contract |
 | Iconography principles deserve real design content | Accept as epic scope, defer from slice | Own spec, book page, and catalog governance in a `v21.0.0-beta.3` slice |
+| Proprietary icons are a non-licensed submodule tier, not catalog copies | Accept two-tier model now | Community catalog in public DS package; proprietary via `@myrrys/proprietary` submodule registry; amend plan step 4 |
+| v21 submodule pins a pre-registry commit | Advance pointer `b34789a` → `13857fc` (origin/main) | Adds icon tier, preserves served webp assets |
+| `pbta-logo` differs from submodule `pbta`; mapping would change the rendered logo | Pending human decision | Preserve v18 `pbta-logo` artwork via the proprietary tier, or narrow the slice |
 
 ## Open Gates
 
@@ -222,4 +289,9 @@ Recorded in `plans/cn-icon.md` under Further Work.
 - ~~Human approval of `specs/design-system/components/cn-icon/spec.md`.~~ Approved 2026-07-20.
 - ~~Human approval of `plans/cn-icon.md`, including selected consumers, after its accessibility notes are reconciled with the retained v18 noun announcement.~~ Approved 2026-07-20 with the reconciled accessibility notes and the beta.3 iconography follow-on logged.
 - Approval of source provenance for the selected current-only assets.
+- Approval to advance the `@myrrys/proprietary` submodule pointer from
+  `b34789a` to `origin/main` (`13857fc`) so v21 gains the icon registry tier.
+- Decision on `pbta-logo`: preserve v18 artwork through the proprietary tier
+  (requires adding `pbta-logo.svg` to the submodule repo) versus narrowing the
+  first slice's FeaturedTags scope.
 - Implementation, deterministic checks, visual review, and release decision.

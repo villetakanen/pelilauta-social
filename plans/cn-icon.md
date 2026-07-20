@@ -80,17 +80,45 @@ The selected public consumers provide a bounded vertical slice:
   v21. The implementation must still reconcile it with current production:
   v20's catalogs do not contain every noun currently used by v18.
 
-### Current-only compatibility assets
+### Source tiers and the licensing boundary
+
+v20 resolves nouns across tiers, and the tiers are a licensing boundary, not
+just a lookup order (lessons Finding 13):
+
+- Community tier `@pelilauta/icons` holds project-licensed artwork (e.g. `fox`).
+- Managed tier `@myrrys/proprietary` is a separate submodule whose README
+  states "All rights reserved... not licensed under the main project license."
+  It holds `dd5`, `pathfinder`, `ll-ampersand`, `pbta`, and other branded nouns.
+- The v20 generator inlines each tier's SVG source into an `index.ts` **inside
+  that tier's own package**, so proprietary artwork never lands in the open
+  packages. Resolution is community → managed → bundled fallback → missing.
+
+v21 therefore keeps the same segregation: community artwork lives in the public
+design-system catalog; proprietary artwork is consumed from the
+`@myrrys/proprietary` submodule and is never copied into public design-system
+source.
+
+### Current-only and reconciled assets
 
 The tracked `apps/pelilauta/public/icons/` directory is the compatibility
-authority for production nouns missing from v20. Relevant current-only assets
-include `search`, `bsky`, `label-tag`, `undo`, and `pbta-logo`.
+authority for production nouns missing from v20's packages. `search` is such a
+current-only community asset. Community current-only SVGs may be copied into the
+public design-system catalog with contents and provenance preserved; they must
+not be moved while legacy `cn-icon` consumers still request `/icons/{noun}.svg`.
 
-Required current-only SVGs may be copied into the design-system catalog with
-their contents and provenance preserved. They must not be moved while legacy
-`cn-icon` consumers still request `/icons/{noun}.svg`. Nouns absent from both
-v20 and the current public directory remain explicit product decisions; this
-iteration must not invent aliases or artwork for them.
+`pbta-logo` needs explicit reconciliation. In v18, `public/icons/pbta-logo.svg`
+and `public/icons/pbta.svg` are byte-identical and are the artwork on the live
+front page; the submodule's `pbta` is different artwork. Mapping `pbta-logo` to
+the submodule's `pbta` would silently change the rendered logo. Preserving
+appearance requires the exact v18 `pbta-logo` artwork as the source; being
+branded, it belongs in the proprietary submodule tier.
+
+The v21 submodule is pinned at `b34789a`, before the icon registry existed; the
+registry (`icons/`, generated `index.ts`, `@myrrys/proprietary` `package.json`)
+exists from `13857fc` (`origin/main`) onward, which still carries the served
+webp folders. Nouns absent from both v20 and the current public directory remain
+explicit product decisions; this iteration must not invent aliases or artwork
+for them.
 
 ### Required sizing tokens
 
@@ -121,10 +149,21 @@ general sizing tokens, and token generation remain outside this iteration.
    production-required catalog. Adapt the v20 icon registry generator when it
    is the smallest way to keep source SVGs and the consumed registry aligned;
    this is feature-owned catalog maintenance, not generic token infrastructure.
-4. Reconcile `search`, `fox`, `dd5`, `pathfinder`, `ll-ampersand`, and
-   `pbta-logo` against immutable v20 sources and current v18 assets. Copy
-   current-only assets into the local catalog without removing their public
-   originals. Include the stable missing fallback.
+4. Reconcile the selected nouns across the v20 two-tier source model (see
+   Source Tiers below), keeping proprietary artwork out of the public
+   design-system catalog:
+   - Community tier (project-licensed): `fox` from the v20 `pelilauta-icons`
+     source and `search` from the current v18 asset are copied into the
+     public design-system community catalog, without removing their public
+     originals.
+   - Managed tier (all-rights-reserved): `dd5`, `pathfinder`, `ll-ampersand`,
+     and `pbta-logo` are consumed from the `@myrrys/proprietary` submodule
+     registry, never copied into the public design-system source. This
+     requires advancing the v21 submodule pointer from `b34789a` to
+     `origin/main` (`13857fc`), which adds the icon registry while preserving
+     the served webp assets, and reconciling the `pbta-logo` noun whose live
+     artwork differs from the submodule's `pbta`.
+   - Include the stable bundled missing fallback.
 5. Implement the local icon capability in `packages/design-system` from the
    approved intent spec. It must render on the server and require no new
    dependency.
@@ -157,6 +196,8 @@ This iteration must not:
 - add generic token generation, package-linking architecture, or a new
   dependency; the directly consumed icon registry and its v20-derived generator
   are inside scope;
+- copy or inline `@myrrys/proprietary` artwork into the public design-system
+  source; proprietary nouns are consumed only from the submodule registry;
 - add CI, authenticated-write verification, or unrelated root check/build
   dispatch;
 - redesign, normalize, or recolor approved source artwork.
