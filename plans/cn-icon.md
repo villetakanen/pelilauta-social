@@ -211,6 +211,27 @@ Later icon slices must account for hydrated Svelte noun updates, imperative
 NounSelect catalog, fixed-color legacy assets, and missing nouns. Those are
 evidence for future scope, not work authorized by this plan.
 
+## Further Work: Iconography Principles (targeted for v21.0.0-beta.3)
+
+Decided 2026-07-20: the icon epic also delivers an iconography principles
+capability, shipped as its own later slice and not in this one. Legacy Cyan 4
+publishes two icon pages — a principles page that is in practice only an icon
+inventory, and the component usage page. The new design system keeps the
+two-page shape but gives the principles page real design content.
+
+The follow-on slice owns:
+
+- an intent spec at `specs/design-system/iconography/spec.md` covering the
+  icon vocabulary philosophy, catalog governance, when-to-use guidance, and
+  the monochrome versus branded design position;
+- a principles book page in `apps/design`, including a catalog inventory
+  generated from the icon registry this plan introduces;
+- moving catalog-governance ownership from the cn-icon component spec to the
+  iconography spec, with the component spec anchoring to it.
+
+That slice runs through the same gates as this one: spec, adversarial review,
+human approval, then delivery. Nothing in it is authorized by this plan.
+
 ## Stop Rule
 
 If the selected consumers cannot render from a small reviewed catalog within

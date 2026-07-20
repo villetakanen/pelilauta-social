@@ -183,6 +183,21 @@ decision, with observed values kept in provenance as evidence. The rule is
 now step 9 of the spec skill and a note in `specs/TEMPLATE.md`; prefer plain
 sentences over compressed prohibition clauses.
 
+### 12. Iconography Principles Is Epic Scope, Not Slice Scope
+
+Cyan 4 documents icons on two pages: a principles page and the component
+usage page. Inspection of the live legacy principles page shows it is only an
+auto-generated icon inventory; the design thinking it should carry is absent.
+The new design system keeps the two-page shape, and the principles content is
+therefore mostly new design work rather than a migration.
+
+Decision (human, 2026-07-20): the epic includes an iconography principles
+capability — its own intent spec at `specs/design-system/iconography/spec.md`,
+its own book page with a registry-generated catalog inventory, and ownership
+of catalog governance that the component spec then anchors to. It ships as
+its own slice targeted for `v21.0.0-beta.3`, not in this production slice.
+Recorded in `plans/cn-icon.md` under Further Work.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |
@@ -199,6 +214,7 @@ sentences over compressed prohibition clauses.
 | Separate close-time summary duplicates lessons | Reject separate artifact | Finalize the same lessons file at cycle close |
 | Spec conventions were fragmented | Accept | `specs/TEMPLATE.md`, provenance frontmatter, adversarial review gate in the spec skill |
 | Legacy nested AGENTS.md contradicted root contract | Accept removal | Root `AGENTS.md` (symlinked as `CLAUDE.md`) is the single agent contract |
+| Iconography principles deserve real design content | Accept as epic scope, defer from slice | Own spec, book page, and catalog governance in a `v21.0.0-beta.3` slice |
 
 ## Open Gates
 
