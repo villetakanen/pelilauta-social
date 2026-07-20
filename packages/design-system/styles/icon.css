@@ -1,0 +1,19 @@
+/*
+ * Icon sizing tokens.
+ *
+ * Values match the immutable v20 authority
+ * (pelilauta-20 packages/cyan/src/tokens/units.css at
+ * 02880fbc995b45d459ce4f264b29d5283b1d8ced) and Cyan 4
+ * (@11thdeg/cyan-css tokens/units.css). Legacy cn-icon consumers read the
+ * same custom properties from cyan-css until they are migrated; the
+ * definitions are identical, so both sources may coexist.
+ *
+ * Spec: specs/design-system/components/cn-icon/spec.md
+ */
+:root {
+	--cn-icon-size-xsmall: 1rem; /* 16px at the default root font size */
+	--cn-icon-size-small: 1.5rem; /* 24px */
+	--cn-icon-size: 2.25rem; /* 36px, the medium default */
+	--cn-icon-size-large: 4.5rem; /* 72px */
+	--cn-icon-size-xlarge: 8rem; /* 128px */
+}
