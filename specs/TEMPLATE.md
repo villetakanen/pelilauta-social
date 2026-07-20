@@ -25,6 +25,9 @@ Observable behavior stated as facts of the system: vocabulary, visual
 behavior, accessibility, compatibility intent. Use as many focused sections
 as the capability needs. Be explicit — agents don't infer. Frame constraints
 positively (what the system does), not as prohibitions where avoidable.
+Anchor, don't model: promise only what this capability owns; reference values
+owned by tokens, parent specs, or upstream contracts as their owner's
+decision, keeping observed values in provenance as evidence.
 
 ## Non-Goals
 

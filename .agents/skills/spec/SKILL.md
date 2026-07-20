@@ -33,7 +33,11 @@ from it.
    and implementation status. Put those in the linked plan.
 8. Record compatibility intent and deliberate behavior changes without copying
    implementation details into the spec.
-9. Run the adversarial review below, resolve or explicitly accept each finding,
+9. Anchor, don't model: a spec promises only what its capability owns. Values
+   owned elsewhere — design tokens, parent specs, upstream contracts — are
+   referenced as their owner's decision, with observed values recorded in
+   provenance as evidence, never restated in the body as this spec's promise.
+10. Run the adversarial review below, resolve or explicitly accept each finding,
    then ask for human approval before changing status to `approved`.
 
 ## Adversarial Review Gate

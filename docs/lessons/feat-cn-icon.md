@@ -169,6 +169,20 @@ move the asset-relocation and invented-artwork prohibitions into Non-Goals,
 and replace untestable acceptance wording. The gate stays mandatory for
 future specs; it paid for itself on first use.
 
+### 11. Specs Anchor, They Don't Model
+
+Human review of the rewritten icon spec caught it promising "exact" pixel
+sizes that the design-token vocabulary owns, and a Non-Goals sentence whose
+compressed clause structure was unreadable. A spec that restates values it
+does not control is spec-as-model: it silently forks the owning source and
+breaks when that source evolves.
+
+Decision: specs promise only what their capability owns. Values owned by
+tokens, parent specs, or upstream contracts are referenced as their owner's
+decision, with observed values kept in provenance as evidence. The rule is
+now step 9 of the spec skill and a note in `specs/TEMPLATE.md`; prefer plain
+sentences over compressed prohibition clauses.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |

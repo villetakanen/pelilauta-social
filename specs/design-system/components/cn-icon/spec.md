@@ -6,6 +6,7 @@ provenance:
   - "Current-only compatibility assets: apps/pelilauta/public/icons/ (search, bsky, label-tag, undo, pbta-logo)"
   - "Findings and decisions: docs/lessons/feat-cn-icon.md"
   - "Human decisions 2026-07-20: empty noun treated as unknown; missing-icon fallback accepted as deliberate change; v18 assistive-technology noun announcement retained"
+  - "Established v18 sizing evidence: 16, 24, 36, 72, 128 px at default root font size (@11thdeg/cyan-css@4.0.0-beta.39 dist/tokens/units.css)"
 ---
 
 # Icon
@@ -42,8 +43,9 @@ intentional artwork across Light and Dark modes.
   behavior; the icon itself imposes no alignment rule.
 - The supported sizes are extra small, small, medium, large, and extra large.
   Medium is the default.
-- The exact sizes are 16, 24, 36, 72, and 128 pixels at the default root font
-  size, and they scale proportionally with the root font size.
+- Each size takes its dimensions from the design-system icon sizing tokens;
+  the icon does not define or promise the values itself. The established v18
+  values are recorded in this spec's provenance as compatibility evidence.
 - Monochrome artwork inherits the surrounding foreground color, including
   link, button, selected, status, hover, active, and disabled states. Current
   production deviates from this because a global theme property overrode the
@@ -81,8 +83,10 @@ intentional artwork across Light and Dark modes.
 
 - This capability does not redesign existing artwork or rename persisted and
   dynamic nouns as part of an unrelated surface migration.
-- It does not move, rename, or remove the public legacy icon assets while any
-  legacy Cyan icon consumer still requests them.
+- It does not touch the SVG files served under the public `/icons/` path.
+  Remaining legacy Cyan icons fetch their artwork from those URLs in the
+  browser, so the files stay in place until the last legacy consumer is
+  migrated.
 - It does not invent artwork or aliases for nouns that are absent from both
   approved sources; such nouns remain explicit product decisions.
 - It does not require importing every possible icon before a current product
@@ -105,8 +109,9 @@ intentional artwork across Light and Dark modes.
 
 - A legacy Cyan icon consumer's visible color resolves to its contextual
   foreground; no global theme property may re-break that inheritance.
-- Public legacy icon assets remain served at their existing addresses while
-  any legacy Cyan icon consumer requests them.
+- Every SVG under the public `/icons/` path stays available at its current
+  URL for as long as any legacy Cyan icon consumer remains in the
+  application.
 - An unknown, empty, or absent noun never silently collapses its layout
   space.
 
@@ -117,8 +122,8 @@ intentional artwork across Light and Dark modes.
   computed-color assertion from parent to icon.
 - Approved branded icons retain the colors encoded in their reviewed source
   artwork in both modes.
-- Every supported size renders with computed width equal to height at the
-  exact established values.
+- Every supported size renders square, with computed width equal to height at
+  the dimension its sizing token defines.
 - Known nouns render the artwork the approved catalog assigns them; unknown,
   empty, and absent nouns render the approved missing-icon glyph with
   preserved layout space.
