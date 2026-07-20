@@ -151,7 +151,9 @@ This iteration must not:
 - change Firebase data, persisted noun values, routes, or authentication;
 - repair the unsupported `name="discussion"` call or currently missing asset
   nouns unless one enters the selected surface;
-- announce decorative icons or otherwise perform a global accessibility rewrite;
+- change icon accessibility semantics or perform a global accessibility
+  rewrite; the local icon keeps v18's noun announcement per the 2026-07-20
+  spec decision;
 - add generic token generation, package-linking architecture, or a new
   dependency; the directly consumed icon registry and its v20-derived generator
   are inside scope;
@@ -177,8 +179,9 @@ This iteration must not:
 - All five sizes produce the approved square dimensions.
 - Monochrome icons match their parent's computed foreground in both modes and
   interaction states; branded artwork retains reviewed internal colors.
-- Decorative SVG is hidden from assistive technology, while containing links
-  retain their existing accessible names.
+- The local icon exposes its noun to assistive technology through its artwork
+  title as v18 does, and containing links retain their existing accessible
+  names.
 - Pelilauta and design application builds pass.
 - Focused browser tests cover `/`, one route with the shared search app bar, and
   `/components/icon` in both modes.
@@ -195,8 +198,9 @@ Review Light and Dark rendering for:
 - every size, monochrome context, branded example, and missing fallback in the
   design-system book.
 
-Approve the selected asset provenance and confirm that decorative-by-default
-semantics are acceptable for the migrated consumers. Confirm that the v20
+Approve the selected asset provenance. Accessibility semantics were decided
+2026-07-20 during the spec's adversarial review: the icon retains v18's noun
+announcement, and decorative-by-default was rejected. Confirm that the v20
 registry precedence and source-owned monochrome/branded color model are the v21
 target.
 

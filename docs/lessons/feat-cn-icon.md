@@ -142,6 +142,33 @@ nested AGENTS.md is removed and root `CLAUDE.md` symlinks to `AGENTS.md`.
 The cn-icon spec adopts provenance frontmatter now and passes the review gate
 before its approval.
 
+### 10. Adversarial Review Caught Real Spec Defects
+
+The first run of the new spec review gate (2026-07-20, independent critic
+session) found genuine defects the authors missed. Verified against the
+installed `cyan-lit@4.0.0-beta.30` source: v18 renders the default design
+icon for an empty noun, a blank sized box for an unknown noun, and announces
+the technical noun to assistive technology via an SVG title. The draft spec
+presented departures from all three as plain facts, left the empty-noun state
+undefined, lacked the template's Contract half, and held two compatibility
+prohibitions only in the plan.
+
+Human decisions on the surfaced changes:
+
+- Empty or absent noun is treated as unknown — deliberate change from the
+  v18 design-icon quirk. Accepted.
+- Unknown nouns render the approved missing-icon glyph — deliberate change
+  from v18's blank box. Accepted.
+- Decorative-by-default accessibility was rejected; the icon keeps v18's
+  noun announcement. The plan's accessibility notes must follow the spec on
+  this point before implementation.
+
+Decision: the spec was rewritten to declare the accepted changes, define the
+empty-noun state, add Contract (Definition of Done, Regression Guardrails),
+move the asset-relocation and invented-artwork prohibitions into Non-Goals,
+and replace untestable acceptance wording. The gate stays mandatory for
+future specs; it paid for itself on first use.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |
@@ -161,8 +188,8 @@ before its approval.
 
 ## Open Gates
 
-- Adversarial review of `specs/design-system/components/cn-icon/spec.md` per the spec skill's review gate.
+- ~~Adversarial review of `specs/design-system/components/cn-icon/spec.md` per the spec skill's review gate.~~ Completed 2026-07-20; findings resolved in the spec, decisions in Finding 10.
 - Human approval of `specs/design-system/components/cn-icon/spec.md`.
-- Human approval of `plans/cn-icon.md`, including selected consumers.
+- Human approval of `plans/cn-icon.md`, including selected consumers, after its accessibility notes are reconciled with the retained v18 noun announcement.
 - Approval of source provenance for the selected current-only assets.
 - Implementation, deterministic checks, visual review, and release decision.
