@@ -360,6 +360,30 @@ five sizing tokens; the new `Icon.svelte` hardcodes `fill="currentColor"`; the
 identically only while `--color-on` stays globally undefined; a scope that sets
 it would diverge them. This is a record fix, not a code change.
 
+### 20. Visual Acceptance Caught Tag-Selector Regressions No Gate Could
+
+Human visual acceptance found two live regressions that every deterministic
+check had passed over — both instances of the LOW 6 class (cyan-css styles the
+`cn-icon` element by tag; the local component renders `<span class="cn-icon">`).
+
+- App-bar search rendered at 36px instead of 24px: cyan-css
+  `core/buttons.css` forces `a.button cn-icon { width/height: var(--cn-icon-size-small) }`,
+  a tag selector the span does not match. Fixed with `size="small"` on the
+  consumer.
+- Footer fox was no longer centered: the color-wrapper `<span>` added during
+  migration became the flex item of `.flex-col.items-center`, displacing the
+  icon. Fixed with `display:contents` on the span, which drops its box (so the
+  icon is the flex item again) while still passing its inherited `color` to the
+  icon.
+
+Lesson: replacing a custom element with a class-bearing element silently breaks
+every tag-scoped rule the design system wrote for it — size, margin, layout —
+and unit/registry tests cannot see it because they never render in the consumer
+context. Per-consumer visual acceptance in the real app is the only gate that
+catches this today; migrating a button- or layout-hosted icon must include a
+pass over cyan-css tag selectors for that context. This strengthens the NOTE 8 /
+HIGH 3 case that consumer migrations need a rendered-in-context check.
+
 ## RC Release Note — Bundled Scope (HIGH 2)
 
 This candidate is one merge/revert unit but lands four related changes; the
