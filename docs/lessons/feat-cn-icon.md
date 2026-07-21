@@ -321,8 +321,8 @@ protective once something actually runs it.
 | Legacy nested AGENTS.md contradicted root contract | Accept removal | Root `AGENTS.md` (symlinked as `CLAUDE.md`) is the single agent contract |
 | Iconography principles deserve real design content | Accept as epic scope, defer from slice | Own spec, book page, and catalog governance in a `v21.0.0-beta.3` slice |
 | Proprietary icons are a non-licensed submodule tier, not catalog copies | Accept two-tier model now | Community catalog in public DS package; proprietary via `@myrrys/proprietary` submodule registry; amend plan step 4 |
-| v21 submodule pins a pre-registry commit | Advance pointer `b34789a` → `13857fc` (origin/main) | Adds icon tier, preserves served webp assets |
-| `pbta-logo` differs from submodule `pbta`; mapping would change the rendered logo | Pending human decision | Preserve v18 `pbta-logo` artwork via the proprietary tier, or narrow the slice |
+| v21 submodule pins a pre-registry commit | Relocated to `packages/myrrys-proprietary`, always tracking latest proprietary `main` (now `e9d8217`) | Adds icon tier, preserves served webp assets |
+| `pbta-logo` differs from submodule `pbta`; mapping would change the rendered logo | Resolved 2026-07-21: add exact v18 `pbta-logo` artwork to the proprietary repo (`e9d8217`), resolved via the managed tier | Preserves the live front-page logo appearance |
 
 ## Open Gates
 
