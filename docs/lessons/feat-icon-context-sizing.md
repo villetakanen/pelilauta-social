@@ -74,7 +74,21 @@ probe.
 
 ## Open Gates
 
-- Implementation and deterministic checks.
-- Rendered-in-context visual acceptance (Light + Dark) of the app-bar search
-  action after the `size="small"` workaround is removed — required gate.
-- Release decision.
+- ~~Implementation and deterministic checks.~~ Complete 2026-07-21: astro check
+  0 errors; DS 9/9; pelilauta 463/463; both app builds.
+- ~~Rendered-in-context visual acceptance (Light + Dark) of the app-bar search
+  action after the `size="small"` workaround is removed.~~ Passed 2026-07-21
+  (human).
+- ~~Release decision.~~ Approved 2026-07-21 as `v21.0.0-beta.3` (human).
+
+## Release Note
+
+- **Version.** `v21.0.0-beta.3`. Reassigns the beta.3 earmark: the
+  iconography-principles epic (cn-icon finding 12) moves to a later beta. Semver
+  identifies the release; the earmark was a plan note, not a commitment.
+- **Bundled cycle-setup (disclosed per the AGENTS.md amendment).** This RC
+  bundles the feature with a one-time cycle-setup unit —
+  `docs/practices/consumer-migration.md` and the delivery-contract amendment
+  sanctioning disclosed cycle-setup bundles. Reverting the RC reverts both.
+- **Carried known issue.** `apps/pelilauta/e2e/color-theme.spec.ts` remains
+  broken and ungated (cn-icon LOW 6); still deferred.

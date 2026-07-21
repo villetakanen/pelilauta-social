@@ -5,14 +5,17 @@ Pelilauta community and its local design system.
 
 ## Project Status
 
-**Current release:** `v21.0.0-beta.2`
+**Current release:** `v21.0.0-beta.3`
 
 v21 has a verified import of the live v18 application, the approved v20-derived
-Light and Dark color themes, and now its first Lit-to-Svelte component
-migration: a tiered, server-rendered `Icon` that replaces the Cyan 4 `cn-icon`
-in the app bar, footer, and front-page featured tags. Existing Cyan 4 consumers
-continue to work through a local compatibility layer, and both the color
-contract and the icon capability are published in the design-system book.
+Light and Dark color themes, and its first Lit-to-Svelte component migration: a
+tiered, server-rendered `Icon` that replaces the Cyan 4 `cn-icon` in the app
+bar, footer, and front-page featured tags. Icons inside buttons and fabs now
+standardize their size through the design system rather than per-consumer
+overrides, so migrated controls match legacy sizing without hardcoding.
+Existing Cyan 4 consumers continue to work through a local compatibility layer,
+and both the color contract and the icon capability are published in the
+design-system book.
 
 The betas prove that bounded design-system changes can ship through the v21
 workspace without changing routes, Firebase contracts, authentication,
@@ -47,10 +50,16 @@ The root workspace version identifies v21 releases. The version in
 `apps/pelilauta/package.json` remains the imported application's baseline
 version until a separate product decision requires changing it.
 
-`v21.0.0-beta.2` includes the deployable v18 baseline, the color-theme delivery,
-and the local Icon migration of the app bar, footer, and featured tags. It does
-not claim that every authenticated write journey has been accepted as a complete
-v18 replacement; that remains a gate before a v21 release candidate.
+`v21.0.0-beta.3` builds on the deployable v18 baseline, the color-theme
+delivery, and the local Icon migration by adding contextual icon-size
+standardization: buttons and fabs collapse the icon-size vocabulary within
+their scope, so the app-bar search action sizes from the design system instead
+of a per-consumer override. It also bundles a one-time cycle-setup unit — the
+`docs/practices/consumer-migration.md` practice and the delivery-contract
+amendment sanctioning disclosed cycle-setup bundles — disclosed here per that
+amendment. It does not claim that every authenticated write journey has been
+accepted as a complete v18 replacement; that remains a gate before a v21
+release candidate.
 
 ## Commands
 
