@@ -13,10 +13,18 @@ working memory, not proof that the planned outcome has shipped.
 
 ## Current Context
 
-No `cn-icon` production change has shipped in this cycle yet. The intent spec
-and delivery plan are drafted, v18 and immutable v20 implementations have been
-studied, and accepted compound writebacks from the color-theme cycle have been
-applied. Implementation and acceptance remain pending.
+The bounded slice is implemented and all deterministic checks pass; human
+visual acceptance and the release decision remain. Shipped on `feat/cn-icon`:
+the legacy `--color-on` inheritance fix, the five icon sizing tokens, the
+two-tier source model (community catalog in the public design-system package;
+proprietary artwork consumed from the relocated `@myrrys/proprietary`
+submodule), the server-rendered `Icon` component, the three migrated consumers
+(app bar, footer, featured tags), the `/components/icon` book, focused package
+and design-book tests, and a root test dispatcher with a pre-push hook.
+
+Checks: `astro check` 0 errors; pelilauta build and design build complete;
+design-system 8/8 unit tests; pelilauta 463/463 unit tests; the icon-book
+Playwright spec passes.
 
 ## Intended Production Outcome
 
@@ -262,6 +270,39 @@ disturbing the assets already served.
   the source; being branded, it belongs in the proprietary submodule tier, not
   the public catalog.
 
+### 15. Proprietary Assets Serve From A Relocated Package Via A Sync Step
+
+Human direction during delivery: the `apps/pelilauta/public/myrrys-proprietary`
+submodule was a legacy v18-era pointer. The registry-bearing commit belongs at
+`packages/myrrys-proprietary` as a real workspace package the icon component
+imports; the v18 pointer should not be kept.
+
+Legacy pages still reference the submodule's image assets by URL
+(`/myrrys-proprietary/*.webp`). A committed symlink under `public/` is not
+safe: Astro 5.18 copies `public/` with `fs.cp(..., { recursive: true })`, whose
+default `dereference: false` would emit a dangling symlink into `dist/`. The
+resolution is a no-dependency `sync-proprietary-assets.mjs` step, run before
+dev and build, that materializes the non-code asset folders into a gitignored
+`public/myrrys-proprietary/`; the submodule stays the single source of truth.
+`@myrrys/proprietary` resolves through Vite + TS aliases (workspace-contract
+approach), not package-linking.
+
+### 16. The Root Test Dispatcher Immediately Caught A Latent Regression
+
+Adding the root `pnpm test` dispatcher (plan step 9) surfaced a failing
+pelilauta unit test on first run: `test/styles/colorThemeContract.test.ts`
+reported `missing: --color-on`. The branch's first commit removed the bare
+`--color-on` mapping (finding 1) but never updated this contract test, which
+had no runner wired, so the regression sat latent.
+
+The fix encodes the approved decision rather than reverting it: `--color-on` is
+intentionally undefined, excluded from the alias-resolution check, and a new
+assertion proves it stays undefined and is only ever used as
+`var(--color-on, currentColor)`. This is exactly the acceptance criterion that
+the `--color-on` regression is removed without leaving another
+production-consumed property unresolved. Lesson: a deterministic check is only
+protective once something actually runs it.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |
@@ -288,10 +329,16 @@ disturbing the assets already served.
 - ~~Adversarial review of `specs/design-system/components/cn-icon/spec.md` per the spec skill's review gate.~~ Completed 2026-07-20; findings resolved in the spec, decisions in Finding 10.
 - ~~Human approval of `specs/design-system/components/cn-icon/spec.md`.~~ Approved 2026-07-20.
 - ~~Human approval of `plans/cn-icon.md`, including selected consumers, after its accessibility notes are reconciled with the retained v18 noun announcement.~~ Approved 2026-07-20 with the reconciled accessibility notes and the beta.3 iconography follow-on logged.
-- Approval of source provenance for the selected current-only assets.
-- Approval to advance the `@myrrys/proprietary` submodule pointer from
-  `b34789a` to `origin/main` (`13857fc`) so v21 gains the icon registry tier.
-- Decision on `pbta-logo`: preserve v18 artwork through the proprietary tier
-  (requires adding `pbta-logo.svg` to the submodule repo) versus narrowing the
-  first slice's FeaturedTags scope.
-- Implementation, deterministic checks, visual review, and release decision.
+- ~~Approval to advance the `@myrrys/proprietary` submodule pointer.~~ Superseded
+  2026-07-21: the submodule was relocated to `packages/myrrys-proprietary`
+  pinned at `e9d8217` (finding 15); the legacy public pointer was dropped.
+- ~~Decision on `pbta-logo`.~~ Resolved 2026-07-21: the exact v18 `pbta-logo`
+  artwork was added to the `@myrrys/proprietary` repo (`e9d8217`) and resolves
+  through the managed tier, preserving the live appearance.
+- ~~Implementation and deterministic checks.~~ Complete 2026-07-21; see Current
+  Context for the check results.
+- Human visual acceptance in Light and Dark of the app-bar search action,
+  the four featured tags, the footer fox, and every book example.
+- Approval of source provenance for the selected community assets
+  (`fox`, `search`) recorded in the design-system community `PROVENANCE.md`.
+- Release decision (next beta) after acceptance.
