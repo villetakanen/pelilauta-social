@@ -7,6 +7,7 @@
   "scripts": {
     "build": "pnpm --filter pelilauta build && node scripts/stage-default-netlify-output.mjs",
     "dev": "pnpm --filter './apps/*' --parallel --if-present run dev",
+    "test": "pnpm -r --if-present run test",
     "postinstall": "lefthook install"
   },
   "devDependencies": {

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "generate:icons": "node scripts/generate-icon-registry.mjs",
-    "check:icons": "node scripts/generate-icon-registry.mjs --check"
+    "check:icons": "node scripts/generate-icon-registry.mjs --check",
+    "test": "node --experimental-strip-types --test test/icon-registry.test.ts"
   }
 }

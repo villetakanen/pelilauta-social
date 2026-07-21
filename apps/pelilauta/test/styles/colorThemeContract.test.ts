@@ -55,6 +55,13 @@ const expectedReferences = {
 
 const declarationPattern = /(--[\w-]+)\s*:\s*([^;]+);/g;
 const usagePattern = /var\((--[\w-]+)/g;
+
+// --color-on is intentionally left undefined. Legacy Cyan cn-icon consumes it
+// as `var(--color-on, currentColor)`, so leaving it undefined lets icons
+// inherit their contextual foreground. Defining it globally re-broke that
+// inheritance (docs/lessons/feat-cn-icon.md finding 1;
+// specs/design-system/components/cn-icon/spec.md).
+const intentionallyUndefined = new Set(['--color-on']);
 const sourceExtensions = new Set(['.astro', '.css', '.js', '.svelte', '.ts']);
 const colorPrefixes = [
   '--background-',
@@ -186,11 +193,42 @@ describe('v20 color theme contract', () => {
       ...installedSources,
       ...appSources,
     ]);
-    const errors = [...usedProperties].flatMap((property) =>
-      resolutionErrors(property, available),
-    );
+    const errors = [...usedProperties]
+      .filter((property) => !intentionallyUndefined.has(property))
+      .flatMap((property) => resolutionErrors(property, available));
 
     expect([...new Set(errors)].sort()).toEqual([]);
+  });
+
+  it('leaves --color-on intentionally undefined with a currentColor fallback', () => {
+    const installedSources = [
+      'node_modules/@11thdeg/cyan-css/src',
+      'node_modules/@11thdeg/cyan-lit',
+      'node_modules/@11thdeg/cn-story-clock',
+      'node_modules/@11thdeg/cn-d20-ability-score',
+    ].flatMap((directory) => readSources(join(appRoot, directory)));
+    const appSources = readSources(join(appRoot, 'src'));
+    const styleSources = readSources(stylesRoot);
+    const available = declarations(
+      [...installedSources, ...styleSources, ...appSources].join('\n'),
+    );
+
+    // Undefined by design: no layer may define the bare property.
+    expect(available.has('--color-on')).toBe(false);
+
+    // Every consumer must fall back to currentColor so icons inherit context.
+    const usagesWithoutFallback = [
+      ...installedSources,
+      ...appSources,
+      ...styleSources,
+    ]
+      .flatMap((source) => [
+        ...source.matchAll(/var\(\s*--color-on\s*(,[^)]*)?\)/g),
+      ])
+      .filter((match) => !/,\s*currentColor\b/.test(match[1] ?? ''))
+      .map((match) => match[0]);
+
+    expect(usagesWithoutFallback).toEqual([]);
   });
 
   it('keeps application styles on semantic properties instead of raw chroma', () => {
