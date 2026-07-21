@@ -1,7 +1,30 @@
 # feat/cn-icon Lessons
 
-Status: Complete — shipped as `v21.0.0-beta.2` (merge `5cf6b0c`, tag
-`v21.0.0-beta.2`), 2026-07-21.
+Status: **Active — long-living epic branch.** `feat/cn-icon` is the continuous
+context for the iconography epic and delivers each slice to `main` as its own
+pull request. Delivered so far: local Icon migration `v21.0.0-beta.2` (merge
+`5cf6b0c`, tag `v21.0.0-beta.2`), 2026-07-21. Remaining epic work: catalog /
+iconography-principles capability, and the next bounded Lit→Svelte consumer
+migrations. (The contextual-icon-sizing slice shipped on a separate branch as
+`v21.0.0-beta.3`; see `docs/lessons/feat-icon-context-sizing.md`.)
+
+## Slices In Progress
+
+### Slice: factory writeback (governance) — PR #34
+
+- **Outcome.** Not a product change: reworks the delivery governance the epic
+  runs under — merge-is-the-deployable-unit, `main` integrated only via PR from
+  a `feat/*`/emergency branch, factory work rides in its establishing slice;
+  adds `delivery-slice`/`delivery-review` skills; narrows `release`.
+- **Integration identity.** PR #34 `feat/cn-icon` → `main`, source head
+  `38f8572`. Merge SHA to reconcile in a later slice per the lessons practice.
+- **Checks.** No `apps/`/`packages/` source touched; type/build gates
+  unaffected. commitlint + pre-push hooks pass.
+- **Gate.** `delivery-review` (release-significant factory change) before merge;
+  human merge approval.
+- **Carry-forward.** Next slice on this branch: iconography-principles capability
+  (intent spec + catalog governance + DS book page on the design site),
+  1-working-day timebox.
 
 ## Update Rule
 
@@ -12,10 +35,10 @@ reusable technique. Do not wait for cycle close or a separate prompt.
 Keep facts, interpretations, and decisions distinguishable. This file is
 working memory, not proof that the planned outcome has shipped.
 
-## Current Context
+## Delivered Slice — local Icon migration (`v21.0.0-beta.2`)
 
-The bounded slice is implemented and all deterministic checks pass; human
-visual acceptance and the release decision remain. Shipped on `feat/cn-icon`:
+Historical record of the first shipped slice; superseded state reconciled at the
+top Status. Shipped on `feat/cn-icon`:
 the legacy `--color-on` inheritance fix, the five icon sizing tokens, the
 two-tier source model (community catalog in the public design-system package;
 proprietary artwork consumed from the relocated `@myrrys/proprietary`
