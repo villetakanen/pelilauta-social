@@ -26,6 +26,16 @@ Checks: `astro check` 0 errors; pelilauta build and design build complete;
 design-system 8/8 unit tests; pelilauta 463/463 unit tests; the icon-book
 Playwright spec passes.
 
+An adversarial review round then landed (see `plans/cn-icon-review-notes.md`,
+findings 17–18 below): the managed tier is now optional at build and runtime
+(BLOCKER 1); SVG normalization moved to generation time, deleting the render
+regex (MEDIUM 4); builds gate on registry freshness (NOTE 7). HIGH 2 (scope
+bundling) is accepted with an explicit RC scope note (below); HIGH 3 (new test
+coverage) is declined this cycle; LOW 5 is a record correction (below); NOTE 8
+is a standing gate for future migrations; the LOW 6 broken e2e is a documented
+known issue. Re-verified absent-submodule: both apps build; present: both build,
+design-system 8/8, icon-book e2e passes, managed `dd5` branded artwork resolves.
+
 ## Intended Production Outcome
 
 Restore contextual color inheritance for existing Pelilauta icons, then migrate
@@ -303,6 +313,81 @@ the `--color-on` regression is removed without leaving another
 production-consumed property unresolved. Lesson: a deterministic check is only
 protective once something actually runs it.
 
+### 17. The Managed Tier Is Optional At Build Time, Not Only Runtime
+
+Adversarial review BLOCKER 1: the static `import ... from "@myrrys/proprietary"`
+made a missing submodule a compile-time failure for every page rendering an
+icon. The chosen fix was a dynamic/optional import. Empirically, that alone does
+NOT clear the blocker: Vite resolves the alias at build and inlines the module,
+so a `try/catch` dynamic import guards only runtime, and in a bundled build the
+module is never absent at runtime if it was present at build. Removing the submodule
+still failed the build with `[vite:load-fallback] Could not load .../index.ts`.
+
+The resolution that actually holds: a `resolveId`/`load` Vite plugin
+(`packages/design-system/vite/optional-proprietary.mjs`, `enforce: "pre"`)
+resolves `@myrrys/proprietary` to the real registry when present and to an
+inline empty virtual module when absent — no stub file committed. Plus the
+guarded dynamic import (`managed-tier.ts`) for runtime, and
+`sync-proprietary-assets` now warns-and-exits-0 instead of exiting 1. Verified:
+with the submodule fully removed, both `astro check` and `astro build` succeed
+in both apps and icons degrade to the fallback → missing glyph.
+
+Lesson: "make the import optional" is not equivalent to "make the build
+optional" under a build-time alias resolver — verify the actual absent case, do
+not reason from the import syntax.
+
+### 18. Generation-Time Normalization Preserves Heterogeneous Fills
+
+MEDIUM 4: both tiers stored whole SVG documents and the component reverse-
+engineered inner markup + viewBox with a render-time regex (non-global, root
+attributes discarded). Moving normalization into the two generators (community
+`.mjs`; a new generator committed to the `@myrrys/proprietary` submodule) so each
+icon stores `{ inner, viewBox }` deleted that regex and its failure class. The
+extraction keeps inner markup verbatim, which matters because the proprietary
+artwork encodes color in four different ways (`fill=` attribute, inline
+`style="fill:…"`, `<g fill=…>`, and a `<style>` block in `pbta-logo`). Checked
+first that no root `<svg>` carries a presentational fill, so dropping the
+wrapper is lossless. The submodule pointer advanced to its normalized registry.
+
+### 19. Delivery-Record Correction: Where The `--color-on` Contract Lives
+
+LOW 5: the delivery self-declaration implied `icon.css` consumes
+`var(--color-on, currentColor)`. Accurate statement: `icon.css` holds only the
+five sizing tokens; the new `Icon.svelte` hardcodes `fill="currentColor"`; the
+`var(--color-on, currentColor)` inheritance contract lives in legacy `cn-icon`
+(`@11thdeg/cyan-lit`) and is protected by keeping bare `--color-on` undefined
+(documented at `styles/compat/cyan-4.css:55-56`). New and legacy icons behave
+identically only while `--color-on` stays globally undefined; a scope that sets
+it would diverge them. This is a record fix, not a code change.
+
+## RC Release Note — Bundled Scope (HIGH 2)
+
+This candidate is one merge/revert unit but lands four related changes; the
+release PR/tag note must state this explicitly (reverting the icon feature also
+reverts these):
+
+1. **Icon migration** — tiered server-rendered `Icon`, catalog + generators,
+   app bar / footer / featured-tags consumers, `/components/icon` book.
+2. **Color-theme compatibility** — the `--color-on` inheritance fix and its
+   contract test / compat layer (`styles/compat/cyan-4.css`, e2e + contract).
+3. **Docs/process migration** — root `AGENTS.md`/`CLAUDE.md`, retros→lessons,
+   `specs/TEMPLATE.md`, this runbook.
+4. **Tooling** — centralized `lefthook.yml`, commitlint config, skill symlinks.
+
+Decision (2026-07-21): keep bundled with this explicit disclosure rather than
+rewriting already-pushed history.
+
+## Known Issues Carried Into Release
+
+- **LOW 6 — `apps/pelilauta/e2e/color-theme.spec.ts` is broken by the footer
+  migration.** It selects the `cn-icon` custom-element tag
+  (`main > footer cn-icon`, line 143) and throws when absent, but the migrated
+  footer now renders `<span class="cn-icon">`. It surfaced no failure only
+  because `test:e2e` is in no gate (the HIGH 3 gap). Left untouched this cycle
+  per the human decision not to invest in the test system now; must be repaired
+  (retarget the selector to `.cn-icon` / the migrated element) before that e2e
+  is trusted or gated.
+
 ## Compound Decisions So Far
 
 | Finding | Decision | Destination |
@@ -321,8 +406,16 @@ protective once something actually runs it.
 | Legacy nested AGENTS.md contradicted root contract | Accept removal | Root `AGENTS.md` (symlinked as `CLAUDE.md`) is the single agent contract |
 | Iconography principles deserve real design content | Accept as epic scope, defer from slice | Own spec, book page, and catalog governance in a `v21.0.0-beta.3` slice |
 | Proprietary icons are a non-licensed submodule tier, not catalog copies | Accept two-tier model now | Community catalog in public DS package; proprietary via `@myrrys/proprietary` submodule registry; amend plan step 4 |
-| v21 submodule pins a pre-registry commit | Relocated to `packages/myrrys-proprietary`, always tracking latest proprietary `main` (now `e9d8217`) | Adds icon tier, preserves served webp assets |
-| `pbta-logo` differs from submodule `pbta`; mapping would change the rendered logo | Resolved 2026-07-21: add exact v18 `pbta-logo` artwork to the proprietary repo (`e9d8217`), resolved via the managed tier | Preserves the live front-page logo appearance |
+| v21 submodule pins a pre-registry commit | Relocated to `packages/myrrys-proprietary`, always tracking latest proprietary `main` (now `69588a6`) | Adds icon tier, preserves served webp assets |
+| `pbta-logo` differs from submodule `pbta`; mapping would change the rendered logo | Resolved 2026-07-21: add exact v18 `pbta-logo` artwork to the proprietary repo, resolved via the managed tier | Preserves the live front-page logo appearance |
+| AR BLOCKER 1: managed tier is a compile-time hard dependency | Accept — make it optional via a Vite resolver + guarded dynamic import + soft sync; dynamic import alone was insufficient (finding 17) | `vite/optional-proprietary.mjs`, `managed-tier.ts`, both astro configs, sync script |
+| AR MEDIUM 4: render-time SVG regex | Accept — normalize at generation time in both generators; store `{ inner, viewBox }` (finding 18) | Community + submodule generators, `Icon.svelte`, submodule pointer |
+| AR NOTE 7: registry can ship stale | Accept — run `check:icons` at the start of both app builds | `apps/*/package.json` build scripts |
+| AR HIGH 2: scope bundling | Accept bundled + explicit RC scope note; do not rewrite pushed history | RC Release Note section above |
+| AR HIGH 3: test gates give false confidence | Reject new coverage this cycle (DS test system too immature) | Deferred; NOTE 8 gate remains |
+| AR LOW 5: inaccurate `--color-on` record | Accept — record correction only, code already correct | Finding 19 |
+| AR LOW 6: migration broke `color-theme.spec.ts` | Defer repair (test not gated; per HIGH 3 decision) | Known Issues section above |
+| AR NOTE 8: catalog tiny vs v18 | Accept as standing gate | Catalog expansion is a prerequisite for each future consumer migration |
 
 ## Open Gates
 
@@ -337,6 +430,9 @@ protective once something actually runs it.
   through the managed tier, preserving the live appearance.
 - ~~Implementation and deterministic checks.~~ Complete 2026-07-21; see Current
   Context for the check results.
+- ~~Adversarial review (`plans/cn-icon-review-notes.md`).~~ Completed 2026-07-21;
+  BLOCKER 1 + MEDIUM 4 + NOTE 7 fixed (findings 17–19); HIGH 2 accepted with RC
+  note; HIGH 3 declined; LOW 6 documented as a known issue.
 - Human visual acceptance in Light and Dark of the app-bar search action,
   the four featured tags, the footer fox, and every book example.
 - Approval of source provenance for the selected community assets
