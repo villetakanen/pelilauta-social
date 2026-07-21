@@ -52,7 +52,26 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   (`draft`→`approved`) before any implementation. Then a catalog-vs-provenance
   parity check and absent-submodule build are the named deterministic
   acceptance checks.
-- **Status.** Draft spec authored; adversarial review pending.
+- **Adversarial spec review (spec-skill gate).** Independent pass raised 3
+  blockers, all resolved in a revision:
+  - B1: `PROVENANCE.md` has no licence column, so a "row has source + licence"
+    check was unrunnable. Resolved: community-tier membership confers project
+    licensing (admission requires project-licensable artwork); the row records
+    *source* only. No phantom licence column.
+  - B2: "absent-submodule build completes" was contradicted by
+    `managed-tier.ts` (runtime-only guard) and named no probe. Resolved: grounded
+    in the cn-icon cycle's verified absent-submodule builds; named `dd5` as the
+    concrete managed-only probe that must degrade to the missing glyph.
+  - B3: tier precedence was mis-attributed to the `cn-icon` spec, which never
+    mentions tiers. Resolved: precedence is owned *here*, ported from v20
+    `02880fbc`, and cited.
+  Non-blocking also fixed: bundled-fallback tier grounded in `icon-fallback.ts`;
+  parity made bidirectional; accessibility anchored to the Icon contract instead
+  of restated; colour acceptance tightened to a concrete `fill="currentColor"`
+  grep; circular DoD item reframed to an observable catalog state.
+- **Status.** Revised draft ready for human `draft`→`approved` decision.
+  Unresolved for the human: (1) alias policy, (2) whether the DS book is
+  required for Done (Delivery-Contract tension noted in the spec frontmatter).
 
 ## Update Rule
 
