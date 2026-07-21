@@ -1,0 +1,272 @@
+---
+import "@design-system/styles/color.css";
+import "@design-system/styles/icon.css";
+import Icon from "@design-system/components/Icon.svelte";
+import { getNouns as communityNouns } from "@design-system/icons/community";
+
+const community = communityNouns();
+
+const sizes = [
+  { size: "xsmall", token: "--cn-icon-size-xsmall", px: "16px" },
+  { size: "small", token: "--cn-icon-size-small", px: "24px" },
+  { size: "medium", token: "--cn-icon-size", px: "36px (default)" },
+  { size: "large", token: "--cn-icon-size-large", px: "72px" },
+  { size: "xlarge", token: "--cn-icon-size-xlarge", px: "128px" },
+] as const;
+
+// Branded (managed tier) artwork already published on the public front page.
+const branded = ["dd5", "pathfinder", "ll-ampersand", "pbta-logo"];
+
+const tiers = [
+  { tier: "Community", noun: "fox", note: "Project-licensed, monochrome, inherits currentColor." },
+  { tier: "Managed", noun: "dd5", note: "@myrrys/proprietary, branded, keeps encoded colors." },
+  { tier: "Fallback", noun: "menu", note: "Bundled essential UI symbol, guaranteed available." },
+  { tier: "Missing", noun: "no-such-noun-xyz", note: "Unknown, empty, or absent noun renders the missing glyph." },
+];
+
+const title = "Icon";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="The Pelilauta v21 icon component: tiered source resolution, sizing, contextual color, and fallback."
+    />
+    <title>{title} / Pelilauta Design System</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">Pelilauta DS</a>
+      <span>BOOK 02</span>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="kicker">INTENT / CONTRACT / BOOK</p>
+        <h1>{title}</h1>
+        <p class="lede">
+          A server-rendered icon with tiered source resolution: community →
+          managed → bundled fallback → missing glyph. Monochrome artwork
+          inherits its surrounding color; branded artwork keeps the colors
+          encoded in its reviewed source. Markup is complete in the initial
+          response and does not shift when scripts load.
+        </p>
+        <dl class="facts">
+          <div><dt>Community nouns</dt><dd>{community.length}</dd></div>
+          <div><dt>Sizes</dt><dd>5</dd></div>
+          <div><dt>Tiers</dt><dd>4</dd></div>
+          <div><dt>Default</dt><dd>medium</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="sizes-title">
+        <div class="section-heading">
+          <p>01 / SIZES</p>
+          <h2 id="sizes-title">Five sizes, medium default</h2>
+          <p>
+            Each size takes its dimension from a design-system icon sizing
+            token. The icon renders a square box; its computed width equals its
+            height at the token's value.
+          </p>
+        </div>
+        <ul class="sizes">
+          {sizes.map(({ size, token, px }) => (
+            <li>
+              <span class="size-icon" data-size={size}>
+                <Icon noun="search" size={size} />
+              </span>
+              <code>{size}</code>
+              <small>{token}</small>
+              <small>{px}</small>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="color-title">
+        <div class="section-heading">
+          <p>02 / CONTEXTUAL COLOR</p>
+          <h2 id="color-title">Monochrome follows its context</h2>
+          <p>
+            Both panels render the same monochrome community icons. Each icon
+            inherits the foreground of its surrounding text, link, button, and
+            status context, in Light and Dark, without per-instance styling.
+          </p>
+        </div>
+        <div class="theme-split">
+          {["light", "dark"].map((mode) => (
+            <article class={`theme-panel ${mode}`}>
+              <header>
+                <span class="mode-dot"></span>
+                <h3>{mode}</h3>
+              </header>
+              <p class="context-row" style="color: var(--cn-text);">
+                <Icon noun="search" size="small" /> body text
+              </p>
+              <p class="context-row" style="color: var(--cn-link);">
+                <Icon noun="search" size="small" /> link color
+              </p>
+              <p class="context-row" style="color: var(--cn-text-low);">
+                <Icon noun="fox" size="small" /> low-emphasis (footer fox)
+              </p>
+              <p class="context-row context-button">
+                <Icon noun="search" size="small" /> on button
+              </p>
+              {["success", "warning", "error", "info"].map((status) => (
+                <p class="context-row" style={`color: var(--cn-color-${status});`}>
+                  <Icon noun="search" size="small" /> {status}
+                </p>
+              ))}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="branded-title">
+        <div class="section-heading">
+          <p>03 / BRANDED ARTWORK</p>
+          <h2 id="branded-title">Branded artwork keeps its colors</h2>
+          <p>
+            Managed-tier featured-tag artwork retains the colors encoded in its
+            reviewed source, unchanged across Light and Dark.
+          </p>
+        </div>
+        <div class="theme-split">
+          {["light", "dark"].map((mode) => (
+            <article class={`theme-panel ${mode}`}>
+              <header>
+                <span class="mode-dot"></span>
+                <h3>{mode}</h3>
+              </header>
+              <ul class="branded">
+                {branded.map((noun) => (
+                  <li>
+                    <Icon noun={noun} size="large" />
+                    <code>{noun}</code>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="tiers-title">
+        <div class="section-heading">
+          <p>04 / SOURCE TIERS & FALLBACK</p>
+          <h2 id="tiers-title">Precedence, ending in a visible miss</h2>
+          <p>
+            A noun resolves through community, then managed, then the bundled
+            fallback, and finally the missing glyph. Missing artwork is visible
+            and keeps its layout space rather than collapsing.
+          </p>
+        </div>
+        <ul class="tiers">
+          {tiers.map(({ tier, noun, note }) => (
+            <li>
+              <span class="tier-icon"><Icon noun={noun} size="medium" /></span>
+              <div>
+                <code>{tier}</code>
+                <small>{note}</small>
+                <small>noun: <code>{noun}</code></small>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </main>
+    <footer>
+      <a href="/">Index</a>
+      <span>Source: <code>packages/design-system/components/Icon.svelte</code></span>
+    </footer>
+
+    <style>
+      :global(*) { box-sizing: border-box; }
+      :global(body) {
+        margin: 0;
+        color: var(--cn-text);
+        background: var(--cn-background);
+        font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      :global(code) { font-family: "SFMono-Regular", Consolas, monospace; }
+      .site-header,
+      body > footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem clamp(1.25rem, 4vw, 3rem);
+        color: var(--cn-text-low);
+        border-block-end: 1px solid var(--cn-border);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      a { color: var(--cn-link); }
+      a:hover { color: var(--cn-link-hover); }
+      main > section { padding: clamp(3rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem); }
+      .hero {
+        min-block-size: min(40rem, 78vh);
+        display: grid;
+        align-content: center;
+        background:
+          linear-gradient(130deg, transparent 45%, var(--cn-hover)),
+          var(--cn-surface);
+      }
+      .kicker,
+      .section-heading > p:first-child {
+        color: var(--cn-text-low);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+      }
+      h1 {
+        margin: 0.3rem 0 1.5rem;
+        color: var(--cn-text-high);
+        font-size: clamp(3.5rem, 12vw, 9rem);
+        font-weight: 600;
+        letter-spacing: -0.07em;
+        line-height: 0.85;
+      }
+      .lede { max-inline-size: 48rem; color: var(--cn-text-low); font-size: clamp(1.05rem, 2vw, 1.5rem); }
+      .facts { display: flex; flex-wrap: wrap; gap: 2rem 5rem; margin-block-start: 3rem; }
+      .facts div { display: grid; gap: 0.25rem; }
+      .facts dt { color: var(--cn-text-low); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; }
+      .facts dd { margin: 0; color: var(--cn-text-high); font-size: 1.5rem; }
+      .section-heading { max-inline-size: 48rem; margin-block-end: 2.5rem; }
+      .section-heading h2 { margin: 0.4rem 0 1rem; color: var(--cn-text-high); font-size: clamp(2rem, 5vw, 4rem); letter-spacing: -0.04em; line-height: 0.95; }
+      .section-heading > p:last-child { color: var(--cn-text-low); font-size: 1.05rem; }
+      .sizes { display: flex; flex-wrap: wrap; gap: 2rem; align-items: end; padding: 0; list-style: none; }
+      .sizes li { display: grid; justify-items: center; gap: 0.35rem; }
+      .size-icon { display: inline-flex; align-items: end; color: var(--cn-text); }
+      .sizes code { color: var(--cn-text-high); }
+      .sizes small { color: var(--cn-text-low); font-family: monospace; font-size: 0.66rem; }
+      .theme-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--cn-border); }
+      .theme-panel { padding: clamp(1rem, 3vw, 2rem); background: var(--cn-background); color: var(--cn-text); }
+      .theme-panel + .theme-panel { border-inline-start: 1px solid var(--cn-border); }
+      .theme-panel.light { color-scheme: light; }
+      .theme-panel.dark { color-scheme: dark; }
+      .theme-panel > header { display: flex; align-items: center; gap: 0.7rem; margin-block-end: 1.5rem; }
+      .theme-panel h3 { margin: 0; text-transform: capitalize; }
+      .mode-dot { inline-size: 0.75rem; block-size: 0.75rem; border-radius: 50%; background: var(--cn-focus-ring); }
+      .context-row { display: flex; align-items: center; gap: 0.6rem; margin: 0.35rem 0; font-size: 0.95rem; }
+      .context-button { padding: 0.5rem 0.9rem; border-radius: 999px; color: var(--cn-on-button); background: var(--cn-button); width: fit-content; }
+      .branded { display: flex; flex-wrap: wrap; gap: 1.5rem; padding: 0; list-style: none; }
+      .branded li { display: grid; justify-items: center; gap: 0.4rem; }
+      .branded code { color: var(--cn-text-low); font-size: 0.72rem; }
+      .tiers { display: grid; gap: 1px; padding: 1px; background: var(--cn-border); list-style: none; margin: 0; }
+      .tiers li { display: flex; align-items: center; gap: 1.2rem; padding: 1rem; background: var(--cn-background); color: var(--cn-text); }
+      .tier-icon { display: inline-flex; color: var(--cn-text); }
+      .tiers div { display: grid; gap: 0.2rem; }
+      .tiers small { color: var(--cn-text-low); font-size: 0.78rem; }
+      @media (max-width: 48rem) {
+        .theme-split { grid-template-columns: 1fr; }
+        .theme-panel + .theme-panel { border-inline-start: 0; border-block-start: 1px solid var(--cn-border); }
+        body > footer { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </body>
+</html>

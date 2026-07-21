@@ -1,5 +1,6 @@
 // @ts-check
 import { fileURLToPath } from "node:url";
+import svelte from "@astrojs/svelte";
 import { defineConfig } from "astro/config";
 
 const designSystem = fileURLToPath(
@@ -12,6 +13,7 @@ const myrrysProprietary = fileURLToPath(
 export default defineConfig({
 	site: "https://design.pelilauta.social",
 	output: "static",
+	integrations: [svelte()],
 	vite: {
 		resolve: {
 			alias: {

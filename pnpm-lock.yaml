@@ -23,9 +23,15 @@ importers:
       '@astrojs/check':
         specifier: ^0.9.4
         version: 0.9.5(prettier@3.6.2)(typescript@5.9.3)
+      '@astrojs/svelte':
+        specifier: ^7.1.1
+        version: 7.2.2(@types/node@24.10.0)(astro@5.15.4(@netlify/blobs@10.3.3)(@types/node@24.10.0)(jiti@2.6.1)(rollup@4.53.2)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1))(jiti@2.6.1)(svelte@5.43.5)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1)
       astro:
         specifier: ^5.14.1
         version: 5.15.4(@netlify/blobs@10.3.3)(@types/node@24.10.0)(jiti@2.6.1)(rollup@4.53.2)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1)
+      svelte:
+        specifier: ^5.39.6
+        version: 5.43.5
       typescript:
         specifier: ^5.9.2
         version: 5.9.3
@@ -198,6 +204,8 @@ importers:
         version: 7.3.0
 
   packages/design-system: {}
+
+  packages/myrrys-proprietary: {}
 
 packages:
 
@@ -7374,6 +7382,28 @@ snapshots:
     dependencies:
       '@sveltejs/vite-plugin-svelte': 5.1.1(svelte@5.43.5)(vite@6.4.1(@types/node@24.10.0)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.1))
       astro: 5.15.4(@netlify/blobs@10.3.3)(@types/node@24.10.0)(jiti@2.6.1)(rollup@2.79.2)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1)
+      svelte: 5.43.5
+      svelte2tsx: 0.7.45(svelte@5.43.5)(typescript@5.9.3)
+      typescript: 5.9.3
+      vite: 6.4.1(@types/node@24.10.0)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.1)
+    transitivePeerDependencies:
+      - '@types/node'
+      - jiti
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
+
+  '@astrojs/svelte@7.2.2(@types/node@24.10.0)(astro@5.15.4(@netlify/blobs@10.3.3)(@types/node@24.10.0)(jiti@2.6.1)(rollup@4.53.2)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1))(jiti@2.6.1)(svelte@5.43.5)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1)':
+    dependencies:
+      '@sveltejs/vite-plugin-svelte': 5.1.1(svelte@5.43.5)(vite@6.4.1(@types/node@24.10.0)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.1))
+      astro: 5.15.4(@netlify/blobs@10.3.3)(@types/node@24.10.0)(jiti@2.6.1)(rollup@4.53.2)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.1)
       svelte: 5.43.5
       svelte2tsx: 0.7.45(svelte@5.43.5)(typescript@5.9.3)
       typescript: 5.9.3
