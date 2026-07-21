@@ -1,7 +1,35 @@
 # feat/cn-icon Lessons
 
-Status: Complete — shipped as `v21.0.0-beta.2` (merge `5cf6b0c`, tag
-`v21.0.0-beta.2`), 2026-07-21.
+Status: **Active — long-living epic branch.** `feat/cn-icon` is the continuous
+context for the iconography epic and delivers each slice to `main` as its own
+pull request. Delivered so far: local Icon migration `v21.0.0-beta.2` (merge
+`5cf6b0c`, tag `v21.0.0-beta.2`), 2026-07-21. Remaining epic work: catalog /
+iconography-principles capability, and the next bounded Lit→Svelte consumer
+migrations. (The contextual-icon-sizing slice shipped on a separate branch as
+`v21.0.0-beta.3`; see `docs/lessons/feat-icon-context-sizing.md`.)
+
+## Slices In Progress
+
+### Slice: factory writeback (governance) — PR #34
+
+- **Outcome.** Not a product change: reworks the delivery governance the epic
+  runs under — merge-is-the-deployable-unit, `main` integrated only via PR from
+  a `feat/*`/emergency branch, factory work rides in its establishing slice;
+  adds `delivery-slice`/`delivery-review` skills; narrows `release`.
+- **Integration identity.** PR #34 `feat/cn-icon` → `main`, commits `38f8572`
+  (writeback) + `184447a` (this lessons reopen, the PR source head). Merge SHA
+  to reconcile in a later slice per the lessons practice.
+- **Checks.** No `apps/`/`packages/` source touched; type/build gates
+  unaffected. commitlint + pre-push hooks pass.
+- **Gate.** `delivery-review` (release-significant factory change) — independent
+  adversarial pass, **no blockers**. Two record corrections applied before merge:
+  reconciled the stale "Next production problem" beta.3 earmark (it shipped as
+  contextual-icon-sizing), and corrected the recorded PR source head to `184447a`.
+  Non-blocking `README.md` status-paragraph edit accepted (consistency with the
+  removed cycle-setup exception). Human authorized merge-if-clean.
+- **Carry-forward.** Next slice on this branch: iconography-principles capability
+  (intent spec + catalog governance + DS book page on the design site),
+  1-working-day timebox.
 
 ## Update Rule
 
@@ -12,10 +40,10 @@ reusable technique. Do not wait for cycle close or a separate prompt.
 Keep facts, interpretations, and decisions distinguishable. This file is
 working memory, not proof that the planned outcome has shipped.
 
-## Current Context
+## Delivered Slice — local Icon migration (`v21.0.0-beta.2`)
 
-The bounded slice is implemented and all deterministic checks pass; human
-visual acceptance and the release decision remain. Shipped on `feat/cn-icon`:
+Historical record of the first shipped slice; superseded state reconciled at the
+top Status. Shipped on `feat/cn-icon`:
 the legacy `--color-on` inheritance fix, the five icon sizing tokens, the
 two-tier source model (community catalog in the public design-system package;
 proprietary artwork consumed from the relocated `@myrrys/proprietary`
@@ -496,5 +524,29 @@ rewriting already-pushed history.
 - **Remaining assumption.** Build-time survival of an absent submodule was
   verified locally; production always builds with the submodule present.
 - **Next production problem.** The iconography-principles epic (own spec, book
-  page, catalog governance) earmarked for a later `v21.0.0-beta.3`, and the next
-  bounded Lit-to-Svelte consumer migration.
+  page, catalog governance) and the next bounded Lit-to-Svelte consumer
+  migration. (Reconciled: `v21.0.0-beta.3` shipped the contextual-icon-sizing
+  slice on branch `feat/icon-context-sizing`, not iconography-principles, which
+  is now unversioned remaining epic work — see top Status.)
+
+## Post-Close Factory Writeback — 2026-07-21
+
+Human clarification after reviewing this cycle: a feature branch is a
+continuous delivery context and may merge several production slices to `main`
+before branch close. The merge, not the lifetime branch diff, is the deployable
+and coherently reversible unit. Factory, harness, and architecture work is
+expected inside the slice that first establishes and verifies its concrete
+need; classifying that work as exceptional "chores" was the wrong lesson.
+
+Accepted writeback: move operational integration procedure out of `AGENTS.md`
+into `delivery-slice`, add a risk-scaled `delivery-review` skill for exact merge
+deltas, narrow `release` to named release identity and publication, and keep
+branch lessons active across multiple delivered slices. Claude skill links
+mirror the canonical `.agents/skills` definitions.
+
+Independent review of the writeback caught two workflow ambiguities before it
+was relied on: a merge cannot record its own resulting SHA inside itself, and a
+release's approved content baseline is not the same commit as the final merge
+that adds version metadata. The skills now record pre-merge integration
+identity without requiring a bookkeeping-only merge, and tag the final
+versioned release commit after verifying it contains the approved baseline.
