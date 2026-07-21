@@ -5,6 +5,9 @@ import { defineConfig } from "astro/config";
 const designSystem = fileURLToPath(
 	new URL("../../packages/design-system", import.meta.url),
 );
+const myrrysProprietary = fileURLToPath(
+	new URL("../../packages/myrrys-proprietary/index.ts", import.meta.url),
+);
 
 export default defineConfig({
 	site: "https://design.pelilauta.social",
@@ -13,6 +16,7 @@ export default defineConfig({
 		resolve: {
 			alias: {
 				"@design-system": designSystem,
+				"@myrrys/proprietary": myrrysProprietary,
 			},
 		},
 	},

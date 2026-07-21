@@ -17,6 +17,9 @@ export default defineConfig({
         '@design-system': fileURLToPath(
           new URL('../../packages/design-system', import.meta.url),
         ),
+        '@myrrys/proprietary': fileURLToPath(
+          new URL('../../packages/myrrys-proprietary/index.ts', import.meta.url),
+        ),
       },
     },
     plugins: [
