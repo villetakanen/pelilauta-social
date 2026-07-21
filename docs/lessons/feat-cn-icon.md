@@ -1,6 +1,7 @@
 # feat/cn-icon Lessons
 
-Status: Active
+Status: Complete — shipped as `v21.0.0-beta.2` (merge `5cf6b0c`, tag
+`v21.0.0-beta.2`), 2026-07-21.
 
 ## Update Rule
 
@@ -457,8 +458,43 @@ rewriting already-pushed history.
 - ~~Adversarial review (`plans/cn-icon-review-notes.md`).~~ Completed 2026-07-21;
   BLOCKER 1 + MEDIUM 4 + NOTE 7 fixed (findings 17–19); HIGH 2 accepted with RC
   note; HIGH 3 declined; LOW 6 documented as a known issue.
-- Human visual acceptance in Light and Dark of the app-bar search action,
-  the four featured tags, the footer fox, and every book example.
-- Approval of source provenance for the selected community assets
-  (`fox`, `search`) recorded in the design-system community `PROVENANCE.md`.
-- Release decision (next beta) after acceptance.
+- ~~Human visual acceptance in Light and Dark of the app-bar search action,
+  the four featured tags, the footer fox, and every book example.~~ Passed
+  2026-07-21; two regressions found and fixed (finding 20).
+- ~~Approval of source provenance for the selected community assets
+  (`fox`, `search`) recorded in the design-system community `PROVENANCE.md`.~~
+  Signed off 2026-07-21.
+- ~~Release decision (next beta) after acceptance.~~ Approved and released as
+  `v21.0.0-beta.2` on 2026-07-21.
+
+## Cycle Close
+
+- **Production outcome — shipped.** The app bar, footer, and front-page featured
+  tags render through the local server-rendered `Icon`, contextual color
+  inheritance is restored, and the icon capability is published in the
+  design-system book. Released as `v21.0.0-beta.2` (merge `5cf6b0c`, annotated
+  tag `v21.0.0-beta.2`); `pelilauta.social` returns HTTP 200 and the PR #30
+  Netlify deploy-preview gate passed before merge.
+- **Evidence.** `astro check` 0 errors; both app builds complete; design-system
+  8/8 unit; pelilauta 463/463 unit; icon-book e2e passes; absent-submodule build
+  verified in both apps; human visual acceptance in Light and Dark.
+- **What worked.** Generation-time normalization deleted an entire render-time
+  failure class; the optional-tier resolver made a non-licensed dependency safe
+  without a committed stub; per-consumer visual acceptance caught what every
+  automated gate missed.
+- **Root cause carried forward.** The local component renders
+  `<span class="cn-icon">`, so every cyan-css rule written for the `<cn-icon>`
+  tag (size, margin, layout) silently stops applying at migrated sites. This is
+  the dominant migration risk for the remaining consumers.
+- **Accepted, carried into future plans.** (1) Each consumer migration includes
+  a rendered-in-context pass over cyan-css tag selectors for that context.
+  (2) Catalog expansion precedes each migration (NOTE 8). (3) Repair the ungated
+  `apps/pelilauta/e2e/color-theme.spec.ts` footer selector (LOW 6) before that
+  e2e is trusted or gated — explicitly deferred this cycle.
+- **Rejected this cycle.** New icon test coverage / real-component unit test
+  (HIGH 3): DS test system too immature; revisit with concrete evidence.
+- **Remaining assumption.** Build-time survival of an absent submodule was
+  verified locally; production always builds with the submodule present.
+- **Next production problem.** The iconography-principles epic (own spec, book
+  page, catalog governance) earmarked for a later `v21.0.0-beta.3`, and the next
+  bounded Lit-to-Svelte consumer migration.
