@@ -4,6 +4,7 @@ provenance:
   - "Parent rendering contract: specs/design-system/components/cn-icon/spec.md (the Icon component owns sizes, contextual colour, the size-standardization mechanism, missing-glyph rendering, and the assistive-technology noun announcement; this spec anchors to it and does not restate those values)"
   - "Human design decision 2026-07-21: the iconography book is a usage/design-principles page — why icons are used, when an icon may stand alone vs. carry a label, accessibility-in-use, and the vocabulary grouped by purpose — not a technical catalog dump. Informed by an agent-drafted principles page reviewed by the human and by the Pelilauta RPG-community context (threads, character sheets, forums)."
   - "Human decision 2026-07-21: adding a community icon noun is a human-approved change recording the artwork's source in PROVENANCE.md and confirming it is project-licensable; community-tier membership confers project licensing; community artwork is monochrome, authored to render with the surrounding foreground (currentColor). Formalizes the practice already applied for fox and search."
+  - "Human decision 2026-07-21: the managed (myrrys) tier is enumerable, so the book lists all managed icons when the submodule is present (not merely by example). Community icons are ported from the existing pelilauta application decisively, one at a time — each an individual human-approved admission, not a bulk import — so the catalog grows alongside the per-consumer Cyan migrations."
   - "Human decision 2026-07-21: noun aliases are deferred out of scope until a real consumer need appears (distinct nouns only); the design-system book IS required for this capability to be Done (governance-only work is not exempt from the CLAUDE.md Delivery-Contract book rule) and is the deliverable."
   - "Tier model and precedence (ported from the v20 target model at immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced): trusted registries, community→managed→fallback precedence, server-rendered markup, source-owned colour. Bundled fallback: packages/design-system/components/icon-fallback.ts (essential UI symbols + missing glyph, MIT). Managed optionality: packages/design-system/components/managed-tier.ts; absent-submodule builds verified in the cn-icon cycle (docs/lessons/feat-cn-icon.md)."
   - "Community catalog and current practice: packages/design-system/icons/community/ + PROVENANCE.md (fox, search); packages/design-system/scripts/generate-icon-registry.mjs. Cross-cycle: docs/lessons/feat-cn-icon.md; docs/practices/consumer-migration.md."
@@ -17,8 +18,8 @@ In a text-rich RPG community — discussion threads, character sheets, the share
 library — icons are functional UI tools, not decoration. They let players and
 game masters find actions and navigation quickly (wayfinding and scannability),
 they keep a given meaning looking the same everywhere it appears (semantic
-consistency: *edit*, *roll*, *bookmark* are always the same mark), and they
-reinforce the visual hierarchy of a dense interface.
+consistency — a recurring action carries one mark wherever it shows up), and
+they reinforce the visual hierarchy of a dense interface.
 
 This capability owns the icon **vocabulary and the design principles for using
 it**: why and when an icon is used, when it may stand alone, how it pairs with
@@ -46,9 +47,10 @@ the available vocabulary grouped by purpose.
 
 ### Accessibility in use
 
-- A standalone icon or icon-only control always has an accessible name that
-  states the action, not the picture. (How that name is supplied is the Icon
-  contract's; this principle governs that consumers must provide one.)
+- An icon-only control always has an accessible name that states its action,
+  not its picture; a standalone (non-control) icon conveys its noun's meaning to
+  assistive technology. Either way the *mechanism* is the Icon contract's; this
+  principle governs that consumers provide a name for icon-only controls.
 - An icon is never the only signal of a state; colour or shape change is paired
   with text or another structural indication.
 
@@ -74,10 +76,16 @@ the available vocabulary grouped by purpose.
 - Every icon is identified by a semantic noun from the approved catalog. Nouns
   describe meaning (`search`, `fox`), not appearance, so artwork can be revised
   without renaming the noun.
-- The book presents the available vocabulary **grouped by purpose** — for
-  example navigation & system, community & interaction, content & editorial, and
-  tabletop/gaming tools — with each noun's meaning and typical context, so a
-  consumer chooses by intent rather than by guessing a name.
+- The book presents the available vocabulary **grouped by the purposes the
+  catalog actually serves** (for example navigation & system, community &
+  interaction, tabletop/gaming tools), each noun with its meaning and typical
+  context, so a consumer chooses by intent rather than by guessing a name. A
+  purpose group appears only when the catalog contains icons for it; the book
+  never names an empty group or an icon that does not exist.
+- The book enumerates the community nouns in full and the managed (myrrys) icons
+  in full when the managed submodule is present, with the bundled fallback shown
+  as the always-available safety net. The managed tier is enumerable, so its
+  icons are listed, not merely exemplified.
 - Within the tier that resolves it, one noun maps to exactly one piece of
   artwork, whether statically authored or supplied from data.
 - Aliases (one noun pointing at another's artwork) are deliberately out of scope
@@ -97,6 +105,10 @@ content.
   is project-licensable. Community-tier membership confers project licensing;
   the row records the source, not a per-row licence string. Community artwork is
   monochrome and authored to inherit the surrounding foreground.
+- **Porting is one at a time.** Community icons are ported from the existing
+  pelilauta application decisively, one at a time — each an individual
+  human-approved admission, never a bulk import — so the catalog grows alongside
+  the per-consumer Cyan migrations rather than ahead of a real need.
 - **Source tiers** resolve in precedence **community → managed → bundled
   fallback → missing glyph** (ported from v20 `02880fbc`): community
   (project-licensed monochrome, in-repo, with provenance), managed (proprietary
@@ -133,9 +145,10 @@ content.
 - **The design-system book makes icon usage readable on
   `design.pelilauta.social`.** A consumer can read the usage principles (clarity
   over decoration, accessibility in use, size & alignment) with concrete do's
-  and don'ts, and the available vocabulary grouped by purpose — the
-  repository-owned community nouns enumerated in full, with the managed and
-  bundled-fallback tiers shown by representative example. This is the
+  and don'ts, and the available vocabulary grouped by the purposes the catalog
+  serves — the community nouns and the managed (myrrys) icons enumerated in full
+  (managed when its submodule is present), with the bundled fallback shown as
+  the safety net, and only populated purpose groups shown. This is the
   capability's observable deliverable; the spec is its intent.
 - Every noun in `packages/design-system/icons/community/` is project-licensable
   artwork with a `PROVENANCE.md` row recording its source, and no proprietary
@@ -161,10 +174,11 @@ content.
 
 - **Icon usage is readable from the DS book (human, primary).** On
   `design.pelilauta.social`, a consumer can read the usage principles and do's
-  and don'ts, and the available vocabulary grouped by purpose (every
-  repository-owned community noun, managed and fallback shown by example). The
-  page is legible in both Light and Dark. (Icon rendering across modes is the
-  Icon contract's acceptance, not re-verified here.)
+  and don'ts, and the available vocabulary grouped by purpose (community nouns
+  and managed (myrrys) icons enumerated in full — managed when its submodule is
+  present — bundled fallback as the safety net; only populated purpose groups
+  shown). The page is legible in both Light and Dark. (Icon rendering across
+  modes is the Icon contract's acceptance, not re-verified here.)
 - **Catalog ↔ provenance parity (deterministic).** Every artwork file under
   `packages/design-system/icons/community/` has exactly one `PROVENANCE.md`
   row, and every row (other than the header) names an existing artwork file;

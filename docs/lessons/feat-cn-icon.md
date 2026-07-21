@@ -90,9 +90,27 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   to our reality: local `Icon` (`noun=`) not `<cyan-icon>`, and the vocabulary
   reflects the actual catalog (community = fox, search; managed/fallback by
   example) rather than an aspirational icon list.
-- **Status.** Spec reframed design-first; awaiting human confirmation of the
-  design direction before re-running the spec gate and the `draft`→`approved`
-  decision. (Two prior adversarial passes were on the plumbing-heavy version.)
+- **Spec gate (reframed, 3rd pass).** Sound, no blockers. Resolved: NB1
+  (purpose categories over-promised vs. the real catalog; Intent illustrated
+  with non-existent `edit`/`roll`/`bookmark`) — groups now appear only when
+  populated, Intent illustration de-nouned, managed icons enumerated in full;
+  N1 (accessibility "action" wording over-applied to standalone icons) — scoped
+  to icon-only controls, standalone icons convey their noun's meaning. N2
+  (subjective "readable") accepted: pinned to the content checklist + named
+  human review.
+- **Status.** Spec gate passed (design-first version); design clarification
+  (managed enumerable; one-by-one porting) incorporated. **Awaiting human
+  `draft`→`approved`.**
+- **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
+  (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
+  the submodule is present — not merely "by example." This also relieves the
+  thin-catalog concern (community is only fox/search today). (2) Community icons
+  are **ported from the pelilauta app decisively, one by one** — each port is an
+  individual human-approved admission recording source + provenance, not a bulk
+  import; this ties catalog growth to the per-consumer migrations. Fold both
+  into the spec in the next revision (with the gate findings): change managed
+  from "by example" to "enumerated when present", and state the one-by-one
+  porting model in the admission/governance section.
 
 ## Update Rule
 
