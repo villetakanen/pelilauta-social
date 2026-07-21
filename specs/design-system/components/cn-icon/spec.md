@@ -6,6 +6,7 @@ provenance:
   - "Current-only compatibility assets: apps/pelilauta/public/icons/ (search, bsky, label-tag, undo, pbta-logo)"
   - "Findings and decisions: docs/lessons/feat-cn-icon.md"
   - "Human decisions 2026-07-20: empty noun treated as unknown; missing-icon fallback accepted as deliberate change; v18 assistive-technology noun announcement retained"
+  - "Human decision 2026-07-21: the five icon sizes are all legitimately used, so an icon renders at its selected size by default. A context that needs one icon size standardizes every icon within it to that context's size regardless of the icon's own selection — buttons and fabs render icons at the button icon size — as a design-system rule resolving against the local component, not per-consumer hardcoding. Intended mechanism is that the context sets the public --cn-icon-size-* tokens within its scope, refining v20 packages/cyan/src/core/buttons.css and fab.css at 02880fbc, which force the component's private --icon-dim with !important. Legacy Cyan CSS expressed these rules against the cn-icon element, which the migrated class-based markup does not match (docs/lessons/feat-cn-icon.md finding 20)"
   - "Established v18 sizing evidence: 16, 24, 36, 72, 128 px at default root font size (@11thdeg/cyan-css@4.0.0-beta.39 dist/tokens/units.css)"
 ---
 
@@ -46,6 +47,17 @@ intentional artwork across Light and Dark modes.
 - Each size takes its dimensions from the design-system icon sizing tokens;
   the icon does not define or promise the values itself. The established v18
   values are recorded in this spec's provenance as compatibility evidence.
+- All five sizes are legitimately used across the application, so an icon
+  renders at its selected size by default, medium when unspecified.
+- A context that requires a single icon size standardizes every icon it
+  contains to that context's size, regardless of each icon's own size
+  selection — for example, icons inside buttons and fabs render at the button
+  icon size. The intended mechanism is that the context sets the icon-size
+  tokens within its own scope; because the icon resolves its size from those
+  tokens, every icon inside then renders at the context's size without reading
+  each icon's selection. This is a design-system rule that resolves against the
+  local icon component, so it applies equally to migrated icons; sizing an icon
+  for a context is not each consumer's responsibility.
 - Monochrome artwork inherits the surrounding foreground color, including
   link, button, selected, status, hover, active, and disabled states. Current
   production deviates from this because a global theme property overrode the
@@ -114,6 +126,13 @@ intentional artwork across Light and Dark modes.
   application.
 - An unknown, empty, or absent noun never silently collapses its layout
   space.
+- Contextual size standardization (for example, icons inside buttons and fabs
+  rendering at the button icon size regardless of their own size selection)
+  resolves against the local icon component. When a surface migrates off a
+  legacy Cyan `cn-icon` element-scoped size or layout rule, the equivalent
+  standardization is re-expressed against the local component so the context
+  behavior survives; it is not left to per-consumer hardcoding or silently
+  dropped.
 
 ## Acceptance
 
