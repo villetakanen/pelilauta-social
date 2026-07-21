@@ -14,8 +14,8 @@
  *
  * Spec: specs/design-system/components/cn-icon/spec.md
  */
-import { getIcon as getManagedIcon } from "@myrrys/proprietary";
 import { getIcon as getCommunityIcon } from "../icons/community";
+import { getManagedIcon } from "./managed-tier";
 import { FallbackIcons } from "./icon-fallback";
 
 let { noun = "", size = "medium" }: {

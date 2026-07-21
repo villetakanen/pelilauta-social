@@ -2,12 +2,10 @@
 import { fileURLToPath } from "node:url";
 import svelte from "@astrojs/svelte";
 import { defineConfig } from "astro/config";
+import { optionalProprietary } from "../../packages/design-system/vite/optional-proprietary.mjs";
 
 const designSystem = fileURLToPath(
 	new URL("../../packages/design-system", import.meta.url),
-);
-const myrrysProprietary = fileURLToPath(
-	new URL("../../packages/myrrys-proprietary/index.ts", import.meta.url),
 );
 
 export default defineConfig({
@@ -18,8 +16,12 @@ export default defineConfig({
 		resolve: {
 			alias: {
 				"@design-system": designSystem,
-				"@myrrys/proprietary": myrrysProprietary,
 			},
 		},
+		plugins: [
+			optionalProprietary(
+				new URL("../../packages/myrrys-proprietary/index.ts", import.meta.url),
+			),
+		],
 	},
 });

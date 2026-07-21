@@ -33,10 +33,14 @@ const EXCLUDE = new Set([
 ]);
 
 if (!existsSync(source)) {
-  console.error(
-    `[sync-proprietary-assets] missing ${source}. Run: git submodule update --init packages/myrrys-proprietary`,
+  // The proprietary submodule is optional (review BLOCKER 1): if it is not
+  // checked out, warn and skip asset sync rather than failing the build. The
+  // Icon component degrades to its bundled fallback, and legacy pages that
+  // reference /myrrys-proprietary/*.webp lose only that branded artwork.
+  console.warn(
+    `[sync-proprietary-assets] missing ${source}; skipping. Run: git submodule update --init packages/myrrys-proprietary`,
   );
-  process.exit(1);
+  process.exit(0);
 }
 
 rmSync(target, { recursive: true, force: true });
