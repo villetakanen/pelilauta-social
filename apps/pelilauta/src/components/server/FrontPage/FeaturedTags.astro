@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from '@utils/i18n';
 
 const featuredTags = [
@@ -32,7 +33,7 @@ const featuredTags = [
   <div class="flex flex-wrap">
     {featuredTags.map((item) => (
       <a href={`/tags/${encodeURIComponent(item.tag)}`} class="cn-chip flex-none">
-        <cn-icon noun={item.icon} xsmall />
+        <Icon noun={item.icon} size="xsmall" />
         <span>{item.displayName}</span>
       </a>
     ))}
