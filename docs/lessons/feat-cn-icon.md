@@ -98,9 +98,26 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   to icon-only controls, standalone icons convey their noun's meaning. N2
   (subjective "readable") accepted: pinned to the content checklist + named
   human review.
-- **Status.** Spec gate passed (design-first version); design clarification
-  (managed enumerable; one-by-one porting) incorporated. **Awaiting human
-  `draft`→`approved`.**
+- **Status.** Spec **approved** by the human 2026-07-21 (`status: approved`).
+  Implementation in progress.
+- **Implementation (2026-07-21).** Built the deliverable:
+  - `packages/design-system/pages/IconographyPage.astro` — usage/principles
+    page: intent, usage principles (clarity/accessibility/size-alignment),
+    do & don't, vocabulary grouped by purpose, "where icons come from".
+  - Route `apps/design/src/pages/iconography.astro` (`/iconography`); linked
+    from the DS index (`HomePage.astro`, "02 / ICONOGRAPHY").
+  - `getManagedNouns` added to `components/managed-tier.ts` (guarded, empty when
+    the submodule is absent) so the book enumerates the managed tier.
+  - Vocabulary enumerated live at build: **34 nouns** rendered (2 community + 28
+    managed + 4 named fallback), grouped into Navigation & system / Community &
+    interaction / Tabletop & gaming / Game systems, plus a "More in the catalog"
+    catch-all so no existing noun is hidden and none is invented.
+  - **Verified:** `pnpm --filter ./apps/design build` — icon-registry fresh,
+    `astro check` 0 errors, `/iconography` generated, 34 icon SVGs present.
+- **Remaining before the slice PR.** Deterministic acceptance checks
+  (catalog↔provenance parity, community `currentColor` grep, absent-submodule
+  `dd5`→missing) wired into a gate; human rendered-in-context visual acceptance
+  (Light + Dark) of `/iconography`.
 - **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
   (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
   the submodule is present — not merely "by example." This also relieves the

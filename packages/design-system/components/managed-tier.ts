@@ -19,14 +19,22 @@ export interface IconEntry {
 }
 
 type GetIcon = (noun: string) => IconEntry | undefined;
+type GetNouns = () => string[];
 
 let getManagedIcon: GetIcon = () => undefined;
+// Enumerating the managed tier lets the design-system book list every managed
+// icon when the submodule is present (iconography spec). It degrades to an
+// empty list when the tier is unavailable, exactly like getManagedIcon.
+let getManagedNouns: GetNouns = () => [];
 
 try {
   const managed = await import("@myrrys/proprietary");
   getManagedIcon = managed.getIcon as GetIcon;
+  if (typeof managed.getNouns === "function") {
+    getManagedNouns = managed.getNouns as GetNouns;
+  }
 } catch {
   // Proprietary registry unavailable — the managed tier stays empty.
 }
 
-export { getManagedIcon };
+export { getManagedIcon, getManagedNouns };

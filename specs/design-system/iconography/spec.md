@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 provenance:
   - "Parent rendering contract: specs/design-system/components/cn-icon/spec.md (the Icon component owns sizes, contextual colour, the size-standardization mechanism, missing-glyph rendering, and the assistive-technology noun announcement; this spec anchors to it and does not restate those values)"
   - "Human design decision 2026-07-21: the iconography book is a usage/design-principles page — why icons are used, when an icon may stand alone vs. carry a label, accessibility-in-use, and the vocabulary grouped by purpose — not a technical catalog dump. Informed by an agent-drafted principles page reviewed by the human and by the Pelilauta RPG-community context (threads, character sheets, forums)."
