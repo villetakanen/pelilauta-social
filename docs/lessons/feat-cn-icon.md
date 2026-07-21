@@ -16,12 +16,17 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   runs under — merge-is-the-deployable-unit, `main` integrated only via PR from
   a `feat/*`/emergency branch, factory work rides in its establishing slice;
   adds `delivery-slice`/`delivery-review` skills; narrows `release`.
-- **Integration identity.** PR #34 `feat/cn-icon` → `main`, source head
-  `38f8572`. Merge SHA to reconcile in a later slice per the lessons practice.
+- **Integration identity.** PR #34 `feat/cn-icon` → `main`, commits `38f8572`
+  (writeback) + `184447a` (this lessons reopen, the PR source head). Merge SHA
+  to reconcile in a later slice per the lessons practice.
 - **Checks.** No `apps/`/`packages/` source touched; type/build gates
   unaffected. commitlint + pre-push hooks pass.
-- **Gate.** `delivery-review` (release-significant factory change) before merge;
-  human merge approval.
+- **Gate.** `delivery-review` (release-significant factory change) — independent
+  adversarial pass, **no blockers**. Two record corrections applied before merge:
+  reconciled the stale "Next production problem" beta.3 earmark (it shipped as
+  contextual-icon-sizing), and corrected the recorded PR source head to `184447a`.
+  Non-blocking `README.md` status-paragraph edit accepted (consistency with the
+  removed cycle-setup exception). Human authorized merge-if-clean.
 - **Carry-forward.** Next slice on this branch: iconography-principles capability
   (intent spec + catalog governance + DS book page on the design site),
   1-working-day timebox.
@@ -519,8 +524,10 @@ rewriting already-pushed history.
 - **Remaining assumption.** Build-time survival of an absent submodule was
   verified locally; production always builds with the submodule present.
 - **Next production problem.** The iconography-principles epic (own spec, book
-  page, catalog governance) earmarked for a later `v21.0.0-beta.3`, and the next
-  bounded Lit-to-Svelte consumer migration.
+  page, catalog governance) and the next bounded Lit-to-Svelte consumer
+  migration. (Reconciled: `v21.0.0-beta.3` shipped the contextual-icon-sizing
+  slice on branch `feat/icon-context-sizing`, not iconography-principles, which
+  is now unversioned remaining epic work — see top Status.)
 
 ## Post-Close Factory Writeback — 2026-07-21
 
