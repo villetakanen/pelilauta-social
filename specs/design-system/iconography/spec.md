@@ -55,10 +55,10 @@ anchors to as their owner.
 - **Determinism.** Within the tier that resolves it, one noun maps to exactly
   one piece of artwork, whether the noun is statically authored or supplied from
   data.
-- **Aliases are deliberately out of scope** until the open alias-policy decision
-  resolves; this spec governs only distinct nouns. A future alias will need its
-  own provenance treatment, so absence of an alias rule here does not imply
-  aliases are ungoverned.
+- **Aliases are deliberately out of scope** (human decision 2026-07-21) until a
+  real consumer need appears; this spec governs only distinct nouns. A future
+  alias will need its own provenance treatment, so absence of an alias rule here
+  does not imply aliases are ungoverned.
 - **Proprietary artwork is never stored in this repository.** Branded,
   non-project-licensed artwork lives only in the `@myrrys/proprietary` managed
   submodule and is consumed through the optional managed tier.
@@ -104,6 +104,11 @@ behaviour:
   review, not a pipeline.
 - Does not require importing every possible icon before a product consumer needs
   it, nor removing other Cyan Lit components.
+- Does not decide whether the book content extends the existing Icon book page
+  (`packages/design-system/pages/components/IconPage.astro`) or is a new page —
+  that is a plan decision. The capability requires only that the content above
+  is readable, without duplicating the Icon component's existing size, colour,
+  and fallback demonstrations.
 
 ## Contract
 
@@ -111,7 +116,9 @@ behaviour:
 
 - **The design-system book makes icon usage readable on
   `design.pelilauta.social`.** A consumer can read, from the DS site, the
-  available icon vocabulary (which nouns exist and can be used), the usage
+  available icon vocabulary — the repository-owned community nouns enumerated in
+  full, with the managed and bundled-fallback tiers shown by representative
+  example (the managed tier is proprietary and may be absent) — the usage
   principles, and the tier/provenance governance behind them. This is the
   capability's observable deliverable; the spec is its intent.
 - Every noun in `packages/design-system/icons/community/` is project-licensable
@@ -151,10 +158,12 @@ behaviour:
   authoring convention by which it inherits context. (Contextual-colour
   rendering itself is verified by the Icon contract's acceptance.)
 - **Icon usage is readable from the DS book (human).** On
-  `design.pelilauta.social`, a consumer can read the available icon vocabulary
-  (the nouns they may use), the usage principles, and the tier/provenance
-  governance, rendered correctly in both Light and Dark. This is the slice's
-  primary acceptance.
+  `design.pelilauta.social`, a consumer can read the community vocabulary (every
+  repository-owned community noun), with the managed and bundled-fallback tiers
+  shown by example; the usage principles; and the tier/provenance governance.
+  The governance page itself is legible in both Light and Dark (icon rendering
+  across modes is the Icon contract's acceptance, not re-verified here). This is
+  the slice's primary acceptance.
 - **Governance review (human).** A human review confirms the usage principles,
   admission rule, and tier assignment in this spec match the artwork and
   provenance actually present in the catalog, and that the book reflects them.

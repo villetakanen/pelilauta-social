@@ -73,12 +73,18 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   parity made bidirectional; accessibility anchored to the Icon contract instead
   of restated; colour acceptance tightened to a concrete `fill="currentColor"`
   grep; circular DoD item reframed to an observable catalog state.
-- **Status.** Spec revised again to make the DS book the central deliverable and
-  to record the two resolved decisions. Both open items now closed. Re-running
-  the spec review gate on the changed DoD/Acceptance, then back to the human for
-  `draft`→`approved`. Implementation (expand the DS book so icon usage/vocabulary
-  is readable; the deterministic catalog↔provenance / absent-submodule /
-  currentColor checks) follows approval.
+- **Re-review (spec gate, 2nd pass).** No blockers. Non-blocking fixes applied:
+  aliased body text reworded to match the resolved (not "open") decision;
+  vocabulary scope pinned (community nouns enumerated in full, managed/fallback
+  by example since managed is proprietary/absent-able); book acceptance narrowed
+  to page *legibility* in both modes so it does not re-verify icon rendering the
+  cn-icon contract owns; added a Non-Goal keeping the extend-IconPage-vs-new-page
+  choice a plan decision to avoid a duplicate page.
+- **Status.** Spec gate passed (two adversarial passes, all findings resolved).
+  Awaiting human `draft`→`approved`. On approval: flip frontmatter status, then
+  implement the slice — make icon usage readable in the DS book, and wire the
+  deterministic acceptance checks (catalog↔provenance parity, absent-submodule
+  `dd5`→missing, community `currentColor` grep).
 
 ## Update Rule
 
