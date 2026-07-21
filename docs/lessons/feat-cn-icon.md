@@ -16,9 +16,10 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   runs under — merge-is-the-deployable-unit, `main` integrated only via PR from
   a `feat/*`/emergency branch, factory work rides in its establishing slice;
   adds `delivery-slice`/`delivery-review` skills; narrows `release`.
-- **Integration identity.** PR #34 `feat/cn-icon` → `main`, commits `38f8572`
-  (writeback) + `184447a` (this lessons reopen, the PR source head). Merge SHA
-  to reconcile in a later slice per the lessons practice.
+- **Integration identity.** PR #34 `feat/cn-icon` → `main`, source head
+  `c098165` (after review corrections). Merged 2026-07-21 as `18ea7b3`
+  (reconciled here during the next slice, per the lessons practice — no doc-only
+  merge). `feat/cn-icon` fast-forwarded to `18ea7b3`.
 - **Checks.** No `apps/`/`packages/` source touched; type/build gates
   unaffected. commitlint + pre-push hooks pass.
 - **Gate.** `delivery-review` (release-significant factory change) — independent
@@ -28,8 +29,30 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   Non-blocking `README.md` status-paragraph edit accepted (consistency with the
   removed cycle-setup exception). Human authorized merge-if-clean.
 - **Carry-forward.** Next slice on this branch: iconography-principles capability
-  (intent spec + catalog governance + DS book page on the design site),
-  1-working-day timebox.
+  (see below).
+
+### Slice: iconography-principles capability — in progress
+
+- **Scope (human-decided 2026-07-21).** Separate spec
+  `specs/design-system/iconography/spec.md` owning icon **usage/design
+  principles + catalog governance**, anchored to the `cn-icon` component
+  contract (does not duplicate it). Admission rule codifies current practice:
+  adding a community noun is a human-approved change recording source + license
+  + tier in `PROVENANCE.md`; community tier is project-licensed monochrome
+  (`currentColor`). **Foundation-leaning work — 1-working-day timebox.**
+- **Deliberately deferred.** The design-site book page was *not* selected as
+  part of this slice's scope; it is a later follow-up within the epic. This
+  slice therefore delivers a spec + governance rules (documentation), with no
+  new production surface — acceptable here under the explicit-approval +
+  timebox provision for foundation work.
+- **Open decisions (surfaced with the approval request, not silently dropped).**
+  (1) Noun **alias policy** — undecided. (2) Whether the DS **book** must
+  demonstrate governance for the capability to be Done — deferred.
+- **Gate.** Spec adversarial-review pass (spec skill) → human spec approval
+  (`draft`→`approved`) before any implementation. Then a catalog-vs-provenance
+  parity check and absent-submodule build are the named deterministic
+  acceptance checks.
+- **Status.** Draft spec authored; adversarial review pending.
 
 ## Update Rule
 
