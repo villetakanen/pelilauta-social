@@ -17,3 +17,25 @@
 	--cn-icon-size-large: 4.5rem; /* 72px */
 	--cn-icon-size-xlarge: 8rem; /* 128px */
 }
+
+/*
+ * Contextual size standardization.
+ *
+ * Buttons and fabs standardize every icon they contain to the button icon size
+ * (small), regardless of each icon's own size selection. The context collapses
+ * the public size vocabulary on the local Icon's element, and the component
+ * resolves its dimension from these tokens — so a consumer does not hardcode a
+ * size for the control. This re-expresses the legacy Cyan element-scoped rules
+ * (@11thdeg/cyan-css core/buttons.css, core/fab.css) against the local
+ * component's class, which those tag selectors no longer match. No !important
+ * is needed: the descendant selector outranks the :root defaults.
+ *
+ * Spec: specs/design-system/components/cn-icon/spec.md (Visual Behavior,
+ * Regression Guardrails).
+ */
+:where(button, a.button, .fab) .cn-icon {
+	--cn-icon-size-xsmall: var(--cn-icon-size-small);
+	--cn-icon-size: var(--cn-icon-size-small);
+	--cn-icon-size-large: var(--cn-icon-size-small);
+	--cn-icon-size-xlarge: var(--cn-icon-size-small);
+}
