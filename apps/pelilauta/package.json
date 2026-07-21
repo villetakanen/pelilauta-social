@@ -10,7 +10,7 @@
     "sync:proprietary": "node scripts/sync-proprietary-assets.mjs",
     "dev": "node scripts/sync-proprietary-assets.mjs && astro dev",
     "start": "node scripts/sync-proprietary-assets.mjs && astro dev",
-    "build": "node scripts/sync-proprietary-assets.mjs && astro check && astro build && npm run generateSW",
+    "build": "pnpm --filter @pelilauta/design-system check:icons && node scripts/sync-proprietary-assets.mjs && astro check && astro build && npm run generateSW",
     "preview": "astro preview",
     "astro": "astro",
     "generate:icons": "node scripts/generate-icons.mjs",
