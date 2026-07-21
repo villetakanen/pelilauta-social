@@ -58,8 +58,10 @@ test("pbta-logo artwork matches the v18 front-page logo viewBox", () => {
   assert.equal(getManagedIcon("pbta-logo")!.viewBox, "0 0 256 256");
 });
 
-test("icon.css defines exactly the five sizing tokens with the v20 values", () => {
+test("icon.css :root defines exactly the five sizing tokens with the v20 values", () => {
   const css = readFileSync(new URL("../styles/icon.css", import.meta.url), "utf8");
+  const rootBlock = css.match(/:root\s*\{([^}]*)\}/);
+  assert.ok(rootBlock, ":root token block is present");
   const expected: Record<string, string> = {
     "--cn-icon-size-xsmall": "1rem",
     "--cn-icon-size-small": "1.5rem",
@@ -67,13 +69,44 @@ test("icon.css defines exactly the five sizing tokens with the v20 values", () =
     "--cn-icon-size-large": "4.5rem",
     "--cn-icon-size-xlarge": "8rem",
   };
-  const found = [...css.matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g)].map((m) => [
+  const found = [...rootBlock[1].matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g)].map((m) => [
     m[1],
     m[2].trim(),
   ]);
   const foundMap = Object.fromEntries(found);
   assert.deepEqual(foundMap, expected);
-  assert.equal(found.length, 5, "no unrelated icon sizing tokens are introduced");
+  assert.equal(found.length, 5, "no unrelated icon sizing tokens are defined at :root");
+});
+
+test("icon.css collapses the size vocabulary to the button icon size in button and fab contexts", () => {
+  const css = readFileSync(new URL("../styles/icon.css", import.meta.url), "utf8");
+  const context = css.replace(/:root\s*\{[^}]*\}/, "");
+
+  // The context targets the local Icon element inside buttons and fabs.
+  assert.match(context, /button[\s\S]*?\.cn-icon\s*\{/, "context rule targets .cn-icon inside buttons");
+  assert.match(context, /\.fab/, "context rule covers fabs");
+
+  // Every size other than the target small collapses to the button icon size,
+  // so any size selection renders at the control's size.
+  for (const token of [
+    "--cn-icon-size-xsmall",
+    "--cn-icon-size",
+    "--cn-icon-size-large",
+    "--cn-icon-size-xlarge",
+  ]) {
+    const re = new RegExp(`${token.replace(/-/g, "\\-")}\\s*:\\s*var\\(\\s*--cn-icon-size-small\\s*\\)`);
+    assert.match(context, re, `${token} collapses to the button icon size`);
+  }
+
+  // The small token is the target and is not redefined by the context rule.
+  assert.ok(
+    !/--cn-icon-size-small\s*:/.test(context),
+    "the small token is not redefined by the context rule",
+  );
+
+  // Contextual sizing sets the public tokens; it must not force the
+  // component's private dimension variable (v20's --icon-dim !important bug).
+  assert.ok(!/--icon-dim/.test(css), "the context rule does not touch the private --icon-dim");
 });
 
 test("community registry generation is deterministic (--check passes)", () => {

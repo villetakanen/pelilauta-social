@@ -45,7 +45,32 @@ Contexts out of scope for this slice (no migrated consumer): `.flex.items-start
 
 ## Findings
 
-_(none yet)_
+### 1. Token-collapse needs no `!important`; a zero-specificity selector suffices
+
+The context rule sets the public tokens directly on the local Icon's element
+(`:where(button, a.button, .fab) .cn-icon`). A value declared on the element
+always wins over the value inherited from `:root`, independent of specificity,
+so `:where(...)` (zero specificity) is enough and keeps the rule easy for a
+future consumer to override. This is the clean alternative to v20's
+`--icon-dim: … !important`.
+
+### 2. The token contract test caught the change and was strengthened, not weakened
+
+`test/icon-registry.test.ts` scanned the whole `icon.css` for
+`--cn-icon-size*` declarations and asserted exactly the five `:root` values.
+The new context block tripped it. Rather than relax the assertion, the test was
+split: one case still pins the five `:root` definitions; a second asserts the
+context rule collapses the four non-small tokens to `var(--cn-icon-size-small)`,
+does not redefine the small token, and never touches the private `--icon-dim`.
+The regression guardrail is now encoded, per finding 16 of the cn-icon cycle.
+
+### 3. Removing the app-bar workaround is the observable proof
+
+`AppBar.astro` dropped `size="small"` on the search Icon. It now renders at the
+default medium selection, which the button context collapses to the button
+icon size (small, 24px). If the context rule were absent or wrong, the icon
+would render at 36px — so the removed workaround is the visual acceptance
+probe.
 
 ## Open Gates
 
