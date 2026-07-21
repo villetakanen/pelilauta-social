@@ -7,9 +7,10 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build && npm run generateSW",
+    "sync:proprietary": "node scripts/sync-proprietary-assets.mjs",
+    "dev": "node scripts/sync-proprietary-assets.mjs && astro dev",
+    "start": "node scripts/sync-proprietary-assets.mjs && astro dev",
+    "build": "pnpm --filter @pelilauta/design-system check:icons && node scripts/sync-proprietary-assets.mjs && astro check && astro build && npm run generateSW",
     "preview": "astro preview",
     "astro": "astro",
     "generate:icons": "node scripts/generate-icons.mjs",
@@ -21,8 +22,7 @@
     "test:e2e:debug": "NODE_ENV=development node e2e/init-test-db.js && NODE_ENV=development npx wait-on http://localhost:4321 && NODE_ENV=development playwright test --debug",
     "generateSW": "SW_DIST_PATH=dist workbox injectManifest workbox.config.cjs",
     "backup:storage": "node tooling/backupStorage.js",
-    "postbuild": "node tooling/warm-cache.mjs",
-    "postinstall": "lefthook install"
+    "postbuild": "node tooling/warm-cache.mjs"
   },
   "dependencies": {
     "@11thdeg/cn-d20-ability-score": "4.0.0-beta.5",
@@ -68,15 +68,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.3",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
     "@playwright/test": "^1.50.0",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^24.0.0",
     "@types/turndown": "^5.0.5",
     "@types/uuid": "^10.0.0",
     "dotenv": "^16.5.0",
-    "lefthook": "^1.13.4",
     "rollup-plugin-visualizer": "^6.0.3",
     "vite": "^6.0.11",
     "vite-tsconfig-paths": "^5.1.4",

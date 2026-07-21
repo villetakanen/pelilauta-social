@@ -14,7 +14,8 @@
       "@locales/*": ["src/locales/*"],
       "@firebase/*": ["src/firebase/*"],
       "@utils/*": ["src/utils/*"],
-      "@design-system/*": ["../../packages/design-system/*"]
+      "@design-system/*": ["../../packages/design-system/*"],
+      "@myrrys/proprietary": ["../../packages/myrrys-proprietary/index.ts"]
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js",

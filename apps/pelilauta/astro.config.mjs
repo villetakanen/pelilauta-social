@@ -4,6 +4,7 @@ import svelte from '@astrojs/svelte';
 import { defineConfig } from 'astro/config';
 import { visualizer } from 'rollup-plugin-visualizer';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { optionalProprietary } from '../../packages/design-system/vite/optional-proprietary.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,6 +21,9 @@ export default defineConfig({
       },
     },
     plugins: [
+      optionalProprietary(
+        new URL('../../packages/myrrys-proprietary/index.ts', import.meta.url),
+      ),
       tsconfigPaths(),
       visualizer({
         emitFile: true,
