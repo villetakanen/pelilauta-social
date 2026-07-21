@@ -1,13 +1,14 @@
 # AGENTS.md
 
 > **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library. v21 is a Firebase-compatible successor to the live v17/v18 application.
-> **Core constraint:** Every v21 release is a drop-in replacement for live v18. Ship `v21.0.0-rc.X` as small, independently verifiable changes while replacing the legacy Lit.js design system with local Svelte design-system components.
+> **Core constraint:** Every v21 release is a drop-in replacement for live v18. Deliver small, independently verifiable slices while replacing the legacy Lit.js design system with local Svelte design-system components.
 
 ## Delivery Contract
 
 - Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and user-visible interactions as compatibility contracts unless an approved spec says otherwise.
-- Keep each release candidate deployable and reversible. Do not combine unrelated refactors or migration steps.
-- One-time cycle-setup changes — process, tooling, or documentation scaffolding a slice must first establish, carrying no v18 compatibility or product behavior — may ride with the delivery slice that first needs them, only when the release note discloses them as a distinct bundled unit and they revert with the slice. This exception never extends to product refactors or additional migration steps; prefer shipping cycle-setup as its own prior release candidate when it can stand alone.
+- A feature branch is a continuous context and may deliver multiple slices to `main` before it closes. Treat each merge, not the lifetime branch diff, as the deployable and coherently reversible delivery unit.
+- Integrate to `main` only through a pull request from a `feat/*` feature branch or an emergency branch; never push to `main` directly. A long-living `feat/*` branch delivers each slice as its own pull request.
+- Evolve factory, harness, and architecture inside the production slice that first establishes and verifies their concrete need. Keep required supporting work visible in slice scope and review; defer unrelated cleanup, unsupported generalization, and additional migration steps.
 - Migrate one bounded surface at a time: preserve its behavior first, then replace its Lit.js dependency with the equivalent local Svelte component.
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
 - For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
@@ -38,13 +39,11 @@
 **ALWAYS**
 - Inspect the relevant v18 implementation and write or update the compatibility spec before changing a migrated surface.
 - Before migrating a Lit consumer to its local component, run the pre-flight in `docs/practices/consumer-migration.md`: enumerate the legacy Cyan CSS rules scoped to the component's element tag for that context, decide how each is re-expressed against the local component, and finish with a rendered-in-context visual acceptance.
-- Verify the smallest applicable deterministic checks after each change. Use repository-defined commands once the toolchain exists.
-- Make micro-commits only after the change and its applicable checks pass. Each commit must describe one reversible, reviewable step.
-- Report compatibility assumptions, checks run, and any remaining human acceptance gate.
+- Use the `delivery-slice` skill to prepare and integrate each proposed merge. Use `delivery-review` for release-significant compatibility, factory, harness, architecture, deployment, licensing, or generated-source changes.
 
 ## Working Model
 
-Human approval governs product scope, compatibility exceptions, dependencies, data changes, and releases. Agents may investigate, implement a specified bounded change, run deterministic checks, and prepare reviewable artifacts. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step.
+Human approval governs product scope, compatibility exceptions, dependencies, data changes, and releases. Agents may investigate, implement a specified bounded change, evolve the supporting factory within that slice, run deterministic checks, and prepare reviewable integration. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step.
 
 ## Workflow Guides
 
@@ -53,5 +52,7 @@ Spec, lessons, and review conventions follow the practices published at [ASDLC.i
 - Active lessons: `docs/practices/lessons.md`. Every delivery task reads and updates the current branch file under `docs/lessons/` as new evidence appears; do not wait for a close prompt.
 - Consumer migration: `docs/practices/consumer-migration.md` carries the cross-cycle decisions and the required pre-flight for migrating a Lit consumer to its local component.
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
+- Delivery slices: `.agents/skills/delivery-slice/SKILL.md`
+- Risk-scaled implementation review: `.agents/skills/delivery-review/SKILL.md`
 - Lessons and compound decisions: `.agents/skills/lessons/SKILL.md`
 - Root releases: `.agents/skills/release/SKILL.md` and `docs/runbooks/releases.md`

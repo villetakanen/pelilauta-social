@@ -54,12 +54,10 @@ version until a separate product decision requires changing it.
 delivery, and the local Icon migration by adding contextual icon-size
 standardization: buttons and fabs collapse the icon-size vocabulary within
 their scope, so the app-bar search action sizes from the design system instead
-of a per-consumer override. It also bundles a one-time cycle-setup unit — the
-`docs/practices/consumer-migration.md` practice and the delivery-contract
-amendment sanctioning disclosed cycle-setup bundles — disclosed here per that
-amendment. It does not claim that every authenticated write journey has been
-accepted as a complete v18 replacement; that remains a gate before a v21
-release candidate.
+of a per-consumer override. The slice also establishes the consumer-migration
+practice required and verified by that production migration. It does not claim
+that every authenticated write journey has been accepted as a complete v18
+replacement; that remains a gate before a v21 release candidate.
 
 ## Commands
 

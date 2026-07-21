@@ -498,3 +498,25 @@ rewriting already-pushed history.
 - **Next production problem.** The iconography-principles epic (own spec, book
   page, catalog governance) earmarked for a later `v21.0.0-beta.3`, and the next
   bounded Lit-to-Svelte consumer migration.
+
+## Post-Close Factory Writeback — 2026-07-21
+
+Human clarification after reviewing this cycle: a feature branch is a
+continuous delivery context and may merge several production slices to `main`
+before branch close. The merge, not the lifetime branch diff, is the deployable
+and coherently reversible unit. Factory, harness, and architecture work is
+expected inside the slice that first establishes and verifies its concrete
+need; classifying that work as exceptional "chores" was the wrong lesson.
+
+Accepted writeback: move operational integration procedure out of `AGENTS.md`
+into `delivery-slice`, add a risk-scaled `delivery-review` skill for exact merge
+deltas, narrow `release` to named release identity and publication, and keep
+branch lessons active across multiple delivered slices. Claude skill links
+mirror the canonical `.agents/skills` definitions.
+
+Independent review of the writeback caught two workflow ambiguities before it
+was relied on: a merge cannot record its own resulting SHA inside itself, and a
+release's approved content baseline is not the same commit as the final merge
+that adds version metadata. The skills now record pre-merge integration
+identity without requiring a bookkeeping-only merge, and tag the final
+versioned release commit after verifying it contains the approved baseline.
