@@ -36,9 +36,9 @@ test("managed tier owns the branded featured-tag nouns", () => {
 });
 
 test("branded managed artwork keeps encoded colors; community is monochrome", () => {
-  assert.match(getManagedIcon("dd5") as string, /fill="#BC0F0F"/);
-  assert.match(getCommunityIcon("fox") as string, /fill="currentColor"/);
-  assert.match(getCommunityIcon("search") as string, /fill="currentColor"/);
+  assert.match(getManagedIcon("dd5")!.inner, /fill="#BC0F0F"/);
+  assert.match(getCommunityIcon("fox")!.inner, /fill="currentColor"/);
+  assert.match(getCommunityIcon("search")!.inner, /fill="currentColor"/);
 });
 
 test("unknown, empty, and absent nouns fall to the missing glyph", () => {
@@ -55,7 +55,7 @@ test("bundled fallback tier provides the essential UI symbols", () => {
 });
 
 test("pbta-logo artwork matches the v18 front-page logo viewBox", () => {
-  assert.match(getManagedIcon("pbta-logo") as string, /viewBox="0 0 256 256"/);
+  assert.equal(getManagedIcon("pbta-logo")!.viewBox, "0 0 256 256");
 });
 
 test("icon.css defines exactly the five sizing tokens with the v20 values", () => {

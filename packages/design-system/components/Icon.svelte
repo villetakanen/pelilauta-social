@@ -23,46 +23,33 @@ let { noun = "", size = "medium" }: {
   size?: "xsmall" | "small" | "medium" | "large" | "xlarge";
 } = $props();
 
-// Raw registry SVG for the noun, if any tier owns it. Community first, matching
-// the resolution order below.
-const rawSvg = $derived(getCommunityIcon(noun) || getManagedIcon(noun));
-
-const content = $derived.by(() => {
-  if (rawSvg) return rawSvg;
+// Resolved icon as pre-normalized inner markup plus a viewBox. The community
+// and managed tiers store this shape directly (normalized at generation time,
+// not here); the fallback and missing tiers assemble it from structured paths.
+const resolved = $derived.by(() => {
+  const registered = getCommunityIcon(noun) || getManagedIcon(noun);
+  if (registered) return registered;
 
   // Bundled fallback tier (named essential symbols).
   const fallback = FallbackIcons[noun];
   if (fallback) {
-    return fallback.paths
-      .map((p) => {
-        const fill = p.fill || "currentColor";
-        const opacity = p.opacity !== undefined ? ` fill-opacity="${p.opacity}"` : "";
-        return `<path d="${p.d}" fill="${fill}"${opacity} />`;
-      })
-      .join("");
+    return {
+      viewBox: fallback.viewBox || "0 0 24 24",
+      inner: fallback.paths
+        .map((p) => {
+          const fill = p.fill || "currentColor";
+          const opacity = p.opacity !== undefined ? ` fill-opacity="${p.opacity}"` : "";
+          return `<path d="${p.d}" fill="${fill}"${opacity} />`;
+        })
+        .join(""),
+    };
   }
 
   // Missing glyph — unknown, empty, or absent noun.
-  return FallbackIcons.missing.paths.map((p) => `<path d="${p.d}" fill="currentColor" />`).join("");
-});
-
-const viewBox = $derived.by(() => {
-  if (rawSvg) {
-    const match = rawSvg.match(/viewBox\s*=\s*['"]([^'"]+)['"]/);
-    return match ? match[1] : "0 0 128 128";
-  }
-  return FallbackIcons[noun]?.viewBox || FallbackIcons.missing.viewBox || "0 0 24 24";
-});
-
-const innerHtml = $derived.by(() => {
-  if (content.includes("<svg")) {
-    return content
-      .replace(/<\?xml[^>]*\?>/gi, "")
-      .replace(/<!DOCTYPE[^>]*>/gi, "")
-      .replace(/<svg[^>]*>/i, "")
-      .replace(/<\/svg>/i, "");
-  }
-  return content;
+  return {
+    viewBox: FallbackIcons.missing.viewBox || "0 0 24 24",
+    inner: FallbackIcons.missing.paths.map((p) => `<path d="${p.d}" fill="currentColor" />`).join(""),
+  };
 });
 
 const sizes: Record<string, string> = {
@@ -76,9 +63,9 @@ const dimension = $derived(sizes[size] || sizes.medium);
 </script>
 
 <span class="cn-icon" data-noun={noun} style="--icon-dim: {dimension};">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox} role="img">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox={resolved.viewBox} role="img">
     <title>{noun}</title>
-    {@html innerHtml}
+    {@html resolved.inner}
   </svg>
 </span>
 
