@@ -1,6 +1,8 @@
 # feat/icon-context-sizing Lessons
 
-Status: In progress. Branch `feat/icon-context-sizing`.
+Status: Complete — shipped as `v21.0.0-beta.3` (merge `22f9506`, tag
+`v21.0.0-beta.3`), 2026-07-21. `pelilauta.social` returns HTTP 200; branch
+deleted.
 
 ## Update Rule
 
