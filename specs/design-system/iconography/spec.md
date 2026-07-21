@@ -8,7 +8,7 @@ provenance:
   - "Community catalog and current practice this spec codifies: packages/design-system/icons/community/ + PROVENANCE.md (provenance rows for fox, search), packages/design-system/scripts/generate-icon-registry.mjs"
   - "Human decision 2026-07-21: adding a community icon noun is a human-approved change that records the artwork's source and confirms it is project-licensable before it enters the community tier; community-tier artwork is monochrome and authored to render with the surrounding foreground (currentColor). Formalizes the practice already applied for fox and search."
   - "Cross-cycle decisions and evidence: docs/lessons/feat-cn-icon.md; docs/practices/consumer-migration.md"
-  - "OPEN human decisions (unresolved at draft): noun alias policy; whether the design-system book must demonstrate this governance for the capability to be Done (CLAUDE.md Delivery Contract requires a package-owned DS book for a design-system functionality — confirm whether governance-only work is exempt)"
+  - "Human decision 2026-07-21: noun aliases are deferred out of scope for this capability until a real consumer need appears; the capability governs distinct nouns only. The design-system book IS required for this capability to be Done — a package-owned governance page on design.pelilauta.social makes the vocabulary and its governance reviewable (per the CLAUDE.md Delivery Contract; governance-only work is not exempt from the book rule)."
 ---
 
 # Iconography
@@ -109,6 +109,11 @@ behaviour:
 
 ### Definition of Done
 
+- **The design-system book makes icon usage readable on
+  `design.pelilauta.social`.** A consumer can read, from the DS site, the
+  available icon vocabulary (which nouns exist and can be used), the usage
+  principles, and the tier/provenance governance behind them. This is the
+  capability's observable deliverable; the spec is its intent.
 - Every noun in `packages/design-system/icons/community/` is project-licensable
   artwork with a `PROVENANCE.md` row recording its source, and no proprietary
   artwork is committed to this repository.
@@ -145,6 +150,11 @@ behaviour:
   `packages/design-system/icons/community/` declares `fill="currentColor"`, the
   authoring convention by which it inherits context. (Contextual-colour
   rendering itself is verified by the Icon contract's acceptance.)
+- **Icon usage is readable from the DS book (human).** On
+  `design.pelilauta.social`, a consumer can read the available icon vocabulary
+  (the nouns they may use), the usage principles, and the tier/provenance
+  governance, rendered correctly in both Light and Dark. This is the slice's
+  primary acceptance.
 - **Governance review (human).** A human review confirms the usage principles,
   admission rule, and tier assignment in this spec match the artwork and
-  provenance actually present in the catalog.
+  provenance actually present in the catalog, and that the book reflects them.

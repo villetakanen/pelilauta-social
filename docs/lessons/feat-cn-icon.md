@@ -33,21 +33,25 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
 
 ### Slice: iconography-principles capability — in progress
 
-- **Scope (human-decided 2026-07-21).** Separate spec
-  `specs/design-system/iconography/spec.md` owning icon **usage/design
-  principles + catalog governance**, anchored to the `cn-icon` component
-  contract (does not duplicate it). Admission rule codifies current practice:
-  adding a community noun is a human-approved change recording source + license
-  + tier in `PROVENANCE.md`; community tier is project-licensed monochrome
-  (`currentColor`). **Foundation-leaning work — 1-working-day timebox.**
-- **Deliberately deferred.** The design-site book page was *not* selected as
-  part of this slice's scope; it is a later follow-up within the epic. This
-  slice therefore delivers a spec + governance rules (documentation), with no
-  new production surface — acceptable here under the explicit-approval +
-  timebox provision for foundation work.
-- **Open decisions (surfaced with the approval request, not silently dropped).**
-  (1) Noun **alias policy** — undecided. (2) Whether the DS **book** must
-  demonstrate governance for the capability to be Done — deferred.
+- **Production outcome (human-decided 2026-07-21).** *Icon usage is readable
+  from the design system* — a consumer can read, on `design.pelilauta.social`,
+  the available icon vocabulary (which nouns exist and may be used), the usage
+  principles, and the tier/provenance governance behind them. **The DS book page
+  is the slice deliverable**; the separate spec
+  `specs/design-system/iconography/spec.md` is its intent. This makes the slice
+  a proper production slice (named target `apps/design`), not foundation-only.
+- **Scope correction.** An earlier framing treated this as spec-only with the
+  book deferred and a 1-day timebox; the human corrected it — the book (icon
+  usage readable from the DS) is the whole point. Re-scope the slice around the
+  book page as the observable outcome; the 1-day timebox no longer applies as
+  stated. Admission rule codifies current practice: adding a community noun is a
+  human-approved change recording source in `PROVENANCE.md`; tier membership
+  confers project licensing; community artwork is monochrome `currentColor`.
+- **Resolved open decisions (2026-07-21).** (1) Noun **alias policy** — deferred
+  out of scope until a real consumer need appears; capability governs distinct
+  nouns only. (2) DS **book** — **required** for Done (governance-only work is
+  not exempt from the Delivery-Contract book rule); it is in fact the
+  deliverable per the production-outcome correction above.
 - **Gate.** Spec adversarial-review pass (spec skill) → human spec approval
   (`draft`→`approved`) before any implementation. Then a catalog-vs-provenance
   parity check and absent-submodule build are the named deterministic
@@ -69,9 +73,12 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   parity made bidirectional; accessibility anchored to the Icon contract instead
   of restated; colour acceptance tightened to a concrete `fill="currentColor"`
   grep; circular DoD item reframed to an observable catalog state.
-- **Status.** Revised draft ready for human `draft`→`approved` decision.
-  Unresolved for the human: (1) alias policy, (2) whether the DS book is
-  required for Done (Delivery-Contract tension noted in the spec frontmatter).
+- **Status.** Spec revised again to make the DS book the central deliverable and
+  to record the two resolved decisions. Both open items now closed. Re-running
+  the spec review gate on the changed DoD/Acceptance, then back to the human for
+  `draft`→`approved`. Implementation (expand the DS book so icon usage/vocabulary
+  is readable; the deterministic catalog↔provenance / absent-submodule /
+  currentColor checks) follows approval.
 
 ## Update Rule
 
