@@ -80,11 +80,19 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   to page *legibility* in both modes so it does not re-verify icon rendering the
   cn-icon contract owns; added a Non-Goal keeping the extend-IconPage-vs-new-page
   choice a plan decision to avoid a duplicate page.
-- **Status.** Spec gate passed (two adversarial passes, all findings resolved).
-  Awaiting human `draft`→`approved`. On approval: flip frontmatter status, then
-  implement the slice — make icon usage readable in the DS book, and wire the
-  deterministic acceptance checks (catalog↔provenance parity, absent-submodule
-  `dd5`→missing, community `currentColor` grep).
+- **Design-first reframe (human feedback 2026-07-21).** The human read the spec
+  and found it over-weighted to *technical* detail (tiers, provenance,
+  deterministic checks) and under-weighted on *design*. Corrected: the book is a
+  usage/design-principles page — why icons are used, clarity over decoration,
+  icon-only vs. labelled, accessibility-in-use, size/alignment, do's and don'ts,
+  and the **vocabulary grouped by purpose**. Governance/tiers demoted to a
+  supporting "Where icons come from" section. Adapted the human's example draft
+  to our reality: local `Icon` (`noun=`) not `<cyan-icon>`, and the vocabulary
+  reflects the actual catalog (community = fox, search; managed/fallback by
+  example) rather than an aspirational icon list.
+- **Status.** Spec reframed design-first; awaiting human confirmation of the
+  design direction before re-running the spec gate and the `draft`→`approved`
+  decision. (Two prior adversarial passes were on the plumbing-heavy version.)
 
 ## Update Rule
 
