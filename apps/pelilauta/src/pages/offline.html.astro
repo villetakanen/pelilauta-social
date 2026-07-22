@@ -1,6 +1,7 @@
 ---
 import { t } from 'src/utils/i18n';
 // filepath: /Users/ville.takanen/dev/pelilauta-16/src/pages/offline.astro
+import Icon from '@design-system/components/Icon.svelte';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 
 const title = t('app:offline.title');
@@ -15,7 +16,7 @@ const description = t('app:offline.description');
       <div class="content-columns">
       <section class="column-l">
         <div class="flex items-center">
-          <cn-icon noun="fox" large></cn-icon>
+          <Icon noun="fox" size="large" />
         </div>
         
         <h1 class="text-title mb-2">{title}</h1>

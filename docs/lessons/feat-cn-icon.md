@@ -10,6 +10,89 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
 
 ## Slices In Progress
 
+### Closing arc: full consumer migration — planned 2026-07-22
+
+- **Plan.** `plans/cn-icon-consumer-migration.md`. Goal: zero direct `<cn-icon>`
+  element consumers in `apps/pelilauta/src`; all render through local `<Icon>`.
+- **Scope reality (investigated 2026-07-22).** 95 files still use the literal
+  `<cn-icon>` element (14 already on local `<Icon>`). App icon vocabulary reaches
+  **78 nouns**; only ~34 covered by local tiers today (community 2, managed 28,
+  fallback 6). **44-noun gap**: ~35 exist as v18 public SVGs (portable to
+  community), 9 render blank in v18 today (chevron-right, error, loader, sort,
+  tag, trash, warning, compass, tentacles).
+- **cyan-lit is NOT removable this arc.** `cn-card`, `cn-loader`,
+  `cn-story-clock`, `cn-d20` remain and `cn-loader` imports `cn-icon.js`, so
+  `cn-icon` stays registered and `public/icons/` stays served. End state is "no
+  direct `<cn-icon>` consumers," not "drop the package."
+- **Dynamic-noun consumers force catalog completeness.** `channel.icon`/
+  `topic.icon`/`systemToNoun`/`tagInfo.icon` render persisted user-chosen nouns
+  from `NounSelect`'s ~66-noun catalog; the whole catalog must resolve locally
+  before those consumers migrate. Catalog port rides inside the first batch that
+  needs each noun (factory-in-establishing-slice), not a consumer-free foundation.
+- **Human decision (2026-07-22): batched final arc**, not a single 95-file merge
+  — each batch is one reversible PR with its own rendered-in-context visual
+  acceptance (the only gate that catches tag-selector breakage, finding 20).
+- **Human decision (2026-07-22): per-noun design spike** for the 9 blank nouns —
+  at the batch that first touches the consumer, decide if the icon is needed; if
+  so refactor in reviewable artwork (v20/v18 provenance, no invented vocabulary),
+  else let it fall to the missing glyph (matches today's blank).
+- **Carries the deferred checks.** Terminal batch wires the iconography slice's
+  deferred catalog↔provenance parity + community `currentColor` checks (now that
+  the catalog grows) and repairs the LOW 6 e2e selector.
+
+### Batch A(0): status/error pages — implemented 2026-07-22 (awaiting visual acceptance)
+
+- **Surface.** `pages/403.astro`, `pages/404.astro`, `pages/offline.html.astro`
+  (7 icons). Chosen as the opener because the pre-flight showed **no cyan-css
+  `cn-icon` tag rule applies** to any of these contexts (no `.flex.items-start`,
+  no `a.button` — 403 uses `.btn`, which cyan-css does not style — no `.fab`,
+  `h3`, or sortable). So the migration is a pure element→`<Icon>` swap plus the
+  `small`/`large`/`xlarge` attribute → `size="…"` prop translation.
+- **`arrow-left` reclassified to community (human direction).** It is
+  project-provenance and exists in v18 `public/icons/arrow-left.svg`, so its
+  canonical home is the community catalog, not the bundled fallback. Ported the
+  verbatim v18 SVG into `icons/community/`, regenerated the registry, recorded
+  provenance, and **removed the fallback entry**. Compatibility bonus: the v18
+  artwork (`viewBox 0 0 128 128`, Serif-authored, `currentColor`) **differs**
+  from the old fallback path (`0 0 24 24`, Material-style) — resolving via
+  community now preserves the exact v18 appearance the fallback would have
+  silently changed. Updated `icon-registry.test.ts` accordingly.
+- **Managed-tier nouns stay put.** `admin`/`avatar`/`monsters` resolve via the
+  managed (proprietary) tier — the intended home (known v18 misfiling; not
+  re-examined here). Consequence in scope: absent-submodule builds render the
+  missing glyph on 403/404 — in-contract per the standing production-builds-with-
+  submodule assumption, now on error pages rather than the front page.
+- **Checks.** Zero `<cn-icon>` in the 3 files; registry `--check` OK;
+  design-system unit 9/9; `astro check` 0 errors; pelilauta unit 463/463; both
+  app builds pass. Pages are SSR (no prerender), so server-rendered output is
+  verified at the human visual-acceptance gate.
+- **Visual acceptance — passed 2026-07-22.** Rendered-in-context Light + Dark
+  screenshots of all three pages: `admin` (large), `monsters` (xlarge), `fox`
+  (large) render centered; `arrow-left`/`avatar` render inline in the 403 `.btn`
+  links and inherit the green link color (currentColor working); no finding-20
+  flex displacement; offline's standalone `BaseHead` doc has the sizing tokens.
+- **Integration identity.** PR #36 `feat/cn-icon` → `main`, source head
+  `fea1df6`. Merge SHA to be reconciled in the next slice per the lessons
+  practice (no doc-only merge).
+- **Remaining pre-merge gates.** ~~`delivery-review`~~ done (below); Netlify
+  deploy-preview outstanding. Merge only on human approval.
+- **Delivery-review — independent adversarial pass, NO BLOCKERS (2026-07-22).**
+  A reviewer that did not author the slice re-ran the checks (not inferred) over
+  the exact delta `2ace40f..HEAD`. Verified: the 3 pages render local `<Icon>`
+  and zero `<cn-icon>`; the "no cyan-css `cn-icon` tag rule applies" claim is
+  true for all three contexts (cyan-css does not style `.btn`; no `.items-start`,
+  `a.button`, `.fab`, `h3`, or sortable here); `size=` translation faithful;
+  `arrow-left` community art is byte-identical to v18 `public/icons/arrow-left.svg`
+  (restoration, not regression) and the only other arrow-left consumer
+  (`ConfirmCharacterDeletion.svelte`) is still legacy `<cn-icon>` rendering the
+  same serif SVG; generator `--check` exits 0; DS test 9/9; `astro check` 0
+  errors; licensing boundary intact (no proprietary art in public DS;
+  `admin`/`avatar`/`monsters` stay managed); missing-glyph path intact;
+  accessibility (`role="img"` + `<title>`) preserved. One record correction
+  applied: the plan's tier-count table was stale post-slice (community 2/fallback
+  6 → 3/5) — fixed in `plans/cn-icon-consumer-migration.md`. No blockers; merge
+  gated only on human approval + Netlify preview.
+
 ### Slice: factory writeback (governance) — PR #34
 
 - **Outcome.** Not a product change: reworks the delivery governance the epic
@@ -134,9 +217,18 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   acceptance sufficient to integrate; deeper design iteration may follow from
   looking at results.
 - **Integration identity.** PR #35 `feat/cn-icon` → `main` (iconography slice:
-  spec + `/iconography` book page). Source head recorded pre-merge as `03c90c4`;
-  merge SHA to reconcile in the next slice per the lessons practice.
-- **Status.** Iconography slice open as PR #35, awaiting merge.
+  spec + `/iconography` book page). Merged 2026-07-22 as `b96ef2a` (Netlify
+  deploy-preview gate green; human waived `delivery-review` on the merge delta).
+  `feat/cn-icon` fast-forwarded to `b96ef2a`.
+- **Waived gate (human 2026-07-22).** `delivery-review` on #35's implementation
+  delta was offered and declined. Un-reviewed by that gate: the `getManagedNouns`
+  managed-tier addition, the new public `/iconography` deploy surface, public
+  enumeration/rendering of proprietary Myrrys artwork (human pre-approved), and
+  the absent-submodule negative state was not re-exercised this slice (inherited
+  from the cn-icon cycle's verification).
+- **Status.** Iconography slice shipped (PR #35). Epic continues; next: first
+  bounded consumer migration + one-by-one icon porting (carries the deferred
+  parity + `currentColor` checks).
 - **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
   (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
   the submodule is present — not merely "by example." This also relieves the

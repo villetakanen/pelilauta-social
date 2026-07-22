@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import Page from '../layouts/Page.astro';
 ---
 
@@ -6,18 +7,18 @@ import Page from '../layouts/Page.astro';
   <main class="content-columns">
     <section class="column-l">
       <div class="flex flex-col items-center p-4">
-        <cn-icon noun="admin" large></cn-icon>
+        <Icon noun="admin" size="large" />
         <h1>Access Forbidden</h1>
         <p class="text-center text-low pb-4">
           You don't have the necessary permissions to access this resource.
         </p>
         <div class="toolbar">
           <a href="/" class="btn">
-            <cn-icon noun="arrow-left" small></cn-icon>
+            <Icon noun="arrow-left" size="small" />
             Back to Home
           </a>
           <a href="/profile" class="btn">
-            <cn-icon noun="avatar" small></cn-icon>
+            <Icon noun="avatar" size="small" />
             My Profile
           </a>
         </div>

@@ -1,12 +1,13 @@
 ---
 import { t } from 'src/utils/i18n';
+import Icon from '@design-system/components/Icon.svelte';
 import Page from '../layouts/Page.astro';
 ---
 <Page>
   <div class="content-columns">
     <article>
       <div class="flex justify-center">
-        <cn-icon noun="monsters" xlarge />
+        <Icon noun="monsters" size="xlarge" />
       </div>
       <h1>{t("app:404.title")}</h1>
       <p class="subtitle">{t("app:404.subtitle")}</p>
