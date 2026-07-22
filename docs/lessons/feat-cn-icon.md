@@ -87,10 +87,29 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   `feat/cn-icon` fast-forwarded to main and A(1) committed as `de4d341`.
 - **Integration identity.** PR #37 `feat/cn-icon` → `main`, source head
   `de4d341`. Merge SHA to be reconciled in the next slice per the
-  no-doc-only-merge practice. Remaining gates: `delivery-review` (Icon contract +
-  spec change), spec adversarial-review for the accessibility amendment (human
-  may waive), Netlify deploy-preview, and deploy-preview visual acceptance of the
-  data-driven consumers (`/admin` confirmed locally). Merge only on human approval.
+  no-doc-only-merge practice.
+- **Delivery-review — independent adversarial pass, NO BLOCKERS (2026-07-22).**
+  A non-author reviewer re-ran the checks over `26b4a0d..HEAD`. Verified: 7/7
+  render `<Icon>` with zero `<cn-icon>` and faithful size mapping; `cn-card`
+  retained; `aria-label={ariaLabel || noun}` always present + ARIA-only (title
+  stays noun), confirmed in built HTML (default `aria-label="fox"`, branded
+  `aria-label="Myrrys.com logo"` + `<title>myrrys-scarlet</title>`); the only
+  matching cyan-css tag rule (`h3 cn-icon` vertical-align) is re-expressed by the
+  component; DS unit 9/9, astro check 0 errors, both builds pass; the aria-label
+  default on already-shipped consumers is safe (accname stays the noun, no double
+  announcement). Findings (none blocking):
+  - RISK: rendered-in-context visual acceptance met for only `/admin`; the other
+    6 surfaces are data/auth-gated → deploy-preview gate (human-owned, disclosed).
+  - RECORD: no automated test for the aria-label behavior (book + HTML + human
+    only); DS Svelte-render harness stays deferred (HIGH 3).
+  - RECORD: spec contract amended while `status: approved` — spec
+    adversarial-review gate not re-run (human may waive, as #35).
+  - RECORD (fixed): PR body wrongly implied `h3 cn-icon` is not a cyan-css tag
+    rule; corrected the PR prose (conclusion was already right).
+- **Open pre-merge gates (human-owned).** (1) Spec adversarial-review for the
+  accessibility amendment, or an explicit human waiver. (2) Netlify deploy-preview
+  + in-context visual acceptance of the 6 data/auth-gated consumers. Merge only
+  on human approval.
 
 ### Batch A(0): status/error pages — implemented 2026-07-22 (awaiting visual acceptance)
 
