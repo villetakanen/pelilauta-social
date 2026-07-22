@@ -133,7 +133,10 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
 - **Human acceptance.** "The icon page is OK for now" (2026-07-21). Visual
   acceptance sufficient to integrate; deeper design iteration may follow from
   looking at results.
-- **Status.** Iconography slice ready to integrate as a PR to `main`.
+- **Integration identity.** PR #35 `feat/cn-icon` → `main` (iconography slice:
+  spec + `/iconography` book page). Source head recorded pre-merge as `03c90c4`;
+  merge SHA to reconcile in the next slice per the lessons practice.
+- **Status.** Iconography slice open as PR #35, awaiting merge.
 - **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
   (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
   the submodule is present — not merely "by example." This also relieves the
