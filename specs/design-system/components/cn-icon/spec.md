@@ -73,6 +73,12 @@ intentional artwork across Light and Dark modes.
 - An icon exposes its noun to assistive technology through its artwork title,
   preserving observed v18 behavior. Making icons decorative by default is an
   explicit future product decision, not part of this capability.
+- The icon carries an `aria-label` for assistive technology that defaults to
+  its noun. A consumer may supply an explicit `aria-label` that overrides the
+  noun as the icon's aria-label, for cases where the technical noun is not the
+  meaning to convey (for example a brand mark). This affects ARIA only; the
+  artwork title (tooltip) stays the noun. This preserves the intent of v18
+  consumers that set an accessible label on the legacy element.
 - An icon that is the sole content of a control does not provide the
   control's accessible name; the consuming control supplies one from visible
   text or an explicit label.
@@ -148,6 +154,7 @@ intentional artwork across Light and Dark modes.
   preserved layout space.
 - Initial server-rendered content includes the icon markup before any
   client-side script runs.
-- Assistive technology continues to receive the icon's noun as in v18.
+- Assistive technology continues to receive the icon's noun as in v18 through
+  its aria-label; an explicit aria-label, when supplied, overrides the noun.
 - A human review confirms the design-system book's size, color, and fallback
   examples match the migrated production surfaces in both modes.

@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from '@utils/i18n';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -89,7 +90,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
         href={`/threads/${thread.key}?jumpTo=unread#discussion`}
         class="px-1 no-decoration flex"
       >
-        <cn-icon noun="discussion" small></cn-icon>
+        <Icon noun="discussion" size="small" />
         <span class="text-caption">{thread.replyCount || 0}</span>
       </a>
     </div>

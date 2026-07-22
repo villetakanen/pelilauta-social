@@ -176,6 +176,38 @@ const title = "Icon";
           ))}
         </ul>
       </section>
+      <section aria-labelledby="a11y-title">
+        <div class="section-heading">
+          <p>05 / ACCESSIBILITY</p>
+          <h2 id="a11y-title">Announced by noun, or an explicit label</h2>
+          <p>
+            An icon carries an <code>aria-label</code> for assistive technology
+            that defaults to its noun, and keeps the noun as its SVG title
+            tooltip (v18 behavior). A consumer may pass an explicit
+            <code>aria-label</code> to override the noun as the icon's aria-label
+            when the technical noun is not the meaning to convey — for example a
+            brand mark. This affects ARIA only; the tooltip stays the noun.
+          </p>
+        </div>
+        <ul class="tiers">
+          <li>
+            <span class="tier-icon"><Icon noun="fox" size="medium" /></span>
+            <div>
+              <code>default</code>
+              <small>No aria-label: the aria-label is the noun.</small>
+              <small>aria-label: <code>fox</code></small>
+            </div>
+          </li>
+          <li>
+            <span class="tier-icon"><Icon noun="myrrys-scarlet" size="medium" aria-label="Myrrys.com logo" /></span>
+            <div>
+              <code>aria-label</code>
+              <small>Explicit aria-label overrides the noun for assistive tech; tooltip stays the noun.</small>
+              <small>aria-label: <code>Myrrys.com logo</code></small>
+            </div>
+          </li>
+        </ul>
+      </section>
     </main>
     <footer>
       <a href="/">Index</a>

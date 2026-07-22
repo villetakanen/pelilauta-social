@@ -9,8 +9,12 @@
  * as unknown and renders the missing glyph (spec decision 2026-07-20).
  *
  * Accessibility: unlike the v20 source, the icon is NOT decorative by default.
- * It announces its noun to assistive technology through an SVG <title>,
- * preserving observed v18 behavior (spec decision 2026-07-20).
+ * It announces its noun to assistive technology as the icon's `aria-label`
+ * (defaulting to the noun) and carries the noun as an SVG <title> tooltip,
+ * preserving observed v18 behavior (spec decision 2026-07-20). A consumer may
+ * pass an explicit `aria-label` that overrides the noun as the icon's aria-label
+ * when the noun is not the meaning to convey — e.g. a brand mark. This affects
+ * ARIA only: the <title> tooltip stays the noun.
  *
  * Spec: specs/design-system/components/cn-icon/spec.md
  */
@@ -18,9 +22,10 @@ import { getIcon as getCommunityIcon } from "../icons/community";
 import { getManagedIcon } from "./managed-tier";
 import { FallbackIcons } from "./icon-fallback";
 
-let { noun = "", size = "medium" }: {
+let { noun = "", size = "medium", "aria-label": ariaLabel = "" }: {
   noun?: string;
   size?: "xsmall" | "small" | "medium" | "large" | "xlarge";
+  "aria-label"?: string;
 } = $props();
 
 // Resolved icon as pre-normalized inner markup plus a viewBox. The community
@@ -63,7 +68,7 @@ const dimension = $derived(sizes[size] || sizes.medium);
 </script>
 
 <span class="cn-icon" data-noun={noun} style="--icon-dim: {dimension};">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox={resolved.viewBox} role="img">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox={resolved.viewBox} role="img" aria-label={ariaLabel || noun}>
     <title>{noun}</title>
     {@html resolved.inner}
   </svg>
