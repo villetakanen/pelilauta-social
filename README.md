@@ -5,7 +5,7 @@ Pelilauta community and its local design system.
 
 ## Project Status
 
-**Current release:** `v21.0.0-beta.3`
+**Current release:** `v21.0.0-beta.4`
 
 v21 has a verified import of the live v18 application, the approved v20-derived
 Light and Dark color themes, and its first Lit-to-Svelte component migration: a
@@ -50,14 +50,15 @@ The root workspace version identifies v21 releases. The version in
 `apps/pelilauta/package.json` remains the imported application's baseline
 version until a separate product decision requires changing it.
 
-`v21.0.0-beta.3` builds on the deployable v18 baseline, the color-theme
-delivery, and the local Icon migration by adding contextual icon-size
-standardization: buttons and fabs collapse the icon-size vocabulary within
-their scope, so the app-bar search action sizes from the design system instead
-of a per-consumer override. The slice also establishes the consumer-migration
-practice required and verified by that production migration. It does not claim
-that every authenticated write journey has been accepted as a complete v18
-replacement; that remains a gate before a v21 release candidate.
+`v21.0.0-beta.4` builds on `v21.0.0-beta.3` by advancing the iconography epic:
+the delivery-governance model and slice skills (#34), the public `/iconography`
+usage book on `design.pelilauta.social` (#35), and two rounds of consumer
+migration off the legacy Cyan `cn-icon` element onto the local `Icon` component —
+the status/error pages with `arrow-left` moved to the community catalog (#36),
+and seven static server-chrome surfaces plus a new `aria-label` prop on `Icon`
+(#37). It does not claim that every authenticated write journey has been accepted
+as a complete v18 replacement; that remains a gate before a v21 release
+candidate.
 
 ## Commands
 

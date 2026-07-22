@@ -3,10 +3,28 @@
 Status: **Active — long-living epic branch.** `feat/cn-icon` is the continuous
 context for the iconography epic and delivers each slice to `main` as its own
 pull request. Delivered so far: local Icon migration `v21.0.0-beta.2` (merge
-`5cf6b0c`, tag `v21.0.0-beta.2`), 2026-07-21. Remaining epic work: catalog /
-iconography-principles capability, and the next bounded Lit→Svelte consumer
-migrations. (The contextual-icon-sizing slice shipped on a separate branch as
+`5cf6b0c`, tag `v21.0.0-beta.2`), 2026-07-21. On this branch since: PR #34
+(delivery-governance/skills, `18ea7b3`), PR #35 (public `/iconography` book,
+`b96ef2a`), PR #36 (status/error pages + `arrow-left`→community, `26b4a0d`),
+PR #37 (static server chrome + `Icon` `aria-label` prop, `23382e6`). These four
+are released together as `v21.0.0-beta.4` (2026-07-22). Remaining epic work: the
+community-port + generic-UI consumers, the dynamic-noun surfaces, and the
+terminal batch. (The contextual-icon-sizing slice shipped on a separate branch as
 `v21.0.0-beta.3`; see `docs/lessons/feat-icon-context-sizing.md`.)
+
+## Release — v21.0.0-beta.4 (2026-07-22)
+
+- **Approved by the human**, exact version `v21.0.0-beta.4` (deployable beta, not
+  a complete-v18-replacement claim). Covers everything on `main` since
+  `v21.0.0-beta.3`: PR #34, #35, #36, #37.
+- **Baseline.** `main` tip `23382e6` (PR #37 merge). PR #37's merge SHA is
+  reconciled here (was "to be reconciled next slice").
+- **Gates.** #34 delivery-review no blockers; #35 delivery-review human-waived;
+  #36 + #37 delivery-review independent passes, no blockers; #37 spec gate
+  human-waived. Root version bumped `21.0.0-beta.3`→`beta.4`; nested app versions
+  unchanged per the runbook.
+- **Carried known issue.** The ungated `apps/pelilauta/e2e/color-theme.spec.ts`
+  `cn-icon` footer selector (LOW 6) still ships unrepaired.
 
 ## Slices In Progress
 
@@ -86,8 +104,8 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
 - **Sequencing (resolved).** Held until #36 merged (`26b4a0d`), then
   `feat/cn-icon` fast-forwarded to main and A(1) committed as `de4d341`.
 - **Integration identity.** PR #37 `feat/cn-icon` → `main`, source head
-  `de4d341`. Merge SHA to be reconciled in the next slice per the
-  no-doc-only-merge practice.
+  `de4d341`. Merged 2026-07-22 as `23382e6`; `feat/cn-icon` fast-forwarded to it.
+  (Reconciled here during the `v21.0.0-beta.4` release prep.)
 - **Delivery-review — independent adversarial pass, NO BLOCKERS (2026-07-22).**
   A non-author reviewer re-ran the checks over `26b4a0d..HEAD`. Verified: 7/7
   render `<Icon>` with zero `<cn-icon>` and faithful size mapping; `cn-card`
