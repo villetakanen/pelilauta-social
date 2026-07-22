@@ -134,9 +134,18 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   acceptance sufficient to integrate; deeper design iteration may follow from
   looking at results.
 - **Integration identity.** PR #35 `feat/cn-icon` → `main` (iconography slice:
-  spec + `/iconography` book page). Source head recorded pre-merge as `03c90c4`;
-  merge SHA to reconcile in the next slice per the lessons practice.
-- **Status.** Iconography slice open as PR #35, awaiting merge.
+  spec + `/iconography` book page). Merged 2026-07-22 as `b96ef2a` (Netlify
+  deploy-preview gate green; human waived `delivery-review` on the merge delta).
+  `feat/cn-icon` fast-forwarded to `b96ef2a`.
+- **Waived gate (human 2026-07-22).** `delivery-review` on #35's implementation
+  delta was offered and declined. Un-reviewed by that gate: the `getManagedNouns`
+  managed-tier addition, the new public `/iconography` deploy surface, public
+  enumeration/rendering of proprietary Myrrys artwork (human pre-approved), and
+  the absent-submodule negative state was not re-exercised this slice (inherited
+  from the cn-icon cycle's verification).
+- **Status.** Iconography slice shipped (PR #35). Epic continues; next: first
+  bounded consumer migration + one-by-one icon porting (carries the deferred
+  parity + `currentColor` checks).
 - **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
   (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
   the submodule is present — not merely "by example." This also relieves the
