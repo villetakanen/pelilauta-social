@@ -74,9 +74,24 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
 - **Integration identity.** PR #36 `feat/cn-icon` → `main`, source head
   `fea1df6`. Merge SHA to be reconciled in the next slice per the lessons
   practice (no doc-only merge).
-- **Remaining pre-merge gates.** `delivery-review` (slice touches catalog/
-  licensing governance + the generated-source pipeline) and the Netlify
-  deploy-preview. Merge only on human approval.
+- **Remaining pre-merge gates.** ~~`delivery-review`~~ done (below); Netlify
+  deploy-preview outstanding. Merge only on human approval.
+- **Delivery-review — independent adversarial pass, NO BLOCKERS (2026-07-22).**
+  A reviewer that did not author the slice re-ran the checks (not inferred) over
+  the exact delta `2ace40f..HEAD`. Verified: the 3 pages render local `<Icon>`
+  and zero `<cn-icon>`; the "no cyan-css `cn-icon` tag rule applies" claim is
+  true for all three contexts (cyan-css does not style `.btn`; no `.items-start`,
+  `a.button`, `.fab`, `h3`, or sortable here); `size=` translation faithful;
+  `arrow-left` community art is byte-identical to v18 `public/icons/arrow-left.svg`
+  (restoration, not regression) and the only other arrow-left consumer
+  (`ConfirmCharacterDeletion.svelte`) is still legacy `<cn-icon>` rendering the
+  same serif SVG; generator `--check` exits 0; DS test 9/9; `astro check` 0
+  errors; licensing boundary intact (no proprietary art in public DS;
+  `admin`/`avatar`/`monsters` stay managed); missing-glyph path intact;
+  accessibility (`role="img"` + `<title>`) preserved. One record correction
+  applied: the plan's tier-count table was stale post-slice (community 2/fallback
+  6 → 3/5) — fixed in `plans/cn-icon-consumer-migration.md`. No blockers; merge
+  gated only on human approval + Netlify preview.
 
 ### Slice: factory writeback (governance) — PR #34
 

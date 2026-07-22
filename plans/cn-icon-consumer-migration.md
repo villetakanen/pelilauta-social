@@ -50,11 +50,14 @@ The app's icon vocabulary reaches **78 nouns** (static `noun="…"` uses, the
 `NounSelect` user-selectable catalog, `systemToNoun` output, `TagSynonyms` and
 channel/topic defaults). Coverage by local tier today:
 
+Tier coverage (updated after Batch A(0), which moved `arrow-left`
+fallback→community):
+
 | Tier | Count | Contents (summary) |
 | --- | --- | --- |
-| Community (`packages/design-system/icons/community`) | 2 | `fox`, `search` |
+| Community (`packages/design-system/icons/community`) | 3 | `fox`, `search`, `arrow-left` |
 | Managed (`packages/myrrys-proprietary/icons`) | 28 | branded + several generic nouns already resolving |
-| Bundled fallback (`components/icon-fallback.ts`) | 6 | `account`, `arrow-left`, `close`, `google`, `menu`, `missing` |
+| Bundled fallback (`components/icon-fallback.ts`) | 5 | `account`, `close`, `google`, `menu`, `missing` |
 
 That leaves a **44-noun gap** — reachable but resolving to the missing glyph:
 
