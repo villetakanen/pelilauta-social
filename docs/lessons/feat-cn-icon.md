@@ -120,10 +120,20 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
     breakdown surfaced to the human: community 2 (in-repo), managed 28 (submodule
     only), bundled fallback 4 (in-component MIT symbols); managed collapses when
     the submodule is absent.
-- **Remaining before the slice PR.** Deterministic acceptance checks
-  (catalog↔provenance parity, community `currentColor` grep, absent-submodule
-  `dd5`→missing) wired into a gate; human rendered-in-context visual acceptance
-  (Light + Dark) of `/iconography`.
+- **Deterministic checks — accepted-deferred (human 2026-07-21).** The spec's
+  three acceptance checks are NOT wired in this slice. Rationale: all guard the
+  *catalog as it grows*, not this slice's deliverable (a readable usage page),
+  and none is motivated by a failure here — wiring them around a 2-icon catalog
+  asserts little and is automation ahead of concrete need (lessons Compound
+  Rules). Homes:
+  - catalog↔provenance parity + community `currentColor` → the **first
+    icon-porting slice** (the change that both needs and exercises the guard).
+  - absent-submodule `dd5`→missing → stays the documented verified assumption;
+    builds already gate on registry freshness. No new test.
+- **Human acceptance.** "The icon page is OK for now" (2026-07-21). Visual
+  acceptance sufficient to integrate; deeper design iteration may follow from
+  looking at results.
+- **Status.** Iconography slice ready to integrate as a PR to `main`.
 - **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
   (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
   the submodule is present — not merely "by example." This also relieves the
