@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { verifySession } from '@utils/server/auth/verifySession';
 import type { Channel } from 'src/schemas/ChannelSchema';
 
@@ -22,7 +23,7 @@ const isAuthenticated = !!session?.uid;
         class="flex-1 border-none bg-transparent text-body"
         data-channel={channel.slug}
       />
-      <cn-icon noun="search" small></cn-icon>
+      <Icon noun="search" size="small" />
     </div>
     
     <!-- This will be enhanced with Svelte for Algolia integration -->
@@ -30,7 +31,7 @@ const isAuthenticated = !!session?.uid;
   ) : (
     <div class="flex items-center gap-2 p-2 bg-surface-variant border border-color radius-m opacity-70">
       <div class="flex items-center gap-1 text-caption text-secondary m-0">
-        <cn-icon noun="search" small></cn-icon>
+        <Icon noun="search" size="small" />
         <span>Search requires login</span>
       </div>
       <a href="/login" class="text-caption text-primary no-underline hover:underline">Sign in to search</a>

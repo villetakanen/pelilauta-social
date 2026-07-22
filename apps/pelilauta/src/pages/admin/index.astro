@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
 import PageWithTray from '../../layouts/PageWithTray.astro';
 
@@ -12,7 +13,7 @@ const showLocalTools =
   <AdminTray client:only="svelte" {showLocalTools} slot="app-tray"/> 
   <div class="content-columns">
     <div class="flex align-center items-center justify-center flex-col">
-      <cn-icon noun="admin" xlarge></cn-icon>
+      <Icon noun="admin" size="xlarge" />
     { showLocalTools ? (
       <p class="text-center">ADMIN TOOLS ACTIVE</p>
     ) : <p class="text-center">MOD TOOLS ACTIVE</p> }

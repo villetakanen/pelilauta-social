@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { type Character, CharacterSchema } from 'src/schemas/CharacterSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
@@ -91,7 +92,7 @@ const image = site.avatarURL || site.posterURL || site.backgroundURL;
           style="grid-column: 1/-1;"
           class="secondary surface flex items-center"
         >
-          <cn-icon noun="adventurer" xlarge />
+          <Icon noun="adventurer" size="xlarge" />
           <p class="downscaled">
             {t("site:characters.empty") || "No characters found for this site."}
           </p>

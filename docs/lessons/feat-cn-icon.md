@@ -40,6 +40,52 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   deferred catalog↔provenance parity + community `currentColor` checks (now that
   the catalog grows) and repairs the LOW 6 e2e selector.
 
+### Batch A(1): static server chrome + Icon aria-label — implemented 2026-07-22 (commit HELD until PR #36 merges)
+
+- **Surface (7 files, all nouns already covered — no catalog work).**
+  `ChannelApp/ChannelSearchBox.astro` (search ×2), `library/LibraryTray.astro`
+  (mekanismi ×2, adventurer), `FrontPage/ThreadCard.astro` (discussion),
+  `FrontPage/SyndicateStream/SyndicateStream.astro` (myrrys-scarlet, d20),
+  `ThreadsApp/ThreadInfoSection.astro` (send — its `<cn-card noun="discussion">`
+  is an *implicit* consumer and correctly left alone), `pages/admin/index.astro`
+  (admin), `pages/sites/[siteKey]/characters.astro` (adventurer). Pure
+  element→`<Icon>` swap + size attr→prop.
+- **Pre-flight — existing DS coverage suffices.** `h3 cn-icon` is only
+  `vertical-align: middle`, already provided by `Icon.svelte`'s own style;
+  `icon.css` already re-expresses the `button`/`a.button`/`.fab` context; the
+  `.btn`/`.tray-button`/`.link` classes are not styled by cyan-css. No new
+  re-expression rules needed.
+- **DS contract change — `Icon` gains an `aria-label` prop (factory evolution in
+  its establishing slice).** `SyndicateStream.astro:45` carried
+  `<cn-icon aria-label="Myrrys.com logo">`; the local `Icon` accepted only
+  `noun`/`size` and would have dropped it. Rather than defer, added the prop
+  (human direction 2026-07-22). Decisions from the human: (1) the prop is named
+  `aria-label` (not `label`) to make its purpose unambiguous — Svelte 5
+  renamed-destructuring `"aria-label": ariaLabel`; (2) it is **ARIA only** — the
+  `<title>` tooltip stays the noun; (3) the icon **always** carries an
+  `aria-label` that **defaults to the noun**, and an explicit `aria-label`
+  overrides it (`aria-label={ariaLabel || noun}`). Shipped together per the
+  Delivery Contract: implementation (`Icon.svelte`) + intent spec
+  (`specs/design-system/components/cn-icon/spec.md` accessibility + acceptance) +
+  DS book (`IconPage.astro` new "05 / ACCESSIBILITY" section) integrated in
+  `apps/design`. Lesson: the local `Icon` drops any attribute beyond its declared
+  props — audit every consumer's extra attributes in each batch's pre-flight, not
+  just size.
+- **Checks.** Zero `<cn-icon>` in the 7 files (`cn-card` retained); design-system
+  unit 9/9; `astro check` 0 errors; both app builds pass. Verified in the built
+  book HTML: default icon renders `aria-label="fox"` (noun), the branded example
+  renders `aria-label="Myrrys.com logo"` with `<title>myrrys-scarlet</title>`
+  (ARIA-only override confirmed).
+- **Visual acceptance.** `/admin` confirmed locally (admin xlarge, Light+Dark).
+  The other consumers are data/auth-gated locally (empty front page, `/library`
+  302); in-context acceptance best done on the seeded Netlify deploy-preview.
+- **Gates before merge.** This slice changes the `Icon` component contract + its
+  spec, so it warrants `delivery-review` and — for the spec amendment — the spec
+  adversarial-review gate (human may waive as on #35). Merge only on human
+  approval.
+- **Sequencing.** Commit is HELD: PR #36 is still open from `feat/cn-icon`, so a
+  new commit would land in #36. Commit + open slice-A PR only after #36 merges.
+
 ### Batch A(0): status/error pages — implemented 2026-07-22 (awaiting visual acceptance)
 
 - **Surface.** `pages/403.astro`, `pages/404.astro`, `pages/offline.html.astro`
@@ -72,8 +118,10 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   links and inherit the green link color (currentColor working); no finding-20
   flex displacement; offline's standalone `BaseHead` doc has the sizing tokens.
 - **Integration identity.** PR #36 `feat/cn-icon` → `main`, source head
-  `fea1df6`. Merge SHA to be reconciled in the next slice per the lessons
-  practice (no doc-only merge).
+  `fea1df6`. Merged 2026-07-22 as `26b4a0d` (Netlify deploy-preview green,
+  `delivery-review` no blockers, human approved). `feat/cn-icon` fast-forwarded
+  to `26b4a0d`. (Reconciled here during Batch A(1), per the no-doc-only-merge
+  practice.)
 - **Remaining pre-merge gates.** ~~`delivery-review`~~ done (below); Netlify
   deploy-preview outstanding. Merge only on human approval.
 - **Delivery-review — independent adversarial pass, NO BLOCKERS (2026-07-22).**

@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import SyndicatePost from './SyndicatePost.astro';
@@ -42,7 +43,7 @@ try {
 <div class="column-s flex flex-col">
   <div>
     <h3 class="text-h4">
-      <cn-icon noun="myrrys-scarlet" aria-label="Myrrys.com logo"></cn-icon>
+      <Icon noun="myrrys-scarlet" aria-label="Myrrys.com logo" />
       Myrrys.com
     </h3>
     <img src="/myrrys-proprietary/letl/letl_gm_screen_splash-690.webp" alt="Myrrys logo" class="w-16-9 poster" />
@@ -56,7 +57,7 @@ try {
   </div>
 
   <div class="flex items-center my-2">
-    <cn-icon noun="d20" large></cn-icon><br/>
+    <Icon noun="d20" size="large" /><br/>
   </div>
 
   <div>

@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 ---
 <nav class="flex flex-col h-full pb-1">
@@ -7,14 +8,14 @@ import { t } from 'src/utils/i18n';
   <!-- SITES -->
   <li>
     <a href="/library" class="tray-button">
-      <cn-icon noun="mekanismi" small/>
+      <Icon noun="mekanismi" size="small" />
       {t('library:sites.title')}
     </a>
   </li>
   <!-- CHARACTERS -->
   <li>
     <a href="/library/characters" class="tray-button">
-      <cn-icon noun="adventurer" small/>
+      <Icon noun="adventurer" size="small" />
       {t('library:characters.title')}
     </a>
   </li>
@@ -24,7 +25,7 @@ import { t } from 'src/utils/i18n';
   <ul  class="flex-none">
     <li>
       <a href="/sites" class="tray-button">
-        <cn-icon noun="mekanismi" small/>
+        <Icon noun="mekanismi" size="small" />
         {t('site:siteList.title')}
       </a>
     </li>
