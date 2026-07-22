@@ -66,9 +66,17 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   design-system unit 9/9; `astro check` 0 errors; pelilauta unit 463/463; both
   app builds pass. Pages are SSR (no prerender), so server-rendered output is
   verified at the human visual-acceptance gate.
-- **Open gate.** Rendered-in-context visual acceptance (Light + Dark) of the
-  three pages, with attention to the finding-20 flex-item class (403 column
-  `items-center`; offline/404 single-child flex).
+- **Visual acceptance — passed 2026-07-22.** Rendered-in-context Light + Dark
+  screenshots of all three pages: `admin` (large), `monsters` (xlarge), `fox`
+  (large) render centered; `arrow-left`/`avatar` render inline in the 403 `.btn`
+  links and inherit the green link color (currentColor working); no finding-20
+  flex displacement; offline's standalone `BaseHead` doc has the sizing tokens.
+- **Integration identity.** PR #36 `feat/cn-icon` → `main`, source head
+  `fea1df6`. Merge SHA to be reconciled in the next slice per the lessons
+  practice (no doc-only merge).
+- **Remaining pre-merge gates.** `delivery-review` (slice touches catalog/
+  licensing governance + the generated-source pipeline) and the Netlify
+  deploy-preview. Merge only on human approval.
 
 ### Slice: factory writeback (governance) — PR #34
 
