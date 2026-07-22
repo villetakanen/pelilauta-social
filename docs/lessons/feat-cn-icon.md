@@ -106,10 +106,12 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
     adversarial-review gate not re-run (human may waive, as #35).
   - RECORD (fixed): PR body wrongly implied `h3 cn-icon` is not a cyan-css tag
     rule; corrected the PR prose (conclusion was already right).
-- **Open pre-merge gates (human-owned).** (1) Spec adversarial-review for the
-  accessibility amendment, or an explicit human waiver. (2) Netlify deploy-preview
-  + in-context visual acceptance of the 6 data/auth-gated consumers. Merge only
-  on human approval.
+- **Spec gate — WAIVED (human 2026-07-22).** The spec adversarial-review gate on
+  the `aria-label` accessibility amendment was offered and waived (as on #35).
+  Un-reviewed by that gate: the amended accessibility clause + acceptance item in
+  `cn-icon/spec.md`, kept at `status: approved`.
+- **Merge decision (human 2026-07-22).** Wait for the Netlify deploy-preview,
+  then merge #37.
 
 ### Batch A(0): status/error pages — implemented 2026-07-22 (awaiting visual acceptance)
 
