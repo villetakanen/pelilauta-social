@@ -114,6 +114,12 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
     catch-all so no existing noun is hidden and none is invented.
   - **Verified:** `pnpm --filter ./apps/design build` — icon-registry fresh,
     `astro check` 0 errors, `/iconography` generated, 34 icon SVGs present.
+  - **Proprietary marking (human decision 2026-07-21).** Managed-tier icons are
+    tagged `proprietary` on the page (28 tags) with a legend, distinguishing
+    licensed Myrrys artwork from project-owned community/fallback icons. Source
+    breakdown surfaced to the human: community 2 (in-repo), managed 28 (submodule
+    only), bundled fallback 4 (in-component MIT symbols); managed collapses when
+    the submodule is absent.
 - **Remaining before the slice PR.** Deterministic acceptance checks
   (catalog↔provenance parity, community `currentColor` grep, absent-submodule
   `dd5`→missing) wired into a gate; human rendered-in-context visual acceptance
