@@ -1,0 +1,335 @@
+---
+import "@design-system/styles/color.css";
+import "@design-system/styles/icon.css";
+import Icon from "@design-system/components/Icon.svelte";
+import { getNouns as communityNouns } from "@design-system/icons/community";
+import { getManagedNouns } from "@design-system/components/managed-tier";
+import { FallbackIcons } from "@design-system/components/icon-fallback";
+
+// Live vocabulary, enumerated at build time. Community and managed (myrrys)
+// tiers are enumerable; the managed list is empty when its submodule is absent.
+const community = communityNouns();
+const managed = getManagedNouns();
+const fallbackNamed = Object.keys(FallbackIcons).filter((n) => n !== "missing");
+const available = new Set<string>([...community, ...managed, ...fallbackNamed]);
+
+const communitySet = new Set<string>(community);
+const managedSet = new Set<string>(managed);
+// A noun is proprietary when it resolves from the managed (Myrrys) tier —
+// present in managed and not overridden by the project-owned community tier.
+const isProprietary = (n: string) => !communitySet.has(n) && managedSet.has(n);
+
+// Curated purpose groups. Only nouns that actually resolve are shown, and any
+// available noun not placed here falls into "More in the catalog" — so the page
+// never hides an existing icon and never names one that does not exist
+// (iconography spec, Non-Goals).
+const PURPOSE_GROUPS = [
+  {
+    title: "Navigation & system",
+    detail: "Wayfinding, account, and application chrome.",
+    nouns: ["search", "menu", "close", "account", "admin", "avatar", "tokens", "send"],
+  },
+  {
+    title: "Community & interaction",
+    detail: "Discussion, identity, and sharing across the community.",
+    nouns: ["discussion", "fox", "youtube", "google"],
+  },
+  {
+    title: "Tabletop & gaming",
+    detail: "Dice, characters, and play at the table.",
+    nouns: ["d8", "d12", "d20", "adventurer", "monsters", "homebrew", "gamepad", "books", "moon", "hood"],
+  },
+  {
+    title: "Game systems",
+    detail: "Branded marks for supported rule systems — managed tier keeps its encoded colours.",
+    nouns: ["dd5", "pathfinder", "ll-ampersand", "pbta", "pbta-logo"],
+  },
+];
+
+const categorized = new Set<string>();
+const groups = PURPOSE_GROUPS.map((g) => {
+  const present = g.nouns.filter((n) => available.has(n));
+  present.forEach((n) => categorized.add(n));
+  return { ...g, present };
+}).filter((g) => g.present.length > 0);
+
+const uncategorized = [...available].filter((n) => !categorized.has(n)).sort();
+
+const dos = [
+  "Pair an unfamiliar or domain icon with a visible text label.",
+  "Reserve icon-only controls for near-universal actions (close, search, menu, settings).",
+  "Keep icon sizing uniform within a list or navigation group.",
+  "Give an interactive icon an adequate click/touch target.",
+];
+const donts = [
+  "Ship an ambiguous icon alone for a complex or domain action.",
+  "Rely on colour alone to signal a state — pair it with text or shape.",
+  "Mix sizes within one group, or drop in ad-hoc external SVGs inline.",
+  "Attach an action to a bare inline glyph with no target padding.",
+];
+
+const title = "Iconography";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="How to use icons in Pelilauta: usage principles, do's and don'ts, and the available vocabulary grouped by purpose."
+    />
+    <title>{title} / Pelilauta Design System</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">Pelilauta DS</a>
+      <span>GUIDE / ICONOGRAPHY</span>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="kicker">USAGE / PRINCIPLES / VOCABULARY</p>
+        <h1>{title}</h1>
+        <p class="lede">
+          In a text-rich RPG community — threads, character sheets, the shared
+          library — icons are functional UI tools, not decoration. They aid
+          wayfinding and scannability, keep a given meaning looking the same
+          everywhere it appears, and reinforce visual hierarchy. This guide is
+          how to use them; the <a href="/components/icon">Icon component book</a>
+          covers how a single icon renders.
+        </p>
+        <dl class="facts">
+          <div><dt>Community nouns</dt><dd>{community.length}</dd></div>
+          <div><dt>Managed nouns</dt><dd>{managed.length}</dd></div>
+          <div><dt>Bundled fallback</dt><dd>{fallbackNamed.length}</dd></div>
+          <div><dt>Default size</dt><dd>medium</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="principles-title">
+        <div class="section-heading">
+          <p>01 / USAGE PRINCIPLES</p>
+          <h2 id="principles-title">Clarity over decoration</h2>
+          <p>
+            Use an icon only when it aids understanding or visually anchors an
+            interaction. If an icon makes an element ambiguous, omit it or pair
+            it with a visible label.
+          </p>
+        </div>
+        <ul class="principles">
+          <li>
+            <h3>Standing alone vs. labelled</h3>
+            <p>
+              Icon-only controls are reserved for near-universal actions
+              (close, search, menu, settings). Complex or domain-specific
+              actions — <em>Publish campaign</em>, <em>Archive thread</em> —
+              always carry a visible text label.
+            </p>
+          </li>
+          <li>
+            <h3>Accessibility in use</h3>
+            <p>
+              An icon-only control always has an accessible name that states its
+              action, not its picture. A standalone icon conveys its noun's
+              meaning to assistive technology. Never signal a state with colour
+              alone; pair it with text or shape.
+            </p>
+          </li>
+          <li>
+            <h3>Size & alignment</h3>
+            <p>
+              Use the design system's standard sizes rather than arbitrary
+              values; a context that needs one size standardises the icons
+              within it. Beside text, an icon aligns to the text rather than
+              floating.
+            </p>
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="dodont-title">
+        <div class="section-heading">
+          <p>02 / DO & DON'T</p>
+          <h2 id="dodont-title">Quick rules</h2>
+        </div>
+        <div class="dodont">
+          <div class="do">
+            <h3><span class="badge do-badge">Do</span></h3>
+            <ul>{dos.map((d) => <li>{d}</li>)}</ul>
+          </div>
+          <div class="dont">
+            <h3><span class="badge dont-badge">Don't</span></h3>
+            <ul>{donts.map((d) => <li>{d}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="vocab-title">
+        <div class="section-heading">
+          <p>03 / VOCABULARY BY PURPOSE</p>
+          <h2 id="vocab-title">Choose an icon by intent</h2>
+          <p>
+            Every icon is a semantic noun from the approved catalog. Pick by
+            meaning, not by guessing a name. Groups appear only when the catalog
+            has icons for them.
+          </p>
+          <p class="legend">
+            Icons tagged <span class="tag-proprietary">proprietary</span> come
+            from the managed (Myrrys) tier — licensed artwork, not project-owned,
+            and present only where its submodule is available. Untagged icons are
+            project-licensed community artwork or bundled-fallback symbols.
+          </p>
+        </div>
+        {groups.map((g) => (
+          <div class="vocab-group">
+            <div class="vocab-group-head">
+              <h3>{g.title}</h3>
+              <p>{g.detail}</p>
+            </div>
+            <ul class="noun-grid">
+              {g.present.map((n) => (
+                <li class={isProprietary(n) ? "is-proprietary" : undefined}>
+                  <span class="noun-icon"><Icon noun={n} size="large" /></span>
+                  <code>{n}</code>
+                  {isProprietary(n) && <span class="tag-proprietary">proprietary</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        {uncategorized.length > 0 && (
+          <div class="vocab-group">
+            <div class="vocab-group-head">
+              <h3>More in the catalog</h3>
+              <p>Available nouns not yet grouped by purpose.</p>
+            </div>
+            <ul class="noun-grid">
+              {uncategorized.map((n) => (
+                <li class={isProprietary(n) ? "is-proprietary" : undefined}>
+                  <span class="noun-icon"><Icon noun={n} size="large" /></span>
+                  <code>{n}</code>
+                  {isProprietary(n) && <span class="tag-proprietary">proprietary</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+
+      <section aria-labelledby="source-title">
+        <div class="section-heading">
+          <p>04 / WHERE ICONS COME FROM</p>
+          <h2 id="source-title">A governed vocabulary</h2>
+          <p>
+            Supporting detail behind the vocabulary above. A noun resolves
+            through community → managed → bundled fallback → missing glyph.
+            Adding a community noun is a human-approved change that records its
+            source and confirms it is project-licensable; community icons are
+            ported from the pelilauta app one at a time. Proprietary artwork
+            lives only in the managed submodule and is never stored in this
+            repository.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a href="/">Index</a>
+      <span>Spec: <code>specs/design-system/iconography/spec.md</code></span>
+    </footer>
+
+    <style>
+      :global(*) { box-sizing: border-box; }
+      :global(body) {
+        margin: 0;
+        color: var(--cn-text);
+        background: var(--cn-background);
+        font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      :global(code) { font-family: "SFMono-Regular", Consolas, monospace; }
+      .site-header,
+      body > footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem clamp(1.25rem, 4vw, 3rem);
+        color: var(--cn-text-low);
+        border-block-end: 1px solid var(--cn-border);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      a { color: var(--cn-link); }
+      a:hover { color: var(--cn-link-hover); }
+      main > section { padding: clamp(2.5rem, 7vw, 6rem) clamp(1.25rem, 4vw, 3rem); }
+      .hero {
+        min-block-size: min(36rem, 70vh);
+        display: grid;
+        align-content: center;
+        background:
+          linear-gradient(130deg, transparent 45%, var(--cn-hover)),
+          var(--cn-surface);
+      }
+      .kicker,
+      .section-heading > p:first-child {
+        color: var(--cn-text-low);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+      }
+      h1 {
+        margin: 0.3rem 0 1.5rem;
+        color: var(--cn-text-high);
+        font-size: clamp(3rem, 11vw, 8rem);
+        font-weight: 600;
+        letter-spacing: -0.06em;
+        line-height: 0.85;
+      }
+      .lede { max-inline-size: 48rem; color: var(--cn-text-low); font-size: clamp(1.05rem, 2vw, 1.4rem); }
+      .facts { display: flex; flex-wrap: wrap; gap: 2rem 4rem; margin-block-start: 3rem; }
+      .facts div { display: grid; gap: 0.25rem; }
+      .facts dt { color: var(--cn-text-low); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; }
+      .facts dd { margin: 0; color: var(--cn-text-high); font-size: 1.5rem; }
+      .section-heading { max-inline-size: 48rem; margin-block-end: 2.5rem; }
+      .section-heading h2 { margin: 0.4rem 0 1rem; color: var(--cn-text-high); font-size: clamp(1.8rem, 4.5vw, 3.4rem); letter-spacing: -0.03em; line-height: 0.98; }
+      .section-heading > p:last-child { color: var(--cn-text-low); font-size: 1.05rem; }
+      .principles { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); padding: 0; list-style: none; margin: 0; }
+      .principles li { padding: 1.5rem; border: 1px solid var(--cn-border); border-radius: 0.5rem; background: var(--cn-surface); }
+      .principles h3 { margin: 0 0 0.6rem; color: var(--cn-text-high); font-size: 1.1rem; }
+      .principles p { margin: 0; color: var(--cn-text-low); font-size: 0.95rem; }
+      .dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1.5rem; }
+      .dodont > div { padding: 1.5rem; border: 1px solid var(--cn-border); border-radius: 0.5rem; }
+      .badge { display: inline-block; padding: 0.15rem 0.7rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+      .do-badge { color: var(--cn-on-button, #fff); background: var(--cn-color-success, #2e7d32); }
+      .dont-badge { color: var(--cn-on-button, #fff); background: var(--cn-color-error, #c62828); }
+      .dodont h3 { margin: 0 0 1rem; }
+      .dodont ul { margin: 0; padding-inline-start: 1.1rem; color: var(--cn-text-low); display: grid; gap: 0.5rem; }
+      .vocab-group { margin-block-start: 2.5rem; }
+      .vocab-group-head { margin-block-end: 1rem; }
+      .vocab-group-head h3 { margin: 0 0 0.2rem; color: var(--cn-text-high); font-size: 1.25rem; }
+      .vocab-group-head p { margin: 0; color: var(--cn-text-low); font-size: 0.9rem; }
+      .noun-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 1px; padding: 1px; margin: 0; list-style: none; background: var(--cn-border); border: 1px solid var(--cn-border); border-radius: 0.5rem; overflow: hidden; }
+      .noun-grid li { display: grid; justify-items: center; gap: 0.5rem; padding: 1.25rem 0.5rem; background: var(--cn-background); color: var(--cn-text); }
+      .noun-icon { display: inline-flex; color: var(--cn-text); }
+      .noun-grid code { color: var(--cn-text-low); font-size: 0.72rem; word-break: break-all; text-align: center; }
+      .noun-grid li.is-proprietary { background: var(--cn-surface); }
+      .tag-proprietary {
+        font-size: 0.58rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--cn-text-low);
+        border: 1px solid var(--cn-border);
+        border-radius: 999px;
+        padding: 0.05rem 0.45rem;
+        white-space: nowrap;
+      }
+      .legend { margin-block-start: 1rem; font-size: 0.9rem; }
+      .legend .tag-proprietary { vertical-align: middle; }
+      @media (max-width: 40rem) {
+        body > footer { flex-direction: column; align-items: flex-start; }
+      }
+    </style>
+  </body>
+</html>

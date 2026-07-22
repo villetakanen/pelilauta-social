@@ -16,9 +16,10 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   runs under — merge-is-the-deployable-unit, `main` integrated only via PR from
   a `feat/*`/emergency branch, factory work rides in its establishing slice;
   adds `delivery-slice`/`delivery-review` skills; narrows `release`.
-- **Integration identity.** PR #34 `feat/cn-icon` → `main`, commits `38f8572`
-  (writeback) + `184447a` (this lessons reopen, the PR source head). Merge SHA
-  to reconcile in a later slice per the lessons practice.
+- **Integration identity.** PR #34 `feat/cn-icon` → `main`, source head
+  `c098165` (after review corrections). Merged 2026-07-21 as `18ea7b3`
+  (reconciled here during the next slice, per the lessons practice — no doc-only
+  merge). `feat/cn-icon` fast-forwarded to `18ea7b3`.
 - **Checks.** No `apps/`/`packages/` source touched; type/build gates
   unaffected. commitlint + pre-push hooks pass.
 - **Gate.** `delivery-review` (release-significant factory change) — independent
@@ -28,8 +29,124 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   Non-blocking `README.md` status-paragraph edit accepted (consistency with the
   removed cycle-setup exception). Human authorized merge-if-clean.
 - **Carry-forward.** Next slice on this branch: iconography-principles capability
-  (intent spec + catalog governance + DS book page on the design site),
-  1-working-day timebox.
+  (see below).
+
+### Slice: iconography-principles capability — in progress
+
+- **Production outcome (human-decided 2026-07-21).** *Icon usage is readable
+  from the design system* — a consumer can read, on `design.pelilauta.social`,
+  the available icon vocabulary (which nouns exist and may be used), the usage
+  principles, and the tier/provenance governance behind them. **The DS book page
+  is the slice deliverable**; the separate spec
+  `specs/design-system/iconography/spec.md` is its intent. This makes the slice
+  a proper production slice (named target `apps/design`), not foundation-only.
+- **Scope correction.** An earlier framing treated this as spec-only with the
+  book deferred and a 1-day timebox; the human corrected it — the book (icon
+  usage readable from the DS) is the whole point. Re-scope the slice around the
+  book page as the observable outcome; the 1-day timebox no longer applies as
+  stated. Admission rule codifies current practice: adding a community noun is a
+  human-approved change recording source in `PROVENANCE.md`; tier membership
+  confers project licensing; community artwork is monochrome `currentColor`.
+- **Resolved open decisions (2026-07-21).** (1) Noun **alias policy** — deferred
+  out of scope until a real consumer need appears; capability governs distinct
+  nouns only. (2) DS **book** — **required** for Done (governance-only work is
+  not exempt from the Delivery-Contract book rule); it is in fact the
+  deliverable per the production-outcome correction above.
+- **Gate.** Spec adversarial-review pass (spec skill) → human spec approval
+  (`draft`→`approved`) before any implementation. Then a catalog-vs-provenance
+  parity check and absent-submodule build are the named deterministic
+  acceptance checks.
+- **Adversarial spec review (spec-skill gate).** Independent pass raised 3
+  blockers, all resolved in a revision:
+  - B1: `PROVENANCE.md` has no licence column, so a "row has source + licence"
+    check was unrunnable. Resolved: community-tier membership confers project
+    licensing (admission requires project-licensable artwork); the row records
+    *source* only. No phantom licence column.
+  - B2: "absent-submodule build completes" was contradicted by
+    `managed-tier.ts` (runtime-only guard) and named no probe. Resolved: grounded
+    in the cn-icon cycle's verified absent-submodule builds; named `dd5` as the
+    concrete managed-only probe that must degrade to the missing glyph.
+  - B3: tier precedence was mis-attributed to the `cn-icon` spec, which never
+    mentions tiers. Resolved: precedence is owned *here*, ported from v20
+    `02880fbc`, and cited.
+  Non-blocking also fixed: bundled-fallback tier grounded in `icon-fallback.ts`;
+  parity made bidirectional; accessibility anchored to the Icon contract instead
+  of restated; colour acceptance tightened to a concrete `fill="currentColor"`
+  grep; circular DoD item reframed to an observable catalog state.
+- **Re-review (spec gate, 2nd pass).** No blockers. Non-blocking fixes applied:
+  aliased body text reworded to match the resolved (not "open") decision;
+  vocabulary scope pinned (community nouns enumerated in full, managed/fallback
+  by example since managed is proprietary/absent-able); book acceptance narrowed
+  to page *legibility* in both modes so it does not re-verify icon rendering the
+  cn-icon contract owns; added a Non-Goal keeping the extend-IconPage-vs-new-page
+  choice a plan decision to avoid a duplicate page.
+- **Design-first reframe (human feedback 2026-07-21).** The human read the spec
+  and found it over-weighted to *technical* detail (tiers, provenance,
+  deterministic checks) and under-weighted on *design*. Corrected: the book is a
+  usage/design-principles page — why icons are used, clarity over decoration,
+  icon-only vs. labelled, accessibility-in-use, size/alignment, do's and don'ts,
+  and the **vocabulary grouped by purpose**. Governance/tiers demoted to a
+  supporting "Where icons come from" section. Adapted the human's example draft
+  to our reality: local `Icon` (`noun=`) not `<cyan-icon>`, and the vocabulary
+  reflects the actual catalog (community = fox, search; managed/fallback by
+  example) rather than an aspirational icon list.
+- **Spec gate (reframed, 3rd pass).** Sound, no blockers. Resolved: NB1
+  (purpose categories over-promised vs. the real catalog; Intent illustrated
+  with non-existent `edit`/`roll`/`bookmark`) — groups now appear only when
+  populated, Intent illustration de-nouned, managed icons enumerated in full;
+  N1 (accessibility "action" wording over-applied to standalone icons) — scoped
+  to icon-only controls, standalone icons convey their noun's meaning. N2
+  (subjective "readable") accepted: pinned to the content checklist + named
+  human review.
+- **Status.** Spec **approved** by the human 2026-07-21 (`status: approved`).
+  Implementation in progress.
+- **Implementation (2026-07-21).** Built the deliverable:
+  - `packages/design-system/pages/IconographyPage.astro` — usage/principles
+    page: intent, usage principles (clarity/accessibility/size-alignment),
+    do & don't, vocabulary grouped by purpose, "where icons come from".
+  - Route `apps/design/src/pages/iconography.astro` (`/iconography`); linked
+    from the DS index (`HomePage.astro`, "02 / ICONOGRAPHY").
+  - `getManagedNouns` added to `components/managed-tier.ts` (guarded, empty when
+    the submodule is absent) so the book enumerates the managed tier.
+  - Vocabulary enumerated live at build: **34 nouns** rendered (2 community + 28
+    managed + 4 named fallback), grouped into Navigation & system / Community &
+    interaction / Tabletop & gaming / Game systems, plus a "More in the catalog"
+    catch-all so no existing noun is hidden and none is invented.
+  - **Verified:** `pnpm --filter ./apps/design build` — icon-registry fresh,
+    `astro check` 0 errors, `/iconography` generated, 34 icon SVGs present.
+  - **Proprietary marking (human decision 2026-07-21).** Managed-tier icons are
+    tagged `proprietary` on the page (28 tags) with a legend, distinguishing
+    licensed Myrrys artwork from project-owned community/fallback icons. Source
+    breakdown surfaced to the human: community 2 (in-repo), managed 28 (submodule
+    only), bundled fallback 4 (in-component MIT symbols); managed collapses when
+    the submodule is absent.
+- **Deterministic checks — accepted-deferred (human 2026-07-21).** The spec's
+  three acceptance checks are NOT wired in this slice. Rationale: all guard the
+  *catalog as it grows*, not this slice's deliverable (a readable usage page),
+  and none is motivated by a failure here — wiring them around a 2-icon catalog
+  asserts little and is automation ahead of concrete need (lessons Compound
+  Rules). Homes:
+  - catalog↔provenance parity + community `currentColor` → the **first
+    icon-porting slice** (the change that both needs and exercises the guard).
+  - absent-submodule `dd5`→missing → stays the documented verified assumption;
+    builds already gate on registry freshness. No new test.
+- **Human acceptance.** "The icon page is OK for now" (2026-07-21). Visual
+  acceptance sufficient to integrate; deeper design iteration may follow from
+  looking at results.
+- **Integration identity.** PR #35 `feat/cn-icon` → `main` (iconography slice:
+  spec + `/iconography` book page). Source head recorded pre-merge as `03c90c4`;
+  merge SHA to reconcile in the next slice per the lessons practice.
+- **Status.** Iconography slice open as PR #35, awaiting merge.
+- **Vocabulary + catalog-growth decision (human 2026-07-21).** (1) The managed
+  (myrrys) tier is **enumerable**, so the book lists **all** managed icons when
+  the submodule is present — not merely "by example." This also relieves the
+  thin-catalog concern (community is only fox/search today). (2) Community icons
+  are **ported from the pelilauta app decisively, one by one** — each port is an
+  individual human-approved admission recording source + provenance, not a bulk
+  import; this ties catalog growth to the per-consumer migrations. Fold both
+  into the spec in the next revision (with the gate findings): change managed
+  from "by example" to "enumerated when present", and state the one-by-one
+  porting model in the admission/governance section.
 
 ## Update Rule
 
