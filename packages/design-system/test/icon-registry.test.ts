@@ -22,11 +22,13 @@ function resolveTier(noun: string): "community" | "managed" | "fallback" | "miss
   return "missing";
 }
 
-test("community tier owns fox and search", () => {
+test("community tier owns fox, search, and arrow-left", () => {
   assert.equal(resolveTier("fox"), "community");
   assert.equal(resolveTier("search"), "community");
+  assert.equal(resolveTier("arrow-left"), "community");
   assert.ok(communityNouns().includes("fox"));
   assert.ok(communityNouns().includes("search"));
+  assert.ok(communityNouns().includes("arrow-left"));
 });
 
 test("managed tier owns the branded featured-tag nouns", () => {
@@ -39,6 +41,7 @@ test("branded managed artwork keeps encoded colors; community is monochrome", ()
   assert.match(getManagedIcon("dd5")!.inner, /fill="#BC0F0F"/);
   assert.match(getCommunityIcon("fox")!.inner, /fill="currentColor"/);
   assert.match(getCommunityIcon("search")!.inner, /fill="currentColor"/);
+  assert.match(getCommunityIcon("arrow-left")!.inner, /fill="currentColor"/);
 });
 
 test("unknown, empty, and absent nouns fall to the missing glyph", () => {
@@ -49,7 +52,7 @@ test("unknown, empty, and absent nouns fall to the missing glyph", () => {
 });
 
 test("bundled fallback tier provides the essential UI symbols", () => {
-  for (const noun of ["menu", "close", "account", "arrow-left"]) {
+  for (const noun of ["menu", "close", "account"]) {
     assert.equal(resolveTier(noun), "fallback", `${noun} should resolve to fallback`);
   }
 });

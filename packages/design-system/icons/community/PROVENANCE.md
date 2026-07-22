@@ -8,6 +8,7 @@ component. Proprietary artwork is never stored here; it stays in the
 | --- | --- | --- |
 | `fox` | v20 `packages/pelilauta-icons/src/fox.svg` at immutable commit `02880fbc995b45d459ce4f264b29d5283b1d8ced` | Monochrome, `fill="currentColor"`. |
 | `search` | v18 `apps/pelilauta/public/icons/search.svg` (current-only asset, absent from v20 packages) | Monochrome, `fill="currentColor"`. |
+| `arrow-left` | v18 `apps/pelilauta/public/icons/arrow-left.svg` (project-provenance asset) | Monochrome, `fill="currentColor"`. Moved from the bundled fallback tier to its canonical community home; the v18 artwork differs from the prior fallback path and is the compatibility authority. |
 
 Artwork is copied verbatim. The public originals under
 `apps/pelilauta/public/icons/` are not removed while legacy Cyan `cn-icon`
