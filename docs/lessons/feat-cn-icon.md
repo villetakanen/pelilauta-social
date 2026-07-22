@@ -83,8 +83,14 @@ migrations. (The contextual-icon-sizing slice shipped on a separate branch as
   spec, so it warrants `delivery-review` and — for the spec amendment — the spec
   adversarial-review gate (human may waive as on #35). Merge only on human
   approval.
-- **Sequencing.** Commit is HELD: PR #36 is still open from `feat/cn-icon`, so a
-  new commit would land in #36. Commit + open slice-A PR only after #36 merges.
+- **Sequencing (resolved).** Held until #36 merged (`26b4a0d`), then
+  `feat/cn-icon` fast-forwarded to main and A(1) committed as `de4d341`.
+- **Integration identity.** PR #37 `feat/cn-icon` → `main`, source head
+  `de4d341`. Merge SHA to be reconciled in the next slice per the
+  no-doc-only-merge practice. Remaining gates: `delivery-review` (Icon contract +
+  spec change), spec adversarial-review for the accessibility amendment (human
+  may waive), Netlify deploy-preview, and deploy-preview visual acceptance of the
+  data-driven consumers (`/admin` confirmed locally). Merge only on human approval.
 
 ### Batch A(0): status/error pages — implemented 2026-07-22 (awaiting visual acceptance)
 
