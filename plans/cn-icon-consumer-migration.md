@@ -256,12 +256,14 @@ Sort round 2 (human 2026-07-23):
 | --- | --- | --- |
 | filter, font, info, kebab, label-tag, palette, reduce, pdf | ours → community (currentColor) | **Done** — ported + normalized (filter `#000`; kebab/pdf no-fill; info Inkscape cruft stripped) |
 | fork, idea, login, love, quote, save, share, tools, undo | bought → myrrys (currentColor) | **Done** — submodule (`9eceea2`), pointer bumped |
-| check, edit, file-pdf, import-export, open-down | delete ("rest in the first set") | **HELD — needs confirmation** |
+| edit | bought → myrrys (currentColor) | **Done** — submodule (`7bf9abc`); `edit.svg` also kept in `public/icons` for legacy `cn-icon` |
+| check, file-pdf, import-export, open-down | delete from repo (human 2026-07-23) | **Done** — public SVGs removed + `NounSelect` entries removed |
 
-Delete-set hold: `check` (3 files), `edit` (6 files), `import-export` (1),
-`open-down` (1) are **actively rendered via legacy `<cn-icon>` in the running
-app**; deleting their `public/icons/*.svg` is an immediate production regression
-(the element fetches `/icons/{noun}.svg`). `file-pdf` is catalog-only. Awaiting
-the human's intent: physically delete the assets (accepting the live break, e.g.
-because those consumers are being retired), or "delete from the sort" = leave the
-public SVGs in place, just don't port them to community/myrrys.
+Deliberate deletions (human-directed, git-reversible). Live consequence until
+the affected consumers migrate: legacy `<cn-icon>` still references these, so
+they now render the blank/404 glyph — `check` in `RemoveAccountSection`,
+`NotificationItem`, `AddChannelForm`; `import-export` in `SiteAdminActions`;
+`open-down` is `NounSelect`'s own dropdown-arrow (line 176). `file-pdf` was
+catalog-only (no live blank). These spots resolve when those consumers migrate
+to the local `Icon` (they'll show the missing glyph there too, by design, since
+the nouns are intentionally gone).
