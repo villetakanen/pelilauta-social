@@ -37,7 +37,6 @@ const availableIcons = [
   'chevron-left',
   'clock',
   'close',
-  'components',
   'copy-md',
   'd12',
   'd20',

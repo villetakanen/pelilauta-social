@@ -227,3 +227,25 @@ Batches B and G are the completeness pressure points: B first requires the full
 dynamic-noun vocabulary; G's `NounSelect` renders all of it. A–F may otherwise
 proceed in the order that best fits available review capacity, provided each
 batch's own nouns are ported before its consumers migrate.
+
+## Provenance Sort Ledger (human-owned)
+
+Provenance (bought/licensed vs project-created) cannot be inferred from the
+files or from where they currently sit (`public/icons/` vs the submodule); only
+the human decides. Recorded here as the human sorts, batch by batch. Community
+ports normalize to `currentColor` unless noted; `myrrys` = move into the
+`@myrrys/proprietary` submodule (kept at its encoded color only when branded).
+
+Sort round 1 (human 2026-07-23):
+
+| Noun | Decision | Status |
+| --- | --- | --- |
+| add, arrow-up, arrow-down, card, chevron-left, clock, close, dots, drag, dragger | ours → community (currentColor) | **Done** — ported + normalized + verified |
+| assets, copy-md, delete, design | bought → myrrys (currentColor) | **Done** — added to submodule (`96ae625`), pointer bumped |
+| bsky | bought → myrrys (keeps brand `#1185fe`) | **Done** — added to submodule, brand color preserved |
+| components | delete (drop the icon) | **Done** — removed from `NounSelect`, public SVG deleted |
+
+`components` deletion caveat: any channel/topic persisted with `icon:
+'components'` now falls to the missing glyph (no such value found in source
+defaults; low risk). Public originals for the community/myrrys ports remain under
+`public/icons/` for legacy `cn-icon` fetches until the terminal cleanup batch.
