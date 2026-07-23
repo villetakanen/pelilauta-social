@@ -249,3 +249,19 @@ Sort round 1 (human 2026-07-23):
 'components'` now falls to the missing glyph (no such value found in source
 defaults; low risk). Public originals for the community/myrrys ports remain under
 `public/icons/` for legacy `cn-icon` fetches until the terminal cleanup batch.
+
+Sort round 2 (human 2026-07-23):
+
+| Noun | Decision | Status |
+| --- | --- | --- |
+| filter, font, info, kebab, label-tag, palette, reduce, pdf | ours → community (currentColor) | **Done** — ported + normalized (filter `#000`; kebab/pdf no-fill; info Inkscape cruft stripped) |
+| fork, idea, login, love, quote, save, share, tools, undo | bought → myrrys (currentColor) | **Done** — submodule (`9eceea2`), pointer bumped |
+| check, edit, file-pdf, import-export, open-down | delete ("rest in the first set") | **HELD — needs confirmation** |
+
+Delete-set hold: `check` (3 files), `edit` (6 files), `import-export` (1),
+`open-down` (1) are **actively rendered via legacy `<cn-icon>` in the running
+app**; deleting their `public/icons/*.svg` is an immediate production regression
+(the element fetches `/icons/{noun}.svg`). `file-pdf` is catalog-only. Awaiting
+the human's intent: physically delete the assets (accepting the live break, e.g.
+because those consumers are being retired), or "delete from the sort" = leave the
+public SVGs in place, just don't port them to community/myrrys.
