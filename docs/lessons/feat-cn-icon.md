@@ -123,8 +123,25 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
 - **Checks.** Zero `<cn-icon>` in all 5 channel files; DS unit 10/10; registry
   parity OK; `astro check` 0 errors. SSR pages verified at the visual gate
   (channel list + channel page, Light+Dark; chevron mirror confirmed).
-- **Integration identity.** To open as a PR from `feat/cn-icon` (source includes
-  `43c459a` + the chevron-surface follow-up).
+- **Delivery-review — independent pass (2026-07-24): NO BLOCKERS.** Verified over
+  `aa4319a..HEAD`: zero `<cn-icon>` in all 5 files, correct size/noun mapping,
+  `chevron-right` a true horizontal mirror (currentColor, provenance parity —
+  community 22 = union-type = PROVENANCE rows), no cyan-css tag rule applied to
+  any of the 5 contexts, dynamic vocabulary resolves except compass/tentacles
+  (already blank in v18), DS 10/10, astro check 0 errors, merge coherent. Two
+  non-blocking RISKs, human-owned:
+  - a11y: breadcrumb chevrons now announced (Icon has no decorative mode). The
+    reviewer notes WAI-ARIA breadcrumb separators are conventionally decorative,
+    so "aria-hidden was a bug" is debatable — but it is the human's accepted call.
+    **Follow-up surfaced:** `ChannelApp` uses `chevron-left` (`<`, backwards) as a
+    *forward* breadcrumb separator (should be `>` like `SimplifiedChannelApp`);
+    pre-existing v18 oddity, faithfully preserved, now audible. Fix later.
+  - layout: the `flex-none` wrapper stretches cross-axis (visually equivalent);
+    accepted.
+- **Integration identity.** To open as a PR from `feat/cn-icon`. Gate status:
+  delivery-review clean; PR creation blocked on a GitHub PR-create outage
+  (2026-07-24) — auto-retrying; merge on PR + green preview per human
+  "merge if clean".
 
 ## Slices In Progress
 
