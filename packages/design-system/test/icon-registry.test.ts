@@ -22,13 +22,23 @@ function resolveTier(noun: string): "community" | "managed" | "fallback" | "miss
   return "missing";
 }
 
-test("community tier owns fox, search, and arrow-left", () => {
-  assert.equal(resolveTier("fox"), "community");
-  assert.equal(resolveTier("search"), "community");
-  assert.equal(resolveTier("arrow-left"), "community");
-  assert.ok(communityNouns().includes("fox"));
-  assert.ok(communityNouns().includes("search"));
-  assert.ok(communityNouns().includes("arrow-left"));
+test("community tier owns the project-provenance UI nouns", () => {
+  for (const noun of [
+    "fox", "search", "arrow-left",
+    "add", "arrow-up", "arrow-down", "card", "chevron-left", "clock",
+    "close", "dots", "drag", "dragger",
+  ]) {
+    assert.equal(resolveTier(noun), "community", `${noun} should resolve to community`);
+    assert.ok(communityNouns().includes(noun), `${noun} in community registry`);
+  }
+});
+
+test("every community icon is monochrome currentColor (no hardcoded fill)", () => {
+  for (const noun of communityNouns()) {
+    const inner = getCommunityIcon(noun)!.inner;
+    assert.match(inner, /currentColor/, `${noun} declares currentColor`);
+    assert.doesNotMatch(inner, /#[0-9a-fA-F]{3,6}/, `${noun} has no hardcoded hex fill`);
+  }
 });
 
 test("managed tier owns the branded featured-tag nouns", () => {
@@ -52,7 +62,7 @@ test("unknown, empty, and absent nouns fall to the missing glyph", () => {
 });
 
 test("bundled fallback tier provides the essential UI symbols", () => {
-  for (const noun of ["menu", "close", "account"]) {
+  for (const noun of ["menu", "account"]) {
     assert.equal(resolveTier(noun), "fallback", `${noun} should resolve to fallback`);
   }
 });

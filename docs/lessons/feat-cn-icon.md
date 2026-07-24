@@ -26,6 +26,57 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
 - **Carried known issue.** The ungated `apps/pelilauta/e2e/color-theme.spec.ts`
   `cn-icon` footer selector (LOW 6) still ships unrepaired.
 
+## Catalog provenance sort — PR #39 (2026-07-24)
+
+- **Outcome.** Catalog-only slice (no consumer migrations): the local icon
+  catalog reflects a human provenance sort of every icon, so later consumer
+  batches resolve against the right tier.
+- **Method / durable lesson.** Provenance (bought/licensed vs project-created)
+  cannot be inferred from the SVG files or from where they currently sit
+  (`public/icons/` vs the submodule) — files were misfiled in both directions.
+  Only the human decides. Two visual contact sheets (rendered in a teal/orange
+  color context) drove the sort. The submodule-membership heuristic was wrong and
+  abandoned.
+- **Result.** Community 21 (18 newly ported, all `currentColor`-normalized;
+  normalizations: no-fill→currentColor, CSS `#000`→currentColor, Inkscape
+  namedview cruft stripped; `close` moved off the fallback). Submodule 43 (15
+  added — `7bf9abc`; all `currentColor` except `bsky` `#1185fe`; verified all 35
+  non-branded managed icons inherit context on the real render path). Deleted 5
+  (components, check, file-pdf, import-export, open-down) + their `NounSelect`
+  entries. Full ledger in `plans/cn-icon-consumer-migration.md`.
+- **Deliberate compatibility note.** `check`/`import-export`/`open-down` are still
+  referenced by legacy `<cn-icon>` (incl. `NounSelect`'s dropdown arrow) and now
+  render the missing glyph until those consumers migrate. Human-directed,
+  git-reversible.
+- **New guard wired.** Every community icon asserted monochrome `currentColor`,
+  no hardcoded hex (the iconography-slice deferred check, now that the catalog
+  grew).
+- **Checks.** DS unit 10/10; registry parity OK; `astro check` 0 errors; both
+  builds pass (precache 311→306, matching the 5 deletions).
+- **Delivery-review — independent adversarial pass (2026-07-24): 1 BLOCKER + 1
+  RISK, both resolved.**
+  - BLOCKER (fixed `6deab3c`): 8 round-2 community ports (filter, font, info,
+    kebab, label-tag, palette, pdf, reduce) were in the registry but lacked the
+    `PROVENANCE.md` rows the spec requires. All 21 community nouns now have rows
+    (verified: registry-minus-provenance is empty). Lesson: the provenance row is
+    part of the port, not a follow-up — a community add isn't done until its
+    `PROVENANCE.md` row exists.
+  - RISK (human-decided): deleting in-use public SVGs (check, import-export,
+    open-down) contradicted the approved spec's Regression Guardrail ("every
+    `/icons/` SVG stays available while any legacy cn-icon consumer remains").
+    Human chose (2026-07-24) to **keep the deletions and amend the spec**: the
+    guardrail now permits human-approved *noun retirement* (delete the public SVG
+    even with legacy consumers remaining, accepting the transitional blank).
+    Amended `specs/design-system/components/cn-icon/spec.md` Regression Guardrails.
+    Spec adversarial-review gate on this amendment not separately run (consistent
+    with the #37 waiver); human directed the change.
+  - Everything else verified clean: registry determinism, all community monochrome
+    `currentColor` in the *generated* inner, geometry intact, managed branded/
+    non-branded colors correct, licensing boundary, counts (community 21,
+    submodule 43, 5 deleted), test guard faithful, merge coherence.
+- **Integration identity.** PR #39 `feat/cn-icon` → `main`, source head `6deab3c`
+  (after blocker fix + spec amendment). Merge SHA to reconcile next slice.
+
 ## Slices In Progress
 
 ### Closing arc: full consumer migration — planned 2026-07-22
