@@ -26,6 +26,38 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
 - **Carried known issue.** The ungated `apps/pelilauta/e2e/color-theme.spec.ts`
   `cn-icon` footer selector (LOW 6) still ships unrepaired.
 
+## Catalog provenance sort — PR #39 (2026-07-24)
+
+- **Outcome.** Catalog-only slice (no consumer migrations): the local icon
+  catalog reflects a human provenance sort of every icon, so later consumer
+  batches resolve against the right tier.
+- **Method / durable lesson.** Provenance (bought/licensed vs project-created)
+  cannot be inferred from the SVG files or from where they currently sit
+  (`public/icons/` vs the submodule) — files were misfiled in both directions.
+  Only the human decides. Two visual contact sheets (rendered in a teal/orange
+  color context) drove the sort. The submodule-membership heuristic was wrong and
+  abandoned.
+- **Result.** Community 21 (18 newly ported, all `currentColor`-normalized;
+  normalizations: no-fill→currentColor, CSS `#000`→currentColor, Inkscape
+  namedview cruft stripped; `close` moved off the fallback). Submodule 43 (15
+  added — `7bf9abc`; all `currentColor` except `bsky` `#1185fe`; verified all 35
+  non-branded managed icons inherit context on the real render path). Deleted 5
+  (components, check, file-pdf, import-export, open-down) + their `NounSelect`
+  entries. Full ledger in `plans/cn-icon-consumer-migration.md`.
+- **Deliberate compatibility note.** `check`/`import-export`/`open-down` are still
+  referenced by legacy `<cn-icon>` (incl. `NounSelect`'s dropdown arrow) and now
+  render the missing glyph until those consumers migrate. Human-directed,
+  git-reversible.
+- **New guard wired.** Every community icon asserted monochrome `currentColor`,
+  no hardcoded hex (the iconography-slice deferred check, now that the catalog
+  grew).
+- **Checks.** DS unit 10/10; registry parity OK; `astro check` 0 errors; both
+  builds pass (precache 311→306, matching the 5 deletions).
+- **Integration identity.** PR #39 `feat/cn-icon` → `main`, source head `12e8a47`.
+  Merge SHA to reconcile next slice. Gates: `delivery-review` (both generated
+  registries + licensing boundary + deletions) and Netlify deploy-preview. Merge
+  only on human approval.
+
 ## Slices In Progress
 
 ### Closing arc: full consumer migration — planned 2026-07-22
