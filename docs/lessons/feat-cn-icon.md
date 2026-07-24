@@ -150,6 +150,25 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
   GitHub PR-create outage (2026-07-24) — auto-retrying; merge on PR + clean
   tray review + green preview per human "merge if clean".
 
+## Server surface complete (2026-07-24)
+
+- The dynamic-noun batch was extended to finish the **entire server (`.astro`)
+  surface**: `BlueskyPostCard` (bsky/love/discussion/send), `EntryTagsWithLabelsSection`
+  (label-tag), `pages/tags/[tag]` (discussion/card). **0 server `.astro` files
+  use `<cn-icon>`.** 73 Svelte files remain ("the rest").
+- **New DS rule (factory, in its establishing slice).** `icon.css` now re-expresses
+  cyan-css's `.flex.items-start > cn-icon { flex-grow: 0 }` as
+  `.flex.items-start > .cn-icon { flex-grow: 0 }` — cyan sets
+  `.flex:not(.flex-col) > * { flex: 1 1 auto }`, so a direct-child icon would
+  stretch without this. First needed by `BlueskyPostCard`'s items-start rows.
+- **Uncovered bug fixed.** `pages/tags/[tag].astro` used `<cn-icon name="discussion">`
+  (`name`, not `noun`) — a typo that rendered v18's empty-noun default; corrected
+  to `noun="discussion"` (its sibling used `noun="card"`). Reported as a bugfix.
+- **Delivery-review (both halves): NO BLOCKERS.** Channel surface and site/tag/docs
+  trays each independently reviewed clean. `chart-line` (a docs frontmatter noun)
+  and `compass`/`tentacles` (TagSynonyms) don't resolve → missing glyph; all were
+  blank in v18 (spec-accepted deliberate change).
+
 ## Slices In Progress
 
 ### Closing arc: full consumer migration — planned 2026-07-22
