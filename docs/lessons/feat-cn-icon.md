@@ -74,8 +74,23 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
     `currentColor` in the *generated* inner, geometry intact, managed branded/
     non-branded colors correct, licensing boundary, counts (community 21,
     submodule 43, 5 deleted), test guard faithful, merge coherence.
-- **Integration identity.** PR #39 `feat/cn-icon` → `main`, source head `6deab3c`
-  (after blocker fix + spec amendment). Merge SHA to reconcile next slice.
+- **Integration identity.** PR #39 `feat/cn-icon` → `main`, source head `87ca3a6`
+  (after blocker fix + spec amendment). Merged 2026-07-24 as `21e8847` (Netlify
+  preview green, delivery-review resolved, human approved); `feat/cn-icon`
+  fast-forwarded. Released in `v21.0.0-beta.5`.
+
+## Release — v21.0.0-beta.5 (2026-07-24)
+
+- **Human-approved**, exact version `v21.0.0-beta.5`. Sole delta since beta.4:
+  PR #39 (catalog provenance sort).
+- **Baseline.** `main` tip `21e8847` (PR #39 merge).
+- **Gates.** #39 delivery-review: BLOCKER (missing provenance rows) fixed; RISK
+  (in-use SVG deletion vs spec guardrail) resolved by human decision to amend the
+  guardrail. Root version `21.0.0-beta.4`→`beta.5`; nested app versions unchanged.
+- **Carried known issues.** The retired nouns (check/import-export/open-down)
+  render the blank glyph in their remaining legacy `cn-icon` consumers until those
+  consumers migrate (deliberate, now permitted by the amended spec guardrail).
+  LOW 6 color-theme e2e still ungated.
 
 ## Slices In Progress
 
