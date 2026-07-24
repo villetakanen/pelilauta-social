@@ -138,10 +138,17 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
     pre-existing v18 oddity, faithfully preserved, now audible. Fix later.
   - layout: the `flex-none` wrapper stretches cross-axis (visually equivalent);
     accepted.
-- **Integration identity.** To open as a PR from `feat/cn-icon`. Gate status:
-  delivery-review clean; PR creation blocked on a GitHub PR-create outage
-  (2026-07-24) — auto-retrying; merge on PR + green preview per human
-  "merge if clean".
+- **Site/tag/docs trays folded in (human 2026-07-24).** Rather than a separate
+  PR, the site/tag/docs tray consumers were added to this batch: `SiteTray`
+  (`action.noun`), `SiteListItem` (`systemToNoun` + static books/adventurer),
+  `TagHeader` (`tagInfo.icon`), `DocsTray` (`p.data.noun`). All resolve; clean
+  contexts. Combined batch = 9 consumer files, delta `aa4319a..51a4ace`.
+  Unresolved TagSynonyms/doc nouns degrade to the missing glyph (v18 blank).
+- **Integration identity.** One PR from `feat/cn-icon` for the combined
+  dynamic-noun server batch. Gate status: channel-surface delivery-review clean;
+  tray delta (`51a4ace`) review pending before merge; PR creation blocked on a
+  GitHub PR-create outage (2026-07-24) — auto-retrying; merge on PR + clean
+  tray review + green preview per human "merge if clean".
 
 ## Slices In Progress
 
