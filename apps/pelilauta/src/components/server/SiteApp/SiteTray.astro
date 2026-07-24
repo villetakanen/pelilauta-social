@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { systemToNoun } from 'src/utils/schemaHelpers';
@@ -50,7 +51,7 @@ const actions: Array<SiteTrayAction> = [
       {actions.map((action) => (
         <li class={`${action.break && 'border-t'}`}>
           <a href={action.href} class="tray-button">
-            <cn-icon noun={action.noun} xsmall />
+            <Icon noun={action.noun} size="xsmall" />
             <span>{action.label}</span>
           </a>
         </li>

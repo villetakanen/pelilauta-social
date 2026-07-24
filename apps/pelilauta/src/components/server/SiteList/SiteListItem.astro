@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { systemToNounMapping } from 'src/schemas/nouns';
 import type { Site } from 'src/schemas/SiteSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
@@ -41,7 +42,7 @@ function systemToNoun(system?: string): string {
           loading="lazy"
         />
       ) : (
-        <cn-icon noun={systemToNoun(site.system)} />
+        <Icon noun={systemToNoun(site.system)} size="medium" />
       )}
     </div>
     <div>
@@ -58,12 +59,12 @@ function systemToNoun(system?: string): string {
   </div>
   <div class="toolbar">
     <div class="flex flex-row flex-no-wrap items-center">
-      <cn-icon noun='books' small></cn-icon>
+      <Icon noun="books" size="small" />
       <span class="downscaled">{site.pageRefs?.length}</span>
     </div>
     {(site.players?.length || 0) > 0 && (
       <div class="flex flex-row flex-no-wrap items-center">
-        <cn-icon noun='adventurer' small></cn-icon>
+        <Icon noun="adventurer" size="small" />
         <span class="downscaled">{site.players?.length}</span>
       </div>
     )}
