@@ -19,6 +19,14 @@ component. Proprietary artwork is never stored here; it stays in the
 | `dots` | v18 `apps/pelilauta/public/icons/dots.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
 | `drag` | v18 `apps/pelilauta/public/icons/drag.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
 | `close` | v18 `apps/pelilauta/public/icons/close.svg` (project-created) | Normalized to `currentColor` (source `<style>` hardcoded `fill:#000`, which overrode its own `fill="currentColor"` attribute). Moved from the bundled fallback tier to its canonical community home. |
+| `font` | v18 `apps/pelilauta/public/icons/font.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
+| `label-tag` | v18 `apps/pelilauta/public/icons/label-tag.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
+| `palette` | v18 `apps/pelilauta/public/icons/palette.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
+| `reduce` | v18 `apps/pelilauta/public/icons/reduce.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
+| `info` | v18 `apps/pelilauta/public/icons/info.svg` (project-created) | Monochrome, `fill="currentColor"`. Inkscape `sodipodi:namedview` editor cruft (pagecolor/bordercolor) stripped; the artwork path was already `currentColor`. |
+| `filter` | v18 `apps/pelilauta/public/icons/filter.svg` (project-created) | Normalized to `currentColor` (source `<style>` hardcoded `.cls-1{fill:#000}`, overriding its own `fill="currentColor"` attribute). |
+| `kebab` | v18 `apps/pelilauta/public/icons/kebab.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
+| `pdf` | v18 `apps/pelilauta/public/icons/pdf.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
 
 Artwork is copied verbatim unless a Notes entry records a deliberate
 `currentColor` normalization (source hardcoded a fill or defaulted to black).
