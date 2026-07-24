@@ -92,6 +92,36 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
   consumers migrate (deliberate, now permitted by the amended spec guardrail).
   LOW 6 color-theme e2e still ungated.
 
+## Batch B — dynamic-noun channel consumers (2026-07-24)
+
+- **Outcome.** First dynamic-noun surface migrated: `ChannelInfoSection`
+  (`channel.icon`, large), `ChannelTray` (`topic.icon`, xsmall, in `.tray-button`),
+  `ChannelInfoRow` (`channelWithStats.icon`). These render persisted, user-chosen
+  nouns — the reason catalog completeness (the provenance-sort slice) had to land
+  first. Visually confirmed on `/channels/` and a channel page in Light+Dark: each
+  channel's saved icon (discussion, edit, d20, monsters…) resolves via the
+  complete catalog and inherits contextual color.
+- **Pre-flight — dynamic vocabulary resolves.** Of the full dynamic vocabulary
+  (NounSelect catalog + `systemToNoun` + `TagSynonyms` + defaults, 63 nouns), only
+  `compass`/`tentacles` don't resolve — both were already blank in v18 (never had
+  artwork) and now show the missing glyph (spec-accepted). Everything else covered.
+- **Attribute-passthrough finding.** `ChannelInfoRow`'s `<cn-icon class="flex-none">`
+  — the local `Icon` doesn't forward `class`, so `flex-none` (no-shrink in the
+  flex row) was re-expressed as a `<span class="flex-none">` wrapper around `Icon`.
+  General rule reaffirmed: audit every consumer's non-noun/size attributes.
+- **Deferred (new DS-capability gap): decorative icons.** `ChannelApp` and
+  `SimplifiedChannelApp` use breadcrumb-separator chevrons marked
+  `aria-hidden="true"` (decorative). The local `Icon` always announces
+  (`role="img"` + `aria-label`) — it has no decorative/hidden mode (the spec
+  defers decorative-by-default). Migrating them would add screen-reader noise, so
+  they're held. They also need `chevron-right` (still a missing noun; natural
+  mirror of the community `chevron-left`). Next step for that surface: add a
+  decorative/`aria-hidden` capability to `Icon` (its own small DS slice, like the
+  `aria-label` prop), then migrate + port/mirror `chevron-right`.
+- **Checks.** Zero `<cn-icon>` in the 3 files; `astro check` 0 errors; pelilauta
+  build passes. SSR pages verified at the visual gate.
+- **Integration identity.** To open as a PR from `feat/cn-icon`.
+
 ## Slices In Progress
 
 ### Closing arc: full consumer migration — planned 2026-07-22
