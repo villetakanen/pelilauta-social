@@ -109,18 +109,22 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
   — the local `Icon` doesn't forward `class`, so `flex-none` (no-shrink in the
   flex row) was re-expressed as a `<span class="flex-none">` wrapper around `Icon`.
   General rule reaffirmed: audit every consumer's non-noun/size attributes.
-- **Deferred (new DS-capability gap): decorative icons.** `ChannelApp` and
-  `SimplifiedChannelApp` use breadcrumb-separator chevrons marked
-  `aria-hidden="true"` (decorative). The local `Icon` always announces
-  (`role="img"` + `aria-label`) — it has no decorative/hidden mode (the spec
-  defers decorative-by-default). Migrating them would add screen-reader noise, so
-  they're held. They also need `chevron-right` (still a missing noun; natural
-  mirror of the community `chevron-left`). Next step for that surface: add a
-  decorative/`aria-hidden` capability to `Icon` (its own small DS slice, like the
-  `aria-label` prop), then migrate + port/mirror `chevron-right`.
-- **Checks.** Zero `<cn-icon>` in the 3 files; `astro check` 0 errors; pelilauta
-  build passes. SSR pages verified at the visual gate.
-- **Integration identity.** To open as a PR from `feat/cn-icon`.
+- **The breadcrumb chevrons' `aria-hidden` was a bug, not a decorative feature
+  (human 2026-07-24).** `ChannelApp` (`chevron-left`) and `SimplifiedChannelApp`
+  (`chevron-right` ×2) marked their separator chevrons `aria-hidden="true"`; the
+  human confirmed there's no need for decorative icons — that attribute was a bug
+  we uncovered. So NO decorative/`aria-hidden` `Icon` capability is needed:
+  migrated them as normal announced `<Icon>` (the buggy `aria-hidden` dropped),
+  folding both back into Batch B (5 files total for the channel surface).
+- **`chevron-right` added to community as the mirror of `chevron-left`.** It was
+  a missing noun (legacy consumers rendered blank). Created by horizontally
+  mirroring the project's own `chevron-left` via an SVG transform — derived, not
+  invented artwork — provenance recorded. Verified visually: `<` / `>`.
+- **Checks.** Zero `<cn-icon>` in all 5 channel files; DS unit 10/10; registry
+  parity OK; `astro check` 0 errors. SSR pages verified at the visual gate
+  (channel list + channel page, Light+Dark; chevron mirror confirmed).
+- **Integration identity.** To open as a PR from `feat/cn-icon` (source includes
+  `43c459a` + the chevron-surface follow-up).
 
 ## Slices In Progress
 

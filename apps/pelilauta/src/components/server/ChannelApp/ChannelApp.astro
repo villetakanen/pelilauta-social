@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import { parseThread, type Thread } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
@@ -82,7 +83,7 @@ try {
               <a href="/channels/" class="text-link">{t('threads:forum.title')}</a>
             </li>
             <li>
-              <cn-icon noun="chevron-left" small aria-hidden="true"></cn-icon>
+              <Icon noun="chevron-left" size="small" />
             </li>
             <li aria-current="page" class="grow">
               <span>{channel.name}</span>
