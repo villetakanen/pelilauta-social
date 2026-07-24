@@ -128,8 +128,14 @@ intentional artwork across Light and Dark modes.
 - A legacy Cyan icon consumer's visible color resolves to its contextual
   foreground; no global theme property may re-break that inheritance.
 - Every SVG under the public `/icons/` path stays available at its current
-  URL for as long as any legacy Cyan icon consumer remains in the
-  application.
+  URL for as long as any legacy Cyan icon consumer remains in the application,
+  **except** for a noun the project has explicitly decided to retire. A
+  human-approved retirement may delete the public SVG even while legacy Cyan
+  consumers still reference it, accepting that those consumers render the
+  missing/blank glyph in the interim until they migrate to the local component.
+  Each retirement is recorded (source removed, decision, and the affected
+  legacy consumers) so the transitional blank is a known, deliberate state, not
+  a silent regression.
 - An unknown, empty, or absent noun never silently collapses its layout
   space.
 - Contextual size standardization (for example, icons inside buttons and fabs

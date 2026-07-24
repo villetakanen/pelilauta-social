@@ -53,10 +53,29 @@ terminal batch. (The contextual-icon-sizing slice shipped on a separate branch a
   grew).
 - **Checks.** DS unit 10/10; registry parity OK; `astro check` 0 errors; both
   builds pass (precache 311→306, matching the 5 deletions).
-- **Integration identity.** PR #39 `feat/cn-icon` → `main`, source head `12e8a47`.
-  Merge SHA to reconcile next slice. Gates: `delivery-review` (both generated
-  registries + licensing boundary + deletions) and Netlify deploy-preview. Merge
-  only on human approval.
+- **Delivery-review — independent adversarial pass (2026-07-24): 1 BLOCKER + 1
+  RISK, both resolved.**
+  - BLOCKER (fixed `6deab3c`): 8 round-2 community ports (filter, font, info,
+    kebab, label-tag, palette, pdf, reduce) were in the registry but lacked the
+    `PROVENANCE.md` rows the spec requires. All 21 community nouns now have rows
+    (verified: registry-minus-provenance is empty). Lesson: the provenance row is
+    part of the port, not a follow-up — a community add isn't done until its
+    `PROVENANCE.md` row exists.
+  - RISK (human-decided): deleting in-use public SVGs (check, import-export,
+    open-down) contradicted the approved spec's Regression Guardrail ("every
+    `/icons/` SVG stays available while any legacy cn-icon consumer remains").
+    Human chose (2026-07-24) to **keep the deletions and amend the spec**: the
+    guardrail now permits human-approved *noun retirement* (delete the public SVG
+    even with legacy consumers remaining, accepting the transitional blank).
+    Amended `specs/design-system/components/cn-icon/spec.md` Regression Guardrails.
+    Spec adversarial-review gate on this amendment not separately run (consistent
+    with the #37 waiver); human directed the change.
+  - Everything else verified clean: registry determinism, all community monochrome
+    `currentColor` in the *generated* inner, geometry intact, managed branded/
+    non-branded colors correct, licensing boundary, counts (community 21,
+    submodule 43, 5 deleted), test guard faithful, merge coherence.
+- **Integration identity.** PR #39 `feat/cn-icon` → `main`, source head `6deab3c`
+  (after blocker fix + spec amendment). Merge SHA to reconcile next slice.
 
 ## Slices In Progress
 
