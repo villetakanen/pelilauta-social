@@ -40,7 +40,7 @@ export default defineConfig({
       ],
     },
     ssr: {
-      noExternal: ['nanostores', '@nanostores/persistent'],
+      noExternal: ['nanostores', '@nanostores/persistent', '@astrojs/netlify'],
     },
   },
 
