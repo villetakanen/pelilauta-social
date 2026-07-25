@@ -5,8 +5,8 @@ equivalent without silently dropping behavior. This is durable practice, not a
 plan: it outlines carried-forward decisions and a required pre-flight that every
 consumer migration follows. Plans are disposable; this file is not.
 
-Read this before migrating any consumer, alongside the active branch file under
-`docs/lessons/` and the relevant capability spec under `specs/`.
+Read this before migrating any consumer alongside the relevant capability spec
+under `specs/`.
 
 ## Carried Decisions
 
@@ -17,45 +17,43 @@ rediscover. Each links to its evidence.
   class-bearing element (e.g. `<span class="cn-icon">`), so every legacy
   `@11thdeg/cyan-css` rule scoped to the custom-element **tag** (`cn-icon`,
   `cn-loader`, …) silently stops applying at the migrated site — size, margin,
-  and layout included. This is the dominant migration risk. Evidence:
-  `docs/lessons/feat-cn-icon.md` finding 20.
+  and layout included. This is the dominant migration risk and the reason for
+  the required tag-rule inventory below.
 - **Contextual size forcing sets public tokens, not private variables.** A
   context that needs one icon size (buttons, fabs) sets the public
   `--cn-icon-size-*` tokens within its scope; the component resolves its size
   from those tokens. Do not override the component's private `--icon-dim`, and
-  never with `!important` — v20 did and it was a latent specificity bug.
-  Evidence: `specs/design-system/components/cn-icon/spec.md`;
-  `docs/lessons/feat-cn-icon.md`.
-- **Catalog expansion precedes each consumer migration.** A consumer cannot
-  migrate to the local icon until every noun it uses exists in the appropriate
-  catalog tier. Expand the catalog first. Evidence:
-  `docs/lessons/feat-cn-icon.md` NOTE 8.
+  never with `!important` — v20 did and it was a latent specificity bug. The
+  owning contract is `specs/design-system/components/cn-icon/spec.md`.
+- **Every noun needs a reviewed disposition before consumer migration.** Add
+  approved artwork to the appropriate catalog tier, or record an explicit human
+  decision that the noun uses the component's missing glyph. Never let an
+  unresolved noun fall through accidentally. The owning catalog contracts are
+  `specs/design-system/iconography/spec.md` and the component spec.
 - **Verify the actual absent case; do not reason from syntax.** "Make the
   import optional" is not "make the build optional" under a build-time
   resolver. Test the real failure mode (remove the submodule, delete the
-  asset), do not infer it from the import statement. Evidence:
-  `docs/lessons/feat-cn-icon.md` finding 17.
+  asset), do not infer it from the import statement. The optional resolver in
+  `packages/design-system/vite/optional-proprietary.mjs` encodes this boundary.
 - **A deterministic check protects only once something runs it.** A test with
   no runner or gate is not protection. Wire the runner in the same slice that
-  adds the check. Evidence: `docs/lessons/feat-cn-icon.md` finding 16.
+  adds the check.
 - **Per-consumer, rendered-in-context visual acceptance is the only gate that
   catches tag-selector breakage today.** Unit and registry tests never render
-  in the consumer context, so they cannot see it. Evidence:
-  `docs/lessons/feat-cn-icon.md` finding 20.
+  in the consumer context, so they cannot see it.
 
 ### Open debts
 
 - `apps/pelilauta/e2e/color-theme.spec.ts` selects the `cn-icon` tag and is
   broken by the migrated footer; it is in no gate, so it fails silently. Repair
-  the selector before that e2e is trusted or gated. Accepted-deferred:
-  `docs/lessons/feat-cn-icon.md` LOW 6.
+  the selector before that e2e is trusted or gated.
 
 ## Migration Pre-flight
 
 Run this before implementing any Lit-consumer migration.
 
-1. **Read** the active lessons file, this practice, and the capability spec for
-   the component being migrated.
+1. **Read** this practice and the capability spec for the component being
+   migrated.
 2. **Enumerate the tag rules for the target context.** Grep the legacy
    stylesheet for every rule scoped to the component's custom-element tag that
    could apply where this consumer renders it:
@@ -79,8 +77,8 @@ Run this before implementing any Lit-consumer migration.
      local component's class, or the consumer's own layout where the rule was
      consumer-specific. Record which.
    - A rule with no consumer in the migrated surface is noted and skipped.
-4. **Confirm the catalog** contains every noun this consumer uses; expand it
-   first if not.
+4. **Confirm each noun's disposition:** reviewed catalog artwork or an explicit
+   approved missing-glyph outcome. Resolve undecided nouns before migration.
 5. **Implement**, then run the smallest applicable deterministic checks
    (`astro check`, unit, relevant e2e, both app builds).
 6. **Rendered-in-context visual acceptance** of the migrated surface in Light

@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { type Channel, parseChannel } from 'src/schemas/ChannelSchema';
 import { t } from 'src/utils/i18n';
 
@@ -31,7 +32,7 @@ function inCategory(cat: string) {
           {inCategory(category).map((topic: Channel) => (
             <li>
               <a href={`/channels/${topic.slug}`} class="tray-button">
-                <cn-icon noun={topic.icon} xsmall />
+                <Icon noun={topic.icon} size="xsmall" />
                 <span>
                   {topic.name} ({topic.threadCount})
                 </span>

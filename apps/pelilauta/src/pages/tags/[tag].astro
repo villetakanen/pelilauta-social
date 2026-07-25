@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import { logError } from '@utils/logHelpers';
 import type { Tag } from 'src/schemas/TagSchema';
 import { t } from 'src/utils/i18n';
@@ -118,7 +119,7 @@ function parseUrl(tag: Tag) {
         threads.length > 0 && (
           <section style="margin-bottom: calc(3 * var(--cn-grid))">
             <h2 class="text-title">
-              <cn-icon name="discussion" small />
+              <Icon noun="discussion" size="small" />
               {t("tag:discussions")} ({threads.length})
             </h2>
             <ul>
@@ -139,7 +140,7 @@ function parseUrl(tag: Tag) {
         pages.length > 0 && (
           <section>
             <h2 class="text-title">
-              <cn-icon noun="card" small />
+              <Icon noun="card" size="small" />
               {t("tag:pages")} ({pages.length})
             </h2>
             <ul>

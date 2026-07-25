@@ -87,9 +87,9 @@ test('legacy icons inherit the contextual foreground color', async ({
       return { iconColor, bareColorOn };
     });
 
-    // The contract behind lessons Finding 1: a legacy icon without an
-    // explicit color resolves to its parent's currentColor, which requires
-    // the bare --color-on custom property to stay undefined.
+    // A legacy icon without an explicit color resolves to its parent's
+    // currentColor, which requires the bare --color-on property to stay
+    // undefined (specs/design-system/components/cn-icon/spec.md).
     expect(probe.bareColorOn, `${colorScheme}: --color-on must stay undefined`)
       .toBe('');
     expect(probe.iconColor, `${colorScheme}: icon inherits parent color`).toBe(

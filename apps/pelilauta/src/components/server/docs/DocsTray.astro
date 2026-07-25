@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 
+import Icon from '@design-system/components/Icon.svelte';
 import { getCollection } from 'astro:content';
 import { t } from 'src/utils/i18n';
 
@@ -15,7 +16,7 @@ const allComponents = await getCollection('docs');
     ).map(p => (
       <li>
         <a href={'/docs/' + p.id}>
-          {p.data.noun && <cn-icon noun={p.data.noun} small></cn-icon>}
+          {p.data.noun && <Icon noun={p.data.noun} size="small" />}
           {p.data.shortname || p.data.name}</a>
       </li>
     ))

@@ -12,6 +12,7 @@ component. Proprietary artwork is never stored here; it stays in the
 | `add` | v18 `apps/pelilauta/public/icons/add.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `card` | v18 `apps/pelilauta/public/icons/card.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `chevron-left` | v18 `apps/pelilauta/public/icons/chevron-left.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
+| `chevron-right` | Derived from the project `chevron-left` (horizontal mirror via SVG transform) | Monochrome, `fill="currentColor"`. Its natural pair; not invented artwork — the same project polygon reflected. Absent from v18 (the legacy `chevron-right` consumers rendered blank). |
 | `clock` | v18 `apps/pelilauta/public/icons/clock.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `dragger` | v18 `apps/pelilauta/public/icons/dragger.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `arrow-up` | v18 `apps/pelilauta/public/icons/arrow-up.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |

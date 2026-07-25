@@ -1,4 +1,5 @@
 ---
+import Icon from '@design-system/components/Icon.svelte';
 import type { getTagDisplayInfo } from '../../schemas/TagSynonyms';
 import { t } from '../../utils/i18n';
 
@@ -12,7 +13,7 @@ const { displayName, tagInfo } = Astro.props;
 
 <header class="mb-2 pb-2 border-b">
   <h1 class="text-h2">
-    {tagInfo?.icon && <cn-icon noun={tagInfo.icon} />}
+    {tagInfo?.icon && <Icon noun={tagInfo.icon} />}
     {displayName}
   </h1>
 

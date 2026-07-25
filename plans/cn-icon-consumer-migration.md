@@ -4,7 +4,6 @@ Status: Draft 2026-07-22
 Branch: `feat/cn-icon` (closing arc)
 Intent: `specs/design-system/components/cn-icon/spec.md`; `specs/design-system/iconography/spec.md`
 Practice: `docs/practices/consumer-migration.md` (required pre-flight)
-Active lessons: `docs/lessons/feat-cn-icon.md`
 
 ## Production Outcome
 
@@ -26,15 +25,16 @@ Cyan components.
 
 ## Why This Is An Arc, Not One Merge
 
-- **Surface size.** 95 files still use the literal `<cn-icon>` element (14 files
-  already use local `<Icon>`, migrated in `v21.0.0-beta.2`).
+- **Surface size.** The arc began with 95 files using the literal `<cn-icon>`
+  element. After the server-surface delta in PR #41, zero `.astro` files and 73
+  Svelte files remain; recount before each new batch.
 - **The dominant risk is per-consumer and invisible to automation.** The local
   component renders `<span class="cn-icon">`, so every `@11thdeg/cyan-css` rule
   scoped to the `<cn-icon>` *tag* (size, negative margin, button circularity,
   flex/heading layout) silently stops applying at each migrated site. Unit and
   registry tests never render in the consumer context and cannot see it.
   Rendered-in-context visual acceptance in Light and Dark is the only gate that
-  catches it (lessons finding 20; practice pre-flight step 6).
+  catches it (consumer-migration pre-flight step 6).
 - **Delivery contract.** Each merge — not the lifetime branch diff — is the
   deployable, coherently reversible unit; migrate one bounded surface at a time.
   A single 95-file merge that each needs its own visual acceptance is neither
@@ -42,36 +42,25 @@ Cyan components.
 
 Decision (human, 2026-07-22): deliver the closing arc as **several bounded PRs by
 surface**, each independently reversible and visually accepted, followed by a
-terminal PR that confirms zero remaining consumers and wires the deferred checks.
+terminal PR that confirms zero remaining consumers, keeps catalog guards green,
+and repairs or explicitly dispositions the ungated footer e2e.
 
-## Evidence: The Catalog Gap Is The Real Prerequisite
+## Current Catalog State
 
-The app's icon vocabulary reaches **78 nouns** (static `noun="…"` uses, the
-`NounSelect` user-selectable catalog, `systemToNoun` output, `TagSynonyms` and
-channel/topic defaults). Coverage by local tier today:
+The app vocabulary reaches static nouns, the `NounSelect` catalog,
+`systemToNoun`, `TagSynonyms`, and persisted channel/topic choices. The catalog
+sort completed the local tiers needed by dynamic consumers:
 
-Tier coverage (updated after Batch A(0), which moved `arrow-left`
-fallback→community):
-
-| Tier | Count | Contents (summary) |
+| Tier | Current role |
 | --- | --- | --- |
-| Community (`packages/design-system/icons/community`) | 3 | `fox`, `search`, `arrow-left` |
-| Managed (`packages/myrrys-proprietary/icons`) | 28 | branded + several generic nouns already resolving |
-| Bundled fallback (`components/icon-fallback.ts`) | 5 | `account`, `close`, `google`, `menu`, `missing` |
+| Community (`packages/design-system/icons/community`) | 22 project-licensed nouns with provenance and `currentColor` guards |
+| Managed (`packages/myrrys-proprietary/icons`) | Proprietary/branded and approved managed nouns, optional at build time |
+| Bundled fallback (`components/icon-fallback.ts`) | Essential UI symbols plus the mandatory missing glyph |
 
-That leaves a **44-noun gap** — reachable but resolving to the missing glyph:
-
-- **~35 exist as v18 public SVGs** → portable to the community tier with
-  provenance preserved (`public/icons/` is the compatibility authority, finding
-  3): `add`, `arrow-down`, `arrow-up`, `assets`, `bsky`, `card`, `check`,
-  `chevron-left`, `clock`, `components`, `copy-md`, `delete`, `design`, `dots`,
-  `drag`, `dragger`, `edit`, `file-pdf`, `filter`, `font`, `fork`, `idea`,
-  `import-export`, `info`, `kebab`, `label-tag`, `login`, `love`, `open-down`,
-  `palette`, `pdf`, `quote`, `reduce`, `save`, `share`, `tools`, `undo`.
-- **9 render blank in v18 today** (no public SVG, no tier; `<cn-icon>` resolves
-  to `/icons/{noun}.svg#icon`, which 404s): `chevron-right`, `error`, `loader`,
-  `sort`, `tag`, `trash`, `warning` (generic UI, used in real controls) and
-  `compass`, `tentacles` (dynamic `TagSynonyms` game nouns).
+`chart-line`, `compass`, and `tentacles` have approved missing-glyph outcomes.
+Human-retired `check`, `import-export`, and `open-down` still occur in legacy
+Svelte consumers and intentionally remain blank until those consumers migrate;
+their batch must preserve or revisit that explicit disposition.
 
 ### The dynamic-noun consumers force catalog completeness
 
@@ -79,9 +68,9 @@ Several consumers render a **persisted, user-chosen** noun, not a literal:
 `channel.icon` / `topic.icon` (default `discussion`), `systemToNoun(system)`,
 `tagInfo.icon`. Users pick these from `NounSelect`'s ~66-noun catalog and the
 value is persisted in Firebase. To migrate any of these consumers without a
-compatibility regression, **every noun in the `NounSelect` catalog must resolve
-in a local tier first.** This is the concrete need that pulls catalog completion
-in as required supporting work — not consumer-free foundation.
+compatibility regression, **every reachable noun needs a reviewed disposition:**
+catalog artwork or an explicit approved missing-glyph outcome. This is the
+concrete need that pulls catalog decisions into the consumer slice.
 
 ### Missing-noun handling (human, 2026-07-22)
 
@@ -95,7 +84,7 @@ a live tag actually uses them.
 
 ## Carried Decisions Every Batch Obeys
 
-From `docs/practices/consumer-migration.md` and lessons — do not rediscover:
+From `docs/practices/consumer-migration.md` and the approved specs:
 
 1. **Run the pre-flight before each batch.** Enumerate the cyan-css rules scoped
    to `cn-icon` for that context, decide how each is re-expressed against the
@@ -105,8 +94,9 @@ From `docs/practices/consumer-migration.md` and lessons — do not rediscover:
    override the private `--icon-dim`, never with `!important`. Re-express
    margin/layout/circularity as a DS rule targeting the `.cn-icon` class or the
    consumer's own layout — record which.
-3. **Catalog expansion precedes each consumer migration**, and rides *inside*
-   the batch that first needs the noun (factory work in its establishing slice).
+3. **Resolve every noun before consumer migration:** add approved catalog
+   artwork or record an explicit missing-glyph decision inside the batch that
+   first reaches it.
 4. **Per-consumer rendered-in-context visual acceptance is a required gate.**
 5. **Preserve behavior first, then replace the Lit dependency.** Keep persisted
    noun values, routes, auth, and accessible names unchanged. The local `<Icon>`
@@ -121,24 +111,20 @@ Counts are approximate; the exact file split is confirmed at each batch's
 pre-flight. Each batch: pre-flight → catalog port for its nouns → migrate →
 `astro check` + unit + relevant e2e + both app builds → visual acceptance.
 
-### Batch A — App shell, navigation, layouts (server)
+### Server Surface — complete or in review
 
-Trays, layout headers, and remaining server nav consumers
-(`server/*Tray.astro`, `layouts/PageWithTray.astro`, `pages/sites/**` headers,
-`404`/`403`/`offline`). Ports the common UI nouns (`add`, `check`,
-`chevron-left`, `arrow-*`, `edit`, `delete`, `info`, `open-down`, `kebab`,
-`dots`, `close` already bundled). Includes button/fab tag-rule re-expression
-for trays. **Also repairs the ungated LOW 6 e2e** (`e2e/color-theme.spec.ts`
-selects the `cn-icon` tag on the migrated footer) as it is app-shell scope.
+PRs #36 and #37 delivered status/error pages and static server chrome. PR #41
+finishes the remaining direct `.astro` consumers across channels, sites, tags,
+docs, Bluesky, and entry tags. Its source head `e9f1b53` has zero direct
+`<cn-icon>` in the server surface and a green Netlify preview. The broken footer
+selector in `e2e/color-theme.spec.ts` remains terminal-batch debt.
 
-### Batch B — Front page & channels (server, dynamic nouns)
+After PR #41, 73 Svelte files remained direct consumers; recount before the next
+batch. The next bounded surface starts at Batch C.
 
-`server/FrontPage/*`, `server/ChannelApp/*`, `server/channels/*`, `TagHeader`,
-`EntryTagsWithLabelsSection`, `SiteList*`, `SiteApp/SiteTray`. This is the
-**first dynamic-noun surface** (`channel.icon`, `topic.icon`, `getNoun(...)`,
-`systemToNoun`), so it carries the **bulk community catalog port** to cover the
-full `NounSelect`/system vocabulary as required supporting work. Spike
-`chevron-right` (SimplifiedChannelApp).
+Follow-up outside PR #41: `ChannelApp` still uses `chevron-left` as a forward
+breadcrumb separator while `SimplifiedChannelApp` uses `chevron-right`. This is
+inherited behavior now made audible; decide it in a later bounded consumer slice.
 
 ### Batch C — Threads & discussion (svelte)
 
@@ -176,13 +162,13 @@ tightest completeness check — by this batch every offered noun must resolve.
 - Assert **zero `<cn-icon>` element usages** remain in `apps/pelilauta/src`
   (grep gate); confirm `cn-icon` stays registered only via retained Cyan
   components (`cn-loader` import) and `public/icons/` is untouched.
-- **Wire the deferred deterministic checks** now that the catalog has grown
-  (deferred from the iconography slice, lessons 2026-07-21): catalog↔provenance
-  parity, and the community `currentColor` grep. This is the batch that both
-  needs and exercises them.
+- Keep the existing catalog↔provenance parity and community `currentColor`
+  checks green; repair the footer e2e selector and decide whether to gate it.
 - Confirm the absent-submodule build still degrades managed nouns to the missing
   glyph (inherited verification; re-run once here).
-- Finalize `docs/lessons/feat-cn-icon.md` (cycle close) and the release decision.
+- Before the final production integration, resolve any active lesson candidates
+  that exist per `docs/practices/lessons.md`, optionally compact them to the
+  minimal log, and make the release decision.
 
 ## Deterministic Acceptance (per batch unless noted)
 
@@ -217,7 +203,7 @@ merge.
 Per the delivery contract, one working day without a production-integrated slice
 is a mandatory re-scope gate. If a batch's tag-rule re-expression cannot be
 resolved against the local component within a batch, stop and record the
-specific cyan-css rule and context in lessons before continuing — do not
+specific cyan-css rule and context in the plan or PR before continuing — do not
 hardcode per-consumer sizes as a workaround (that repeats the v20 `!important`
 specificity bug).
 

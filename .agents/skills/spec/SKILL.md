@@ -15,10 +15,11 @@ from it.
 
 ## Procedure
 
-1. Read the active branch file under `docs/lessons/`, the relevant v18 behavior,
-   approved product direction, and existing parent specs.
-2. Update the active lessons file whenever spec work establishes a new source,
-   ambiguity, failed assumption, or human decision.
+1. Read the relevant v18 behavior, approved product direction, existing parent
+   specs, and the branch lessons queue when one exists.
+2. Record sources and human product decisions directly in spec provenance. Add
+   to lessons only when spec work reveals a reusable gap in the specification
+   practice or harness.
 3. Create or update `specs/<domain>/<capability>/spec.md` from
    `specs/TEMPLATE.md`. Design-system work normally uses
    `specs/design-system/<capability>/spec.md`.
@@ -44,7 +45,7 @@ from it.
 
 Before requesting `draft` → `approved`, a reviewer (a separate agent session or
 a deliberate critic pass that has not just written the text) challenges the
-spec — not the code — and records the outcome in the active lessons file:
+spec — not the code — and records the outcome in the spec review or PR:
 
 - **Ambiguity:** can two reasonable implementers read a requirement
   differently? Name the sentence.
