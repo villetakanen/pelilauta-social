@@ -49,7 +49,7 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
 
-- Active lessons: `docs/practices/lessons.md`. Every delivery task reads and updates the current branch file under `docs/lessons/` as new evidence appears; do not wait for a close prompt.
+- Lessons: `docs/practices/lessons.md`. A non-durable branch file under `docs/lessons/` may collect reusable candidates awaiting disposition or durable writeback, then compact resolved candidates to a minimal lessons-learned log. Humans may delete these logs; agents must never rely on them for required context. Plans, PRs, checks, and task state remain in their existing owners.
 - Consumer migration: `docs/practices/consumer-migration.md` carries the cross-cycle decisions and the required pre-flight for migrating a Lit consumer to its local component.
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Delivery slices: `.agents/skills/delivery-slice/SKILL.md`

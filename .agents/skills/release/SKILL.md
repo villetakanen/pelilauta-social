@@ -12,13 +12,13 @@ release identity and publication, not the full lifecycle of a feature branch.
 
 ## Procedure
 
-1. Read and update the active branch lessons throughout release preparation.
-   Record gate failures, deployment behavior, versioning decisions, and
-   corrected assumptions as they occur.
+1. Read the branch lessons queue when one exists. Record release evidence and
+   decisions in the release PR or runbook; add to lessons only when release work
+   reveals a reusable process or harness candidate.
 2. Confirm explicit human approval for the release and exact version. Do not
    infer that every merge or branch close is a named release.
 3. Identify the exact delivered content baseline approved for release and read
-   its applicable specs, slice records, lessons, human acceptance, and checks.
+   its applicable specs, PRs, human acceptance, and checks.
 4. Confirm any required `delivery-review` findings are resolved or carry an
    explicit human decision.
 5. Inspect Git status, the release delta, recent commits, remote tracking, and

@@ -21,10 +21,14 @@ Establish the exact delta since the last slice from this branch delivered to
 `main`. If the boundary is unclear, stop and ask rather than reviewing unrelated
 historical branch work.
 
+For an explicitly approved, timeboxed consumer-free slice, review the named
+factory or harness outcome and stop condition directly; do not require a
+fictional application outcome.
+
 ## Challenges
 
-1. **Outcome:** does the delta produce the named observable outcome in the
-   target application?
+1. **Outcome:** does the delta produce the named application outcome, or the
+   approved bounded factory/harness outcome for a consumer-free exception?
 2. **Compatibility:** are v18 behavior claims supported by cited source,
    deployed evidence, an immutable upstream revision, or a human decision? Are
    departures explicit and approved?
@@ -44,7 +48,7 @@ historical branch work.
 8. **Migration context:** were relevant legacy element selectors, tests,
    imperative APIs, dynamic inputs, persisted values, and accessibility
    semantics considered for the migrated surface?
-9. **Delivery record:** do the spec, plan, lessons, release note, and reported
+9. **Delivery record:** do the spec, plan, PR or release note, and reported
    checks describe the implementation accurately?
 10. **Merge coherence:** can the complete merge deploy and revert coherently?
     Do not demand that supporting changes be independently reverted from the
@@ -53,10 +57,9 @@ historical branch work.
 ## Findings And Gate
 
 Lead with findings ordered by severity and include file or artifact references.
-Distinguish blockers, non-blocking risks, and record corrections. Record the
-review and resulting human decisions in the active lessons file; avoid creating
-a separate review artifact unless the evidence is too large to remain usable
-there.
+Distinguish blockers, non-blocking risks, and record corrections. Keep review
+findings and resulting human decisions in the PR, reviewed spec, or owning plan.
+Add only a reusable process or architecture candidate to the lessons queue.
 
 An unresolved blocker stops integration. Non-blocking findings are fixed,
 accepted, deferred, or rejected by the human owner. A review finding is

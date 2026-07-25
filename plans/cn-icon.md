@@ -3,8 +3,7 @@
 Status: Approved 2026-07-20
 Branch: `feat/cn-icon`
 Intent: `specs/design-system/components/cn-icon/spec.md`
-Prior lessons: `docs/lessons/feat-color-theme-compatibility.md`
-Active lessons: `docs/lessons/feat-cn-icon.md`
+Prior compatibility plan: `plans/color-theme-compatibility.md`
 
 ## Production Outcome
 
@@ -83,7 +82,7 @@ The selected public consumers provide a bounded vertical slice:
 ### Source tiers and the licensing boundary
 
 v20 resolves nouns across tiers, and the tiers are a licensing boundary, not
-just a lookup order (lessons Finding 13):
+just a lookup order (`specs/design-system/iconography/spec.md`):
 
 - Community tier `@pelilauta/icons` holds project-licensed artwork (e.g. `fox`).
 - Managed tier `@myrrys/proprietary` is a separate submodule whose README
@@ -113,12 +112,12 @@ the submodule's `pbta` would silently change the rendered logo. Preserving
 appearance requires the exact v18 `pbta-logo` artwork as the source; being
 branded, it belongs in the proprietary submodule tier.
 
-The v21 submodule is pinned at `b34789a`, before the icon registry existed; the
-registry (`icons/`, generated `index.ts`, `@myrrys/proprietary` `package.json`)
-exists from `13857fc` (`origin/main`) onward, which still carries the served
-webp folders. Nouns absent from both v20 and the current public directory remain
-explicit product decisions; this iteration must not invent aliases or artwork
-for them.
+The managed tier now lives at `packages/myrrys-proprietary`, with its generated
+registry and served webp assets kept in the same non-licensed submodule. The
+optional Vite resolver in `packages/design-system/vite/optional-proprietary.mjs`
+degrades an absent checkout to an empty managed registry. Nouns absent from both
+v20 and the current public directory remain explicit product decisions; this
+iteration must not invent aliases or artwork for them.
 
 ### Required sizing tokens
 
@@ -157,12 +156,10 @@ general sizing tokens, and token generation remain outside this iteration.
      public design-system community catalog, without removing their public
      originals.
    - Managed tier (all-rights-reserved): `dd5`, `pathfinder`, `ll-ampersand`,
-     and `pbta-logo` are consumed from the `@myrrys/proprietary` submodule
-     registry, never copied into the public design-system source. This
-     requires advancing the v21 submodule pointer from `b34789a` to
-     `origin/main` (`13857fc`), which adds the icon registry while preserving
-     the served webp assets, and reconciling the `pbta-logo` noun whose live
-     artwork differs from the submodule's `pbta`.
+     and the exact live `pbta-logo` artwork are consumed from the relocated
+     `packages/myrrys-proprietary` submodule registry, never copied into public
+     design-system source. The optional resolver preserves absent-submodule
+     builds while the asset sync preserves the served webp folders.
    - Include the stable bundled missing fallback.
 5. Implement the local icon capability in `packages/design-system` from the
    approved intent spec. It must render on the server and require no new
@@ -178,8 +175,8 @@ general sizing tokens, and token generation remain outside this iteration.
    fallback, accessibility, and computed color.
 9. Add one root `test` dispatcher and a root Lefthook pre-push test hook. Do not
    add CI, root check/build orchestration, or other harness work.
-10. Complete human review, finalize the cycle lessons, and decide the next beta
-   only after the production and book surfaces are accepted.
+10. Complete human review and decide the next beta only after the production and
+    book surfaces are accepted.
 
 ## Compatibility Boundaries
 

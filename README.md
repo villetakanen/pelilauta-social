@@ -32,16 +32,17 @@ has now started and proceeds one bounded consumer surface at a time.
 - `specs` records approved product and design intent.
 - `plans` records bounded delivery scope, implementation decisions, and
   acceptance evidence.
-- `docs/lessons` records active and completed delivery learning and compound
-  decisions.
+- `docs/lessons` holds optional, non-durable candidate queues and compact
+  lessons-learned logs; accepted knowledge moves to its owning spec, practice,
+  test, skill, or runbook.
 
 ## Delivery History
 
 | Delivery | State | Evidence |
 | --- | --- | --- |
-| v18 import baseline | Complete and deployed | `plans/v18-import.md`, `docs/lessons/feat-v18-import.md` |
-| Color-theme compatibility | Complete and approved | `plans/color-theme-compatibility.md`, `docs/lessons/feat-color-theme-compatibility.md` |
-| Local Icon (app bar, footer, featured tags) | Complete and approved | `specs/design-system/components/cn-icon/spec.md`, `plans/cn-icon.md`, `docs/lessons/feat-cn-icon.md` |
+| v18 import baseline | Complete and deployed | `plans/v18-import.md` |
+| Color-theme compatibility | Complete and approved | `plans/color-theme-compatibility.md` |
+| Local Icon (app bar, footer, featured tags) | Complete and approved | `specs/design-system/components/cn-icon/spec.md`, PR #30, `v21.0.0-beta.2` |
 | Lit-to-Svelte components | In progress | Each component is a separate intent-specified compatibility slice |
 
 ## Release Boundaries
