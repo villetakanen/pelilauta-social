@@ -51,20 +51,19 @@ The root workspace version identifies v21 releases. The version in
 `apps/pelilauta/package.json` remains the imported application's baseline
 version until a separate product decision requires changing it.
 
-`v21.0.0-beta.5` builds on `v21.0.0-beta.4` with a catalog provenance sort (#39):
-every icon is now classified created (community, project-licensed) or bought
-(the `@myrrys/proprietary` submodule), with monochrome community artwork
-normalized to `currentColor` and third-party/branded marks kept in the
-proprietary tier. A few superseded nouns were retired. No consumer migrations —
-the tiered catalog now reflects the real provenance so later migration batches
-resolve correctly. It does not claim that every authenticated write journey has
-been accepted as a complete v18 replacement; that remains a gate before a v21
-release candidate.
+`v21.0.0-beta.6` builds on `v21.0.0-beta.5` with the completed server-rendered
+icon surface and the lessons-compounding harness (#41). All direct `.astro`
+`<cn-icon>` consumers now use the local `Icon`; dynamic nouns resolve through
+the reviewed catalog, and legacy Cyan tag-scoped layout behavior is re-expressed
+for the local markup. Lessons files are now optional, non-durable candidate
+queues and compact lessons-learned logs; durable project behavior remains in
+specs, practices, plans, tests, skills, PRs, and runbooks.
 
-Earlier betas: `beta.4` delivered the delivery-governance model + slice skills
-(#34), the public `/iconography` book (#35), and consumer migrations of the
-status/error pages and static server chrome plus the `Icon` `aria-label` prop
-(#36, #37).
+This beta does not claim that every Svelte icon consumer or authenticated write
+journey has been accepted as a complete v18 replacement; those remain gates
+before a v21 release candidate. Earlier betas delivered the catalog provenance
+sort (`beta.5`), delivery governance and iconography book (`beta.4`), contextual
+icon sizing (`beta.3`), and the initial local Icon capability (`beta.2`).
 
 ## Commands
 
