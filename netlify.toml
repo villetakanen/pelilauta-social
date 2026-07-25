@@ -5,6 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  PNPM_FLAGS = "--config.node-linker=hoisted"
 
 # PBI-037: Netlify Image CDN remote image domains
 [images]
