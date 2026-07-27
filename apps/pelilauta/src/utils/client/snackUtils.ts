@@ -1,5 +1,7 @@
-import type { SnackbarMessage } from 'node_modules/@11thdeg/cyan-lit/dist/cn-snackbar/cn-snackbar';
+import type { CnSnackbar } from '@11thdeg/cyan-lit';
 import { type LocaleSubstitutions, t } from 'src/utils/i18n';
+
+type SnackbarMessage = Parameters<CnSnackbar['pushToStack']>[0];
 
 function _toMessage(
   snack: string | SnackbarMessage,
