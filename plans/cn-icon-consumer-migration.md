@@ -148,6 +148,18 @@ Pre-flight outcomes:
   standardization, the `items-start` flex-grow cancel, and the reached legacy
   `h3` alignment until local Button, Fab, layout, and typography capabilities
   replace them. Stable Icon CSS remains limited to the icon token vocabulary.
+- **Bare `a.fab` icon size is a transitional departure (human 2026-07-27).**
+  Cyan has no rule sizing icons in a bare `.fab`: `core/fab.css:68` sets only
+  `font-size`, which never reaches the legacy `:host` box
+  (`height/width: var(--cn-icon-size, 36px)`), and the small-size collapse is
+  scoped to the `button` element (`tokens/buttons.css:81`) and `button` /
+  `a.button` (`core/buttons.css:72`). `ChannelFabs`' create-thread
+  `<a class="fab">` therefore rendered at 36px in v18 and renders at 24px under
+  the helper's `.fab` clause (inherited from `b002bbe`; this batch is the first
+  bare `a.fab` consumer to reach it). The `a.fab.button` login branch was
+  already 24px and is unchanged. Accepted as a transitional effect of the
+  incremental migration; **icon sizing in fab contexts is owned by the future
+  Fab epic**, which absorbs this helper and settles the behavior.
 - **`loader` spike (LabelManager): missing glyph.** No `loader.svg` exists in
   `public/icons/`, the community tier, or the managed tier, so the legacy
   element already renders a 404 blank in production today. `cn-loader` is the
@@ -184,7 +196,11 @@ is that batch's to repair.
 
 `svelte/sites/**` (toc, handouts, settings, assets, data, clocks, fabs).
 Fab/button-hosted icons — heavy tag-rule re-expression; verify control spacing
-and fab sizing per pre-flight.
+and fab sizing per pre-flight. Carry forward Batch C's bare-`a.fab` sizing
+departure: this surface has more fabs, so record each `.fab` variant reached
+(`a.fab`, `a.fab.button`, `button.fab`) rather than assuming Batch C settled
+them. `site-asset-upload.spec.ts`'s `cn-icon[noun="delete"]` breaks here and is
+this batch's to repair.
 
 ### Batch E — Characters (svelte)
 
