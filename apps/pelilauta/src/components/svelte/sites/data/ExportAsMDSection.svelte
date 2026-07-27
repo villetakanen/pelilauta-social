@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { saveAs } from 'file-saver';
 import { createSiteExport } from 'src/firebase/client/site/createSiteExport';
 import { exportSiteAsMd } from 'src/firebase/client/site/exportSiteAsMd';
@@ -25,14 +26,14 @@ async function exportSiteAsDoc() {
   <h3>{t('site:data.export.asMarkdown')}</h3>
     
   <button class="text" onclick={exportSite} type="button">
-    <cn-icon noun="arrow-down"></cn-icon>
+    <Icon noun="arrow-down" />
     <span>{t('actions:export.asZippedFolder')}</span>
   </button>
 
   <p class="downscaled text-low">{t('site:toc.importExport.description')}</p>
 
   <button class="text" onclick={exportSiteAsDoc} type="button">
-    <cn-icon noun="arrow-down"></cn-icon>
+    <Icon noun="arrow-down" />
     <span>{t('site:data.actions.asMarkdonwDocument')}</span>
   </button>
 

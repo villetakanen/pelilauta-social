@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { CnStoryClock } from '@11thdeg/cn-story-clock';
+import Icon from '@design-system/components/Icon.svelte';
 import type { Clock } from 'src/schemas/ClockSchema';
 import { uid } from '../../../stores/session';
 import { site } from '../../../stores/site';
@@ -39,7 +40,7 @@ async function handleChange(event: CustomEvent) {
   </p>
   {#if !view}
     <a href={`/sites/${$site?.key}/delete/clock/${clock.key}`} aria-label="delete clock" class="button text">
-      <cn-icon noun="delete"></cn-icon>
+      <Icon noun="delete" />
     </a>
   {/if}
 </div>

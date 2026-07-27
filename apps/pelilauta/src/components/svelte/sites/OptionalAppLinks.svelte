@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
@@ -20,7 +21,7 @@ const member = $derived.by(() => {
   {#if $site.useClocks}
     <li>
       <a href={`/sites/${$site.key}/clocks`} class="tray-button">
-        <cn-icon noun="clock" xsmall></cn-icon>
+        <Icon noun="clock" size="xsmall" />
         <span>{t('site:clocks.title')}</span>
       </a>
     </li>
@@ -28,7 +29,7 @@ const member = $derived.by(() => {
   {#if $site.useHandouts && member}
     <li>
       <a href={`/sites/${$site?.key}/handouts`} class="tray-button">
-        <cn-icon noun="books" xsmall></cn-icon>
+        <Icon noun="books" size="xsmall" />
         <span>{t('site:handouts.title')}</span>
       </a>
     </li>
@@ -36,7 +37,7 @@ const member = $derived.by(() => {
   {#if $site.useCharacters }
     <li>
       <a href={`/sites/${$site?.key}/characters`} class="tray-button">
-        <cn-icon noun="adventurer" xsmall></cn-icon>
+        <Icon noun="adventurer" size="xsmall" />
         <span>{t('site:characters.title')}</span>
       </a>
     </li>
@@ -44,7 +45,7 @@ const member = $derived.by(() => {
   {#if $site.useCharacters && $site.useCharacterKeeper && member}
     <li>
       <a href={`/sites/${$site?.key}/keeper`} class="tray-button">
-        <cn-icon noun="adventurer" xsmall></cn-icon>
+        <Icon noun="adventurer" size="xsmall" />
         <span>{t('site:keeper.title')}</span>
       </a>
     </li>

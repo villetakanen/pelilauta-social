@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { systemToNoun } from 'src/utils/schemaHelpers';
@@ -23,25 +24,25 @@ const showActions = $derived.by(() => {
     <ul>
       <li>
         <a href={`/sites/${site.key}/members`} class="tray-button">
-          <cn-icon noun="adventurer" xsmall></cn-icon>
+          <Icon noun="adventurer" size="xsmall" />
           <span>{t('site:members.title')}</span>
         </a>
       </li>
       <li>
         <a href={`/sites/${site.key}/data`} class="tray-button">
-          <cn-icon noun="import-export" xsmall></cn-icon>
+          <Icon noun="import-export" size="xsmall" />
           <span>{t('site:data.title')}</span>
         </a>
       </li>
       <li>
         <a href={`/sites/${site.key}/options`} class="tray-button">
-          <cn-icon noun="tools" xsmall></cn-icon>
+          <Icon noun="tools" size="xsmall" />
           <span>{t('site:options.title')}</span>
         </a>
       </li>
       <li>
         <a href={`/sites/${site.key}/settings`} class="tray-button">
-          <cn-icon noun="tools" xsmall></cn-icon>
+          <Icon noun="tools" size="xsmall" />
           <span>{t('site:settings.title')}</span>
         </a>
       </li>
@@ -49,6 +50,6 @@ const showActions = $derived.by(() => {
   </nav>
 {:else}
   <div class="flex items-center justify-center p-2" style="opacity:0.11">
-    <cn-icon noun={noun} large></cn-icon>
+    <Icon noun={noun} size="large" />
   </div>
 {/if}

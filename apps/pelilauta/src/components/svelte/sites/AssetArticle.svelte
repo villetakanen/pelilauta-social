@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { deleteSiteAsset } from 'src/firebase/client/site/deleteSiteFromAssets';
 import type { Asset } from 'src/schemas/AssetSchema';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -31,9 +32,9 @@ async function copyMarkdown() {
   {#if asset.mimetype?.includes("image")}
     <img src={asset.url} alt={asset.name} />
   {:else if asset.mimetype?.includes("/pdf")}
-    <cn-icon noun="pdf"></cn-icon>
+    <Icon noun="pdf" />
   {:else}
-    <cn-icon noun="assets"></cn-icon>
+    <Icon noun="assets" />
   {/if}
   <div>
     <p class="m-0">
@@ -51,7 +52,7 @@ async function copyMarkdown() {
       aria-label={t("actions:copy-markdown")}
       onkeydown={(e) => e.key === "Enter" && copyMarkdown()}
     >
-      <cn-icon noun="copy-md"></cn-icon>
+      <Icon noun="copy-md" />
     </button>
     {#if showActions}
       <a
@@ -59,7 +60,7 @@ async function copyMarkdown() {
         href={`/sites/${site?.key}/assets/${asset.name}`}
         class="button"
       >
-        <cn-icon noun="edit"></cn-icon>
+        <Icon noun="edit" />
       </a>
       <button
         onclick={deleteAsset}
@@ -67,7 +68,7 @@ async function copyMarkdown() {
         onkeydown={(e) => e.key === "Enter" && deleteAsset()}
         type="button"
       >
-        <cn-icon noun="delete"></cn-icon>
+        <Icon noun="delete" />
       </button>
     {/if}
   </div>

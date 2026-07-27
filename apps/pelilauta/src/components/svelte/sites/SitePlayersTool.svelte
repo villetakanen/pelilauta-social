@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { addNotification } from 'src/firebase/client/notifications';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
@@ -82,7 +83,7 @@ function setUsePlayers(e: Event) {
       type="button"
       disabled={$uid === player}
       onclick={() => dropPlayer(player)}>
-      <cn-icon noun="delete"></cn-icon>
+      <Icon noun="delete" />
     </button>
   </div>
 {/each}

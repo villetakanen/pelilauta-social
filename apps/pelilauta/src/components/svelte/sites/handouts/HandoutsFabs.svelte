@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../../stores/session';
@@ -20,7 +21,7 @@ const visible = $derived.by(() => {
     href={`/sites/${site.key}/create/handout`}
     class="fab button">
     
-    <cn-icon noun="add" small></cn-icon>
+    <Icon noun="add" size="small" />
     <span class="sm-hidden">{t('actions:create.handout')}</span>
     
   </a>

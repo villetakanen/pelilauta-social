@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { PageSchema } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack } from 'src/utils/client/snackUtils';
@@ -140,7 +141,7 @@ function cancel() {
             {t('actions:cancel')}
           </button>
           <button type="submit" data-testid="create-page-button">
-            <cn-icon noun="add"></cn-icon>
+            <Icon noun="add" />
             <span>{t('actions:create.page')}</span>
           </button>
         </div>

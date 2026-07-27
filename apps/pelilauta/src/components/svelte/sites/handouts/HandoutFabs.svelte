@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Handout } from 'src/schemas/HandoutSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
@@ -22,7 +23,7 @@ const visible = $derived.by(() => {
         href={`/sites/${site.key}/handouts/${handout.key}/edit`}
         class="fab button"
       >
-        <cn-icon noun="edit" small></cn-icon>
+        <Icon noun="edit" size="small" />
         <span class="sm-hidden">{t('actions:edit')}</span>
       </a>
     {/if}
