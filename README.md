@@ -5,7 +5,7 @@ Pelilauta community and its local design system.
 
 ## Project Status
 
-**Current release:** `v21.0.0-beta.5`
+**Current release:** `v21.0.0-beta.7`
 
 v21 has a verified import of the live v18 application, the approved v20-derived
 Light and Dark color themes, and its first Lit-to-Svelte component migration: a
@@ -51,19 +51,18 @@ The root workspace version identifies v21 releases. The version in
 `apps/pelilauta/package.json` remains the imported application's baseline
 version until a separate product decision requires changing it.
 
-`v21.0.0-beta.6` builds on `v21.0.0-beta.5` with the completed server-rendered
-icon surface and the lessons-compounding harness (#41). All direct `.astro`
-`<cn-icon>` consumers now use the local `Icon`; dynamic nouns resolve through
-the reviewed catalog, and legacy Cyan tag-scoped layout behavior is re-expressed
-for the local markup. Lessons files are now optional, non-durable candidate
-queues and compact lessons-learned logs; durable project behavior remains in
-specs, practices, plans, tests, skills, PRs, and runbooks.
+`v21.0.0-beta.7` builds on `v21.0.0-beta.6` by migrating the thread,
+discussion, inbox, and site Svelte surfaces to the local `Icon`. Legacy Cyan
+control and layout behavior remains available through a bounded application
+migration layer, and the site surface adds reviewed `sort` artwork to the local
+catalog. Direct Svelte `<cn-icon>` consumer files have decreased from 73 to 38.
 
 This beta does not claim that every Svelte icon consumer or authenticated write
 journey has been accepted as a complete v18 replacement; those remain gates
-before a v21 release candidate. Earlier betas delivered the catalog provenance
-sort (`beta.5`), delivery governance and iconography book (`beta.4`), contextual
-icon sizing (`beta.3`), and the initial local Icon capability (`beta.2`).
+before a v21 release candidate. Earlier betas delivered the server icon surface
+and lessons harness (`beta.6`), catalog provenance sort (`beta.5`), delivery
+governance and iconography book (`beta.4`), contextual icon sizing (`beta.3`),
+and the initial local Icon capability (`beta.2`).
 
 ## Commands
 
