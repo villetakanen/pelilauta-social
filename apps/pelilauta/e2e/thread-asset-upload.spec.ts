@@ -153,7 +153,7 @@ test.describe('Thread Asset Upload', () => {
 
     // Now add a reply with an image
     // First, open the reply dialog
-    const replyButton = page.locator('button:has(cn-icon[noun="send"])');
+    const replyButton = page.locator('button:has(.cn-icon[data-noun="send"])');
     await expect(replyButton).toBeVisible({ timeout: 5000 });
     await replyButton.click();
 

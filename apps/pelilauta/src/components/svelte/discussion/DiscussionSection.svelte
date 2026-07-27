@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import {
   REPLIES_COLLECTION,
   type Reply,
@@ -105,7 +106,7 @@ onMount(async () => {
     {:else}
       <div class="toolbar items-center">
         <a href="/login" class="button">
-          <cn-icon noun="send"></cn-icon>
+          <Icon noun="send" />
           <span>{t("actions:login")}</span>
         </a>
       </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { deleteNotification } from 'src/firebase/client/inbox/deleteNotification';
 import { markRead } from 'src/firebase/client/inbox/markRead';
 import type { Notification } from 'src/schemas/NotificationSchema';
@@ -55,7 +56,7 @@ async function remove() {
 <article
   class={`notification-item flex flex-no-wrap mb-1 p-1 border-radius ${notification.read ? "" : "elevation-4"}`}
 >
-  <cn-icon {noun} small class="mt-1 flex-none"></cn-icon>
+  <span class="mt-1 flex-none"><Icon {noun} size="small" /></span>
   <div class="grow">
     <p class="m-0">
       <ProfileLink uid={notification.from} />
@@ -75,11 +76,11 @@ async function remove() {
       onclick={read}
       aria-label={t("actions:markRead")}
     >
-      <cn-icon noun="check"></cn-icon>
+      <Icon noun="check" />
     </button>
   {:else}
     <button class="text flex-none" aria-label="delete" onclick={remove}>
-      <cn-icon noun="delete"></cn-icon>
+      <Icon noun="delete" />
     </button>
   {/if}
 </article>

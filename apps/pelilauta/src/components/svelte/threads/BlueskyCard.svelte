@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Thread } from '@schemas/ThreadSchema';
 import { uid } from '@stores/session';
 import { pushSnack } from '@utils/client/snackUtils';
@@ -59,7 +60,7 @@ async function handleShare() {
 
     <div class="toolbar items-center">
       <button onclick={handleShare} disabled={isSharing}>
-        <cn-icon noun="share"></cn-icon>
+        <Icon noun="share" />
         <span>
           {isSharing ? t("threads:share.sharing") : t("threads:share.button")}
         </span>

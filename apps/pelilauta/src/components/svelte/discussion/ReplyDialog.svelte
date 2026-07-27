@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
@@ -80,7 +81,7 @@ async function handleSave() {
 
 <div class="toolbar items-center">
   <button type="button" onclick={showDialog}>
-    <cn-icon noun="send"></cn-icon>
+    <Icon noun="send" />
     <span>{t("threads:discussion.reply")}</span>
   </button>
 </div>
@@ -92,7 +93,7 @@ async function handleSave() {
     <div class="reply-content">
       {#if error}
         <div class="error-message">
-          <cn-icon noun="info"></cn-icon>
+          <Icon noun="info" />
           <span>{error}</span>
         </div>
       {/if}
@@ -138,10 +139,10 @@ async function handleSave() {
       </button>
       <button type="button" disabled={saving} onclick={handleSave}>
         {#if saving}
-          <cn-icon noun="send"></cn-icon>
+          <Icon noun="send" />
           <span>{t("actions:send")}</span>
         {:else}
-          <cn-icon noun="send"></cn-icon>
+          <Icon noun="send" />
           <span>{t("actions:send")}</span>
         {/if}
       </button>

@@ -19,8 +19,8 @@
  * Spec: specs/design-system/components/cn-icon/spec.md
  */
 import { getIcon as getCommunityIcon } from "../icons/community";
-import { getManagedIcon } from "./managed-tier";
 import { FallbackIcons } from "./icon-fallback";
+import { getManagedIcon } from "./managed-tier";
 
 let { noun = "", size = "medium", "aria-label": ariaLabel = "" }: {
   noun?: string;
@@ -83,7 +83,6 @@ const dimension = $derived(sizes[size] || sizes.medium);
     height: var(--icon-dim);
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    vertical-align: middle;
   }
   .cn-icon svg {
     width: 100%;

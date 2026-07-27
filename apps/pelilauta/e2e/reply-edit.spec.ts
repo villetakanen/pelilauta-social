@@ -43,7 +43,9 @@ test('can create and edit a reply', async ({ page }) => {
 
   // Click reply button to open dialog
   // Try a more specific selector if getByRole fails
-  const replyButton = page.locator('button:has(cn-icon[noun="send"])').first();
+  const replyButton = page
+    .locator('button:has(.cn-icon[data-noun="send"])')
+    .first();
   if (await replyButton.isVisible()) {
     await replyButton.click();
   } else {
@@ -86,7 +88,7 @@ test('can create and edit a reply', async ({ page }) => {
   // Click the edit button. It might be inside a menu or directly visible depending on implementation.
   // In ReplyArticle.svelte I added:
   // <button class="text" onclick={() => editDialog?.showDialog()}>
-  //   <cn-icon noun="edit" small></cn-icon>
+  //   <Icon noun="edit" size="small" />
   //   <span>{t('actions:edit')}</span>
   // </button>
   // It is inside the <ul> of <cn-menu>.
@@ -97,7 +99,7 @@ test('can create and edit a reply', async ({ page }) => {
   // Click the edit button.
   // Use evaluate to bypass visibility checks completely
   await replyArticle
-    .locator('button:has(cn-icon[noun="edit"])')
+    .locator('button:has(.cn-icon[data-noun="edit"])')
     .evaluate((node) => (node as HTMLElement).click());
 
   // Wait for edit dialog

@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { updateReply } from 'src/firebase/client/threads/updateReply';
 import type { Reply } from 'src/schemas/ReplySchema';
 import { t } from 'src/utils/i18n';
@@ -85,7 +86,7 @@ async function handleSave() {
                     class="error-message"
                     style="background: var(--cn-color-error-bg, #fee); color: var(--cn-color-error, #c00); padding: var(--cn-gap-xs); border-radius: var(--cn-radius); margin-bottom: var(--cn-gap);"
                 >
-                    <cn-icon noun="info"></cn-icon>
+                    <Icon noun="info" />
                     <span>{error}</span>
                 </div>
             {/if}
@@ -137,7 +138,7 @@ async function handleSave() {
                 onclick={handleSave}
             >
                 {#if saving}
-                    <cn-icon noun="clock"></cn-icon>
+                    <Icon noun="clock" />
                     <span>{t("actions:saving") || "Saving..."}</span>
                 {:else}
                     {t("actions:save")}
