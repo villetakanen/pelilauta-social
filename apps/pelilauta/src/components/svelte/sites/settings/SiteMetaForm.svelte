@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { ASSET_LICENSES_KEYS } from '@schemas/AssetSchema';
 import { systemToNounMapping } from '@schemas/nouns';
 import {
@@ -157,7 +158,7 @@ const descriptionLength = $derived($activeSite?.description?.length || 0);
         {#if $isSaving}
           <cn-loader noun="save"></cn-loader>
         {:else}
-          <cn-icon noun="save"></cn-icon>
+          <Icon noun="save" />
         {/if}
           <span>{t('actions:save')}</span>
       </button>

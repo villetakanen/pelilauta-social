@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { addClocktoSite } from 'src/firebase/client/site/addClockToSite';
 import { parseClock } from 'src/schemas/ClockSchema';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -74,13 +75,13 @@ const clock = $state(
       <span>{t('entries:clock.tickIndex')}</span>
       <span>{t('entries:clock.tickSize')}</span>
       <span>
-        <cn-icon noun="add" small></cn-icon>
+        <Icon noun="add" size="small" />
       </span>
       <span>
-        <cn-icon noun="reduce" small></cn-icon>
+        <Icon noun="reduce" size="small" />
       </span>
       <span>
-        <cn-icon noun="delete" small></cn-icon>
+        <Icon noun="delete" size="small" />
       </span>
     
     {#each clock.ticks as tick, i}
@@ -88,15 +89,15 @@ const clock = $state(
       <span>{tick}</span>
         <button type="button" class="text" onclick={() => increaseTick(i)}
             aria-label={t('actions:increase.tick')}>
-          <cn-icon noun="add" small></cn-icon>
+          <Icon noun="add" size="small" />
         </button>
         <button type="button" class="text" onclick={() => decreaseTick(i)}
             aria-label={t('actions:decrease.tick')}>
-          <cn-icon noun="reduce" small></cn-icon>
+          <Icon noun="reduce" size="small" />
         </button>
         <button type="button" class="text" onclick={() => clock.ticks.splice(i, 1)}
             aria-label={t('actions:delete.tick')}>
-          <cn-icon noun="delete" small></cn-icon>
+          <Icon noun="delete" size="small" />
         </button>
     {/each}
     </div>
@@ -104,7 +105,7 @@ const clock = $state(
     <hr>
     <div class="toolbar justify-end">
     <button onclick={addTick} class="text" type="button">
-        <cn-icon noun="add" small></cn-icon>
+        <Icon noun="add" size="small" />
         <span>{t('actions:create.tick')}</span>
     </button>
   </div>
@@ -112,7 +113,7 @@ const clock = $state(
 
   <div class="toolbar">
   <button type="submit">
-    <cn-icon noun="clock"></cn-icon>
+    <Icon noun="clock" />
     <span>{t('actions:save')}</span></button>
     </div>
   </form>

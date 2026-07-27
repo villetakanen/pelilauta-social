@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
 import { site, update } from '../../../stores/site';
@@ -45,7 +46,7 @@ function setSelectedUid(e: Event) {
       type="button"
       disabled={$uid === owner}
       onclick={() => dropOwner(owner)}>
-      <cn-icon noun="delete"></cn-icon>
+      <Icon noun="delete" />
     </button>
   </div>
 {/each}

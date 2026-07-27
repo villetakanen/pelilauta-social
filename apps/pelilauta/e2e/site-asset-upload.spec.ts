@@ -37,7 +37,7 @@ test.describe('Site Asset Upload', () => {
 
     // Look for the upload button/FAB
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     // Wait for upload button to be visible (only visible to owners)
@@ -85,7 +85,7 @@ test.describe('Site Asset Upload', () => {
     await waitForAuthState(page, 15000);
 
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });
@@ -133,7 +133,7 @@ test.describe('Site Asset Upload', () => {
     });
 
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });
@@ -181,7 +181,7 @@ test.describe('Site Asset Upload', () => {
     await waitForAuthState(page, 15000);
 
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });
@@ -213,7 +213,7 @@ test.describe('Site Asset Upload', () => {
 
     // Look for delete button within the asset article
     const deleteButton = assetArticle.locator(
-      'button:has(cn-icon[noun="delete"])',
+      'button:has(.cn-icon[data-noun="delete"])',
     );
     await expect(deleteButton).toBeVisible({ timeout: 5000 });
 
@@ -238,7 +238,7 @@ test.describe('Site Asset Upload', () => {
 
     // Upload button should not be visible for anonymous users
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     // Button should either not exist or not be visible
@@ -262,7 +262,7 @@ test.describe('Site Asset Upload', () => {
 
     // As an owner (existing user is owner), button should be visible
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });
@@ -277,7 +277,7 @@ test.describe('Site Asset Upload', () => {
     await waitForAuthState(page, 15000);
 
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });
@@ -341,7 +341,7 @@ test.describe('Site Asset Upload', () => {
     await waitForAuthState(page, 15000);
 
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });
@@ -447,7 +447,7 @@ test.describe('Site Asset Upload', () => {
     await waitForAuthState(page, 15000);
 
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .or(page.locator('.fab'));
 
     await expect(uploadButton).toBeVisible({ timeout: 10000 });

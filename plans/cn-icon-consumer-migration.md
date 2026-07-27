@@ -195,12 +195,51 @@ is that batch's to repair.
 ### Batch D — Sites (svelte)
 
 `svelte/sites/**` (toc, handouts, settings, assets, data, clocks, fabs).
-Fab/button-hosted icons — heavy tag-rule re-expression; verify control spacing
-and fab sizing per pre-flight. Carry forward Batch C's bare-`a.fab` sizing
-departure: this surface has more fabs, so record each `.fab` variant reached
-(`a.fab`, `a.fab.button`, `button.fab`) rather than assuming Batch C settled
-them. `site-asset-upload.spec.ts`'s `cn-icon[noun="delete"]` breaks here and is
-this batch's to repair.
+Twenty-five files, 45 usages, migrated to the local `Icon`. 63 → 38 consumer
+files remain. Delivered as one PR (human decision 2026-07-27, declining a
+D1/D2 split).
+
+Pre-flight outcomes:
+
+- **No new tag rule is reached.** The inventory over this surface matches rules
+  the Batch C helper already owns: `button` / `a.button` size and spacing, the
+  `button.fab` / `a.button.fab` margin cancel, and `h3 cn-icon`.
+  `ManualTocOrdering`'s `sort` icon is the first real consumer of the `h3`
+  alignment rule, which Batch C added speculatively. `.flex.items-start >
+  cn-icon` and `cn-sortable-list cn-icon[noun="drag"]` have no consumer here —
+  `ManualTocOrdering` uses neither a sortable list nor a drag icon.
+- **Batch C's bare-`a.fab` sizing departure does not recur.** Every fab on this
+  surface is `a.fab.button` (`ClocksFabs`, `PageFabs`, `HandoutFabs`,
+  `HandoutsFabs`) or `button.fab` (`UploadAssetFab`). Both already resolved to
+  the small icon size in v18 via `a.button cn-icon` / `button cn-icon`, so
+  sizing is unchanged. The departure remains specific to bare `a.fab`
+  (`ChannelFabs`) and stays owned by the Fab epic.
+- **`sort` spike (ManualTocOrdering): artwork ported.** Human decision
+  2026-07-27: reuse the existing project chevron rotated 90° rather than source
+  new artwork. Added as a community icon derived from `chevron-left` via
+  `rotate(-90 64 64)`, giving a down-chevron; same polygon, so no invented
+  vocabulary. Follows the existing `chevron-right` mirror precedent. This turns
+  today's production blank into real artwork.
+- **`import-export` (SiteAdminActions) stays the missing glyph**, per the human
+  retirement decision in the sort ledger.
+- **Dynamic nouns resolve completely.** `SystemSelect` (`systemToNounMapping`)
+  and `SiteAdminActions` (`systemToNoun`) reach the same nine values —
+  `homebrew`, `ll-ampersand`, `dd5`, `myrrys-scarlet`, `thequick`, `mekanismi`,
+  `pbta`, `hood`, `pathfinder` — all present in the managed tier, with
+  `homebrew` as the mapped default. No persisted value changes.
+- **`class`/`style` passthrough was not added.** `SiteThemeImageInput` passed
+  `class="flex-none"` and inline flex styles to the legacy element;
+  re-expressed as a wrapper span, following the `NotificationItem` and
+  `AppFooter` pattern rather than widening the component's contract.
+- **e2e selectors broken by this batch were repaired in it:**
+  `site-asset-upload.spec.ts` (`assets` via `UploadAssetFab`, `delete` via
+  `AssetArticle`) now selects `.cn-icon[data-noun="…"]`. Not run here — the
+  suite needs the emulator and is in no gate.
+
+Debt found, not owned by this batch: `manual-toc-ordering.spec.ts` selects
+`cn-icon[noun="drag-handle"]`, a noun that exists nowhere in `apps/pelilauta/src`.
+It is a dead selector independent of this migration; it belongs to the terminal
+batch alongside the footer and `label-tag` selectors.
 
 ### Batch E — Characters (svelte)
 
@@ -317,3 +356,14 @@ they now render the blank/404 glyph — `check` in `RemoveAccountSection`,
 catalog-only (no live blank). These spots resolve when those consumers migrate
 to the local `Icon` (they'll show the missing glyph there too, by design, since
 the nouns are intentionally gone).
+
+Sort round 3 (human 2026-07-27, Batch D):
+
+| Noun | Decision | Status |
+| --- | --- | --- |
+| sort | ours → community, derived from the project `chevron-left` rotated 90° (`rotate(-90 64 64)`) rather than sourced as new artwork | **Done** — added + registry regenerated + provenance recorded |
+
+`sort` had no artwork in any tier nor under `public/icons/`, so its legacy
+consumer (`ManualTocOrdering`) rendered blank in production. Reusing the
+existing project chevron follows the `chevron-right` mirror precedent: the same
+project polygon under an SVG transform, not invented vocabulary.

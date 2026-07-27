@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../../stores/session';
@@ -25,7 +26,7 @@ const showActions = $derived.by(() => {
 
 {#if showActions}
 <a class="button" href={`/sites/${site.key}/toc/settings`}>
-  <cn-icon noun="tools"></cn-icon>
+  <Icon noun="tools" />
   <span>{t('site:toc.admin.title')}</span>
 </a>
 {/if}

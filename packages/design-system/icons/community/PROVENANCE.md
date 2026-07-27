@@ -13,6 +13,7 @@ component. Proprietary artwork is never stored here; it stays in the
 | `card` | v18 `apps/pelilauta/public/icons/card.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `chevron-left` | v18 `apps/pelilauta/public/icons/chevron-left.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `chevron-right` | Derived from the project `chevron-left` (horizontal mirror via SVG transform) | Monochrome, `fill="currentColor"`. Its natural pair; not invented artwork — the same project polygon reflected. Absent from v18 (the legacy `chevron-right` consumers rendered blank). |
+| `sort` | Derived from the project `chevron-left` (90° rotation via SVG transform, `rotate(-90 64 64)`) | Monochrome, `fill="currentColor"`. Human decision 2026-07-27: reuse the existing project chevron rotated to point down rather than sourcing new artwork — the same project polygon, not invented vocabulary. Absent from v18 and from every tier, so the legacy `sort` consumer rendered blank. |
 | `clock` | v18 `apps/pelilauta/public/icons/clock.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `dragger` | v18 `apps/pelilauta/public/icons/dragger.svg` (project-created) | Monochrome, `fill="currentColor"`. Copied verbatim. |
 | `arrow-up` | v18 `apps/pelilauta/public/icons/arrow-up.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |

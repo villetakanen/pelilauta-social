@@ -22,7 +22,8 @@ export type CommunityNoun =
   | "palette"
   | "pdf"
   | "reduce"
-  | "search";
+  | "search"
+  | "sort";
 
 export interface IconEntry {
   inner: string;
@@ -52,6 +53,7 @@ const _registry: Record<CommunityNoun, IconEntry> = {
   "pdf": { viewBox: "0 0 128 128", inner: "<g\n     id=\"icon\" fill=\"currentColor\"\n     transform=\"matrix(0.25396835,0,0,0.25396824,-1.015923,-1.0159202)\">\n    <path\n       d=\"m 480,288 v -32 h -96 v 160 h 32 v -64 h 48 v -32 h -48 v -32 z\"\n       id=\"path1\" />\n    <path\n       d=\"M 304,416 H 240 V 256 h 64 c 27.199,0 48,20.801 48,48 v 64 c 0,27.199 -20.801,48 -48,48 z m -32,-32 h 32 c 9.6016,0 16,-6.3984 16,-16 v -64 c 0,-9.6016 -6.3984,-16 -16,-16 h -32 z\"\n       id=\"path2\" />\n    <path\n       d=\"M 176,256 H 96 v 160 h 32 v -48 h 48 c 17.602,0 32,-14.398 32,-32 v -48 c 0,-17.602 -14.398,-32 -32,-32 z m -48,80 v -48 h 48 v 48 z\"\n       id=\"path3\" />\n    <path\n       d=\"m 352,224 v -64 c 0,-4.8008 -1.6016,-8 -4.8008,-11.199 l -112,-112 C 232,33.6018 228.8008,32.0002 224.0002,32.0002 h -160 c -17.602,0 -32,14.398 -32,32 v 384 c 0,17.602 14.398,32 32,32 h 256 v -32 h -256 v -384 h 128 v 96 c 0,17.602 14.398,32 32,32 h 96 v 32 z M 224,160 V 70.398 L 313.602,160 Z\"\n       id=\"path4\" />\n  </g>" },
   "reduce": { viewBox: "0 0 128 128", inner: "<defs\n   id=\"defs1\" />\n\n<path\n   style=\"fill:currentColor;stroke-width:0;stroke-linecap:round;paint-order:markers stroke fill\"\n   d=\"M 0,70 8,58 h 120 l -8,12 H 0\"\n   id=\"icon\" />" },
   "search": { viewBox: "0 0 128 128", inner: "<g id=\"icon\" fill=\"currentColor\">\n    <polygon points=\"91.8 84.9 128 123.4 108.6 128 79.2 96.8 91.8 84.9\"/>\n    <path d=\"M55.1,111.1C24.4,111.1-.5,86.2-.5,55.5S24.4,0,55.1,0s55.5,24.9,55.5,55.5-24.9,55.5-55.5,55.5ZM55.1,14c-22.9,0-41.5,18.6-41.5,41.5s18.6,41.5,41.5,41.5,41.5-18.6,41.5-41.5S78,14,55.1,14Z\"/>\n  </g>" },
+  "sort": { viewBox: "0 0 128 128", inner: "<g transform=\"rotate(-90 64 64)\">\n        <polygon fill=\"currentColor\" id=\"icon\" points=\"80 20 92 32 52 64 92 96 80 108 28 64 80 20\"/>\n    </g>" },
 };
 
 export function getIcon(noun: CommunityNoun | (string & {})): IconEntry | undefined {
