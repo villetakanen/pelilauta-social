@@ -6,6 +6,7 @@ provenance:
   - "Current-only compatibility assets: apps/pelilauta/public/icons/ (search, bsky, label-tag, undo, pbta-logo)"
   - "Human decisions 2026-07-20: empty noun treated as unknown; missing-icon fallback accepted as deliberate change; v18 assistive-technology noun announcement retained"
   - "Human decision 2026-07-21: the five icon sizes are all legitimately used, so an icon renders at its selected size by default. A context that needs one icon size standardizes every icon within it to that context's size regardless of the icon's own selection — buttons and fabs render icons at the button icon size — as a design-system rule resolving against the local component, not per-consumer hardcoding. Intended mechanism is that the context sets the public --cn-icon-size-* tokens within its scope, refining v20 packages/cyan/src/core/buttons.css and fab.css at 02880fbc, which force the component's private --icon-dim with !important. Legacy Cyan CSS expressed these rules against the cn-icon element; the durable migration response is docs/practices/consumer-migration.md."
+  - "Human decision 2026-07-27: Icon owns intrinsic icon rendering and tokens, not temporary Button, Fab, layout, or typography compatibility. During incremental Cyan migration, reached cross-capability selectors are preserved by minimal application migration helpers until their local capability owns and removes them."
   - "Established v18 sizing evidence: 16, 24, 36, 72, 128 px at default root font size (@11thdeg/cyan-css@4.0.0-beta.39 dist/tokens/units.css)"
 ---
 
@@ -57,6 +58,12 @@ intentional artwork across Light and Dark modes.
   each icon's selection. This is a design-system rule that resolves against the
   local icon component, so it applies equally to migrated icons; sizing an icon
   for a context is not each consumer's responsibility.
+- Icon does not own the surrounding control, layout, or typography rules that
+  establish that context. While migrated icons coexist with Cyan contexts,
+  reached cross-capability selectors must be preserved by minimal application
+  migration helpers, not by intrinsic Icon styling. The relevant local Button,
+  Fab, layout, or typography capability must absorb the behavior and remove its
+  helper when that context migrates.
 - Monochrome artwork inherits the surrounding foreground color, including
   link, button, selected, status, hover, active, and disabled states. Current
   production deviates from this because a global theme property overrode the
@@ -144,6 +151,10 @@ intentional artwork across Light and Dark modes.
   standardization is re-expressed against the local component so the context
   behavior survives; it is not left to per-consumer hardcoding or silently
   dropped.
+- Until the owning local context exists, required cross-capability behavior is
+  isolated in an application migration helper. It does not enter stable Icon
+  CSS, and the helper is removed when its named local capability takes
+  ownership.
 
 ## Acceptance
 

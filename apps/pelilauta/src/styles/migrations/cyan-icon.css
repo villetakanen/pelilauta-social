@@ -1,0 +1,54 @@
+/*
+ * Temporary Cyan cn-icon migration helpers.
+ *
+ * Keep this file limited to legacy element selectors reached by migrated
+ * consumers. Each rule remains only until its named local capability owns the
+ * behavior; this inventory is an input when selecting the next migration epic.
+ */
+
+/*
+ * Source: @11thdeg/cyan-css core/buttons.css and core/fab.css.
+ * Current consumers: migrated button and fab icons.
+ * Future owners: Button and Fab. Remove when those local capabilities replace
+ * Cyan control styling.
+ */
+:where(button, a.button, .fab) .cn-icon {
+  --cn-icon-size-xsmall: var(--cn-icon-size-small);
+  --cn-icon-size: var(--cn-icon-size-small);
+  --cn-icon-size-large: var(--cn-icon-size-small);
+  --cn-icon-size-xlarge: var(--cn-icon-size-small);
+}
+
+button .cn-icon:first-child:not(:only-child),
+a.button .cn-icon:first-child:not(:only-child) {
+  margin-left: calc(var(--cn-grid) * -1);
+}
+
+button .cn-icon:only-child,
+a.button .cn-icon:only-child {
+  margin-top: 1px;
+  margin-right: -9px;
+  margin-left: -9px;
+}
+
+button.fab .cn-icon:first-child:not(:only-child),
+a.button.fab .cn-icon:first-child:not(:only-child) {
+  margin-left: 0;
+}
+
+/*
+ * Source: @11thdeg/cyan-css atomics/flex.css.
+ * Current consumers: direct local Icon children of legacy flex layouts.
+ * Future owner: local layout primitives. Remove with the Cyan flex utilities.
+ */
+.flex.items-start > .cn-icon {
+  flex-grow: 0;
+}
+
+/*
+ * Source: @11thdeg/cyan-css utilities/helpers.css.
+ * Future owner: local heading/inline layout. Keep alignment out of Icon itself.
+ */
+h3 .cn-icon {
+  vertical-align: middle;
+}

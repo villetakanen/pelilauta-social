@@ -91,35 +91,18 @@ test("icon.css :root defines exactly the five sizing tokens with the v20 values"
   assert.equal(found.length, 5, "no unrelated icon sizing tokens are defined at :root");
 });
 
-test("icon.css collapses the size vocabulary to the button icon size in button and fab contexts", () => {
+test("icon.css owns only the stable icon token vocabulary", () => {
   const css = readFileSync(new URL("../styles/icon.css", import.meta.url), "utf8");
   const context = css.replace(/:root\s*\{[^}]*\}/, "");
 
-  // The context targets the local Icon element inside buttons and fabs.
-  assert.match(context, /button[\s\S]*?\.cn-icon\s*\{/, "context rule targets .cn-icon inside buttons");
-  assert.match(context, /\.fab/, "context rule covers fabs");
-
-  // Every size other than the target small collapses to the button icon size,
-  // so any size selection renders at the control's size.
-  for (const token of [
-    "--cn-icon-size-xsmall",
-    "--cn-icon-size",
-    "--cn-icon-size-large",
-    "--cn-icon-size-xlarge",
-  ]) {
-    const re = new RegExp(`${token.replace(/-/g, "\\-")}\\s*:\\s*var\\(\\s*--cn-icon-size-small\\s*\\)`);
-    assert.match(context, re, `${token} collapses to the button icon size`);
-  }
-
-  // The small token is the target and is not redefined by the context rule.
   assert.ok(
-    !/--cn-icon-size-small\s*:/.test(context),
-    "the small token is not redefined by the context rule",
+    !/\S/.test(context.replace(/\/\*[\s\S]*?\*\//g, "")),
+    "no contextual rules follow :root",
   );
-
-  // Contextual sizing sets the public tokens; it must not force the
-  // component's private dimension variable (v20's --icon-dim !important bug).
-  assert.ok(!/--icon-dim/.test(css), "the context rule does not touch the private --icon-dim");
+  assert.ok(
+    !/button|\.fab|\.flex|h3/.test(css),
+    "consumer contexts stay outside stable Icon CSS",
+  );
 });
 
 test("community registry generation is deterministic (--check passes)", () => {

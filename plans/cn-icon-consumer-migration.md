@@ -30,11 +30,11 @@ Cyan components.
   Svelte files remain; recount before each new batch.
 - **The dominant risk is per-consumer and invisible to automation.** The local
   component renders `<span class="cn-icon">`, so every `@11thdeg/cyan-css` rule
-  scoped to the `<cn-icon>` *tag* (size, negative margin, button circularity,
+  scoped to the `<cn-icon>` *tag* (size, control spacing,
   flex/heading layout) silently stops applying at each migrated site. Unit and
   registry tests never render in the consumer context and cannot see it.
   Rendered-in-context visual acceptance in Light and Dark is the only gate that
-  catches it (consumer-migration pre-flight step 6).
+  catches it (consumer-migration pre-flight step 7).
 - **Delivery contract.** Each merge — not the lifetime branch diff — is the
   deployable, coherently reversible unit; migrate one bounded surface at a time.
   A single 95-file merge that each needs its own visual acceptance is neither
@@ -92,7 +92,7 @@ From `docs/practices/consumer-migration.md` and the approved specs:
 2. **A class does not match a tag rule.** Re-express size via the public
    `--cn-icon-size-*` tokens in the consumer's scope (or `size=` prop); never
    override the private `--icon-dim`, never with `!important`. Re-express
-   margin/layout/circularity as a DS rule targeting the `.cn-icon` class or the
+   margin/layout behavior as a DS rule targeting the `.cn-icon` class or the
    consumer's own layout — record which.
 3. **Resolve every noun before consumer migration:** add approved catalog
    artwork or record an explicit missing-glyph decision inside the batch that
@@ -109,7 +109,9 @@ Ordered so shared/common nouns are ported early and dynamic-noun surfaces come
 after the catalog is complete. Each batch is one PR: `feat/cn-icon` → `main`.
 Counts are approximate; the exact file split is confirmed at each batch's
 pre-flight. Each batch: pre-flight → catalog port for its nouns → migrate →
-`astro check` + unit + relevant e2e + both app builds → visual acceptance.
+`astro check` + unit + contract tests + both app builds → visual acceptance.
+Keep deprecated e2e selectors aligned, but do not use that suite as acceptance
+evidence unless it is explicitly restored to a gate.
 
 ### Server Surface — complete or in review
 
@@ -126,17 +128,63 @@ Follow-up outside PR #41: `ChannelApp` still uses `chevron-left` as a forward
 breadcrumb separator while `SimplifiedChannelApp` uses `chevron-right`. This is
 inherited behavior now made audible; decide it in a later bounded consumer slice.
 
-### Batch C — Threads & discussion (svelte)
+### Batch C — Threads & discussion (svelte) — accepted
 
 `svelte/threads/*`, `svelte/discussion/*`, `svelte/inbox/NotificationItem`.
-Hydrated consumers with reactive noun updates (`ChannelThreadList`). Spike
-`loader` (LabelManager) — likely superseded by `cn-loader`; confirm.
+Ten files, 24 usages, migrated to the local `Icon`. 73 → 63 consumer files
+remain.
+
+Pre-flight outcomes:
+
+- **Control spacing was the missing re-expression.** This batch is the first to
+  put the local component inside real `button` / `a.button` chrome with a
+  sibling label, so `button cn-icon:first-child:not(:only-child)` (negative
+  `--cn-grid` pull-back), `button cn-icon:only-child` (both-side pull-in plus
+  the 1px drop), and the `button.fab` cancel had no `.cn-icon` equivalent yet.
+  Added to the temporary application-owned
+  `apps/pelilauta/src/styles/migrations/cyan-icon.css`, mirroring the legacy
+  selector shapes exactly, so a bare `a.fab` (`ChannelFabs`) keeps its
+  untouched spacing as today. That helper also owns contextual size
+  standardization, the `items-start` flex-grow cancel, and the reached legacy
+  `h3` alignment until local Button, Fab, layout, and typography capabilities
+  replace them. Stable Icon CSS remains limited to the icon token vocabulary.
+- **`loader` spike (LabelManager): missing glyph.** No `loader.svg` exists in
+  `public/icons/`, the community tier, or the managed tier, so the legacy
+  element already renders a 404 blank in production today. `cn-loader` is the
+  real spinner; swapping it in is a behavior change, not an icon migration.
+  Migrated as-is, which turns today's blank into the missing glyph — the same
+  deliberate transitional state as the human-retired nouns. Human approval of
+  this outcome is part of this batch's acceptance.
+- **`check` (NotificationItem) stays the missing glyph**, per the human
+  retirement decision in the sort ledger. This batch converts that consumer's
+  blank into the missing glyph, which is the recorded intent.
+- **Dynamic `channel.icon`** (`ChannelThreadList`, three sites) resolves
+  against the vocabulary completed in the dynamic-noun batch; no persisted
+  value changes.
+- **`class` passthrough was not added.** `NotificationItem` passed
+  `class="mt-1 flex-none"` to the legacy element; re-expressed as a wrapper
+  span carrying those layout classes, following the `AppFooter` pattern rather
+  than widening the component's contract.
+- **e2e selectors broken by this batch were repaired in it:**
+  `reply-edit.spec.ts` (`send`, `edit`) and `thread-asset-upload.spec.ts`
+  (`send`) now select `.cn-icon[data-noun="…"]`. Not run here — the suite needs
+  the emulator and is in no gate.
+
+Acceptance (human, 2026-07-27): rendered Light/Dark contexts accepted; the
+`loader` missing-glyph outcome approved.
+
+Debt found, not owned by this batch: `thread-labels.spec.ts` selects
+`cn-icon[noun="label-tag"]`, already broken by PR #41's
+`EntryTagsWithLabelsSection` migration. Same silent-failure class as the footer
+`color-theme.spec.ts` selector; both belong to the terminal batch.
+`site-asset-upload.spec.ts`'s `cn-icon[noun="delete"]` breaks with Batch D and
+is that batch's to repair.
 
 ### Batch D — Sites (svelte)
 
 `svelte/sites/**` (toc, handouts, settings, assets, data, clocks, fabs).
-Fab/button-hosted icons — heavy tag-rule re-expression; verify circularity and
-fab sizing per pre-flight.
+Fab/button-hosted icons — heavy tag-rule re-expression; verify control spacing
+and fab sizing per pre-flight.
 
 ### Batch E — Characters (svelte)
 
@@ -176,8 +224,8 @@ tightest completeness check — by this batch every offered noun must resolve.
   shows local `.cn-icon` markup.
 - Every noun reachable in the batch's surface resolves to reviewed artwork or
   the intended missing glyph; no persisted noun value changes.
-- `astro check` 0 errors; pelilauta + design builds pass; existing unit tests
-  pass; relevant e2e passes.
+- `astro check` 0 errors; pelilauta + design builds pass; existing unit and
+  migration contract tests pass.
 - Community catalog additions carry provenance; monochrome artwork uses
   `currentColor`; proprietary artwork is never copied into public DS source.
 - (Batch H) Zero-consumer grep gate passes; parity + `currentColor` checks are

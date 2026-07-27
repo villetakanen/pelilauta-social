@@ -41,6 +41,22 @@ rediscover. Each links to its evidence.
 - **Per-consumer, rendered-in-context visual acceptance is the only gate that
   catches tag-selector breakage today.** Unit and registry tests never render
   in the consumer context, so they cannot see it.
+- **The end-to-end suite is a second consumer of the element tag.** Playwright
+  specs locate controls by the legacy tag (`button:has(cn-icon[noun="send"])`),
+  so migrating the source breaks them — silently, because the suite needs the
+  emulator and sits in no gate. The migrated equivalent is
+  `.cn-icon[data-noun="…"]`.
+- **An earlier batch does not retire the tag-rule inventory.** The rules that
+  apply depend on the context, not on the component, so a later surface can be
+  the first to reach a rule nobody has re-expressed yet — the button and fab
+  icon spacing rules survived several batches that way. Re-run the inventory
+  for each batch's own contexts.
+- **Cross-capability bridges are application migration helpers.** When a local
+  component reaches a legacy selector owned by a capability that has not yet
+  migrated, re-express only that reached selector under
+  `apps/pelilauta/src/styles/migrations/`. Record its legacy source, current
+  consumers, future owner, and removal condition. Do not make temporary Button,
+  Fab, layout, or typography behavior intrinsic to the migrated component.
 
 ### Open debts
 
@@ -67,20 +83,29 @@ Run this before implementing any Lit-consumer migration.
    `:first-child:not(:only-child)` variants), `.fab cn-icon`,
    `button.fab` / `a.button.fab cn-icon:first-child:not(:only-child)`,
    `.flex.items-start > cn-icon`, `h3 cn-icon`, and
-   `cn-sortable-list cn-icon[noun="drag"]`. These set size, negative margin,
-   button circularity (`:has(cn-icon:only-child)`), and flex/heading layout.
+   `cn-sortable-list cn-icon[noun="drag"]`. These set size, control spacing,
+   and flex/heading layout. Cyan 4 has no `:has(cn-icon:only-child)` rule.
 3. **Decide how each matching rule is re-expressed against the local
    component**, not per-consumer hardcoding:
    - *Size* → the context sets the public `--cn-icon-size-*` tokens within its
      scope (see Carried Decisions).
-   - *Margin / layout / circularity* → a design-system rule that targets the
-     local component's class, or the consumer's own layout where the rule was
-     consumer-specific. Record which.
+   - *Margin / layout* → the owning local capability, or an
+     explicitly temporary application migration helper when that capability
+     does not exist yet. Keep helpers limited to selectors reached by migrated
+     consumers and record their future owner and removal condition.
    - A rule with no consumer in the migrated surface is noted and skipped.
 4. **Confirm each noun's disposition:** reviewed catalog artwork or an explicit
    approved missing-glyph outcome. Resolve undecided nouns before migration.
-5. **Implement**, then run the smallest applicable deterministic checks
-   (`astro check`, unit, relevant e2e, both app builds).
-6. **Rendered-in-context visual acceptance** of the migrated surface in Light
+   A noun with no artwork in any tier and none under `public/icons/` is already
+   rendering blank in production; say so in the disposition rather than
+   treating the miss as new.
+5. **Grep the deprecated e2e suite for the tag** over the surface being migrated
+   (`grep -rn '<tag>' apps/pelilauta/e2e`) and repair every selector this batch
+   breaks, in this batch. Record selectors an earlier batch already broke as
+   named debt rather than leaving them to fail silently. Do not cite these e2es
+   as acceptance evidence unless the suite is explicitly restored to a gate.
+6. **Implement**, then run the smallest applicable deterministic checks
+   (`astro check`, unit, contract tests, both app builds).
+7. **Rendered-in-context visual acceptance** of the migrated surface in Light
    and Dark. This is a required gate, not optional; it is the only check that
    catches a missed tag rule.

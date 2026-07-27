@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
@@ -60,14 +61,14 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
         <ul>
           <li>
             <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
-              <cn-icon noun="fork" small></cn-icon>
+              <Icon noun="fork" size="small" />
               <span>{t("actions:fork")}</span>
             </a>
           </li>
           {#if fromUser}
             <li>
               <button class="text" onclick={() => editDialog?.showDialog()}>
-                <cn-icon noun="edit" small></cn-icon>
+                <Icon noun="edit" size="small" />
                 <span>{t("actions:edit")}</span>
               </button>
             </li>
@@ -75,7 +76,7 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
               <a
                 href={`/threads/${reply.threadKey}/replies/${reply.key}/delete`}
               >
-                <cn-icon noun="delete" small></cn-icon>
+                <Icon noun="delete" size="small" />
                 <span>{t("actions:delete")}</span>
               </a>
             </li>
