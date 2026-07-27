@@ -10,5 +10,5 @@
 | A deterministic test protects behavior only when a real command or gate executes it. | Applied | Root test dispatcher, pre-push hook, and build registry checks |
 | Rendered-in-context acceptance remains necessary where unit tests cannot observe legacy layout selectors. | Applied | Consumer migration pre-flight |
 | Branch lessons must collect reusable candidates, not become generic agent memory or a delivery log. | Applied | `docs/practices/lessons.md`; project skills and `AGENTS.md` |
-| Netlify's ready state does not prove pnpm-linked SSR dependencies survived upload; use a hoisted install, guard the observed adapter import, and keep endpoint verification authoritative. | Applied | Pelilauta Netlify config and SSR entry build check; release endpoint gate |
+| Netlify's ready state does not prove traced SSR dependencies survived upload; stage hoisted dependencies under the preserved app path and keep endpoint verification authoritative. | Applied | Pelilauta Netlify build scripts and config; release endpoint gate |
 | The footer color-theme e2e still targets the removed custom-element tag. | Deferred | `plans/cn-icon-consumer-migration.md` terminal batch |
