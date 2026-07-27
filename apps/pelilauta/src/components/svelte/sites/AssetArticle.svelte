@@ -32,9 +32,9 @@ async function copyMarkdown() {
   {#if asset.mimetype?.includes("image")}
     <img src={asset.url} alt={asset.name} />
   {:else if asset.mimetype?.includes("/pdf")}
-    <Icon noun="pdf" />
+    <span class="asset-icon"><Icon noun="pdf" /></span>
   {:else}
-    <Icon noun="assets" />
+    <span class="asset-icon"><Icon noun="assets" /></span>
   {/if}
   <div>
     <p class="m-0">
@@ -87,7 +87,7 @@ async function copyMarkdown() {
     max-height: calc(8 * var(--cn-grid));
     justify-self: center;
   }
-  .asset > cn-icon {
+  .asset-icon {
     justify-self: center;
   }
 </style>
