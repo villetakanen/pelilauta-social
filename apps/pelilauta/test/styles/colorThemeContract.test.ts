@@ -1,12 +1,41 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 const appRoot = fileURLToPath(new URL('../..', import.meta.url));
+const workspaceRoot = fileURLToPath(new URL('../../../..', import.meta.url));
 const stylesRoot = fileURLToPath(
   new URL('../../../../packages/design-system/styles', import.meta.url),
 );
+
+/**
+ * Locate an installed package directory without assuming the pnpm store layout.
+ * Under `node-linker=hoisted` a dependency exists only in the workspace-root
+ * `node_modules`, not the app's, so a hardcoded app-relative path throws ENOENT.
+ * Throws rather than returning nothing: an empty read would make these contract
+ * tests pass while covering no installed source at all.
+ */
+function installedDir(relative: string): string {
+  const candidates = [
+    join(appRoot, 'node_modules', relative),
+    join(workspaceRoot, 'node_modules', relative),
+  ];
+  const found = candidates.find((candidate) => existsSync(candidate));
+  if (!found) {
+    throw new Error(
+      `Installed source not found for '${relative}'. Looked in:\n  ${candidates.join('\n  ')}`,
+    );
+  }
+  return found;
+}
+
+const installedCyanDirs = [
+  '@11thdeg/cyan-css/src',
+  '@11thdeg/cyan-lit',
+  '@11thdeg/cn-story-clock',
+  '@11thdeg/cn-d20-ability-score',
+];
 
 const expectedReferences = {
   '--cn-color-primary-0': 'oklch(0 0 185)',
@@ -177,12 +206,9 @@ describe('v20 color theme contract', () => {
   });
 
   it('resolves application and installed Cyan color aliases without cycles', () => {
-    const installedSources = [
-      'node_modules/@11thdeg/cyan-css/src',
-      'node_modules/@11thdeg/cyan-lit',
-      'node_modules/@11thdeg/cn-story-clock',
-      'node_modules/@11thdeg/cn-d20-ability-score',
-    ].flatMap((directory) => readSources(join(appRoot, directory)));
+    const installedSources = installedCyanDirs.flatMap((directory) =>
+      readSources(installedDir(directory)),
+    );
     const appSources = readSources(join(appRoot, 'src'));
     const styleSources = readSources(stylesRoot);
     const available = declarations(
@@ -200,12 +226,9 @@ describe('v20 color theme contract', () => {
   });
 
   it('leaves --color-on intentionally undefined with a currentColor fallback', () => {
-    const installedSources = [
-      'node_modules/@11thdeg/cyan-css/src',
-      'node_modules/@11thdeg/cyan-lit',
-      'node_modules/@11thdeg/cn-story-clock',
-      'node_modules/@11thdeg/cn-d20-ability-score',
-    ].flatMap((directory) => readSources(join(appRoot, directory)));
+    const installedSources = installedCyanDirs.flatMap((directory) =>
+      readSources(installedDir(directory)),
+    );
     const appSources = readSources(join(appRoot, 'src'));
     const styleSources = readSources(stylesRoot);
     const available = declarations(

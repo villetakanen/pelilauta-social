@@ -35,10 +35,16 @@
       "!**/node_modules/**/*",
       "!**/dist/**/*",
       "!**/.astro/**/*",
+      "!**/.netlify/**/*",
       "!**/.vercel/**/*",
+      "!**/test-results/**/*",
+      "!**/playwright-report/**/*",
       "!**/*.cjs",
       "!**/cn-lightbox/**/*",
-      "!tooling/**/*"
+      "!**/tooling/**/*",
+      "!**/*.svg",
+      "!packages/myrrys-proprietary/**/*",
+      "!packages/design-system/icons/community.ts"
     ]
   },
   "overrides": [

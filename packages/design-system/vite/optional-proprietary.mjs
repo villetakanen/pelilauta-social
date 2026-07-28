@@ -1,5 +1,5 @@
-import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 /**
  * Vite plugin that resolves the optional `@myrrys/proprietary` managed icon
@@ -16,12 +16,12 @@ import { fileURLToPath } from "node:url";
  */
 export function optionalProprietary(realUrl) {
   const realPath = fileURLToPath(realUrl);
-  const SPEC = "@myrrys/proprietary";
-  const VIRTUAL = "\0virtual:myrrys-proprietary-empty";
+  const SPEC = '@myrrys/proprietary';
+  const VIRTUAL = '\0virtual:myrrys-proprietary-empty';
   /** @type {import("vite").Plugin} */
   const plugin = {
-    name: "optional-myrrys-proprietary",
-    enforce: "pre",
+    name: 'optional-myrrys-proprietary',
+    enforce: 'pre',
     resolveId(id) {
       if (id === SPEC) return existsSync(realPath) ? realPath : VIRTUAL;
       if (id === VIRTUAL) return VIRTUAL;
@@ -29,7 +29,7 @@ export function optionalProprietary(realUrl) {
     },
     load(id) {
       if (id === VIRTUAL) {
-        return "export const getIcon = () => undefined;\nexport const getNouns = () => [];\n";
+        return 'export const getIcon = () => undefined;\nexport const getNouns = () => [];\n';
       }
       return null;
     },
