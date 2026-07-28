@@ -138,7 +138,7 @@ function handleChannelDeleted(deletedSlug: string) {
     {#if error}
       <div class="p-4 border border-error radius-s bg-error-low">
         <p class="text-error">
-          <Icon noun="info" />
+          <Icon noun="info" size="small" />
           {error}
         </p>
                 <button onclick={() => error = null} class="btn btn-sm mt-2">

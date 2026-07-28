@@ -45,32 +45,32 @@ async function testSSRNoAuth() {
   <ul>
     <li>
       <a href="/admin/channels">
-        <Icon noun="discussion" /> Forum Administration
+        <Icon noun="discussion" size="small" /> Forum Administration
       </a>
     </li>
     <li>
       <a href="/admin/messaging">
-        <Icon noun="send" /> Social Media Poster
+        <Icon noun="send" size="small" /> Social Media Poster
       </a>
     </li>
     <li>
       <a href="/admin/users">
-        <Icon noun="adventurer" /> User Management
+        <Icon noun="adventurer" size="small" /> User Management
       </a>
     </li>
     <li>
       <a href="/admin/sheets">
-        <Icon noun="adventurer" /> Character Sheets
+        <Icon noun="adventurer" size="small" /> Character Sheets
       </a>
     </li>
     <li>
       <a href="/admin/sites">
-        <Icon noun="mekanismi" /> Site Activity
+        <Icon noun="mekanismi" size="small" /> Site Activity
       </a>
     </li>
     <li>
       <a href="/admin/snackbar-test">
-        <Icon noun="info" /> Snackbar Test
+        <Icon noun="info" size="small" /> Snackbar Test
       </a>
     </li>
     <li>
@@ -88,4 +88,3 @@ async function testSSRNoAuth() {
     </li>
   </ul>
 </WithAuth>
-

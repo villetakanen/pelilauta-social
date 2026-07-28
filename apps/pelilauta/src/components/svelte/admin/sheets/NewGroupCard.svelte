@@ -27,7 +27,7 @@ function addGroup() {
 
 <cn-card>
   <div class="flex items-center">
-    <Icon noun="card" />
+    <Icon noun="card" size="large" />
   </div>
   <label>
     <span>Group Name</span>

@@ -4,7 +4,7 @@ provenance:
   - "Parent rendering contract: specs/design-system/components/cn-icon/spec.md (the Icon component owns sizes, contextual colour, the size-standardization mechanism, missing-glyph rendering, and the assistive-technology noun announcement; this spec anchors to it and does not restate those values)"
   - "Human design decision 2026-07-21: the iconography book is a usage/design-principles page — why icons are used, when an icon may stand alone vs. carry a label, accessibility-in-use, and the vocabulary grouped by purpose — not a technical catalog dump. Informed by an agent-drafted principles page reviewed by the human and by the Pelilauta RPG-community context (threads, character sheets, forums)."
   - "Human decision 2026-07-28: the tier formerly named community is renamed open-source. The distinction it draws is openly licensed versus proprietary, not authorship; the old name misdescribed the tier as soon as third-party artwork was admitted."
-  - "Human decision 2026-07-28: the open-source tier admits permissively licensed third-party artwork alongside project-created artwork. Each noun's PROVENANCE.md row states which kind it is and names the copyright holder and licence; the licence text is vendored beside the artwork. First admissions: Fluent UI System Icons bin-recycle-24-filled (MIT, (c) 2020 Microsoft Corporation, microsoft/fluentui-system-icons@5ecd79ea56f2be0169859b3b881dcc890be932fc) adopted as the delete artwork with the trash noun retired onto it; and Ant Design Icons filled exclamation-circle (MIT, (c) 2018-present Ant UED, ant-design/ant-design-icons@6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1) adopted as the warning artwork. Copyright holders are taken from each project's upstream LICENSE, not from aggregator pages, which credited a contributor instead of the holder."
+  - "Human decision 2026-07-28: the open-source tier admits permissively licensed third-party artwork alongside project-created artwork. Each noun's PROVENANCE.md row states which kind it is; a third-party row names the copyright holder, licence, and immutable upstream source, with the licence text vendored beside the artwork. First admissions: Fluent UI System Icons bin-recycle-24-filled (MIT, (c) 2020 Microsoft Corporation, microsoft/fluentui-system-icons@5ecd79ea56f2be0169859b3b881dcc890be932fc) adopted as the delete artwork with the trash noun retired onto it; and Ant Design Icons filled exclamation-circle (MIT, (c) 2018-present Ant UED, ant-design/ant-design-icons@6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1) adopted as the warning artwork. Copyright holders are taken from each project's upstream LICENSE, not from aggregator pages, which credited a contributor instead of the holder."
   - "Human decision 2026-07-21: adding a community icon noun is a human-approved change recording the artwork's source in PROVENANCE.md and confirming it is project-licensable; community-tier membership confers project licensing; community artwork is monochrome, authored to render with the surrounding foreground (currentColor). Formalizes the practice already applied for fox and search."
   - "Human decision 2026-07-21: the managed (myrrys) tier is enumerable, so the book lists all managed icons when the submodule is present (not merely by example). Community icons are ported from the existing pelilauta application decisively, one at a time — each an individual human-approved admission, not a bulk import — so the catalog grows alongside the per-consumer Cyan migrations."
   - "Human decision 2026-07-21: noun aliases are deferred out of scope until a real consumer need appears (distinct nouns only); the design-system book IS required for this capability to be Done (governance-only work is not exempt from the CLAUDE.md Delivery-Contract book rule) and is the deliverable."
@@ -111,13 +111,14 @@ content.
   commit, and the licence text is vendored beside the artwork. Open-source
   artwork is
   monochrome and authored to inherit the surrounding foreground.
-- **Porting is one at a time.** Open-source icons are ported from the existing
-  pelilauta application decisively, one at a time — each an individual
-  human-approved admission, never a bulk import — so the catalog grows alongside
-  the per-consumer Cyan migrations rather than ahead of a real need.
+- **Admission is one at a time.** Open-source icons are admitted from the
+  existing Pelilauta application or an approved upstream source decisively, one
+  at a time — each an individual human-approved admission, never a bulk import —
+  so the catalog grows alongside the per-consumer Cyan migrations rather than
+  ahead of a real need.
 - **Source tiers** resolve in precedence **open-source → managed → bundled
   fallback → missing glyph** (ported from v20 `02880fbc`): open-source
-  (project-licensed monochrome, in-repo, with provenance), managed (proprietary
+  (openly licensed monochrome, in-repo, with provenance), managed (proprietary
   branded artwork from `@myrrys/proprietary`, optional at build and runtime —
   absent degrades through the remaining tiers rather than failing), bundled
   fallback (`packages/design-system/components/icon-fallback.ts`, MIT, always
@@ -132,7 +133,9 @@ content.
 - Does not define the Icon rendering contract — sizes, the size-standardization
   mechanism, colour resolution, missing-glyph rendering, and the
   assistive-technology announcement are owned by the `cn-icon` spec.
-- Does not redesign existing artwork or rename persisted or dynamic nouns.
+- Does not redesign or re-point artwork as an incidental effect of a consumer
+  migration, or rename persisted or dynamic nouns. Deliberate artwork revisions
+  remain human-approved catalog decisions under the governance above.
 - Does not invent artwork or aliases for nouns absent from every approved
   source, nor promise icons the catalog does not contain; the book documents the
   vocabulary that actually exists.

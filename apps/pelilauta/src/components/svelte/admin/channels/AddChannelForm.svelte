@@ -96,7 +96,7 @@ function handleSubmit(event: SubmitEvent) {
 {#if success}
   <div class="p-4 border border-success radius-s bg-success-low mb-4">
     <p class="text-success">
-      <Icon noun="check" />
+      <Icon noun="check" size="small" />
       {t('admin:channels.add.success', { name: channelName })}
     </p>
   </div>
@@ -105,7 +105,7 @@ function handleSubmit(event: SubmitEvent) {
     {#if error}
       <div class="p-4 border border-error radius-s bg-error-low">
         <p class="text-error">
-          <Icon noun="info" />
+          <Icon noun="info" size="small" />
           {error}
         </p>
       </div>

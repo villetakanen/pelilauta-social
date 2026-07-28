@@ -5,7 +5,7 @@
  */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { getIcon as getManagedIcon } from '../../myrrys-proprietary/index.ts';
@@ -64,6 +64,39 @@ test('every open-source icon is monochrome currentColor (no hardcoded fill)', ()
       `${noun} has no hardcoded hex fill`,
     );
   }
+});
+
+test('open-source artwork and provenance rows are in exact parity', () => {
+  const directory = new URL('../icons/open-source/', import.meta.url);
+  const artwork = readdirSync(directory)
+    .filter((name) => name.endsWith('.svg'))
+    .map((name) => name.slice(0, -4))
+    .sort();
+  const provenance = readFileSync(
+    new URL('../icons/open-source/PROVENANCE.md', import.meta.url),
+    'utf8',
+  );
+  const nounTable = provenance.split('| Noun | Source | Notes |')[1];
+  assert.ok(nounTable, 'provenance noun table is present');
+  const rows = [...nounTable.matchAll(/^\| `([^`]+)` \| ([^|]+) \|/gm)];
+  const nouns = rows.map((row) => row[1]);
+
+  assert.equal(
+    new Set(nouns).size,
+    nouns.length,
+    'provenance nouns are unique',
+  );
+  assert.ok(
+    rows.every((row) => row[2].trim().length > 0),
+    'every provenance row records a source',
+  );
+  assert.ok(
+    rows.every((row) =>
+      /^\*\*(?:Project-created|Third-party, [^*]+)\.\*\*/.test(row[2].trim()),
+    ),
+    'every provenance row identifies its source kind',
+  );
+  assert.deepEqual(nouns.sort(), artwork);
 });
 
 test('managed tier owns the branded featured-tag nouns', () => {
