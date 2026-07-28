@@ -1,7 +1,7 @@
 # RC.1 Toolchain Upgrades
 
 Status: Draft 2026-07-28
-Branch: not yet opened — this plan is a requirement register, not an active arc
+Branch: `chore/repo-tooling` opened step 1; the remaining steps are unstarted
 Decision: human 2026-07-28 — Astro and Vite must be current before `v21.0.0-rc.1`;
 too large for the current beta line, so they are logged here rather than started.
 
@@ -28,7 +28,7 @@ Recorded 2026-07-28 against installed versions, not just declared ranges.
 | `vitest` | `^2.1.8` | 2.1.9 | 4.1.10 | **2** |
 | `svelte` | `^5.39.6` | 5.43.5 | 5.56.8 | 0 (minor drift) |
 | `@astrojs/check` | `^0.9.4` | 0.9.5 | 0.9.10 | 0 (patch drift) |
-| `workbox-cli` | `^7.3.0` | 7.3.0 | 7.4.1 | 0 (minor drift) |
+| `workbox-cli` | `^7.4.1` | 7.4.1 | 7.4.1 | 0 — **done in this slice** |
 
 `astro` and `vite` are declared in both apps' dependency sets; `apps/design`
 carries `astro` and `@astrojs/svelte` too, so every Astro-major step is a
@@ -54,12 +54,11 @@ attempt 5→7 in one merge.
 
 Cheap and independent first, so the risky steps start from a clean baseline.
 
-1. **`workbox-cli` 7.3.0 → 7.4.1.** Independent of Astro. Moves workbox from
-   `rollup: ^2.43.1` to `^4.53.3`, removing `rollup@2.79.2` from the tree and
-   with it the dual peer-resolution of `astro@5.15.4` that broke
-   `pnpm install --frozen-lockfile` (see PR #48). Verified output-equivalent:
-   same 309 precached URLs / 7.82 MB and the same 12 hashed fonts. `^7.3.0`
-   already admits 7.4.1, so this is a lockfile bump.
+1. ~~**`workbox-cli` 7.3.0 → 7.4.1.**~~ **Done in this slice.** Moved workbox
+   from `rollup: ^2.43.1` to `^4.53.3`, removing `rollup@2.79.2` and with it the
+   dual peer-resolution of `astro@5.15.4` that broke
+   `pnpm install --frozen-lockfile` under `node-linker=hoisted`. Output
+   equivalent: same precache manifest, same 12 hashed fonts.
 2. **`svelte` and `@astrojs/check` drift.** Same-major, no API surface change
    expected. Cheap to verify and shrinks the diff of every later step.
 3. **`astro` 5 → 6**, with `@astrojs/netlify`, `@astrojs/svelte`, and `vite` to
@@ -75,22 +74,25 @@ plan should be read as a claim about what those majors changed.
 
 ## Known Landmines
 
-Found during the PR #48 investigation; both bear directly on these steps.
+Found while investigating the install failure repaired in this slice; both bear
+directly on the remaining steps.
 
-- **`apps/pelilauta/src/overrides.css` loads fonts by relative path into
-  `node_modules`** — `url("../node_modules/lato-font/fonts/…/lato-hairline.woff2")`.
-  This resolves only when `apps/pelilauta/node_modules/lato-font` exists, and it
-  fails **silently**: Vite emits nothing, the CSS ships bare
-  `lato-black.woff2` URLs, `dist/` contains zero woff2 files, and typography
-  falls back to a system stack with no build error. `node-linker=hoisted`
-  triggered exactly this. Any Vite major changes asset resolution, so this is the
-  most likely thing to break invisibly. **Fix the fragile reference before
-  step 3** — import from the package rather than reaching through a relative
-  path — or accept that every Vite step needs the font gate below.
-- **The Netlify SSR function bundle is the highest-risk surface.** The adapter
-  major moves with Astro, and the recent deploy fixes (`6be656a` through
-  `7c2d2ee`) show this repository has already been bitten by traced
-  dependencies not surviving upload. A green Netlify state is not evidence.
+- ~~**Relative `node_modules` font path.**~~ **Fixed in this slice.**
+  `overrides.css` addressed Lato as
+  `url("../node_modules/lato-font/fonts/…")`, which resolves only when
+  `apps/pelilauta/node_modules/lato-font` exists. Under `node-linker=hoisted`
+  it does not, and the failure is **silent** — Vite emits no asset, passes the
+  raw specifier into the built CSS, and the browser 404s. Now addressed as
+  `url("lato-font/fonts/…")` so node resolution handles it under any store
+  layout. The **font-emission gate below stays** regardless: any Vite major
+  changes asset resolution, and this class of failure produces no build error.
+- **The Netlify SSR function bundle is the highest-risk surface, and its health
+  cannot be read from Netlify's state.** The adapter major moves with Astro, and
+  the deploy fixes `6be656a`…`7c2d2ee` show this repository has already been
+  bitten by traced dependencies not surviving upload. Demonstrated again during
+  this slice: a `shamefully-hoist=true` preview reported deploy **SUCCESS** while
+  every SSR route returned **502** and only static assets served. Fetch an SSR
+  route on the preview; never accept "ready" as evidence.
 
 ## Gates Per Step
 
@@ -104,8 +106,8 @@ Every step in this plan must hold all of these, not a subset:
   hashed files and the built CSS references the hashed names. This is the
   regression detector for the landmine above and it is cheap; run it every step.
 - **Service worker gate:** the precache manifest stays at its expected size
-  (309 URLs / 7.82 MB on a clean `dist/` as of this plan). A silent drop is how
-  the missing fonts first surfaced.
+  (308 URLs / 7.8 MB on a clean `dist/` as of this plan; the broken-font state
+  reads 296 / 5.6 MB). A silent drop is how the missing fonts first surfaced.
 - A **Netlify preview deploy** verified against the live endpoint, per the
   release runbook. Required for any step touching the adapter or Vite.
 

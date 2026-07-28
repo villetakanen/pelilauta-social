@@ -24,10 +24,8 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("lato-font/fonts/lato-hairline/lato-hairline.woff2")
-    format("woff2"),
-    url("lato-font/fonts/lato-hairline/lato-hairline.woff")
-    format("woff");
+    url("lato-font/fonts/lato-hairline/lato-hairline.woff2") format("woff2"),
+    url("lato-font/fonts/lato-hairline/lato-hairline.woff") format("woff");
 }
 
 @font-face {
@@ -50,10 +48,8 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("lato-font/fonts/lato-thin/lato-thin.woff2")
-    format("woff2"),
-    url("lato-font/fonts/lato-thin/lato-thin.woff")
-    format("woff");
+    url("lato-font/fonts/lato-thin/lato-thin.woff2") format("woff2"),
+    url("lato-font/fonts/lato-thin/lato-thin.woff") format("woff");
 }
 
 @font-face {
@@ -65,8 +61,7 @@ main > footer h4 {
   src:
     url("lato-font/fonts/lato-thin-italic/lato-thin-italic.woff2")
     format("woff2"),
-    url("lato-font/fonts/lato-thin-italic/lato-thin-italic.woff")
-    format("woff");
+    url("lato-font/fonts/lato-thin-italic/lato-thin-italic.woff") format("woff");
 }
 
 @font-face {
@@ -76,10 +71,8 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("lato-font/fonts/lato-light/lato-light.woff2")
-    format("woff2"),
-    url("lato-font/fonts/lato-light/lato-light.woff")
-    format("woff");
+    url("lato-font/fonts/lato-light/lato-light.woff2") format("woff2"),
+    url("lato-font/fonts/lato-light/lato-light.woff") format("woff");
 }
 
 @font-face {
@@ -102,10 +95,8 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("lato-font/fonts/lato-normal/lato-normal.woff2")
-    format("woff2"),
-    url("lato-font/fonts/lato-normal/lato-normal.woff")
-    format("woff");
+    url("lato-font/fonts/lato-normal/lato-normal.woff2") format("woff2"),
+    url("lato-font/fonts/lato-normal/lato-normal.woff") format("woff");
 }
 
 @font-face {
@@ -128,10 +119,8 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("lato-font/fonts/lato-bold/lato-bold.woff2")
-    format("woff2"),
-    url("lato-font/fonts/lato-bold/lato-bold.woff")
-    format("woff");
+    url("lato-font/fonts/lato-bold/lato-bold.woff2") format("woff2"),
+    url("lato-font/fonts/lato-bold/lato-bold.woff") format("woff");
 }
 
 @font-face {
@@ -143,8 +132,7 @@ main > footer h4 {
   src:
     url("lato-font/fonts/lato-bold-italic/lato-bold-italic.woff2")
     format("woff2"),
-    url("lato-font/fonts/lato-bold-italic/lato-bold-italic.woff")
-    format("woff");
+    url("lato-font/fonts/lato-bold-italic/lato-bold-italic.woff") format("woff");
 }
 
 @font-face {
@@ -154,10 +142,8 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("lato-font/fonts/lato-black/lato-black.woff2")
-    format("woff2"),
-    url("lato-font/fonts/lato-black/lato-black.woff")
-    format("woff");
+    url("lato-font/fonts/lato-black/lato-black.woff2") format("woff2"),
+    url("lato-font/fonts/lato-black/lato-black.woff") format("woff");
 }
 
 @font-face {
