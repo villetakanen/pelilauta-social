@@ -24,9 +24,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-hairline/lato-hairline.woff2")
+    url("lato-font/fonts/lato-hairline/lato-hairline.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-hairline/lato-hairline.woff")
+    url("lato-font/fonts/lato-hairline/lato-hairline.woff")
     format("woff");
 }
 
@@ -37,9 +37,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-hairline-italic/lato-hairline-italic.woff2")
+    url("lato-font/fonts/lato-hairline-italic/lato-hairline-italic.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-hairline-italic/lato-hairline-italic.woff")
+    url("lato-font/fonts/lato-hairline-italic/lato-hairline-italic.woff")
     format("woff");
 }
 
@@ -50,9 +50,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-thin/lato-thin.woff2")
+    url("lato-font/fonts/lato-thin/lato-thin.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-thin/lato-thin.woff")
+    url("lato-font/fonts/lato-thin/lato-thin.woff")
     format("woff");
 }
 
@@ -63,9 +63,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-thin-italic/lato-thin-italic.woff2")
+    url("lato-font/fonts/lato-thin-italic/lato-thin-italic.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-thin-italic/lato-thin-italic.woff")
+    url("lato-font/fonts/lato-thin-italic/lato-thin-italic.woff")
     format("woff");
 }
 
@@ -76,9 +76,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-light/lato-light.woff2")
+    url("lato-font/fonts/lato-light/lato-light.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-light/lato-light.woff")
+    url("lato-font/fonts/lato-light/lato-light.woff")
     format("woff");
 }
 
@@ -89,9 +89,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-light-italic/lato-light-italic.woff2")
+    url("lato-font/fonts/lato-light-italic/lato-light-italic.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-light-italic/lato-light-italic.woff")
+    url("lato-font/fonts/lato-light-italic/lato-light-italic.woff")
     format("woff");
 }
 
@@ -102,9 +102,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff2")
+    url("lato-font/fonts/lato-normal/lato-normal.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff")
+    url("lato-font/fonts/lato-normal/lato-normal.woff")
     format("woff");
 }
 
@@ -115,9 +115,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff2")
+    url("lato-font/fonts/lato-normal-italic/lato-normal-italic.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff")
+    url("lato-font/fonts/lato-normal-italic/lato-normal-italic.woff")
     format("woff");
 }
 
@@ -128,9 +128,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff2")
+    url("lato-font/fonts/lato-bold/lato-bold.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff")
+    url("lato-font/fonts/lato-bold/lato-bold.woff")
     format("woff");
 }
 
@@ -141,9 +141,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff2")
+    url("lato-font/fonts/lato-bold-italic/lato-bold-italic.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff")
+    url("lato-font/fonts/lato-bold-italic/lato-bold-italic.woff")
     format("woff");
 }
 
@@ -154,9 +154,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-black/lato-black.woff2")
+    url("lato-font/fonts/lato-black/lato-black.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-black/lato-black.woff")
+    url("lato-font/fonts/lato-black/lato-black.woff")
     format("woff");
 }
 
@@ -167,9 +167,9 @@ main > footer h4 {
   font-display: swap;
   text-rendering: optimizeLegibility;
   src:
-    url("../node_modules/lato-font/fonts/lato-black-italic/lato-black-italic.woff2")
+    url("lato-font/fonts/lato-black-italic/lato-black-italic.woff2")
     format("woff2"),
-    url("../node_modules/lato-font/fonts/lato-black-italic/lato-black-italic.woff")
+    url("lato-font/fonts/lato-black-italic/lato-black-italic.woff")
     format("woff");
 }
 @media (max-width: 620px) {
