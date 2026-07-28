@@ -10,8 +10,8 @@ Practice: `docs/practices/consumer-migration.md` (required pre-flight)
 Every remaining direct `<cn-icon>` element consumer in `apps/pelilauta` renders
 through the local server-rendered `<Icon>` component. When the arc closes, app
 source contains **zero direct `<cn-icon>` element usages**; icons resolve through
-the tiered local catalog (community → managed → bundled fallback → missing) in
-Light and Dark with no visual regression against live v18.
+the tiered local catalog (community → managed → bundled fallback → missing) with
+no visual regression against live v18.
 
 ### What this arc is *not*
 
@@ -33,8 +33,9 @@ Cyan components.
   scoped to the `<cn-icon>` *tag* (size, control spacing,
   flex/heading layout) silently stops applying at each migrated site. Unit and
   registry tests never render in the consumer context and cannot see it.
-  Rendered-in-context visual acceptance in Light and Dark is the only gate that
-  catches it (consumer-migration pre-flight step 7).
+  Rendered-in-context visual acceptance is the only gate that catches it
+  (consumer-migration pre-flight step 7). What it checks is theme-independent —
+  size, spacing, layout — so one theme is sufficient.
 - **Delivery contract.** Each merge — not the lifetime branch diff — is the
   deployable, coherently reversible unit; migrate one bounded surface at a time.
   A single 95-file merge that each needs its own visual acceptance is neither
@@ -243,8 +244,63 @@ batch alongside the footer and `label-tag` selectors.
 
 ### Batch E — Characters (svelte)
 
-`svelte/characters/**` incl `CharacterApp`, library, fabs, `CharacterCard`
-(`systemKey` dynamic noun).
+`svelte/characters/**`: `ConfirmCharacterDeletion`, `CharactersFab`,
+`CharacterApp/CharacterHeader`, `CharacterApp/CharacterArticle`,
+`library/CharacterLibraryApp`, `library/CharacterLibraryFabs`. Six files, eight
+live usages, migrated to the local `Icon`. 38 → 33 consumer files remain.
+
+Pre-flight outcomes:
+
+- **No new tag rule is reached.** The inventory over this surface matches rules
+  the Batch C helper already owns: `button` / `a.button` size and spacing
+  (`ConfirmCharacterDeletion`'s `a.button.text` + `button.button.primary`,
+  `CharacterArticle`'s `a.button.text`), `button cn-icon:only-child`
+  (`CharacterHeader`'s bare settings `button`), and the `a.button.fab` margin
+  cancel (`CharactersFab`, `CharacterLibraryFabs`). `.flex.items-start >
+  cn-icon` has no consumer: `CharacterLibraryApp`'s empty-state section is
+  `.flex.flex-column`, not `items-start`. `h3 cn-icon` is not reached —
+  `CharacterArticle`'s toolbar heading is an `h2` and holds no icon.
+- **Batch C's bare-`a.fab` sizing departure does not recur.** Both character
+  fabs are `a.fab.button` with an explicit `small`, so they resolved to 24px in
+  v18 via `a.button cn-icon` and resolve to 24px now via `size="small"` under
+  the helper. Unchanged.
+- **`xlarge` maps exactly.** `CharacterLibraryApp`'s empty-state `monsters`
+  icon carried the legacy `xlarge` attribute (`:host([xlarge])` →
+  `--cn-icon-size-xlarge`, 128px); `size="xlarge"` resolves the same token. It
+  sits in no button/fab scope, so the helper's token override does not apply.
+- **`CharacterCard` is out of scope.** It renders `<cn-card noun={systemKey}>`,
+  not `<cn-icon>`. `cn-card` is a retained Cyan Lit component per this arc's
+  boundary, so the `systemKey` dynamic noun stays served by `/icons/{noun}.svg`
+  and migrates with a future Card epic, not here.
+- **Every noun already had reviewed artwork; no spike was needed.**
+  `arrow-left` and `add` are community; `delete`, `monsters`, `tools`, and
+  `edit` are managed. No missing-glyph outcome and no catalog change in this
+  batch.
+- **No e2e selector is broken by this batch.** The character specs
+  (`create-character`, `character-sheet-editing`, `character-keeper`) select
+  `cn-card[noun=…]`, which is untouched; `library.spec.ts:76` mentions
+  `cn-icon` only in a comment describing the dead sort-controls block below.
+
+- **Dead sort-controls block removed (human 2026-07-28).** `CharacterLibraryApp`
+  carried a commented-out sort-controls block containing
+  `<cn-icon noun={directionNoun}>` alongside references to `directionNoun`,
+  `toggleOrder`, `filters`, `FilteredSites`, and `userSites` — none of which
+  exist in the file or are imported by it. It was dead scaffolding rather than a
+  consumer, but it was the last literal `<cn-icon>` string under
+  `svelte/characters/**` and would have tripped Batch H's zero-usage grep gate.
+  Deleted here on human direction, keeping the gate honest instead of carrying
+  a known false positive to the terminal batch. No rendered output changes, and
+  no e2e is affected: `library.spec.ts`'s sort-direction test targets
+  `nav.toolbar` on `/library`, which is `site-library/UserSitesList`, not this
+  component. That live consumer migrates in Batch G.
+
+`svelte/characters/**` now contains zero `<cn-icon>` strings, commented or live.
+
+Acceptance (human 2026-07-28): rendered-in-context visual review is by hand, as
+on every release, and remains the gate that catches a missed tag rule. What this
+batch does not need is a separate dual-theme pass: every noun was
+already-reviewed artwork, the `Icon` inherits colour via `currentColor`, and no
+colour or theming surface is touched. Deterministic checks are green.
 
 ### Batch F — Admin (svelte)
 
@@ -288,10 +344,18 @@ tightest completeness check — by this batch every offered noun must resolve.
 
 ## Human Acceptance (per batch)
 
-Rendered-in-context Light and Dark review of the batch's surface, with explicit
-attention to button/fab/heading/flex contexts where cyan-css tag rules applied.
-Sign off community-asset provenance for that batch's ports. Approve each
-missing-noun spike outcome (port vs. missing glyph).
+Rendered-in-context review of the batch's surface, with explicit attention to
+button/fab/heading/flex contexts where cyan-css tag rules applied. Sign off
+community-asset provenance for that batch's ports. Approve each missing-noun
+spike outcome (port vs. missing glyph).
+
+**Light and Dark review is not a gate on these batches (human 2026-07-28).** It
+belongs to the design-system colour and theming capabilities, not to application
+consumer screens. The local `Icon` renders monochrome artwork with
+`currentColor`, so a consumer migration cannot change theme behaviour; branded
+managed artwork keeps its encoded colours in both themes either way. A batch
+whose only nouns are already-reviewed artwork and whose checks are green needs
+no separate human theme pass.
 
 ## Compatibility Boundaries
 

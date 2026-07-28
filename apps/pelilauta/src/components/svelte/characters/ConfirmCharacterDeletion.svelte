@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { authedDelete } from 'src/firebase/client/apiClient';
 import {
   character,
@@ -56,11 +57,11 @@ async function handleSubmit(event: Event) {
       
       <div class="toolbar justify-end">
         <a href={`/characters/${characterKey}`} class="button text">
-          <cn-icon noun="arrow-left"></cn-icon>
+          <Icon noun="arrow-left" />
           <span>{t('actions:cancel')}</span>
         </a>
         <button type="submit" class="button primary">
-          <cn-icon noun="delete"></cn-icon>
+          <Icon noun="delete" />
           <span>{t('actions:delete')}</span>
         </button>
           
@@ -72,7 +73,7 @@ async function handleSubmit(event: Event) {
       <p>{t('characters:snacks.characterNotFound')}</p>
       <div class="toolbar justify-end">
         <a href="/library/characters" class="button text">
-          <cn-icon noun="arrow-left"></cn-icon>
+          <Icon noun="arrow-left" />
           <span>{t('actions:cancel')}</span>
         </a>
       </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { userCharacters } from 'src/stores/characters/userCharacters';
 import { t } from 'src/utils/i18n';
 import CharacterCard from '../CharacterCard.svelte';
@@ -23,7 +24,7 @@ import CharacterCard from '../CharacterCard.svelte';
     {/each}
   {:else}
       <section class="secondary border-radius p-2 flex flex-column">
-        <cn-icon noun="monsters" xlarge></cn-icon>
+        <Icon noun="monsters" size="xlarge" />
         <p class="downscaled">
           {t('library:characters.empty')}
         </p>
@@ -35,27 +36,3 @@ import CharacterCard from '../CharacterCard.svelte';
     </p>
   </footer>
 </div>
-   <!--div class="full-width">
-    §  <div class="toolbar">
-        <h4 class="grow">{t('library:sites.title')}</h4>
-        <button class="text" aria-label={directionNoun} onclick={toggleOrder}>
-          <cn-icon noun={directionNoun}></cn-icon>
-        </button>
-        <button
-          class={filters.orderBy === 'name' ? '' : 'text'}
-          onclick={() => filters.orderBy = 'name'}
-        >
-        {t('entries:site.name')}
-        </button>
-        <button
-          class={filters.orderBy === 'flowTime' ? '' : 'text'}
-          onclick={() => filters.orderBy = 'flowTime'}
-        >
-          {t('entries:site.flowTime')}
-        </button>
-      </div>
-   </div>
-   <FilteredSites />
-   <div class="full-width mb-2">
-      <p>{t('library:sites.count', { count: $userSites.length })}</p>
-   </div-->

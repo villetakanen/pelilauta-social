@@ -3,6 +3,7 @@
  * A component to display the character's markdown content as an article.column-l
  */
 
+import Icon from '@design-system/components/Icon.svelte';
 import type { Character } from '@schemas/CharacterSchema';
 import { canEdit } from '@stores/characters/characterStore';
 import { t } from '@utils/i18n';
@@ -31,7 +32,7 @@ const htmlContent = $derived.by(() => {
       </h2>
       {#if $canEdit}
         <a href={`/characters/${character.key}/edit`} class="button text">
-          <cn-icon noun="edit"></cn-icon>
+          <Icon noun="edit" />
           <span>{t('actions:edit')}</span>
         </a>
       {/if}

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { CnToggleButton } from '@11thdeg/cyan-lit';
+import Icon from '@design-system/components/Icon.svelte';
 /*
  * A header component for the CharacterApp microfrontend.
  * Displays character name and edit button if permitted.
@@ -36,7 +37,7 @@ const canEdit = $derived.by(() => {
       onclick={() => $showSettingsPanel = true}
       aria-label={t('actions:settings')}
     >
-      <cn-icon noun="tools"></cn-icon>
+      <Icon noun="tools" />
     </button>
   </div>
   <p class="text-small text-low">{$character?.description}</p>

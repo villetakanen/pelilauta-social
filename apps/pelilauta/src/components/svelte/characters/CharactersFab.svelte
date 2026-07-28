@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
@@ -26,7 +27,7 @@ const visible = $derived.by(() => {
     class="fab button"
     aria-label={t('actions:create.character')}
   >
-    <cn-icon noun="add" small></cn-icon>
+    <Icon noun="add" size="small" />
     <span class="sm-hidden">{t('actions:create.character')}</span>
   </a>
 {/if}
