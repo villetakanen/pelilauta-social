@@ -7,6 +7,7 @@ provenance:
   - "Human decisions 2026-07-20: empty noun treated as unknown; missing-icon fallback accepted as deliberate change; v18 assistive-technology noun announcement retained"
   - "Human decision 2026-07-21: the five icon sizes are all legitimately used, so an icon renders at its selected size by default. A context that needs one icon size standardizes every icon within it to that context's size regardless of the icon's own selection — buttons and fabs render icons at the button icon size — as a design-system rule resolving against the local component, not per-consumer hardcoding. Intended mechanism is that the context sets the public --cn-icon-size-* tokens within its scope, refining v20 packages/cyan/src/core/buttons.css and fab.css at 02880fbc, which force the component's private --icon-dim with !important. Legacy Cyan CSS expressed these rules against the cn-icon element; the durable migration response is docs/practices/consumer-migration.md."
   - "Human decision 2026-07-27: Icon owns intrinsic icon rendering and tokens, not temporary Button, Fab, layout, or typography compatibility. During incremental Cyan migration, reached cross-capability selectors are preserved by minimal application migration helpers until their local capability owns and removes them."
+  - "Human decision 2026-07-28: the design system owns and verifies Icon color behavior in Light and Dark. An application consumer migration that does not change the color or theming capability reviews its contextual layout in one rendered theme; it does not repeat the design system's dual-theme acceptance."
   - "Established v18 sizing evidence: 16, 24, 36, 72, 128 px at default root font size (@11thdeg/cyan-css@4.0.0-beta.39 dist/tokens/units.css)"
 ---
 
@@ -173,4 +174,6 @@ intentional artwork across Light and Dark modes.
 - Assistive technology continues to receive the icon's noun as in v18 through
   its aria-label; an explicit aria-label, when supplied, overrides the noun.
 - A human review confirms the design-system book's size, color, and fallback
-  examples match the migrated production surfaces in both modes.
+  examples in both modes. Application consumer migrations separately review
+  their rendered-in-context size, spacing, and layout in one theme unless the
+  slice changes the color or theming capability.
