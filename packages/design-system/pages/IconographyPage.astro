@@ -1,16 +1,16 @@
 ---
-import "@design-system/styles/color.css";
-import "@design-system/styles/icon.css";
-import Icon from "@design-system/components/Icon.svelte";
-import { getNouns as communityNouns } from "@design-system/icons/community";
-import { getManagedNouns } from "@design-system/components/managed-tier";
-import { FallbackIcons } from "@design-system/components/icon-fallback";
+import '@design-system/styles/color.css';
+import '@design-system/styles/icon.css';
+import Icon from '@design-system/components/Icon.svelte';
+import { FallbackIcons } from '@design-system/components/icon-fallback';
+import { getManagedNouns } from '@design-system/components/managed-tier';
+import { getNouns as communityNouns } from '@design-system/icons/community';
 
 // Live vocabulary, enumerated at build time. Community and managed (myrrys)
 // tiers are enumerable; the managed list is empty when its submodule is absent.
 const community = communityNouns();
 const managed = getManagedNouns();
-const fallbackNamed = Object.keys(FallbackIcons).filter((n) => n !== "missing");
+const fallbackNamed = Object.keys(FallbackIcons).filter((n) => n !== 'missing');
 const available = new Set<string>([...community, ...managed, ...fallbackNamed]);
 
 const communitySet = new Set<string>(community);
@@ -25,50 +25,71 @@ const isProprietary = (n: string) => !communitySet.has(n) && managedSet.has(n);
 // (iconography spec, Non-Goals).
 const PURPOSE_GROUPS = [
   {
-    title: "Navigation & system",
-    detail: "Wayfinding, account, and application chrome.",
-    nouns: ["search", "menu", "close", "account", "admin", "avatar", "tokens", "send"],
+    title: 'Navigation & system',
+    detail: 'Wayfinding, account, and application chrome.',
+    nouns: [
+      'search',
+      'menu',
+      'close',
+      'account',
+      'admin',
+      'avatar',
+      'tokens',
+      'send',
+    ],
   },
   {
-    title: "Community & interaction",
-    detail: "Discussion, identity, and sharing across the community.",
-    nouns: ["discussion", "fox", "youtube", "google"],
+    title: 'Community & interaction',
+    detail: 'Discussion, identity, and sharing across the community.',
+    nouns: ['discussion', 'fox', 'youtube', 'google'],
   },
   {
-    title: "Tabletop & gaming",
-    detail: "Dice, characters, and play at the table.",
-    nouns: ["d8", "d12", "d20", "adventurer", "monsters", "homebrew", "gamepad", "books", "moon", "hood"],
+    title: 'Tabletop & gaming',
+    detail: 'Dice, characters, and play at the table.',
+    nouns: [
+      'd8',
+      'd12',
+      'd20',
+      'adventurer',
+      'monsters',
+      'homebrew',
+      'gamepad',
+      'books',
+      'moon',
+      'hood',
+    ],
   },
   {
-    title: "Game systems",
-    detail: "Branded marks for supported rule systems — managed tier keeps its encoded colours.",
-    nouns: ["dd5", "pathfinder", "ll-ampersand", "pbta", "pbta-logo"],
+    title: 'Game systems',
+    detail:
+      'Branded marks for supported rule systems — managed tier keeps its encoded colours.',
+    nouns: ['dd5', 'pathfinder', 'll-ampersand', 'pbta', 'pbta-logo'],
   },
 ];
 
 const categorized = new Set<string>();
 const groups = PURPOSE_GROUPS.map((g) => {
   const present = g.nouns.filter((n) => available.has(n));
-  present.forEach((n) => categorized.add(n));
+  for (const n of present) categorized.add(n);
   return { ...g, present };
 }).filter((g) => g.present.length > 0);
 
 const uncategorized = [...available].filter((n) => !categorized.has(n)).sort();
 
 const dos = [
-  "Pair an unfamiliar or domain icon with a visible text label.",
-  "Reserve icon-only controls for near-universal actions (close, search, menu, settings).",
-  "Keep icon sizing uniform within a list or navigation group.",
-  "Give an interactive icon an adequate click/touch target.",
+  'Pair an unfamiliar or domain icon with a visible text label.',
+  'Reserve icon-only controls for near-universal actions (close, search, menu, settings).',
+  'Keep icon sizing uniform within a list or navigation group.',
+  'Give an interactive icon an adequate click/touch target.',
 ];
 const donts = [
-  "Ship an ambiguous icon alone for a complex or domain action.",
-  "Rely on colour alone to signal a state — pair it with text or shape.",
-  "Mix sizes within one group, or drop in ad-hoc external SVGs inline.",
-  "Attach an action to a bare inline glyph with no target padding.",
+  'Ship an ambiguous icon alone for a complex or domain action.',
+  'Rely on colour alone to signal a state — pair it with text or shape.',
+  'Mix sizes within one group, or drop in ad-hoc external SVGs inline.',
+  'Attach an action to a bare inline glyph with no target padding.',
 ];
 
-const title = "Iconography";
+const title = 'Iconography';
 ---
 
 <html lang="en">

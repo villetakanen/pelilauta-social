@@ -28,9 +28,9 @@ let getManagedIcon: GetIcon = () => undefined;
 let getManagedNouns: GetNouns = () => [];
 
 try {
-  const managed = await import("@myrrys/proprietary");
+  const managed = await import('@myrrys/proprietary');
   getManagedIcon = managed.getIcon as GetIcon;
-  if (typeof managed.getNouns === "function") {
+  if (typeof managed.getNouns === 'function') {
     getManagedNouns = managed.getNouns as GetNouns;
   }
 } catch {

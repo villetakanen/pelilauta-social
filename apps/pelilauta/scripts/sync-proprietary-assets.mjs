@@ -12,24 +12,24 @@
  * Only non-code folders are copied. The icon registry (icons/, index.ts,
  * package.json, README.md) is consumed as a package import, not over HTTP.
  */
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const source = resolve(here, "../../../packages/myrrys-proprietary");
-const target = resolve(here, "../public/myrrys-proprietary");
+const source = resolve(here, '../../../packages/myrrys-proprietary');
+const target = resolve(here, '../public/myrrys-proprietary');
 
 const EXCLUDE = new Set([
-  "icons",
-  "index.ts",
-  "package.json",
-  "README.md",
-  "tsconfig.json",
-  "node_modules",
-  ".git",
-  ".gitignore",
-  ".DS_Store",
+  'icons',
+  'index.ts',
+  'package.json',
+  'README.md',
+  'tsconfig.json',
+  'node_modules',
+  '.git',
+  '.gitignore',
+  '.DS_Store',
 ]);
 
 if (!existsSync(source)) {
@@ -56,4 +56,6 @@ for (const entry of readdirSync(source)) {
   copied += 1;
 }
 
-console.log(`[sync-proprietary-assets] copied ${copied} asset folder(s) to public/myrrys-proprietary`);
+console.log(
+  `[sync-proprietary-assets] copied ${copied} asset folder(s) to public/myrrys-proprietary`,
+);

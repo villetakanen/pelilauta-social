@@ -1,30 +1,46 @@
 ---
-import "@design-system/styles/color.css";
-import "@design-system/styles/icon.css";
-import Icon from "@design-system/components/Icon.svelte";
-import { getNouns as communityNouns } from "@design-system/icons/community";
+import '@design-system/styles/color.css';
+import '@design-system/styles/icon.css';
+import Icon from '@design-system/components/Icon.svelte';
+import { getNouns as communityNouns } from '@design-system/icons/community';
 
 const community = communityNouns();
 
 const sizes = [
-  { size: "xsmall", token: "--cn-icon-size-xsmall", px: "16px" },
-  { size: "small", token: "--cn-icon-size-small", px: "24px" },
-  { size: "medium", token: "--cn-icon-size", px: "36px (default)" },
-  { size: "large", token: "--cn-icon-size-large", px: "72px" },
-  { size: "xlarge", token: "--cn-icon-size-xlarge", px: "128px" },
+  { size: 'xsmall', token: '--cn-icon-size-xsmall', px: '16px' },
+  { size: 'small', token: '--cn-icon-size-small', px: '24px' },
+  { size: 'medium', token: '--cn-icon-size', px: '36px (default)' },
+  { size: 'large', token: '--cn-icon-size-large', px: '72px' },
+  { size: 'xlarge', token: '--cn-icon-size-xlarge', px: '128px' },
 ] as const;
 
 // Branded (managed tier) artwork already published on the public front page.
-const branded = ["dd5", "pathfinder", "ll-ampersand", "pbta-logo"];
+const branded = ['dd5', 'pathfinder', 'll-ampersand', 'pbta-logo'];
 
 const tiers = [
-  { tier: "Community", noun: "fox", note: "Project-licensed, monochrome, inherits currentColor." },
-  { tier: "Managed", noun: "dd5", note: "@myrrys/proprietary, branded, keeps encoded colors." },
-  { tier: "Fallback", noun: "menu", note: "Bundled essential UI symbol, guaranteed available." },
-  { tier: "Missing", noun: "no-such-noun-xyz", note: "Unknown, empty, or absent noun renders the missing glyph." },
+  {
+    tier: 'Community',
+    noun: 'fox',
+    note: 'Project-licensed, monochrome, inherits currentColor.',
+  },
+  {
+    tier: 'Managed',
+    noun: 'dd5',
+    note: '@myrrys/proprietary, branded, keeps encoded colors.',
+  },
+  {
+    tier: 'Fallback',
+    noun: 'menu',
+    note: 'Bundled essential UI symbol, guaranteed available.',
+  },
+  {
+    tier: 'Missing',
+    noun: 'no-such-noun-xyz',
+    note: 'Unknown, empty, or absent noun renders the missing glyph.',
+  },
 ];
 
-const title = "Icon";
+const title = 'Icon';
 ---
 
 <html lang="en">

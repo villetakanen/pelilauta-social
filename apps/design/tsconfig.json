@@ -1,10 +1,10 @@
 {
-	"extends": "astro/tsconfigs/strict",
-	"exclude": ["node_modules", "dist"],
-	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"@design-system/*": ["../../packages/design-system/*"]
-		}
-	}
+  "extends": "astro/tsconfigs/strict",
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@design-system/*": ["../../packages/design-system/*"]
+    }
+  }
 }
