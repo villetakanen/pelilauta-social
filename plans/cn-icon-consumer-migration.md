@@ -243,8 +243,50 @@ batch alongside the footer and `label-tag` selectors.
 
 ### Batch E — Characters (svelte)
 
-`svelte/characters/**` incl `CharacterApp`, library, fabs, `CharacterCard`
-(`systemKey` dynamic noun).
+`svelte/characters/**`: `ConfirmCharacterDeletion`, `CharactersFab`,
+`CharacterApp/CharacterHeader`, `CharacterApp/CharacterArticle`,
+`library/CharacterLibraryApp`, `library/CharacterLibraryFabs`. Six files, eight
+live usages, migrated to the local `Icon`. 38 → 33 consumer files remain.
+
+Pre-flight outcomes:
+
+- **No new tag rule is reached.** The inventory over this surface matches rules
+  the Batch C helper already owns: `button` / `a.button` size and spacing
+  (`ConfirmCharacterDeletion`'s `a.button.text` + `button.button.primary`,
+  `CharacterArticle`'s `a.button.text`), `button cn-icon:only-child`
+  (`CharacterHeader`'s bare settings `button`), and the `a.button.fab` margin
+  cancel (`CharactersFab`, `CharacterLibraryFabs`). `.flex.items-start >
+  cn-icon` has no consumer: `CharacterLibraryApp`'s empty-state section is
+  `.flex.flex-column`, not `items-start`. `h3 cn-icon` is not reached —
+  `CharacterArticle`'s toolbar heading is an `h2` and holds no icon.
+- **Batch C's bare-`a.fab` sizing departure does not recur.** Both character
+  fabs are `a.fab.button` with an explicit `small`, so they resolved to 24px in
+  v18 via `a.button cn-icon` and resolve to 24px now via `size="small"` under
+  the helper. Unchanged.
+- **`xlarge` maps exactly.** `CharacterLibraryApp`'s empty-state `monsters`
+  icon carried the legacy `xlarge` attribute (`:host([xlarge])` →
+  `--cn-icon-size-xlarge`, 128px); `size="xlarge"` resolves the same token. It
+  sits in no button/fab scope, so the helper's token override does not apply.
+- **`CharacterCard` is out of scope.** It renders `<cn-card noun={systemKey}>`,
+  not `<cn-icon>`. `cn-card` is a retained Cyan Lit component per this arc's
+  boundary, so the `systemKey` dynamic noun stays served by `/icons/{noun}.svg`
+  and migrates with a future Card epic, not here.
+- **Every noun already had reviewed artwork; no spike was needed.**
+  `arrow-left` and `add` are community; `delete`, `monsters`, `tools`, and
+  `edit` are managed. No missing-glyph outcome and no catalog change in this
+  batch.
+- **No e2e selector is broken by this batch.** The character specs
+  (`create-character`, `character-sheet-editing`, `character-keeper`) select
+  `cn-card[noun=…]`, which is untouched; `library.spec.ts:76` mentions
+  `cn-icon` only in a comment describing the dead sort-controls block below.
+
+Debt found, owned by Batch H: `CharacterLibraryApp` keeps a commented-out
+sort-controls block (lines ~38–46) containing `<cn-icon noun={directionNoun}>`
+alongside references to `filters`, `FilteredSites`, and `userSites` that do not
+exist in the file. It is dead scaffolding, not a consumer, but it is the last
+literal `<cn-icon>` string in `svelte/characters/**` and will trip Batch H's
+zero-usage grep gate. Deleting the block is a scope decision for the human, not
+an icon migration; left intact here and listed for the terminal batch.
 
 ### Batch F — Admin (svelte)
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { userCharacters } from 'src/stores/characters/userCharacters';
 import { t } from 'src/utils/i18n';
 import CharacterCard from '../CharacterCard.svelte';
@@ -23,7 +24,7 @@ import CharacterCard from '../CharacterCard.svelte';
     {/each}
   {:else}
       <section class="secondary border-radius p-2 flex flex-column">
-        <cn-icon noun="monsters" xlarge></cn-icon>
+        <Icon noun="monsters" size="xlarge" />
         <p class="downscaled">
           {t('library:characters.empty')}
         </p>
