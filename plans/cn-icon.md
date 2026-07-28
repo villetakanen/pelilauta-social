@@ -84,13 +84,13 @@ The selected public consumers provide a bounded vertical slice:
 v20 resolves nouns across tiers, and the tiers are a licensing boundary, not
 just a lookup order (`specs/design-system/iconography/spec.md`):
 
-- Community tier `@pelilauta/icons` holds project-licensed artwork (e.g. `fox`).
+- Open-source tier holds openly licensed artwork (e.g. `fox`).
 - Managed tier `@myrrys/proprietary` is a separate submodule whose README
   states "All rights reserved... not licensed under the main project license."
   It holds `dd5`, `pathfinder`, `ll-ampersand`, `pbta`, and other branded nouns.
 - The v20 generator inlines each tier's SVG source into an `index.ts` **inside
   that tier's own package**, so proprietary artwork never lands in the open
-  packages. Resolution is community → managed → bundled fallback → missing.
+  packages. Resolution is open-source → managed → bundled fallback → missing.
 
 v21 therefore keeps the same segregation: community artwork lives in the public
 design-system catalog; proprietary artwork is consumed from the
@@ -151,7 +151,7 @@ general sizing tokens, and token generation remain outside this iteration.
 4. Reconcile the selected nouns across the v20 two-tier source model (see
    Source Tiers below), keeping proprietary artwork out of the public
    design-system catalog:
-   - Community tier (project-licensed): `fox` from the v20 `pelilauta-icons`
+   - Open-source tier (openly licensed): `fox` from the v20 `pelilauta-icons`
      source and `search` from the current v18 asset are copied into the
      public design-system community catalog, without removing their public
      originals.

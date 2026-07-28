@@ -2,9 +2,9 @@
 import '@design-system/styles/color.css';
 import '@design-system/styles/icon.css';
 import Icon from '@design-system/components/Icon.svelte';
-import { getNouns as communityNouns } from '@design-system/icons/community';
+import { getNouns as openSourceNouns } from '@design-system/icons/open-source';
 
-const community = communityNouns();
+const openSource = openSourceNouns();
 
 const sizes = [
   { size: 'xsmall', token: '--cn-icon-size-xsmall', px: '16px' },
@@ -19,7 +19,7 @@ const branded = ['dd5', 'pathfinder', 'll-ampersand', 'pbta-logo'];
 
 const tiers = [
   {
-    tier: 'Community',
+    tier: 'Open source',
     noun: 'fox',
     note: 'Project-licensed, monochrome, inherits currentColor.',
   },
@@ -63,14 +63,14 @@ const title = 'Icon';
         <p class="kicker">INTENT / CONTRACT / BOOK</p>
         <h1>{title}</h1>
         <p class="lede">
-          A server-rendered icon with tiered source resolution: community →
+          A server-rendered icon with tiered source resolution: open-source →
           managed → bundled fallback → missing glyph. Monochrome artwork
           inherits its surrounding color; branded artwork keeps the colors
           encoded in its reviewed source. Markup is complete in the initial
           response and does not shift when scripts load.
         </p>
         <dl class="facts">
-          <div><dt>Community nouns</dt><dd>{community.length}</dd></div>
+          <div><dt>Open-source nouns</dt><dd>{openSource.length}</dd></div>
           <div><dt>Sizes</dt><dd>5</dd></div>
           <div><dt>Tiers</dt><dd>4</dd></div>
           <div><dt>Default</dt><dd>medium</dd></div>
@@ -106,7 +106,7 @@ const title = 'Icon';
           <p>02 / CONTEXTUAL COLOR</p>
           <h2 id="color-title">Monochrome follows its context</h2>
           <p>
-            Both panels render the same monochrome community icons. Each icon
+            Both panels render the same monochrome open-source icons. Each icon
             inherits the foreground of its surrounding text, link, button, and
             status context, in Light and Dark, without per-instance styling.
           </p>
@@ -174,7 +174,7 @@ const title = 'Icon';
           <p>04 / SOURCE TIERS & FALLBACK</p>
           <h2 id="tiers-title">Precedence, ending in a visible miss</h2>
           <p>
-            A noun resolves through community, then managed, then the bundled
+            A noun resolves through open-source, then managed, then the bundled
             fallback, and finally the missing glyph. Missing artwork is visible
             and keeps its layout space rather than collapsing.
           </p>

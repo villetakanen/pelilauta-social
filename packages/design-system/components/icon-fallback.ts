@@ -1,7 +1,7 @@
 /**
  * icon-fallback.ts — Tier 3 essential UI symbols plus the mandatory missing
  * glyph, bundled with the component so resolution never collapses even if the
- * community or managed registries are unavailable. MIT-licensed artwork.
+ * open-source or managed registries are unavailable. MIT-licensed artwork.
  *
  * Ported from the v20 target model (immutable commit
  * 02880fbc995b45d459ce4f264b29d5283b1d8ced,

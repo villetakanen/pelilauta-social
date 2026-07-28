@@ -1,8 +1,23 @@
-# Community icon provenance
+# Open-source icon provenance
 
-Project-licensed community artwork consumed by the design-system icon
-component. Proprietary artwork is never stored here; it stays in the
-`@myrrys/proprietary` submodule (see `plans/cn-icon.md`).
+Openly licensed artwork consumed by the design-system icon component. The tier
+admits two kinds of source, and every row states which it is:
+
+1. **Project-created** artwork the project itself owns (v18 or v20 sources).
+2. **Permissively licensed third-party** artwork whose licence allows
+   redistribution and modification. The licence text is vendored beside the
+   artwork and the copyright holder is named per noun.
+
+Renamed from "community" (human 2026-07-28): the distinction this tier draws is
+*openly licensed* versus *proprietary*, not who the author was. Proprietary
+artwork is never stored here; it stays in the `@myrrys/proprietary` submodule
+(see `plans/cn-icon.md`).
+
+## Vendored licences
+
+| File | Covers | Licence |
+| --- | --- | --- |
+| `LICENSE-fluent-ui-system-icons` | Artwork sourced from Fluent UI System Icons | MIT, © 2020 Microsoft Corporation |
 
 | Noun | Source | Notes |
 | --- | --- | --- |
@@ -29,6 +44,7 @@ component. Proprietary artwork is never stored here; it stays in the
 | `filter` | v18 `apps/pelilauta/public/icons/filter.svg` (project-created) | Normalized to `currentColor` (source `<style>` hardcoded `.cls-1{fill:#000}`, overriding its own `fill="currentColor"` attribute). |
 | `kebab` | v18 `apps/pelilauta/public/icons/kebab.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
 | `pdf` | v18 `apps/pelilauta/public/icons/pdf.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
+| `delete` | **Third-party, MIT.** Fluent UI System Icons, `assets/Bin Recycle/SVG/ic_fluent_bin_recycle_24_filled.svg`, from `microsoft/fluentui-system-icons` at immutable commit `5ecd79ea56f2be0169859b3b881dcc890be932fc`. © 2020 Microsoft Corporation; licence text vendored as `LICENSE-fluent-ui-system-icons`. | Normalized to `currentColor` (source encoded `fill="#212121"`); geometry otherwise verbatim, `viewBox="0 0 24 24"`. Human decision 2026-07-28: adopt this bin-recycle mark for `delete` and retire the separate `trash` noun onto it. Overrides the managed-tier `delete`, which becomes unreachable — see the plan follow-up. |
 
 Artwork is copied verbatim unless a Notes entry records a deliberate
 `currentColor` normalization (source hardcoded a fill or defaulted to black).

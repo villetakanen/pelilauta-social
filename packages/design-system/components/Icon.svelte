@@ -2,7 +2,7 @@
 /**
  * Icon — server-rendered icon with tiered source resolution.
  *
- * Resolution precedence (v20 target model): community → managed
+ * Resolution precedence (v20 target model): open-source → managed
  * (@myrrys/proprietary) → bundled fallback → missing glyph. Monochrome artwork
  * inherits the surrounding foreground via currentColor; branded artwork keeps
  * the colors encoded in its reviewed source. An empty or absent noun is treated
@@ -18,7 +18,7 @@
  *
  * Spec: specs/design-system/components/cn-icon/spec.md
  */
-import { getIcon as getCommunityIcon } from '../icons/community';
+import { getIcon as getOpenSourceIcon } from '../icons/open-source';
 import { FallbackIcons } from './icon-fallback';
 import { getManagedIcon } from './managed-tier';
 
@@ -32,11 +32,11 @@ let {
   'aria-label'?: string;
 } = $props();
 
-// Resolved icon as pre-normalized inner markup plus a viewBox. The community
+// Resolved icon as pre-normalized inner markup plus a viewBox. The open-source
 // and managed tiers store this shape directly (normalized at generation time,
 // not here); the fallback and missing tiers assemble it from structured paths.
 const resolved = $derived.by(() => {
-  const registered = getCommunityIcon(noun) || getManagedIcon(noun);
+  const registered = getOpenSourceIcon(noun) || getManagedIcon(noun);
   if (registered) return registered;
 
   // Bundled fallback tier (named essential symbols).
