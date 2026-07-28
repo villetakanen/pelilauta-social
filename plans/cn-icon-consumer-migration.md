@@ -296,10 +296,11 @@ Pre-flight outcomes:
 
 `svelte/characters/**` now contains zero `<cn-icon>` strings, commented or live.
 
-Acceptance (human 2026-07-28): no dual-theme pass required per the corrected
-Human Acceptance rule above — every noun in this batch was already-reviewed
-artwork, the `Icon` inherits colour via `currentColor`, and no colour or theming
-surface is touched. Deterministic checks are the gate and are green.
+Acceptance (human 2026-07-28): rendered-in-context visual review is by hand, as
+on every release, and remains the gate that catches a missed tag rule. What this
+batch does not need is a separate dual-theme pass: every noun was
+already-reviewed artwork, the `Icon` inherits colour via `currentColor`, and no
+colour or theming surface is touched. Deterministic checks are green.
 
 ### Batch F — Admin (svelte)
 

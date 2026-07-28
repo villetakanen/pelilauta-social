@@ -112,9 +112,11 @@ Run this before implementing any Lit-consumer migration.
    flex/heading layout, the properties the legacy tag rules actually set. One
    theme is sufficient.
 
-   Light **and** Dark review belongs to design-system colour and theming
-   capabilities, not to an application consumer migration (human decision
-   2026-07-28). A migrated component that inherits its colour — the local `Icon`
-   renders monochrome artwork with `currentColor` — cannot change theme
-   behaviour at the consumer, so a dual-theme pass adds no coverage here. Scope
-   a dual-theme gate to the slice that owns colour.
+   This review is performed by hand, and every release is checked by hand — that
+   practice is not in question here. What is scoped out is the **dual-theme**
+   requirement: Light **and** Dark review belongs to design-system colour and
+   theming capabilities, not to an application consumer migration (human
+   decision 2026-07-28). A migrated component that inherits its colour — the
+   local `Icon` renders monochrome artwork with `currentColor` — cannot change
+   theme behaviour at the consumer, so a second theme adds no coverage here.
+   Scope a dual-theme gate to the slice that owns colour.
