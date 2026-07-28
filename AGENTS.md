@@ -6,6 +6,7 @@
 ## Delivery Contract
 
 - Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and user-visible interactions as compatibility contracts unless an approved spec says otherwise.
+- **THE COMPATIBILITY CONTRACT COVERS THE PORTED v18 BUSINESS LOGIC. IT DOES NOT COVER DEPENDENCY VERSIONS.** Libraries may — and should — be updated, **including across breaking majors**, whenever the update does not break this application. Staying on a legacy version is not a compatibility requirement and is not a way to reduce delivery risk; it accumulates it. When a problem is caused by an outdated dependency, **check whether the dependency can simply be updated before designing any workaround.** Updates remain an ASK for approval, but the default answer sought is "update it," not "work around it."
 - A feature branch is a continuous context and may deliver multiple slices to `main` before it closes. Treat each merge, not the lifetime branch diff, as the deployable and coherently reversible delivery unit.
 - Integrate to `main` only through a pull request from a `feat/*` feature branch or an emergency branch; never push to `main` directly. A long-living `feat/*` branch delivers each slice as its own pull request.
 - Evolve factory, harness, and architecture inside the production slice that first establishes and verifies their concrete need. Keep required supporting work visible in slice scope and review; defer unrelated cleanup, unsupported generalization, and additional migration steps.
@@ -33,6 +34,7 @@
 - Bundle broad refactors with a compatibility migration.
 
 **ASK**
+- Before updating a dependency — but ask having first checked whether the update fixes the problem, and bring that evidence. Do not propose a workaround for an outdated-dependency problem without reporting whether updating it works.
 - When the v18 behavior or Firebase contract cannot be established from source, deployed behavior, or existing specifications.
 - Before changing public URLs, authentication/authorization behavior, persisted data, release/versioning behavior, or deployment configuration.
 
