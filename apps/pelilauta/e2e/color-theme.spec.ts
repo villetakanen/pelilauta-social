@@ -90,8 +90,10 @@ test('legacy icons inherit the contextual foreground color', async ({
     // A legacy icon without an explicit color resolves to its parent's
     // currentColor, which requires the bare --color-on property to stay
     // undefined (specs/design-system/components/cn-icon/spec.md).
-    expect(probe.bareColorOn, `${colorScheme}: --color-on must stay undefined`)
-      .toBe('');
+    expect(
+      probe.bareColorOn,
+      `${colorScheme}: --color-on must stay undefined`,
+    ).toBe('');
     expect(probe.iconColor, `${colorScheme}: icon inherits parent color`).toBe(
       'rgb(11, 22, 33)',
     );

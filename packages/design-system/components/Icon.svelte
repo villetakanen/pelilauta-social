@@ -18,14 +18,18 @@
  *
  * Spec: specs/design-system/components/cn-icon/spec.md
  */
-import { getIcon as getCommunityIcon } from "../icons/community";
-import { FallbackIcons } from "./icon-fallback";
-import { getManagedIcon } from "./managed-tier";
+import { getIcon as getCommunityIcon } from '../icons/community';
+import { FallbackIcons } from './icon-fallback';
+import { getManagedIcon } from './managed-tier';
 
-let { noun = "", size = "medium", "aria-label": ariaLabel = "" }: {
+let {
+  noun = '',
+  size = 'medium',
+  'aria-label': ariaLabel = '',
+}: {
   noun?: string;
-  size?: "xsmall" | "small" | "medium" | "large" | "xlarge";
-  "aria-label"?: string;
+  size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  'aria-label'?: string;
 } = $props();
 
 // Resolved icon as pre-normalized inner markup plus a viewBox. The community
@@ -39,30 +43,33 @@ const resolved = $derived.by(() => {
   const fallback = FallbackIcons[noun];
   if (fallback) {
     return {
-      viewBox: fallback.viewBox || "0 0 24 24",
+      viewBox: fallback.viewBox || '0 0 24 24',
       inner: fallback.paths
         .map((p) => {
-          const fill = p.fill || "currentColor";
-          const opacity = p.opacity !== undefined ? ` fill-opacity="${p.opacity}"` : "";
+          const fill = p.fill || 'currentColor';
+          const opacity =
+            p.opacity !== undefined ? ` fill-opacity="${p.opacity}"` : '';
           return `<path d="${p.d}" fill="${fill}"${opacity} />`;
         })
-        .join(""),
+        .join(''),
     };
   }
 
   // Missing glyph — unknown, empty, or absent noun.
   return {
-    viewBox: FallbackIcons.missing.viewBox || "0 0 24 24",
-    inner: FallbackIcons.missing.paths.map((p) => `<path d="${p.d}" fill="currentColor" />`).join(""),
+    viewBox: FallbackIcons.missing.viewBox || '0 0 24 24',
+    inner: FallbackIcons.missing.paths
+      .map((p) => `<path d="${p.d}" fill="currentColor" />`)
+      .join(''),
   };
 });
 
 const sizes: Record<string, string> = {
-  xsmall: "var(--cn-icon-size-xsmall)",
-  small: "var(--cn-icon-size-small)",
-  medium: "var(--cn-icon-size)",
-  large: "var(--cn-icon-size-large)",
-  xlarge: "var(--cn-icon-size-xlarge)",
+  xsmall: 'var(--cn-icon-size-xsmall)',
+  small: 'var(--cn-icon-size-small)',
+  medium: 'var(--cn-icon-size)',
+  large: 'var(--cn-icon-size-large)',
+  xlarge: 'var(--cn-icon-size-xlarge)',
 };
 const dimension = $derived(sizes[size] || sizes.medium);
 </script>

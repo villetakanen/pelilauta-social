@@ -1,8 +1,8 @@
 ---
 export const prerender = true;
 
-import Icon from '@design-system/components/Icon.svelte';
 import { getCollection } from 'astro:content';
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 
 const allComponents = await getCollection('docs');

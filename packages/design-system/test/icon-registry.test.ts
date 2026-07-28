@@ -3,110 +3,151 @@
  * runner with type stripping, so it needs no test-framework dependency:
  *   node --experimental-strip-types --test test/icon-registry.test.ts
  */
-import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { test } from "node:test";
-
-import { FallbackIcons } from "../components/icon-fallback.ts";
-import { getIcon as getCommunityIcon, getNouns as communityNouns } from "../icons/community.ts";
-import { getIcon as getManagedIcon } from "../../myrrys-proprietary/index.ts";
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { getIcon as getManagedIcon } from '../../myrrys-proprietary/index.ts';
+import { FallbackIcons } from '../components/icon-fallback.ts';
+import {
+  getNouns as communityNouns,
+  getIcon as getCommunityIcon,
+} from '../icons/community.ts';
 
 // Mirror of the component's resolution order (community -> managed -> fallback
 // -> missing) so precedence is asserted independently of Svelte rendering.
-function resolveTier(noun: string): "community" | "managed" | "fallback" | "missing" {
-  if (getCommunityIcon(noun)) return "community";
-  if (getManagedIcon(noun)) return "managed";
-  if (FallbackIcons[noun]) return "fallback";
-  return "missing";
+function resolveTier(
+  noun: string,
+): 'community' | 'managed' | 'fallback' | 'missing' {
+  if (getCommunityIcon(noun)) return 'community';
+  if (getManagedIcon(noun)) return 'managed';
+  if (FallbackIcons[noun]) return 'fallback';
+  return 'missing';
 }
 
-test("community tier owns the project-provenance UI nouns", () => {
+test('community tier owns the project-provenance UI nouns', () => {
   for (const noun of [
-    "fox", "search", "arrow-left",
-    "add", "arrow-up", "arrow-down", "card", "chevron-left", "clock",
-    "close", "dots", "drag", "dragger",
+    'fox',
+    'search',
+    'arrow-left',
+    'add',
+    'arrow-up',
+    'arrow-down',
+    'card',
+    'chevron-left',
+    'clock',
+    'close',
+    'dots',
+    'drag',
+    'dragger',
   ]) {
-    assert.equal(resolveTier(noun), "community", `${noun} should resolve to community`);
+    assert.equal(
+      resolveTier(noun),
+      'community',
+      `${noun} should resolve to community`,
+    );
     assert.ok(communityNouns().includes(noun), `${noun} in community registry`);
   }
 });
 
-test("every community icon is monochrome currentColor (no hardcoded fill)", () => {
+test('every community icon is monochrome currentColor (no hardcoded fill)', () => {
   for (const noun of communityNouns()) {
     const inner = getCommunityIcon(noun)!.inner;
     assert.match(inner, /currentColor/, `${noun} declares currentColor`);
-    assert.doesNotMatch(inner, /#[0-9a-fA-F]{3,6}/, `${noun} has no hardcoded hex fill`);
+    assert.doesNotMatch(
+      inner,
+      /#[0-9a-fA-F]{3,6}/,
+      `${noun} has no hardcoded hex fill`,
+    );
   }
 });
 
-test("managed tier owns the branded featured-tag nouns", () => {
-  for (const noun of ["dd5", "pathfinder", "ll-ampersand", "pbta-logo"]) {
-    assert.equal(resolveTier(noun), "managed", `${noun} should resolve to managed`);
+test('managed tier owns the branded featured-tag nouns', () => {
+  for (const noun of ['dd5', 'pathfinder', 'll-ampersand', 'pbta-logo']) {
+    assert.equal(
+      resolveTier(noun),
+      'managed',
+      `${noun} should resolve to managed`,
+    );
   }
 });
 
-test("branded managed artwork keeps encoded colors; community is monochrome", () => {
-  assert.match(getManagedIcon("dd5")!.inner, /fill="#BC0F0F"/);
-  assert.match(getCommunityIcon("fox")!.inner, /fill="currentColor"/);
-  assert.match(getCommunityIcon("search")!.inner, /fill="currentColor"/);
-  assert.match(getCommunityIcon("arrow-left")!.inner, /fill="currentColor"/);
+test('branded managed artwork keeps encoded colors; community is monochrome', () => {
+  assert.match(getManagedIcon('dd5')!.inner, /fill="#BC0F0F"/);
+  assert.match(getCommunityIcon('fox')!.inner, /fill="currentColor"/);
+  assert.match(getCommunityIcon('search')!.inner, /fill="currentColor"/);
+  assert.match(getCommunityIcon('arrow-left')!.inner, /fill="currentColor"/);
 });
 
-test("unknown, empty, and absent nouns fall to the missing glyph", () => {
-  assert.equal(resolveTier("no-such-noun-xyz"), "missing");
-  assert.equal(resolveTier(""), "missing");
+test('unknown, empty, and absent nouns fall to the missing glyph', () => {
+  assert.equal(resolveTier('no-such-noun-xyz'), 'missing');
+  assert.equal(resolveTier(''), 'missing');
   assert.ok(FallbackIcons.missing);
   assert.ok(FallbackIcons.missing.paths.length > 0);
 });
 
-test("bundled fallback tier provides the essential UI symbols", () => {
-  for (const noun of ["menu", "account"]) {
-    assert.equal(resolveTier(noun), "fallback", `${noun} should resolve to fallback`);
+test('bundled fallback tier provides the essential UI symbols', () => {
+  for (const noun of ['menu', 'account']) {
+    assert.equal(
+      resolveTier(noun),
+      'fallback',
+      `${noun} should resolve to fallback`,
+    );
   }
 });
 
-test("pbta-logo artwork matches the v18 front-page logo viewBox", () => {
-  assert.equal(getManagedIcon("pbta-logo")!.viewBox, "0 0 256 256");
+test('pbta-logo artwork matches the v18 front-page logo viewBox', () => {
+  assert.equal(getManagedIcon('pbta-logo')!.viewBox, '0 0 256 256');
 });
 
-test("icon.css :root defines exactly the five sizing tokens with the v20 values", () => {
-  const css = readFileSync(new URL("../styles/icon.css", import.meta.url), "utf8");
+test('icon.css :root defines exactly the five sizing tokens with the v20 values', () => {
+  const css = readFileSync(
+    new URL('../styles/icon.css', import.meta.url),
+    'utf8',
+  );
   const rootBlock = css.match(/:root\s*\{([^}]*)\}/);
-  assert.ok(rootBlock, ":root token block is present");
+  assert.ok(rootBlock, ':root token block is present');
   const expected: Record<string, string> = {
-    "--cn-icon-size-xsmall": "1rem",
-    "--cn-icon-size-small": "1.5rem",
-    "--cn-icon-size": "2.25rem",
-    "--cn-icon-size-large": "4.5rem",
-    "--cn-icon-size-xlarge": "8rem",
+    '--cn-icon-size-xsmall': '1rem',
+    '--cn-icon-size-small': '1.5rem',
+    '--cn-icon-size': '2.25rem',
+    '--cn-icon-size-large': '4.5rem',
+    '--cn-icon-size-xlarge': '8rem',
   };
-  const found = [...rootBlock[1].matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g)].map((m) => [
-    m[1],
-    m[2].trim(),
-  ]);
+  const found = [
+    ...rootBlock[1].matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g),
+  ].map((m) => [m[1], m[2].trim()]);
   const foundMap = Object.fromEntries(found);
   assert.deepEqual(foundMap, expected);
-  assert.equal(found.length, 5, "no unrelated icon sizing tokens are defined at :root");
+  assert.equal(
+    found.length,
+    5,
+    'no unrelated icon sizing tokens are defined at :root',
+  );
 });
 
-test("icon.css owns only the stable icon token vocabulary", () => {
-  const css = readFileSync(new URL("../styles/icon.css", import.meta.url), "utf8");
-  const context = css.replace(/:root\s*\{[^}]*\}/, "");
+test('icon.css owns only the stable icon token vocabulary', () => {
+  const css = readFileSync(
+    new URL('../styles/icon.css', import.meta.url),
+    'utf8',
+  );
+  const context = css.replace(/:root\s*\{[^}]*\}/, '');
 
   assert.ok(
-    !/\S/.test(context.replace(/\/\*[\s\S]*?\*\//g, "")),
-    "no contextual rules follow :root",
+    !/\S/.test(context.replace(/\/\*[\s\S]*?\*\//g, '')),
+    'no contextual rules follow :root',
   );
   assert.ok(
     !/button|\.fab|\.flex|h3/.test(css),
-    "consumer contexts stay outside stable Icon CSS",
+    'consumer contexts stay outside stable Icon CSS',
   );
 });
 
-test("community registry generation is deterministic (--check passes)", () => {
-  const script = fileURLToPath(new URL("../scripts/generate-icon-registry.mjs", import.meta.url));
+test('community registry generation is deterministic (--check passes)', () => {
+  const script = fileURLToPath(
+    new URL('../scripts/generate-icon-registry.mjs', import.meta.url),
+  );
   // Throws (non-zero exit) if the committed registry is stale.
-  execFileSync("node", [script, "--check"], { stdio: "pipe" });
+  execFileSync('node', [script, '--check'], { stdio: 'pipe' });
 });
