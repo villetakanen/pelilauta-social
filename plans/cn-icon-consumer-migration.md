@@ -10,8 +10,8 @@ Practice: `docs/practices/consumer-migration.md` (required pre-flight)
 Every remaining direct `<cn-icon>` element consumer in `apps/pelilauta` renders
 through the local server-rendered `<Icon>` component. When the arc closes, app
 source contains **zero direct `<cn-icon>` element usages**; icons resolve through
-the tiered local catalog (community → managed → bundled fallback → missing) in
-Light and Dark with no visual regression against live v18.
+the tiered local catalog (community → managed → bundled fallback → missing) with
+no visual regression against live v18.
 
 ### What this arc is *not*
 
@@ -33,8 +33,9 @@ Cyan components.
   scoped to the `<cn-icon>` *tag* (size, control spacing,
   flex/heading layout) silently stops applying at each migrated site. Unit and
   registry tests never render in the consumer context and cannot see it.
-  Rendered-in-context visual acceptance in Light and Dark is the only gate that
-  catches it (consumer-migration pre-flight step 7).
+  Rendered-in-context visual acceptance is the only gate that catches it
+  (consumer-migration pre-flight step 7). What it checks is theme-independent —
+  size, spacing, layout — so one theme is sufficient.
 - **Delivery contract.** Each merge — not the lifetime branch diff — is the
   deployable, coherently reversible unit; migrate one bounded surface at a time.
   A single 95-file merge that each needs its own visual acceptance is neither
@@ -295,6 +296,11 @@ Pre-flight outcomes:
 
 `svelte/characters/**` now contains zero `<cn-icon>` strings, commented or live.
 
+Acceptance (human 2026-07-28): no dual-theme pass required per the corrected
+Human Acceptance rule above — every noun in this batch was already-reviewed
+artwork, the `Icon` inherits colour via `currentColor`, and no colour or theming
+surface is touched. Deterministic checks are the gate and are green.
+
 ### Batch F — Admin (svelte)
 
 `svelte/admin/**` (sheets, channels, `User`, `AdminTray`, `SentryTestButton`).
@@ -337,10 +343,18 @@ tightest completeness check — by this batch every offered noun must resolve.
 
 ## Human Acceptance (per batch)
 
-Rendered-in-context Light and Dark review of the batch's surface, with explicit
-attention to button/fab/heading/flex contexts where cyan-css tag rules applied.
-Sign off community-asset provenance for that batch's ports. Approve each
-missing-noun spike outcome (port vs. missing glyph).
+Rendered-in-context review of the batch's surface, with explicit attention to
+button/fab/heading/flex contexts where cyan-css tag rules applied. Sign off
+community-asset provenance for that batch's ports. Approve each missing-noun
+spike outcome (port vs. missing glyph).
+
+**Light and Dark review is not a gate on these batches (human 2026-07-28).** It
+belongs to the design-system colour and theming capabilities, not to application
+consumer screens. The local `Icon` renders monochrome artwork with
+`currentColor`, so a consumer migration cannot change theme behaviour; branded
+managed artwork keeps its encoded colours in both themes either way. A batch
+whose only nouns are already-reviewed artwork and whose checks are green needs
+no separate human theme pass.
 
 ## Compatibility Boundaries
 

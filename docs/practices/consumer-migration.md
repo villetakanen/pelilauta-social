@@ -106,6 +106,15 @@ Run this before implementing any Lit-consumer migration.
    as acceptance evidence unless the suite is explicitly restored to a gate.
 6. **Implement**, then run the smallest applicable deterministic checks
    (`astro check`, unit, contract tests, both app builds).
-7. **Rendered-in-context visual acceptance** of the migrated surface in Light
-   and Dark. This is a required gate, not optional; it is the only check that
-   catches a missed tag rule.
+7. **Rendered-in-context visual acceptance** of the migrated surface. This is a
+   required gate, not optional; it is the only check that catches a missed tag
+   rule. What it looks for is **theme-independent** — size, control spacing, and
+   flex/heading layout, the properties the legacy tag rules actually set. One
+   theme is sufficient.
+
+   Light **and** Dark review belongs to design-system colour and theming
+   capabilities, not to an application consumer migration (human decision
+   2026-07-28). A migrated component that inherits its colour — the local `Icon`
+   renders monochrome artwork with `currentColor` — cannot change theme
+   behaviour at the consumer, so a dual-theme pass adds no coverage here. Scope
+   a dual-theme gate to the slice that owns colour.
