@@ -98,7 +98,12 @@ Run this before implementing any Lit-consumer migration.
    approved missing-glyph outcome. Resolve undecided nouns before migration.
    A noun with no artwork in any tier and none under `public/icons/` is already
    rendering blank in production; say so in the disposition rather than
-   treating the miss as new.
+   treating the miss as new. **But blank and missing-glyph are not the same
+   outcome:** legacy `cn-icon` renders `<use href="/icons/{noun}.svg#icon">`, so
+   a 404 paints nothing, while the local `Icon` renders visible
+   missing-glyph artwork (a filled exclamation circle). Every missing-glyph
+   disposition is therefore a visible change on a shipped surface and needs a
+   human decision on that basis, not a claim of preserved behavior.
 5. **Grep the deprecated e2e suite for the tag** over the surface being migrated
    (`grep -rn '<tag>' apps/pelilauta/e2e`) and repair every selector this batch
    breaks, in this batch. Record selectors an earlier batch already broke as

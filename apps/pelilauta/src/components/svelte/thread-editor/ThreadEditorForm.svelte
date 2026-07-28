@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
@@ -174,7 +175,7 @@ function onAddFiles(newFiles: File[]) {
       {#if saving}
         <cn-loader noun="send" style="display:inline-block;vertical-align: middle"></cn-loader>
       {:else}
-        <cn-icon noun="send"></cn-icon>
+        <Icon noun="send" />
       {/if}
       <span>{t('actions:send')}</span>
     </button>

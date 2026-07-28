@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { profile } from '@stores/session/profile';
 import { updateProfile } from 'src/firebase/client/profile/updateProfile';
 import { uploadAvatar } from 'src/firebase/client/profile/uploadAvatar';
@@ -176,7 +177,7 @@ async function logoutAction() {
             onclick={() => removeLink(index)}
             aria-label="Poista linkki"
           >
-            <cn-icon noun="delete" small></cn-icon>
+            <Icon noun="delete" size="small" />
           </button>
         </li>
       {/each}

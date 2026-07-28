@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils';
@@ -125,7 +126,7 @@ function handleEditorChange(event: CustomEvent<string>) {
 
     {#if contentMigrated}
       <div class="alert warning flex flex-row items-center px-1">
-        <cn-icon noun="info"></cn-icon>
+        <Icon noun="info" />
         <p>{t('site:page.editor.contentMigrateWarning')}</p>
       </div>
     {/if}
@@ -160,7 +161,7 @@ function handleEditorChange(event: CustomEvent<string>) {
         {#if saving}
           <cn-loader noun="save"></cn-loader>
         {:else}
-          <cn-icon noun="save"></cn-icon>
+          <Icon noun="save" />
         {/if}
         <span>{t('actions:save')}</span>
       </button>

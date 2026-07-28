@@ -58,7 +58,9 @@ test.describe('Thread Asset Upload', () => {
     );
 
     // Look for upload button (AddFilesButton with assets icon)
-    const uploadButton = page.locator('button:has(cn-icon[noun="assets"])');
+    const uploadButton = page.locator(
+      'button:has(.cn-icon[data-noun="assets"])',
+    );
 
     // Check if upload button exists and is visible
     if (await uploadButton.isVisible({ timeout: 5000 })) {
@@ -167,7 +169,7 @@ test.describe('Thread Asset Upload', () => {
 
     // Look for upload button in the dialog
     const uploadButton = page.locator(
-      'dialog[open] button:has(cn-icon[noun="assets"])',
+      'dialog[open] button:has(.cn-icon[data-noun="assets"])',
     );
 
     if (await uploadButton.isVisible({ timeout: 3000 })) {
@@ -324,7 +326,7 @@ test.describe('Thread Asset Upload', () => {
 
     // Try to upload an image
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .first();
 
     if (await uploadButton.isVisible({ timeout: 3000 })) {
@@ -372,7 +374,7 @@ test.describe('Thread Asset Upload', () => {
 
     // Upload image
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .first();
 
     if (await uploadButton.isVisible({ timeout: 3000 })) {
@@ -454,7 +456,7 @@ test.describe('Thread Asset Upload', () => {
 
     // Click upload button to trigger file input
     const uploadButton = page
-      .locator('button:has(cn-icon[noun="assets"])')
+      .locator('button:has(.cn-icon[data-noun="assets"])')
       .first();
 
     if (await uploadButton.isVisible({ timeout: 5000 })) {

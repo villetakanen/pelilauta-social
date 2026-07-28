@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import { CHANNEL_DEFAULT_SLUG, type Channels } from 'src/schemas/ChannelSchema';
 import type { Reply } from 'src/schemas/ReplySchema';
@@ -140,7 +141,7 @@ function handleChange() {
         debug: {JSON.stringify({ changed, saving })}
       </span>
       <button type="submit">
-        <cn-icon noun="send"></cn-icon>
+        <Icon noun="send" />
         <span>{t('actions:send')}</span>
       </button>
     </div>

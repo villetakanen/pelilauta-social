@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import utilities, stores, and lifecycle functions
 
+import Icon from '@design-system/components/Icon.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
 import { captureError } from 'src/utils/client/sentry';
@@ -312,7 +313,7 @@ onMount(async () => {
           {#if suspend}
             <cn-loader></cn-loader>
           {:else}
-            <cn-icon noun="send"></cn-icon>
+            <Icon noun="send" />
           {/if}
           <span>{t("login:withEmail.sendAction")}</span>
         </button>
