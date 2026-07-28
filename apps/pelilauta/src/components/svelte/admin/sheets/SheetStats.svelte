@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { CnToggleButton } from '@11thdeg/cyan-lit';
+import Icon from '@design-system/components/Icon.svelte';
 import { updateCharacterSheet } from 'src/firebase/client/characterSheets/updateCharacterSheet';
 import {
   type CharacterStat,
@@ -163,11 +164,11 @@ function isGroupExpanded(groupName: string): boolean {
               onclick={() => toggleGroup(groupName)}
               aria-expanded={isGroupExpanded(groupName)}
             >
-              <cn-icon noun={isGroupExpanded(groupName) ? 'arrow-up' : 'arrow-down'}></cn-icon>
+              <Icon noun={isGroupExpanded(groupName) ? 'arrow-up' : 'arrow-down'} />
               <span>{isGroupExpanded(groupName) ? 'Collapse' : 'Expand'}</span>
             </button>
             <button type="button" class="text" onclick={() => addStat(groupName)}>
-              <cn-icon noun="add"></cn-icon>
+              <Icon noun="add" />
               <span>Add</span>
             </button>
           </div>
@@ -207,7 +208,7 @@ function isGroupExpanded(groupName: string): boolean {
                     class="button flex-none text" 
                     onclick={() => removeStat(statIndex)}
                   >
-                    <cn-icon noun="delete"></cn-icon>
+                    <Icon noun="delete" />
                   </button>
                 </div>
 
@@ -275,7 +276,7 @@ function isGroupExpanded(groupName: string): boolean {
 
     <div class="toolbar justify-end mb-2">
       <button type="submit" class="button primary" disabled={!dirty}>
-        <cn-icon noun="save"></cn-icon>
+        <Icon noun="save" />
         <span>
           save
         </span>

@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import {
   CharacterSheetSchema,
   type StatGroup,
@@ -126,7 +127,7 @@ $effect(() => {
               onclick={() => removeGroup(group.key)}
               disabled={groupHasStats(group.key)}
             >
-              <cn-icon noun="delete"></cn-icon>
+              <Icon noun="delete" />
             </button>
           </div>
           <StatsSection group={group.key} layout={group.layout} />
@@ -136,7 +137,7 @@ $effect(() => {
                   class="text"
                   onclick={() => addStat(group.key)}
                 >
-                  <cn-icon noun="add"></cn-icon>
+                  <Icon noun="add" />
                   <span>New Stat</span>
                 </button>
           </div>

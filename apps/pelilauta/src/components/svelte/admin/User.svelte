@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { setFrozen } from 'src/firebase/client/account/setFrozen';
 import type { Account } from 'src/schemas/AccountSchema';
 import { appMeta } from 'src/stores/metaStore/metaStore';
@@ -26,7 +27,7 @@ const toggleFrozen = async () => {
 
   {#if adminStatus()}
   <div style="justify-content: center; display: flex;">
-    <cn-icon noun="admin"></cn-icon>
+    <Icon noun="admin" />
     </div>
   {:else}
     <p></p>

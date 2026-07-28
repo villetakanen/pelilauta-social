@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import type { CharacterSheet } from 'src/schemas/CharacterSheetSchema';
 import { CHARACTER_SHEETS_COLLECTION_NAME } from 'src/schemas/CharacterSheetSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
@@ -99,10 +100,10 @@ async function deleteCharacterSheet(sheetKey: string, sheetName: string) {
                 class="button text"
                 aria-label="Delete Character Sheet"
               >
-                <cn-icon noun="delete"></cn-icon>
+                <Icon noun="delete" />
               </button>
               <a href={`/admin/sheets/${characterSheet.key}`} class="button text">
-                <cn-icon noun="edit"></cn-icon>
+                <Icon noun="edit" />
                 <span>Edit</span>
               </a>
             </div>

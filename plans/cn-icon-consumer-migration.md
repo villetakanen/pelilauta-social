@@ -10,7 +10,7 @@ Practice: `docs/practices/consumer-migration.md` (required pre-flight)
 Every remaining direct `<cn-icon>` element consumer in `apps/pelilauta` renders
 through the local server-rendered `<Icon>` component. When the arc closes, app
 source contains **zero direct `<cn-icon>` element usages**; icons resolve through
-the tiered local catalog (community → managed → bundled fallback → missing) with
+the tiered local catalog (open-source → managed → bundled fallback → missing) with
 no visual regression against live v18.
 
 ### What this arc is *not*
@@ -54,7 +54,7 @@ sort completed the local tiers needed by dynamic consumers:
 
 | Tier | Current role |
 | --- | --- | --- |
-| Community (`packages/design-system/icons/community`) | 22 project-licensed nouns with provenance and `currentColor` guards |
+| Open source (`packages/design-system/icons/open-source`) | 23 openly licensed nouns with provenance and `currentColor` guards. Renamed from "community" 2026-07-28; admits project-created *and* permissively licensed third-party artwork |
 | Managed (`packages/myrrys-proprietary/icons`) | Proprietary/branded and approved managed nouns, optional at build time |
 | Bundled fallback (`components/icon-fallback.ts`) | Essential UI symbols plus the mandatory missing glyph |
 
@@ -162,7 +162,7 @@ Pre-flight outcomes:
   incremental migration; **icon sizing in fab contexts is owned by the future
   Fab epic**, which absorbs this helper and settles the behavior.
 - **`loader` spike (LabelManager): missing glyph.** No `loader.svg` exists in
-  `public/icons/`, the community tier, or the managed tier, so the legacy
+  `public/icons/`, the open-source tier, or the managed tier, so the legacy
   element already renders a 404 blank in production today. `cn-loader` is the
   real spinner; swapping it in is a behavior change, not an icon migration.
   Migrated as-is, which turns today's blank into the missing glyph — the same
@@ -302,11 +302,88 @@ batch does not need is a separate dual-theme pass: every noun was
 already-reviewed artwork, the `Icon` inherits colour via `currentColor`, and no
 colour or theming surface is touched. Deterministic checks are green.
 
-### Batch F — Admin (svelte)
+### Batch F — Admin (svelte), tier rename, and the `delete` artwork
 
-`svelte/admin/**` (sheets, channels, `User`, `AdminTray`, `SentryTestButton`).
-Spike `warning` (SentryTestButton, `cn-card noun="warning"`), `tag`
-(AddTopicForm), `sort` (ManualTocOrdering if not already in D).
+`svelte/admin/**` — sheets, channels, `User`, `AdminTray`, `SentryTestButton`.
+Sixteen files, 44 usages, migrated to the local `Icon`. 32 → 16 consumer files
+remain. This batch also carries two human-directed changes that are not
+consumer migration; both are recorded below because they change shipped visuals
+and the licensing surface.
+
+Pre-flight outcomes:
+
+- **`.flex.items-start > cn-icon` finally has a consumer.** `ChannelSettings`
+  renders the dynamic `channel.icon` as a direct child of
+  `div.flex.flex-row.items-start`, the first live consumer of the rule Batch C
+  added speculatively. It also passed `class="flex-none"`. These are not
+  equivalent: the tag rule sets only `flex-grow: 0`, while `.flex-none` sets
+  `flex: none` (grow **and** shrink). Re-expressed as a wrapper
+  `<span class="flex-none">`, following the `NotificationItem` precedent —
+  `.flex > .flex-none` matches the span, preserving `flex: none` exactly.
+  Relying on the helper's `.flex.items-start > .cn-icon` instead would have
+  silently dropped `flex-shrink: 0`. The helper rule consequently still has no
+  live consumer.
+- **Plan correction: `warning` is not on a `cn-card`.** This plan previously
+  recorded `warning` as `cn-card noun="warning"` and therefore out of scope.
+  `SentryTestButton:60` is a real `<cn-icon noun="warning" small>` inside a bare
+  `<button>`. It is in scope and needed a disposition.
+- **`warning`, `tag`, and `check` stay the missing glyph.** None has artwork in
+  any tier or under `public/icons/`, so all three render blank in production
+  today; migrating preserves that as the missing glyph, per the recorded
+  missing-noun rule. `check` is additionally a human retirement. Fluent UI is
+  now an admitted source (below) and offers both `warning` and `tag`, so these
+  are cheap to port later if wanted — but that is a design decision, not part of
+  this migration.
+- **No new size or spacing re-expression.** `button` / `a.button` contexts and
+  `button.fab` (`SheetFabs`, icon + `sr-only` span, so
+  `:first-child:not(:only-child)`) are all owned by the existing helper. No bare
+  `a.fab`, so Batch C's sizing departure does not recur. No `h3` icon and no
+  `cn-sortable-list` on this surface.
+- **Dynamic nouns resolve.** `systemToNoun(characterSheet.system)` reaches the
+  same nine managed values verified in Batch D; `arrow-up`/`arrow-down` are
+  open-source tier; `channel.icon` is persisted and resolves against the full
+  vocabulary, as in Batch C. No persisted value changes.
+- **No e2e selector is broken.** No spec targets an admin `cn-icon`. The
+  outstanding `label-tag`, `assets`, and `drag-handle` selectors are unchanged
+  debt; `assets` belongs to Batch G (`AddFilesButton`).
+
+Human-directed changes carried in this batch:
+
+- **Tier renamed `community` → `open-source` (human 2026-07-28).** The tier's
+  real distinction is *openly licensed* versus *proprietary*, not authorship, and
+  the old name caused exactly that confusion when third-party artwork was
+  admitted. Directory, generated registry (`icons/open-source.ts`),
+  `OpenSourceNoun`/`getOpenSourceIcon`/`openSourceNouns` identifiers, both DS
+  book pages, the registry tests, the biome generated-file exclusion, and
+  `PROVENANCE.md` all move together. Mechanical and gated by the registry parity
+  check.
+- **`delete` artwork replaced; `trash` retired onto it (human 2026-07-28).** New
+  artwork is Fluent UI System Icons `bin-recycle-24-filled`, MIT, © 2020
+  Microsoft Corporation, taken from `microsoft/fluentui-system-icons` at
+  immutable commit `5ecd79ea56f2be0169859b3b881dcc890be932fc`, normalized from
+  `fill="#212121"` to `currentColor`. The licence text is vendored beside the
+  artwork as `LICENSE-fluent-ui-system-icons`, and `PROVENANCE.md` now documents
+  that the tier admits permissively licensed third-party sources with per-noun
+  attribution.
+
+  This is a **deliberate visual change to already-shipped surfaces**, not a
+  compatibility-preserving migration: `delete` has 17 consumers and 10 were
+  already migrated and live (`AssetArticle`, `ReplyArticle`, `Clock`,
+  `CreateClockApp` ×2, `HandoutMeta`, `SiteOwnersTool`, `SitePlayersTool`,
+  `NotificationItem`, `ConfirmCharacterDeletion`). Human decision 2026-07-28
+  chose to land it in this batch rather than a separate slice.
+
+  `ProfileTool`'s `trash` — the only `trash` consumer, and blank in production
+  since no tier ever had that artwork — is repointed to `noun="delete"` rather
+  than aliasing, keeping the compatibility boundary against invented aliases.
+  That file's own `cn-icon` → `Icon` migration stays in Batch G.
+
+Follow-up, not owned here: the managed tier still ships `delete.svg`, now
+permanently shadowed by the open-source entry (resolution is open-source →
+managed). Removing it is a `@myrrys/proprietary` submodule change and a separate
+human decision.
+
+### Batch G — Settings, auth, editors, shared UI, and `NounSelect`
 
 ### Batch G — Settings, auth, editors, shared UI, and `NounSelect`
 

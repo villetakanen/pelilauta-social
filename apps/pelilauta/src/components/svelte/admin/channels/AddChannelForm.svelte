@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import { forumTopics } from '@stores/admin/ChannelsAdminStore';
 import { t } from 'src/utils/i18n';
@@ -95,7 +96,7 @@ function handleSubmit(event: SubmitEvent) {
 {#if success}
   <div class="p-4 border border-success radius-s bg-success-low mb-4">
     <p class="text-success">
-      <cn-icon noun="check" small></cn-icon>
+      <Icon noun="check" />
       {t('admin:channels.add.success', { name: channelName })}
     </p>
   </div>
@@ -104,7 +105,7 @@ function handleSubmit(event: SubmitEvent) {
     {#if error}
       <div class="p-4 border border-error radius-s bg-error-low">
         <p class="text-error">
-          <cn-icon noun="info" small></cn-icon>
+          <Icon noun="info" />
           {error}
         </p>
       </div>
@@ -187,7 +188,7 @@ function handleSubmit(event: SubmitEvent) {
         onclick={resetForm}
         disabled={isSaving}
       >
-        <cn-icon noun="spiral" small></cn-icon>
+        <Icon noun="spiral" />
         {t('admin:channels.add.form.actions.reset')}
       </button>
       
@@ -199,7 +200,7 @@ function handleSubmit(event: SubmitEvent) {
         {#if isSaving}
           <cn-loader small></cn-loader>
         {:else}
-          <cn-icon noun="add" small></cn-icon>
+          <Icon noun="add" />
         {/if}
         <span>{t('admin:channels.add.form.actions.create')}</span>
       </button>

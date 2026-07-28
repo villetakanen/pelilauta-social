@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { updateCharacterSheet } from 'src/firebase/client/characterSheets/updateCharacterSheet';
 import { characterSheet as sheet } from 'src/stores/characters/characterSheetStore';
 import { logDebug, logError } from 'src/utils/logHelpers';
@@ -92,7 +93,7 @@ function moveGroupDown(index: number) {
               disabled={i === 0}
               onclick={() => moveGroupUp(i)}
             >
-              <cn-icon noun="arrow-up"></cn-icon>
+              <Icon noun="arrow-up" />
             </button>
             <button 
               aria-label="Move Group Down"
@@ -101,7 +102,7 @@ function moveGroupDown(index: number) {
               disabled={i === statGroups.length - 1}
               onclick={() => moveGroupDown(i)}
             >
-              <cn-icon noun="arrow-down"></cn-icon>
+              <Icon noun="arrow-down" />
             </button>
             <button 
               aria-label="Remove Group"
@@ -109,7 +110,7 @@ function moveGroupDown(index: number) {
               class="button flex-none text" 
               onclick={() => removeGroup(i)}
             >
-              <cn-icon noun="delete"></cn-icon>
+              <Icon noun="delete" />
             </button>
           </div>
         </div>
@@ -120,11 +121,11 @@ function moveGroupDown(index: number) {
     
     <div class="toolbar justify-end mb-2">
       <button type="button" class="text" onclick={addGroup}>
-        <cn-icon noun="add"></cn-icon>
+        <Icon noun="add" />
         <span>Add Group</span>
       </button>
       <button type="submit" class="button primary" disabled={!dirty}>
-        <cn-icon noun="save"></cn-icon>
+        <Icon noun="save" />
         <span>
           save
         </span>

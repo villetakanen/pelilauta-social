@@ -176,7 +176,7 @@ async function logoutAction() {
             onclick={() => removeLink(index)}
             aria-label="Poista linkki"
           >
-            <cn-icon noun="trash" small></cn-icon>
+            <cn-icon noun="delete" small></cn-icon>
           </button>
         </li>
       {/each}

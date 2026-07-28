@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { authedPost } from 'src/firebase/client/apiClient';
 import { appMeta } from 'src/stores/metaStore/metaStore';
 import { logDebug } from 'src/utils/logHelpers';
@@ -44,42 +45,42 @@ async function testSSRNoAuth() {
   <ul>
     <li>
       <a href="/admin/channels">
-        <cn-icon noun="discussion" small></cn-icon> Forum Administration
+        <Icon noun="discussion" /> Forum Administration
       </a>
     </li>
     <li>
       <a href="/admin/messaging">
-        <cn-icon noun="send" small></cn-icon> Social Media Poster
+        <Icon noun="send" /> Social Media Poster
       </a>
     </li>
     <li>
       <a href="/admin/users">
-        <cn-icon noun="adventurer" small></cn-icon> User Management
+        <Icon noun="adventurer" /> User Management
       </a>
     </li>
     <li>
       <a href="/admin/sheets">
-        <cn-icon noun="adventurer" small></cn-icon> Character Sheets
+        <Icon noun="adventurer" /> Character Sheets
       </a>
     </li>
     <li>
       <a href="/admin/sites">
-        <cn-icon noun="mekanismi" small></cn-icon> Site Activity
+        <Icon noun="mekanismi" /> Site Activity
       </a>
     </li>
     <li>
       <a href="/admin/snackbar-test">
-        <cn-icon noun="info" small></cn-icon> Snackbar Test
+        <Icon noun="info" /> Snackbar Test
       </a>
     </li>
     <li>
       <button onclick={testSSRAuth}>
-        <cn-icon noun="adventurer" small></cn-icon> Test SSR Auth
+        <Icon noun="adventurer" /> Test SSR Auth
       </button>
     </li>
     <li>
       <button onclick={testSSRNoAuth}>
-        <cn-icon noun="adventurer" small></cn-icon> Test SSR No Auth
+        <Icon noun="adventurer" /> Test SSR No Auth
       </button>
     </li>
     <li>
