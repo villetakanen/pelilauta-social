@@ -327,13 +327,20 @@ Pre-flight outcomes:
   recorded `warning` as `cn-card noun="warning"` and therefore out of scope.
   `SentryTestButton:60` is a real `<cn-icon noun="warning" small>` inside a bare
   `<button>`. It is in scope and needed a disposition.
-- **`warning`, `tag`, and `check` stay the missing glyph.** None has artwork in
-  any tier or under `public/icons/`, so all three render blank in production
-  today; migrating preserves that as the missing glyph, per the recorded
-  missing-noun rule. `check` is additionally a human retirement. Fluent UI is
-  now an admitted source (below) and offers both `warning` and `tag`, so these
-  are cheap to port later if wanted — but that is a design decision, not part of
-  this migration.
+- **`warning` spike: artwork ported.** Human decision 2026-07-28 — adopt Ant
+  Design Icons' filled `exclamation-circle` (MIT, © 2018-present Ant UED,
+  `ant-design/ant-design-icons@6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1`),
+  normalized to `currentColor` since the source declared no fill. `warning` had
+  no artwork in any tier or under `public/icons/`, so this turns today's
+  production blank into real artwork. Second vendored licence in the tier
+  (`LICENSE-ant-design-icons`), and the second source proving the open-source
+  tier's per-noun attribution model works.
+- **`tag` and `check` stay the missing glyph.** Neither has artwork in any tier
+  or under `public/icons/`, so both render blank in production today and
+  migrating preserves that, per the recorded missing-noun rule. `check` is
+  additionally a human retirement. Both Fluent and Ant Design are now admitted
+  sources and offer a `tag` mark, so porting it later is cheap — a design
+  decision, not part of this migration.
 - **No new size or spacing re-expression.** `button` / `a.button` contexts and
   `button.fab` (`SheetFabs`, icon + `sr-only` span, so
   `:first-child:not(:only-child)`) are all owned by the existing helper. No bare

@@ -24,7 +24,8 @@ export type OpenSourceNoun =
   | "pdf"
   | "reduce"
   | "search"
-  | "sort";
+  | "sort"
+  | "warning";
 
 export interface IconEntry {
   inner: string;
@@ -56,6 +57,7 @@ const _registry: Record<OpenSourceNoun, IconEntry> = {
   "reduce": { viewBox: "0 0 128 128", inner: "<defs\n   id=\"defs1\" />\n\n<path\n   style=\"fill:currentColor;stroke-width:0;stroke-linecap:round;paint-order:markers stroke fill\"\n   d=\"M 0,70 8,58 h 120 l -8,12 H 0\"\n   id=\"icon\" />" },
   "search": { viewBox: "0 0 128 128", inner: "<g id=\"icon\" fill=\"currentColor\">\n    <polygon points=\"91.8 84.9 128 123.4 108.6 128 79.2 96.8 91.8 84.9\"/>\n    <path d=\"M55.1,111.1C24.4,111.1-.5,86.2-.5,55.5S24.4,0,55.1,0s55.5,24.9,55.5,55.5-24.9,55.5-55.5,55.5ZM55.1,14c-22.9,0-41.5,18.6-41.5,41.5s18.6,41.5,41.5,41.5,41.5-18.6,41.5-41.5S78,14,55.1,14Z\"/>\n  </g>" },
   "sort": { viewBox: "0 0 128 128", inner: "<g transform=\"rotate(-90 64 64)\">\n        <polygon fill=\"currentColor\" id=\"icon\" points=\"80 20 92 32 52 64 92 96 80 108 28 64 80 20\"/>\n    </g>" },
+  "warning": { viewBox: "0 0 1024 1024", inner: "<path fill=\"currentColor\" d=\"M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 0 1 0-96 48.01 48.01 0 0 1 0 96z\"/>" },
 };
 
 export function getIcon(noun: OpenSourceNoun | (string & {})): IconEntry | undefined {

@@ -18,6 +18,7 @@ artwork is never stored here; it stays in the `@myrrys/proprietary` submodule
 | File | Covers | Licence |
 | --- | --- | --- |
 | `LICENSE-fluent-ui-system-icons` | Artwork sourced from Fluent UI System Icons | MIT, © 2020 Microsoft Corporation |
+| `LICENSE-ant-design-icons` | Artwork sourced from Ant Design Icons | MIT, © 2018-present Ant UED |
 
 | Noun | Source | Notes |
 | --- | --- | --- |
@@ -45,6 +46,7 @@ artwork is never stored here; it stays in the `@myrrys/proprietary` submodule
 | `kebab` | v18 `apps/pelilauta/public/icons/kebab.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
 | `pdf` | v18 `apps/pelilauta/public/icons/pdf.svg` (project-created) | Normalized to `currentColor` (source had no fill and defaulted to black). |
 | `delete` | **Third-party, MIT.** Fluent UI System Icons, `assets/Bin Recycle/SVG/ic_fluent_bin_recycle_24_filled.svg`, from `microsoft/fluentui-system-icons` at immutable commit `5ecd79ea56f2be0169859b3b881dcc890be932fc`. © 2020 Microsoft Corporation; licence text vendored as `LICENSE-fluent-ui-system-icons`. | Normalized to `currentColor` (source encoded `fill="#212121"`); geometry otherwise verbatim, `viewBox="0 0 24 24"`. Human decision 2026-07-28: adopt this bin-recycle mark for `delete` and retire the separate `trash` noun onto it. Overrides the managed-tier `delete`, which becomes unreachable — see the plan follow-up. |
+| `warning` | **Third-party, MIT.** Ant Design Icons, `packages/icons-svg/svg/filled/exclamation-circle.svg`, from `ant-design/ant-design-icons` at immutable commit `6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1`. © 2018-present Ant UED; licence text vendored as `LICENSE-ant-design-icons`. | Normalized to `currentColor` (source declared no fill and defaulted to black); geometry otherwise verbatim, `viewBox="0 0 1024 1024"`. Editor-only root `class="icon"` and the XML prolog dropped. Human decision 2026-07-28: adopt this filled exclamation-circle for `warning`, which had no artwork in any tier and rendered blank in production. Note: the aggregator page credited "HeskeyBaozi" (a contributor); the upstream LICENSE names Ant UED as copyright holder, which is what this row records. |
 
 Artwork is copied verbatim unless a Notes entry records a deliberate
 `currentColor` normalization (source hardcoded a fill or defaulted to black).
