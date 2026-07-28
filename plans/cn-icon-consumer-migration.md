@@ -280,13 +280,20 @@ Pre-flight outcomes:
   `cn-card[noun=…]`, which is untouched; `library.spec.ts:76` mentions
   `cn-icon` only in a comment describing the dead sort-controls block below.
 
-Debt found, owned by Batch H: `CharacterLibraryApp` keeps a commented-out
-sort-controls block (lines ~38–46) containing `<cn-icon noun={directionNoun}>`
-alongside references to `filters`, `FilteredSites`, and `userSites` that do not
-exist in the file. It is dead scaffolding, not a consumer, but it is the last
-literal `<cn-icon>` string in `svelte/characters/**` and will trip Batch H's
-zero-usage grep gate. Deleting the block is a scope decision for the human, not
-an icon migration; left intact here and listed for the terminal batch.
+- **Dead sort-controls block removed (human 2026-07-28).** `CharacterLibraryApp`
+  carried a commented-out sort-controls block containing
+  `<cn-icon noun={directionNoun}>` alongside references to `directionNoun`,
+  `toggleOrder`, `filters`, `FilteredSites`, and `userSites` — none of which
+  exist in the file or are imported by it. It was dead scaffolding rather than a
+  consumer, but it was the last literal `<cn-icon>` string under
+  `svelte/characters/**` and would have tripped Batch H's zero-usage grep gate.
+  Deleted here on human direction, keeping the gate honest instead of carrying
+  a known false positive to the terminal batch. No rendered output changes, and
+  no e2e is affected: `library.spec.ts`'s sort-direction test targets
+  `nav.toolbar` on `/library`, which is `site-library/UserSitesList`, not this
+  component. That live consumer migrates in Batch G.
+
+`svelte/characters/**` now contains zero `<cn-icon>` strings, commented or live.
 
 ### Batch F — Admin (svelte)
 
