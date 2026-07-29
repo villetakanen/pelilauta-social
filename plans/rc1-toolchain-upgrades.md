@@ -5,6 +5,24 @@ Branch: `chore/repo-tooling` opened step 1; the remaining steps are unstarted
 Decision: human 2026-07-28 — Astro and Vite must be current before `v21.0.0-rc.1`;
 too large for the current beta line, so they are logged here rather than started.
 
+## Standing Principle
+
+**Dependency versions are not themselves compatibility contracts.** Libraries
+may and should be updated, breaking majors included, whenever the update
+preserves the v18 behavior, Firebase integration, public routes, data shapes,
+and user-visible interactions protected by the delivery contract. Staying on a
+legacy version is not a compatibility requirement and does not reduce delivery
+risk — it defers and compounds it.
+
+Corollary, learned the expensive way: **when a problem is caused by an outdated
+dependency, check whether the dependency can simply be updated before designing
+any workaround.** The `node-linker=hoisted` versus `shamefully-hoist`
+investigation — which produced a fix that reported deploy SUCCESS while every
+SSR route returned 502 — existed entirely because `workbox-build@7.3.0` pinned
+`rollup: ^2.43.1`. Bumping workbox to 7.4.1, a version the declared `^7.3.0`
+range already admitted, deleted the cause. Checking upgradability first would
+have replaced the whole detour with one command.
+
 ## Why This Is An RC.1 Gate
 
 `docs/runbooks/releases.md` reserves `beta.X` for "deployable product increments
