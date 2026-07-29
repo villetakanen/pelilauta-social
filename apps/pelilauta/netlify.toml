@@ -1,4 +1,16 @@
+# pelilauta.social. This file is authoritative for the site: the Netlify project
+# sets package_path = "apps/pelilauta", so Netlify reads the config from here and
+# looks for the Astro adapter's Frameworks API output (.netlify/v1/) in this
+# directory — where the adapter actually writes it. `base` stays the repository
+# root so pnpm installs the whole workspace, matching the apps/design convention.
+#
+# Before this, the project had no package_path, so Netlify treated the repository
+# root as the package and looked for the function at the root. A root netlify.toml
+# clone plus scripts/stage-default-netlify-output.mjs copied the function there,
+# and dependencies did not survive the copy — every SSR route 500'd while the
+# deploy reported success. Both workarounds are deleted; alignment replaces them.
 [build]
+  base = "."
   command = "pnpm --filter pelilauta build"
   publish = "apps/pelilauta/dist"
 

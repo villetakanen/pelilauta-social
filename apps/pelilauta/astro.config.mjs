@@ -67,6 +67,21 @@ export default defineConfig({
         'marked-footnote',
         'uuid',
       ],
+      /*
+       * Keep firebase-admin and its transitive deps out of the SSR bundle.
+       * @grpc/grpc-js is CommonJS and uses __dirname to locate native proto
+       * files; bundled into an ESM chunk that becomes undefined and the first
+       * Firestore call fails. Staying external means Node resolves it from
+       * node_modules at runtime, which is what the [functions.ssr]
+       * external_node_modules block in netlify.toml ships. Adopted from v20.
+       */
+      external: [
+        'firebase-admin',
+        'firebase-admin/app',
+        'firebase-admin/auth',
+        'firebase-admin/firestore',
+        'firebase-admin/storage',
+      ],
     },
   },
 
