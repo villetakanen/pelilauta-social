@@ -17,3 +17,7 @@
 | Re-expressing a legacy context rule requires checking which property it actually sets: `.fab cn-icon` sets `font-size`, not the element's box, so a helper that collapses size tokens for `.fab` invents behavior the legacy CSS never had. | Deferred | `plans/cn-icon-consumer-migration.md` Batch D; future Fab epic |
 | The footer color-theme e2e still targets the removed custom-element tag. | Deferred | `plans/cn-icon-consumer-migration.md` terminal batch |
 | `thread-labels.spec.ts` targets the removed tag for `label-tag` chips (broken by PR #41). | Deferred | `plans/cn-icon-consumer-migration.md` terminal batch |
+| Check whether updating an outdated dependency resolves the problem before designing a workaround. | Applied | `AGENTS.md` Delivery Contract + ASK; `plans/rc1-toolchain-upgrades.md` |
+| Address package sources by name rather than assuming a particular `node_modules` layout. | Applied | `apps/pelilauta/src/overrides.css`; `apps/pelilauta/test/styles/colorThemeContract.test.ts`; `plans/rc1-toolchain-upgrades.md` font-emission gate |
+| A gate written into practice text is re-applied by every later reader until the text itself is corrected — restating a decision in conversation does not retire it. | Applied | `docs/practices/consumer-migration.md` step 7 |
+| A PR to `main` is a delivery/release unit, not a commit. Small coherent commits belong inside one slice; splitting them into separate PRs-to-main inflates the release count without adding reviewability. | Applied | `AGENTS.md` Delivery Contract; `.agents/skills/delivery-slice/SKILL.md` |
