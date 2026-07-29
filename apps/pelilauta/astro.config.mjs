@@ -40,7 +40,21 @@ export default defineConfig({
       ],
     },
     ssr: {
-      noExternal: ['nanostores', '@nanostores/persistent', '@astrojs/netlify'],
+      // `firebase` is the *client* SDK. It reaches the server graph because
+      // Astro server-renders islands, and islands import `@stores/session`,
+      // which imports `src/firebase/client`. Left external, the deployed
+      // Netlify function had to resolve `firebase` from its own node_modules at
+      // runtime — and when a deploy shipped without that package, every SSR
+      // route failed with ERR_MODULE_NOT_FOUND. Bundling it into the server
+      // output removes that runtime resolution entirely. `firebase-admin` stays
+      // external on purpose: it has native and dynamic requires that must not
+      // be bundled.
+      noExternal: [
+        'nanostores',
+        '@nanostores/persistent',
+        '@astrojs/netlify',
+        'firebase',
+      ],
     },
   },
 
