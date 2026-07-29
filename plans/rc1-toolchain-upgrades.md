@@ -7,10 +7,11 @@ too large for the current beta line, so they are logged here rather than started
 
 ## Standing Principle
 
-**The v18 compatibility contract covers the ported business logic. It does not
-cover dependency versions.** Libraries may and should be updated, breaking
-majors included, whenever the update does not break this application. Staying on
-a legacy version is not a compatibility requirement and does not reduce delivery
+**Dependency versions are not themselves compatibility contracts.** Libraries
+may and should be updated, breaking majors included, whenever the update
+preserves the v18 behavior, Firebase integration, public routes, data shapes,
+and user-visible interactions protected by the delivery contract. Staying on a
+legacy version is not a compatibility requirement and does not reduce delivery
 risk — it defers and compounds it.
 
 Corollary, learned the expensive way: **when a problem is caused by an outdated
