@@ -1,7 +1,9 @@
 # Lesson Candidates — `feat/ds-navigation`
 
-Three candidates. Earlier revisions of this file recorded eight, most of them
+Five candidates. Earlier revisions of this file recorded eight, most of them
 facets of the second one; the discarded detail is in git history if needed.
+Candidate 4 is a re-entry: it was consolidated away in `1016ccb` and recurred
+within hours with material cost.
 
 ## 1. Check upgradability before designing a workaround
 
@@ -91,5 +93,76 @@ and the trigger was not recognised.
 generator — template, skill, practice guide — needs its own approval and a
 consumer, meaning the next artifact actually written through it. The signal to
 watch is the ratio: one sentence criticised, one template rewritten.
+
+**Disposition.** Proposed.
+
+## 4. A superfluous branch acquires a plan file and becomes a shadow epic
+
+**Evidence.** `feat/ds-foundations` was created 12:31 from `1016ccb`, the tip of
+this branch, and PR #58 was opened with `feat/ds-navigation` as its base — a
+feature branch stacked on a feature branch, which the delivery contract does not
+provide for. It then acquired `plans/core-tokens.md` as its work ledger. The
+owner deleted that file from this branch in `2eb3680` as swept in by
+`git add -A`, but it survived on the shadow branch, where it recorded the state
+of the token work.
+
+Three costs landed within four hours, all in this session:
+
+- The owner could not verify the token results, because the work and its ledger
+  were on a branch invisible from the epic.
+- An agent auditing the token layer rediscovered `--cn-grid` as an unresolved
+  reference, reported it as a live product defect, and was wrong: the fix — a
+  `units.css` definition and a `tokens.css` entry point — already existed on the
+  shadow branch, with a header comment naming that exact defect.
+- The two branches diverged on a file one of them deleted, so replaying the work
+  now needs manual conflict resolution.
+
+**Assessment.** The mechanism is branch first, ledger second. An illegitimate
+branch is still a place, and a place accumulates a durable artifact; `plans/` is
+the only writable surface with no stated lifetime, so the artifact lands there
+and becomes the only record of that branch's state. Nothing in the harness
+objects: no gate checks a PR's base, and no artifact declares which branch is
+the live epic.
+
+This signal has now fired three times. `50b41ab docs(lessons): log plans
+drifting into agent work ledgers` recorded it; `1016ccb` consolidated it into
+candidate 2 as a facet of artifact altitude, hours before it recurred with
+material cost. It is not an altitude problem. Candidate 2 is about artifacts
+filling with too much detail; this is about an artifact existing at all because
+a branch did.
+
+**Possible change.** Two, separable. First, a plan's right to exist derives from
+its branch: a PR whose base is not `main` is the defect to catch, and it is
+mechanically checkable in the PR workflow. Second, introduce `docs/adrs/` so
+decisions stop needing a plan to live in, and move the ones already stranded
+(default radius, design-system token ownership) — both are currently recoverable
+only from a plan file or a branch that should not exist.
+
+**Disposition.** Proposed. Third recurrence; the previous consolidation was
+premature. Overlaps the audit's missing-ADR finding.
+
+## 5. Nothing tells an agent which branch is the live epic
+
+**Evidence.** `AGENTS.md` states that a feature branch is a continuous context
+delivering several slices to `main` before it closes, and `feat/cn-icon`
+demonstrates it — PRs #53 and #56 from one branch. Despite having read and
+quoted that passage, I concluded twice in one session that `feat/ds-navigation`
+was finished because PR #57 had merged, and built two rounds of analysis on it:
+first that the branch predated the token work, then that the work had been done
+on dead code. A stored agent memory naming `feat/ds-foundations` as the epic
+branch reinforced the error rather than correcting it.
+
+**Assessment.** The rule was in required context and was not applied, which is
+the same failure shape as candidates 1 and 3: the rule is stated abstractly and
+the trigger is a concrete observation that does not resemble it. `git log`
+answers "did this merge" but not "is this epic open"; merged-and-continuing and
+merged-and-closed are indistinguishable from the branch alone. The one artifact
+that would disambiguate — a closing commit like `chore(factory): close the icon
+branch` — is only recognisable after the fact.
+
+**Possible change.** Make the live epic observable rather than inferred. The
+cheapest form is a line in `AGENTS.md` naming the current epic branch, updated
+when one closes, so an agent reads it instead of deducing it from merge state.
+The failing inference to name explicitly: a merged PR does not close its branch.
 
 **Disposition.** Proposed.
