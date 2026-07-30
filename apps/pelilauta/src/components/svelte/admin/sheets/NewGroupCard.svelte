@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { CharacterSheetSchema } from '@schemas/CharacterSheetSchema';
 import { characterSheet as sheet } from 'src/stores/characters/characterSheetStore';
 
@@ -26,7 +27,7 @@ function addGroup() {
 
 <cn-card>
   <div class="flex items-center">
-    <cn-icon noun="card" large></cn-icon>
+    <Icon noun="card" size="large" />
   </div>
   <label>
     <span>Group Name</span>
@@ -34,7 +35,7 @@ function addGroup() {
   </label>
   <div slot="actions" class="toolbar items-center">
   <button type="button" class="text" onclick={() => addGroup()} disabled={!groupName.trim()}>
-      <cn-icon noun="add"></cn-icon>
+      <Icon noun="add" />
       <span>New Group</span>
     </button>
   </div>

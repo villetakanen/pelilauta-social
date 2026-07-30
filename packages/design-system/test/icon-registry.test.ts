@@ -5,28 +5,28 @@
  */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { getIcon as getManagedIcon } from '../../myrrys-proprietary/index.ts';
 import { FallbackIcons } from '../components/icon-fallback.ts';
 import {
-  getNouns as communityNouns,
-  getIcon as getCommunityIcon,
-} from '../icons/community.ts';
+  getIcon as getOpenSourceIcon,
+  getNouns as openSourceNouns,
+} from '../icons/open-source.ts';
 
-// Mirror of the component's resolution order (community -> managed -> fallback
+// Mirror of the component's resolution order (open-source -> managed -> fallback
 // -> missing) so precedence is asserted independently of Svelte rendering.
 function resolveTier(
   noun: string,
-): 'community' | 'managed' | 'fallback' | 'missing' {
-  if (getCommunityIcon(noun)) return 'community';
+): 'open-source' | 'managed' | 'fallback' | 'missing' {
+  if (getOpenSourceIcon(noun)) return 'open-source';
   if (getManagedIcon(noun)) return 'managed';
   if (FallbackIcons[noun]) return 'fallback';
   return 'missing';
 }
 
-test('community tier owns the project-provenance UI nouns', () => {
+test('open-source tier owns the openly licensed UI nouns', () => {
   for (const noun of [
     'fox',
     'search',
@@ -44,16 +44,19 @@ test('community tier owns the project-provenance UI nouns', () => {
   ]) {
     assert.equal(
       resolveTier(noun),
-      'community',
-      `${noun} should resolve to community`,
+      'open-source',
+      `${noun} should resolve to open-source`,
     );
-    assert.ok(communityNouns().includes(noun), `${noun} in community registry`);
+    assert.ok(
+      openSourceNouns().includes(noun),
+      `${noun} in open-source registry`,
+    );
   }
 });
 
-test('every community icon is monochrome currentColor (no hardcoded fill)', () => {
-  for (const noun of communityNouns()) {
-    const inner = getCommunityIcon(noun)!.inner;
+test('every open-source icon is monochrome currentColor (no hardcoded fill)', () => {
+  for (const noun of openSourceNouns()) {
+    const inner = getOpenSourceIcon(noun)!.inner;
     assert.match(inner, /currentColor/, `${noun} declares currentColor`);
     assert.doesNotMatch(
       inner,
@@ -61,6 +64,39 @@ test('every community icon is monochrome currentColor (no hardcoded fill)', () =
       `${noun} has no hardcoded hex fill`,
     );
   }
+});
+
+test('open-source artwork and provenance rows are in exact parity', () => {
+  const directory = new URL('../icons/open-source/', import.meta.url);
+  const artwork = readdirSync(directory)
+    .filter((name) => name.endsWith('.svg'))
+    .map((name) => name.slice(0, -4))
+    .sort();
+  const provenance = readFileSync(
+    new URL('../icons/open-source/PROVENANCE.md', import.meta.url),
+    'utf8',
+  );
+  const nounTable = provenance.split('| Noun | Source | Notes |')[1];
+  assert.ok(nounTable, 'provenance noun table is present');
+  const rows = [...nounTable.matchAll(/^\| `([^`]+)` \| ([^|]+) \|/gm)];
+  const nouns = rows.map((row) => row[1]);
+
+  assert.equal(
+    new Set(nouns).size,
+    nouns.length,
+    'provenance nouns are unique',
+  );
+  assert.ok(
+    rows.every((row) => row[2].trim().length > 0),
+    'every provenance row records a source',
+  );
+  assert.ok(
+    rows.every((row) =>
+      /^\*\*(?:Project-created|Third-party, [^*]+)\.\*\*/.test(row[2].trim()),
+    ),
+    'every provenance row identifies its source kind',
+  );
+  assert.deepEqual(nouns.sort(), artwork);
 });
 
 test('managed tier owns the branded featured-tag nouns', () => {
@@ -73,11 +109,11 @@ test('managed tier owns the branded featured-tag nouns', () => {
   }
 });
 
-test('branded managed artwork keeps encoded colors; community is monochrome', () => {
+test('branded managed artwork keeps encoded colors; open-source is monochrome', () => {
   assert.match(getManagedIcon('dd5')!.inner, /fill="#BC0F0F"/);
-  assert.match(getCommunityIcon('fox')!.inner, /fill="currentColor"/);
-  assert.match(getCommunityIcon('search')!.inner, /fill="currentColor"/);
-  assert.match(getCommunityIcon('arrow-left')!.inner, /fill="currentColor"/);
+  assert.match(getOpenSourceIcon('fox')!.inner, /fill="currentColor"/);
+  assert.match(getOpenSourceIcon('search')!.inner, /fill="currentColor"/);
+  assert.match(getOpenSourceIcon('arrow-left')!.inner, /fill="currentColor"/);
 });
 
 test('unknown, empty, and absent nouns fall to the missing glyph', () => {
@@ -144,7 +180,7 @@ test('icon.css owns only the stable icon token vocabulary', () => {
   );
 });
 
-test('community registry generation is deterministic (--check passes)', () => {
+test('open-source registry generation is deterministic (--check passes)', () => {
   const script = fileURLToPath(
     new URL('../scripts/generate-icon-registry.mjs', import.meta.url),
   );

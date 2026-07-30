@@ -189,7 +189,7 @@ These tests verify the implementation from **PBI-039 Phase 4**:
 
 - Check user authentication: `await waitForAuthState(page, 15000)`
 - Verify user is site owner: Check `init-test-db.js` owners array
-- Check component rendering: Look for `button:has(cn-icon[noun="assets"])`
+- Check component rendering: Look for `button:has(.cn-icon[data-noun="assets"])`
 
 ### File Upload Fails
 

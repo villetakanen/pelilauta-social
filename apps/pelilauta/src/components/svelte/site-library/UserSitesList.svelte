@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { onMount } from 'svelte';
 import { uid } from '../../../stores/session';
 import { refreshSites, userSites } from '../../../stores/userSites/index.ts';
@@ -22,7 +23,7 @@ onMount(() => {
     <nav class="toolbar">
       <h1 class="grow">{t("library:sites.title")}</h1>
       <button class="text" aria-label={directionNoun} onclick={toggleOrder}>
-        <cn-icon noun={directionNoun}></cn-icon>
+        <Icon noun={directionNoun} />
       </button>
       <button
         class={filters.orderBy === "name" ? "" : "text"}

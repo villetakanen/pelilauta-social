@@ -119,7 +119,7 @@ Combined, "463/463, 8/8, e2e passing ✅" overstates real coverage.
 `</svg>`) + `:49-55` (viewBox re-extracted separately).
 
 **Root cause:** The tiers store data in two different shapes:
-- Community/managed (`icons/community.ts:7-9`, proprietary `index.ts`) store the
+- Open-source/managed (`icons/open-source.ts:7-9`, proprietary `index.ts`) store the
   **entire raw SVG document** string (XML prolog + Illustrator root `<svg>` + inner).
   These are v18 sprite source files inlined verbatim — note the fossil `viewBox="0 0
   128 128"` and `<g id="icon">` (the `#icon` fragment v18's `<use href=".../x.svg#icon">`
@@ -179,7 +179,7 @@ CSS or test selecting the `cn-icon` **tag** silently stops matching at migrated 
 
 ## NOTE 7 — Registry can drift from its SVG sources at build time
 
-`icons/community.ts` is generated-and-committed. The staleness `--check`
+`icons/open-source.ts` is generated-and-committed. The staleness `--check`
 (`generate-icon-registry.mjs`, `check:icons`) runs only inside the (gated) design-system
 unit test — **never** in any `build`. A build that skips the pre-push hook (e.g. Netlify)
 can ship a `community.ts` stale against its SVG sources.

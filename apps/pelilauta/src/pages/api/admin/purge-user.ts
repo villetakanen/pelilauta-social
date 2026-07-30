@@ -5,7 +5,23 @@ import { PROFILES_COLLECTION_NAME } from '@schemas/ProfileSchema';
 import { logDebug, logError } from '@utils/logHelpers';
 import { tokenToUid } from '@utils/server/auth/tokenToUid';
 import type { APIRoute } from 'astro';
-import { FirebaseError } from 'firebase/app';
+
+/**
+ * Structural check for a firebase-admin error code, without importing a
+ * Firebase SDK into this server route.
+ *
+ * This previously tested `error instanceof FirebaseError` against the *client*
+ * SDK's class. `serverAuth` throws firebase-admin's own `FirebaseError`, a
+ * different class, so that test was always false and the not-found branch below
+ * was unreachable. Admin errors expose `code` as `auth/user-not-found`, which is
+ * what this matches.
+ */
+function hasErrorCode(error: unknown, code: string): boolean {
+  return (
+    error instanceof Error &&
+    (error as Error & { code?: unknown }).code === code
+  );
+}
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -43,10 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
         `Cleared custom claims for ${userToPurgeUid}`,
       );
     } catch (error: unknown) {
-      if (
-        error instanceof FirebaseError &&
-        error.code === 'auth/user-not-found'
-      ) {
+      if (hasErrorCode(error, 'auth/user-not-found')) {
         logDebug(
           'api/admin/purge-user',
           `User ${userToPurgeUid} not found in Auth, skipping claim removal.`,

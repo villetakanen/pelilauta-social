@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
@@ -173,7 +174,7 @@ async function handleDelete() {
 
 <article class="surface cols-2">
   <div class="flex flex-row items-start">
-    <cn-icon noun={channel.icon} class="flex-none"></cn-icon>
+    <span class="flex-none"><Icon noun={channel.icon} /></span>
     <div class="grow">
       <label>
         <span>{t('admin:channels.edit.name')}</span>
@@ -232,7 +233,7 @@ async function handleDelete() {
       {#if isRefreshing}
         <cn-loader small></cn-loader>
       {:else}
-        <cn-icon noun="tools" small></cn-icon>
+        <Icon noun="tools" />
       {/if}
       {t('admin:channels.actions.refresh')}
     </button>
@@ -247,7 +248,7 @@ async function handleDelete() {
       {#if isDeleting}
         <cn-loader small></cn-loader>
       {:else}
-        <cn-icon noun="delete" small></cn-icon>
+        <Icon noun="delete" />
       {/if}
       {t('admin:channels.actions.delete')}
     </button>

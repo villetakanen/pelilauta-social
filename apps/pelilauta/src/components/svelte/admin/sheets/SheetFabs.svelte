@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { createCharacterSheet } from 'src/stores/characters/characterSheetStore';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { logError } from 'src/utils/logHelpers';
@@ -40,7 +41,7 @@ async function handleCreateCharacterSheet() {
     aria-label="Create new sheet" 
     data-tooltip="Create new sheet"
   >
-    <cn-icon noun="add"></cn-icon>
+    <Icon noun="add" />
     <span class="sr-only">Create new sheet</span>
   </button>
 </div>

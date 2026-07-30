@@ -3,11 +3,13 @@ status: approved
 provenance:
   - "Parent rendering contract: specs/design-system/components/cn-icon/spec.md (the Icon component owns sizes, contextual colour, the size-standardization mechanism, missing-glyph rendering, and the assistive-technology noun announcement; this spec anchors to it and does not restate those values)"
   - "Human design decision 2026-07-21: the iconography book is a usage/design-principles page — why icons are used, when an icon may stand alone vs. carry a label, accessibility-in-use, and the vocabulary grouped by purpose — not a technical catalog dump. Informed by an agent-drafted principles page reviewed by the human and by the Pelilauta RPG-community context (threads, character sheets, forums)."
+  - "Human decision 2026-07-28: the tier formerly named community is renamed open-source. The distinction it draws is openly licensed versus proprietary, not authorship; the old name misdescribed the tier as soon as third-party artwork was admitted."
+  - "Human decision 2026-07-28: the open-source tier admits permissively licensed third-party artwork alongside project-created artwork. Each noun's PROVENANCE.md row states which kind it is; a third-party row names the copyright holder, licence, and immutable upstream source, with the licence text vendored beside the artwork. First admissions: Fluent UI System Icons bin-recycle-24-filled (MIT, (c) 2020 Microsoft Corporation, microsoft/fluentui-system-icons@5ecd79ea56f2be0169859b3b881dcc890be932fc) adopted as the delete artwork with the trash noun retired onto it; and Ant Design Icons filled exclamation-circle (MIT, (c) 2018-present Ant UED, ant-design/ant-design-icons@6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1) adopted as the warning artwork. Copyright holders are taken from each project's upstream LICENSE, not from aggregator pages, which credited a contributor instead of the holder."
   - "Human decision 2026-07-21: adding a community icon noun is a human-approved change recording the artwork's source in PROVENANCE.md and confirming it is project-licensable; community-tier membership confers project licensing; community artwork is monochrome, authored to render with the surrounding foreground (currentColor). Formalizes the practice already applied for fox and search."
   - "Human decision 2026-07-21: the managed (myrrys) tier is enumerable, so the book lists all managed icons when the submodule is present (not merely by example). Community icons are ported from the existing pelilauta application decisively, one at a time — each an individual human-approved admission, not a bulk import — so the catalog grows alongside the per-consumer Cyan migrations."
   - "Human decision 2026-07-21: noun aliases are deferred out of scope until a real consumer need appears (distinct nouns only); the design-system book IS required for this capability to be Done (governance-only work is not exempt from the CLAUDE.md Delivery-Contract book rule) and is the deliverable."
-  - "Tier model and precedence (ported from the v20 target model at immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced): trusted registries, community→managed→fallback precedence, server-rendered markup, source-owned colour. Bundled fallback: packages/design-system/components/icon-fallback.ts (essential UI symbols + missing glyph, MIT). Managed optionality: packages/design-system/components/managed-tier.ts and packages/design-system/vite/optional-proprietary.mjs."
-  - "Community catalog and current practice: packages/design-system/icons/community/ + PROVENANCE.md; packages/design-system/scripts/generate-icon-registry.mjs; docs/practices/consumer-migration.md."
+  - "Tier model and precedence (ported from the v20 target model at immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced): trusted registries, open-source→managed→fallback precedence, server-rendered markup, source-owned colour. Bundled fallback: packages/design-system/components/icon-fallback.ts (essential UI symbols + missing glyph, MIT). Managed optionality: packages/design-system/components/managed-tier.ts and packages/design-system/vite/optional-proprietary.mjs."
+  - "Open-source catalog and current practice: packages/design-system/icons/open-source/ + PROVENANCE.md; packages/design-system/scripts/generate-icon-registry.mjs; docs/practices/consumer-migration.md."
 ---
 
 # Iconography
@@ -82,7 +84,7 @@ the available vocabulary grouped by purpose.
   context, so a consumer chooses by intent rather than by guessing a name. A
   purpose group appears only when the catalog contains icons for it; the book
   never names an empty group or an icon that does not exist.
-- The book enumerates the community nouns in full and the managed (myrrys) icons
+- The book enumerates the open-source nouns in full and the managed (myrrys) icons
   in full when the managed submodule is present, with the bundled fallback shown
   as the always-available safety net. The managed tier is enumerable, so its
   icons are listed, not merely exemplified.
@@ -100,18 +102,23 @@ content.
 - The catalog is repository-owned, reviewed artwork. Adding, removing, or
   re-pointing a noun is a human-approved product decision, never an incidental
   effect of a surface migration.
-- **Admission.** A community noun is added by a human-approved change that
-  records the artwork's source in the community `PROVENANCE.md` and confirms it
-  is project-licensable. Community-tier membership confers project licensing;
-  the row records the source, not a per-row licence string. Community artwork is
+- **Admission.** An open-source noun is added by a human-approved change that
+  records the artwork's source in the tier's `PROVENANCE.md` and confirms its
+  licence permits redistribution and modification. The tier admits two kinds of
+  source, and every row states which it is: project-created artwork the project
+  owns, or permissively licensed third-party artwork. A third-party row names the
+  copyright holder, the licence, and the upstream repository at an immutable
+  commit, and the licence text is vendored beside the artwork. Open-source
+  artwork is
   monochrome and authored to inherit the surrounding foreground.
-- **Porting is one at a time.** Community icons are ported from the existing
-  pelilauta application decisively, one at a time — each an individual
-  human-approved admission, never a bulk import — so the catalog grows alongside
-  the per-consumer Cyan migrations rather than ahead of a real need.
-- **Source tiers** resolve in precedence **community → managed → bundled
-  fallback → missing glyph** (ported from v20 `02880fbc`): community
-  (project-licensed monochrome, in-repo, with provenance), managed (proprietary
+- **Admission is one at a time.** Open-source icons are admitted from the
+  existing Pelilauta application or an approved upstream source decisively, one
+  at a time — each an individual human-approved admission, never a bulk import —
+  so the catalog grows alongside the per-consumer Cyan migrations rather than
+  ahead of a real need.
+- **Source tiers** resolve in precedence **open-source → managed → bundled
+  fallback → missing glyph** (ported from v20 `02880fbc`): open-source
+  (openly licensed monochrome, in-repo, with provenance), managed (proprietary
   branded artwork from `@myrrys/proprietary`, optional at build and runtime —
   absent degrades through the remaining tiers rather than failing), bundled
   fallback (`packages/design-system/components/icon-fallback.ts`, MIT, always
@@ -126,7 +133,9 @@ content.
 - Does not define the Icon rendering contract — sizes, the size-standardization
   mechanism, colour resolution, missing-glyph rendering, and the
   assistive-technology announcement are owned by the `cn-icon` spec.
-- Does not redesign existing artwork or rename persisted or dynamic nouns.
+- Does not redesign or re-point artwork as an incidental effect of a consumer
+  migration, or rename persisted or dynamic nouns. Deliberate artwork revisions
+  remain human-approved catalog decisions under the governance above.
 - Does not invent artwork or aliases for nouns absent from every approved
   source, nor promise icons the catalog does not contain; the book documents the
   vocabulary that actually exists.
@@ -146,11 +155,11 @@ content.
   `design.pelilauta.social`.** A consumer can read the usage principles (clarity
   over decoration, accessibility in use, size & alignment) with concrete do's
   and don'ts, and the available vocabulary grouped by the purposes the catalog
-  serves — the community nouns and the managed (myrrys) icons enumerated in full
+  serves — the open-source nouns and the managed (myrrys) icons enumerated in full
   (managed when its submodule is present), with the bundled fallback shown as
   the safety net, and only populated purpose groups shown. This is the
   capability's observable deliverable; the spec is its intent.
-- Every noun in `packages/design-system/icons/community/` is project-licensable
+- Every noun in `packages/design-system/icons/open-source/` is openly licensed
   artwork with a `PROVENANCE.md` row recording its source, and no proprietary
   artwork is committed to this repository.
 - Each Acceptance item below maps to a deterministic check or a named human
@@ -158,7 +167,7 @@ content.
 
 ### Regression Guardrails
 
-- No community-tier artwork is present without a `PROVENANCE.md` row naming its
+- No open-source-tier artwork is present without a `PROVENANCE.md` row naming its
   source, and no row names a noun with no artwork file.
 - No proprietary or non-project-licensable artwork is committed to this
   repository; branded artwork is consumed only through the optional managed
@@ -174,20 +183,20 @@ content.
 
 - **Icon usage is readable from the DS book (human, primary).** On
   `design.pelilauta.social`, a consumer can read the usage principles and do's
-  and don'ts, and the available vocabulary grouped by purpose (community nouns
+  and don'ts, and the available vocabulary grouped by purpose (open-source nouns
   and managed (myrrys) icons enumerated in full — managed when its submodule is
   present — bundled fallback as the safety net; only populated purpose groups
   shown). The page is legible in both Light and Dark. (Icon rendering across
   modes is the Icon contract's acceptance, not re-verified here.)
 - **Catalog ↔ provenance parity (deterministic).** Every artwork file under
-  `packages/design-system/icons/community/` has exactly one `PROVENANCE.md`
+  `packages/design-system/icons/open-source/` has exactly one `PROVENANCE.md`
   row, and every row (other than the header) names an existing artwork file;
   each row records a source.
 - **Absent-submodule resolution (deterministic).** Building both apps with the
   `@myrrys/proprietary` submodule absent completes, and the managed-only probe
   noun `dd5` resolves to the missing glyph rather than failing.
-- **Community authoring (deterministic).** Every SVG under
-  `packages/design-system/icons/community/` declares `fill="currentColor"`.
+- **Open-source authoring (deterministic).** Every SVG under
+  `packages/design-system/icons/open-source/` declares `fill="currentColor"`.
 - **Governance review (human).** A human review confirms the admission rule and
   tier assignment match the artwork and provenance actually present, and that
   the book reflects them.

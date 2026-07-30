@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import {
   dirty,
   save,
@@ -50,7 +51,7 @@ async function onsubmit(e: Event) {
     
       
   <button type="submit" class="button primary" disabled={!$dirty}>
-    <cn-icon noun="save"></cn-icon>
+    <Icon noun="save" />
     <span>Save Sheet</span>
   </button>
   </div>

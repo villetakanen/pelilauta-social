@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 
 interface Props {
@@ -39,6 +40,6 @@ const handleButtonClick = () => {
   data-testid="file-input"
 />
 <button onclick={handleButtonClick} type="button" {disabled}>
-  <cn-icon noun="assets"></cn-icon>
+  <Icon noun="assets" />
   <span>{t("actions:upload")}</span>
 </button>

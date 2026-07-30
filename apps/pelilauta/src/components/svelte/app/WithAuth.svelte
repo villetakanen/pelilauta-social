@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 import type { Snippet } from 'svelte';
 import { uid } from '../../../stores/session';
@@ -18,7 +19,7 @@ const { allow, children, message }: Props = $props();
   <div class="content-columns">
     <article>
       <div class="flex justify-center p-2">
-        <cn-icon noun="monsters" xlarge></cn-icon>
+        <Icon noun="monsters" size="xlarge" />
       </div>
       <div class="surface border-radius p-2 mt-2">
       <h1>{t('app:forbidden.title')}</h1>

@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Site } from 'src/schemas/SiteSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
@@ -41,10 +42,10 @@ const coverSrcset = $derived.by(() => {
   <p>{site.description}</p>
   <div slot="actions" class="toolbar">
     {#if owns()}
-      <cn-icon noun="avatar"></cn-icon>
+      <Icon noun="avatar" />
     {/if}
     {#if plays()}
-      <cn-icon noun="adventurer"></cn-icon>
+      <Icon noun="adventurer" />
     {/if}
     <div>
       <p>{toDisplayString(site.flowTime)}</p>

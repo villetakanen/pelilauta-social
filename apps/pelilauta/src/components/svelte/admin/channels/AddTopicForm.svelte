@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch, authedPost } from '@firebase/client/apiClient';
 import { addTopicFormOpen } from '@stores/admin/ChannelsAdminStore';
 import { pushSnack } from '@utils/client/snackUtils';
@@ -70,7 +71,7 @@ function handleCancel() {
           {#if isSubmitting}
             <cn-loader small></cn-loader>
           {:else}
-            <cn-icon noun="tag" small></cn-icon>
+            <Icon noun="tag" />
           {/if}
           <span>{t('admin:topics.create.save')}</span>
         </button>

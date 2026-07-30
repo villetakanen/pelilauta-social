@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import {
   CharacterSheetSchema,
   type CharacterStat,
@@ -74,7 +75,7 @@ function removeStat(statToRemove: CharacterStat) {
           <option value="d20_ability_score" selected={stat.type === 'd20_ability_score'}>D20-A</option>
         </select>
         <button class="text" aria-label="delete" type="button" onclick={() => removeStat(stat)}>
-          <cn-icon noun="delete"></cn-icon>
+          <Icon noun="delete" />
         </button>
     {/each}
   </section>

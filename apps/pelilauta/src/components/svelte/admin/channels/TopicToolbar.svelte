@@ -1,4 +1,5 @@
 <script lang="ts">
+import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import { forumTopics } from '@stores/admin/ChannelsAdminStore';
 import { t } from '../../../../utils/i18n';
@@ -176,7 +177,7 @@ async function moveTopicDown() {
     {#if isMoving}
       <cn-loader small></cn-loader>
     {:else}
-      <cn-icon noun="arrow-up"></cn-icon>
+      <Icon noun="arrow-up" />
     {/if}
   </button>
   <button 
@@ -188,7 +189,7 @@ async function moveTopicDown() {
     {#if isMoving}
       <cn-loader small></cn-loader>
     {:else}
-      <cn-icon noun="arrow-down"></cn-icon>
+      <Icon noun="arrow-down" />
     {/if}
   </button>
     <button 
@@ -201,7 +202,7 @@ async function moveTopicDown() {
       {#if isDeleting}
         <cn-loader small></cn-loader>
       {:else}
-        <cn-icon noun="delete"></cn-icon>
+        <Icon noun="delete" />
       {/if}
     </button>
 

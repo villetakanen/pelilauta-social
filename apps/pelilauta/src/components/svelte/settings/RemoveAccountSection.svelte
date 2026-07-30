@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import stores, utilities, and i18n function
 
+import Icon from '@design-system/components/Icon.svelte';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils'; // For user feedback
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
@@ -104,7 +105,7 @@ async function deRegister(e: SubmitEvent) {
             {#if loading}
               <cn-loader></cn-loader>
             {:else}
-              <cn-icon noun="check"></cn-icon>
+              <Icon noun="check" />
             {/if}
             <span>{t('actions:confirm.delete')}</span>
           </button>

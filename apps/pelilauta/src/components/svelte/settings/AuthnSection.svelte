@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import stores and utilities
 
+import Icon from '@design-system/components/Icon.svelte';
 import { authUser, uid } from 'src/stores/session'; // Use centralized session stores
 import { profile } from 'src/stores/session/profile'; // $profile is used directly as per nanostores/svelte
 import { pushSessionSnack } from 'src/utils/client/snackUtils'; // For user feedback
@@ -72,7 +73,7 @@ async function updateAvatar() {
         {#if avatarURL && avatarURL !== $profile?.avatarURL}
           <div class="flex flex-row items-center my-1">
             <cn-avatar src={$profile?.avatarURL} alt="Current Avatar"></cn-avatar>
-            <cn-icon noun="add" class="mx-1"></cn-icon> 
+            <span class="mx-1"><Icon noun="add" /></span>
             <cn-avatar src={avatarURL} alt="New Avatar"></cn-avatar>
           </div>
           <button
@@ -84,7 +85,7 @@ async function updateAvatar() {
           {#if loadingAvatarUpdate}
             <cn-loader></cn-loader>
           {:else}
-            <cn-icon noun="avatar"></cn-icon>
+            <Icon noun="avatar" />
           {/if}
           <span>{t('settings:authz.updateAvatar')}</span>
         </button>

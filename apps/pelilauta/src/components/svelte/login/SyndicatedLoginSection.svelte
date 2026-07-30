@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import utilities and i18n function
 
+import Icon from '@design-system/components/Icon.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
 import { captureError } from 'src/utils/client/sentry';
@@ -75,7 +76,7 @@ async function loginWithGoogle(e: SubmitEvent) {
       {#if loading}
         <cn-loader noun="google"></cn-loader>
       {:else}
-        <cn-icon noun="google"></cn-icon>
+        <Icon noun="google" />
       {/if}
       <span>{t("login:withGoogle.action")}</span>
     </button>

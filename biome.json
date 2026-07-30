@@ -44,7 +44,7 @@
       "!**/tooling/**/*",
       "!**/*.svg",
       "!packages/myrrys-proprietary/**/*",
-      "!packages/design-system/icons/community.ts"
+      "!packages/design-system/icons/open-source.ts"
     ]
   },
   "overrides": [

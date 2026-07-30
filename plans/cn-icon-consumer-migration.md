@@ -10,7 +10,7 @@ Practice: `docs/practices/consumer-migration.md` (required pre-flight)
 Every remaining direct `<cn-icon>` element consumer in `apps/pelilauta` renders
 through the local server-rendered `<Icon>` component. When the arc closes, app
 source contains **zero direct `<cn-icon>` element usages**; icons resolve through
-the tiered local catalog (community → managed → bundled fallback → missing) with
+the tiered local catalog (open-source → managed → bundled fallback → missing) with
 no visual regression against live v18.
 
 ### What this arc is *not*
@@ -54,14 +54,14 @@ sort completed the local tiers needed by dynamic consumers:
 
 | Tier | Current role |
 | --- | --- | --- |
-| Community (`packages/design-system/icons/community`) | 22 project-licensed nouns with provenance and `currentColor` guards |
+| Open source (`packages/design-system/icons/open-source`) | 27 openly licensed nouns with provenance and `currentColor` guards. Renamed from "community" 2026-07-28; admits project-created *and* permissively licensed third-party artwork |
 | Managed (`packages/myrrys-proprietary/icons`) | Proprietary/branded and approved managed nouns, optional at build time |
 | Bundled fallback (`components/icon-fallback.ts`) | Essential UI symbols plus the mandatory missing glyph |
 
 `chart-line`, `compass`, and `tentacles` have approved missing-glyph outcomes.
-Human-retired `check`, `import-export`, and `open-down` still occur in legacy
-Svelte consumers and intentionally remain blank until those consumers migrate;
-their batch must preserve or revisit that explicit disposition.
+Human-retired `check` and `open-down` were revisited and **ported** at their
+migrating batch (Sort round 4, Batch G); `import-export` remains retired and
+renders the missing glyph in `SiteAdminActions`.
 
 ### The dynamic-noun consumers force catalog completeness
 
@@ -162,7 +162,7 @@ Pre-flight outcomes:
   incremental migration; **icon sizing in fab contexts is owned by the future
   Fab epic**, which absorbs this helper and settles the behavior.
 - **`loader` spike (LabelManager): missing glyph.** No `loader.svg` exists in
-  `public/icons/`, the community tier, or the managed tier, so the legacy
+  `public/icons/`, the open-source tier, or the managed tier, so the legacy
   element already renders a 404 blank in production today. `cn-loader` is the
   real spinner; swapping it in is a behavior change, not an icon migration.
   Migrated as-is, which turns today's blank into the missing glyph — the same
@@ -302,25 +302,229 @@ batch does not need is a separate dual-theme pass: every noun was
 already-reviewed artwork, the `Icon` inherits colour via `currentColor`, and no
 colour or theming surface is touched. Deterministic checks are green.
 
-### Batch F — Admin (svelte)
+### Batch F — Admin (svelte), tier rename, and the `delete` artwork
 
-`svelte/admin/**` (sheets, channels, `User`, `AdminTray`, `SentryTestButton`).
-Spike `warning` (SentryTestButton, `cn-card noun="warning"`), `tag`
-(AddTopicForm), `sort` (ManualTocOrdering if not already in D).
+`svelte/admin/**` — sheets, channels, `User`, `AdminTray`, `SentryTestButton`.
+Sixteen files, 44 usages, migrated to the local `Icon`. 32 → 16 consumer files
+remain. This batch also carries two human-directed changes that are not
+consumer migration; both are recorded below because they change shipped visuals
+and the licensing surface.
+
+Pre-flight outcomes:
+
+- **`.flex.items-start > cn-icon` finally has a consumer.** `ChannelSettings`
+  renders the dynamic `channel.icon` as a direct child of
+  `div.flex.flex-row.items-start`, the first live consumer of the rule Batch C
+  added speculatively. It also passed `class="flex-none"`. These are not
+  equivalent: the tag rule sets only `flex-grow: 0`, while `.flex-none` sets
+  `flex: none` (grow **and** shrink). Re-expressed as a wrapper
+  `<span class="flex-none">`, following the `NotificationItem` precedent —
+  `.flex > .flex-none` matches the span, preserving `flex: none` exactly.
+  Relying on the helper's `.flex.items-start > .cn-icon` instead would have
+  silently dropped `flex-shrink: 0`. The helper rule consequently still has no
+  live consumer.
+- **Plan correction: `warning` is not on a `cn-card`.** This plan previously
+  recorded `warning` as `cn-card noun="warning"` and therefore out of scope.
+  `SentryTestButton:60` is a real `<cn-icon noun="warning" small>` inside a bare
+  `<button>`. It is in scope and needed a disposition.
+- **`warning` spike: artwork ported.** Human decision 2026-07-28 — adopt Ant
+  Design Icons' filled `exclamation-circle` (MIT, © 2018-present Ant UED,
+  `ant-design/ant-design-icons@6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1`),
+  normalized to `currentColor` since the source declared no fill. `warning` had
+  no artwork in any tier or under `public/icons/`, so this turns today's
+  production blank into real artwork. Second vendored licence in the tier
+  (`LICENSE-ant-design-icons`), and the second source proving the open-source
+  tier's per-noun attribution model works.
+- **`tag` and `check` stay the missing glyph.** Neither has artwork in any tier
+  or under `public/icons/`, so both render blank in production today and
+  migrating preserves that, per the recorded missing-noun rule. `check` is
+  additionally a human retirement. Both Fluent and Ant Design are now admitted
+  sources and offer a `tag` mark, so porting it later is cheap — a design
+  decision, not part of this migration.
+- **No new size or spacing re-expression.** `button` / `a.button` contexts and
+  `button.fab` (`SheetFabs`, icon + `sr-only` span, so
+  `:first-child:not(:only-child)`) are all owned by the existing helper. No bare
+  `a.fab`, so Batch C's sizing departure does not recur. No `h3` icon and no
+  `cn-sortable-list` on this surface.
+- **Dynamic nouns resolve.** `systemToNoun(characterSheet.system)` reaches the
+  same nine managed values verified in Batch D; `arrow-up`/`arrow-down` are
+  open-source tier; `channel.icon` is persisted and resolves against the full
+  vocabulary, as in Batch C. No persisted value changes.
+- **No e2e selector is broken.** No spec targets an admin `cn-icon`. The
+  outstanding `label-tag`, `assets`, and `drag-handle` selectors are unchanged
+  debt; `assets` belongs to Batch G (`AddFilesButton`).
+
+Human-directed changes carried in this batch:
+
+- **Tier renamed `community` → `open-source` (human 2026-07-28).** The tier's
+  real distinction is *openly licensed* versus *proprietary*, not authorship, and
+  the old name caused exactly that confusion when third-party artwork was
+  admitted. Directory, generated registry (`icons/open-source.ts`),
+  `OpenSourceNoun`/`getOpenSourceIcon`/`openSourceNouns` identifiers, both DS
+  book pages, the registry tests, the biome generated-file exclusion, and
+  `PROVENANCE.md` all move together. Mechanical and gated by the registry parity
+  check.
+- **`delete` artwork replaced; `trash` retired onto it (human 2026-07-28).** New
+  artwork is Fluent UI System Icons `bin-recycle-24-filled`, MIT, © 2020
+  Microsoft Corporation, taken from `microsoft/fluentui-system-icons` at
+  immutable commit `5ecd79ea56f2be0169859b3b881dcc890be932fc`, normalized from
+  `fill="#212121"` to `currentColor`. The licence text is vendored beside the
+  artwork as `LICENSE-fluent-ui-system-icons`, and `PROVENANCE.md` now documents
+  that the tier admits permissively licensed third-party sources with per-noun
+  attribution.
+
+  This is a **deliberate visual change to already-shipped surfaces**, not a
+  compatibility-preserving migration: `delete` has 17 consumers and 10 were
+  already migrated and live (`AssetArticle`, `ReplyArticle`, `Clock`,
+  `CreateClockApp` ×2, `HandoutMeta`, `SiteOwnersTool`, `SitePlayersTool`,
+  `NotificationItem`, `ConfirmCharacterDeletion`). Human decision 2026-07-28
+  chose to land it in this batch rather than a separate slice.
+
+  `ProfileTool`'s `trash` — the only `trash` consumer, and blank in production
+  since no tier ever had that artwork — is repointed to `noun="delete"` rather
+  than aliasing, keeping the compatibility boundary against invented aliases.
+  That file's own `cn-icon` → `Icon` migration stays in Batch G.
+
+Follow-up, not owned here: the managed tier still ships `delete.svg`, now
+permanently shadowed by the open-source entry (resolution is open-source →
+managed). Removing it is a `@myrrys/proprietary` submodule change and a separate
+human decision.
 
 ### Batch G — Settings, auth, editors, shared UI, and `NounSelect`
 
 `svelte/settings/*`, `svelte/login/*`, `svelte/thread-editor/*`,
-`svelte/page-editor/*`, `svelte/app/*`, `svelte/ui/NounSelect` +
-`ReactionButton`, `svelte/search/*`, `svelte/frontpage/*`,
-`svelte/site-library/*`. `NounSelect` renders every catalog noun and is the
-tightest completeness check — by this batch every offered noun must resolve.
+`svelte/page-editor/*`, `svelte/app/*`, `svelte/ui/NounSelect`,
+`svelte/search/*`, `svelte/frontpage/*`, `svelte/site-library/*`. Sixteen
+files, 24 usages, migrated to the local `Icon`. 16 → **0** consumer files
+remain: this batch closes the consumer arc, and Batch H is now purely the
+gate-and-disposition merge. `ReactionButton` was listed in this batch's scope
+but has no `cn-icon` usage; it was already icon-free.
+
+Pre-flight outcomes:
+
+- **`NounSelect` passes the completeness check.** Its 61-noun catalog plus the
+  batch's literal nouns — 63 distinct nouns — were resolved through the real
+  `Icon` code path (`getOpenSourceIcon` → `getManagedIcon` → `FallbackIcons`),
+  not inferred from directory listings. 61 resolve to reviewed artwork; only
+  `open-down` and `check` fall to the missing glyph.
+- **`open-down` and `check` are ported, not left to the missing glyph.** Both
+  were human-retired in Sort round 2 (2026-07-23) and had artwork in no tier and
+  none under `public/icons/`. The review below establishes that migrating such a
+  noun replaces production's *blank* with a *visible* missing glyph, so the
+  human decision 2026-07-28 was to port both rather than ship that mark — see
+  Sort round 4. Batch G therefore ships **zero missing glyphs on its own
+  surface**: all 63 nouns resolve to reviewed artwork, verified through the real
+  `Icon` resolution path.
+- **No new size or spacing re-expression.** Every icon on this surface sits in
+  a context the existing helper already owns: bare `button` / `a.button`
+  (`AddFilesButton`, both login sections, `PageEditorForm`,
+  `RemoveAccountSection`, `AuthnSection`, `ProfileTool`, both thread editors,
+  `UserSitesList`, and both `NounSelect` button contexts) and `a.button.fab`
+  (`FrontpageFabs`, `LibrarySitesFabs`). Both fabs are `a.button.fab`, not bare
+  `a.fab`, so Batch C's sizing departure does not recur. No `h3` icon, no
+  `.flex.items-start` icon child — `WithAuth`, `PageEditorForm`'s alert,
+  `AlgoliaSearchApp`, and `AuthnSection` are all `justify-center` or
+  `items-center` contexts, which no `cn-icon` tag rule matches. That helper rule
+  still has no live consumer.
+- **Verified that legacy already collapsed `large` inside buttons.** Cyan sets
+  `--cn-icon-size-large: var(--cn-icon-size-small)` on `button`
+  (`tokens/buttons.css`) *and* forces `button cn-icon` height/width
+  (`core/buttons.css`), and `cn-icon`'s size attributes resolve those same
+  public tokens from its shadow root. So `NounSelect`'s
+  `large={size === 'large'}` trigger icon was already small in production, and
+  the helper's token collapse reproduces that rather than shrinking it. Checked
+  rather than assumed, because the helper collapses a token where legacy also
+  had a higher-specificity tag rule.
+- **`AuthnSection`'s `class="mx-1"` needed a wrapper.** The local `Icon` takes
+  `noun`, `size`, and `aria-label` only, so a consumer class has nowhere to
+  land. Re-expressed as `<span class="mx-1">` around the icon, following the
+  `NotificationItem` / `ChannelSettings` precedent; the span is the flex child
+  that carries the margin, exactly as the icon did.
+- **`NounSelect` owns the batch's only component-scoped tag selector.**
+  `.search-container cn-icon` positions the search affordance absolutely. Two
+  things break it at once: a class does not match a tag rule, *and* Svelte
+  scoping does not cross a component boundary, so even `.search-container
+  .cn-icon` would be compiled with a scope class the `Icon`'s span never
+  carries. Re-expressed as `.search-container :global(.cn-icon)` and commented
+  in place. This stays the consumer's own rule — it is layout local to
+  `NounSelect`, not reached legacy Cyan behavior, so it does not belong in the
+  `styles/migrations/` helper.
+- **`assets` e2e selectors repaired here, as scheduled.** `AddFilesButton` is
+  the `assets` consumer, so this batch owns the five
+  `button:has(cn-icon[noun="assets"])` locators in
+  `thread-asset-upload.spec.ts` (plus the one in `README-ASSET-TESTS.md`), now
+  `button:has(.cn-icon[data-noun="assets"])`. `library.spec.ts` mentions the tag
+  only in a comment and locates by `button`, so `UserSitesList` breaks nothing
+  there. Remaining unrepaired selectors are unchanged debt owned elsewhere:
+  `label-tag` (`thread-labels.spec.ts`), `drag-handle`
+  (`manual-toc-ordering.spec.ts`, a noun that exists in no tier), and the footer
+  selector in `color-theme.spec.ts` (Batch H).
+- **One imperative `cn-icon` remains, and it is out of scope.**
+  `SvelteSortableList` builds its delete buttons with
+  `document.createElement('cn-icon')` and appends them into `cn-sortable-list`'s
+  slots. It is not a `<cn-icon>` element literal, so Batch H's planned grep gate
+  would not see it. It is also not migratable as a consumer swap: it renders
+  into a retained Cyan component whose own CSS
+  (`cn-sortable-list cn-icon[noun="drag"]`) needs the tag. Recorded as a named
+  exception rather than left silent — see the Batch H amendment below.
+
+Deterministic checks are green: `astro check` 0 errors, 465 app unit tests and
+11 design-system registry tests pass, `check:icons` parity OK, both app builds
+succeed, and `grep -rn '<cn-icon' apps/pelilauta/src` returns nothing.
+
+#### Correction: "preserves today's blank" is wrong about the visual
+
+This plan has said, from Sort round 2 onward, that migrating a noun with no
+artwork in any tier "preserves today's blank." That is true of the *disposition*
+and false of the *rendering*, and Batch G's review is where it was checked
+rather than repeated:
+
+- Legacy `cn-icon` renders `<svg><use href="/icons/{noun}.svg#icon"></svg>`
+  (`@11thdeg/cyan-lit` `cn-icon.js`). A 404 paints nothing — the element keeps
+  its box, but there is no mark.
+- The local `Icon`'s missing glyph is real, visible artwork: a filled circle
+  with an exclamation mark (`packages/design-system/components/icon-fallback.ts`,
+  `FallbackIcons.missing`). It reads as an error indicator.
+
+So every missing-glyph disposition in this arc is a **visible change on a
+shipped surface**, not a no-op. Batch G newly introduces it in two places:
+`open-down` in every `NounSelect` trigger (channel and topic admin forms) and
+`check` in the account-deletion confirm CTA. It is already live on `main` from
+earlier batches: `check` (`NotificationItem`, `AddChannelForm`), `tag`
+(`AddTopicForm`), `import-export` (`SiteAdminActions`), and `loader`
+(`LabelManager` ×2 — a noun that has never existed in any tier, inherited blank
+from the v18 import).
+
+**Human decision 2026-07-28: port both nouns** (Sort round 4 below). Batch G
+ships no new missing glyph. Porting `check` also retires the mark on two
+*already-migrated* consumers, `NotificationItem` and `AddChannelForm`, which have
+been showing it on `main` since Batches C and F.
+
+Still on the missing glyph app-wide, and **not** owned by Batch G — Batch H
+dispositions them:
+
+| Noun | Consumer | Status |
+| --- | --- | --- |
+| `tag` | `AddTopicForm` | Batch F recorded it as intentional; both admitted MIT sources offer a `tag` mark, so porting stays cheap. |
+| `import-export` | `SiteAdminActions` | Human-retired in Sort round 2; migrated in Batch D. |
+| `loader` | `LabelManager` ×2 | A **defect, not a disposition**: a spinner slot pointing at a noun that has never existed in any tier. Inherited from the v18 import (`14fe061` already had `<cn-icon noun="loader">`), so it was blank in v18 too. Wants a loader component, not icon artwork — its own slice. |
+
+Treat "renders the missing glyph" and "renders blank" as different outcomes
+everywhere in this plan.
 
 ### Batch H — Terminal PR (arc close)
 
 - Assert **zero `<cn-icon>` element usages** remain in `apps/pelilauta/src`
   (grep gate); confirm `cn-icon` stays registered only via retained Cyan
   components (`cn-loader` import) and `public/icons/` is untouched.
+- **Amendment (Batch G):** the element-literal grep reached zero at Batch G, but
+  it does not cover `SvelteSortableList`'s
+  `document.createElement('cn-icon')`. The gate must match imperative creation
+  too, and record that one usage as the arc's declared exception: it renders into
+  the retained `cn-sortable-list`, whose own Cyan CSS is scoped to the
+  `cn-icon` tag, so it belongs to the future Cyan-component epic, not to this
+  arc. State the exception in the gate rather than letting a literal-only grep
+  imply the app has no `cn-icon` left at all.
 - Keep the existing catalog↔provenance parity and community `currentColor`
   checks green; repair the footer e2e selector and decide whether to gate it.
 - Confirm the absent-submodule build still degrades managed nouns to the missing
@@ -431,3 +635,25 @@ Sort round 3 (human 2026-07-27, Batch D):
 consumer (`ManualTocOrdering`) rendered blank in production. Reusing the
 existing project chevron follows the `chevron-right` mirror precedent: the same
 project polygon under an SVG transform, not invented vocabulary.
+
+Sort round 4 (human 2026-07-28, Batch G):
+
+| Noun | Decision | Status |
+| --- | --- | --- |
+| open-down | ours → open-source, derived from the project `chevron-left` rotated 90° (`rotate(-90 64 64)`), following the `sort` precedent rather than sourcing new artwork | **Done** — added + registry regenerated + provenance recorded |
+| check | third-party MIT → open-source: Ant Design Icons outlined `check`, chosen via `shadcn.io/icon/ant-design-check-outlined` | **Done** — geometry taken from `ant-design/ant-design-icons@6c18c63fbcfcf71dae09cd6bd6d63a48f8b688f1` (`packages/icons-svg/svg/outlined/check.svg`), normalized to `currentColor`, provenance recorded under the already-vendored `LICENSE-ant-design-icons` |
+
+Both nouns reverse their Sort round 2 retirement, and the reason is the
+correction recorded in Batch G: the local `Icon` paints a visible missing glyph
+where legacy painted nothing, so leaving them retired would have shipped an
+error-looking mark into `NounSelect`'s trigger and the account-deletion CTA.
+
+Two notes on the ports. `open-down` is **geometrically identical to `sort`** —
+both are the project chevron rotated to point down — and is deliberately kept as
+its own noun and its own file rather than an alias, because this arc's
+compatibility boundary forbids invented aliases and the two nouns carry
+independent dispositions. `check` was identified from the shadcn.io aggregator
+page the human named, but the artwork is taken from the pinned upstream commit:
+the aggregator publishes no path data, and provenance requires an immutable
+source. As with `warning`, the aggregator credits contributor "HeskeyBaozi"
+while the upstream LICENSE names Ant UED, which is what `PROVENANCE.md` records.
