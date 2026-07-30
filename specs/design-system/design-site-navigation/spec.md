@@ -24,26 +24,16 @@ that a human or an agent can easily locate a book of the package.
 ## Behavior
 
 Books belong to named groups. Which groups exist, their labels and their order
-are the design system's decision, not the site's, and are declared in one place.
-A book's group is visible in its URL. Within a group a book may declare its
-position; otherwise books fall back to alphabetical order by title.
+are the design system's decision, declared in one place; the site reads it. A
+book's group is its URL group. Within a group a book may declare its position,
+otherwise books order alphabetically by title.
 
-The site publishes what exists: a group with no published books does not appear,
-a draft entry is neither published nor listed, and a path naming no published
-book is not a page.
+The site publishes only what exists: an empty group does not appear, and a draft
+entry is neither published nor listed.
 
-One navigation lists every published book on every page, so reaching any book
-never requires returning to the index. It is complete in the served markup, so a
-reader that runs no scripts — an agent, or a crawler — sees the whole set. Exactly one location is marked current —
-the book being read, or the index — and on a book page that label is the same
-title as the page's heading. Group labels are not headings, and no two published
-books share a title.
-
-Where the viewport is too narrow for a persistent index, the navigation is
-reached through a labelled disclosure that needs no JavaScript. While closed it
-is closed: its links are not reachable by keyboard or assistive technology.
-
-Every page's first focusable element skips the shell to the book's content.
+Every page carries the same navigation, complete in the served markup, marking
+which book is being read. Where the viewport is too narrow to keep it visible, it
+is reached through a labelled disclosure that needs no JavaScript.
 
 ## Non-Goals
 
@@ -66,8 +56,9 @@ Every page's first focusable element skips the shell to the book's content.
   `/principles/iconography` resolves; `/iconography` does not.
 - A draft entry appears in neither the URLs nor the navigation, and an unknown
   path is not served.
-- At a narrow viewport the navigation and its links are unreachable until the
-  disclosure opens, and reachable after.
+- At a narrow viewport the navigation and its links are unreachable — by keyboard
+  and assistive technology, not merely off-screen — until the disclosure opens.
+- Every page's first focusable element skips the shell to the book's content.
 - No page logs a console error, and the site builds with the optional managed
   icon submodule absent.
 
@@ -75,8 +66,9 @@ Every page's first focusable element skips the shell to the book's content.
 
 - A book has one `h1`, whose text is its frontmatter title. Two sources for a
   book's title must not reappear.
-- No heading in the shell or navigation has the accessible name of a book;
-  existing book specs locate headings by name without a level filter.
+- No heading in the shell or navigation has the accessible name of a book, and no
+  two published books share a title; existing book specs locate headings by name
+  without a level filter, so either would make their locators ambiguous.
 - The navigation renders once per page, and derives active state from the current
   path rather than receiving it.
 - Active-state matching tolerates a trailing slash: the dev server and the built
