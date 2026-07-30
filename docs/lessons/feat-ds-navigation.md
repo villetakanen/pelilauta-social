@@ -401,3 +401,62 @@ is the shape.
 
 **Disposition.** Proposed. Raised by the human owner 2026-07-30, who supplied the
 history behind candidate 6.
+
+## 8. `plans/` has become an agent work ledger instead of a branch map
+
+**Evidence.** Asked to plan the core-token work, the agent wrote
+`plans/core-tokens.md` — 132 lines containing per-token value tables, a
+call-site inventory with file paths, cyan-css-versus-v20 comparisons, and
+per-slice verification commands. The owner's correction: a plan should be a
+high-level epic for a branch, at map altitude. "Map is not the territory."
+
+The drift is not new, and `plans/` now holds four files in four genres:
+
+| File | Lines | Genre |
+| --- | --- | --- |
+| `color-theme-compatibility.md` | 197 | titled "Delivery **Record**" — a retrospective |
+| `rc1-toolchain-upgrades.md` | 146 | contains a "Version Ledger" table |
+| `core-tokens.md` (this one) | 132 | inventory and measurements |
+| `v18-import.md` | 81 | a "## Tasks" checklist |
+
+None is a branch-level map. The smallest is closest, and it is still a task list.
+
+**Assessment.** Valid. The cause is structural and worse than an undefined
+convention.
+
+`AGENTS.md` never says what a plan is — the word appears there only inside a
+sentence about planning a migration. `specs/TEMPLATE.md` defines a plan purely
+**negatively**: "file layouts, framework choices, task sequencing — belongs in
+the linked plan, not here." So `plans/` is the residual category, and every
+detail excluded from a spec is actively routed into it. A residual definition is
+worse than silence, because it supplies a reason to add and none to stop.
+
+This matters beyond tidiness: `.agents/skills/delivery-slice/SKILL.md` instructs
+an agent to read "the slice's plan" as context. An agent following that opens a
+197-line retrospective expecting a map.
+
+Contributing agent-side cause: a plan is written while holding full working
+context, so it becomes the place to externalise that context. Everything in it is
+true and specific, which is why it reads as valuable rather than as bloat.
+
+Worth naming as a pattern, because this is the third artifact in this file with
+the same shape — provenance (candidate 2), the spec body (candidate 4), and now
+plans. In each case the harness states no altitude for the artifact while
+supplying a pressure to add to it, and in each case the result was maximal detail
+that only a human reading it caught.
+
+**Possible change.** Define a plan positively, in the one place that already
+mentions plans: a branch-level epic at map altitude — the intended outcome, the
+slices and their order, and the decisions with their gates. Explicitly not
+inventories, measured values, command transcripts, task checklists, or
+retrospective records; those belong to the pull request (what happened), the
+spec's Contract (what must hold), or this file (what was learned).
+
+Per candidate 7, do **not** answer this with a new `plans/TEMPLATE.md`. Change the
+definition, then let the next plan written be its consumer. `core-tokens.md` is
+still uncommitted and can be that consumer. Extract a template only if a second
+plan needs one.
+
+**Disposition.** Proposed, deferred by the owner 2026-07-30 — explicitly not a
+pivot, to be addressed before the next cycle. The four existing plans are left
+alone.
