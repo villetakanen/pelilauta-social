@@ -6,7 +6,7 @@ date: 2026-07-30
 
 **Context:** Third recurrence. `50b41ab docs(lessons): log plans drifting into
 agent work ledgers` recorded it; `1016ccb` consolidated it into
-[[harness-artifact-altitude]] as a facet of artifact altitude, hours before it
+[[nothing-says-what-belongs-where]] as a facet of artifact altitude, hours before it
 recurred with material cost. It is not an altitude problem: that finding is
 about artifacts filling with too much detail, this is about an artifact existing
 at all because a branch did.
@@ -47,4 +47,4 @@ request whose base is not `main`. The owner rejected it: direct `feat/*` → `ma
 integration is a beta shortcut, not the target model, and `main` should be
 protected. Enforcing the current shortcut in CI would break as soon as a
 dev/staging chain exists. `AGENTS.md` was trimmed to the push guard instead; see
-[[harness-artifact-altitude]].
+[[nothing-says-what-belongs-where]].

@@ -25,4 +25,4 @@ old definition carried now belongs to the epic PBI, the slice's pull request, or
 an ADR. This
 collision plausibly explains [[shadow-epic-branch]] — a branch acquiring a plan
 file as its work ledger is legitimate under one definition and not the other —
-and the plan-as-inventory drift in [[harness-artifact-altitude]].
+and the plan-as-inventory drift in [[nothing-says-what-belongs-where]].

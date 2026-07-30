@@ -1,5 +1,5 @@
 ---
-name: harness-artifact-altitude
+name: nothing-says-what-belongs-where
 branch: feat/ds-navigation
 date: 2026-07-30
 trigger: the next cycle, before new spec or plan work begins
@@ -44,13 +44,14 @@ ASDLC.io practice — while diverging from it: the published anatomy is Blueprin
 Intent. The two dropped thirds are what would have forced concreteness.
 See [[narrow-criticism-sweeping-rewrite]] for that commit's other half.
 
-**Fix:** State an altitude for each artifact, positively. For plans, the
-operational test is greppability — a line regenerable from source with a grep is
-not plan content. For Intent, ask for the domain objects, the consumers by kind
-including agents, and the expected lifetime. For provenance, one line per entry
-naming a source, and mark agent-proposed decisions as such. Add a subtraction
-pass to the review, run last: what can be deleted without losing a checkable
-claim.
+**Fix:** State positively what each artifact holds. Two of the four cases are
+now covered: the `AGENTS.md` context map says what each location owns, and a
+glossary entry would have defined "book". Two remain — bound the provenance
+field to one line per entry naming a re-checkable source, marking
+agent-proposed decisions as such, and add a subtraction pass to the spec review,
+run last: what can be deleted without losing a checkable claim. The operational
+test for plans is greppability: a line regenerable from source with a grep is not
+plan content.
 
 The subtraction pass applies to `AGENTS.md` itself, not only to specs. A false or
 phase-scoped rule there is removed, not caveated: the `feat/*` → `main`

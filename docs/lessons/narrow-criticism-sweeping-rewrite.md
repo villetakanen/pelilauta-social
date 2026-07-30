@@ -10,7 +10,7 @@ approval and a timebox.
 **What happened:** Two instances. `140720c` answered a specific criticism —
 about forcing code-level contract detail into blueprints — by rewriting
 `specs/TEMPLATE.md` and removing its concrete sections wholesale; see
-[[harness-artifact-altitude]] for what that cost downstream. The second is the
+[[nothing-says-what-belongs-where]] for what that cost downstream. The second is the
 lesson queue itself: drafting that finding, I proposed rewriting
 `specs/TEMPLATE.md` again and re-heading four specs. The owner chose to log
 instead, which stopped it.
