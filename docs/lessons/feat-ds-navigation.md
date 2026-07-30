@@ -306,22 +306,98 @@ built. Four rewrites produced four flavours of motivation because that is what t
 heading asked for, and the owner's replacement text is, structurally, a Blueprint:
 domain objects, where they live, who consumes them, what this feature is.
 
-Worth noting the divergence is undocumented. `AGENTS.md` claims to follow the
-published practice and says "adapted", but nothing records that Blueprint was
-renamed and narrowed, or why. An agent reading both sources cannot tell whether
-the local template is a considered adaptation or drift.
+**Provenance of the divergence.** It is neither drift nor a considered
+adaptation. Per the owner, it is the residue of an over-correction: an agent was
+criticised for forcing code-level contract detail into blueprints, and answered by
+rewriting the template — removing the concrete parts wholesale rather than the
+misuse of them.
 
-**Possible change.** Either restore the published anatomy in
-`specs/TEMPLATE.md` — `## Blueprint` with Context, Architecture and Constraints,
-plus `## Contract` — or, if `Intent` is a deliberate local choice, keep the name
-and restore the two missing prompts beneath it, and record in `AGENTS.md` that the
-rename is intentional. The second is cheaper and preserves the four existing
-specs; the first stops the two vocabularies drifting further apart. Either way the
-prompt must ask for the domain objects and the boundaries, not motivation alone.
+`git log --follow specs/TEMPLATE.md` shows the file has two commits, and the
+originating one is `140720c` "docs: consolidate ASDLC spec conventions"
+(2026-07-20). Its own message states it added "the Intent + Contract anatomy",
+required provenance frontmatter, and gated draft-to-approved behind the
+adversarial review — and its `docs/lessons/feat-cn-icon.md` entry records the
+decision as "align spec conventions with the ASDLC.io Living Specs practice".
 
-Deciding this is the owner's call, because it changes a practice convention and
-touches every existing spec.
+Two things follow. The commit claimed alignment with the published practice while
+introducing the divergence from it, so the local template's authority is weaker
+than it looks. And **all three template-shaped findings in this file trace to that
+single commit** — provenance-as-dumping-ground (candidate 2), the additive-only
+review gate (candidate 4), and Intent-instead-of-Blueprint (candidates 5 and 6).
+They are not three independent defects; they are one change's blast radius,
+surfaced ten days later by a human reading a spec.
 
-**Disposition.** Proposed. Raised by the human owner 2026-07-30.
+**Possible change.** The narrow fix is to the prompt, not the anatomy: whatever
+the heading is called, it must ask for the domain objects and the boundaries, not
+motivation alone. Restoring `## Blueprint` with Context, Architecture and
+Constraints matches the published practice; keeping `## Intent` and restoring the
+two missing prompts beneath it is cheaper and leaves the four existing specs
+valid.
 
-**Disposition.** Proposed. Raised by the human owner 2026-07-30.
+Explicitly **not** recommended: another sweeping template rewrite. See candidate 7
+— this file's first draft of this candidate proposed exactly that, which would have
+repeated the failure it describes.
+
+**Disposition.** Proposed. The owner chose to log rather than change the template,
+which on this evidence is the safer call. Raised by the human owner 2026-07-30.
+
+## 7. Narrow criticism answered with a sweeping harness rewrite
+
+**Evidence.** Two instances, one historical and one in this file.
+
+The historical one is candidate 6's cause. The criticism was specific — an agent
+was forcing code-level contract detail into blueprints. The response was
+`140720c`, which introduced a whole template, made provenance frontmatter
+mandatory, added the adversarial review gate, and deleted a 223-line nested
+`AGENTS.md`, in one commit, explicitly "before starting cn-icon implementation" —
+so with no spec to verify any of it against. Ten days later that single change
+had produced three distinct defects, each found by a human reading prose rather
+than by any gate.
+
+The second instance is this file. Drafting candidate 6, I proposed rewriting
+`specs/TEMPLATE.md` — restoring `## Blueprint` with three subsections and
+re-heading four existing specs — as the fix for a bad prompt. That is the same
+move that caused the problem: a broad structural rewrite in response to a narrow
+observation. The owner chose "log only", which stopped it.
+
+**Assessment.** Valid, repeated, and the most consequential pattern in this file,
+because it is the mechanism by which agent-driven harness evolution degrades
+rather than compounds.
+
+The failure has a recognisable shape. A specific criticism arrives. The narrow fix
+would be to change the offending sentence, prompt, or usage. Instead the agent
+generalises the criticism into a principle, then restructures whatever artifact
+embodies that principle — which is more satisfying to produce, reads as thorough,
+and passes review because reviewers check whether the new structure is coherent,
+not whether it was warranted. The damage does not appear at review time; it
+appears when the next author works inside the changed structure, by which point
+the connection to the original criticism is lost.
+
+`AGENTS.md` already contains the rule that would have prevented both instances:
+"Evolve factory, harness, and architecture inside the production slice that first
+establishes and verifies their concrete need", plus "Consumer-free foundation work
+requires explicit human approval and a timebox." `140720c` was consumer-free
+foundation work by its own description. The rule exists; the trigger for applying
+it was not recognised — the same failure mode as candidate 1, where an
+outdated-dependency rule was present in required context and not applied because
+the symptom did not announce itself as that category.
+
+The lessons practice also already says a candidate may be discarded, and that "if
+assessment shows that nothing should change, discard the candidate instead of
+inventing a policy, guide, check, or follow-up task." Both instances invented a
+structure instead.
+
+**Possible change.** When a criticism concerns an artifact the harness generates,
+fix the instance first and record the general case as a candidate. Changing the
+generator — template, skill, practice guide — is a separate decision with its own
+approval, and it needs a consumer: the next spec actually written through the
+changed template, not a rewrite of the template in the abstract. Removing a
+section is never the fix for that section being misused.
+
+Sharper heuristic, since both instances passed the rules already written: the
+signal to watch is not the size of the change but the ratio between what was
+criticised and what got rewritten. One sentence criticised, one template rewritten,
+is the shape.
+
+**Disposition.** Proposed. Raised by the human owner 2026-07-30, who supplied the
+history behind candidate 6.
