@@ -11,7 +11,7 @@ explicitly retained.
 ## Migration Contract
 
 Preserve the v18 application's behavior before replacing its Cyan Lit
-dependency. The applicable capability spec owns the local component's durable
+dependency. The applicable capability spec owns the local component's approved
 behavior; this guide owns shared migration mechanics and known baseline debt.
 
 A migration slice covers one bounded capability and consumer surface. It does

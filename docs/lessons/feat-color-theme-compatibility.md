@@ -1,6 +1,6 @@
 # feat/color-theme-compatibility Lessons Learned
 
-| Lesson | Disposition | Durable owner |
+| Lesson | Disposition | Result |
 | --- | --- | --- |
 | A compatibility alias can break fallback behavior when it defines a property that was intentionally absent. | Applied | `apps/pelilauta/src/styles/compat/cyan-4.css`; color contract tests |
 | Static CSS remains the canonical token implementation until an approved non-web consumer requires another source. | Applied | Design-token spec and styles |

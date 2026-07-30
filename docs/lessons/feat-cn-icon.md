@@ -1,6 +1,6 @@
 # feat/cn-icon Lessons Learned
 
-| Lesson | Disposition | Durable owner |
+| Lesson | Disposition | Result |
 | --- | --- | --- |
 | Replacing a custom-element tag with class-bearing markup silently drops tag-scoped legacy CSS. | Applied | `docs/MIGRATION.md` |
 | Every migrated noun needs reviewed artwork or an explicit missing-glyph disposition. | Applied | Iconography and Icon specs; `docs/MIGRATION.md` |
@@ -19,7 +19,6 @@
 | `thread-labels.spec.ts` targets the removed tag for `label-tag` chips (broken by PR #41). | Deferred | `apps/pelilauta/e2e/thread-labels.spec.ts` |
 | "No artwork in any tier" does not mean "no visual change": legacy `cn-icon` paints nothing on a 404 while the local `Icon` paints a visible missing glyph, so a missing-glyph disposition is a shipped visual change, not a preserved blank. | Applied | `docs/MIGRATION.md`; Icon and iconography specs |
 | A cosmetic import can be a deployment single point of failure: `logHelpers` imported the *client* Firebase SDK only to pretty-print an error code, and because every server route imports `logHelpers`, one unresolvable package took down the whole site. Keep SDKs out of universally-imported utilities; recognize error shapes structurally. | Applied | `apps/pelilauta/src/utils/logHelpers.ts`; `astro.config.mjs` `ssr.noExternal` |
-| To tell a bad *artifact* from a bad *deploy*, upload the local artifact yourself (`netlify deploy --no-build`): if it serves green while the CI build of the same commit 500s, the fault is in the build environment, not the source. This settled in one step what commit-bisecting deploy permalinks could not. | Candidate | `docs/practices/` deployment verification (proposed) |
 | `instanceof` across two SDKs that both export `FirebaseError` is silently always false — firebase-admin's class is unrelated to the client SDK's and never sets `name`. Dead error-handling branches do not announce themselves. | Candidate | `apps/pelilauta/src/pages/api/admin/purge-user.ts` |
 | An aggregator page is fine for *choosing* third-party artwork and wrong as its provenance: take the geometry from the pinned upstream commit, and record the upstream LICENSE holder rather than the aggregator's contributor credit. | Applied | `packages/design-system/icons/open-source/PROVENANCE.md` (`check`, `warning`) |
 | A consumer's own scoped rule targeting the legacy tag breaks twice over: a class does not match a tag rule, and Svelte scoping does not cross a component boundary, so it needs `:global(.cn-icon)` and stays the consumer's rule rather than moving into the migration helper. | Applied | `docs/MIGRATION.md` styling boundaries |

@@ -1,98 +1,67 @@
-# Lessons Compounding Log
+# Lessons And Compounding
 
-A branch may maintain `docs/lessons/<branch-name>.md`, replacing `/` with `-`.
-Create one only when work produces a plausible reusable lesson that does not
-already have a durable owner.
+A branch may keep `docs/lessons/<branch-name>.md`, replacing `/` with `-`, when
+work produces a surprising observation that might improve later work. The file
+is an optional candidate queue, not branch memory, delivery evidence, required
+context, or a behavioral contract. Humans may delete it at any time.
 
-Lessons logs are explicitly non-durable. Humans may retain, compact, archive, or
-delete historical logs at any time. Agents must tolerate their absence and must
-not use them as required context, provenance, or a behavioral contract.
+Compounding means assessing candidate learnings and changing the project when a
+change is justified. It does not mean preserving every observation.
 
-The file is not branch memory. It does not record scope, task state, delivery
-history, PR identities, checks, review findings, product decisions already
-captured in a spec, or information needed merely to resume implementation.
-Plans own planned work, specs own behavior, PRs and Git own delivery evidence,
-and task tooling owns execution state.
+## Candidate Shape
 
-## Active Candidate Shape
+An active candidate contains only:
 
-Each entry contains only:
+1. **Evidence:** what was observed.
+2. **Assessment:** whether the signal is valid, repeated or consequential, and
+   what alternative explanations were considered.
+3. **Possible change:** the smallest useful change, if one exists.
+4. **Disposition:** proposed, accepted, deferred, applied, or discarded,
+   including the human decision when required by `AGENTS.md`.
 
-1. **Evidence:** the surprising observation or failure.
-2. **Root cause:** why it happened, separated from the observation.
-3. **Candidate lesson:** the reusable change to future behavior.
-4. **Durable owner:** the existing spec, practice, skill, test, runbook, plan, or
-   implementation contract that should change.
-5. **Disposition:** proposed, accepted, deferred, rejected, or written back,
-   including the human decision when one is required.
-
-If an observation has no generalizable consequence, it is not a lesson entry.
-If its owner can be corrected immediately, make that correction instead of
-creating an entry.
-
-## Compacted Lesson Shape
-
-After disposition or writeback, replace the detailed candidate with one minimal
-record:
-
-| Lesson | Disposition | Durable owner |
-| --- | --- | --- |
-| Reusable behavior change in one sentence | Applied, deferred, rejected, or ignored | Owning artifact, or `None` |
-
-The optional compact record preserves what was learned and what happened to it.
-It does not preserve evidence transcripts, chronology, delivery status, or
-enough detail to compete with the durable owner.
+A candidate does not need a permanent destination. One-off operational evidence,
+task state, check output, PR history, and already-fixed defects normally do not
+belong in the queue. If assessment shows that nothing should change, discard the
+candidate instead of inventing a policy, guide, check, or follow-up task.
 
 ## Compound Loop
 
-1. Read active candidates when the file exists. Do not create an empty branch
-   record.
-2. Add a candidate when evidence reveals a reusable gap in project behavior,
-   tooling, harness, architecture, or working practice.
-3. Propose the smallest durable owner. Prefer correcting an existing artifact
-   over creating another process layer.
-4. Ask the human owner to accept, defer, or reject scope-changing, product,
-   compatibility, dependency, data, release, or process decisions.
-5. Implement an accepted writeback in the slice that establishes and requires
-   it. A non-required writeback may remain queued for a later compound pass with
-   explicit human deferral, or ship in an explicitly approved, timeboxed
-   consumer-free compound slice, including at branch close.
-6. Keep the entry until its durable writeback is included in the intended
-   integration delta. Compact it to the minimal resolved format in that same
-   delta.
-7. For deferred, rejected, or ignored candidates, record the decision in a
-   durable owner only when future rediscovery matters, then compact the entry.
+1. Read the branch queue when one exists; do not create an empty one.
+2. Add a candidate only when evidence plausibly changes future implementation,
+   verification, architecture, or working practice.
+3. Test the signal before generalizing it. A useful tactic in one incident is
+   not automatically a reusable lesson.
+4. Ask the human owner to decide changes at the approval boundaries in
+   `AGENTS.md`.
+5. Apply an accepted change directly to the relevant code, test, spec, guide,
+   skill, runbook, or workflow. Prefer correcting an existing artifact over
+   creating another process layer.
+6. Delete applied, invalid, obsolete, and one-off candidates unless the human
+   owner wants a compact historical record.
+7. Keep a deferred candidate only when it names concrete evidence or a future
+   condition that should trigger reconsideration.
 
-Compound whenever the queue has useful accepted work. Waiting until branch
-close is allowed, but not required. Crossing 150 lines or 12 KiB is a mandatory
-disposition-and-compaction gate before adding more entries: write back accepted
-candidates, explicitly defer them with a durable owner, record human rejection,
-or mark a candidate ignored when evidence disproves its reusable premise.
+Run a compound pass whenever the queue contains useful candidates and before
+closing its branch. The pass assesses each signal, applies accepted changes,
+and removes debris. It does not block unrelated delivery merely because a
+candidate remains undecided.
 
-## Integration And Close
+## Optional History
 
-- Before integrating a slice, resolve candidates that affect its correctness.
-  Required accepted writebacks belong in that same slice.
-- Delivery evidence and review dispositions stay in the PR or their owning
-  spec/plan; only a generalizable lesson candidate enters this queue.
-- Before the branch's final production integration, run a compound pass: give
-  every proposed candidate a disposition, write back accepted candidates, move
-  genuinely deferred work to its durable owner, and compact every resolved
-  candidate to the minimal log. Later release work appends candidates only when
-  it discovers a new reusable lesson.
-- At a stop decision, give proposed candidates a disposition and hand off
-  unresolved accepted or deferred work to an approved durable owner, then
-  compact the file.
-- Specs, practices, plans, tests, skills, and runbooks must remain complete when
-  every lessons log is absent. They must not cite a log as their source of truth.
+When the human owner wants to retain what happened, compact resolved entries to:
 
-## Compound Rules
+| Lesson | Disposition | Result |
+| --- | --- | --- |
+| Reusable behavior change in one sentence | Applied, deferred, or discarded | Changed artifact, reconsideration trigger, or `None` |
+
+Historical logs remain optional and must never be required context. Specs,
+guides, code, tests, skills, workflows, and runbooks must remain complete when
+all lesson logs are absent.
+
+## Rules
 
 - A finding is evidence, not automatic scope.
-- Retaining detailed candidate text is not compounding; changing the durable
-  owner and compacting the entry is.
+- Persistence is a decision, not the default.
+- Do not create a destination merely because a candidate exists.
 - Add automation only after a concrete repeated or release-significant failure.
 - Keep work on the shortest path to a visible production outcome.
-- Never preserve enough detail for another agent to reconstruct branch
-  chronology from the compact log.
-- Never infer that a historical log still exists; discover it opportunistically.

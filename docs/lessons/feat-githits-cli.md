@@ -1,6 +1,6 @@
 # feat/githits-cli Lessons Learned
 
-| Lesson | Disposition | Durable owner |
+| Lesson | Disposition | Result |
 | --- | --- | --- |
 | Shared agent tooling should invoke a workspace-locked CLI instead of downloading a moving `latest` release. | Applied | Root `githits` dev dependency; `githits-code` skill |
 | An upstream skills lock can overwrite repository-specific skill customization. | Applied | Repository-owned skill; no upstream `skills-lock.json` entry |

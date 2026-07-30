@@ -36,7 +36,7 @@ itself the review, release, or revert unit.
    exception, state the concrete factory/harness outcome, approval, timebox, and
    boundary. Identify why every included change is required.
 4. Implement the smallest complete slice. Add to lessons only when evidence
-   suggests a reusable change with a durable owner; check output stays in its
+   suggests a reusable change worth assessing; check output stays in its
    runner or PR rather than being copied into plans or lessons. Do not modify
    unrelated work already present in the worktree.
 5. Run the smallest applicable deterministic checks while implementing. The
@@ -59,11 +59,10 @@ itself the review, release, or revert unit.
    bypass a failing gate. Use Conventional Commits and do not rewrite published
    history without explicit approval.
 10. Before integration, resolve lesson candidates that affect the slice's
-    correctness. Include required accepted writebacks in the same merge; leave
-    optional candidates queued only with explicit human deferral. Compact
-    resolved entries once their durable writebacks are present. Keep PR identity,
-    checks, carry-forwards, and remaining work in the PR or active plan, not
-    lessons.
+    correctness. Apply required accepted changes in the same merge. Optional
+    candidates do not block delivery; assess, defer with a concrete trigger, or
+    discard them. Keep PR identity, checks, carry-forwards, and remaining work
+    in the PR or active plan, not lessons.
 11. Do not infer a named release from an integrated slice or closed branch. Use
     the `release` skill only after an explicit release request and exact version.
 

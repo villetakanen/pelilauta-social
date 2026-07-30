@@ -1,6 +1,6 @@
 # feat/v18-import Lessons Learned
 
-| Lesson | Disposition | Durable owner |
+| Lesson | Disposition | Result |
 | --- | --- | --- |
 | Verify an imported baseline by immutable source and Git tree identity, not branch name. | Applied | `plans/v18-import.md` |
 | Preserve the verified lock graph when moving an application into a workspace; regenerate only with explicit dependency intent. | Applied | Root `pnpm-lock.yaml`; `plans/v18-import.md` |
