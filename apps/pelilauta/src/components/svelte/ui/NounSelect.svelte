@@ -322,8 +322,8 @@ function handleKeydown(event: KeyboardEvent) {
  * The search affordance is positioned against the input, not sized by it. The
  * local Icon renders its own element, so this component's scoped selector has
  * to reach the child component's class explicitly — a scoped `.cn-icon` rule
- * would never match (consumer-migration practice: a class does not match a tag
- * rule, and Svelte scoping does not cross a component boundary).
+ * would never match (migration guide: a class does not match a tag rule, and
+ * Svelte scoping does not cross a component boundary).
  */
 .search-container :global(.cn-icon) {
   position: absolute;

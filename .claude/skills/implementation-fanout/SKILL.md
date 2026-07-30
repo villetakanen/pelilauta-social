@@ -42,7 +42,7 @@ ordered step after the fanout. Serialize rather than invent independence.
   URLs, authentication behavior, persisted data, release and deployment
   configuration, and compatibility exceptions.
 - The v18 compatibility judgment behind any migrated surface, including the
-  `docs/practices/consumer-migration.md` pre-flight.
+  per-slice inventory in `docs/MIGRATION.md`.
 - Reviewing every returned diff against the slice contract before trusting it.
 - All staging, commits, pushes, pull requests, and integration via
   `delivery-slice`.

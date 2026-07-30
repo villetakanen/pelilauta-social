@@ -42,7 +42,9 @@
 
 **ALWAYS**
 - Inspect the relevant v18 implementation and write or update the compatibility spec before changing a migrated surface.
-- Before migrating a Lit consumer to its local component, run the technical pre-flight in `docs/practices/consumer-migration.md`: enumerate the legacy Cyan CSS rules scoped to the component's element tag for that context, decide how each is re-expressed against the local component, and identify the changed contexts for the human owner's visual review.
+- When planning or implementing migration of an existing v18/Cyan consumer,
+  read `docs/MIGRATION.md`. It owns shared migration mechanics, inherited E2E
+  debt, and the terminal Cyan sweep; it is not general design-system context.
 - Use the `delivery-slice` skill to prepare each proposed merge. Use `delivery-review` only when the human owner explicitly requests an implementation review; the separate adversarial review required for intent specs remains mandatory.
 
 ## Working Model
@@ -54,7 +56,7 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
 
 - Lessons: `docs/practices/lessons.md`. A non-durable branch file under `docs/lessons/` may collect reusable candidates awaiting disposition or durable writeback, then compact resolved candidates to a minimal lessons-learned log. Humans may delete these logs; agents must never rely on them for required context. Plans, PRs, checks, and task state remain in their existing owners.
-- Consumer migration: `docs/practices/consumer-migration.md` carries the cross-cycle decisions and the required pre-flight for migrating a Lit consumer to its local component.
+- v18/Cyan migration: `docs/MIGRATION.md`
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Delivery slices: `.agents/skills/delivery-slice/SKILL.md`
 - Risk-scaled implementation review: `.agents/skills/delivery-review/SKILL.md`

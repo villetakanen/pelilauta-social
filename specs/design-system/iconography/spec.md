@@ -9,7 +9,7 @@ provenance:
   - "Human decision 2026-07-21: the managed (myrrys) tier is enumerable, so the book lists all managed icons when the submodule is present (not merely by example). Community icons are ported from the existing pelilauta application decisively, one at a time — each an individual human-approved admission, not a bulk import — so the catalog grows alongside the per-consumer Cyan migrations."
   - "Human decision 2026-07-21: noun aliases are deferred out of scope until a real consumer need appears (distinct nouns only); the design-system book IS required for this capability to be Done (governance-only work is not exempt from the CLAUDE.md Delivery-Contract book rule) and is the deliverable."
   - "Tier model and precedence (ported from the v20 target model at immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced): trusted registries, open-source→managed→fallback precedence, server-rendered markup, source-owned colour. Bundled fallback: packages/design-system/components/icon-fallback.ts (essential UI symbols + missing glyph, MIT). Managed optionality: packages/design-system/components/managed-tier.ts and packages/design-system/vite/optional-proprietary.mjs."
-  - "Open-source catalog and current practice: packages/design-system/icons/open-source/ + PROVENANCE.md; packages/design-system/scripts/generate-icon-registry.mjs; docs/practices/consumer-migration.md."
+  - "Open-source catalog and generator: packages/design-system/icons/open-source/ + PROVENANCE.md; packages/design-system/scripts/generate-icon-registry.mjs."
 ---
 
 # Iconography
