@@ -3,6 +3,11 @@
 This pnpm workspace contains the Firebase-compatible v21 successor to the live
 Pelilauta community and its local design system.
 
+v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large
+to finish, so v21 ports the v20 look onto the shipped v18 application instead.
+Behavior, data shapes, routes and Firebase integration stay compatible with live
+v18; appearance is expected to change.
+
 ## Project Status
 
 **Current release:** `v21.0.0-beta.8`

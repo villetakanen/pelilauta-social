@@ -1,7 +1,8 @@
 # AGENTS.md
 
-> **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library. v21 is a Firebase-compatible successor to the live v17/v18 application.
-> **Core constraint:** Every v21 release is a drop-in replacement for live v18. Deliver small, independently verifiable slices while replacing the legacy Lit.js design system with local Svelte design-system components.
+> **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library.
+> **Goal:** v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large to finish, so v21 ports the v20 look onto the shipped v18 application instead, one verifiable slice at a time — replacing the legacy Lit.js design system with local Svelte components as it goes.
+> **Core constraint:** Every v21 release is a drop-in replacement for live v18. Behavior, data shapes, routes and Firebase integration are compatibility contracts. Appearance is not — it is expected to change, and v18 is not its reference.
 
 ## The `pnpm` Workspace
 
@@ -20,7 +21,7 @@
 
 ## Delivery Contract
 
-- Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and user-visible interactions as compatibility contracts unless an approved spec says otherwise.
+- Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and how user-visible interactions work as compatibility contracts unless an approved spec says otherwise. How they look is not: appearance follows v20, governed by the design-system specs.
 - **DEPENDENCY VERSIONS ARE NOT THEMSELVES COMPATIBILITY CONTRACTS.** Libraries may — and should — be updated, **including across breaking majors**, whenever the update preserves the compatibility contracts above. Staying on a legacy version is not a compatibility requirement and is not a way to reduce delivery risk; it accumulates it. When a problem is caused by an outdated dependency, **check whether the dependency can simply be updated before designing any workaround.** Updates remain an ASK for approval, but the default answer sought is "update it," not "work around it."
 - A feature branch is a continuous context and may deliver multiple slices before it closes. Treat each merge, not the lifetime branch diff, as the deployable and coherently reversible delivery unit.
 - Never commit or push to `main` directly; integrate through a pull request. A long-living feature branch delivers each slice as its own pull request.
