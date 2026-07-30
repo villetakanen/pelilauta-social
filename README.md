@@ -84,5 +84,6 @@ contextual icon sizing (`beta.3`), and the initial local Icon capability
 - `pnpm build` builds the default Pelilauta deployment.
 - `pnpm --filter pelilauta test` runs the application unit tests.
 - `pnpm lint` runs the workspace Biome checks.
+- `pnpm verify` runs the pull-request verification gate.
 - `pnpm --filter design build` verifies the design-system application build.
 - `pnpm --filter design test:e2e` runs the design-system browser checks.

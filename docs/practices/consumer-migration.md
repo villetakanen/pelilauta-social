@@ -38,9 +38,10 @@ rediscover. Each links to its evidence.
 - **A deterministic check protects only once something runs it.** A test with
   no runner or gate is not protection. Wire the runner in the same slice that
   adds the check.
-- **Per-consumer, rendered-in-context visual acceptance is the only gate that
-  catches tag-selector breakage today.** Unit and registry tests never render
-  in the consumer context, so they cannot see it.
+- **Rendered-in-context visual review catches tag-selector breakage that unit
+  and registry tests cannot see.** Identify the changed contexts in the PR so
+  the human owner can review them; agents do not administer or record that
+  review unless explicitly asked.
 - **The end-to-end suite is a second consumer of the element tag.** Playwright
   specs locate controls by the legacy tag (`button:has(cn-icon[noun="send"])`),
   so migrating the source breaks them — silently, because the suite needs the
@@ -111,17 +112,14 @@ Run this before implementing any Lit-consumer migration.
    as acceptance evidence unless the suite is explicitly restored to a gate.
 6. **Implement**, then run the smallest applicable deterministic checks
    (`astro check`, unit, contract tests, both app builds).
-7. **Rendered-in-context visual acceptance** of the migrated surface. This is a
-   required gate, not optional; it is the only check that catches a missed tag
-   rule. What it looks for is **theme-independent** — size, control spacing, and
-   flex/heading layout, the properties the legacy tag rules actually set. One
-   theme is sufficient.
+7. **Identify the rendered contexts changed by the migration** for the human
+   owner's PR review. The relevant properties are **theme-independent** — size,
+   control spacing, and flex/heading layout, the properties the legacy tag rules
+   actually set. Do not prescribe or record a visual-review matrix unless the
+   human owner asks for one.
 
-   This review is performed by hand, and every release is checked by hand — that
-   practice is not in question here. What is scoped out is the **dual-theme**
-   requirement: Light **and** Dark review belongs to design-system colour and
-   theming capabilities, not to an application consumer migration (human
-   decision 2026-07-28). A migrated component that inherits its colour — the
-   local `Icon` renders monochrome artwork with `currentColor` — cannot change
-   theme behaviour at the consumer, so a second theme adds no coverage here.
-   Scope a dual-theme gate to the slice that owns colour.
+   Light and Dark review belongs to design-system colour and theming
+   capabilities, not to an application consumer migration (human decision
+   2026-07-28). A migrated component that inherits its colour — the local
+   `Icon` renders monochrome artwork with `currentColor` — cannot change theme
+   behaviour at the consumer. Scope theme review to the slice that owns colour.

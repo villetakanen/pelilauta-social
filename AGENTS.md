@@ -16,6 +16,8 @@
 - A design-system functionality is complete only when the same delivery slice includes its intent spec, contract implementation, and package-owned DS book integrated into `apps/design`.
 - Record durable behavior and architecture as intent specs under `specs/` (anatomy: `specs/TEMPLATE.md`), and irreversible decisions in `docs/adrs/` once that directory is introduced. A PBI describes one change; its linked spec remains the source of truth.
 - Specs carry `provenance:` frontmatter naming the v18 sources, immutable upstream commits, or human decisions their claims rest on, and pass the adversarial review gate in the spec skill before a human approves them.
+- Agents prepare reviewable pull requests and stop. The human owner reads the PR, performs any visual acceptance, and decides whether and when to merge or release; none of those actions is implied by passing checks or a ready preview.
+- Use targeted deterministic checks while implementing. The root `pnpm verify` command, invoked by the pull-request workflow, owns broad repository verification; do not manually repeat it after unrelated or documentation-only edits.
 
 ## Workspace Contract
 
@@ -40,12 +42,12 @@
 
 **ALWAYS**
 - Inspect the relevant v18 implementation and write or update the compatibility spec before changing a migrated surface.
-- Before migrating a Lit consumer to its local component, run the pre-flight in `docs/practices/consumer-migration.md`: enumerate the legacy Cyan CSS rules scoped to the component's element tag for that context, decide how each is re-expressed against the local component, and finish with a rendered-in-context visual acceptance.
-- Use the `delivery-slice` skill to prepare and integrate each proposed merge. Use `delivery-review` for release-significant compatibility, factory, harness, architecture, deployment, licensing, or generated-source changes.
+- Before migrating a Lit consumer to its local component, run the technical pre-flight in `docs/practices/consumer-migration.md`: enumerate the legacy Cyan CSS rules scoped to the component's element tag for that context, decide how each is re-expressed against the local component, and identify the changed contexts for the human owner's visual review.
+- Use the `delivery-slice` skill to prepare each proposed merge. Use `delivery-review` only when the human owner explicitly requests an implementation review; the separate adversarial review required for intent specs remains mandatory.
 
 ## Working Model
 
-Human approval governs product scope, compatibility exceptions, dependencies, data changes, and releases. Agents may investigate, implement a specified bounded change, evolve the supporting factory within that slice, run deterministic checks, and prepare reviewable integration. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step.
+Human approval governs product scope, compatibility exceptions, dependencies, data changes, merges, and releases. Agents may investigate, implement a specified bounded change, evolve the supporting factory within that slice, run proportionate deterministic checks, and prepare a reviewable pull request. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step. Do not administer human review or acceptance unless asked.
 
 ## Workflow Guides
 

@@ -11,7 +11,7 @@ admits two kinds of source, and every row states which it is:
 Renamed from "community" (human 2026-07-28): the distinction this tier draws is
 *openly licensed* versus *proprietary*, not who the author was. Proprietary
 artwork is never stored here; it stays in the `@myrrys/proprietary` submodule
-(see `plans/cn-icon.md`).
+as required by `specs/design-system/iconography/spec.md`.
 
 ## Vendored licences
 
