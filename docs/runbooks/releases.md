@@ -7,22 +7,25 @@ bookkeeping.
 
 ## Prepare
 
-1. Confirm the delivery spec, plan or PR, checks, and human acceptance state.
-2. Choose the approved root semantic version. Use `beta.X` for deployable
-   product increments that are not yet claimed as complete v18 replacements.
+1. Require an explicit release request and exact root semantic version. Use
+   `beta.X` for deployable product increments that are not yet claimed as
+   complete v18 replacements.
+2. Confirm the requested baseline is integrated and its required PR checks
+   passed. Do not repeat those checks manually on unchanged code.
 3. Update the root version and project status together.
-4. Run the checks named by the delivery plan from the workspace root.
-5. Confirm the worktree contains no generated output, credentials, or unrelated
+4. Confirm the worktree contains no generated output, credentials, or unrelated
    changes.
 
 ## Release
 
 1. Commit the release preparation with a Conventional Commit message.
 2. Push the delivery branch and open a pull request against `main`.
-3. Wait for the deploy preview and complete any remaining human review.
-4. Merge without bypassing a failing repository-defined gate.
-5. Verify the production endpoint responds from the merged commit.
-6. Create an annotated `v<version>` tag on the exact merge commit and push it.
+3. Stop for the human owner's review. A ready preview does not authorize merge.
+4. Merge only on explicit instruction and without bypassing a failing
+   repository-defined gate.
+5. When explicitly instructed to publish the accepted release, verify the
+   production endpoint responds from the merged commit.
+6. Create an annotated `v<version>` tag on that exact merge commit and push it.
 7. Confirm local `main`, `origin/main`, the root version, and the tag agree.
 
 ## Rollback
@@ -33,5 +36,6 @@ is required.
 
 ## Current Limits
 
-There is no generic release command or CI release pipeline. Follow the delivery
-plan's checks and this runbook directly until repetition justifies automation.
+There is no generic release command or CI release pipeline. Pull requests run
+the root `pnpm verify` gate; release identity and publication remain explicit
+human decisions.

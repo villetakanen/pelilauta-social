@@ -1,19 +1,22 @@
 ---
 name: delivery-review
-description: Adversarially review one proposed Pelilauta merge when it changes compatibility, factory, harness, architecture, deployment, licensing, or another release-significant boundary.
+description: Use only when the human owner explicitly requests an adversarial implementation review of one proposed Pelilauta merge.
 ---
 
 # Delivery Review
+
+This skill is not an automatic delivery gate and does not replace the human
+owner's PR review. Use it only on explicit request. The mandatory separate
+adversarial review of an intent spec is owned by the `spec` skill and is
+unaffected by this boundary.
 
 Review one delivery slice, not the lifetime diff of its feature branch. The
 purpose is to challenge product and factory assumptions before they become a
 dependency of `main`, not to prohibit delivery-enabling architecture or harness
 work inside the slice.
 
-Use a reviewer that did not author the implementation when practical. Review is
-risk-scaled: a routine bounded consumer change needs a concise pass; a new
-build path, source boundary, generator, compatibility exception, or test gate
-needs an independent adversarial pass.
+When requested, use a reviewer that did not author the implementation when
+practical and scale the review to the named concern.
 
 ## Review Boundary
 

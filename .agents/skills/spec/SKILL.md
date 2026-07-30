@@ -5,7 +5,7 @@ description: Create or update a concise Pelilauta intent spec when a feature or 
 
 # Intent Spec
 
-Use this skill for durable product or design-system intent. Do not use it for a
+Use this skill for approved product or design-system intent. Do not use it for a
 delivery plan, task list, implementation design, test log, or lessons record.
 
 Specs follow the ASDLC.io Living Specs practice: an Intent half (why the

@@ -14,8 +14,10 @@
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
 - For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
 - A design-system functionality is complete only when the same delivery slice includes its intent spec, contract implementation, and package-owned DS book integrated into `apps/design`.
-- Record durable behavior and architecture as intent specs under `specs/` (anatomy: `specs/TEMPLATE.md`), and irreversible decisions in `docs/adrs/` once that directory is introduced. A PBI describes one change; its linked spec remains the source of truth.
+- Record approved behavior and architecture as intent specs under `specs/` (anatomy: `specs/TEMPLATE.md`), and irreversible decisions in `docs/adrs/` once that directory is introduced. A PBI describes one change; its linked spec remains the source of truth.
 - Specs carry `provenance:` frontmatter naming the v18 sources, immutable upstream commits, or human decisions their claims rest on, and pass the adversarial review gate in the spec skill before a human approves them.
+- Agents prepare reviewable pull requests and stop. The human owner reads the PR, performs any visual acceptance, and decides whether and when to merge or release; none of those actions is implied by passing checks or a ready preview.
+- Use targeted deterministic checks while implementing. The root `pnpm verify` command, invoked by the pull-request workflow, owns broad repository verification; do not manually repeat it after unrelated or documentation-only edits.
 
 ## Workspace Contract
 
@@ -40,19 +42,21 @@
 
 **ALWAYS**
 - Inspect the relevant v18 implementation and write or update the compatibility spec before changing a migrated surface.
-- Before migrating a Lit consumer to its local component, run the pre-flight in `docs/practices/consumer-migration.md`: enumerate the legacy Cyan CSS rules scoped to the component's element tag for that context, decide how each is re-expressed against the local component, and finish with a rendered-in-context visual acceptance.
-- Use the `delivery-slice` skill to prepare and integrate each proposed merge. Use `delivery-review` for release-significant compatibility, factory, harness, architecture, deployment, licensing, or generated-source changes.
+- When planning or implementing migration of an existing v18/Cyan consumer,
+  read `docs/MIGRATION.md`. It owns shared migration mechanics, inherited E2E
+  debt, and the terminal Cyan sweep; it is not general design-system context.
+- Use the `delivery-slice` skill to prepare each proposed merge. Use `delivery-review` only when the human owner explicitly requests an implementation review; the separate adversarial review required for intent specs remains mandatory.
 
 ## Working Model
 
-Human approval governs product scope, compatibility exceptions, dependencies, data changes, and releases. Agents may investigate, implement a specified bounded change, evolve the supporting factory within that slice, run deterministic checks, and prepare reviewable integration. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step.
+Human approval governs product scope, compatibility exceptions, dependencies, data changes, merges, and releases. Agents may investigate, implement a specified bounded change, evolve the supporting factory within that slice, run proportionate deterministic checks, and prepare a reviewable pull request. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step. Do not administer human review or acceptance unless asked.
 
 ## Workflow Guides
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
 
-- Lessons: `docs/practices/lessons.md`. A non-durable branch file under `docs/lessons/` may collect reusable candidates awaiting disposition or durable writeback, then compact resolved candidates to a minimal lessons-learned log. Humans may delete these logs; agents must never rely on them for required context. Plans, PRs, checks, and task state remain in their existing owners.
-- Consumer migration: `docs/practices/consumer-migration.md` carries the cross-cycle decisions and the required pre-flight for migrating a Lit consumer to its local component.
+- Lessons: `docs/practices/lessons.md`. An optional branch file under `docs/lessons/` may collect candidate improvements for human-gated assessment. Candidates may be applied, deferred with a concrete trigger, or discarded; they do not require a permanent destination. Agents must never rely on lesson logs for required context.
+- v18/Cyan migration: `docs/MIGRATION.md`
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Delivery slices: `.agents/skills/delivery-slice/SKILL.md`
 - Risk-scaled implementation review: `.agents/skills/delivery-review/SKILL.md`

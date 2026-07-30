@@ -10,7 +10,8 @@
     "test": "pnpm -r --if-present run test",
     "postinstall": "lefthook install",
     "lint": "biome check .",
-    "format": "biome check --write ."
+    "format": "biome check --write .",
+    "verify": "pnpm lint && pnpm test && pnpm -r --if-present run build"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
