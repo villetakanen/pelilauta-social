@@ -5,32 +5,34 @@ description: Assess Pelilauta lesson candidates, apply justified improvements, a
 
 # Lessons And Compound Loop
 
-Follow `docs/practices/lessons.md`.
+Follow `docs/practices/lessons.md`. One finding, one file:
+`docs/lessons/<slug>.md`, with the frontmatter and four fields that guide
+defines.
 
-## Procedure
+## Capturing
 
-1. Read `docs/lessons/<branch-name>.md` when it exists. Do not create a lessons
-   file merely to hold branch context, delivery evidence, or task state. Every
-   lessons file is optional; humans may delete it.
-2. Add an entry only for surprising evidence with a plausible reusable
-   consequence. Record evidence, assessment, a possible change, and disposition.
-   A candidate does not need a permanent destination.
-3. Test the signal before generalizing it. If the relevant artifact can be
-   corrected immediately, do that instead of growing the queue.
-4. Ask the human owner to accept, defer, or reject decisions at the boundaries
-   named in `AGENTS.md`.
-5. Apply an accepted change directly to the relevant project artifact. Do not
-   expand another slice with an optional improvement without human approval.
-6. Discard candidates when no project change is justified. Delete resolved
-   entries unless the human owner wants a compact historical record.
-7. Keep a deferred candidate only with concrete evidence or a future condition
-   that should trigger reconsideration.
-8. Run compound passes whenever useful and before branch close: assess each
-   signal, apply accepted changes, and remove debris.
+1. Write a file only for an observation with a plausible reusable consequence.
+2. Keep `**Suspected why:**` a guess. Do not reason it into a verdict at capture
+   time; a retro pass finds the root cause with more evidence.
+3. Never merge a finding into an existing file, and never rewrite the queue to
+   accommodate one. Facets of a suspected common cause stay as sibling files.
+4. If the relevant artifact can be corrected immediately, do that instead of
+   writing a file.
+
+## Assessing
+
+5. Read the queue and look for repeated failure shapes across files.
+6. Ask the human owner to accept, defer, or reject at the boundaries named in
+   `AGENTS.md`.
+7. Apply an accepted change directly to the relevant project artifact. Do not
+   expand an unrelated slice with an optional improvement without approval.
+8. Set `status: applied` and delete the file; discard files where no project
+   change is justified. Keep `status: deferred` only with a concrete `trigger`.
+9. Run a pass whenever useful and before branch close.
 
 PR identities, checks, review transcripts, delivered-slice indexes, current
 objectives, remaining work, and next tasks belong to their existing operational
-owners, never to the lessons log.
+owners, never to this queue.
 
 Never make a spec, plan, skill, test, runbook, or implementation depend on a
-lessons log. The project must remain operable when all historical logs are gone.
+lesson file. The project must remain operable when the queue is empty.

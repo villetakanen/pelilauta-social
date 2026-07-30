@@ -1,62 +1,74 @@
 # Lessons And Compounding
 
-A branch may keep `docs/lessons/<branch-name>.md`, replacing `/` with `-`, when
-work produces a surprising observation that might improve later work. The file
-is an optional candidate queue, not branch memory, delivery evidence, required
-context, or a behavioral contract. Humans may delete it at any time.
+A finding worth considering a fix gets its own file: `docs/lessons/<slug>.md`.
+One finding, one file. The directory is a flat, optional candidate queue — not
+branch memory, delivery evidence, required context, or a behavioral contract.
+Humans may delete any file at any time.
 
-Compounding means assessing candidate learnings and changing the project when a
-change is justified. It does not mean preserving every observation.
+Compounding means assessing candidates and changing the project when a change is
+justified. It does not mean preserving every observation.
 
-## Candidate Shape
+## File Shape
 
-An active candidate contains only:
+```markdown
+---
+name: <slug matching the filename>
+branch: <branch that produced it>
+date: <YYYY-MM-DD>
+status: proposed | deferred | applied | discarded
+trigger: <only when deferred: the concrete condition for reconsideration>
+---
 
-1. **Evidence:** what was observed.
-2. **Assessment:** whether the signal is valid, repeated or consequential, and
-   what alternative explanations were considered.
-3. **Possible change:** the smallest useful change, if one exists.
-4. **Disposition:** proposed, accepted, deferred, applied, or discarded,
-   including the human decision when required by `AGENTS.md`.
+**Context:** the situation, in one or two sentences.
 
-A candidate does not need a permanent destination. One-off operational evidence,
-task state, check output, PR history, and already-fixed defects normally do not
-belong in the queue. If assessment shows that nothing should change, discard the
-candidate instead of inventing a policy, guide, check, or follow-up task.
+**What happened:** the observation, with commits, files, or costs named.
 
-## Compound Loop
+**Suspected why:** the naive reason. A guess, not a verdict — a retro or review
+pass finds the root cause later.
 
-1. Read the branch queue when one exists; do not create an empty one.
-2. Add a candidate only when evidence plausibly changes future implementation,
-   verification, architecture, or working practice.
-3. Test the signal before generalizing it. A useful tactic in one incident is
+**Fix:** the smallest change worth considering, for a retro pass to weigh.
+```
+
+Nothing else belongs in the file. No count, no index, no header, no revision
+history, no narration of how the queue changed. If a file needs to explain
+itself, it is the wrong shape.
+
+## Capture
+
+Write a file when an observation plausibly changes future implementation,
+verification, architecture, or working practice. Capture is cheap, so write it
+at low confidence rather than reasoning it into a conclusion at capture time.
+
+Do not write one for task state, check output, PR history, current objectives,
+remaining work, or an already-fixed defect. Those belong to their existing
+operational owners.
+
+Do not merge a new finding into an existing file. Two findings that look like
+facets of one cause stay separate; a retro pass merges them if it is right, and
+premature consolidation has already hidden a recurring failure in this project.
+Write a sibling file and link it by slug.
+
+If the relevant artifact can simply be corrected now, do that instead of writing
+a file.
+
+## Compound Pass
+
+Run a pass whenever the queue holds useful candidates, and before closing a
+branch.
+
+1. Read the queue. Recurrence is visible by reading siblings — files describing
+   the same failure shape are the signal that it is real.
+2. Test each signal before generalizing it. A useful tactic in one incident is
    not automatically a reusable lesson.
-4. Ask the human owner to decide changes at the approval boundaries in
-   `AGENTS.md`.
-5. Apply an accepted change directly to the relevant code, test, spec, guide,
+3. Ask the human owner to decide at the approval boundaries in `AGENTS.md`.
+4. Apply an accepted change directly to the relevant code, test, spec, guide,
    skill, runbook, or workflow. Prefer correcting an existing artifact over
    creating another process layer.
-6. Delete applied, invalid, obsolete, and one-off candidates unless the human
-   owner wants a compact historical record.
-7. Keep a deferred candidate only when it names concrete evidence or a future
-   condition that should trigger reconsideration.
+5. Delete applied, invalid, obsolete, and one-off files. Deletion is the normal
+   end state; git history retains them.
+6. Keep a `deferred` file only with a concrete `trigger`.
 
-Run a compound pass whenever the queue contains useful candidates and before
-closing its branch. The pass assesses each signal, applies accepted changes,
-and removes debris. It does not block unrelated delivery merely because a
-candidate remains undecided.
-
-## Optional History
-
-When the human owner wants to retain what happened, compact resolved entries to:
-
-| Lesson | Disposition | Result |
-| --- | --- | --- |
-| Reusable behavior change in one sentence | Applied, deferred, or discarded | Changed artifact, reconsideration trigger, or `None` |
-
-Historical logs remain optional and must never be required context. Specs,
-guides, code, tests, skills, workflows, and runbooks must remain complete when
-all lesson logs are absent.
+A pass edits and deletes individual files. It does not rewrite the queue.
 
 ## Rules
 
@@ -65,3 +77,6 @@ all lesson logs are absent.
 - Do not create a destination merely because a candidate exists.
 - Add automation only after a concrete repeated or release-significant failure.
 - Keep work on the shortest path to a visible production outcome.
+
+Specs, guides, code, tests, skills, workflows, and runbooks must remain complete
+when the entire queue is absent.

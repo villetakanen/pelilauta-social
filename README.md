@@ -33,9 +33,9 @@ to own their internal custom-element usage until those components are migrated.
 - `specs` records approved product and design intent.
 - `plans` records bounded delivery scope, implementation decisions, and
   acceptance evidence.
-- `docs/lessons` holds optional candidate queues and compact lessons-learned
-  logs; assessed candidates may improve the project, remain deferred with a
-  concrete trigger, or be discarded.
+- `docs/lessons` holds one optional file per candidate finding; assessed
+  candidates may improve the project, remain deferred with a concrete trigger,
+  or be discarded.
 
 ## Delivery History
 

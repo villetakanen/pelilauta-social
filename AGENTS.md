@@ -57,7 +57,7 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
 
-- Lessons: `docs/practices/lessons.md`. An optional branch file under `docs/lessons/` may collect candidate improvements for human-gated assessment. Candidates may be applied, deferred with a concrete trigger, or discarded; they do not require a permanent destination. Agents must never rely on lesson logs for required context.
+- Lessons: `docs/practices/lessons.md`. Each finding worth considering a fix gets its own file, `docs/lessons/<slug>.md`, for human-gated assessment. Candidates may be applied, deferred with a concrete trigger, or discarded; they do not require a permanent destination. Agents must never rely on lesson files for required context.
 - v18/Cyan migration: `docs/MIGRATION.md`
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Delivery slices: `.agents/skills/delivery-slice/SKILL.md`
