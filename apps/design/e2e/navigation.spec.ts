@@ -48,6 +48,26 @@ test('every book and the index reach every other book', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test('book titles are unique, so a listing entry names one destination', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  const labels = await nav(page)
+    .getByRole('link')
+    .filter({ hasNotText: 'Index' })
+    .allInnerTexts();
+  const trimmed = labels.map((label) => label.trim());
+
+  expect(trimmed.length).toBeGreaterThan(0);
+  expect(new Set(trimmed).size).toBe(trimmed.length);
+});
+
+test('a path naming no published book is not a page', async ({ page }) => {
+  const response = await page.goto('/tokens/no-such-book');
+  expect(response?.status()).toBe(404);
+});
+
 test('the current location is marked exactly once and matches the heading', async ({
   page,
 }) => {

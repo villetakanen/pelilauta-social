@@ -36,29 +36,40 @@ taxonomy; the site owns everything around it.
 
 ## Information Architecture
 
-Books are organised into named groups, presented in a deliberate order. A group
-is a division of the design system's subject matter, and a book's group is
-visible in its URL: a book in the `tokens` group lives under `/tokens/`.
+Books are organised into named groups. A group is a division of the design
+system's subject matter, and a book's group is visible in its URL: a book in the
+`tokens` group lives under `/tokens/`.
 
-The site publishes the groups it has books for. A group with no published books
-does not appear, and books that do not exist yet are not advertised.
+Group order is an editorial decision of the site, declared in one place so the
+navigation and any index of the books cannot disagree. Within a group, a book
+declares its own position; books that do not declare one, or that declare the
+same one, fall back to alphabetical order by title so the listing is never
+arbitrary.
+
+The site publishes the groups it has books for. A group whose books are all
+unpublished does not appear, and books that do not exist yet are not advertised.
 
 An entry may be marked as a draft, in which case the site neither publishes it
 at a URL nor lists it in the navigation.
 
+A path that names no published book is not a page. The catch-all that serves the
+books does not absorb unknown paths into a fallback.
+
 ## Navigation Behavior
 
 The navigation lists every published book, grouped and ordered, on every page of
-the site including the index. It is the same navigation everywhere — a reader's
-route between any two books is one interaction.
+the site including the index. It is the same navigation everywhere: reaching any
+book from any other never requires returning to the index.
 
 Exactly one location is marked as current: the book being read, or the index
 when the reader is on it. The current book's entry in the navigation reads as the
 same book the page's own heading names.
 
-Group labels organise the list without competing with the books for
-prominence — they are not headings, so a book title remains the page's
-structural landmark.
+Group labels organise the list, and are not headings, so a book title remains
+the page's only structural landmark of that rank.
+
+Two published books do not share a title. A reader choosing between identically
+named entries could not tell where either leads.
 
 On a viewport too narrow for a persistent index, the navigation is reached
 through a labelled disclosure in the site header. While it is closed, it is
@@ -85,9 +96,9 @@ approved decision.
   system.
 - No navigation for the Pelilauta application itself.
 - No new token families. The shell consumes the existing surface, border and
-  focus tokens and states explicit values where a token does not yet exist.
-- The design site's rendered-behavior test suite is not added to the repository
-  verification gate here.
+  focus tokens, and states explicit values where a token does not yet exist.
+- This capability does not define how the repository's verification gate is
+  wired, or which suites it runs.
 
 ## Contract
 
@@ -102,6 +113,9 @@ approved decision.
 - `/tokens/color` and `/components/icon` resolve at their existing URLs;
   `/principles/iconography` resolves; `/iconography` no longer does.
 - A draft entry is absent from both the published URLs and the navigation.
+- A path naming no published book is not served as a page.
+- Group order and within-group order are declared once, and the navigation and
+  the index present books in the same order.
 - At a narrow viewport the navigation is not visible and its links are not
   focusable until the disclosure is opened, after which they are both.
 - The first focusable element of every page targets that page's content.
@@ -123,7 +137,28 @@ approved decision.
 - Current-location matching tolerates a trailing slash, because the development
   server and the built static output differ in it.
 - Book components hold no styling that depends on being the page's root
-  document; the shell owns `main`, `body` and the footer.
+  document; the shell owns `main`, `body` and the footer. A selector rooted at
+  one of those inside a book's scoped styles matches nothing, silently.
+- No two published books share a title, so a listing entry always identifies one
+  destination.
+
+## Review
+
+Adversarial review 2026-07-30, against the five axes in the spec skill. Findings
+raised and resolved in this draft: the ordering rule was unstated and two
+implementers could have differed (now declared); "a route between any two books
+is one interaction" contradicted the narrow-viewport disclosure, which needs the
+disclosure opened first (claim restated as not requiring a return to the index);
+"without competing for prominence" was untestable (removed, keeping the checkable
+"not headings"); unknown-path behavior was missing (now stated); duplicate book
+titles were unaddressed although the navigation and the existing book specs both
+locate by accessible name (now a stated behavior and a guardrail); and the
+verification-gate exclusion described slice state rather than a durable Non-Goal
+(reworded).
+
+Limitation the human owner should weigh before approving: this pass was performed
+in the same session that authored the spec, which is the weaker form the practice
+allows. An independent critic has not read it.
 
 ## Acceptance
 
