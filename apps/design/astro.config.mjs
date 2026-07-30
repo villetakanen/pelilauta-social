@@ -1,5 +1,6 @@
 // @ts-check
 import { fileURLToPath } from 'node:url';
+import mdx from '@astrojs/mdx';
 import svelte from '@astrojs/svelte';
 import { defineConfig } from 'astro/config';
 import { optionalProprietary } from '../../packages/design-system/vite/optional-proprietary.mjs';
@@ -11,7 +12,7 @@ const designSystem = fileURLToPath(
 export default defineConfig({
   site: 'https://design.pelilauta.social',
   output: 'static',
-  integrations: [svelte()],
+  integrations: [svelte(), mdx()],
   vite: {
     resolve: {
       alias: {
