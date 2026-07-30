@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 provenance:
   - "Ported architecture: app/cyan-ds Book.astro, DocsTray.astro, content/config.ts and pages/[...slug].astro in v20 at 02880fbc995b45d459ce4f264b29d5283b1d8ced."
   - "Parent: specs/design-system/components/cn-icon/spec.md owns icon behavior, including that an icon is never decorative."
