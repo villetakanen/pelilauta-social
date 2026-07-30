@@ -18,7 +18,8 @@ by the owner reading it rather than by any gate:
   for `design-tokens`, which governs the whole application's visual contract.
 - Its Intent narrated history, then value claims, and never defined "book" or
   named agents as readers. Naming them immediately produced a missing contract
-  line.
+  line. Fixed within the same slice: Intent now defines a book as an MDX page
+  owned by the package, read by humans and agents.
 - `plans/core-tokens.md` was written as an inventory of token values and call
   sites — facts trivially greppable from source.
 
@@ -45,8 +46,8 @@ Intent. The two dropped thirds are what would have forced concreteness.
 See [[narrow-criticism-sweeping-rewrite]] for that commit's other half.
 
 **Fix:** State positively what each artifact holds. Two of the four cases are
-now covered: the `AGENTS.md` context map says what each location owns, and a
-glossary entry would have defined "book". Two remain — bound the provenance
+already closed: the `AGENTS.md` context map says what each location owns, and
+the navigation spec defines "book". Two remain — bound the provenance
 field to one line per entry naming a re-checkable source, marking
 agent-proposed decisions as such, and add a subtraction pass to the spec review,
 run last: what can be deleted without losing a checkable claim. The operational
