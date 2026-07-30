@@ -1,9 +1,5 @@
 ---
 status: approved
-provenance:
-  - "Unit and radius values ported from v20 packages/cyan/src/tokens/units.css at 02880fbc995b45d459ce4f264b29d5283b1d8ced, verified equal to the installed Cyan 4 by packages/design-system/test/units.test.ts."
-  - "Human decision 2026-07-30: the design system owns the core token families so that cyan-css supplies no tokens; --cn-border-radius is real vocabulary meaning the default radius, which is medium."
-  - "Human decision 2026-07-30: typography is deferred to its own epic, because Cyan 4 computes values into typography tokens where v20 keeps them as inputs, and correcting that changes every heading in the application."
 ---
 
 # Design Tokens

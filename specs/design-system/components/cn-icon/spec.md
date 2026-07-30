@@ -1,14 +1,5 @@
 ---
 status: approved
-provenance:
-  - "v18 icon contract: @11thdeg/cyan-lit@4.0.0-beta.30 cn-icon (noun attribute, xsmall/small/large/xlarge with medium default, /icons/{noun}.svg#icon, empty noun renders the design icon, unknown noun renders a blank sized box, SVG title announces the noun)"
-  - "v20 target model: immutable commit 02880fbc995b45d459ce4f264b29d5283b1d8ced (trusted registries, precedence, server-rendered markup, source-owned color, missing glyph)"
-  - "Current-only compatibility assets: apps/pelilauta/public/icons/ (search, bsky, label-tag, undo, pbta-logo)"
-  - "Human decisions 2026-07-20: empty noun treated as unknown; missing-icon fallback accepted as deliberate change; v18 assistive-technology noun announcement retained"
-  - "Human decision 2026-07-21: the five icon sizes are all legitimately used, so an icon renders at its selected size by default. A context that needs one icon size standardizes every icon within it to that context's size regardless of the icon's own selection — buttons and fabs render icons at the button icon size — as a design-system rule resolving against the local component, not per-consumer hardcoding. Intended mechanism is that the context sets the public --cn-icon-size-* tokens within its scope, refining v20 packages/cyan/src/core/buttons.css and fab.css at 02880fbc, which force the component's private --icon-dim with !important."
-  - "Human decision 2026-07-27: Icon owns intrinsic icon rendering and tokens, not temporary Button, Fab, layout, or typography compatibility. During incremental Cyan migration, reached cross-capability selectors are preserved by minimal application migration helpers until their local capability owns and removes them."
-  - "Human decision 2026-07-28: the design system owns and verifies Icon color behavior in Light and Dark. An application consumer migration that does not change the color or theming capability reviews its contextual layout in one rendered theme; it does not repeat the design system's dual-theme acceptance."
-  - "Established v18 sizing evidence: 16, 24, 36, 72, 128 px at default root font size (@11thdeg/cyan-css@4.0.0-beta.39 dist/tokens/units.css)"
 ---
 
 # Icon
@@ -46,8 +37,8 @@ intentional artwork across Light and Dark modes.
 - The supported sizes are extra small, small, medium, large, and extra large.
   Medium is the default.
 - Each size takes its dimensions from the design-system icon sizing tokens;
-  the icon does not define or promise the values itself. The established v18
-  values are recorded in this spec's provenance as compatibility evidence.
+  the icon does not define or promise the values itself. The values are
+  `specs/design-system/design-tokens/spec.md`'s to set.
 - All five sizes are legitimately used across the application, so an icon
   renders at its selected size by default, medium when unspecified.
 - A context that requires a single icon size standardizes every icon it
