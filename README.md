@@ -5,7 +5,7 @@ Pelilauta community and its local design system.
 
 ## Project Status
 
-**Current release:** `v21.0.0-beta.7`
+**Current release:** `v21.0.0-beta.8`
 
 v21 has a verified import of the live v18 application, the approved v20-derived
 Light and Dark color themes, and its first Lit-to-Svelte component migration: a
@@ -18,9 +18,10 @@ and both the color contract and the icon capability are published in the
 design-system book.
 
 The betas prove that bounded design-system changes can ship through the v21
-workspace without changing routes, Firebase contracts, authentication,
-persisted data, interactions, or OS-driven theme selection. Component migration
-has now started and proceeds one bounded consumer surface at a time.
+workspace while preserving public routes, Firebase schemas, authentication
+boundaries, persisted data shapes, and OS-driven theme selection. The direct
+Svelte Icon consumer migration is complete; retained Cyan components continue
+to own their internal custom-element usage until those components are migrated.
 
 ## Workspace
 
@@ -51,24 +52,37 @@ The root workspace version identifies v21 releases. The version in
 `apps/pelilauta/package.json` remains the imported application's baseline
 version until a separate product decision requires changing it.
 
-`v21.0.0-beta.7` builds on `v21.0.0-beta.6` by migrating the thread,
-discussion, inbox, and site Svelte surfaces to the local `Icon`. Legacy Cyan
-control and layout behavior remains available through a bounded application
-migration layer, and the site surface adds reviewed `sort` artwork to the local
-catalog. Direct Svelte `<cn-icon>` consumer files have decreased from 73 to 38.
+`v21.0.0-beta.8` builds on `v21.0.0-beta.7` by migrating the remaining direct
+Svelte `cn-icon` consumers across character, administration, settings, login,
+editor, search, front-page, and shared application surfaces. The direct element
+literal count is now zero. One imperative use remains inside the retained Cyan
+sortable-list boundary and will move with that component rather than through an
+Icon-only rewrite.
 
-This beta does not claim that every Svelte icon consumer or authenticated write
-journey has been accepted as a complete v18 replacement; those remain gates
-before a v21 release candidate. Earlier betas delivered the server icon surface
-and lessons harness (`beta.6`), catalog provenance sort (`beta.5`), delivery
-governance and iconography book (`beta.4`), contextual icon sizing (`beta.3`),
-and the initial local Icon capability (`beta.2`).
+The openly licensed icon tier is now named `open-source` and includes reviewed
+`delete`, `warning`, `check`, and `open-down` artwork with deterministic
+source/provenance parity. The release also aligns Netlify with the Pelilauta
+workspace package so the adapter's traced SSR dependencies survive deployment,
+repairs clean workspace installs and Lato asset resolution, updates Workbox
+within its declared range, consolidates root Biome coverage, and records the
+dependency-currency policy established while verifying that path. The admin
+purge-user endpoint now also treats an already-absent Auth user as the intended
+idempotent case instead of aborting profile cleanup.
+
+This beta does not claim the overall Cyan migration or authenticated write
+journeys are complete v18 replacements. Deferred end-to-end selector debt,
+retained Cyan components, and the RC.1 toolchain upgrades remain later maturity
+gates. Earlier betas delivered the thread, discussion, inbox, and site Icon
+surfaces (`beta.7`), server icon surface and lessons harness (`beta.6`), catalog
+provenance sort (`beta.5`), delivery governance and iconography book (`beta.4`),
+contextual icon sizing (`beta.3`), and the initial local Icon capability
+(`beta.2`).
 
 ## Commands
 
 - `pnpm dev` starts available workspace applications.
 - `pnpm build` builds the default Pelilauta deployment.
 - `pnpm --filter pelilauta test` runs the application unit tests.
-- `pnpm --filter pelilauta check` runs the imported application check command.
+- `pnpm lint` runs the workspace Biome checks.
 - `pnpm --filter design build` verifies the design-system application build.
 - `pnpm --filter design test:e2e` runs the design-system browser checks.
