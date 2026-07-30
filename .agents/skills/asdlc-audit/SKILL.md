@@ -11,7 +11,15 @@ Software Development Cycle. Each of the patterns and practices is usable individ
 
 Assess the current Agent constitution, tooling, skills and harness against the ASDLC recommendations.
 
+The whole knowledge base is one download: `curl -sL https://asdlc.io/asdlc-skill.zip`.
+Read `SKILL.md` and the three index files before any article.
+
 ## REPORT
-1. What is the coverage of harness
+
+Open with the baseline: branch, commit, and any open pull requests or sibling
+branches. A finding is only true relative to what was read.
+
+1. Which patterns are present, which are absent by deliberate choice, and
+   which appear simply unconsidered
 2. What patterns or practices diverge from recommended
-3. What parts of the ASDCL.io recommendations might be applicable as atomic opportunities of improvement to the harness or project
+3. What parts of the ASDLC.io recommendations might be applicable as atomic opportunities of improvement to the harness or project
