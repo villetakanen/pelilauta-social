@@ -52,3 +52,9 @@ including agents, and the expected lifetime. For provenance, one line per entry
 naming a source, and mark agent-proposed decisions as such. Add a subtraction
 pass to the review, run last: what can be deleted without losing a checkable
 claim.
+
+The subtraction pass applies to `AGENTS.md` itself, not only to specs. A false or
+phase-scoped rule there is removed, not caveated: the `feat/*` → `main`
+integration line was trimmed to the push guard alone once the owner pointed out
+that target-branch mechanics belong to repository settings. Both fixes proposed
+before that were additive — a CI check, then a caveat.

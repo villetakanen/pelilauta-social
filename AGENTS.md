@@ -7,8 +7,8 @@
 
 - Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and user-visible interactions as compatibility contracts unless an approved spec says otherwise.
 - **DEPENDENCY VERSIONS ARE NOT THEMSELVES COMPATIBILITY CONTRACTS.** Libraries may — and should — be updated, **including across breaking majors**, whenever the update preserves the compatibility contracts above. Staying on a legacy version is not a compatibility requirement and is not a way to reduce delivery risk; it accumulates it. When a problem is caused by an outdated dependency, **check whether the dependency can simply be updated before designing any workaround.** Updates remain an ASK for approval, but the default answer sought is "update it," not "work around it."
-- A feature branch is a continuous context and may deliver multiple slices to `main` before it closes. Treat each merge, not the lifetime branch diff, as the deployable and coherently reversible delivery unit.
-- Integrate to `main` only through a pull request from a `feat/*` feature branch or an emergency branch; never push to `main` directly. A long-living `feat/*` branch delivers each slice as its own pull request.
+- A feature branch is a continuous context and may deliver multiple slices before it closes. Treat each merge, not the lifetime branch diff, as the deployable and coherently reversible delivery unit.
+- Never commit or push to `main` directly; integrate through a pull request. A long-living feature branch delivers each slice as its own pull request.
 - Evolve factory, harness, and architecture inside the production slice that first establishes and verifies their concrete need. Keep required supporting work visible in slice scope and review; defer unrelated cleanup, unsupported generalization, and additional migration steps.
 - Migrate one bounded surface at a time: preserve its behavior first, then replace its Lit.js dependency with the equivalent local Svelte component.
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.

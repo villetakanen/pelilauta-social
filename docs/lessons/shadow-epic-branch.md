@@ -38,9 +38,14 @@ record of that branch's state. Nothing in the harness objects: no gate checks a
 PR's base, and no artifact declares which branch is the live epic — see
 [[live-epic-not-observable]].
 
-**Fix:** Two, separable. First, a plan's right to exist derives from its branch:
-a PR whose base is not `main` is the defect to catch, and it is mechanically
-checkable in the PR workflow. Second, introduce `docs/adrs/` so decisions stop
-needing a plan to live in, and move the ones already stranded (default radius,
-design-system token ownership) — both are currently recoverable only from a plan
-file or a branch that should not exist. Overlaps the audit's missing-ADR finding.
+**Fix:** Introduce `docs/adrs/` so decisions stop needing a plan to live in, and
+move the ones already stranded (default radius, design-system token ownership) —
+both are currently recoverable only from a plan file or a branch that should not
+exist. Overlaps the audit's missing-ADR finding.
+
+An earlier version of this fix proposed a PR workflow check failing any pull
+request whose base is not `main`. The owner rejected it: direct `feat/*` → `main`
+integration is a beta shortcut, not the target model, and `main` should be
+protected. Enforcing the current shortcut in CI would break as soon as a
+dev/staging chain exists. `AGENTS.md` was trimmed to the push guard instead; see
+[[harness-artifact-altitude]].
