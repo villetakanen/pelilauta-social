@@ -84,7 +84,7 @@ async function handleSave() {
             {#if error}
                 <div
                     class="error-message"
-                    style="background: var(--cn-color-error-bg, #fee); color: var(--cn-color-error, #c00); padding: var(--cn-gap-xs); border-radius: var(--cn-radius); margin-bottom: var(--cn-gap);"
+                    style="background: var(--cn-color-error-bg, #fee); color: var(--cn-color-error, #c00); padding: var(--cn-grid); border-radius: var(--cn-border-radius); margin-bottom: var(--cn-gap);"
                 >
                     <Icon noun="info" />
                     <span>{error}</span>

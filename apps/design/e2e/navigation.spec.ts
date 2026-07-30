@@ -11,6 +11,7 @@ import { expect, type Page, test } from '@playwright/test';
 /** Every published book: nav label and its URL. */
 const BOOKS = [
   { label: 'Iconography', href: '/principles/iconography' },
+  { label: 'Units and grid', href: '/tokens/units' },
   { label: 'Color themes', href: '/tokens/color' },
   { label: 'Icon', href: '/components/icon' },
 ] as const;

@@ -9,7 +9,7 @@
   --_cn-editor-padding: var(--cn-grid, 0.5rem);
   --_cn-editor-border: var(--cn-editor-border, none);
   --_cn-editor-border-bottom: var(--cn-border);
-  --_cn-editor-border-radius: var(--cn-border-radius-field, 0 1rem 0 0);
+  --_cn-editor-border-radius: var(--cn-border-radius-small);
 
   --color-caret: var(--cn-focus-ring);
 

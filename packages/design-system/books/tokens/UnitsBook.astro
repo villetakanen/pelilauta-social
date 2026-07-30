@@ -1,0 +1,151 @@
+---
+/**
+ * Units & grid book.
+ *
+ * Declarations are parsed at build time from the production units.css, so the
+ * book cannot list a token that does not exist or miss one that does.
+ *
+ * Spec: specs/design-system/design-tokens/spec.md
+ */
+import unitsSource from '@design-system/styles/units.css?raw';
+import '@design-system/styles/tokens.css';
+
+interface Props {
+  /** Book title, owned by the MDX entry's frontmatter. Rendered as the only h1. */
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const declarationPattern = /(--[\w-]+)\s*:\s*([^;]+);/g;
+const declarations = [...unitsSource.matchAll(declarationPattern)].map(
+  (match) => ({
+    name: match[1],
+    value: match[2].replace(/\s+/g, ' ').trim(),
+  }),
+);
+
+const spacing = declarations.filter((token) =>
+  ['--cn-grid', '--cn-gap', '--cn-line'].includes(token.name),
+);
+const radii = declarations.filter((token) =>
+  token.name.startsWith('--cn-border-radius'),
+);
+
+// The shadows live in color-theme.css but are grid-derived, so this book is
+// where the dependency is visible.
+const shadows = [
+  '--cn-shadow-elevation-1',
+  '--cn-shadow-elevation-2',
+  '--cn-shadow-elevation-3',
+  '--cn-shadow-elevation-4',
+];
+---
+
+<section class="hero">
+  <p class="kicker">INTENT / CONTRACT / BOOK</p>
+  <h1>{title}</h1>
+  <p class="lede">
+    One base grid, and every spacing, radius and shadow decision derived from
+    it. A token holds an input to a value, not a value computed in advance, so a
+    consumer composes rather than inherits a fixed measurement.
+  </p>
+  <dl class="facts">
+    <div><dt>Base grid</dt><dd>8px</dd></div>
+    <div><dt>Spacing steps</dt><dd>{spacing.length}</dd></div>
+    <div><dt>Radii</dt><dd>{radii.length}</dd></div>
+    <div><dt>Derived shadows</dt><dd>{shadows.length}</dd></div>
+  </dl>
+</section>
+
+<section aria-labelledby="grid-title">
+  <div class="section-heading">
+    <p>01 / THE GRID</p>
+    <h2 id="grid-title">Everything is a multiple of eight</h2>
+    <p>
+      <code>--cn-grid</code> is the only literal measurement. The rest are
+      multiples, so changing the grid rescales the system rather than requiring
+      each value to be revisited.
+    </p>
+  </div>
+  <ul class="scale">
+    {spacing.map((token) => (
+      <li data-unit-token={token.name}>
+        <span class="bar" style={`inline-size: var(${token.name});`}></span>
+        <code>{token.name}</code>
+        <small>{token.value}</small>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section aria-labelledby="radii-title">
+  <div class="section-heading">
+    <p>02 / RADII</p>
+    <h2 id="radii-title">Four steps and a default</h2>
+    <p>
+      Radii are grid multiples too. <code>--cn-border-radius</code> is the
+      default for a consumer that wants a rounded corner without choosing a
+      step; it resolves to medium.
+    </p>
+  </div>
+  <ul class="radii">
+    {radii.map((token) => (
+      <li data-radius-token={token.name}>
+        <span class="swatch" style={`border-radius: var(${token.name});`}></span>
+        <code>{token.name.replace('--cn-border-radius', '') || 'default'}</code>
+        <small>{token.value}</small>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section aria-labelledby="shadow-title">
+  <div class="section-heading">
+    <p>03 / DERIVED SHADOWS</p>
+    <h2 id="shadow-title">The grid reaches depth too</h2>
+    <p>
+      Elevation shadows are declared in <code>color-theme.css</code> as grid
+      multiples, so they only resolve where the grid is defined. Loading
+      <code>tokens.css</code> guarantees that pairing; the computed values below
+      are read from the browser.
+    </p>
+  </div>
+  <ul class="shadows">
+    {shadows.map((name) => (
+      <li>
+        <span class="tile" style={`box-shadow: var(${name});`}></span>
+        <code>{name.replace('--cn-shadow-', '')}</code>
+        <small data-computed={name}>computed in browser</small>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  /* Book-specific only; the shared editorial vocabulary lives in docs.css. */
+  .scale { display: grid; gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+  .scale li { display: grid; gap: 0.4rem; }
+  .bar { display: block; block-size: 1.5rem; background: var(--cn-focus-ring); }
+  .scale code, .radii code { color: var(--cn-text-high); }
+  .scale small, .radii small, .shadows small { color: var(--cn-text-low); font-family: monospace; font-size: 0.72rem; }
+  .radii { display: flex; flex-wrap: wrap; gap: 2rem; margin: 0; padding: 0; list-style: none; }
+  .radii li { display: grid; justify-items: start; gap: 0.4rem; }
+  .swatch { display: block; inline-size: 6rem; block-size: 4rem; background: var(--cn-surface-3); border: 1px solid var(--cn-border); }
+  .shadows { display: flex; flex-wrap: wrap; gap: 3rem; margin: 0; padding: 1rem 0 2rem; list-style: none; }
+  .shadows li { display: grid; justify-items: start; gap: 0.6rem; max-inline-size: 14rem; }
+  .tile { display: block; inline-size: 6rem; block-size: 4rem; background: var(--cn-surface-1); }
+  .shadows small { overflow-wrap: anywhere; }
+</style>
+
+<script>
+  for (const output of document.querySelectorAll('[data-computed]')) {
+    const property = output.getAttribute('data-computed');
+    if (!property) continue;
+    const probe = document.createElement('span');
+    probe.style.boxShadow = `var(${property})`;
+    document.body.append(probe);
+    output.textContent = getComputedStyle(probe).boxShadow;
+    probe.remove();
+  }
+</script>

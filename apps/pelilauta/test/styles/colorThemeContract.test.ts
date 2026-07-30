@@ -259,19 +259,23 @@ describe('v20 color theme contract', () => {
     expect(appSource).not.toMatch(/var\(--chroma-/);
   });
 
-  it('imports the theme after Cyan 4 in both document heads', () => {
+  it('imports the design-system tokens after Cyan 4 in both document heads', () => {
+    // Order is load-bearing: the design system wins at equal specificity only
+    // because it is imported second. tokens.css supersedes the former direct
+    // color.css import, and pulls in units.css first so the grid-derived
+    // elevation shadows in color-theme.css can resolve.
     for (const head of ['BaseHead.astro', 'EditorHead.astro']) {
       const source = readFileSync(
         join(appRoot, 'src/components/server/BaseHead', head),
         'utf8',
       );
       const cyanIndex = source.indexOf("import '@11thdeg/cyan-css';");
-      const themeIndex = source.indexOf(
-        "import '@design-system/styles/color.css';",
+      const tokensIndex = source.indexOf(
+        "import '@design-system/styles/tokens.css';",
       );
 
       expect(cyanIndex).toBeGreaterThan(-1);
-      expect(themeIndex).toBeGreaterThan(cyanIndex);
+      expect(tokensIndex).toBeGreaterThan(cyanIndex);
     }
   });
 });
