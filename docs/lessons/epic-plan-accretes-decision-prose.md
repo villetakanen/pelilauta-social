@@ -4,27 +4,20 @@ branch: feat/ds-typography
 date: 2026-07-30
 ---
 
-**Context:** `plans/typography.md` is 443 lines and 3719 words. Every other plan in
-`plans/` is between 74 and 197, and every spec in `specs/` between 80 and 192. The
-owner expected 100–200 — the size of the research payload prepared for specs — and
-read the file as long enough to be a context-window cost rather than a help.
+**Context:** `plans/typography.md` is 443 lines. Every other plan is 74–197 and
+every spec 80–192. The owner expected 100–200 and read it as a context cost.
 
-**What happened:** it was 200 lines when first written, which is the size that was
-expected. It then grew to 304 (`a964a18`), 378 (`31df5a1`) and 443 (`dd3ac4a`)
-across three commits that added no research at all — only rulings made in
-conversation. The two decision sections are now 169 and 124 lines, 66% of the file,
-while the five sections carrying the actual investigation total 106. Each commit
-appended; none compressed what was already there.
+**What happened:** it was 200 lines when written — the expected size — then grew to
+304, 378 and 443 (`a964a18`, `31df5a1`, `dd3ac4a`) across commits that added no
+research, only rulings made in conversation. Its two decision sections are 169 and
+124 lines; all five sections carrying actual investigation total 106.
 
 **Suspected why:** each ruling was written as the argument that produced it rather
-than as the decision it reached, because no spec existed yet to hold the decision.
+than the decision it reached, because no spec existed yet to hold the decision.
 
-**Fix:** the cheapest candidate is to record rulings as one-line decisions and let
-the commit message carry the reasoning, which `docs/practices/lessons.md` already
-treats as the permanent record for findings. The larger candidate is that settled
-decisions belong in the spec as they are made — `AGENTS.md` says the linked spec is
-the source of truth — leaving the plan as investigation plus pointers. Related:
-[[epic-plans-preplan-slices]], whose suspected cause is the same missing
-destination.
-
-Owner asked for this to be recorded and explicitly not acted upon.
+**Fix:** record rulings as one-line decisions and let the commit message carry the
+reasoning, as `docs/practices/lessons.md` already does for findings. Larger
+candidate: settled decisions move into the spec as they are made, since `AGENTS.md`
+makes the linked spec the source of truth, leaving the plan as investigation plus
+pointers. Owner asked that this be recorded and not acted upon. Related:
+[[epic-plans-preplan-slices]], [[agent-artefacts-have-no-length-budget]].
