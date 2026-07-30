@@ -34,8 +34,8 @@ Human, 2026-07-30:
 
 Rulings, human 2026-07-30:
 
-- `--cn-border-radius` is real vocabulary — an alias for the default radius.
-  Define it.
+- `--cn-border-radius` is real vocabulary — an alias for the default radius, which
+  is medium. Define it.
 - `--cn-radius` means `--cn-border-radius`. Correct the call sites.
 - `--cn-gap-xs` means `--cn-grid`. Correct the call sites.
 - `--cn-border-radius-field` means `--cn-border-radius-small`. Correct the call
@@ -65,7 +65,6 @@ typography token was touched by mistake.
 
 ## Open
 
-- Is the default radius medium or large? Medium assumed.
 - Does `styles/units.css` absorb `styles/icon.css`, whose tokens came from the
   same v20 file? Not required by either slice.
 - The typography epic must also own `--cn-font-family`, which only cyan-css
