@@ -15,30 +15,26 @@ from it.
 
 ## Procedure
 
-1. Read the relevant v18 behavior, approved product direction, existing parent
-   specs, and the branch lessons queue when one exists.
-2. Record sources and human product decisions directly in spec provenance. Add
-   to lessons only when spec work reveals a reusable gap in the specification
-   practice or harness.
-3. Create or update `specs/<domain>/<capability>/spec.md` from
+1. Read the relevant v18 behavior, approved product direction, and existing
+   parent specs.
+2. Create or update `specs/<domain>/<capability>/spec.md` from
    `specs/TEMPLATE.md`. Design-system work normally uses
    `specs/design-system/<capability>/spec.md`.
-4. Add frontmatter status: `draft`, `approved`, or `deprecated`. New intent is
-   `draft` until a human approves it.
-5. Record provenance in frontmatter: the v18 sources, immutable upstream
-   commits, parent specs, or human decisions the spec's claims rest on. A spec
-   without provenance is an opinion, not evidence.
-6. State why the capability exists, what users and consumers can rely on, its
+3. Add frontmatter status: `draft`, `approved`, or `deprecated`. New intent is
+   `draft` until a human approves it. That is the whole frontmatter.
+4. State why the capability exists, what users and consumers can rely on, its
    goals, principles, boundaries, and observable acceptance.
-7. Exclude framework choices, file layouts, task sequencing, command output,
+5. Exclude framework choices, file layouts, task sequencing, command output,
    and implementation status. Put those in the linked plan.
-8. Record compatibility intent and deliberate behavior changes without copying
+6. Record compatibility intent and deliberate behavior changes without copying
    implementation details into the spec.
-9. Anchor, don't model: a spec promises only what its capability owns. Values
+7. Anchor, don't model: a spec promises only what its capability owns. Values
    owned elsewhere — design tokens, parent specs, upstream contracts — are
-   referenced as their owner's decision, with observed values recorded in
-   provenance as evidence, never restated in the body as this spec's promise.
-10. Run the adversarial review below, resolve or explicitly accept each finding,
+   referenced as their owner's decision by linking that owner, never restated in
+   the body as this spec's promise.
+8. Record an irreversible decision as an ADR in `docs/adrs/`, and link it. A
+   decision is not spec content.
+9. Run the adversarial review below, resolve or explicitly accept each finding,
    then ask for human approval before changing status to `approved`.
 
 ## Adversarial Review Gate
@@ -53,10 +49,14 @@ spec — not the code — and records the outcome in the spec review or PR:
   deterministic check or a named human review step? Flag any that are vibes.
 - **Edge cases:** missing states (empty, error, unknown input, both themes,
   hydration timing) that the intent implies but the text omits.
-- **Compatibility:** claims about v18 behavior that are asserted but not
-  backed by the provenance list.
+- **Compatibility:** claims about v18 or v20 behavior that no reader can check —
+  no test, no link to the owning spec, no reachable upstream source. Appearance
+  follows v20, so a v18 look-alike claim is a defect, not evidence.
 - **Scope:** requirements that belong in the plan, and Non-Goals that a naive
   reading of the spec would still permit.
+- **Subtraction:** run last. What can be deleted without losing a checkable
+  claim? Every other axis asks whether the spec says enough; this one is the
+  only counterweight.
 
 Unresolved findings go to the human owner with the approval request; do not
 silently drop them.

@@ -3,6 +3,11 @@
 This pnpm workspace contains the Firebase-compatible v21 successor to the live
 Pelilauta community and its local design system.
 
+v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large
+to finish, so v21 ports the v20 look onto the shipped v18 application instead.
+Behavior, data shapes, routes and Firebase integration stay compatible with live
+v18; appearance is expected to change.
+
 ## Project Status
 
 **Current release:** `v21.0.0-beta.8`
@@ -31,11 +36,11 @@ to own their internal custom-element usage until those components are migrated.
 - `packages/design-system` owns shared design-system implementation and book
   pages.
 - `specs` records approved product and design intent.
-- `plans` records bounded delivery scope, implementation decisions, and
-  acceptance evidence.
-- `docs/lessons` holds optional candidate queues and compact lessons-learned
-  logs; assessed candidates may improve the project, remain deferred with a
-  concrete trigger, or be discarded.
+- `plans` holds epic-level PBIs.
+- `docs/lessons` is a decision inbox holding one file per candidate finding;
+  assessed findings may improve the project, remain deferred with a concrete
+  trigger, or be discarded, and the directory is emptied as they resolve.
+- `docs/adrs` records irreversible architectural decisions.
 
 ## Delivery History
 

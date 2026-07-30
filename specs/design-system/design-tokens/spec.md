@@ -23,9 +23,15 @@ surfaces, including:
 - reference choices such as the available color palette;
 - semantic roles such as text, background, border, link, focus, and status;
 - Light and Dark expressions of the same semantic intent;
+- one base grid, with spacing, radius and elevation decisions derived from it
+  rather than stated independently;
 - compatibility meanings needed while legacy Cyan consumers are replaced;
-- future shared decisions for typography, spacing, shape, motion, and other
-  visual foundations when a product feature requires them.
+- future shared decisions for typography, motion, and other visual foundations
+  when a product feature requires them.
+
+A token holds an input to a value, not a value computed in advance. A consumer
+composes the final measurement, so a decision stays valid when the context around
+it changes.
 
 Reference choices state what is available. Semantic roles state why a choice is
 used. Components consume semantic roles so that their meaning remains stable

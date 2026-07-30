@@ -1,13 +1,14 @@
 /**
- * Package unit tests for the icon capability. Runs on Node's built-in test
- * runner with type stripping, so it needs no test-framework dependency:
- *   node --experimental-strip-types --test test/icon-registry.test.ts
+ * Package unit tests for the icon capability.
+ *
+ * The icon contract is enumerable data — a noun resolves to artwork through a
+ * fixed tier order — so it is asserted here without rendering anything. Browser
+ * checks cover only what needs a cascade and layout.
  */
-import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
-import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { expect, test } from 'vitest';
 import { getIcon as getManagedIcon } from '../../myrrys-proprietary/index.ts';
 import { FallbackIcons } from '../components/icon-fallback.ts';
 import {
@@ -42,14 +43,11 @@ test('open-source tier owns the openly licensed UI nouns', () => {
     'drag',
     'dragger',
   ]) {
-    assert.equal(
-      resolveTier(noun),
+    expect(resolveTier(noun), `${noun} should resolve to open-source`).toBe(
       'open-source',
-      `${noun} should resolve to open-source`,
     );
-    assert.ok(
-      openSourceNouns().includes(noun),
-      `${noun} in open-source registry`,
+    expect(openSourceNouns(), `${noun} in open-source registry`).toContain(
+      noun,
     );
   }
 });
@@ -57,11 +55,9 @@ test('open-source tier owns the openly licensed UI nouns', () => {
 test('every open-source icon is monochrome currentColor (no hardcoded fill)', () => {
   for (const noun of openSourceNouns()) {
     const inner = getOpenSourceIcon(noun)!.inner;
-    assert.match(inner, /currentColor/, `${noun} declares currentColor`);
-    assert.doesNotMatch(
-      inner,
+    expect(inner, `${noun} declares currentColor`).toMatch(/currentColor/);
+    expect(inner, `${noun} has no hardcoded hex fill`).not.toMatch(
       /#[0-9a-fA-F]{3,6}/,
-      `${noun} has no hardcoded hex fill`,
     );
   }
 });
@@ -77,64 +73,56 @@ test('open-source artwork and provenance rows are in exact parity', () => {
     'utf8',
   );
   const nounTable = provenance.split('| Noun | Source | Notes |')[1];
-  assert.ok(nounTable, 'provenance noun table is present');
+  expect(nounTable, 'provenance noun table is present').toBeTruthy();
   const rows = [...nounTable.matchAll(/^\| `([^`]+)` \| ([^|]+) \|/gm)];
   const nouns = rows.map((row) => row[1]);
 
-  assert.equal(
-    new Set(nouns).size,
-    nouns.length,
-    'provenance nouns are unique',
-  );
-  assert.ok(
+  expect(new Set(nouns).size, 'provenance nouns are unique').toBe(nouns.length);
+  expect(
     rows.every((row) => row[2].trim().length > 0),
     'every provenance row records a source',
-  );
-  assert.ok(
+  ).toBe(true);
+  expect(
     rows.every((row) =>
       /^\*\*(?:Project-created|Third-party, [^*]+)\.\*\*/.test(row[2].trim()),
     ),
     'every provenance row identifies its source kind',
-  );
-  assert.deepEqual(nouns.sort(), artwork);
+  ).toBe(true);
+  expect(nouns.sort()).toEqual(artwork);
 });
 
 test('managed tier owns the branded featured-tag nouns', () => {
   for (const noun of ['dd5', 'pathfinder', 'll-ampersand', 'pbta-logo']) {
-    assert.equal(
-      resolveTier(noun),
+    expect(resolveTier(noun), `${noun} should resolve to managed`).toBe(
       'managed',
-      `${noun} should resolve to managed`,
     );
   }
 });
 
 test('branded managed artwork keeps encoded colors; open-source is monochrome', () => {
-  assert.match(getManagedIcon('dd5')!.inner, /fill="#BC0F0F"/);
-  assert.match(getOpenSourceIcon('fox')!.inner, /fill="currentColor"/);
-  assert.match(getOpenSourceIcon('search')!.inner, /fill="currentColor"/);
-  assert.match(getOpenSourceIcon('arrow-left')!.inner, /fill="currentColor"/);
+  expect(getManagedIcon('dd5')!.inner).toMatch(/fill="#BC0F0F"/);
+  expect(getOpenSourceIcon('fox')!.inner).toMatch(/fill="currentColor"/);
+  expect(getOpenSourceIcon('search')!.inner).toMatch(/fill="currentColor"/);
+  expect(getOpenSourceIcon('arrow-left')!.inner).toMatch(/fill="currentColor"/);
 });
 
 test('unknown, empty, and absent nouns fall to the missing glyph', () => {
-  assert.equal(resolveTier('no-such-noun-xyz'), 'missing');
-  assert.equal(resolveTier(''), 'missing');
-  assert.ok(FallbackIcons.missing);
-  assert.ok(FallbackIcons.missing.paths.length > 0);
+  expect(resolveTier('no-such-noun-xyz')).toBe('missing');
+  expect(resolveTier('')).toBe('missing');
+  expect(FallbackIcons.missing).toBeTruthy();
+  expect(FallbackIcons.missing.paths.length).toBeGreaterThan(0);
 });
 
 test('bundled fallback tier provides the essential UI symbols', () => {
   for (const noun of ['menu', 'account']) {
-    assert.equal(
-      resolveTier(noun),
+    expect(resolveTier(noun), `${noun} should resolve to fallback`).toBe(
       'fallback',
-      `${noun} should resolve to fallback`,
     );
   }
 });
 
 test('pbta-logo artwork matches the v18 front-page logo viewBox', () => {
-  assert.equal(getManagedIcon('pbta-logo')!.viewBox, '0 0 256 256');
+  expect(getManagedIcon('pbta-logo')!.viewBox).toBe('0 0 256 256');
 });
 
 test('icon.css :root defines exactly the five sizing tokens with the v20 values', () => {
@@ -143,7 +131,7 @@ test('icon.css :root defines exactly the five sizing tokens with the v20 values'
     'utf8',
   );
   const rootBlock = css.match(/:root\s*\{([^}]*)\}/);
-  assert.ok(rootBlock, ':root token block is present');
+  expect(rootBlock, ':root token block is present').toBeTruthy();
   const expected: Record<string, string> = {
     '--cn-icon-size-xsmall': '1rem',
     '--cn-icon-size-small': '1.5rem',
@@ -152,15 +140,13 @@ test('icon.css :root defines exactly the five sizing tokens with the v20 values'
     '--cn-icon-size-xlarge': '8rem',
   };
   const found = [
-    ...rootBlock[1].matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g),
+    ...rootBlock![1].matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g),
   ].map((m) => [m[1], m[2].trim()]);
-  const foundMap = Object.fromEntries(found);
-  assert.deepEqual(foundMap, expected);
-  assert.equal(
+  expect(Object.fromEntries(found)).toEqual(expected);
+  expect(
     found.length,
-    5,
     'no unrelated icon sizing tokens are defined at :root',
-  );
+  ).toBe(5);
 });
 
 test('icon.css owns only the stable icon token vocabulary', () => {
@@ -170,14 +156,14 @@ test('icon.css owns only the stable icon token vocabulary', () => {
   );
   const context = css.replace(/:root\s*\{[^}]*\}/, '');
 
-  assert.ok(
-    !/\S/.test(context.replace(/\/\*[\s\S]*?\*\//g, '')),
+  expect(
+    /\S/.test(context.replace(/\/\*[\s\S]*?\*\//g, '')),
     'no contextual rules follow :root',
-  );
-  assert.ok(
-    !/button|\.fab|\.flex|h3/.test(css),
+  ).toBe(false);
+  expect(
+    /button|\.fab|\.flex|h3/.test(css),
     'consumer contexts stay outside stable Icon CSS',
-  );
+  ).toBe(false);
 });
 
 test('open-source registry generation is deterministic (--check passes)', () => {
@@ -185,5 +171,7 @@ test('open-source registry generation is deterministic (--check passes)', () => 
     new URL('../scripts/generate-icon-registry.mjs', import.meta.url),
   );
   // Throws (non-zero exit) if the committed registry is stale.
-  execFileSync('node', [script, '--check'], { stdio: 'pipe' });
+  expect(() =>
+    execFileSync('node', [script, '--check'], { stdio: 'pipe' }),
+  ).not.toThrow();
 });

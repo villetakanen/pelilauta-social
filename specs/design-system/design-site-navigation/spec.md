@@ -1,12 +1,5 @@
 ---
 status: approved
-provenance:
-  - "Ported architecture: app/cyan-ds Book.astro, DocsTray.astro, content/config.ts and pages/[...slug].astro in v20 at 02880fbc995b45d459ce4f264b29d5283b1d8ced."
-  - "Parent: specs/design-system/components/cn-icon/spec.md owns icon behavior, including that an icon is never decorative."
-  - "Parent: specs/design-system/design-tokens/spec.md owns the surface, border and focus vocabulary the shell consumes."
-  - "Human decision 2026-07-30: /iconography becomes /principles/iconography, no redirect; a redirect variant was offered and declined. Approved public-URL change under the AGENTS.md ASK gate."
-  - "Human decision 2026-07-30: the group taxonomy and its order are a design-system decision, declared in packages/design-system/books/groups.json."
-  - "Agent-proposed, human-accepted 2026-07-30: books as content-collection entries rather than a hand-kept navigation list; the shell and navigation rendered by apps/design; published books only."
 ---
 
 # Design Site Navigation

@@ -1,67 +1,64 @@
 # Lessons And Compounding
 
-A branch may keep `docs/lessons/<branch-name>.md`, replacing `/` with `-`, when
-work produces a surprising observation that might improve later work. The file
-is an optional candidate queue, not branch memory, delivery evidence, required
-context, or a behavioral contract. Humans may delete it at any time.
+`docs/lessons/` is a decision inbox: one file per finding that needs a human
+decision, held until the owner is present to make it. It is not memory, not
+evidence, not history, and never required context.
 
-Compounding means assessing candidate learnings and changing the project when a
-change is justified. It does not mean preserving every observation.
+Two skills use it. `lesson` writes a finding. `retro` mines the inbox, applies
+what is justified, and empties it.
 
-## Candidate Shape
+## Invariants
 
-An active candidate contains only:
+- **File it only if it needs the owner.** A problem an agent may simply fix gets
+  fixed in the slice; it does not become a file. Findings enter the inbox when
+  acting on them crosses an approval boundary in `AGENTS.md` — the contract, a
+  skill, a template, a dependency, a new directory.
+- **The commit message is the permanent record.** Commit a finding with its
+  reasoning in the message body so that deleting the file later costs nothing.
+  Git history is the archive; the inbox is scaffolding. Keep no in-tree log,
+  index, count, or compacted history table.
+- **Nothing in the inbox needs to survive branch close.** The owner may delete
+  the whole directory at any time. A finding worth keeping is promoted out to a
+  plan, spec, or ADR first — promotion is the owner's decision, not an agent's.
+- **Findings are never merged.** Two that look like facets of one cause stay as
+  sibling files and link by slug. `retro` merges them if it is right; premature
+  consolidation has already hidden a recurring failure in this project.
 
-1. **Evidence:** what was observed.
-2. **Assessment:** whether the signal is valid, repeated or consequential, and
-   what alternative explanations were considered.
-3. **Possible change:** the smallest useful change, if one exists.
-4. **Disposition:** proposed, accepted, deferred, applied, or discarded,
-   including the human decision when required by `AGENTS.md`.
+## File Shape
 
-A candidate does not need a permanent destination. One-off operational evidence,
-task state, check output, PR history, and already-fixed defects normally do not
-belong in the queue. If assessment shows that nothing should change, discard the
-candidate instead of inventing a policy, guide, check, or follow-up task.
+`docs/lessons/<slug>.md`:
 
-## Compound Loop
+```markdown
+---
+name: <slug matching the filename>
+branch: <branch that produced it>
+date: <YYYY-MM-DD>
+trigger: <only when deferred: the concrete condition for reconsideration>
+---
 
-1. Read the branch queue when one exists; do not create an empty one.
-2. Add a candidate only when evidence plausibly changes future implementation,
-   verification, architecture, or working practice.
-3. Test the signal before generalizing it. A useful tactic in one incident is
-   not automatically a reusable lesson.
-4. Ask the human owner to decide changes at the approval boundaries in
-   `AGENTS.md`.
-5. Apply an accepted change directly to the relevant code, test, spec, guide,
-   skill, runbook, or workflow. Prefer correcting an existing artifact over
-   creating another process layer.
-6. Delete applied, invalid, obsolete, and one-off candidates unless the human
-   owner wants a compact historical record.
-7. Keep a deferred candidate only when it names concrete evidence or a future
-   condition that should trigger reconsideration.
+**Context:** the situation, in a sentence or two.
 
-Run a compound pass whenever the queue contains useful candidates and before
-closing its branch. The pass assesses each signal, applies accepted changes,
-and removes debris. It does not block unrelated delivery merely because a
-candidate remains undecided.
+**What happened:** the observation, naming commits, files, or costs.
 
-## Optional History
+**Suspected why:** one sentence. A guess, not a verdict — `retro` finds root
+cause with more evidence.
 
-When the human owner wants to retain what happened, compact resolved entries to:
+**Fix:** the smallest change worth considering.
+```
 
-| Lesson | Disposition | Result |
-| --- | --- | --- |
-| Reusable behavior change in one sentence | Applied, deferred, or discarded | Changed artifact, reconsideration trigger, or `None` |
+Four short paragraphs. No count, no index, no revision history, no narration of
+how the inbox changed. A file that explains itself is the wrong shape.
 
-Historical logs remain optional and must never be required context. Specs,
-guides, code, tests, skills, workflows, and runbooks must remain complete when
-all lesson logs are absent.
+A `trigger` marks the finding as deferred by the owner. Its absence means open.
+There is no other state: applied and discarded both mean deleted.
 
 ## Rules
 
 - A finding is evidence, not automatic scope.
 - Persistence is a decision, not the default.
-- Do not create a destination merely because a candidate exists.
+- Do not create a destination merely because a finding exists.
+- When a rule turns out to be false, the first candidate fix is removing it.
 - Add automation only after a concrete repeated or release-significant failure.
-- Keep work on the shortest path to a visible production outcome.
+
+Specs, guides, code, tests, skills, workflows, and runbooks must remain complete
+when the inbox is empty.
