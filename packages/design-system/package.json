@@ -9,6 +9,9 @@
   "scripts": {
     "generate:icons": "node scripts/generate-icon-registry.mjs",
     "check:icons": "node scripts/generate-icon-registry.mjs --check",
-    "test": "node --experimental-strip-types --test test/*.test.ts"
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
   }
 }
