@@ -31,11 +31,11 @@ to own their internal custom-element usage until those components are migrated.
 - `packages/design-system` owns shared design-system implementation and book
   pages.
 - `specs` records approved product and design intent.
-- `plans` records bounded delivery scope, implementation decisions, and
-  acceptance evidence.
+- `plans` holds epic-level PBIs.
 - `docs/lessons` is a decision inbox holding one file per candidate finding;
   assessed findings may improve the project, remain deferred with a concrete
   trigger, or be discarded, and the directory is emptied as they resolve.
+- `docs/adrs` records irreversible architectural decisions.
 
 ## Delivery History
 
