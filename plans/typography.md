@@ -156,22 +156,96 @@ the root font-size, so at a 24px root the text grows by half and the layout keep
 deciding as though it had not. Large-text readers get correct sizes and wrong
 decisions about them. Slice 5 converts them.
 
-## Decisions still open
+### The scale stops at h4, and `downscaled` becomes explicit classes
 
-1. **`text-h5`, `downscaled`, `text-link`, `text-title`.** For each: real v21
-   vocabulary to define, a mistaken name to correct at the call site, or dead
-   weight to delete. 96 call sites total.
-2. **`.text-caption` uppercase.** Adopt v20's transform, or port the metrics and
-   drop the transform.
-3. **`--cn-*-ui`.** Define the family, point the editor at real tokens, or retire it.
-4. **Container queries on `main, article`.** The accessibility requirement changes
-   the lean here. A `rem` container query means that as the root grows the
-   container measures fewer `rem`, so an h1 downshifts to h2 sooner — the mechanism
-   does the large-text work by itself, and without it a 4.24rem h1 is ~102px at a
-   24px root. So v20's mechanism is wanted, not merely tolerated. The
-   containing-block hazard is unchanged and still needs the audit.
-5. **Global element styling.** v20's `typography-semantics.css` also restyles
+Owner, 2026-07-30: **v20's scale ending at h4 is intentional. There is no smaller
+heading style.** Below h4 you are in text, not headings.
+
+`downscaled` is a Cyan 3 helper — defined across
+`cn-design-system-3/cyan-next/src/styles/typography/` in `heading_2.sass`,
+`heading_4.sass`, `heading-5.css` and `text_body.sass` — that moved an element one
+step down the scale. Cyan 4 retired it and said what to do instead, in its own docs
+at `cyan-design-system-4/apps/cyan-docs/src/books/principles/typography.mdx:51`:
+"Instead of relying on downscaled helpers, use explicit heading-level classes."
+The application never did that sweep, so 70 call sites carry a class that resolves
+to nothing. Owner ruling: do the sweep v20 intended —
+`<h1 class="downscaled">` → `text-h2`, and so on down.
+
+The 70 break down as 37 `<p>`, 24 headings (7 h1, 4 h2, 5 h3, 8 h4), 6 `<span>`,
+and one each of `<section>`, `<header>`, `<div>`.
+
+The mapping runs out at h4. Those 8 `h4.downscaled` sites wanted the step below h4,
+which in Cyan 3 was h5 — and 16 further sites already use `text-h5`, which Cyan 4
+defines and v20 does not. Read together, all 24 turn out to be one role: the title
+of a card, a list row or a small panel. TOC category names, thread list items, site
+names, channel names, search results, stat block titles.
+
+Owner decision: **they become plain `<h4>`, and cards and list rows become
+containers.** v20's container query already renders `h4` as bold 17px body text
+below 38.75rem, so a card title downshifts by available width instead of by a
+hardcoded step. This is strictly better than any fixed class, and it is v20's own
+mechanism.
+
+Consequence to carry into the containment audit: `container-type: inline-size` now
+extends past `main, article` to card and list-row components, so the
+absolute-positioning audit must cover card internals, not just page-level chrome.
+
+### `.text-caption` splits into two classes
+
+The 47 `text-caption` sites are doing two unrelated jobs. Roughly 35 are small
+explanatory prose — whole sentences, including field hints in `AddChannelForm`,
+the EULA profile note, the SEO length counter, `tags/[tag]`'s empty state and the
+footer credits on four pages. Roughly 10 are true labels: the `AddTopicForm` form
+label, `KeeperCharacterCard`'s group header, `LabelManager`'s section title,
+`ChannelListInfoCell`'s "createdAt" and "flowTime", reply counts and timestamps.
+
+Two sites are neither, and uppercase would actively misrepresent them:
+`User.svelte:24` renders `{account.uid}` and `ChannelSettings.svelte:184` renders
+`/channels/{channel.slug}`. Both are case-sensitive identifiers, and
+`text-transform` changes what a reader transcribes without changing the value.
+
+Owner decision 2026-07-30: **split into `.text-caption` and `.text-label`, sharing
+the same metrics, with `.text-caption` carrying the uppercase.** So `.text-label`
+is the label treatment for anything that must preserve its own casing, and
+`NumberStat`'s stat key and `FeaturedTags`' `<h2>` join the label set rather than
+staying pseudo-headings.
+
+### Decisions still open
+
+1. **Where the ~35 prose sites land.** `.text-label` shares caption metrics at
+   12px, which is small for whole sentences; `text-small` at 14px/21px is the
+   prose-sized step. Assumed for now: prose → `text-small`, `.text-label` reserved
+   for labels that must keep their casing, including the two identifier sites.
+2. **`utils/snippetHelpers.ts`.** It injects `text-h5` into headings inside
+   user-generated markdown (`headerClasses = ['text-h5']`, used by
+   `ThreadCard.astro:45`), so thread previews render author headings small. With no
+   h5 in the scale it needs a new target, and unlike the other sweeps this one
+   applies to content the project does not control.
+3. **The 9 shapeless `downscaled` sites.** 6 `<span>`, 1 `<section>`, 1 `<header>`,
+   1 `<div>` — no tag to derive a step from. Per-site rulings, or a default.
+4. **`text-title`.** 3 sites, inert, on tags that already carry heading styles:
+   `offline.html.astro:22` and `tags/[tag].astro` ×2. Delete, or map.
+5. **`text-link`.** Six of seven are on `<a>` elements where cyan-css
+   `core/anchors.css` already colours the anchor, so they are redundant. The
+   seventh, `AlgoliaSearchApp.svelte:204`, is a `<button>` hand-styled as a link
+   whose colour has been silently missing. Needs a real utility or an explicit
+   `color: var(--cn-link)`.
+6. **`--cn-*-ui`.** Define the family, point the editor at real tokens, or retire it.
+7. **Scope of the containment audit.** The mechanism itself is settled — adopted,
+   on `main, article` and now on cards and list rows too. What is open is how far
+   the audit of absolutely positioned descendants reaches. The accessibility case
+   for it is unchanged and strong: a `rem` container query means that as the root
+   grows the container measures fewer `rem`, so an h1 downshifts sooner, and
+   without it a 4.24rem h1 is ~102px at a 24px root.
+8. **Global element styling.** v20's `typography-semantics.css` also restyles
    tables, blockquotes, lists and links. In or out of scope.
+9. **Font weight set.** Dropping from 12 `@font-face` rules to v20's five
+   (300/400/500/700 plus 400 italic) retires hairline, thin and black. Needs a
+   check that nothing asks for 100, 200 or 900.
+10. **Visual acceptance screens** for the semantics slice. Proposed: a thread view
+    (headings, prose, `text-caption` timestamps), the channel index (cards with
+    embedded headings, where the container query bites), and the site library
+    (`text-small` density).
 
 ## Proposed slices
 
