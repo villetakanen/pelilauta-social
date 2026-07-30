@@ -1,0 +1,12 @@
+/*
+ * The design system's token entry point.
+ *
+ * Units come first because styles/color-theme.css derives its elevation shadows
+ * from --cn-grid. Importing color.css alone leaves those shadows unresolvable,
+ * which is the defect this file exists to prevent.
+ *
+ * Icon sizing (styles/icon.css) is deliberately not included: its consumers opt
+ * in, and whether it folds in here is an open question in plans/core-tokens.md.
+ */
+@import "./units.css";
+@import "./color.css";

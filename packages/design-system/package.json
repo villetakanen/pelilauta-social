@@ -9,6 +9,6 @@
   "scripts": {
     "generate:icons": "node scripts/generate-icon-registry.mjs",
     "check:icons": "node scripts/generate-icon-registry.mjs --check",
-    "test": "node --experimental-strip-types --test test/icon-registry.test.ts"
+    "test": "node --experimental-strip-types --test test/*.test.ts"
   }
 }

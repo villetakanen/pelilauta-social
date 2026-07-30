@@ -160,12 +160,12 @@ async function handleSave() {
   .error-message {
     background: var(--cn-color-error-bg, #fee);
     color: var(--cn-color-error, #c00);
-    padding: var(--cn-gap-xs);
-    border-radius: var(--cn-radius);
+    padding: var(--cn-grid);
+    border-radius: var(--cn-border-radius);
     margin-bottom: var(--cn-gap);
     display: flex;
     align-items: center;
-    gap: var(--cn-gap-xs);
+    gap: var(--cn-grid);
   }
 
   .images-preview {

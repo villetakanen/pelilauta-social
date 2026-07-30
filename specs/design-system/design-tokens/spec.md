@@ -1,5 +1,9 @@
 ---
 status: approved
+provenance:
+  - "Unit and radius values ported from v20 packages/cyan/src/tokens/units.css at 02880fbc995b45d459ce4f264b29d5283b1d8ced, verified equal to the installed Cyan 4 by packages/design-system/test/units.test.ts."
+  - "Human decision 2026-07-30: the design system owns the core token families so that cyan-css supplies no tokens; --cn-border-radius is real vocabulary meaning the default radius, which is medium."
+  - "Human decision 2026-07-30: typography is deferred to its own epic, because Cyan 4 computes values into typography tokens where v20 keeps them as inputs, and correcting that changes every heading in the application."
 ---
 
 # Design Tokens
@@ -23,9 +27,15 @@ surfaces, including:
 - reference choices such as the available color palette;
 - semantic roles such as text, background, border, link, focus, and status;
 - Light and Dark expressions of the same semantic intent;
+- one base grid, with spacing, radius and elevation decisions derived from it
+  rather than stated independently;
 - compatibility meanings needed while legacy Cyan consumers are replaced;
-- future shared decisions for typography, spacing, shape, motion, and other
-  visual foundations when a product feature requires them.
+- future shared decisions for typography, motion, and other visual foundations
+  when a product feature requires them.
+
+A token holds an input to a value, not a value computed in advance. A consumer
+composes the final measurement, so a decision stays valid when the context around
+it changes.
 
 Reference choices state what is available. Semantic roles state why a choice is
 used. Components consume semantic roles so that their meaning remains stable
