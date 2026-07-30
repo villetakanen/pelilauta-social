@@ -115,29 +115,121 @@ against `lato-font@^3.0.0`. v20 declares 5 (300/400/500/700 + 400 italic, woff2
 only). v20's `--cn-font-family` names `Lato, system-ui, -apple-system, sans-serif`
 against Cyan 4's longer Tailwind-derived stack.
 
-## Decisions needed before implementation
+## Decisions settled 2026-07-30
 
-1. **Approved appearance exception.** Every heading, all body copy, 101
-   `text-small`/`text-caption` call sites and possibly every button change. This
-   needs the same kind of explicit approval the colour port had, and it needs
-   visual acceptance, not parity verification.
-2. **`text-h5`, `downscaled`, `text-link`, `text-title`.** For each: real v21
+**No appearance exception is needed.** `AGENTS.md` already states that appearance
+is not a compatibility contract and that v18 is not its reference, so the type
+scale moving is the sanctioned direction of travel, not an exception to it. What
+the epic needs from the owner is visual acceptance of running screens, once, at
+the semantics slice. Only two items in this epic stop being appearance and become
+behaviour, and both are called out separately: button height (slice 2) and
+`container-type` on `main, article` (decision 4).
+
+**Prose is already at the goal and does not move.** v20 and Cyan 4 both put body
+text at 17px on a 24px line with ~0.5px tracking. v20 says it as `1.0625rem` and
+the ratio `1.412`; Cyan 4 says it as `calc(var(--cn-grid) * 2.125)` and the length
+`var(--cn-line)`. Same result, and the visible change in this epic is confined to
+the headings and the small/caption steps.
+
+Note the type difference even where the result agrees: v20's 24px is emergent
+(`1.412 × 17 = 24.004`, correct at 17px and only at 17px) where Cyan 4's is pinned
+at 24px regardless of the element's size. Anything inheriting
+`--cn-line-height-text` at another size gets proportional off-grid leading under
+v20. Fine for prose, which is always 17px; not a find-and-replace.
+
+**Accessibility is the reason the scale is expressed the way it is.** The
+requirement is that the system respond to the reader's font-size preference, so
+`--cn-grid: 0.5rem` is the single scaling origin, everything derives from it in
+`rem`, and nothing sets a root font-size. A 17px base against a 16px root means
+the reader's preference is scaled by 1.0625, not overridden: 16 → 17, 24 → 25.5.
+The "17px" in this plan is therefore a ratio, not a promise.
+
+Audited 2026-07-30, and the position is better than expected: **no stylesheet in
+the design system, the app or cyan-css sets `font-size` on `html` or `:root`, and
+no stylesheet anywhere states a `font-size` in `px`.** Type, spacing, radii and
+icon sizes already scale.
+
+The gap is elsewhere. **Every breakpoint in the system is `px` and there are no
+`rem` breakpoints at all** — 18-plus across the app and cyan-css, including the
+existing `@container main-app-content (width > 880px)`. A `px` query cannot know
+the root font-size, so at a 24px root the text grows by half and the layout keeps
+deciding as though it had not. Large-text readers get correct sizes and wrong
+decisions about them. Slice 5 converts them.
+
+## Decisions still open
+
+1. **`text-h5`, `downscaled`, `text-link`, `text-title`.** For each: real v21
    vocabulary to define, a mistaken name to correct at the call site, or dead
    weight to delete. 96 call sites total.
-3. **`.text-caption` uppercase.** Adopt v20's transform, or port the metrics and
+2. **`.text-caption` uppercase.** Adopt v20's transform, or port the metrics and
    drop the transform.
-4. **`--cn-*-ui`.** Define the family, point the editor at real tokens, or retire it.
-5. **Container queries on `main, article`.** Adopt v20's mechanism, or keep the
-   620px media query for this epic and defer the switch.
-6. **Global element styling.** v20's `typography-semantics.css` also restyles
+3. **`--cn-*-ui`.** Define the family, point the editor at real tokens, or retire it.
+4. **Container queries on `main, article`.** The accessibility requirement changes
+   the lean here. A `rem` container query means that as the root grows the
+   container measures fewer `rem`, so an h1 downshifts to h2 sooner — the mechanism
+   does the large-text work by itself, and without it a 4.24rem h1 is ~102px at a
+   24px root. So v20's mechanism is wanted, not merely tolerated. The
+   containing-block hazard is unchanged and still needs the audit.
+5. **Global element styling.** v20's `typography-semantics.css` also restyles
    tables, blockquotes, lists and links. In or out of scope.
 
 ## Proposed slices
 
 Each slice is one PR, each is a drop-in replacement, each is independently
-reversible.
+reversible. The epic opens with a slice that is not typography, for the reason
+given below.
 
-1. **Compat shim first — no visual change.** Enumerate the Cyan-4-only
+1. **Foundations.** Owner decision 2026-07-30: this is the first story, it is a
+   `principles` book named **Foundations**, and `preflight` is in this epic's
+   scope.
+
+   The reason it comes first is not tidiness. The document reset is currently
+   `@11thdeg/cyan-css/src/core/preflight.css`, pulled in live by
+   `import '@11thdeg/cyan-css'` at `BaseHead.astro:5`. It owns `box-sizing:
+   border-box` on `*`, `body { margin: 0 }`, the `ol, ul` list reset, the
+   `[popover]` reset, `:root { color-scheme }` and every scrollbar rule;
+   `core/body.css` owns background, foreground and font smoothing. Nothing in
+   `packages/design-system` owns any of it, so the terminal Cyan sweep would
+   delete the reset out from under the application. Typography depends on it
+   directly — v20's `ul, ol { padding-left: calc(var(--cn-grid) * 3) }` only makes
+   sense on top of a stripped list.
+
+   Deliverables, per the design-system completeness rule:
+
+   - `specs/design-system/foundations/spec.md`. Intent: the system scales
+     proportionally with the reader's font-size preference and never overrides it;
+     the design system owns what it asserts about the document root. Contract: no
+     stylesheet sets `font-size` on `html` or `:root`; every length derives from
+     `--cn-grid: 0.5rem` in `rem`; breakpoints are `rem`; `color-scheme` is
+     declared once and the meta tag agrees with it; the reset belongs to the
+     design system.
+   - `packages/design-system/styles/reset.css`, porting `preflight.css` and
+     `body.css` onto design-system token names. Kept out of `tokens.css`, because
+     a reset is not a token. The scrollbar rules read
+     `--cn-scrollbar-width`, `--cn-scrollbar-border-radius` and
+     `--color-scrollbar-*`; those need enumerating and either owning or adding to
+     `compat/cyan-4.css`.
+   - `test/foundations.test.ts` — no `html`/`:root` `font-size`, no `px`
+     `font-size`, no `px` breakpoint. State the blind spot plainly: it can only
+     police design-system stylesheets, so the app's 18 `px` breakpoints and
+     `overrides.css` stay uncovered until slice 5.
+   - `books/principles/FoundationsBook.astro` +
+     `apps/design/src/content/principles/foundations.mdx`. Demonstrable rather
+     than prose: panels at a 16px, 20px and 24px root showing grid, type and
+     breakpoints moving together.
+
+   **The one visible change in this slice.** Three places declare the
+   no-preference colour default and they disagree: `preflight.css` says
+   `dark light`, `styles/color-theme.css` says `light dark`, and the
+   `BaseHead.astro` meta tag says `dark light`. `tokens.css` is imported after
+   cyan-css at equal specificity, so the design system's `light dark` wins today
+   and both apps default to **light** — and because the CSS property overrides the
+   meta tag, that `dark light` meta is inert. Owner decision 2026-07-30:
+   **`dark light` is correct, the meta tag is right.** So this slice flips the
+   first-paint default for readers with no OS preference, in both the app and the
+   design site, and makes the meta tag meaningful again.
+
+2. **Compat shim — no visual change.** Enumerate the Cyan-4-only
    typography tokens in `styles/compat/cyan-4.css` so that when the design
    system's definitions arrive, nothing cyan-css or cyan-lit reads goes
    undefined. The set is: `--cn-font-size-{display,h5,caption,overline,mono}`,
@@ -149,22 +241,34 @@ reversible.
    Verified by a contract test in the shape of `test/token-contract.test.ts`,
    asserting every name cyan-css reads still resolves.
 
-2. **Own the scale.** `styles/typography.css` with v20's families, sizes,
+3. **Own the scale.** `styles/typography.css` with v20's families, sizes,
    weights, line-height ratios and letter spacings; imported from
    `styles/tokens.css`. A `test/typography.test.ts` in the shape of
    `units.test.ts`, asserting the ported values against the v20 source below.
    Book: Typography, in the `tokens` group. No application change yet.
 
-3. **Own the semantics.** Port heading, body and utility rules into
-   `styles/typography-semantics.css`; resolve the four dangling names from
-   decision 2; retire the corresponding cyan-css rules from the app's cascade.
-   This is the slice the owner accepts visually, and the largest one.
+4. **Own the semantics.** Port heading, body and utility rules into
+   `styles/typography-semantics.css`; resolve the dangling names from decision 1;
+   retire the corresponding cyan-css rules from the app's cascade. This is the
+   slice the owner accepts visually, and the largest one.
 
-4. **Own the font.** Reduce `overrides.css` to v20's weight set, drop the woff
+5. **Breakpoints in `rem`.** Convert the 18-plus `px` queries — 620/621, 760, 768,
+   880, 1364, 1365, 1380 — to `rem`, and publish the set as tokens rather than
+   literals. v20 already has the precedent in `--cn-breakpoint-tray-wide: 64rem`.
+   Also cap the layout chrome, which is where unbounded scaling actually hurts:
+   `--cn-width-tray` is 21rem, or 504px at a 24px root, and starts eating the
+   content column. `min()` on chrome, nothing clamped on prose or headings.
+
+   Sequenced after the semantics slice but stated in the Foundations spec, because
+   it is a consequence of that principle rather than a separate one. Slice 4
+   introduces the first `rem` breakpoint regardless, since v20's
+   `typography-semantics.css` ships `@container (max-width: 38.75rem)`.
+
+6. **Own the font.** Reduce `overrides.css` to v20's weight set, drop the woff
    fallbacks, verify no call site needs 100/200/900, move the declarations into
    the design system.
 
-Slice 3 may need splitting once decision 2 is made — 96 call sites across headings,
+Slice 4 may need splitting once decision 1 is made — 96 call sites across headings,
 `text-small` and `text-caption` is plausibly two PRs rather than one.
 
 ## Verification
