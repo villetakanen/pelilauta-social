@@ -52,3 +52,151 @@ as something outside it.
 
 **Disposition.** Proposed. Human assessment required; not applied. Raised by the
 human owner 2026-07-30 after observing the workaround attempt.
+
+## 2. Provenance frontmatter became a dumping ground
+
+**Evidence.** The owner rejected the provenance block of
+`specs/design-system/design-site-navigation/spec.md` on sight, and the measured
+shape supports that. Frontmatter word counts across the four design-system specs:
+
+| Spec | Provenance |
+| --- | --- |
+| `design-site-navigation` (this slice) | 456 words |
+| `iconography` | 442 words |
+| `components/cn-icon` | 283 words |
+| `design-tokens` | none (no `provenance:` key at all) |
+
+456 words of frontmatter carried a 177-line spec. Of its ten entries, about half
+were not sources of authority:
+
+- Astro Content Layer mechanics, down to
+  `node_modules/astro/dist/content/loaders/glob.js` and the name of an internal
+  function — a framework choice and an implementation note.
+- A paragraph of design rationale explaining why the layout does not own the
+  `h1`, which the body already had to state anyway.
+- The `--cn-grid` / `--cn-shadow-elevation-*` defect finding, plus the statement
+  that the grid token is the next slice's work — a finding and task sequencing.
+- An entry recording that wiring the design site's tests into the verify gate was
+  out of scope, which is slice scope rather than the intent's authority.
+
+`specs/TEMPLATE.md` already forbids exactly this: "Blueprint detail — file
+layouts, framework choices, task sequencing — belongs in the linked plan, not
+here."
+
+**Assessment.** Valid, and the owner's hypothesis that the harness is implicated
+looks correct. Three pressures point one way and nothing points back:
+
+1. `.agents/skills/spec/SKILL.md` states "A spec without provenance is an
+   opinion, not evidence." That is a strong incentive to add, with no
+   counterweight.
+2. `specs/TEMPLATE.md` describes provenance as a category list — v18 file,
+   immutable commit, approved spec, or human decision — but says nothing about
+   an entry's shape or length. Its "well under 300 lines" bound reads as being
+   about the spec body; the frontmatter is unbounded.
+3. The worked examples disagree with each other. An agent that opens
+   `iconography` to learn the format finds 442 words and matches it; one that
+   opens `design-tokens` finds no provenance at all. There is no norm to copy,
+   so whichever file gets read becomes the norm.
+
+Alternative explanation considered: simple agent verbosity, independent of the
+harness. Partly true — but the near-identical 456/442 word counts against a
+shared template suggest imitation of the nearest exemplar rather than
+free-running prose. That is a harness-shaped failure, and it will recur for every
+new spec.
+
+**Possible change.** Smallest useful change, in `specs/TEMPLATE.md` beside the
+provenance key: one entry is one line naming a source — a path, an immutable
+commit, or a dated decision — with at most a clause of context, and the block
+stays short enough to scan. Say explicitly that rationale belongs in the body and
+that framework, file-layout and sequencing detail belongs in the plan, mirroring
+the wording already in the template's comment. Optionally trim `iconography` so
+the exemplar stops teaching the wrong shape.
+
+**Disposition.** Proposed. The offending spec is committed as-is and still
+carries the defect, so the owner can see it before deciding. Raised by the human
+owner 2026-07-30.
+
+## 3. Agent phrasing recorded as dated human decisions
+
+**Evidence.** Five entries in the same provenance block are worded as
+"Human decision 2026-07-30: …" followed by a paragraph of reasoning the agent
+composed. What the owner actually did was select options from multiple-choice
+questions the agent wrote — including the justifications inside those options.
+The spec now presents that reasoning as the owner's own recorded decree.
+
+The underlying decisions are real and were genuinely approved. The defect is
+attribution: a later reader cannot tell which words are the owner's and which are
+the agent's reconstruction, in the one field the practice designates as evidence.
+
+**Assessment.** Valid, and more consequential than the length problem. Provenance
+exists so claims can be traced to authority; provenance that launders agent
+reasoning into human authority defeats the mechanism it implements, and does so
+invisibly. It is also self-reinforcing, because the next spec cites the previous
+one as an approved source.
+
+Related harness contribution: because `AskUserQuestion` presents agent-authored
+options and returns only the selected label, the agent holds a record of the
+choice but not of the owner's reasoning — and the gap is easy to fill with its
+own.
+
+**Possible change.** Record what was actually decided and by which mechanism:
+name the choice the owner made and keep the agent's rationale in the body or the
+plan, or mark an entry as agent-proposed and human-accepted rather than as a
+human decision. Do not attribute composed reasoning to a person.
+
+**Disposition.** Proposed. Not applied to the spec.
+
+## 4. Only a human noticed the spec had bloated — the review gate cannot
+
+**Evidence.** The bloat was found by the owner reading the file, in three
+separate reactions: the provenance block ("insane and idiotic"), the Intent
+section ("overtly long, and contains some 'before this and that' babble"), and
+finally the whole file ("171 lines — for a spec that defines intent for
+[temporary] ds navigation, that sounds like absolute overkill").
+
+A fourth reaction followed the first rewrite, to an opening the agent had just
+written as a replacement for bloat: "The books are how approved visual intent
+reaches the people building Pelilauta. This capability makes that body of work
+navigable, and cheap to extend." — "I have no clue what this is meant to mean, or
+why would anyone write such a sentence to a spec?" Shortening the text did not
+stop it being grandiose; abstraction survived the cut and had to be named
+separately.
+
+Nothing in the harness flagged any of it. Commitlint, Biome, `pnpm verify` and
+eight Playwright tests all passed. So did the mandatory adversarial spec review,
+which is the gate that exists specifically to catch spec defects.
+
+Worse, that review made the file bigger. Its five axes led to a new Review
+section, two extra Definition-of-Done lines, two extra guardrails and two extra
+tests. Every finding it produced was an addition.
+
+**Assessment.** Valid, and it identifies a structural gap rather than a lapse.
+The review's five axes — ambiguity, testability, edge cases, compatibility,
+scope — all ask whether the spec says enough, precisely enough. None asks whether
+any sentence has earned its place, and the Scope axis as written looks for
+requirements that belong elsewhere, not for volume. The gate is therefore
+monotonically additive: a spec can pass its own quality review while becoming
+unreadable, and every pass makes that more likely.
+
+Nothing ties a spec's weight to what it governs, either. This navigation is
+temporary documentation chrome, and it received a heavier treatment than
+`design-tokens`, which governs the whole application's visual contract in 78
+lines. Proportionality was never considered because nothing asks for it.
+
+Also worth noting: detection needed three separate human observations because the
+bloat was distributed — frontmatter, then one section, then the total. One
+proportionality question would have surfaced all three at once.
+
+**Possible change.** Add a final axis to the adversarial review in
+`.agents/skills/spec/SKILL.md` — subtraction and proportionality: what can be
+deleted without losing a checkable claim, and is the spec's weight proportionate
+to the capability's significance and expected lifetime? Run it last, after the
+additive axes, so it prunes what they grew. A concrete anchor helps: compare
+against the leanest existing spec rather than the nearest one.
+
+The fourth reaction suggests a second, cheaper test that catches what a length
+bound does not — for each sentence, could a reader act differently because it is
+there? A sentence naming what the capability does, who for, or what must hold
+passes. A sentence characterising the value of the work does not, at any length.
+
+**Disposition.** Proposed. Raised by the human owner 2026-07-30.

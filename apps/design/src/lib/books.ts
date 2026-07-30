@@ -1,20 +1,21 @@
 import { getCollection } from 'astro:content';
+import taxonomy from '@design-system/books/groups.json';
 
 /**
- * The design site's information architecture, derived from the content
- * collections rather than hand-kept. Site-owned on purpose: a getCollection()
- * call inside packages/design-system would make the package depend on this app's
- * collection config and on astro:content resolving from the package's tsconfig.
+ * The site reads the design system's own taxonomy and fills it from the content
+ * collections. The taxonomy — which groups exist, their labels, their order — is
+ * a package-level decision, because it states how the design system is
+ * organised rather than how this site is built. Reading the collections stays
+ * here: a getCollection() call inside packages/design-system would make the
+ * package depend on this app's collection config and on astro:content resolving
+ * from the package's tsconfig.
  */
 
-/** Navigation groups in presentation order. A group id is the first URL segment. */
-export const GROUPS = [
-  { id: 'principles', label: 'Principles' },
-  { id: 'tokens', label: 'Tokens' },
-  { id: 'components', label: 'Components' },
-] as const;
+/** Collection names, which are also the URL groups. Must match groups.json. */
+export type GroupId = 'principles' | 'tokens' | 'components';
 
-export type GroupId = (typeof GROUPS)[number]['id'];
+export const GROUPS: readonly { id: GroupId; label: string }[] =
+  taxonomy.groups as { id: GroupId; label: string }[];
 
 export interface BookLink {
   title: string;
