@@ -1,103 +1,109 @@
 ---
+/**
+ * Index of the design-system books.
+ *
+ * The catalog is passed in from the site rather than hand-written, so it cannot
+ * drift from the navigation. Grouping and ordering are the site's decision; this
+ * component only renders them.
+ */
 import '@design-system/styles/color.css';
 
-const title = 'Pelilauta Design System';
+interface BookEntry {
+  title: string;
+  description: string;
+  href: string;
+}
+
+interface BookGroup {
+  label: string;
+  books: BookEntry[];
+}
+
+interface Props {
+  title: string;
+  groups: BookGroup[];
+}
+
+const { title, groups } = Astro.props;
+
+// One running number across all groups, so the index reads as a single spine.
+const numbered = groups.flatMap((group) =>
+  group.books.map((book) => ({ ...book, group: group.label })),
+);
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <main>
-      <p class="eyebrow">PELILAUTA / V21</p>
-      <h1>{title}</h1>
-      <p class="intro">
-        Living books connect design intent to the exact contracts used by
-        Pelilauta. Each book is shipped with its specification and production
-        implementation.
-      </p>
-      <section>
-        <p class="index">01 / COLOR SYSTEM</p>
-        <h2><a href="/tokens/color">Light and Dark color themes</a></h2>
-        <p>
-          The established v20 OKLCH references, semantic roles, and Cyan 4
-          compatibility contract now loaded by <code>pelilauta.social</code>.
+<section class="hero index-hero">
+  <p class="kicker">PELILAUTA / V21</p>
+  <h1>{title}</h1>
+  <p class="lede">
+    Living books connect design intent to the exact contracts used by Pelilauta.
+    Each book ships with its specification and its production implementation.
+  </p>
+  <dl class="facts">
+    <div><dt>Books</dt><dd>{numbered.length}</dd></div>
+    <div><dt>Groups</dt><dd>{groups.length}</dd></div>
+  </dl>
+</section>
+
+<section aria-labelledby="index-title">
+  <div class="section-heading">
+    <p>THE BOOKS</p>
+    <h2 id="index-title">Start anywhere</h2>
+  </div>
+  <ol class="index-list">
+    {numbered.map((book, i) => (
+      <li>
+        <p class="index-number">
+          {String(i + 1).padStart(2, '0')} / {book.group.toUpperCase()}
         </p>
-      </section>
-      <section>
-        <p class="index">02 / ICONOGRAPHY</p>
-        <h2><a href="/iconography">Using icons in Pelilauta</a></h2>
-        <p>
-          Usage principles, do's and don'ts, and the available icon vocabulary
-          grouped by purpose. The <a href="/components/icon">Icon component book</a>
-          covers how a single icon renders.
-        </p>
-      </section>
-    </main>
-  </body>
-</html>
+        <h3><a href={book.href}>{book.title}</a></h3>
+        <p class="index-blurb">{book.description}</p>
+      </li>
+    ))}
+  </ol>
+</section>
 
 <style>
-  :global(*) {
-    box-sizing: border-box;
-  }
-  :global(body) {
-    margin: 0;
-    min-block-size: 100vh;
-    color: var(--cn-text);
+  /* The index keeps a heavier display treatment than the interior books. */
+  .index-hero {
     background:
       radial-gradient(circle at 85% 10%, var(--cn-hover), transparent 35rem),
-      var(--cn-background);
-    font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+      var(--cn-surface);
   }
-  main {
-    margin-inline: auto;
-    padding: clamp(2rem, 8vw, 7rem) clamp(1.25rem, 5vw, 4rem);
-    max-inline-size: 72rem;
-  }
-  .eyebrow,
-  .index {
-    color: var(--cn-text-low);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-  }
-  h1 {
-    margin-block: 0.5rem 1.5rem;
+  .index-hero h1 {
     max-inline-size: 10ch;
-    color: var(--cn-text-high);
-    font-size: clamp(3rem, 9vw, 7rem);
-    font-weight: 600;
+    font-size: clamp(3rem, 11vw, 8rem);
     letter-spacing: -0.06em;
     line-height: 0.88;
   }
-  .intro {
-    max-inline-size: 42rem;
-    color: var(--cn-text-low);
-    font-size: clamp(1.1rem, 2vw, 1.5rem);
-    line-height: 1.5;
+  .index-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  section {
-    margin-block-start: clamp(4rem, 12vw, 10rem);
-    padding-block-start: 1.5rem;
+  .index-list li {
+    padding-block: 2rem;
     border-block-start: 1px solid var(--cn-border);
   }
-  h2 {
-    margin-block: 1rem;
-    font-size: clamp(1.75rem, 4vw, 3.25rem);
+  .index-number {
+    margin: 0;
+    color: var(--cn-text-low);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
   }
-  a {
-    color: var(--cn-link);
-    text-decoration-thickness: 0.08em;
-    text-underline-offset: 0.15em;
+  .index-list h3 {
+    margin: 0.75rem 0;
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
   }
-  a:hover {
-    color: var(--cn-link-hover);
+  .index-list h3 a {
+    text-decoration-thickness: 0.06em;
   }
-  code {
-    color: var(--cn-text-high);
+  .index-blurb {
+    max-inline-size: 48rem;
+    margin: 0;
+    color: var(--cn-text-low);
   }
 </style>

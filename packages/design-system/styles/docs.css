@@ -1,0 +1,169 @@
+/*
+ * docs.css — the shared editorial language of the design-system books.
+ *
+ * Every book page used to carry its own copy of this reset and vocabulary
+ * inside a scoped <style> block. The Book layout now imports this file once, so
+ * the classes below are global and a book component only styles what is unique
+ * to it.
+ *
+ * Package-owned rather than site-owned: the book components in
+ * packages/design-system/books consume .kicker, .lede, .facts, .section-heading
+ * and .table-scroll, and a package component must not depend on app CSS.
+ *
+ * Values are the color book's, which was the most recently authored of the
+ * three; the iconography and icon books converge onto this scale rather than
+ * keeping their slightly divergent type sizes.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--cn-text);
+  background: var(--cn-background);
+  font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+a {
+  color: var(--cn-link);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--cn-link-hover);
+}
+
+/* Books are laid out as a stack of full-bleed sections. */
+.book {
+  overflow: hidden;
+}
+
+.book > section {
+  padding: clamp(4rem, 9vw, 8rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.hero {
+  min-block-size: min(48rem, 76vh);
+  display: grid;
+  align-content: center;
+  background:
+    linear-gradient(130deg, transparent 45%, var(--cn-hover)), var(--cn-surface);
+}
+
+.kicker,
+.section-heading > p:first-child {
+  color: var(--cn-text-low);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.hero h1 {
+  margin: 0.3rem 0 1.5rem;
+  max-inline-size: 12ch;
+  color: var(--cn-text-high);
+  font-size: clamp(3.5rem, 12vw, 9rem);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 0.82;
+}
+
+.lede {
+  max-inline-size: 45rem;
+  color: var(--cn-text-low);
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem 5rem;
+  margin-block-start: 4rem;
+}
+
+.facts div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.facts dt {
+  color: var(--cn-text-low);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--cn-text-high);
+  font-size: 1.5rem;
+}
+
+.section-heading {
+  max-inline-size: 48rem;
+  margin-block-end: 3rem;
+}
+
+.section-heading h2 {
+  margin: 0.4rem 0 1rem;
+  color: var(--cn-text-high);
+  font-size: clamp(2.3rem, 6vw, 5rem);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.section-heading > p:last-child {
+  color: var(--cn-text-low);
+  font-size: 1.05rem;
+}
+
+/* Reference tables are wide by nature and scroll inside their own container. */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.book table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.book th,
+.book td {
+  padding: 0.65rem 1rem 0.65rem 0;
+  text-align: start;
+  border-block-start: 1px solid var(--cn-border);
+}
+
+.book th {
+  color: var(--cn-text-low);
+}
+
+.book details {
+  border-block: 1px solid var(--cn-border);
+}
+
+.book summary {
+  padding-block: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

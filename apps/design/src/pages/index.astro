@@ -1,5 +1,14 @@
 ---
 import HomePage from '@design-system/pages/HomePage.astro';
+import Book from '../layouts/Book.astro';
+import { getBookGroups } from '../lib/books';
+
+const title = 'Pelilauta Design System';
+const description =
+  'Living books connecting design intent to the contracts used by Pelilauta v21.';
+const groups = await getBookGroups();
 ---
 
-<HomePage />
+<Book title={title} description={description}>
+  <HomePage title={title} groups={groups} />
+</Book>

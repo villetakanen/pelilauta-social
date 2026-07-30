@@ -1,0 +1,124 @@
+---
+/**
+ * DocsNav — the one navigation for the design-system site.
+ *
+ * Rendered exactly once per page by Book.astro. A second copy for mobile would
+ * duplicate every nav link and every aria-current="page" into Playwright
+ * strict-mode failures, so the desktop column and the mobile drawer are the same
+ * markup in different CSS modes.
+ *
+ * Group labels are deliberately NOT headings: color-book.spec.ts locates its
+ * page heading by accessible name without a level filter, so a heading here
+ * named after a book would make that locator ambiguous.
+ *
+ * Active state is derived here from Astro.url.pathname, never forwarded as a
+ * prop.
+ */
+import { getBookGroups, samePath } from '../lib/books';
+
+const groups = await getBookGroups();
+const pathname = Astro.url.pathname;
+const onIndex = samePath(pathname, '/');
+---
+
+<nav class="docs-nav" aria-label="Design system books">
+  <a class="index-link" href="/" aria-current={onIndex ? 'page' : undefined}>
+    Index
+  </a>
+
+  {
+    groups.map((group) => (
+      <section class="nav-group" aria-labelledby={`nav-group-${group.id}`}>
+        <p class="nav-group-label" id={`nav-group-${group.id}`}>{group.label}</p>
+        <ul>
+          {group.books.map((book) => (
+            <li>
+              <a
+                href={book.href}
+                aria-current={samePath(pathname, book.href) ? 'page' : undefined}
+              >
+                {book.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</nav>
+
+<style>
+  /* Placement, padding, borders and the open/close behavior of this nav belong
+     to the shell that owns the disclosure toggle — see Book.astro. Only the
+     nav's own internal styling lives here. */
+  .index-link {
+    display: block;
+    color: var(--cn-text-low);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-group {
+    margin-block-start: 2.25rem;
+  }
+
+  .nav-group-label {
+    margin: 0 0 0.6rem;
+    color: var(--cn-text-low);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li + li {
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+  li a {
+    display: block;
+    padding-block: 0.55rem;
+    color: var(--cn-text);
+    font-size: 1.05rem;
+    text-decoration: none;
+  }
+
+  li a:hover {
+    color: var(--cn-link-hover);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--cn-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* The current book is the one typographic emphasis in the index. */
+  li a[aria-current='page'] {
+    color: var(--cn-text-high);
+    font-weight: 600;
+  }
+
+  li a[aria-current='page']::before {
+    content: '';
+    display: inline-block;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    margin-inline-end: 0.5rem;
+    border-radius: 50%;
+    background: var(--cn-focus-ring);
+    vertical-align: 0.1em;
+  }
+
+  .index-link[aria-current='page'] {
+    color: var(--cn-text-high);
+  }
+</style>
