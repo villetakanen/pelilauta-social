@@ -2,7 +2,6 @@
 name: harness-artifact-altitude
 branch: feat/ds-navigation
 date: 2026-07-30
-status: deferred
 trigger: the next cycle, before new spec or plan work begins
 ---
 

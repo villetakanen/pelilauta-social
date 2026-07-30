@@ -2,7 +2,6 @@
 name: check-upgradability-before-workaround
 branch: feat/ds-navigation
 date: 2026-07-30
-status: proposed
 ---
 
 **Context:** `AGENTS.md` already requires checking whether a dependency can be

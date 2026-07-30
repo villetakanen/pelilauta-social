@@ -2,7 +2,6 @@
 name: narrow-criticism-sweeping-rewrite
 branch: feat/ds-navigation
 date: 2026-07-30
-status: proposed
 ---
 
 **Context:** `AGENTS.md` already forbids consumer-free foundation work without

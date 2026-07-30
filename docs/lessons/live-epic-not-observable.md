@@ -2,7 +2,6 @@
 name: live-epic-not-observable
 branch: feat/ds-navigation
 date: 2026-07-30
-status: proposed
 ---
 
 **Context:** `AGENTS.md` states that a feature branch is a continuous context

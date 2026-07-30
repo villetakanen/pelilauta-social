@@ -33,9 +33,9 @@ to own their internal custom-element usage until those components are migrated.
 - `specs` records approved product and design intent.
 - `plans` records bounded delivery scope, implementation decisions, and
   acceptance evidence.
-- `docs/lessons` holds one optional file per candidate finding; assessed
-  candidates may improve the project, remain deferred with a concrete trigger,
-  or be discarded.
+- `docs/lessons` is a decision inbox holding one file per candidate finding;
+  assessed findings may improve the project, remain deferred with a concrete
+  trigger, or be discarded, and the directory is emptied as they resolve.
 
 ## Delivery History
 

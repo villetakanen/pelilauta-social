@@ -57,10 +57,11 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
 
-- Lessons: `docs/practices/lessons.md`. Each finding worth considering a fix gets its own file, `docs/lessons/<slug>.md`, for human-gated assessment. Candidates may be applied, deferred with a concrete trigger, or discarded; they do not require a permanent destination. Agents must never rely on lesson files for required context.
+- Lessons: `docs/practices/lessons.md`. `docs/lessons/` is a decision inbox — one file per finding whose fix would need the owner. Findings may be applied, deferred with a concrete trigger, or discarded; deletion is the normal end state and the commit message is the record. Agents must never rely on lesson files for required context.
 - v18/Cyan migration: `docs/MIGRATION.md`
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Delivery slices: `.agents/skills/delivery-slice/SKILL.md`
 - Risk-scaled implementation review: `.agents/skills/delivery-review/SKILL.md`
-- Lessons and compound decisions: `.agents/skills/lessons/SKILL.md`
+- Writing a lesson finding: `.agents/skills/lesson/SKILL.md`
+- Retro and compound mining: `.agents/skills/retro/SKILL.md`
 - Root releases: `.agents/skills/release/SKILL.md` and `docs/runbooks/releases.md`

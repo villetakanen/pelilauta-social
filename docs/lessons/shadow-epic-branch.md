@@ -2,7 +2,6 @@
 name: shadow-epic-branch
 branch: feat/ds-navigation
 date: 2026-07-30
-status: proposed
 ---
 
 **Context:** Third recurrence. `50b41ab docs(lessons): log plans drifting into
