@@ -13,14 +13,13 @@ provenance:
 
 ## Intent
 
-The design site publishes a set of documentation books, and that set is growing.
-We want two things from it.
+The design system is documented as "books": MDX pages that each define a single
+design aspect, principle, component or pattern. The books belong to
+`packages/design-system`, and `apps/design` serves them to their readers, who are
+both humans and agents.
 
-Readers can move around: from any book, reach any other book, and see which one
-they are currently reading — on a phone as well as a desktop.
-
-Adding a book costs writing the book. It does not also cost copying the site's
-shell into a new page and editing a navigation list by hand.
+Design Site Navigation is a temporary navigation feature for `apps/design`, so
+that a human or an agent can easily locate a book of the package.
 
 ## Behavior
 
@@ -34,7 +33,8 @@ a draft entry is neither published nor listed, and a path naming no published
 book is not a page.
 
 One navigation lists every published book on every page, so reaching any book
-never requires returning to the index. Exactly one location is marked current —
+never requires returning to the index. It is complete in the served markup, so a
+reader that runs no scripts — an agent, or a crawler — sees the whole set. Exactly one location is marked current —
 the book being read, or the index — and on a book page that label is the same
 title as the page's heading. Group labels are not headings, and no two published
 books share a title.

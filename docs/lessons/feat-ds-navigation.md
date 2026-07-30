@@ -199,4 +199,129 @@ bound does not — for each sentence, could a reader act differently because it 
 there? A sentence naming what the capability does, who for, or what must hold
 passes. A sentence characterising the value of the work does not, at any length.
 
+## 5. The Intent never defined its subject or named its readers
+
+**Evidence.** After four rewrites the owner supplied the intent directly, and it
+was structurally different from every version the agent produced:
+
+> The design system is documented as "books", MDX pages that define a single
+> design aspect, principle, component or pattern. These books are part of the
+> [package], and they are served via apps/design to human and agent readers.
+>
+> The Design Site Navigation provides a temporary navigation feature for
+> apps/design, so that a user or an agent can easily locate a book of the
+> [package].
+
+Three things it has that no agent version had:
+
+1. **It defines "book" before using it.** The agent's spec used the word fourteen
+   times without ever saying what one is.
+2. **It names the readers, and they include agents.** Every agent draft addressed
+   "the people building Pelilauta" — in a repository whose own delivery model is
+   agent-driven, and whose books agents read.
+3. **It says the feature is temporary.**
+
+**Assessment.** Valid, and each of the three has a distinct cause worth separating.
+
+*Defining the subject.* The agent held the whole domain in session context and
+wrote for a reader who shared it. A spec is read without that context — by a
+person months later, or by an agent with only the file. Nouns therefore have to
+be established before they are used, and "books" never was.
+
+*Naming the readers.* This is the sharpest miss, because the omission had
+consequences beyond wording: with only human readers in view, the spec's
+accessibility claims were about keyboards and assistive technology, and nothing
+addressed a reader that runs no scripts. Once agents were named as readers, a real
+and checkable behavior appeared immediately — the navigation must be complete in
+the served markup. The wrong audience produced an incomplete contract, not merely
+vague prose.
+
+*Stating that it is temporary.* The agent had this fact. The owner had written
+"[temporary] ds navigation" one message earlier. It was used only as a reason to
+shorten the document, and never recorded as something the spec says. A fact about
+the capability was consumed as a meta-instruction about formatting.
+
+Contributing harness shape: `specs/TEMPLATE.md` prompts Intent with "Why this
+capability exists and what users and consumers can rely on... state the problem,
+not the solution mechanics." That asks for motivation, which invites either
+before-and-after narration or value claims — the two failure modes that actually
+occurred, in that order. Nothing in the prompt asks the author to define the
+capability's domain objects, name its consumers concretely, or state its expected
+lifetime. "Consumers" appears, but as an abstraction that a human-only reading
+satisfies.
+
+Alternative explanation considered: the agent simply wrote badly and the template
+is fine. Rejected on the pattern — four successive rewrites all missed the same
+three elements while fixing whatever had just been criticised. Local repair under
+feedback is not the same as re-deriving what a section is supposed to contain, and
+the agent never once asked what a book is or who reads one.
+
+**Possible change.** In `specs/TEMPLATE.md`, replace the Intent prompt's request
+for motivation with three concrete requirements: define the domain objects the
+spec will refer to, name the consumers by kind — including agents where they are
+consumers — and state the expected lifetime when the capability is temporary or
+transitional. Motivation then follows from those instead of standing in for them.
+
+**Disposition.** Proposed. The owner's wording is adopted in the spec, with the
+paths corrected to `apps/design` and `packages/design-system`. Raised by the human
+owner 2026-07-30. See candidate 6 for the likely root cause.
+
+## 6. The local template renamed Blueprint to Intent and dropped two thirds of it
+
+**Evidence.** `AGENTS.md` states that spec conventions "follow the practices
+published at ASDLC.io, adapted to this repository". The owner asked whether the
+published practice says `## Blueprint` rather than `## Intent`. It does.
+
+`asdlc-io/src/content/patterns/the-spec.md` defines the anatomy as **Blueprint +
+Contract**, and Blueprint has three parts:
+
+- **Context** — why does this feature exist?
+- **Architecture** — API contracts, schemas, dependency directions
+- **Constraints** — boundaries stated positively, as facts about how the system
+  behaves
+
+Across `asdlc-io/specs/*/spec.md` the dominant heading set is
+`## Blueprint` + `## Contract` (+ optional Implementation Notes, Resources); a few
+older specs use `## Context` + `## Architecture`. **No asdlc.io spec uses
+`## Intent`.**
+
+`pelilauta-social/specs/TEMPLATE.md` uses `## Intent`, and prompts it with "Why
+this capability exists and what users and consumers can rely on... state the
+problem, not the solution mechanics."
+
+**Assessment.** Valid, and this is probably the root cause of candidate 5 rather
+than a separate issue.
+
+The adaptation kept Blueprint's softest third — Context, the "why" — promoted it
+to the section's name, and dropped the two parts that force concreteness.
+Architecture is what would have made the agent state what a book is and where
+books live. Constraints is what would have made it state boundaries as facts. With
+both gone, the section's only instruction was to explain why the feature exists,
+and "state the problem, not the solution mechanics" actively discourages the
+concrete description that Architecture asked for.
+
+So the section name and prompt selected for the failure. "Intent" invites a
+statement of motivation; "Blueprint" invites a description of the thing being
+built. Four rewrites produced four flavours of motivation because that is what the
+heading asked for, and the owner's replacement text is, structurally, a Blueprint:
+domain objects, where they live, who consumes them, what this feature is.
+
+Worth noting the divergence is undocumented. `AGENTS.md` claims to follow the
+published practice and says "adapted", but nothing records that Blueprint was
+renamed and narrowed, or why. An agent reading both sources cannot tell whether
+the local template is a considered adaptation or drift.
+
+**Possible change.** Either restore the published anatomy in
+`specs/TEMPLATE.md` — `## Blueprint` with Context, Architecture and Constraints,
+plus `## Contract` — or, if `Intent` is a deliberate local choice, keep the name
+and restore the two missing prompts beneath it, and record in `AGENTS.md` that the
+rename is intentional. The second is cheaper and preserves the four existing
+specs; the first stops the two vocabularies drifting further apart. Either way the
+prompt must ask for the domain objects and the boundaries, not motivation alone.
+
+Deciding this is the owner's call, because it changes a practice convention and
+touches every existing spec.
+
+**Disposition.** Proposed. Raised by the human owner 2026-07-30.
+
 **Disposition.** Proposed. Raised by the human owner 2026-07-30.
