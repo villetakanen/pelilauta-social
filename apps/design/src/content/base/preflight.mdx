@@ -1,104 +1,28 @@
 ---
 title: Preflight
-description: The base styles every Pelilauta document starts from — the box model, type inheritance, and the browser defaults the system normalises.
+description: Pelilauta's base styles are a modern reset — what that gives you, what we add to it, and what it deliberately leaves to something else.
 order: 1
 prose: true
 ---
 
-Built on [modern-normalize](https://github.com/sindresorhus/modern-normalize) and
-[Tailwind Preflight](https://tailwindcss.com/docs/preflight), Preflight is the set of
-base styles a Pelilauta document starts from. It arrives with
-`@design-system/styles/ds.css`, ahead of every component. Most of it goes unnoticed;
-the sections below are the parts that can surprise you.
+Pelilauta's base styles are a modern reset, in the line of
+[Andy Bell's](https://piccalil.li/blog/a-more-modern-css-reset/) and
+[Tailwind Preflight](https://tailwindcss.com/docs/preflight) — both built on
+[modern-normalize](https://github.com/sindresorhus/modern-normalize). Those pages
+document what a modern reset does and why; this one covers what is specific to us.
 
-## Everything is border-box
-
-Padding and borders count inside an element's stated size, so a component given
-`inline-size: 20rem` and `padding: 1rem` occupies 20rem.
-
-```css
-*, ::before, ::after {
-  box-sizing: border-box;
-}
+```js
+import '@design-system/styles/ds.css';
 ```
 
-## Lists are unstyled
+Import it once, anywhere in an application's shell. Preflight states only what no other
+stylesheet does, so there is no order to get right.
 
-Markers, margin and padding are removed. Most lists here are structure rather than
-prose — navigations, menus, trays, card grids.
+## What we add
 
-```css
-ol, ul, menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-```
-
-Restore them where the content reads as prose. A book's reading container already
-does:
-
-```css
-.prose :is(ul, ol) { padding-inline-start: calc(var(--cn-grid) * 3); }
-.prose ul { list-style: disc; }
-```
-
-> Some screen readers announce a list differently once its markers are gone. Where a
-> list reads as prose, restore the marker rather than leaving it bare.
-
-## Form controls inherit their type
-
-A control takes the document's font family, size and line height instead of the
-browser's. Set type on a control only to make it deliberately different from its
-surroundings.
-
-```css
-button, input, optgroup, select, textarea {
-  font-family: inherit;
-  font-size: 100%;
-  line-height: inherit;
-  margin: 0;
-}
-
-button, select {
-  text-transform: none;
-}
-```
-
-## Buttons take a pointer
-
-Both `button` and anything with `role="button"`, so an interactive element does not
-need to say so itself.
-
-```css
-button, [role="button"] {
-  cursor: pointer;
-}
-```
-
-## Platform artefacts are removed
-
-Browser-drawn extras that no design accounts for: Firefox's inner focus border and
-focus ring, the invalid-field shadow, number spinners, and the search field's
-appearance and decoration.
-
-## Dark is the no-preference default
-
-The document supports both schemes and names dark first. An application's
-`<meta name="color-scheme">` states the same order, or it has no effect.
-
-```css
-:root {
-  color-scheme: dark light;
-  -moz-tab-size: 4;
-  tab-size: 4;
-}
-```
-
-## Islands are transparent
-
-Astro's hydration wrapper adds no box, so a Svelte island inside a flex row lays out
-as though its markup were written there.
+**Hydration wrappers are transparent.** Astro puts an `astro-island` element around a
+hydrated component. It displays as `contents`, so a Svelte island inside a flex row
+lays out as though its markup were written there.
 
 ```css
 astro-island {
@@ -106,30 +30,41 @@ astro-island {
 }
 ```
 
-## Small corrections
-
-`hr` loses its height, `strong` is bolder than its surroundings, `sub` and `sup` do
-not stretch a line, monospace matches its context, `summary` renders as a list item,
-`table` drops inherited text indentation, and `[hidden]` stays hidden.
-
-The body takes the theme:
+**Dark is the no-preference default.** The document supports both schemes and names
+dark first. An application's `<meta name="color-scheme">` states the same order, or it
+has no effect — the CSS property wins.
 
 ```css
-body {
-  margin: 0;
-  background: var(--cn-background);
-  color: var(--cn-text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  color-scheme: dark light;
 }
 ```
 
-## Using it
+**The body carries the theme**, using the semantic background and text roles rather
+than literal colours.
 
-```js
-import '@design-system/styles/ds.css';
+## What we leave to something else
+
+| Not here | Where it lives |
+| :--- | :--- |
+| Prose margins, type sizes, leading, heading wrap | the type ramp |
+| Constraining image width | the container holding the image |
+| Scrollbar appearance | themed surfaces, not yet assigned |
+| How a control looks once normalised | its component |
+
+A reset that removed prose margins without stating the replacement would be a rule
+waiting to be overridden, so the type ramp does both together.
+
+## One thing worth knowing
+
+List markers are removed only where you ask, following Bell rather than Tailwind:
+
+```css
+ol[role="list"], ul[role="list"], menu[role="list"] {
+  list-style: none;
+}
 ```
 
-Import it once, anywhere in an application's shell — Preflight states only what no
-other stylesheet does, so there is no order to get right. `styles/tokens.css` remains
-available on its own for a consumer that wants the tokens without the base styles.
+Safari drops a list's semantics from VoiceOver when `list-style` is removed, so a
+navigation, menu or tray asks for both — the role keeps the semantics, the selector
+removes the markers. Margins and padding are zeroed on every list regardless.

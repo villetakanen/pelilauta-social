@@ -29,20 +29,9 @@
   grid-column: 2;
 }
 
-/*
- * The preflight strips list markers, because the application's navigations, menus
- * and trays are lists. Prose is where they come back.
- */
+/* Markers come from the browser; prose only needs them indented onto the grid. */
 .cn-content-prose :is(ul, ol) {
   padding-inline-start: calc(var(--cn-grid) * 3);
-}
-
-.cn-content-prose ul {
-  list-style: disc;
-}
-
-.cn-content-prose ol {
-  list-style: decimal;
 }
 
 .cn-content-prose :is(h1, h2, h3, h4) {

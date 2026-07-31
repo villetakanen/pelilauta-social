@@ -50,6 +50,7 @@ const EXPECTED = [
   'button, [role="button"]',
   'button, [type="button"], [type="reset"], [type="submit"]',
   'textarea',
+  'textarea:not([rows])',
   '::-moz-focus-inner',
   ':-moz-focusring',
   ':-moz-ui-invalid',
@@ -69,7 +70,9 @@ const EXPECTED = [
   'table',
   '[hidden]',
   'ol, ul, menu',
+  'ol[role="list"], ul[role="list"], menu[role="list"]',
   '[popover]',
+  ':target',
   // 5. Body and framework
   'body',
   'astro-island',

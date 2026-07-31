@@ -4,13 +4,15 @@
  * Spec: specs/design-system/preflight/spec.md
  * Book: /base/preflight
  *
- * Modelled on modern-normalize and Tailwind Preflight. Cyan 4's
- * core/preflight.css and v20's AppShell rules were read as the inventory of what
- * the applications already rely on, so nothing they provide goes missing.
+ * A modern reset, following Andy Bell's and Tailwind Preflight's, both of which
+ * build on modern-normalize. Cyan 4 and v20 are read as references for what exists,
+ * not as a floor: where v21 differs, the consumer migrates.
  *
  * Five groups, and the set is closed: a sixth concern changes the spec before it
- * changes this file. Prose margins, image constraint and scrollbar appearance are
- * deliberately absent; the spec says who owns each.
+ * changes this file. Typography's own rules are absent — prose margins, leading and
+ * heading wrap arrive with the type ramp, which states their replacements in the
+ * same breath. Image constraint and scrollbar appearance are absent too; the spec
+ * says who owns each.
  *
  * Declares no custom property: every name read here is a token family's.
  */
@@ -83,6 +85,11 @@ button,
 
 textarea {
   resize: vertical;
+}
+
+/* A default textarea is a two-line box, which no touch keyboard leaves room for. */
+textarea:not([rows]) {
+  min-block-size: 10em;
 }
 
 /* Platform artefacts the design system did not ask for. */
@@ -174,13 +181,22 @@ table {
   display: none;
 }
 
-/* Navigations, menus and trays are lists before they are prose. */
 ol,
 ul,
 menu {
-  list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/*
+ * Markers are removed only where the author asks, because Safari drops a list's
+ * semantics from VoiceOver when list-style is removed. A navigation, menu or tray
+ * says role="list" and keeps both.
+ */
+ol[role="list"],
+ul[role="list"],
+menu[role="list"] {
+  list-style: none;
 }
 
 [popover] {
@@ -189,10 +205,17 @@ menu {
   padding: 0;
 }
 
+/* An anchored element otherwise lands underneath a sticky header. */
+:target {
+  scroll-margin-block: 5ex;
+}
+
 /* 5. Body and framework ---------------------------------------------------- */
 
 body {
   margin: 0;
+  /* So a background covers the viewport on a page shorter than it. */
+  min-block-size: 100dvh;
   background: var(--cn-background);
   color: var(--cn-text);
   -webkit-font-smoothing: antialiased;
