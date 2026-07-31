@@ -139,9 +139,18 @@ and in that order, each group introduced by what it asserts and why the browser'
 default is wrong. It declares no custom property: every name it reads is defined by a
 token family, so a missing definition is a token defect rather than a reset defect.
 
+It is reached through the design system's CSS entry point rather than by name. The
+preflight is the first design-system global that is not a token, so `styles/tokens.css`
+stops being the file an application wants: an entry point composes the preflight and the
+tokens, applications import that one file, and the token entry point stays meaningful on
+its own for a consumer that wants tokens and no reset. Later globals — the type ramp
+next — join the entry point without either application's shell changing.
+
 Each application imports it where its shell brings in the design system's core CSS:
 `apps/design` in the book layout, whose book stylesheet then keeps only editorial
-vocabulary, and `apps/pelilauta` in both head components.
+vocabulary, and `apps/pelilauta` in both head components. Opt-in stylesheets, icon
+sizing today, stay outside the entry point and are imported by the surfaces that want
+them.
 
 Its book is the first entry in the `base` group of the design site, described by
 [the navigation spec](../design-site-navigation/spec.md). The book enumerates what the
@@ -184,6 +193,9 @@ decision, which is why it is not a principles book.
 - A book page on `apps/design` renders with `border-box` sizing, no body margin and
   the theme's background and foreground, while its book stylesheet contains no reset
   of its own.
+- Each application reaches the preflight through one import of the design system's CSS
+  entry point, and adding the next global stylesheet to the design system changes
+  neither application.
 - The preflight can be imported at any position in either application's shell without
   changing what a page looks like, which is what proves it states nothing another
   stylesheet also states.
