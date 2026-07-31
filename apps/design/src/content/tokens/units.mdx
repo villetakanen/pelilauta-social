@@ -54,8 +54,9 @@ grid.
 ## Elevation shadows
 
 The four elevation shadows are declared in `styles/color-theme.css`, not here, but they
-are grid multiples and cannot resolve without `--cn-grid`. That is why `styles/tokens.css`
-imports units before colour, and it is the dependency this page exists to make visible.
+are grid multiples and depend on `--cn-grid`. `styles/tokens.css` composes both families,
+and it is that dependency this page exists to make visible; their declaration order does
+not affect custom-property resolution.
 
 | Token | Declared in |
 | :--- | :--- |
@@ -64,10 +65,9 @@ imports units before colour, and it is the dependency this page exists to make v
 | `--cn-shadow-elevation-3` | `styles/color-theme.css` |
 | `--cn-shadow-elevation-4` | `styles/color-theme.css` |
 
-Their computed values are not shown. A shadow that fails to resolve computes to `none`,
-which only a browser knows — `packages/design-system/test/units.test.ts` asserts the
-dependency against the stylesheets instead, rather than against a page that happened to
-import them.
+Their computed values are not shown. `packages/design-system/test/units.test.ts` asserts
+that the token entry point includes the dependency, rather than testing a rendered shadow
+against a page that happened to import it.
 
 ## What this does not cover
 

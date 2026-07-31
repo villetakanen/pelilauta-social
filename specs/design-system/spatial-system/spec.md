@@ -93,7 +93,7 @@ Spatial System principles book.
   on the grid anyway; the medium default is 4.5 steps, so the family cannot be
   expressed as multiples without moving it. No other design-system stylesheet states an
   absolute length.
-- The elevation shadows resolve, which requires the grid to load before colour.
+- The token entry point supplies the grid dependency used by the elevation shadows.
 
 ## Acceptance
 
