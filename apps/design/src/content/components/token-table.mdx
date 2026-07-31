@@ -1,6 +1,6 @@
 ---
 title: TokenTable
-description: The specimen that turns a stylesheet into a lexicon's table, and the guarantee it gives a book that uses it.
+description: Renders every custom property a stylesheet declares, read from the stylesheet at build time.
 order: 20
 prose: true
 ---
@@ -8,69 +8,63 @@ prose: true
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-A **specimen** is a component a book imports for the part that must read real source. It
-exists so that a page cannot state a value the design system does not ship: anything a
-writer would otherwise copy by hand — a token's value, a rule in a stylesheet — goes
-through one instead.
+Renders the custom properties a stylesheet declares, read from that stylesheet when the
+page is built. Lexicon books use it so a published value cannot drift from the one that
+ships.
 
-`TokenTable` is the specimen for token lexicons. Give it a stylesheet and it renders every
-declaration in it, in the stylesheet's own order.
-
-## The guarantee is completeness, not correctness
-
-A lexicon's job is to be exhaustive, and the failure it must not have is a quiet one. A
-table missing a row looks exactly like a table, so `TokenTable` reads the stylesheet at
-build time and lists what it finds there — it cannot omit a token that exists, and it
-cannot invent one that does not.
-
-What it does **not** verify is whether those values are right. Parity with Cyan 4, the
-grid derivation, and whether the elevation shadows can resolve are asserted in
-`packages/design-system/test/units.test.ts`, against the stylesheets themselves. A book
-that renders is not a book that is correct.
-
-## A filter that matches nothing fails the build
-
-The dangerous case is a rename. If a filtered table stops matching, the honest outcomes
-are an empty table or every token in the file, and both are pages that lie without
-saying so. `TokenTable` throws instead, naming the filter that missed, so the build fails
-where the mistake is.
-
-This is the one behaviour worth knowing before using it: a book that asks for a token is
-asserting the token exists.
-
-## Using it
-
-Import the stylesheet with `?raw` and pass it as `source`. Select rows with `names` for
-an exact set, or `prefix` for a family.
-
-| Prop | Purpose |
-| :--- | :--- |
-| `source` | The stylesheet text. Required. |
-| `names` | Exact token names to show. |
-| `prefix` | Show every token whose name starts with this. |
-| `caption` | Names what the reader is looking at. |
-| `noteLabel` | Heading for the trailing-comment column. Defaults to "Resolves to". |
-
-A declaration's trailing inline comment becomes its last column, which is how the resolved
-length reaches the reader beside the formula that produces it. A comment on its own line
-introduces what follows and is left alone.
-
-## It renders itself
-
-This page's own table, produced from `styles/units.css` by the component it documents:
+## Example
 
 <TokenTable
   source={unitsSource}
   names={['--cn-grid', '--cn-gap', '--cn-line']}
-  caption="The spacing tokens, as this specimen reads them"
+  caption="The spacing tokens"
 />
+
+```mdx
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import unitsSource from '@design-system/styles/units.css?raw'
+
+<TokenTable
+  source={unitsSource}
+  names={['--cn-grid', '--cn-gap', '--cn-line']}
+  caption="The spacing tokens"
+/>
+```
+
+A declaration's trailing inline comment becomes its last column. A comment on its own line
+introduces what follows and is left alone.
+
+## Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `source` | `string` | The stylesheet text, imported with `?raw`. Required. |
+| `names` | `string[]` | Exact tokens to show. |
+| `prefix` | `string` | Every token whose name starts with this. |
+| `caption` | `string` | Names what the reader is looking at. |
+| `noteLabel` | `string` | Heading for the trailing-comment column. Defaults to `Resolves to`. |
+
+`names` and `prefix` are alternatives; rows come back in the stylesheet's order either way.
+
+## When to use it
+
+- Any page that would otherwise state a token's value by hand.
+- A lexicon book, where listing every token in a family is the page's job.
+
+Do not use it to explain *which* token to reach for — that is a principles book's, such as
+[Spatial System](/principles/spatial-system).
+
+## Behaviour worth knowing
+
+**A selection that matches nothing fails the build**, naming the filter that missed. After
+a rename the alternatives are an empty table or every token in the file, and both publish
+a page that is wrong without saying so.
+
+It guarantees completeness, not correctness: it shows what the stylesheet declares, and
+proves nothing about whether those values are right. Parity and derivation are asserted in
+`packages/design-system/test/units.test.ts`.
 
 ## What this does not cover
 
-`TokenTable` is a build-time specimen and runs no client script, so it has no behaviour a
-browser would reveal — its tests are in `packages/design-system/test/token-table.test.ts`
-and need no browser. Computed values, which do need one, are outside it: no specimen here
-reports what a `var()` chain resolves to on screen.
-
-The full token vocabulary is in the [Units and grid](/tokens/units) and
-[Colour](/tokens/color) lexicons.
+Computed values. A `var()` chain that fails to resolve computes to `none`, which only a
+browser knows, and no specimen here reports it.
