@@ -69,7 +69,7 @@ const EXPECTED = [
   'code, kbd, samp, pre',
   'summary',
   'table',
-  '[hidden]',
+  '[hidden]:where(:not([hidden="until-found"]))',
   'ol[role="list"], ul[role="list"], menu[role="list"]',
   '[popover]',
   ':target',

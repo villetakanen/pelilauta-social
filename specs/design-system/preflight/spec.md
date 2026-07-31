@@ -74,6 +74,9 @@ reset takes the other path and blanks controls to a slate; that would make a com
 mandatory before any control is usable, which Bell and Tailwind do not ask for and this
 migration cannot absorb.
 
+The `hidden` attribute keeps elements out of layout, except for
+`hidden="until-found"`: that state remains the browser's so find-in-page can reveal it.
+
 Scrollbars are left to the browser, which is what Bell, Tailwind, Radix and v20 all do —
 Cyan 4 is the only source that styles them, and it is the source being replaced. Styling
 them later would be a themed-surface capability with its own tokens and spec, not a gap
