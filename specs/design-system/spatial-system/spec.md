@@ -41,6 +41,13 @@ Radius reads as a size cue: a large surface carries a large radius, and a small 
 does not. A consumer that wants a rounded corner without choosing a step gets the
 medium one.
 
+Radii are the one place a half step appears. A box has two corners across each edge,
+so a half-step radius spends one full step and leaves the box on the grid. Spacing
+has no half step.
+
+Inside a rounded container the padding is `--cn-grid` or more, so the curve does not
+close in on the content it wraps.
+
 ## Scaling
 
 The grid is relative, so the system scales with the reader rather than around them.
@@ -60,6 +67,10 @@ Spatial System principles book.
 
 - Rail and tray geometry, button sizing and icon sizes are part of the spatial
   system in v20 and are not owned here yet; they still come from Cyan 4.
+- The layout grid — how many columns sit inside a breakpoint, and the margins,
+  gutters and maximum container width around them — is not owned yet.
+- Box rules, including how a border is counted against a box's own measurements,
+  belong to System Mechanics.
 - Typographic sizes are the type ramp's, not the grid's.
 
 ## Regression Guardrails

@@ -37,10 +37,6 @@ Spacing is never arbitrary. Use the multiples.
 
 <div style="display: flex; flex-direction: column; gap: var(--cn-grid); padding: var(--cn-gap); background: var(--cn-surface-1); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-large);">
   <div style="display: flex; align-items: center; gap: var(--cn-gap);">
-    <div style="width: calc(var(--cn-grid) * 0.5); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
-    <code>grid × 0.5 — 4px</code>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
     <div style="width: var(--cn-grid); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
     <code>--cn-grid — 8px</code>
   </div>
@@ -89,7 +85,10 @@ would have kept.
 ## 4. Border radii
 
 Radii are grid multiples too, so a rounded corner stays in proportion when the
-system rescales.
+system rescales. Radii are the one place a half step appears, and it is not an
+exception to the spacing rule: a box has two corners across each edge, so a
+half-step radius spends one full step and leaves the box on the grid. Spacing has
+no half step — the scale starts at `--cn-grid`.
 
 | Token | Multiplier | At a 16px root |
 | :--- | :--- | :--- |
@@ -111,6 +110,10 @@ corner without choosing one. It resolves to medium.
 Radius reads as a size cue: the larger the surface, the larger the radius it can
 carry. A 4px radius on a full-width card looks like a rendering accident, and a 32px
 radius on a chip turns it into a pill.
+
+Inside a rounded container the padding is `--cn-grid` or more, so the curve never
+closes in on the content it wraps. A small radius against tight padding is what makes
+a corner look like it is cutting into the text.
 
 ## 5. The reader sets the scale
 
