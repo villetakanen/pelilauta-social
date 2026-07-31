@@ -1,23 +1,16 @@
 /*
- * Preflight — what the design system asserts about a document before any
- * component speaks.
+ * Preflight — the base styles every document starts from, before any component.
  *
  * Spec: specs/design-system/preflight/spec.md
+ * Book: /base/preflight
  *
- * Modelled on modern-normalize and Tailwind Preflight, which both v18's Cyan 4
- * and v20 meant to follow and neither finished. Cyan has a partial
- * core/preflight.css; v20 has the rules inline in AppShell.astro's global style
- * block, mixed with page layout that is not reset material. Cyan's file is the
- * inventory of what the live application depends on. The model is where the rest
- * comes from.
+ * Modelled on modern-normalize and Tailwind Preflight. Cyan 4's
+ * core/preflight.css and v20's AppShell rules were read as the inventory of what
+ * the applications already rely on, so nothing they provide goes missing.
  *
  * Five groups, and the set is closed: a sixth concern changes the spec before it
- * changes this file. Two things are deliberately absent —
- *
- * - Prose margins. The rules that restore them belong to the type ramp, so
- *   zeroing them here would be a rule waiting to be overridden.
- * - Image constraint and scrollbar appearance, which exist only in Cyan and are
- *   recorded in the spec as knowingly unowned.
+ * changes this file. Prose margins, image constraint and scrollbar appearance are
+ * deliberately absent; the spec says who owns each.
  *
  * Declares no custom property: every name read here is a token family's.
  */

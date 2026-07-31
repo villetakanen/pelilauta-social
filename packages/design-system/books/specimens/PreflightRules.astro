@@ -1,46 +1,44 @@
 ---
 /**
- * Specimen: one group of the preflight, printed from the production stylesheet.
+ * Specimen: named rules from the preflight, printed from the shipping stylesheet.
  *
- * A book must not repeat a stylesheet by hand, so the CSS a reader sees is sliced
- * out of styles/preflight.css at build time, using that file's own
- * `/* N. Title ---- *\/` group comments as boundaries. Adding a rule to a group
- * lists it here without anyone editing this file or the book.
+ * A book must not repeat a stylesheet by hand, and it must not dump a whole file
+ * either — a section shows the rules it is about. Selectors are matched against
+ * styles/preflight.css at build time, so a rule cannot be described here and be
+ * missing there.
  *
  * Spec: specs/design-system/preflight/spec.md
  */
 import preflightSource from '@design-system/styles/preflight.css?raw';
 
 interface Props {
-  /** The group number as it appears in preflight.css. */
-  group: string;
+  /** Selectors to print, exactly as written in the stylesheet, in its order. */
+  rules: string[];
 }
 
-const { group } = Astro.props;
+const { rules } = Astro.props;
 
-const sectionPattern = /\/\*\s*(\d)\.\s*([^-*]+?)\s*-+\s*\*\//g;
-const sections = [...preflightSource.matchAll(sectionPattern)].map((match) => ({
-  number: match[1],
-  headingStart: match.index ?? 0,
-  start: (match.index ?? 0) + match[0].length,
-}));
+const withoutComments = preflightSource.replace(/\/\*[\s\S]*?\*\//g, '');
 
-const index = sections.findIndex((section) => section.number === group);
-if (index === -1) {
-  // A book naming a group that no longer exists is a defect, not an empty block.
+/** Every rule in the stylesheet, as written, keyed by its normalised selector. */
+const declared = new Map<string, string>();
+for (const match of withoutComments.matchAll(/([^{}@;]+?)\s*\{([^}]*)\}/g)) {
+  const selector = match[1].replace(/\s+/g, ' ').trim();
+  const body = match[2].replace(/\n\s*/g, '\n  ').trimEnd();
+  declared.set(selector, `${selector} {${body}\n}`);
+}
+
+const missing = rules.filter((selector) => !declared.has(selector));
+if (missing.length > 0) {
+  // A book naming a rule the stylesheet does not have is a defect, not a gap.
   throw new Error(
-    `preflight.css has no group ${group}. Groups present: ${sections
-      .map((section) => section.number)
-      .join(', ')}`,
+    `preflight.css has no rule for ${missing.join(', ')}. Declared: ${[
+      ...declared.keys(),
+    ].join(' | ')}`,
   );
 }
 
-const end = sections[index + 1]?.headingStart ?? preflightSource.length;
-const css = preflightSource
-  .slice(sections[index].start, end)
-  .replace(/\/\*[\s\S]*?\*\//g, '')
-  .replace(/\n{2,}/g, '\n\n')
-  .trim();
+const css = rules.map((selector) => declared.get(selector)).join('\n\n');
 ---
 
 <pre><code>{css}</code></pre>

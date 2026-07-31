@@ -10,12 +10,13 @@ The preflight is what the design system asserts about a document before any comp
 speaks: the browser inconsistencies it corrects, and the box and inheritance baseline
 every component may then rely on without restating it.
 
-Both v18's Cyan 4 and v20 intended a preflight modelled on modern-normalize and
-Tailwind Preflight, and neither finished one. Cyan 4 has a partial file; v20 has the
-rules inline in an application shell, mixed with layout that is not reset material.
-Because no design-system stylesheet owns any of it, the terminal Cyan sweep would
-remove the reset out from under both applications, and `apps/design` — which imports
-no Cyan at all — has been keeping a private copy inside its book stylesheet.
+It is modelled on modern-normalize and Tailwind Preflight, and it takes over a job
+currently spread across two places the design system does not own — Cyan 4's
+`core/preflight.css`, and v20's `AppShell` global styles. Both are read as the
+inventory of what the applications already rely on, so that nothing they provide goes
+missing. Until the design system owns it, the terminal Cyan sweep would remove the
+base styles out from under `apps/pelilauta`, and `apps/design`, which imports no Cyan,
+keeps a private copy inside its book stylesheet.
 
 A rule belongs here when it corrects a browser default, or establishes a baseline
 components depend on silently, and no single component or the type ramp could own it
@@ -54,9 +55,10 @@ artefacts are neutralised: the button appearance keyword, Firefox's inner focus 
 and focus ring, the invalid-field shadow, the number spinners, and the search field's
 appearance and decoration.
 
-This group is the largest gap in what v21 inherits. Cyan 4 has none of it, and
-compensates by setting font on each control from `--cn-*-ui` tokens declared in its
-button tokens — a UI font family living in button tokens is the symptom.
+This is the group v21 gains rather than inherits: Cyan 4 achieves the same result by
+setting type on each control from its `--cn-*-ui` tokens, so the behaviour is not new
+to the application — stating it once as inheritance is. A component that wants a
+control to match its surroundings then writes nothing.
 
 **Element defaults.** `hr` carries no height and inherits its colour. `abbr[title]` is
 underlined with a dotted line. `b` and `strong` are bolder than their surroundings;
