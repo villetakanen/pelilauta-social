@@ -45,8 +45,10 @@ describe('Cyan Icon migration contract', () => {
       ),
     );
     const cyanIndex = source.indexOf("import '@11thdeg/cyan-css';");
-    const iconIndex = source.indexOf(
-      "import '@design-system/styles/icon.css';",
+    // Icon sizing tokens reach the document through the design system's token
+    // entry point; they were a separate icon.css import until they were folded in.
+    const tokensIndex = source.indexOf(
+      "import '@design-system/styles/tokens.css';",
     );
     const migrationIndex = source.indexOf(
       "import '../../../styles/migrations/cyan-icon.css';",
@@ -54,8 +56,8 @@ describe('Cyan Icon migration contract', () => {
     const overridesIndex = source.indexOf("import '../../../overrides.css';");
 
     expect(cyanIndex).toBeGreaterThan(-1);
-    expect(iconIndex).toBeGreaterThan(cyanIndex);
-    expect(migrationIndex).toBeGreaterThan(iconIndex);
+    expect(tokensIndex).toBeGreaterThan(cyanIndex);
+    expect(migrationIndex).toBeGreaterThan(tokensIndex);
     expect(overridesIndex).toBeGreaterThan(migrationIndex);
   });
 });
