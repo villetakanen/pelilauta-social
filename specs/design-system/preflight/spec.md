@@ -23,11 +23,11 @@ instead.
 
 ## What The Preflight Asserts
 
-Six groups, below. No rule outside them belongs in the preflight, so a seventh
-concern is a change to this spec before it is a change to a stylesheet. The literal
-selector list is held by the stylesheet's own test, which fails when the two diverge —
-prose cannot settle whether `optgroup` or a WebKit search pseudo-element is in the
-set, and pretending otherwise would leave the guardrail unenforceable.
+Five groups, below. No rule outside them belongs in the preflight, so a sixth concern
+is a change to this spec before it is a change to a stylesheet. The literal selector
+list is held by the stylesheet's own test, which fails when the two diverge — prose
+cannot settle whether `optgroup` or a WebKit search pseudo-element is in the set, and
+pretending otherwise would leave the guardrail unenforceable.
 
 **Box model.** Every element and pseudo-element sizes as `border-box`.
 
@@ -68,35 +68,28 @@ markers, margin or padding, because the interface's navigations, menus and trays
 lists before they are prose. Elements with a `popover` attribute carry no border,
 margin or padding.
 
-**Margins.** Zeroed on an enumerated set — `body`, `h1` through `h6`, `p`,
-`blockquote`, `dl`, `dd`, `figure`, `hr`, `pre` — following Tailwind Preflight rather
-than v20's universal selector. An enumerated set is a promise the type ramp can keep;
-a universal one silently strips elements nobody has considered.
+**Body and framework.** `body` carries no margin and takes the semantic background and
+foreground roles with the platform's smoothed font rendering. Astro's hydration
+wrapper, `astro-island`, displays as `contents`, so it never interposes a box between
+an element and its semantic child.
 
-**Body and framework.** `body` takes the semantic background and foreground roles and
-the platform's smoothed font rendering. Astro's hydration wrapper, `astro-island`,
-displays as `contents`, so it never interposes a box between an element and its
-semantic child.
+## Nothing Overrides It
 
-## Cascade Position
+The preflight states only what no other stylesheet has reason to state, so it needs no
+cascade arrangement, no layer and no required import position. Where an application
+imports it is the application's business: its shell brings in the design system's core
+CSS alongside whatever legacy stylesheets it still carries.
 
-The preflight is declared in a cascade layer, so anything unlayered outranks it however
-the imports happen to be ordered. A reset must lose to the styles above it; making that
-true by arranging import statements would put a design-system requirement inside each
-application's shell, where it would break silently the first time someone reorders a
-head component.
+That property is a design constraint on this spec, not an assumption about consumers.
+It is why prose margins are not here — the rules that restore them belong to the type
+ramp, so a reset that zeroed them would be overriding the ramp, or waiting to be
+overridden by it. A rule that needs another stylesheet to win against it is in the
+wrong file.
 
-The layer is what keeps the margin group honest while the type ramp still lives in
-Cyan: Cyan's unlayered bottom margins on headings, paragraphs, blockquotes and tables
-win, so prose keeps its rhythm, and the group takes effect for real when the ramp moves
-into the design system and states the replacement margins. Zeroed margins with no ramp
-behind them is not v20's typography — it is an absence of typography — and shipping
-that as an intermediate state would degrade every deployed increment between the two
-stories.
-
-Where an application imports the preflight is the application's business: its shell
-brings in the design system's core CSS, alongside or after whatever legacy stylesheets
-it still carries.
+Where a stylesheet duplicates a preflight rule today, the duplicate is deleted rather
+than arranged around. `styles/docs.css` hand-rolled a reset because the design site
+imports no Cyan and nothing else supplied one; that half of it goes, and its editorial
+vocabulary stays.
 
 The preflight is not imported from the tokens entry point. A reset is not a token, and
 the two have opposite ordering requirements: tokens may load late, a reset may not.
@@ -120,10 +113,10 @@ preflight changes behaviour in one place and appearance in two:
   goes, a control inherits its context instead of being pinned to the body text size —
   a button inside small text becomes small, which is the intended behaviour and a
   visible difference from Cyan's pinning.
-- **`dl`, `dd` and `pre` lose their browser-default margins** in both applications,
-  since neither Cyan nor the design system states margins for them. On `apps/design`,
-  which has no Cyan, book prose also loses default heading and paragraph margins, so
-  its book stylesheet states the rhythm it wants.
+- **Lists lose their markers and indentation** wherever nothing restores them. Cyan
+  already does this globally and restores markers inside `article`, so the application
+  is unchanged; the design site gains the rule it never had, and its book stylesheet
+  states what prose lists should look like.
 
 ### Knowingly Unowned
 
@@ -158,7 +151,9 @@ decision, which is why it is not a principles book.
 ## Non-Goals
 
 - Element typography — sizes, weights, leading, and the margins that express vertical
-  rhythm — belongs to the type ramp, not to the reset.
+  rhythm — belongs to the type ramp, not to the reset. Zeroing prose margins is the
+  ramp's opening move, in the story that states the replacement margins, because the
+  two halves are one decision.
 - Application shell layout is a component's business. v20 placing its page grid and
   viewport height in the same rule as its reset is drift, not a model.
 - Component appearance, including how a button, input or select looks once
@@ -178,8 +173,8 @@ decision, which is why it is not a principles book.
   `color-scheme` meta tags agree with it.
 - The stylesheet's selectors match the list its test holds, and every one of them
   belongs to a group this spec describes.
-- Every preflight rule sits in a cascade layer, so no application needs a particular
-  import order for the reset to lose to the styles above it.
+- No preflight rule needs another stylesheet to override it, and no design-system or
+  application stylesheet restates one.
 
 ## Acceptance
 
@@ -189,13 +184,12 @@ decision, which is why it is not a principles book.
 - A book page on `apps/design` renders with `border-box` sizing, no body margin and
   the theme's background and foreground, while its book stylesheet contains no reset
   of its own.
-- Prose in `apps/pelilauta` still has vertical rhythm — consecutive paragraphs and
-  headings are visibly separated — with the preflight imported in any position in the
-  shell, which is what proves the layer rather than a lucky import order. Whether that
-  rhythm matches v18 is not the question; whether it exists is.
+- The preflight can be imported at any position in either application's shell without
+  changing what a page looks like, which is what proves it states nothing another
+  stylesheet also states.
 - A Svelte island inside a flex row lays out identically whether or not the Cyan flex
   utilities are present.
 - Removing Cyan 4 from `apps/pelilauta` leaves every rule in this spec in force, and
   removes exactly the two recorded unowned families.
-- Human review accepts the layout effect of `astro-island { display: contents }` and
-  the loss of default margins on `dl`, `dd` and `pre`.
+- Human review accepts the layout effect of `astro-island { display: contents }`, which
+  is the one rule here that can move something already on screen.
