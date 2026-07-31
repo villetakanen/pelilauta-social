@@ -2,9 +2,8 @@
 title: Spatial System
 description: The 8px baseline, the three spacing roles, vertical rhythm and radii — how to choose a measurement rather than guess one.
 order: 5
+prose: true
 ---
-
-<h1>{frontmatter.title}</h1>
 
 Pelilauta is built on a deterministic **8px baseline grid**. One literal measurement
 exists; everything else is a multiple of it. That is what makes spacing decidable
@@ -138,15 +137,16 @@ Two rules keep this true:
    that the reader asked for larger text: the type grows, the layout keeps deciding
    as though it had not, and columns break before the reader reaches them.
 
-One honest exception, visible on this page: the documentation site sizes its own
-headings against the viewport, so testing this here will not show the headings
-moving. The spatial system does move.
-
 ## What is not here yet
 
-Rail and tray geometry, button sizing and icon sizes are part of the spatial system
-in v20, but the design system does not own those tokens yet — they still come from
-Cyan 4. This book grows when they are ported.
+Rail and tray geometry and button sizing are part of the spatial system in v20, but the
+design system does not own those tokens yet — they still come from Cyan 4. This book grows
+when they are ported.
+
+Icon sizes **are** owned, and are the one named exception to the rule above: v20 states
+them as `rem` literals and marks the family absolute rather than grid-derived. Four of the
+five land on the grid anyway; the medium default is four and a half steps, so expressing
+the family as multiples would mean moving it.
 
 For the values themselves rather than the reasoning, see the
 [Units and grid](/tokens/units) lexicon.
