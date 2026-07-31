@@ -8,8 +8,9 @@
 
 ```yaml
 - apps
-  - pelilauta      # the v21 application, pelilauta.social
-  - design         # the design-system site — its shell, navigation and information architecture
+  - pelilauta      # the v21 application  → pelilauta.social         · dev :4321
+  - design         # the design-system site, its navigation and IA
+                   #                      → design.pelilauta.social  · dev :4322
 - packages
   - design-system  # components, styles, specs, and the books that publish them
 - specs            # approved behaviour, one per capability
@@ -30,28 +31,21 @@
 
 ## Workspace Contract
 
-- This is a pnpm workspace. Both applications use the latest approved Astro version with TypeScript; repository tooling includes Biome, Lefthook, Conventional Commits, and Playwright.
-- Use Vite aliases for source-level links between workspace projects, mirrored by TypeScript path aliases. Do not introduce monorepo package-linking or build-orchestration tooling for these links.
-- Netlify deploys two distinct sites from this repository. `pelilauta.social` builds and publishes `apps/pelilauta`; `design.pelilauta.social` builds and publishes `apps/design`. Both install from the workspace root so shared source is available.
+- Link workspace projects with Vite aliases, mirrored in TypeScript paths. No package-linking or build-orchestration tooling.
+- Netlify publishes each app as its own site, each installing from the workspace root.
 
 ## Judgment Boundaries
 
-**NEVER**
-- Create, switch, or delete a branch. Until the beta line ends, this repository has exactly two branches: `main`, and the one long-living `feat/**` branch that all work happens on. Every pull request comes from that branch, whatever its topic. Only an explicit written instruction changes which branch that is: do not branch, and do not ask whether to branch.
-- Break v18 drop-in compatibility without an explicit, approved specification.
-- Alter Firebase schemas or security rules, or make a destructive data migration, without approval.
-- Bundle broad refactors with a compatibility migration.
+Never create, switch, or delete a branch. Until the beta line ends, this repository has exactly two branches: `main`, and the one long-living `feat/**` branch that all work happens on. Every pull request comes from that branch, whatever its topic. Only an explicit written instruction changes which branch that is: do not branch, and do not ask whether to branch.
 
-**ASK**
-- When the v18 behavior or Firebase contract cannot be established from source, deployed behavior, or existing specifications.
-- Before changing public URLs, authentication/authorization behavior, persisted data, deployment configuration, or how releases and versioning work.
+Ask first, and wait, before:
 
-**ALWAYS**
-- Inspect the relevant v18 implementation and write or update the compatibility spec before changing a migrated surface.
-- Use `delivery-review` only when the human owner explicitly requests an implementation review; the separate adversarial review required for specs remains mandatory.
+- changing anything v21 shares with live v18 — Firestore schemas or security rules, persisted data, authentication behaviour, public URLs — or departing from v18's behaviour on a shared surface;
+- migrating data destructively;
+- changing deployment configuration, or how releases and versioning work.
 
-## Working Model
+Ask, rather than assume, when v18's behaviour or the Firebase contract cannot be established from source, from the deployed application, or from an existing spec.
 
-Human approval governs product scope, compatibility exceptions, dependencies, data changes and merges. Agents may investigate, implement a bounded change, run proportionate deterministic checks, and prepare a reviewable pull request. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step. Do not administer human review or acceptance unless asked.
+Before changing a migrated surface, inspect the v18 implementation and write or update its spec.
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.

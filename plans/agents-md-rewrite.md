@@ -1,6 +1,6 @@
 # AGENTS.md Rewrite
 
-Status: In progress 2026-07-31 — rules 1–15 decided, 16 onward open
+Status: Complete 2026-07-31 — all 32 statements reviewed and applied, 1040 words to 558
 Branch: `feat/ds-typography`
 
 ## Why
@@ -47,16 +47,27 @@ anything we might act on later, ADR seeds included. The invariants that prevent 
 becoming a work queue — nothing depends on a note, anyone may delete one — do not
 depend on its subject.
 
-## Open
+## Decided, second half
 
-Rules 16, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31, 32.
+| # | Was | Now |
+| --- | --- | --- |
+| 16 | pnpm workspace, Astro, Biome, Lefthook, Playwright | Cut. Every fact is in `package.json` and `lefthook.yml`; "latest approved Astro version" is the dependency rule's job |
+| 20 | Vite aliases, no monorepo tooling | `Link workspace projects with Vite aliases, mirrored in TypeScript paths. No package-linking or build-orchestration tooling.` |
+| 21 | Netlify deploys two sites | Hosts and dev ports move into the context map; one clause remains: `Netlify publishes each app as its own site, each installing from the workspace root.` Ports were unpinned and raced, so they are now pinned — 4321 for the app, 4322 for the design site |
+| 22 | Never branch | Kept verbatim, standing alone above the ask list as the one absolute rule |
+| 23 + 26 + 28 | Never break v18 compatibility; ask when v18 behaviour cannot be established; always inspect v18 and write the spec | One workflow: ask before changing anything shared with live v18 or departing from its behaviour on a shared surface; ask rather than assume when the behaviour cannot be established; write or update the spec before changing a migrated surface |
+| 24 | Never add a dependency, alter Firebase, migrate destructively | Dependency clause cut as a duplicate of rule 6; the rest joins the ask list |
+| 25 | Never bundle broad refactors with a compatibility migration | Cut — rule 11 in different words |
+| 27 | Ask before changing URLs, auth, persisted data, deploy config, releases | Kept, split between the shared-with-v18 entry and the deployment entry. Its beta-bump parenthetical moved to rule 9 |
+| 30 | Always read `docs/MIGRATION.md` | Folded into rule 12 |
+| 31 | Use `delivery-review` only on request; spec review is mandatory | Cut whole. The skill's own description says the first half, and `spec`'s Adversarial Review Gate owns the second |
+| 32 | Working Model paragraph | Cut whole. Two sentences restated the ask list, one described the job, and the gate sentence was not worth a section |
+| 33 | ASDLC pointer | Kept, now the closing line |
 
-Two structural questions the remaining pass has to settle:
-
-- `NEVER` and `ASK` collapse into one list, because three of four `NEVER`s are
-  "…without approval", which is what `ASK` means.
-- Rules 23, 26 and 28 are one workflow in three entries: establish v18 behaviour,
-  ask when it cannot be established, write the spec before changing the surface.
+**`NEVER` and `ASK` are one list.** Three of four `NEVER`s ended in "without
+approval", which is what `ASK` means, and the fourth duplicated rule 11. The branch
+rule is the only genuinely absolute item, so it stands above the list with its
+"do not ask" clause intact.
 
 ## Not this work
 

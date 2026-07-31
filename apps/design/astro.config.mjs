@@ -11,6 +11,10 @@ const designSystem = fileURLToPath(
 
 export default defineConfig({
   site: 'https://design.pelilauta.social',
+
+  // 4322 leaves 4321 to apps/pelilauta; see the note in its config.
+  server: { port: 4322 },
+
   output: 'static',
   integrations: [svelte(), mdx()],
   vite: {
