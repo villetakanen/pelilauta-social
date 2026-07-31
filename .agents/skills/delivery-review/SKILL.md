@@ -7,7 +7,7 @@ description: Use only when the human owner explicitly requests an adversarial im
 
 This skill is not an automatic delivery gate and does not replace the human
 owner's PR review. Use it only on explicit request. The mandatory separate
-adversarial review of an intent spec is owned by the `spec` skill and is
+adversarial review of a spec is owned by the `spec` skill and is
 unaffected by this boundary.
 
 Review one delivery slice, not the lifetime diff of its feature branch. The

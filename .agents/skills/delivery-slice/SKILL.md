@@ -49,7 +49,7 @@ itself the review, release, or revert unit.
    Do not infer failure behavior from source syntax.
 7. Use the `delivery-review` skill only when the human owner explicitly requests
    an implementation review. This does not alter the separate mandatory
-   adversarial review for intent specs.
+   adversarial review for specs.
 8. Before committing, inspect status, the complete slice diff, and recent
    commits. Stage only intended files. Keep commits coherent and reviewable;
    dependent feature and factory changes may revert together with the slice.

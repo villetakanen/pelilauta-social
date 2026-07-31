@@ -1,17 +1,14 @@
 ---
 name: spec
-description: Create or update a concise Pelilauta intent spec when a feature or design-system capability needs its why and what defined before planning or implementation.
+description: Create or update a Pelilauta spec when a capability needs its why and what defined.
 ---
 
-# Intent Spec
+# Spec
 
-Use this skill for approved product or design-system intent. Do not use it for a
-delivery plan, task list, implementation design, test log, or lessons record.
+Use this skill for approved product or design-system intent.
 
-Specs follow the ASDLC.io Living Specs practice: an Intent half (why the
-capability exists and what consumers rely on) and a Contract half (how anyone
-verifies it). The required anatomy is `specs/TEMPLATE.md`; start new specs
-from it.
+Specs follow the ASDLC.io Living Specs practice, adapted here. The required
+anatomy is `specs/TEMPLATE.md`; start new specs from it.
 
 ## Procedure
 
@@ -24,12 +21,9 @@ from it.
    `draft` until a human approves it. That is the whole frontmatter.
 4. State why the capability exists, what users and consumers can rely on, its
    goals, principles, boundaries, and observable acceptance.
-5. Exclude technical detail — framework choices, build configuration, task
-   sequencing, command output, implementation status. Put those in the linked
-   plan. Do not mistake this for excluding the Blueprint: the shape of the thing
-   is spec content, and a plan is too transient to hold it.
-6. Record compatibility intent and deliberate behavior changes without copying
-   implementation details into the spec.
+5. Examples illustrate intent; the current code is the reference for
+   implementation.
+6. Record compatibility intent and deliberate behavior changes.
 7. Anchor, don't model: a spec promises only what its capability owns. Values
    owned elsewhere — design tokens, parent specs, upstream contracts — are
    referenced as their owner's decision by linking that owner, never restated in
@@ -47,15 +41,15 @@ spec — not the code — and records the outcome in the spec review or PR:
 
 - **Ambiguity:** can two reasonable implementers read a requirement
   differently? Name the sentence.
-- **Testability:** does every Acceptance and Definition of Done item map to a
-  deterministic check or a named human review step? Flag any that are vibes.
+- **Testability:** can a human confirm each Acceptance criterion by using the
+  product? Flag any that are vibes.
 - **Edge cases:** missing states (empty, error, unknown input, both themes,
   hydration timing) that the intent implies but the text omits.
 - **Compatibility:** claims about v18 or v20 behavior that no reader can check —
   no test, no link to the owning spec, no reachable upstream source. Appearance
   follows v20, so a v18 look-alike claim is a defect, not evidence.
-- **Scope:** requirements that belong in the plan, and Non-Goals that a naive
-  reading of the spec would still permit.
+- **Scope:** is the spec about one capability, and is anything in it owned by
+  another spec?
 - **Subtraction:** run last. What can be deleted without losing a checkable
   claim? Every other axis asks whether the spec says enough; this one is the
   only counterweight.
@@ -68,5 +62,4 @@ silently drop them.
 Keep the spec small enough to guide decisions. If implementation discovers a
 real intent ambiguity, reconcile the spec with the human owner rather than
 silently treating either prose or code as automatically correct. When behavior
-changes, update the spec in the same commit as the change. Deprecate contract
-lines with strikethrough and a date instead of deleting them.
+changes, update the spec in the same commit as the change.
