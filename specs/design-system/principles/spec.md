@@ -2,33 +2,33 @@
 status: draft
 ---
 
-# Principles Books
+# Principles
 
 ## Intent
 
-The principles chapter documents how to use the design system: which measurement,
-colour or type step to choose in a given situation, and the reasoning behind the
-system's shape.
+A reader arrives at the design system with one decision to make: which spacing
+step, which colour role, which type size. A list of what exists does not answer
+that, and most decisions are cases no list names.
 
-Its readers are the developers and agents building Pelilauta's interface. They
-arrive with one decision to make, and need an answer they can apply to cases the
-book does not list.
+Principles books answer it. They state a rule and the reasoning behind it, so a
+developer or agent can apply it to a case the design system has not written down.
 
-## Books And Lexicons
+## Guidance And Lexicons
 
-The design site carries two kinds of page about the same subjects.
+The design system says two different things about the same subject.
 
-A **principles book** states a rule, the reasoning that lets a reader apply it to an
-unlisted case, and the mistakes the rule prevents. It is written prose.
+A principles book teaches a decision: the rule, why the system is shaped that way,
+and the mistake the rule prevents.
 
-A **lexicon book** states what exists and what each entry resolves to, completely.
+A lexicon book enumerates: what exists, and what each entry resolves to. Spacing
+has both — a principles book about rhythm and choice, and a lexicon listing every
+unit.
 
-A subject appears in both. Spacing has a principles book covering rhythm and choice,
-and a lexicon listing every unit and its value.
+Neither restates the other. A principles book links the lexicon for values.
 
 ## The Chapter
 
-Five books cover the foundations that components depend on:
+Five books cover the foundations components depend on:
 
 - **Spatial System** — grid, layout, spacing and radii.
 - **Color & Surface** — primitives, semantic roles and elevation.
@@ -36,65 +36,45 @@ Five books cover the foundations that components depend on:
 - **Typography** — the type ramp, styles and pairings.
 - **Iconography** — the icon grid, stroke rules and library usage.
 
-Each is written when a delivery slice needs it. An unwritten book is absent from the
-site.
+## Where Design Intent Comes From
 
-## Source Of Intent
+Design intent comes from v20 and from approved owner decisions. Where v20
+documents a foundation, the v21 book ports and adapts it.
 
-Design intent comes from v20 and from approved owner decisions. Where v20 documents
-a foundation, the v21 book ports and adapts it.
+A claim that neither covers is marked in the book as this system's own.
 
-v18 and Cyan 4 supply the compatibility contract for application behaviour, data and
-routes, which `AGENTS.md` governs. Design intent is outside that contract: how
-Cyan 4 uses a token is a fact about the code being replaced.
+The v20 books are in `pelilauta-20-ds` at `app/cyan-ds/src/content/principles/`.
 
-A claim that neither v20 nor an owner decision covers is marked in the book as this
-system's own.
+Application behaviour, data and routes are governed by `AGENTS.md`, not here. How
+Cyan 4 used a token is a fact about the code being replaced, not a source of
+design intent.
 
 ## Blueprint
 
-A principles book is one MDX entry in its group's content collection, per
+A principles book is prose. Each section answers one decision a reader is likely
+to arrive with, and the book closes by linking the lexicon that holds the values
+and naming the parts of the subject the design system does not yet own.
+
+Where a distinction is easier to see than to read, the book shows it — a touch
+target drawn around the smaller control inside it, for example.
+
+Books are published as described in
 `specs/design-system/design-site-navigation/spec.md`.
-
-- The page's only `h1` renders from `frontmatter.title`.
-- Sections are numbered, and each answers one decision.
-- A token table carries four columns: name, derivation, computed value, and role.
-  The role column states what the token is for.
-- Specimens are inline-styled HTML in the MDX body, showing a distinction the prose
-  has stated — a touch target against the smaller control drawn inside it, for
-  example.
-- Do and don't pairs name the mistake a reader would plausibly make.
-- The closing section links the lexicon for values, and states which parts of the
-  subject the design system does not yet own.
-
-The reference books are v20's, in `pelilauta-20-ds` at
-`app/cyan-ds/src/content/principles/`.
 
 ## Non-Goals
 
-- Principles books link the values owned by token specs rather than restating them.
+- Values belong to the lexicon and to the specs that own them.
 - Component APIs belong to component books.
-- A capability is documented after it exists.
+- A new token family does not oblige a principles book.
 
-## Contract
+## Regression Guardrails
 
-### Definition of Done
-
-- The book answers at least one question of the form "which of these should I use
-  here" that the lexicon leaves open.
-- Each claim traces to v20, to a recorded owner decision, or is marked as this
-  system's own addition.
-- The page renders with a single `h1` matching its navigation label.
-
-### Regression Guardrails
-
-- A principles book's content is written. Content regenerable from a stylesheet
+- A principles book is written. Content that can be regenerated from a stylesheet
   belongs to a lexicon book.
-- A new token family does not oblige a principles book. A book is written when
-  readers repeatedly decide something wrongly.
 
 ## Acceptance
 
-- A developer chooses correctly between two plausible tokens after reading the book,
+- A developer reads the book and chooses correctly between two plausible options
   in a case the book does not name.
-- Human review accepts the writing.
+- Every claim in the book traces to v20, to a recorded owner decision, or is
+  marked as this system's own.
