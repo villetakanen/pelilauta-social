@@ -15,8 +15,9 @@ Copy `packages/design-system/books/TEMPLATE.mdx` to
 prose, headings that state outcomes, and markdown tables where a list of values is
 the point. The `h1` renders from `title`; do not write one.
 
-`prose: true` asks the shell to wrap the file in `<article class="cn-content-prose">`,
-which sets the reading measure and restores the list markers the preflight strips.
+`prose: true` asks the shell to render the `h1` and group the body. It adds no styling:
+the design system owns neither content grids nor typography yet, so books look plain,
+and inventing a measure or a rhythm here would be read later as a decision it made.
 
 Where the page would otherwise repeat a stylesheet by hand, import a **specimen**
 component for that part and keep the prose in MDX. A specimen reads real source, so

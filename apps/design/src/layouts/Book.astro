@@ -10,7 +10,6 @@
  * as a prop from the MDX frontmatter instead, so there is one source for it.
  */
 import '@design-system/styles/ds.css';
-import '@design-system/styles/content-prose.css';
 // Prototype-age scaffolding, kept only for the legacy books/*.astro pages that
 // consume its hero and stat-tile vocabulary. Prose books do not use it.
 import '@design-system/styles/docs.css';
@@ -20,9 +19,10 @@ import { groupLabel } from '../lib/books';
 interface Props {
   title: string;
   /**
-   * Wrap the book in the design system's reading container. A prose book sets it;
-   * a legacy books/*.astro page lays out its own full-bleed sections instead, so
-   * wrapping it would put a 67ch measure around a page built without one.
+   * A prose book: the shell renders its h1 from the frontmatter title and groups the
+   * body in an <article>. It adds no styling — measure, rhythm and type are the
+   * design system's to state once it owns them, and guessing them here would be read
+   * later as a decision. Books look plain until then.
    */
   prose?: boolean;
   description: string;
@@ -64,7 +64,7 @@ const context = group ? groupLabel(group) : 'Index';
 
       <main class="book" id="content">
         {prose ? (
-          <article class="cn-content-prose">
+          <article>
             <h1>{title}</h1>
             <slot />
           </article>

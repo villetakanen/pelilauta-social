@@ -14,9 +14,8 @@ prose: true
   component: `books/*.astro` are debt from before there was a design-system app,
   and are not a pattern to copy. Neither is styles/docs.css.
 
-  `prose: true` asks the shell to wrap this file in <article class="cn-content-prose">,
-  which sets the reading measure and restores prose list markers. Omit it only for a
-  book that lays out its own full-bleed sections.
+  `prose: true` asks the shell to render the h1 and group the body. It adds no styling.
+  Omit it only for a book that lays out its own full-bleed sections.
 
   The h1 comes from `title` above — do not write one here.
 

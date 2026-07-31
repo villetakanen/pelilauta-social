@@ -33,10 +33,10 @@ unit books are parsed from stylesheets today, and that property is worth keeping
 `docs.css` is deleted with the last of them, and the `prose` frontmatter flag stops
 having a false case.
 
-`packages/design-system/styles/content-prose.css` holds the reading container in the
-meantime. It carries only what does not need the type ramp; when the typography epic's
-semantics story lands, it gains sizes and leading and moves into `styles/ds.css`,
-which is where v20 keeps the equivalent.
+There is deliberately no stand-in reading measure or prose rhythm. Books render plain
+until the design system owns content grids and typography, each with a spec. A ported or
+invented value would be read later as something the design system had decided, which is
+how `styles/units.css` came to cite a commit that never touched it.
 
 ## Why it is not one pull request
 

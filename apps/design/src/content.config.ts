@@ -17,9 +17,9 @@ const bookSchema = z.object({
   /** Navigation sort key within the group; ties fall back to title order. */
   order: z.number().optional(),
   /**
-   * Wrap the book in the design system's reading container. Prose books set it;
-   * a book that lays out its own full-bleed sections leaves it off. The legacy
-   * `books/*.astro` books are the latter, which is why the default is false.
+   * A prose book: the shell renders its h1 and groups the body. The legacy
+   * `books/*.astro` books lay out their own sections and render their own h1,
+   * which is why the default is false.
    */
   prose: z.boolean().default(false),
   status: z.enum(['stable', 'draft']).default('stable'),
