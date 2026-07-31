@@ -6,12 +6,9 @@ status: draft
 
 ## Intent
 
-A reader arrives at the design system with one decision to make: which spacing
-step, which colour role, which type size. A list of what exists does not answer
-that, and most decisions are cases no list names.
-
-Principles books answer it. They state a rule and the reasoning behind it, so a
-developer or agent can apply it to a case the design system has not written down.
+The principles collection describes the design system's visual and spatial rules
+– the grid, spacing, colour architecture, type, icons, and the mechanics that cut
+across them.
 
 ## Guidance And Lexicons
 
