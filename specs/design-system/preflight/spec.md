@@ -78,21 +78,25 @@ the platform's smoothed font rendering. Astro's hydration wrapper, `astro-island
 displays as `contents`, so it never interposes a box between an element and its
 semantic child.
 
-## Load Order
+## Cascade Position
 
-The preflight loads **before** whatever styles elements — any legacy Cyan stylesheet,
-and the tokens entry point. A reset that loads after the type ramp is not a reset; it
-is an override of the ramp, at equal specificity, by whichever file happened to be
-imported last. That holds for Cyan's ramp today and for the design system's own ramp
-later.
+The preflight is declared in a cascade layer, so anything unlayered outranks it however
+the imports happen to be ordered. A reset must lose to the styles above it; making that
+true by arranging import statements would put a design-system requirement inside each
+application's shell, where it would break silently the first time someone reorders a
+head component.
 
-The consequence in `apps/pelilauta` is that the margin group is inert there for now:
-Cyan supplies the element ramp, including the bottom margins on headings, paragraphs,
-blockquotes and tables, and restores them after the preflight has zeroed them. The
-group takes effect when the ramp moves into the design system, which is the story that
-states the replacement margins. Zeroed margins with no ramp behind them is not v20's
-typography — it is an absence of typography — and shipping that as an intermediate
-state would degrade every deployed increment between the two stories.
+The layer is what keeps the margin group honest while the type ramp still lives in
+Cyan: Cyan's unlayered bottom margins on headings, paragraphs, blockquotes and tables
+win, so prose keeps its rhythm, and the group takes effect for real when the ramp moves
+into the design system and states the replacement margins. Zeroed margins with no ramp
+behind them is not v20's typography — it is an absence of typography — and shipping
+that as an intermediate state would degrade every deployed increment between the two
+stories.
+
+Where an application imports the preflight is the application's business: its shell
+brings in the design system's core CSS, alongside or after whatever legacy stylesheets
+it still carries.
 
 The preflight is not imported from the tokens entry point. A reset is not a token, and
 the two have opposite ordering requirements: tokens may load late, a reset may not.
@@ -142,9 +146,9 @@ and in that order, each group introduced by what it asserts and why the browser'
 default is wrong. It declares no custom property: every name it reads is defined by a
 token family, so a missing definition is a token defect rather than a reset defect.
 
-Both applications import it first. `apps/design` imports it in the book layout and its
-book stylesheet keeps only editorial vocabulary; `apps/pelilauta` imports it ahead of
-Cyan in both head components.
+Each application imports it where its shell brings in the design system's core CSS:
+`apps/design` in the book layout, whose book stylesheet then keeps only editorial
+vocabulary, and `apps/pelilauta` in both head components.
 
 Its book is the first entry in the `base` group of the design site, described by
 [the navigation spec](../design-site-navigation/spec.md). The book enumerates what the
@@ -174,7 +178,8 @@ decision, which is why it is not a principles book.
   `color-scheme` meta tags agree with it.
 - The stylesheet's selectors match the list its test holds, and every one of them
   belongs to a group this spec describes.
-- The preflight is imported before any Cyan stylesheet wherever both are present.
+- Every preflight rule sits in a cascade layer, so no application needs a particular
+  import order for the reset to lose to the styles above it.
 
 ## Acceptance
 
@@ -185,7 +190,8 @@ decision, which is why it is not a principles book.
   the theme's background and foreground, while its book stylesheet contains no reset
   of its own.
 - Prose in `apps/pelilauta` still has vertical rhythm — consecutive paragraphs and
-  headings are visibly separated — which is what proves the load order. Whether that
+  headings are visibly separated — with the preflight imported in any position in the
+  shell, which is what proves the layer rather than a lucky import order. Whether that
   rhythm matches v18 is not the question; whether it exists is.
 - A Svelte island inside a flex row lays out identically whether or not the Cyan flex
   utilities are present.
