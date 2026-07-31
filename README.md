@@ -10,7 +10,7 @@ v18; appearance is expected to change.
 
 ## Project Status
 
-**Current release:** `v21.0.0-beta.8`
+**Current release:** `v21.0.0-beta.9`
 
 v21 has a verified import of the live v18 application, the approved v20-derived
 Light and Dark color themes, and its first Lit-to-Svelte component migration: a
@@ -57,31 +57,20 @@ The root workspace version identifies v21 releases. The version in
 `apps/pelilauta/package.json` remains the imported application's baseline
 version until a separate product decision requires changing it.
 
-`v21.0.0-beta.8` builds on `v21.0.0-beta.7` by migrating the remaining direct
-Svelte `cn-icon` consumers across character, administration, settings, login,
-editor, search, front-page, and shared application surfaces. The direct element
-literal count is now zero. One imperative use remains inside the retained Cyan
-sortable-list boundary and will move with that component rather than through an
-Icon-only rewrite.
-
-The openly licensed icon tier is now named `open-source` and includes reviewed
-`delete`, `warning`, `check`, and `open-down` artwork with deterministic
-source/provenance parity. The release also aligns Netlify with the Pelilauta
-workspace package so the adapter's traced SSR dependencies survive deployment,
-repairs clean workspace installs and Lato asset resolution, updates Workbox
-within its declared range, consolidates root Biome coverage, and records the
-dependency-currency policy established while verifying that path. The admin
-purge-user endpoint now also treats an already-absent Auth user as the intended
-idempotent case instead of aborting profile cleanup.
+`v21.0.0-beta.9` builds on `v21.0.0-beta.8` with the Spatial System principles
+book: the 8px baseline, spacing roles, prose rhythm, grid-derived radii, and the
+reader-owned root scale. It also makes dark the no-preference color-scheme
+default consistently in both applications and corrects the book, spec, lesson,
+and delivery harness discovered while establishing those foundations.
 
 This beta does not claim the overall Cyan migration or authenticated write
 journeys are complete v18 replacements. Deferred end-to-end selector debt,
 retained Cyan components, and the RC.1 toolchain upgrades remain later maturity
-gates. Earlier betas delivered the thread, discussion, inbox, and site Icon
-surfaces (`beta.7`), server icon surface and lessons harness (`beta.6`), catalog
-provenance sort (`beta.5`), delivery governance and iconography book (`beta.4`),
-contextual icon sizing (`beta.3`), and the initial local Icon capability
-(`beta.2`).
+gates. Earlier betas completed the remaining direct Icon consumers and delivery
+tooling (`beta.8`), the thread, discussion, inbox, and site Icon surfaces
+(`beta.7`), server icon surface and lessons harness (`beta.6`), catalog provenance
+sort (`beta.5`), delivery governance and iconography book (`beta.4`), contextual
+icon sizing (`beta.3`), and the initial local Icon capability (`beta.2`).
 
 ## Commands
 

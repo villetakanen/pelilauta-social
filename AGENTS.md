@@ -30,7 +30,7 @@
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
 - For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
 - Record approved behavior as specs under `specs/`, and irreversible decisions as ADRs in `docs/adrs/`. A PBI describes one change; its linked spec remains the source of truth.
-- Agents prepare reviewable pull requests and stop. The human owner reads the PR, performs any visual acceptance, and decides whether and when to merge or release; none of those actions is implied by passing checks or a ready preview.
+- Agents prepare reviewable pull requests and stop. The human owner reads the PR, performs any visual acceptance, and decides whether and when to merge. Every merge to `main` deploys and is a release, so its pull request includes the approved root version and release-facing status before integration; passing checks or a ready preview never authorizes the merge.
 - Use targeted deterministic checks while implementing. The root `pnpm verify` command, invoked by the pull-request workflow, owns broad repository verification; do not manually repeat it after unrelated or documentation-only edits.
 
 ## Workspace Contract
