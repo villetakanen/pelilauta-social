@@ -31,6 +31,13 @@ application-wide paragraph margin, and spacing is stated by whatever owns the la
 *, ::after, ::before, ::backdrop, ::file-selector-button { margin: 0; padding: 0; }
 ```
 
+## Media
+
+Not touched, following Bell, whose more modern reset dropped the media rules his earlier
+one had. Tailwind and Radix make images block-level and constrain them to their
+container; here that is the container's decision, because a reset cannot know which
+images are content and which are chrome.
+
 ## Colour scheme
 
 Both schemes are declared, dark first. An application's `<meta name="color-scheme">`

@@ -50,14 +50,24 @@ cannot settle whether `optgroup` or a WebKit search pseudo-element is inside it.
 | Box model, document, control inheritance, element defaults, body, runtime wrappers | the reset |
 | Type sizes, leading, heading wrap, link colour | the type ramp |
 | The spacing that replaces the removed margins | each container, until the type ramp |
-| Constraining image width | the container holding the image |
-| Scrollbar appearance | themed surfaces, unassigned |
+| Constraining media width, and whether media is block-level | the container holding it |
+| Scrollbar appearance | nobody: not styled, browser default |
 | How a control looks once normalised | its component |
 | Page grid, rows and columns | the shell component |
 
-Image constraint and scrollbar appearance exist only in Cyan today. Nothing fails when
-the terminal sweep deletes them, which is why they are written down rather than left to
-be discovered.
+Media is Bell's position, taken deliberately: his more modern reset dropped the media
+rules his earlier one had, where Tailwind and Radix keep them. If an image has to fit
+something, the something decides — a reset cannot know which images are content and
+which are chrome.
+
+Scrollbars are left to the browser, which is what Bell, Tailwind, Radix and v20 all do —
+Cyan 4 is the only source that styles them, and it is the source being replaced. Styling
+them later would be a themed-surface capability with its own tokens and spec, not a gap
+in this one. `apps/pelilauta` gets default scrollbars when Cyan goes; `apps/design`,
+which imports no Cyan, already shows what that looks like.
+
+Media constraint and Cyan's scrollbar rules both disappear with Cyan, and nothing fails
+when they do, which is why they are written down rather than left to be discovered.
 
 ## Lists Keep Their Semantics
 
