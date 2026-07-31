@@ -29,7 +29,7 @@
 - Migrate one bounded surface at a time: preserve its behavior first, then replace its Lit.js dependency with the equivalent local Svelte component.
 - Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
 - For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
-- A design-system functionality is complete only when the same delivery slice includes its intent spec, contract implementation, and package-owned DS book integrated into `apps/design`.
+- A design-system functionality is complete only when the same delivery slice includes its intent spec, contract implementation, and its book on the design site.
 - Record approved behavior and architecture as intent specs under `specs/` (anatomy: `specs/TEMPLATE.md`), and irreversible decisions as ADRs in `docs/adrs/`. A PBI describes one change; its linked spec remains the source of truth.
 - A spec's frontmatter is `status:` alone. It passes the adversarial review gate in the spec skill before a human approves it, and an irreversible decision it rests on is an ADR in `docs/adrs/`, linked — not frontmatter prose.
 - Agents prepare reviewable pull requests and stop. The human owner reads the PR, performs any visual acceptance, and decides whether and when to merge or release; none of those actions is implied by passing checks or a ready preview.
@@ -39,10 +39,8 @@
 
 - This is a pnpm workspace. Both applications use the latest approved Astro version with TypeScript; repository tooling includes Biome, Lefthook, Conventional Commits, and Playwright.
 - `apps/pelilauta` owns the v21 source for `pelilauta.social`. Its initial baseline is an exact import of the current v17/v18 `main`, after which v21 owns and evolves the code.
-- `apps/design` owns the design-system site at `design.pelilauta.social`. Keep its Astro route files thin and import page implementations from `packages/design-system/pages` through Vite aliases. It also owns the site's shell, navigation and content collections, because those encode the documentation site's information architecture rather than a design-system capability.
-- A book is an entry in an `apps/design` content collection whose body renders one package-owned component from `packages/design-system/books`. The collection id is the book's URL group. Adding a book is one entry plus one component; route files and navigation are not edited.
-- The book taxonomy — which groups exist, their labels, their order — is a design-system decision declared in `packages/design-system/books/groups.json`. The site reads it; it does not define it.
-- `packages/design-system` owns local Svelte components, styles, book and page implementations, and design specifications.
+- `apps/design` owns the design-system site at `design.pelilauta.social`, including its shell, navigation, content collections and information architecture. How books are authored and grouped is defined by `specs/design-system/design-site-navigation/spec.md`, not here.
+- `packages/design-system` owns local Svelte components, styles, and design specifications.
 - Use Vite aliases for source-level links between workspace projects, mirrored by TypeScript path aliases. Do not introduce monorepo package-linking or build-orchestration tooling for these links.
 - Netlify deploys two distinct sites from this repository. `pelilauta.social` builds and publishes `apps/pelilauta`; `design.pelilauta.social` builds and publishes `apps/design`. Both install from the workspace root so shared source is available.
 

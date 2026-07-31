@@ -7,9 +7,8 @@ status: approved
 ## Intent
 
 The design system is documented as "books": MDX pages that each define a single
-design aspect, principle, component or pattern. The books belong to
-`packages/design-system`, and `apps/design` serves them to their readers, who are
-both humans and agents.
+design aspect, principle, component or pattern. `apps/design` holds and serves them
+to their readers, who are both humans and agents.
 
 Design Site Navigation is a temporary navigation feature for `apps/design`, so
 that a human or an agent can easily locate a book of the package.
@@ -17,9 +16,22 @@ that a human or an agent can easily locate a book of the package.
 ## Behavior
 
 Books belong to named groups. Which groups exist, their labels and their order
-are the design system's decision, declared in one place; the site reads it. A
-book's group is its URL group. Within a group a book may declare its position,
-otherwise books order alphabetically by title.
+are the design system's decision, declared in one place —
+`packages/design-system/books/groups.json` — which the site reads and does not
+define. A book's group is its URL group. Within a group a book may declare its
+position, otherwise books order alphabetically by title.
+
+## Authoring
+
+A book is one MDX entry in the content collection named for its group. Adding a
+book is that one file: route files and navigation are never edited, because both
+are derived.
+
+Books are written, not generated. Prose is the body of the MDX, and a book that
+needs live code — a rendered component, a value read from a stylesheet — imports a
+specimen component for that part alone. A book whose content is produced by
+enumerating a source becomes an inventory of what exists rather than guidance on
+what to do, so enumeration belongs to the lexicon books that exist for it.
 
 The site publishes only what exists: an empty group does not appear, and a draft
 entry is neither published nor listed.
@@ -71,7 +83,7 @@ is reached through a labelled disclosure that needs no JavaScript.
 
 ## Acceptance
 
-- `pnpm --filter design build` emits the four pages above and no
+- `pnpm --filter design build` emits every published book and the index, and no
   `iconography/index.html`. A build is required: `astro check` alone does not
   surface a content-schema or MDX error.
 - `pnpm --filter design test:e2e` passes, including the colour and icon book
