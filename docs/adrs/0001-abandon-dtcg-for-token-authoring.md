@@ -1,4 +1,4 @@
-# ADR 0002 — Abandon DTCG as the token source format
+# ADR 0001 — Abandon DTCG as the token source format
 
 - **Status:** accepted
 - **Date:** 2026-07-30
@@ -8,18 +8,13 @@
 
 The v21 design system wanted one platform-neutral source of truth for tokens,
 authored as data and projected into CSS rather than hand-maintained in both places.
-DTCG (Design Tokens Community Group format) was the obvious candidate and was tried:
-ADR 0001, 2026-07-17, adopted DTCG `.tokens.json` files as canonical with generated
-CSS names.
+DTCG (Design Tokens Community Group format) was the obvious candidate and was
+tried, on a branch that was abandoned and deleted without ever reaching `main`.
 
 DTCG does not support all the token types this design system needs. The format
 covers the token kinds it was designed for and leaves the rest unexpressible, so a
 DTCG-canonical source could not describe the whole system — which defeats the point
 of having one.
-
-ADR 0001 never reached `main`. It lived on `feat/core-design-tokens`, which was
-abandoned and deleted, so 0001 is a deliberate gap in this sequence rather than a
-missing file.
 
 ## Decision
 
@@ -27,8 +22,8 @@ DTCG is not the token source format, and no DTCG token data is introduced.
 
 Tokens are hand-authored CSS under `packages/design-system/styles/`, which is what
 ships today. The CSS custom property is the token's real name: the grid token is
-`--cn-grid`, not a projection of a `space.grid` path. ADR 0001's path grammar and
-its generated `--cn-space-grid` style of naming are both rejected.
+`--cn-grid`, not a projection of a `space.grid` path. DTCG's path grammar and the
+generated `--cn-space-grid` style of naming that came with it are both rejected.
 
 The underlying intent survives: a JSON-shaped token source generating the CSS, with
 TypeScript-typed values rather than DTCG's type system. That is a later concern with
