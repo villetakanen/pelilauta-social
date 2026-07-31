@@ -15,7 +15,7 @@
 - specs            # spec files describing the expected behaviour of the apps
 - plans            # epic level PBIs
 - docs
-  - lessons        # unhandled compound loop findings
+  - lessons        # notes for the next harness change
   - adrs           # ADR records
 ```
 
@@ -73,7 +73,7 @@ Human approval governs product scope, compatibility exceptions, dependencies, da
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
 
-- Lessons: `docs/practices/lessons.md`. `docs/lessons/` is a decision inbox — one file per finding whose fix would need the owner. Findings may be applied, deferred with a concrete trigger, or discarded; deletion is the normal end state and the commit message is the record. Agents must never rely on lesson files for required context.
+- Lessons: `docs/practices/lessons.md`. `docs/lessons/` is a list of things we might want to take into account the next time we change the harness — one file per note, each naming one instance and one change someone could make. Anyone may delete any note at any time; deletion is the normal end state and the commit message is the record. Agents must never rely on lesson files for required context.
 - v18/Cyan migration: `docs/MIGRATION.md`
 - Intent specs: `.agents/skills/spec/SKILL.md`, template at `specs/TEMPLATE.md`
 - Delivery slices: `.agents/skills/delivery-slice/SKILL.md`

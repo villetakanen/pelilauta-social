@@ -1,28 +1,29 @@
 # Lessons And Compounding
 
-`docs/lessons/` is a decision inbox: one file per finding that needs a human
-decision, held until the owner is present to make it. It is not memory, not
-evidence, not history, and never required context.
+`docs/lessons/` is a list of things we might want to take into account the next time
+we change the harness. One file per note. It is not a work queue, a status board, or
+agent memory, and nothing may depend on it.
 
-Two skills use it. `lesson` writes a finding. `retro` mines the inbox, applies
-what is justified, and empties it.
+Two skills use it. `lesson` writes a note. `retro` looks at the harness alongside the
+notes and promotes actionable change concepts.
 
 ## Invariants
 
-- **File it only if it needs the owner.** A problem an agent may simply fix gets
-  fixed in the slice; it does not become a file. Findings enter the inbox when
-  acting on them crosses an approval boundary in `AGENTS.md` — the contract, a
-  skill, a template, a dependency, a new directory.
-- **The commit message is the permanent record.** Commit a finding with its
-  reasoning in the message body so that deleting the file later costs nothing.
-  Git history is the archive; the inbox is scaffolding. Keep no in-tree log,
-  index, count, or compacted history table.
-- **Nothing in the inbox needs to survive branch close.** The owner may delete
-  the whole directory at any time. A finding worth keeping is promoted out to a
-  plan, spec, or ADR first — promotion is the owner's decision, not an agent's.
-- **Findings are never merged.** Two that look like facets of one cause stay as
-  sibling files and link by slug. `retro` merges them if it is right; premature
-  consolidation has already hidden a recurring failure in this project.
+- **Write it only if it needs the owner.** A problem an agent may simply fix gets
+  fixed in the slice; it does not become a file. Notes are for what crosses an
+  approval boundary in `AGENTS.md` — the contract, a skill, a template, a
+  dependency, a new directory.
+- **The commit message is the permanent record.** Commit a note with its reasoning in
+  the message body so that deleting the file later costs nothing. Git history is the
+  archive; the list is scaffolding.
+- **Anyone may delete any note at any time.** A human who thinks a note is incidental
+  or not worth keeping should delete it — no justification, no ceremony. Nothing in
+  the list needs to survive branch close, and a note worth keeping is promoted out to
+  a plan, spec, or ADR first, which is the owner's decision.
+- **A note names one instance and proposes one change.** Give the file and the line.
+  The **Fix** must be something a person can do and then be done with, not a rule to
+  follow. If the Fix cannot be written as a diff, do not file it — let the problem
+  recur, because a second occurrence usually names itself.
 
 ## File Shape
 
@@ -33,7 +34,6 @@ what is justified, and empties it.
 name: <slug matching the filename>
 branch: <branch that produced it>
 date: <YYYY-MM-DD>
-trigger: <only when deferred: the concrete condition for reconsideration>
 ---
 
 **Context:** the situation, in a sentence or two.
@@ -46,19 +46,12 @@ cause with more evidence.
 **Fix:** the smallest change worth considering.
 ```
 
-Four short paragraphs. No count, no index, no revision history, no narration of
-how the inbox changed. A file that explains itself is the wrong shape.
-
-A `trigger` marks the finding as deferred by the owner. Its absence means open.
-There is no other state: applied and discarded both mean deleted.
+Four short paragraphs. A file that explains itself is the wrong shape.
 
 ## Rules
 
-- A finding is evidence, not automatic scope.
-- Persistence is a decision, not the default.
-- Do not create a destination merely because a finding exists.
-- When a rule turns out to be false, the first candidate fix is removing it.
-- Add automation only after a concrete repeated or release-significant failure.
+- A note is evidence, not automatic scope.
+- Do not create a destination merely because a note exists.
 
 Specs, guides, code, tests, skills, workflows, and runbooks must remain complete
-when the inbox is empty.
+when there are no notes.
