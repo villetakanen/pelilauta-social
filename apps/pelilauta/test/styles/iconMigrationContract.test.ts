@@ -48,7 +48,7 @@ describe('Cyan Icon migration contract', () => {
     // Icon sizing tokens reach the document through the design system's token
     // entry point; they were a separate icon.css import until they were folded in.
     const tokensIndex = source.indexOf(
-      "import '@design-system/styles/tokens.css';",
+      "import '@design-system/styles/ds.css';",
     );
     const migrationIndex = source.indexOf(
       "import '../../../styles/migrations/cyan-icon.css';",

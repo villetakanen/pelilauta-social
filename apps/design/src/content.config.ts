@@ -27,6 +27,7 @@ const book = (group: string) =>
 
 export const collections = {
   principles: book('principles'),
+  base: book('base'),
   tokens: book('tokens'),
   components: book('components'),
 };
