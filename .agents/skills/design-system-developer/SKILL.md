@@ -63,6 +63,4 @@ compatibility contract.
 Look for v20's answer before writing your own, and look past the obvious place. Its
 CSS is in `packages/cyan/src/{tokens,core,layouts,utilities}` **and inline in
 `.astro` global style blocks** — a search of the token and core directories alone
-has already produced two wrong conclusions. Its documented intent is in its books. A
-claim neither v20 nor an owner decision covers is marked in the book as this system's
-own.
+has already produced two wrong conclusions. Its documented intent is in its books.
