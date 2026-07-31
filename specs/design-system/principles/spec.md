@@ -73,5 +73,3 @@ Books are published as described in
 
 - A developer reads the book and chooses correctly between two plausible options
   in a case the book does not name.
-- Every claim in the book traces to v20, to a recorded owner decision, or is
-  marked as this system's own.

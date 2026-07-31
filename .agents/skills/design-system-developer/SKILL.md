@@ -56,7 +56,7 @@ and do not extend it.
 
 ## Where design intent comes from
 
-v20, and recorded owner decisions. Where either disagrees with the shipped
+v20, and owner direction. Where either disagrees with the shipped
 application, they win: the application is v18's, and appearance is not a
 compatibility contract.
 
