@@ -47,6 +47,17 @@ has no half step.
 Inside a rounded container the padding is `--cn-grid` or more, so the curve does not
 close in on the content it wraps.
 
+## Icon Sizes
+
+Five sizes — xsmall, small, medium, large, xlarge — stated as `rem` literals rather
+than grid multiples, following v20, whose `tokens/units.css` files them beside the grid
+and marks them "absolute, not grid-derived". They scale with the reader like every
+other `rem` length; they simply do not derive from `--cn-grid`. The medium default is
+the reason the family is absolute: at 2.25rem it is four and a half grid steps, so
+expressing it as a multiple would mean changing it.
+
+Values are in the [Units and grid](/tokens/units) lexicon.
+
 ## Scaling
 
 The grid is relative, so the system scales with the reader rather than around them.
@@ -64,8 +75,9 @@ Spatial System principles book.
 
 ## Non-Goals
 
-- Rail and tray geometry, button sizing and icon sizes are part of the spatial
-  system in v20 and are not owned here yet; they still come from Cyan 4.
+- Rail and tray geometry and button sizing are part of the spatial system in v20 and
+  are not owned here yet; they still come from Cyan 4. Icon sizes are owned — see the
+  exception below.
 - The layout grid — how many columns sit inside a breakpoint, and the margins,
   gutters and maximum container width around them — is not owned yet.
 - Box rules, including how a border is counted against a box's own measurements,
@@ -74,8 +86,13 @@ Spatial System principles book.
 
 ## Regression Guardrails
 
-- The grid is the only literal length. Every other unit derives from it, and
-  `units.css` states no absolute length.
+- The grid is the only literal length, and every measurement derived from it derives
+  from it in the stylesheet, not in a comment.
+- Icon sizes are the one named exception: absolute by v20's decision, which states them
+  as `rem` literals and marks them "absolute, not grid-derived". Four of the five land
+  on the grid anyway; the medium default is 4.5 steps, so the family cannot be
+  expressed as multiples without moving it. No other design-system stylesheet states an
+  absolute length.
 - The elevation shadows resolve, which requires the grid to load before colour.
 
 ## Acceptance
