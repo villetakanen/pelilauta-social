@@ -2,10 +2,8 @@
 /**
  * TokenTable — a lexicon's table of declarations, read from a stylesheet.
  *
- * A thin renderer over parseTokens, which holds every decision worth asserting;
- * this file only turns the result into a table. It carries no styling: books
- * render plain until the design system owns typography and content grids, and a
- * stand-in here would later be read as something the design system decided.
+ * A renderer over parseTokens, which holds the logic. It carries no styling:
+ * books render plain until the design system owns typography and content grids.
  *
  * Book: apps/design/src/content/components/token-table.mdx
  */
@@ -25,9 +23,8 @@ interface Props {
   /** Names what the reader is looking at, as the table's caption. */
   caption?: string;
   /**
-   * Show each token as a colour chip. For a colour lexicon, where the value is
-   * an OKLCH triplet a reader cannot picture — the chip resolves through the
-   * live cascade, so it also shows the current mode's arm of a `light-dark()`.
+   * Show each token as a colour chip. The chip resolves through the live
+   * cascade, so it shows the current theme's arm of a `light-dark()`.
    */
   swatch?: boolean;
 }
@@ -45,9 +42,8 @@ const {
 const tokens = parseTokens(source, { names, prefix, without });
 
 /**
- * An empty table is the failure this specimen exists to prevent: a renamed or
- * removed token would otherwise turn into a page that quietly says nothing.
- * Failing the build is the only way a book can be wrong loudly.
+ * A renamed or removed token would otherwise render an empty table and report no
+ * error. Failing the build surfaces it.
  */
 if (tokens.length === 0) {
   throw new Error(

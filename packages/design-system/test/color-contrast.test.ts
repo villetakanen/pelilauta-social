@@ -140,7 +140,7 @@ describe('the step gap predicts contrast', () => {
     expect(floorAt(45)).toBeGreaterThanOrEqual(3);
   });
 
-  test('40 is not enough, which is why the threshold is not USWDS 50', () => {
+  test('a gap of 40 does not reach AA Large', () => {
     // Fails the book's own rule if someone rounds the numbers down.
     expect(floorAt(40)).toBeLessThan(3);
   });
@@ -169,9 +169,8 @@ describe('the elevation-4 guardrail', () => {
   });
 
   test('the de-emphasised roles do not, which is what the rule forbids', () => {
-    // Stated as an assertion rather than a warning: if a palette change ever
-    // makes these pass, the guardrail in the book has become false and this
-    // fails until it is rewritten.
+    // Asserted in both directions. If a palette change makes these pass, the
+    // book's statement is out of date and this test fails.
     for (const foreground of ['--cn-text-low', '--cn-on-surface-secondary']) {
       const { ratio } = measure(foreground, '--cn-surface-4', 'dark', tokens);
       expect(ratio, `${foreground} at ${ratio.toFixed(2)}:1`).toBeLessThan(4.5);

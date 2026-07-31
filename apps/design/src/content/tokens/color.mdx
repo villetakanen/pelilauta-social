@@ -9,50 +9,42 @@ import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import referenceSource from '@design-system/styles/color-reference.css?raw'
 import themeSource from '@design-system/styles/color-theme.css?raw'
 
-This is the lexicon: what the colour tokens are and what each one is worth. Which one to
-reach for, and the contrast rules that constrain the choice, are in the
+Every colour token and its declared value. Which token to use is in the
 [Colour System](/principles/color-system) book.
 
-Every table is read from its stylesheet when this page is built. Swatches resolve through
-the live cascade, so each one shows the arm of `light-dark()` that matches the mode you
-are reading in — switch your system theme and the same page shows the other.
+Each table is read from its stylesheet at build time. Swatches resolve in the theme you are
+reading in, so a `light-dark()` role shows the arm currently in force.
 
 ## Semantic roles
 
-What a colour is *for*. Each states Light and Dark as the two arms of one `light-dark()`
-declaration, so there is one place a role is defined and no second theme to keep in step.
-These are what a component reads.
+Components read these. Each states both themes in one declaration.
 
 <TokenTable source={themeSource} without="shadow" swatch caption="Semantic roles" />
 
-## Elevation and shadows
+## Elevation shadows
 
-Declared in the same stylesheet, but they are shadows rather than colours, so they carry
-no swatch. They are grid multiples and resolve only where `--cn-grid` is defined, which is
-why `styles/tokens.css` composes both families — see
+Declared in the same stylesheet. They are shadows, so they carry no swatch. They are grid
+multiples and need `--cn-grid`, which `styles/tokens.css` supplies alongside them. See
 [Units and grid](/tokens/units).
 
 <TokenTable source={themeSource} prefix="--cn-shadow" caption="Elevation shadows" />
 
-## The reference palette
+## Reference palette
 
-The literal colours, in OKLCH, where the stack bottoms out. A component should not read
-these — they say what is available, not what it means.
+The literal colours in OKLCH. Components do not read these.
 
 <TokenTable source={referenceSource} prefix="--cn-color-" swatch caption="Reference palette" />
 
 ## Cyan 4 aliases are not here
 
 `styles/compat/cyan-4.css` maps legacy names onto these roles until the surfaces still
-running on Cyan are replaced. It is removed before `v21.0.0-rc.1`, nothing new reads it,
-and it is not published as vocabulary. Read the stylesheet if you are migrating a surface;
-`docs/MIGRATION.md` owns the sweep.
+running on Cyan are replaced. It is removed before `v21.0.0-rc.1` and nothing new reads it.
+Read the stylesheet if you are migrating a surface. `docs/MIGRATION.md` owns the sweep.
 
 ## What this does not cover
 
-Contrast figures, the guardrails they produce, and which role to reach for are the
-[Colour System](/principles/color-system) book's. Spacing, radii and icon sizes are in
-[Units and grid](/tokens/units).
+Spacing, radii and icon sizes are in [Units and grid](/tokens/units). Contrast figures and
+theme rules are in the [Colour System](/principles/color-system) book.
 
-One shadow token sits outside the `--cn-shadow` family — `--cn-reply-dock-shadow` — and
-appears in the semantic table, because that is where it is declared.
+One shadow token sits outside the `--cn-shadow` family, `--cn-reply-dock-shadow`, and
+appears in the semantic table because that is where it is declared.

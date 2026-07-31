@@ -1,15 +1,12 @@
 /**
- * Colour resolution and contrast, for the books that publish both.
+ * Colour resolution and contrast.
  *
- * The palette is OKLCH and the semantic layer states Light and Dark as the two
- * arms of one `light-dark()` declaration. A contrast figure therefore cannot be
- * read off the stylesheet — it has to be computed, per mode, after the `var()`
- * chain is resolved. Writing those figures by hand is how a book ends up
- * asserting a ratio the palette stopped producing.
+ * The palette is OKLCH and the semantic layer states both themes in one
+ * `light-dark()` declaration, so a contrast figure appears in no stylesheet. It
+ * has to be computed per theme, after the `var()` chain is resolved.
  *
- * v20's own colour book is the cautionary case: it publishes a contrast
- * guardrail for "surface-40" when the token it describes resolves to surface-50,
- * and quotes a ratio that belongs to neither.
+ * v20's colour book states a contrast rule for surface-40 where the token it
+ * describes resolves to surface-50, and quotes a ratio matching neither.
  *
  * Books: apps/design/src/content/tokens/color.mdx
  *        apps/design/src/content/principles/color-system.mdx
@@ -60,12 +57,11 @@ const KEYWORDS: Record<string, Oklch> = {
 };
 
 /**
- * Resolve a declared value to a colour for one mode, following `var()` chains
+ * Resolve a declared value to a colour for one theme, following `var()` chains
  * and picking the matching arm of any `light-dark()`.
  *
- * Returns undefined rather than throwing for anything it cannot resolve —
- * `color-mix()`, gradients, a token defined elsewhere. A caller that requires a
- * colour says so; silently substituting one would be worse than reporting none.
+ * Returns undefined for anything it cannot resolve: `color-mix()`, gradients, a
+ * token defined elsewhere. Callers that require a colour check for undefined.
  */
 export function resolve(
   value: string,
@@ -167,9 +163,9 @@ export interface Measurement {
 }
 
 /**
- * Measure one foreground token against one background token in one mode.
- * Throws when either side cannot be resolved: an unmeasurable pair is a broken
- * reference, and a book that skipped it would publish a shorter table.
+ * Measure one foreground token against one background token in one theme.
+ * Throws when either side cannot be resolved, so a broken reference fails the
+ * build instead of shortening a published table.
  */
 export function measure(
   foreground: string,

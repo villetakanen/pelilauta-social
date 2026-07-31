@@ -2,12 +2,9 @@
 /**
  * RoleTable — a semantic role shown in Light and Dark at once.
  *
- * Cyan 4's colour book puts both modes in one row, and that is the artifact this
- * system most needed: `light-dark()` resolves against `color-scheme`, so a
- * reader normally sees only their own mode and has to be *told* what the other
- * one does. Scoping `color-scheme` on each cell makes the browser resolve both
- * arms on one page, and the fact that Dark is not an inversion becomes something
- * you can see rather than a paragraph of statistics.
+ * `light-dark()` resolves against `color-scheme`, so a reader normally sees only
+ * their own theme. Scoping `color-scheme` on each cell makes the browser resolve
+ * both arms on one page. Cyan 4's colour book uses the same approach.
  *
  * Book: apps/design/src/content/principles/color-system.mdx
  */
