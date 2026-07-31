@@ -56,10 +56,16 @@ function rules(slice: string) {
 
 const groups = sections.map((section, index) => {
   const end = sections[index + 1]?.headingStart ?? preflightSource.length;
-  return { ...section, rules: rules(preflightSource.slice(section.start, end)) };
+  return {
+    ...section,
+    rules: rules(preflightSource.slice(section.start, end)),
+  };
 });
 
-const ruleCount = groups.reduce((total, group) => total + group.rules.length, 0);
+const ruleCount = groups.reduce(
+  (total, group) => total + group.rules.length,
+  0,
+);
 const declarationCount = groups.reduce(
   (total, group) =>
     total +

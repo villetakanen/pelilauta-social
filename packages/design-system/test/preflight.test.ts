@@ -81,7 +81,8 @@ describe('preflight', () => {
   });
 
   test('declares no custom property', () => {
-    const declarations = withoutComments(preflight).match(/--[\w-]+\s*:/g) ?? [];
+    const declarations =
+      withoutComments(preflight).match(/--[\w-]+\s*:/g) ?? [];
     expect(declarations).toEqual([]);
   });
 
@@ -111,7 +112,14 @@ describe('preflight', () => {
   });
 
   test('is the only design-system stylesheet declaring color-scheme', () => {
-    const others = ['../styles/color-theme.css', '../styles/color.css', '../styles/units.css', '../styles/icon.css', '../styles/docs.css', '../styles/compat/cyan-4.css'];
+    const others = [
+      '../styles/color-theme.css',
+      '../styles/color.css',
+      '../styles/units.css',
+      '../styles/icon.css',
+      '../styles/docs.css',
+      '../styles/compat/cyan-4.css',
+    ];
     expect(withoutComments(preflight)).toMatch(/color-scheme\s*:/);
     for (const path of others) {
       expect(withoutComments(read(path)), path).not.toMatch(/color-scheme\s*:/);
@@ -122,7 +130,9 @@ describe('preflight', () => {
 describe('entry point', () => {
   test('composes the preflight and the tokens, in that order', () => {
     const entry = withoutComments(read('../styles/ds.css'));
-    const imports = [...entry.matchAll(/@import\s+"([^"]+)"/g)].map((m) => m[1]);
+    const imports = [...entry.matchAll(/@import\s+"([^"]+)"/g)].map(
+      (m) => m[1],
+    );
     expect(imports).toEqual(['./preflight.css', './tokens.css']);
   });
 
