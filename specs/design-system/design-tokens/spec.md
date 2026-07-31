@@ -33,6 +33,12 @@ A token holds an input to a value, not a value computed in advance. A consumer
 composes the final measurement, so a decision stays valid when the context around
 it changes.
 
+The base grid is expressed in `rem`, and no stylesheet overrides the document's
+root font size, so every spacing decision scales with the reader's font-size
+preference instead of replacing it. Breakpoints are expressed in `rem` for the same
+reason: a query stated in pixels cannot see that the reader has asked for larger
+text, and would keep making layout decisions as though they had not.
+
 Reference choices state what is available. Semantic roles state why a choice is
 used. Components consume semantic roles so that their meaning remains stable
 when the visual expression evolves.
@@ -80,5 +86,9 @@ when the visual expression evolves.
 - Existing consumers continue to work through an explicitly bounded
   compatibility contract until they are migrated.
 - Every added token has a current, named purpose and consumer.
+- The design system's own stylesheets set no root font size and state no pixel
+  breakpoint, so a reader who enlarges their default text gets a proportionally
+  larger interface. A package check enforces this; consuming applications are
+  outside its reach and are not covered by it.
 - Human review approves visual intent and any deliberate departure from the
   live v18 experience.

@@ -1,0 +1,249 @@
+---
+/**
+ * Foundations book.
+ *
+ * The origin and its multiples are parsed at build time from the production
+ * units.css, so the book cannot claim a ratio the stylesheet does not have. The
+ * three demonstration frames inline that same stylesheet text, so all three run
+ * identical production CSS and differ only in their root font size.
+ *
+ * Spec: specs/design-system/design-tokens/spec.md
+ * Guard: packages/design-system/test/root-scaling.test.ts
+ */
+import unitsSource from '@design-system/styles/units.css?raw';
+import '@design-system/styles/tokens.css';
+
+interface Props {
+  /** Book title, owned by the MDX entry's frontmatter. Rendered as the only h1. */
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const declarationPattern = /(--[\w-]+)\s*:\s*([^;]+);/g;
+const declarations = [...unitsSource.matchAll(declarationPattern)].map(
+  (match) => ({
+    name: match[1],
+    value: match[2].replace(/\s+/g, ' ').trim(),
+  }),
+);
+
+const origin = declarations.find((token) => token.name === '--cn-grid');
+const originRem = Number.parseFloat(origin?.value ?? '0');
+
+/**
+ * How many grids a token is worth, or null when it aliases another token rather
+ * than the origin. `calc(var(--cn-grid) * 2)` is 2; `var(--cn-grid)` is 1;
+ * `var(--cn-border-radius-medium)` is an alias and has no direct multiple.
+ */
+function multipleOfGrid(value: string) {
+  if (value === 'var(--cn-grid)') return 1;
+  const factor = value.match(/var\(--cn-grid\)\s*\*\s*([\d.]+)/);
+  return factor ? Number(factor[1]) : null;
+}
+
+const derived = declarations
+  .filter((token) => token.name !== '--cn-grid')
+  .map((token) => ({ ...token, multiple: multipleOfGrid(token.value) }));
+
+const scaling = derived.filter((token) => token.multiple !== null);
+
+const ROOTS = [16, 20, 24];
+
+const demoStyles = `
+  body { margin: 0; padding: var(--cn-gap); background: Canvas; color: CanvasText;
+    color-scheme: light dark; font-family: system-ui, sans-serif; overflow: hidden; }
+  .card { display: grid; gap: var(--cn-grid); padding: var(--cn-gap);
+    border: 0.125rem solid CanvasText; border-radius: var(--cn-border-radius-large); }
+  h2 { margin: 0; font-size: 1rem; }
+  .row { display: flex; align-items: center; gap: var(--cn-gap); }
+  .dot { inline-size: var(--cn-line); block-size: var(--cn-line);
+    border-radius: 50%; background: CanvasText; flex: none; }
+`;
+
+const panes = ROOTS.map((root) => ({
+  root,
+  gap: originRem * 2 * root,
+  srcdoc: `<!doctype html><html lang="en"><head><meta charset="utf-8"><style>html{font-size:${root}px}${unitsSource}${demoStyles}</style></head><body><div class="card"><h2>Ketju</h2><div class="row"><span class="dot"></span><span>Ville</span></div><div class="row"><span class="dot"></span><span>Anna</span></div></div></body></html>`,
+}));
+---
+
+<section class="hero">
+  <p class="kicker">ORIGIN / SCALING / GUARD</p>
+  <h1>{title}</h1>
+  <p class="lede">
+    One literal measurement, <code>--cn-grid</code>, and every spacing decision
+    derived from it in <code>rem</code>. Nothing overrides the document's root
+    font size, so a reader who asks their browser for larger text gets a
+    proportionally larger interface rather than the same one with bigger letters
+    crammed into it.
+  </p>
+  <p class="lede exception">
+    That promise covers the spatial system — grid, gap, line, radii and the
+    shadows derived from them. It deliberately does not cover this documentation
+    site's own display type, which is sized fluidly against the viewport so long
+    headings stay readable on a phone.
+  </p>
+  <dl class="facts">
+    <div><dt>Origin</dt><dd>{origin?.value}</dd></div>
+    <div><dt>Derived from it</dt><dd>{scaling.length}</dd></div>
+    <div><dt>Root overrides</dt><dd>0</dd></div>
+    <div>
+      <dt>Your root size</dt>
+      <dd data-root-readout>needs JavaScript</dd>
+    </div>
+  </dl>
+</section>
+
+<section aria-labelledby="origin-title">
+  <div class="section-heading">
+    <p>01 / ONE ORIGIN</p>
+    <h2 id="origin-title">Everything is a multiple of the grid</h2>
+    <p>
+      <code>--cn-grid</code> is the only literal length in the system. Each token
+      below states how many grids it is worth, so changing the origin rescales
+      everything at once instead of requiring every value to be revisited.
+    </p>
+  </div>
+  <ul class="origin">
+    <li data-origin-token="--cn-grid">
+      <code>--cn-grid</code>
+      <span class="multiple">the origin</span>
+      <small>{origin?.value}</small>
+    </li>
+    {scaling.map((token) => (
+      <li data-origin-token={token.name}>
+        <code>{token.name}</code>
+        <span class="multiple">×{token.multiple}</span>
+        <small>{token.value}</small>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section aria-labelledby="scale-title" data-demo="root-scaling">
+  <div class="section-heading">
+    <p>02 / THREE READERS, ONE STYLESHEET</p>
+    <h2 id="scale-title">The same CSS at three root sizes</h2>
+    <p>
+      Each frame is its own document running the identical
+      <code>units.css</code>, and the frames are the same size. Only the root
+      font size differs — exactly what happens when a reader sets a larger
+      default in their browser. Nothing inside is resized by hand.
+    </p>
+  </div>
+
+  <div class="panes">
+    {panes.map((pane) => (
+      <figure data-root-demo={pane.root}>
+        <iframe
+          title={`Interface preview at a ${pane.root} pixel root font size`}
+          sandbox=""
+          loading="lazy"
+          srcdoc={pane.srcdoc}
+        ></iframe>
+        <figcaption>
+          {pane.root}px root · <code>--cn-gap</code> resolves to {pane.gap}px
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <caption>Resolved values, computed from units.css</caption>
+      <thead>
+        <tr>
+          <th scope="col">Token</th>
+          <th scope="col">Source</th>
+          {ROOTS.map((root) => <th scope="col">{root}px root</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-scale-token="--cn-grid">
+          <th scope="row"><code>--cn-grid</code></th>
+          <td><code>{origin?.value}</code></td>
+          {ROOTS.map((root) => <td>{originRem * root}px</td>)}
+        </tr>
+        {scaling.map((token) => (
+          <tr data-scale-token={token.name}>
+            <th scope="row"><code>{token.name}</code></th>
+            <td><code>{token.value}</code></td>
+            {ROOTS.map((root) => (
+              <td>{originRem * (token.multiple ?? 0) * root}px</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="break-title">
+  <div class="section-heading">
+    <p>03 / WHAT WOULD BREAK IT</p>
+    <h2 id="break-title">Two rules, kept by a test</h2>
+    <p>
+      The property above is easy to lose by accident and invisible when it goes,
+      so it is a check rather than a convention.
+    </p>
+  </div>
+  <ol class="rules">
+    <li>
+      <h3>No stylesheet sets a root font size</h3>
+      <p>
+        Declaring <code>font-size</code> on <code>html</code> or
+        <code>:root</code> replaces the reader's preference with a number of our
+        choosing. Every length in the system is relative to it, so one such
+        declaration silently opts the whole interface out.
+      </p>
+    </li>
+    <li>
+      <h3>Breakpoints are declared in rem</h3>
+      <p>
+        A media query stated in pixels cannot see that the reader has chosen
+        larger text. The type grows, the layout keeps deciding as though it had
+        not, and columns break before the reader reaches them.
+      </p>
+    </li>
+  </ol>
+  <p class="footnote">
+    Enforced by <code>packages/design-system/test/root-scaling.test.ts</code>,
+    which reads this package's stylesheets. Consuming applications are outside
+    its reach.
+  </p>
+</section>
+
+<style>
+  /* Book-specific only; the shared editorial vocabulary lives in docs.css. */
+  .exception { color: var(--cn-text-low); }
+  .origin { display: grid; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+  .origin li { display: grid; grid-template-columns: minmax(14rem, auto) 5rem 1fr; gap: 1rem; align-items: baseline; }
+  .origin code { color: var(--cn-text-high); }
+  .origin .multiple { color: var(--cn-text-high); font-variant-numeric: tabular-nums; }
+  .origin small { color: var(--cn-text-low); font-family: monospace; font-size: 0.72rem; }
+  .panes { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-block-end: 3rem; }
+  .panes figure { margin: 0; display: grid; gap: 0.6rem; }
+  .panes iframe { inline-size: 100%; aspect-ratio: 4 / 3; border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-small); background: var(--cn-surface-1); }
+  .panes figcaption { color: var(--cn-text-low); font-size: 0.8rem; }
+  .rules { display: grid; gap: 2rem; margin: 0; padding: 0 0 0 1.5rem; }
+  .rules h3 { margin: 0 0 0.5rem; color: var(--cn-text-high); font-size: 1.1rem; }
+  .rules p { margin: 0; }
+  .footnote { color: var(--cn-text-low); font-size: 0.85rem; margin-block-start: 2rem; }
+</style>
+
+<script>
+  const readout = document.querySelector('[data-root-readout]');
+  if (readout) {
+    const probe = document.createElement('span');
+    probe.style.display = 'block';
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    probe.style.inlineSize = 'var(--cn-gap)';
+    document.body.append(probe);
+    const root = getComputedStyle(document.documentElement).fontSize;
+    const gap = getComputedStyle(probe).inlineSize;
+    probe.remove();
+    readout.textContent = `${root} · gap ${gap}`;
+  }
+</script>
