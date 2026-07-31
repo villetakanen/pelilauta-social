@@ -52,13 +52,27 @@ cannot settle whether `optgroup` or a WebKit search pseudo-element is inside it.
 | The spacing that replaces the removed margins | each container, until the type ramp |
 | Constraining media width, and whether media is block-level | the container holding it |
 | Scrollbar appearance | nobody: not styled, browser default |
-| How a control looks once normalised | its component |
-| Page grid, rows and columns | the shell component |
+| How a control looks | its component; the reset normalises, it does not style |
+| Page grid, rows and columns | a shell component, which neither app has yet |
 
 Media is Bell's position, taken deliberately: his more modern reset dropped the media
 rules his earlier one had, where Tailwind and Radix keep them. If an image has to fit
 something, the something decides — a reset cannot know which images are content and
 which are chrome.
+
+The body filling the viewport is the reset's: Bell's rule, taken with `dvh` rather than
+`vh` so it survives a mobile browser's collapsing toolbar, which is also v20's unit. The
+body *being* a grid with named rows is a shell's, which is where v20 put it — and no v21
+shell exists yet. `apps/pelilauta` gets its chrome from Cyan's `main`, `bar`, `rail` and
+`tray` stylesheets, and `apps/design` lays out its own in the book layout.
+
+Controls keep their native look until a component gives them the system's. The reset
+neutralises the artefacts nobody wants — Firefox's focus ring and inner border, number
+spinners, the search field — and keeps `-webkit-appearance: button`, which preserves
+native button rendering that iOS Safari otherwise drops on `[type="button"]`. Radix's
+reset takes the other path and blanks controls to a slate; that would make a component
+mandatory before any control is usable, which Bell and Tailwind do not ask for and this
+migration cannot absorb.
 
 Scrollbars are left to the browser, which is what Bell, Tailwind, Radix and v20 all do —
 Cyan 4 is the only source that styles them, and it is the source being replaced. Styling
