@@ -5,8 +5,6 @@ order: 1
 prose: true
 ---
 
-import PreflightRules from '@design-system/books/specimens/PreflightRules.astro'
-
 Built on [modern-normalize](https://github.com/sindresorhus/modern-normalize) and
 [Tailwind Preflight](https://tailwindcss.com/docs/preflight), Preflight is the set of
 base styles a Pelilauta document starts from. It arrives with
@@ -18,14 +16,24 @@ the sections below are the parts that can surprise you.
 Padding and borders count inside an element's stated size, so a component given
 `inline-size: 20rem` and `padding: 1rem` occupies 20rem.
 
-<PreflightRules rules={['*, ::before, ::after']} />
+```css
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+```
 
 ## Lists are unstyled
 
 Markers, margin and padding are removed. Most lists here are structure rather than
 prose — navigations, menus, trays, card grids.
 
-<PreflightRules rules={['ol, ul, menu']} />
+```css
+ol, ul, menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+```
 
 Restore them where the content reads as prose. A book's reading container already
 does:
@@ -44,14 +52,29 @@ A control takes the document's font family, size and line height instead of the
 browser's. Set type on a control only to make it deliberately different from its
 surroundings.
 
-<PreflightRules rules={['button, input, optgroup, select, textarea', 'button, select']} />
+```css
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  margin: 0;
+}
+
+button, select {
+  text-transform: none;
+}
+```
 
 ## Buttons take a pointer
 
 Both `button` and anything with `role="button"`, so an interactive element does not
 need to say so itself.
 
-<PreflightRules rules={['button, [role="button"]']} />
+```css
+button, [role="button"] {
+  cursor: pointer;
+}
+```
 
 ## Platform artefacts are removed
 
@@ -64,14 +87,24 @@ appearance and decoration.
 The document supports both schemes and names dark first. An application's
 `<meta name="color-scheme">` states the same order, or it has no effect.
 
-<PreflightRules rules={[':root']} />
+```css
+:root {
+  color-scheme: dark light;
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+```
 
 ## Islands are transparent
 
 Astro's hydration wrapper adds no box, so a Svelte island inside a flex row lays out
 as though its markup were written there.
 
-<PreflightRules rules={['astro-island']} />
+```css
+astro-island {
+  display: contents;
+}
+```
 
 ## Small corrections
 
@@ -81,7 +114,15 @@ not stretch a line, monospace matches its context, `summary` renders as a list i
 
 The body takes the theme:
 
-<PreflightRules rules={['body']} />
+```css
+body {
+  margin: 0;
+  background: var(--cn-background);
+  color: var(--cn-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+```
 
 ## Using it
 
