@@ -6,112 +6,95 @@ status: draft
 
 ## Intent
 
-A reader who needs to know what `--cn-gap` resolves to can look it up in a second.
-A reader deciding whether this gap between two elements should be `--cn-gap` or
-`--cn-line` cannot look that up anywhere, and today guesses.
+The principles chapter documents how to use the design system: which measurement,
+colour or type step to choose in a given situation, and the reasoning behind the
+system's shape.
 
-The principles chapter answers the second question. It is the part of the design
-system that teaches a decision — when to reach for which token, what not to do, and
-why the system is shaped the way it is. Without it the design system is a vocabulary
-with no grammar: every value is documented and every choice is still improvised.
+Its readers are the developers and agents building Pelilauta's interface. They
+arrive with one decision to make, and need an answer they can apply to cases the
+book does not list.
 
-## Principles And Lexicon
+## Books And Lexicons
 
-Two kinds of book, distinguished by the question they answer.
+The design site carries two kinds of page about the same subjects.
 
-A **principles** book teaches a decision. It states a rule, gives the reasoning a
-reader needs to apply it to a case the book does not cover, and shows what going
-wrong looks like. It is prose, written by a person.
+A **principles book** states a rule, the reasoning that lets a reader apply it to an
+unlisted case, and the mistakes the rule prevents. It is written prose.
 
-A **tokens** book is a lexicon. It states what exists and what each entry resolves
-to, completely and without advice. Enumeration is the correct form here, and a
-lexicon that omits an entry is defective.
+A **lexicon book** states what exists and what each entry resolves to, completely.
 
-Keeping them apart is what lets each be good at its job. A principles book that
-enumerates becomes an inventory nobody reads for guidance; a lexicon that editorialises
-becomes incomplete. The same subject appears in both — spacing has a principles book
-about rhythm and a lexicon entry for every unit — and that is not duplication.
+A subject appears in both. Spacing has a principles book covering rhythm and choice,
+and a lexicon listing every unit and its value.
 
 ## The Chapter
 
-Five books, covering the foundations a reader needs before any component makes sense:
+Five books cover the foundations that components depend on:
 
-- **Spatial System** — the grid, layout and spacing.
+- **Spatial System** — grid, layout, spacing and radii.
 - **Color & Surface** — primitives, semantic roles and elevation.
-- **System Mechanics** — density, box rules, and the cross-cutting do's and don'ts.
+- **System Mechanics** — density, box rules, and cross-cutting do's and don'ts.
 - **Typography** — the type ramp, styles and pairings.
 - **Iconography** — the icon grid, stroke rules and library usage.
 
-The list is the chapter's intended shape, not a delivery commitment. A book is
-written when a slice needs it, and an unwritten book is absent rather than a stub.
+Each is written when a delivery slice needs it. An unwritten book is absent from the
+site.
 
 ## Source Of Intent
 
-The design system's intent comes from v20 and from approved owner decisions. Where
-v20 has already documented a foundation, a v21 principles book ports and adapts it
-rather than reinventing it.
+Design intent comes from v20 and from approved owner decisions. Where v20 documents
+a foundation, the v21 book ports and adapts it.
 
-**v18 and Cyan 4 are not sources of design intent.** They are the system being
-replaced. How Cyan 4 happens to use a token, and how the v18 application happens to
-call it, are facts about legacy code, not evidence of good design — and a principles
-book that derives its rules from them launders v18 habits into v21. This holds only
-for design intent: v18 remains the compatibility contract for application behavior,
-data and routes, which `AGENTS.md` governs.
+v18 and Cyan 4 supply the compatibility contract for application behaviour, data and
+routes, which `AGENTS.md` governs. Design intent is outside that contract: how
+Cyan 4 uses a token is a fact about the code being replaced.
 
-Where a book states something neither v20 nor an owner decision covers, it says so.
+A claim that neither v20 nor an owner decision covers is marked in the book as this
+system's own.
 
 ## Blueprint
 
 A principles book is one MDX entry in its group's content collection, per
-`specs/design-system/design-site-navigation/spec.md`. Its shape:
+`specs/design-system/design-site-navigation/spec.md`.
 
-- **One `h1`, rendered from `frontmatter.title`.** The layout deliberately does not
-  render it, and the title has one source.
-- **Numbered sections, each answering one decision.** A section that answers no
-  question a reader would actually ask is a section to cut.
-- **Tables that carry a Role column.** Token, derivation, computed value, and what it
-  is *for*. The last column is why the table exists in a principles book at all; the
-  first three are the lexicon's job.
-- **Specimens that illustrate a distinction**, written as inline-styled HTML in the
-  MDX body. A specimen earns its place by showing something prose cannot — v20's
-  physical-versus-visual button size is the model. A grid of every value is an
-  inventory, not a specimen.
-- **Do and don't pairs** wherever a rule is easy to misapply, stated as the mistake a
-  reader would plausibly make rather than as a general caution.
-- **A closing pointer to the lexicon** for the values themselves, and a plain
-  statement of what the design system does not yet own, so a gap reads as a boundary
-  rather than an oversight.
+- The page's only `h1` renders from `frontmatter.title`.
+- Sections are numbered, and each answers one decision.
+- A token table carries four columns: name, derivation, computed value, and role.
+  The role column states what the token is for.
+- Specimens are inline-styled HTML in the MDX body, showing a distinction the prose
+  has stated — a touch target against the smaller control drawn inside it, for
+  example.
+- Do and don't pairs name the mistake a reader would plausibly make.
+- The closing section links the lexicon for values, and states which parts of the
+  subject the design system does not yet own.
 
-The books to imitate are v20's own, `app/cyan-ds/src/content/principles/` in
-`pelilauta-20-ds` — prose first, tables that explain, specimens that demonstrate.
+The reference books are v20's, in `pelilauta-20-ds` at
+`app/cyan-ds/src/content/principles/`.
 
 ## Non-Goals
 
-- Principles books do not restate values owned by the token specs; they link them.
-- The chapter does not document component APIs, which belong to component books.
-- No principles book is required before the capability it describes exists.
+- Principles books link the values owned by token specs rather than restating them.
+- Component APIs belong to component books.
+- A capability is documented after it exists.
 
 ## Contract
 
 ### Definition of Done
 
-- A principles book answers at least one "which should I use, and why" question that
-  a reader could not answer from the lexicon.
-- Its claims trace to v20 or to a recorded owner decision, or are marked as this
+- The book answers at least one question of the form "which of these should I use
+  here" that the lexicon leaves open.
+- Each claim traces to v20, to a recorded owner decision, or is marked as this
   system's own addition.
-- It renders as one MDX entry with a single `h1` matching its navigation label, per
-  `specs/design-system/design-site-navigation/spec.md`.
+- The page renders with a single `h1` matching its navigation label.
 
 ### Regression Guardrails
 
-- A principles book's content is not generated by enumerating a stylesheet. If a
-  book can be regenerated from source, it belongs in the lexicon.
-- Adding a token family does not oblige a principles book; a book is justified by a
-  decision readers keep getting wrong.
+- A principles book's content is written. Content regenerable from a stylesheet
+  belongs to a lexicon book.
+- A new token family does not oblige a principles book. A book is written when
+  readers repeatedly decide something wrongly.
 
 ## Acceptance
 
-- A developer can decide between two plausible tokens after reading the relevant
-  book, and could not before.
-- Human review accepts the writing. This is editorial work, and no check can tell
-  whether guidance is good.
+- A developer chooses correctly between two plausible tokens after reading the book,
+  in a case the book does not name.
+- Human review accepts the writing.

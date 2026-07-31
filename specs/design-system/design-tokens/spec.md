@@ -76,18 +76,14 @@ direction through three layers:
 - a **reference** layer of literal values, which is where the stack bottoms out;
 - a **semantic** layer naming roles, built from the reference layer and expressing
   Light and Dark as two arms of one declaration;
-- a **compatibility** layer aliasing legacy Cyan 4 names onto semantic roles. It
-  maps and never holds a value of its own, so a legacy name cannot drift away from
-  the role it stands for, and every alias terminates in an owned token rather than
-  in the compatibility layer itself.
+- a **compatibility** layer aliasing legacy Cyan 4 names onto semantic roles. Every
+  entry is an alias terminating in a reference or semantic token.
 
-The grid family is separate from colour and is loaded first, because elevation
-shadows in the semantic layer are derived from the grid and are unresolvable
-without it. One entry point composes the families in that order, so a consumer
-importing it cannot get a partial stack.
+The grid family is separate from colour and loads first: elevation shadows in the
+semantic layer derive from the grid. One entry point composes the families in that
+order, and consumers import it.
 
-A consumer reads semantic roles. Reaching past them to a reference value couples a
-component to a palette choice rather than to the meaning it wanted.
+Consumers read semantic roles.
 
 ## Non-Goals
 
