@@ -2,8 +2,8 @@ name: tag
 
 # Every merge to main deploys and is a release. The version was already bumped in
 # the pull request, so the tag is derived here rather than applied by hand. An
-# existing tag is left alone: a merge that did not bump the version is not a new
-# release, and a published tag never moves.
+# rerun leaves a tag on this commit alone. A tag on any other commit fails the
+# release: published tags never move, and every merge needs its own version.
 
 on:
   push:
@@ -28,8 +28,12 @@ jobs:
           TAG: ${{ steps.version.outputs.value }}
         run: |
           if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
-            echo "$TAG already exists; nothing to publish."
-            exit 0
+            if [ "$(git rev-list -n 1 "$TAG")" = "$GITHUB_SHA" ]; then
+              echo "$TAG already identifies this release commit."
+              exit 0
+            fi
+            echo "::error::$TAG already identifies a different release commit."
+            exit 1
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
