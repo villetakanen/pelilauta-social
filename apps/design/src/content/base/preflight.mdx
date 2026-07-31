@@ -1,40 +1,44 @@
 ---
 title: Preflight
-description: Pelilauta's base styles are a modern reset — what that gives you, what we add to it, and what it deliberately leaves to something else.
+description: Pelilauta's modern reset, and its deviations from the Andy Bell and Tailwind Preflight baseline.
 order: 1
 prose: true
 ---
 
-Pelilauta's base styles are a modern reset, in the line of
-[Andy Bell's](https://piccalil.li/blog/a-more-modern-css-reset/) and
-[Tailwind Preflight](https://tailwindcss.com/docs/preflight) — both built on
-[modern-normalize](https://github.com/sindresorhus/modern-normalize). Those pages
-document what a modern reset does and why; this one covers what is specific to us.
+Pelilauta uses a modern reset, based on the work of
+[Andy Bell](https://piccalil.li/blog/a-more-modern-css-reset/) and
+[Tailwind Preflight](https://tailwindcss.com/docs/preflight). Any deviations from their
+baseline are documented here.
 
 ## Extensions
 
-**Hydration wrappers are transparent.** Astro puts an `astro-island` element around a
-hydrated component. It displays as `contents`, so a Svelte island inside a flex row
-lays out as though its markup were written there.
+Astro wraps a hydrated component in an `astro-island` element. It is made transparent,
+so an island lays out as though its markup were written in place.
 
 ```css
-astro-island {
-  display: contents;
-}
+astro-island { display: contents; }
 ```
 
-**Dark is the no-preference default.** The document supports both schemes and names
-dark first. An application's `<meta name="color-scheme">` states the same order, or it
-has no effect — the CSS property wins.
+The document declares both colour schemes, dark first. An application's
+`<meta name="color-scheme">` must state the same order, because the property overrides
+the tag.
 
 ```css
-:root {
-  color-scheme: dark light;
-}
+:root { color-scheme: dark light; }
 ```
 
-**The body carries the theme**, using the semantic background and text roles rather
-than literal colours.
+`body` takes the semantic background and text roles rather than literal colours.
+
+## List markers
+
+Removed only on `[role="list"]`, following Bell; Tailwind removes them from every list.
+Safari drops a list's semantics from VoiceOver when `list-style` is removed, so a
+navigation or menu asks for both. Margin and padding are zeroed on every list either
+way.
+
+```css
+ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
+```
 
 ## Owned elsewhere
 
@@ -42,22 +46,8 @@ than literal colours.
 | :--- | :--- |
 | Prose margins, type sizes, leading, heading wrap | the type ramp |
 | Constraining image width | the container holding the image |
-| Scrollbar appearance | themed surfaces, not yet assigned |
+| Scrollbar appearance | themed surfaces, unassigned |
 | How a control looks once normalised | its component |
 
-A reset that removed prose margins without stating the replacement would be a rule
-waiting to be overridden, so the type ramp does both together.
-
-## List markers
-
-List markers are removed only where you ask, following Bell rather than Tailwind:
-
-```css
-ol[role="list"], ul[role="list"], menu[role="list"] {
-  list-style: none;
-}
-```
-
-Safari drops a list's semantics from VoiceOver when `list-style` is removed, so a
-navigation, menu or tray asks for both — the role keeps the semantics, the selector
-removes the markers. Margins and padding are zeroed on every list regardless.
+Bell and Tailwind both zero prose margins in the reset. Here that waits for the type
+ramp, which states the replacement rhythm in the same change.
