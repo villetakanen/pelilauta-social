@@ -11,7 +11,7 @@ Pelilauta's base styles are a modern reset, in the line of
 [modern-normalize](https://github.com/sindresorhus/modern-normalize). Those pages
 document what a modern reset does and why; this one covers what is specific to us.
 
-## What we add
+## Extensions
 
 **Hydration wrappers are transparent.** Astro puts an `astro-island` element around a
 hydrated component. It displays as `contents`, so a Svelte island inside a flex row
@@ -36,9 +36,9 @@ has no effect — the CSS property wins.
 **The body carries the theme**, using the semantic background and text roles rather
 than literal colours.
 
-## What we leave to something else
+## Owned elsewhere
 
-| Not here | Where it lives |
+| Concern | Owner |
 | :--- | :--- |
 | Prose margins, type sizes, leading, heading wrap | the type ramp |
 | Constraining image width | the container holding the image |
@@ -48,7 +48,7 @@ than literal colours.
 A reset that removed prose margins without stating the replacement would be a rule
 waiting to be overridden, so the type ramp does both together.
 
-## One thing worth knowing
+## List markers
 
 List markers are removed only where you ask, following Bell rather than Tailwind:
 
