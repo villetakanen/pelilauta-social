@@ -1,0 +1,58 @@
+---
+title: The book's title
+description: One sentence. It is the navigation subtitle and the page's meta description, so write it for someone deciding whether to open the page.
+order: 1
+prose: true
+---
+
+{/*
+  BOOK TEMPLATE — copy to apps/design/src/content/<group>/<slug>.mdx and delete
+  these comments.
+
+  A book IS this file. Prose in MDX, headings that say what the reader gets, and
+  markdown tables where a list of values is the point. There is no per-book Astro
+  component: `books/*.astro` are debt from before there was a design-system app,
+  and are not a pattern to copy. Neither is styles/docs.css.
+
+  `prose: true` asks the shell to wrap this file in <article class="cn-content-prose">,
+  which sets the reading measure and restores prose list markers. Omit it only for a
+  book that lays out its own full-bleed sections.
+
+  The h1 comes from `title` above — do not write one here.
+
+  Live code: import a specimen component for the part that must read real source,
+  and keep the prose in MDX. Anything that can go stale by hand — a token's value,
+  a rule that ships in a stylesheet — belongs to a specimen, not to prose.
+
+  Length: v20's books run 50–200 lines. If it is longer, it is probably two books.
+*/}
+
+Open with what this is and who needs it, in two or three sentences. State the
+decision the reader arrives with, and answer it here rather than at the end.
+
+## A heading that states the outcome
+
+Not "Overview" and not a noun phrase — "Form controls inherit their type", "The
+grid is the only literal length". A reader scanning headings should be able to
+learn the rules without reading the paragraphs.
+
+Prose explains why the system is shaped this way and what the rule prevents. Values
+belong in a table:
+
+| Token | Value | Role |
+| :--- | :--- | :--- |
+| `--cn-grid` | `0.5rem` | The atomic unit of alignment. |
+
+## A heading with live source under it
+
+<SomeSpecimen />
+
+Use a specimen where the page would otherwise repeat a stylesheet by hand. Say in
+one line what the reader is looking at; do not narrate what the specimen already
+shows.
+
+## What this does not cover
+
+Name the neighbouring things this book deliberately leaves alone and who owns them.
+A reader who came for one of them should leave knowing where to look, and a future
+agent should not read the omission as an oversight.

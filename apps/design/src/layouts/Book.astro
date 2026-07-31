@@ -10,18 +10,27 @@
  * as a prop from the MDX frontmatter instead, so there is one source for it.
  */
 import '@design-system/styles/ds.css';
+import '@design-system/styles/content-prose.css';
+// Prototype-age scaffolding, kept only for the legacy books/*.astro pages that
+// consume its hero and stat-tile vocabulary. Prose books do not use it.
 import '@design-system/styles/docs.css';
 import DocsNav from '../components/DocsNav.astro';
 import { groupLabel } from '../lib/books';
 
 interface Props {
   title: string;
+  /**
+   * Wrap the book in the design system's reading container. A prose book sets it;
+   * a legacy books/*.astro page lays out its own full-bleed sections instead, so
+   * wrapping it would put a 67ch measure around a page built without one.
+   */
+  prose?: boolean;
   description: string;
   /** Collection id of the current book, absent on the index page. */
   group?: string;
 }
 
-const { title, description, group } = Astro.props;
+const { title, description, group, prose = false } = Astro.props;
 const context = group ? groupLabel(group) : 'Index';
 ---
 
@@ -54,7 +63,14 @@ const context = group ? groupLabel(group) : 'Index';
       <DocsNav />
 
       <main class="book" id="content">
-        <slot />
+        {prose ? (
+          <article class="cn-content-prose">
+            <h1>{title}</h1>
+            <slot />
+          </article>
+        ) : (
+          <slot />
+        )}
       </main>
     </div>
 

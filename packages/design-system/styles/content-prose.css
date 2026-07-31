@@ -1,0 +1,112 @@
+/*
+ * .cn-content-prose — the reading container for a documentation book.
+ *
+ * v20's name and v20's job: its docs shell wraps every MDX book in
+ * <article class="cn-content-prose"> and carries no styles of its own, because the
+ * design system owns how prose reads (packages/cyan/src/layouts/content-grid.css
+ * and tokens/typography-semantics.css).
+ *
+ * This is the half of that which does not need the type ramp: the reading measure,
+ * prose list markers, and the presentation of code, tables and quotes. Sizes,
+ * weights and leading stay with the browser until the typography epic's semantics
+ * story ports them, at which point this file gains the rest and the sizes stop
+ * being defaults.
+ *
+ * Deliberately not part of styles/ds.css. apps/pelilauta still gets its prose from
+ * Cyan, so shipping a second set of prose rules into the application would be two
+ * stylesheets arguing. The design site imports this directly until the ramp lands.
+ */
+
+.cn-content-prose {
+  /* v20's measure: 67ch of text, centred, with the gutters as tracks. */
+  display: grid;
+  grid-template-columns: 1fr min(67ch, 100%) 1fr;
+  padding-block: calc(var(--cn-line) * 2) calc(var(--cn-line) * 6);
+  padding-inline: var(--cn-gap);
+}
+
+.cn-content-prose > * {
+  grid-column: 2;
+}
+
+/*
+ * The preflight strips list markers, because the application's navigations, menus
+ * and trays are lists. Prose is where they come back.
+ */
+.cn-content-prose :is(ul, ol) {
+  padding-inline-start: calc(var(--cn-grid) * 3);
+}
+
+.cn-content-prose ul {
+  list-style: disc;
+}
+
+.cn-content-prose ol {
+  list-style: decimal;
+}
+
+.cn-content-prose :is(h1, h2, h3, h4) {
+  color: var(--cn-text-high);
+}
+
+/* Headings belong to the text they introduce, not to the text above them. */
+.cn-content-prose :is(h2, h3, h4) {
+  margin-block: calc(var(--cn-line) * 1.5) var(--cn-grid);
+  scroll-margin-block-start: calc(var(--cn-line) * 2);
+}
+
+.cn-content-prose :is(code, kbd, samp) {
+  padding-inline: 0.3em;
+  border-radius: var(--cn-border-radius-small);
+  background: var(--cn-surface-1);
+  color: var(--cn-text-high);
+}
+
+.cn-content-prose pre {
+  margin-block: var(--cn-line);
+  padding: var(--cn-gap);
+  overflow-x: auto;
+  border: 1px solid var(--cn-border);
+  border-radius: var(--cn-border-radius);
+  background: var(--cn-surface-1);
+  tab-size: 2;
+}
+
+/* A code block is one surface, so the spans inside it do not draw their own. */
+.cn-content-prose pre code {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--cn-text);
+}
+
+.cn-content-prose table {
+  inline-size: 100%;
+  margin-block: var(--cn-line);
+  border-collapse: collapse;
+  text-align: start;
+}
+
+.cn-content-prose :is(th, td) {
+  padding: var(--cn-grid) var(--cn-gap) var(--cn-grid) 0;
+  border-block-end: 1px solid var(--cn-border);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.cn-content-prose th {
+  color: var(--cn-text-low);
+  font-weight: 600;
+}
+
+.cn-content-prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--cn-gap);
+  border-inline-start: 2px solid var(--cn-border);
+  color: var(--cn-text-low);
+}
+
+/* A wide specimen escapes the measure rather than overflowing it. */
+.cn-content-prose > .cn-content-wide {
+  grid-column: 1 / -1;
+}

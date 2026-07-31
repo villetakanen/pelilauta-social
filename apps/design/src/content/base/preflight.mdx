@@ -1,9 +1,110 @@
 ---
 title: Preflight
-description: What the document already does before a component says anything — the box model, inheritance, and the browser defaults the system corrects.
+description: An opinionated set of base styles, applied before any component says anything — the box model, inheritance, and the browser defaults the system corrects.
 order: 1
+prose: true
 ---
 
-import PreflightBook from '@design-system/books/base/PreflightBook.astro'
+import PreflightRules from '@design-system/books/specimens/PreflightRules.astro'
 
-<PreflightBook title={frontmatter.title} />
+The preflight is what the design system asserts about a document: the browser
+inconsistencies it corrects, and the box and inheritance baseline every component
+then relies on without restating it. It is modelled on modern-normalize and
+Tailwind Preflight.
+
+Both v18's Cyan 4 and v20 meant to ship exactly this, and neither finished. Cyan has
+a partial `core/preflight.css` with no form-control normalization. v20 has no
+preflight file at all — its rules sit inline in `AppShell.astro`'s global style
+block, mixed with the page grid and viewport height that belong to a shell. So this
+is not a port: Cyan's file is the inventory of what the live application depends on,
+the model is where the rest comes from, and the shell layout stayed behind.
+
+The rule set is closed. A sixth concern changes the spec before it changes the
+stylesheet, and a test holds the literal selector list — prose cannot settle whether
+`optgroup` or a WebKit search pseudo-element is inside it.
+
+## Everything sizes as border-box
+
+Padding and borders count inside an element's stated width, on every element and
+pseudo-element. Both versions already assume this and so does every component here:
+a card given a width and a padding is that width.
+
+<PreflightRules group="1" />
+
+## The document states its colour schemes
+
+A reader with no operating-system preference gets dark. It is declared here and
+nowhere else: the property overrides the `<meta name="color-scheme">` tag, so the two
+must agree or the tag is inert — and three files disagreeing about the order is what
+kept the no-preference default wrong for as long as it was.
+
+No `font-size` is set on `html` or `:root`, ever. The reader's root size is the origin
+of every length in the system; overriding it replaces their preference instead of
+scaling with it.
+
+<PreflightRules group="2" />
+
+## Form controls inherit their type
+
+A button, input, select or textarea takes the document's font family, size and line
+height, and carries no margin. Browsers do not do this on their own, which is why
+Cyan sets font on each control from `--cn-*-ui` tokens declared in its *button*
+tokens. A UI font family living in button tokens is the symptom, not the design.
+
+The rest of the group removes platform artefacts nobody asked for: the button
+appearance keyword, Firefox's inner focus border and focus ring, the invalid-field
+shadow, number spinners, and the search field's appearance and decoration.
+
+<PreflightRules group="3" />
+
+## Browser defaults are normalised
+
+Small corrections with no theme in them — `hr` with no height, `strong` bolder than
+its surroundings, `sub` and `sup` that do not stretch a line, monospace at the size of
+its context, `summary` that renders as a list item.
+
+Lists are the one with consequences. `ol`, `ul` and `menu` carry no markers, margin or
+padding, because this interface's navigations, menus and trays are built from them.
+Prose restores them: the reading container you are looking at puts the markers back,
+which is why the lists on this page have them.
+
+> A list stripped of its markers is announced differently by some screen readers.
+> Where a list is prose rather than structure, restore the marker rather than leaving
+> it bare.
+
+<PreflightRules group="4" />
+
+## The body takes the theme, and hydration wrappers disappear
+
+The body carries no margin and takes the theme's background and foreground. Astro's
+`astro-island` wrapper displays as `contents`, so it never puts a box between an
+element and its semantic child — an icon inside a flex button, for instance. Cyan
+reaches through the wrapper instead, with duplicated
+`.flex-col > astro-island > *` selectors, which this makes redundant.
+
+<PreflightRules group="5" />
+
+## What it deliberately does not do
+
+Two of these exist only in Cyan today. Nothing fails when the terminal Cyan sweep
+deletes them, which is exactly why they are written down.
+
+| Not here | Belongs to | Why |
+| :--- | :--- | :--- |
+| Prose margins | the type ramp | The rules that put the rhythm back belong to the ramp, so zeroing margins here would be a rule waiting to be overridden. A rule that needs another stylesheet to win against it is in the wrong file. |
+| Image constraint | whichever spec first owns the prose container | Cyan constrains images inside a section or article. Whether images are constrained globally or by their container is a container-level decision, and it has not been made. |
+| Scrollbar appearance | nobody yet | Cyan styles the standard and WebKit scrollbars from a width, a radius and three colour names. That is themed appearance rather than normalization, and since nothing owns it, the application loses scrollbar styling when Cyan is removed. |
+
+## Using it
+
+An application imports the design system's CSS entry point. Where in its shell it
+does so does not matter: the preflight states only what no other stylesheet has
+reason to state, so there is no order to get right.
+
+```js
+import '@design-system/styles/ds.css';
+```
+
+`ds.css` composes the preflight and the tokens. When the type ramp moves out of Cyan
+it joins the same file and neither application changes. `styles/tokens.css` stays
+meaningful on its own for a consumer that wants tokens without a reset.
