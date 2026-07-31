@@ -80,9 +80,9 @@ direction through three layers:
 - a **compatibility** layer aliasing legacy Cyan 4 names onto semantic roles. Every
   entry is an alias terminating in a reference or semantic token.
 
-The grid family is separate from colour and loads first: elevation shadows in the
-semantic layer derive from the grid. One entry point composes the families in that
-order, and consumers import it.
+The grid family is separate from colour, and elevation shadows in the semantic layer
+derive from it. One entry point composes both families so consumers receive the shadow
+declarations and their grid dependency together.
 
 Consumers read semantic roles.
 
@@ -104,6 +104,10 @@ Consumers read semantic roles.
 - Existing consumers continue to work through an explicitly bounded
   compatibility contract until they are migrated.
 - Every added token has a current, named purpose and consumer.
+- A lexicon book lists every token its stylesheet declares, with the value as
+  declared, read from that stylesheet at build time. It cannot omit a token that
+  exists or state one that does not, and a selection that matches nothing fails
+  the build rather than publishing an empty or unfiltered table.
 - The design system's own stylesheets set no root font size and state no pixel
   breakpoint, so a reader who enlarges their default text gets a proportionally
   larger interface. Consuming applications are outside this guarantee.

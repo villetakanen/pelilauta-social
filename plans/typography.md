@@ -451,11 +451,14 @@ What must be deterministic:
   epic from the abandoned `feat/ds-foundations` — belong in
   `specs/design-system/design-tokens/spec.md` instead, where the spec rather than
   a plan would own them.
-- `packages/design-system/styles/units.css` on `main` carries a false commit
-  citation (above). Correcting it is not typography work, but this epic is where
-  it was found, and the same comment also claims the two stale cyan-css radius
-  annotations are wrong — a claim worth re-checking rather than inheriting.
-- Does `styles/icon.css` fold into the token entry point? Inherited open question
-  from the core-token epic; typography does not settle it.
+- ~~`packages/design-system/styles/units.css` carries a false commit citation.~~
+  Settled 2026-07-31 in the units-lexicon story: the citation is gone from both
+  `units.css` and `icon.css`, which carried the same one. The accompanying claim
+  that cyan-css's radius annotations are stale was re-checked rather than
+  inherited, and is correct — cyan-css comments `large` as 12px and `xl` as 16px
+  where its own formulas compute 16px and 32px.
+- ~~Does `styles/icon.css` fold into the token entry point?~~ Settled in the
+  preflight story: `tokens.css` imports it, and the icon values are published in
+  the Units and grid lexicon as the spatial-system spec says they should be.
 - The terminal Cyan sweep unblocks once the semantics land, since typography is the last
   token family cyan-css supplies. `docs/MIGRATION.md` owns that sweep.

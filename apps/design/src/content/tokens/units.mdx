@@ -1,9 +1,78 @@
 ---
 title: Units and grid
-description: The base grid, the spacing and radius steps derived from it, and the elevation shadows that depend on it.
+description: Every spacing and radius token the design system declares, with its value as written in the stylesheet.
 order: 5
+prose: true
 ---
 
-import UnitsBook from '@design-system/books/tokens/UnitsBook.astro'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import unitsSource from '@design-system/styles/units.css?raw'
+import iconSource from '@design-system/styles/icon.css?raw'
 
-<UnitsBook title={frontmatter.title} />
+This is the lexicon: what the tokens are, and what each one is worth. Why the system is
+shaped this way — how to pick between the three spacing roles, why radii have a half step
+and spacing does not — is in the [Spatial System](/principles/spatial-system) book.
+
+Every table below is read from `styles/units.css` when this page is built, so it cannot
+list a token that does not exist or miss one that does.
+
+## Spacing
+
+One literal measurement, and two multiples of it.
+
+<TokenTable
+  source={unitsSource}
+  names={['--cn-grid', '--cn-gap', '--cn-line']}
+/>
+
+## Radii
+
+Four steps, plus an unsuffixed default for a consumer that wants a rounded corner without
+choosing one.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-border-radius"
+/>
+
+## Icon sizes
+
+Absolute `rem` literals rather than grid multiples, following v20, which files them beside
+the grid and marks them "absolute, not grid-derived". They scale with the reader like
+every other `rem` length; they simply do not derive from `--cn-grid`. Four of the five land
+on the grid anyway — the medium default is four and a half steps, which is the reason the
+family is stated absolutely.
+
+They are declared in `styles/icon.css`, imported by `styles/tokens.css` alongside the
+grid.
+
+<TokenTable
+  source={iconSource}
+  prefix="--cn-icon-size"
+/>
+
+## Elevation shadows
+
+The four elevation shadows are declared in `styles/color-theme.css`, not here, but they
+are grid multiples and depend on `--cn-grid`. `styles/tokens.css` composes both families,
+and it is that dependency this page exists to make visible; their declaration order does
+not affect custom-property resolution.
+
+| Token | Declared in |
+| :--- | :--- |
+| `--cn-shadow-elevation-1` | `styles/color-theme.css` |
+| `--cn-shadow-elevation-2` | `styles/color-theme.css` |
+| `--cn-shadow-elevation-3` | `styles/color-theme.css` |
+| `--cn-shadow-elevation-4` | `styles/color-theme.css` |
+
+Their computed values are not shown. `packages/design-system/test/units.test.ts` asserts
+that the token entry point includes the dependency, rather than testing a rendered shadow
+against a page that happened to import it.
+
+## What this does not cover
+
+Colour tokens are in the [Colour](/tokens/color) lexicon. How to *choose* between these
+values is the [Spatial System](/principles/spatial-system) book's, and when to reach for
+each icon size is [Iconography](/principles/iconography)'s. Rail and tray geometry, button
+sizing and typographic sizes are not owned by the design system yet and still come from
+Cyan 4.

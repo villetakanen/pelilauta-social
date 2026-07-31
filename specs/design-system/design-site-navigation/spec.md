@@ -50,6 +50,12 @@ regenerable from a source belongs to a lexicon book.
 - No new token families; the shell states explicit values where a token does not
   yet exist.
 - Does not define how the repository's verification gate is wired.
+- Book presentation is not specified here. Reading measure, prose rhythm and editorial
+  chrome are not decided, and get no stand-in: books render plain until the design system
+  owns typography and content grids. What styling exists is disposable —
+  `packages/design-system/styles/docs.css` and the whole-page `books/*.astro` components
+  predate this spec and contradict the Blueprint above. They are replaced
+  opportunistically, one book at a time, and never gate or sequence other work.
 
 ## Contract
 

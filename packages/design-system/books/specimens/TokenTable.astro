@@ -1,0 +1,71 @@
+---
+/**
+ * TokenTable — a lexicon's table of declarations, read from a stylesheet.
+ *
+ * A thin renderer over parseTokens, which holds every decision worth asserting;
+ * this file only turns the result into a table. It carries no styling: books
+ * render plain until the design system owns typography and content grids, and a
+ * stand-in here would later be read as something the design system decided.
+ *
+ * Book: apps/design/src/content/components/token-table.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** The stylesheet, imported by the book with `?raw`. */
+  source: string;
+  /** Exact names to show. Mutually exclusive with `prefix`. */
+  names?: readonly string[];
+  /** Show every declaration whose name starts with this. */
+  prefix?: string;
+  /** Column heading for the trailing-comment column. */
+  noteLabel?: string;
+  /** Names what the reader is looking at, as the table's caption. */
+  caption?: string;
+}
+
+const {
+  source,
+  names,
+  prefix,
+  noteLabel = 'Resolves to',
+  caption,
+} = Astro.props;
+
+const tokens = parseTokens(source, { names, prefix });
+
+/**
+ * An empty table is the failure this specimen exists to prevent: a renamed or
+ * removed token would otherwise turn into a page that quietly says nothing.
+ * Failing the build is the only way a book can be wrong loudly.
+ */
+if (tokens.length === 0) {
+  throw new Error(
+    `TokenTable matched no declarations (${
+      names ? `names: ${names.join(', ')}` : `prefix: ${prefix ?? 'none'}`
+    }). The stylesheet no longer declares what this book claims it does.`,
+  );
+}
+
+const hasNotes = tokens.some((token) => token.note);
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr>
+      <th scope="col">Token</th>
+      <th scope="col">Declared value</th>
+      {hasNotes && <th scope="col">{noteLabel}</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {tokens.map((token) => (
+      <tr>
+        <th scope="row"><code>{token.name}</code></th>
+        <td><code>{token.value}</code></td>
+        {hasNotes && <td>{token.note ?? ''}</td>}
+      </tr>
+    ))}
+  </tbody>
+</table>

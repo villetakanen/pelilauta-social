@@ -130,14 +130,14 @@ test('the default radius is medium', () => {
   );
 });
 
-test('the elevation shadows can resolve, which needs --cn-grid', () => {
+test('the token entry point includes the elevation shadows and their grid dependency', () => {
   const theme = declarations(
     read(new URL('../styles/color-theme.css', import.meta.url).pathname),
   );
 
   // color-theme.css derives its shadows from --cn-grid but does not define it.
   // tokens.css exists to guarantee the pairing; assert the dependency is real
-  // and that this file satisfies it.
+  // and that the composed sources supply it. Declaration order is irrelevant.
   const shadow = theme.get('--cn-shadow-elevation-3');
   expect(shadow, 'shadows should derive from the grid').toContain(
     'var(--cn-grid)',

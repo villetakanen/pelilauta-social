@@ -10,10 +10,23 @@ the design site.
 
 ## A book is an MDX file
 
-Copy `packages/design-system/books/TEMPLATE.mdx` to
+Copy the template for the kind of book you are writing to
 `apps/design/src/content/<group>/<slug>.mdx`. That file **is** the book: frontmatter,
-prose, headings that state outcomes, and markdown tables where a list of values is
-the point. The `h1` renders from `title`; do not write one.
+prose, and markdown tables where a list of values is the point. The `h1` renders from
+`title`; do not write one.
+
+| Writing | Template | Shape |
+| :--- | :--- | :--- |
+| A principles or base book | `books/templates/principles.mdx` | An essay. It teaches a decision, and its headings argue. |
+| A component book | `books/templates/component.mdx` | A schema. One or two sentences, the example, the props table, then guidance. |
+
+The distinction is not stylistic. A component page is read against the last component's,
+so its headings are slots that must match; an argument in a heading cannot be scanned.
+Published design systems converge on this — Primer, Polaris, Radix, USWDS and GOV.UK all
+reach an example within a sentence or two, and none of them argues in a heading. **A
+component page that never shows its own invocation has failed**, however well it reads.
+
+Motivation, history and why-it-is-shaped-this-way belong in the spec, not the book.
 
 `prose: true` asks the shell to render the `h1` and group the body. It adds no styling:
 the design system owns neither content grids nor typography yet, so books look plain,
@@ -23,9 +36,10 @@ Where the page would otherwise repeat a stylesheet by hand, import a **specimen*
 component for that part and keep the prose in MDX. A specimen reads real source, so
 the book cannot describe a rule or a value that does not ship.
 
-v20's books are the reference for shape and length —
+v20's books are the reference for shape and length **of a principles book** —
 `~/dev/pelilauta-20-ds/app/cyan-ds/src/content/principles/*.mdx`, 50 to 200 lines
-each. Longer than that is usually two books.
+each. Longer than that is usually two books. They are not the reference for a
+component book, which is shorter and follows its own template.
 
 Groups, ordering and publication are
 `specs/design-system/design-site-navigation/spec.md`.

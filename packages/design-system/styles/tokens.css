@@ -1,9 +1,9 @@
 /*
  * The design system's token entry point.
  *
- * Units come first because styles/color-theme.css derives its elevation shadows
- * from --cn-grid. Importing color.css alone leaves those shadows unresolvable,
- * which is the defect this file exists to prevent.
+ * styles/color-theme.css derives its elevation shadows from --cn-grid. Importing
+ * color.css alone omits that dependency, so this entry point composes colour and
+ * units together. Their relative declaration order does not affect var() resolution.
  *
  * Icon sizing follows units because it belongs to the same subject: v20 files
  * both in tokens/units.css, and marks the icon family "absolute, not

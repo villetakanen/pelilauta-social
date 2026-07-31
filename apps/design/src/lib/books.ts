@@ -12,7 +12,7 @@ import taxonomy from '@design-system/books/groups.json';
  */
 
 /** Collection names, which are also the URL groups. Must match groups.json. */
-export type GroupId = 'principles' | 'tokens' | 'components';
+export type GroupId = 'principles' | 'base' | 'tokens' | 'components';
 
 export const GROUPS: readonly { id: GroupId; label: string }[] =
   taxonomy.groups as { id: GroupId; label: string }[];

@@ -1,0 +1,76 @@
+---
+title: ComponentName
+description: One sentence. It is the navigation subtitle and the page's meta description, so write it for someone deciding whether to open the page.
+order: 10
+prose: true
+---
+
+{/*
+  COMPONENT BOOK TEMPLATE — copy to apps/design/src/content/components/<slug>.mdx
+  and delete these comments.
+
+  A component page is a schema, not an essay. Keep the headings below, in this
+  order, and drop the ones that do not apply. The reader is comparing this page
+  against the last component's, so the slots have to match.
+
+  This is what published design systems converge on — GitHub Primer, Shopify
+  Polaris, Radix, USWDS and the GOV.UK Design System all open with one or two
+  sentences and then show the thing. Primer and USWDS reach a code example in a
+  single sentence; the longest of the five spends about eighty words. None of
+  them argues a position in a heading.
+
+  So: no philosophy, no motivation, no history. Why the component exists the way
+  it does belongs in its spec. If a paragraph is persuading rather than
+  instructing, cut it.
+
+  The one rule that outranks brevity: SHOW THE CODE. A component page that never
+  displays its own invocation has failed, however well it reads.
+
+  Length: shorter than a principles book. Sixty to a hundred lines.
+*/}
+
+One sentence saying what it is and what it is for. A second only if the first
+leaves a reader guessing where it is used.
+
+## Example
+
+Show it rendering, then the code that produced it — in that order, because the
+reader is confirming they want it before they copy it.
+
+<TheComponent someProp="value" />
+
+```mdx
+import TheComponent from '@design-system/books/…/TheComponent.astro'
+
+<TheComponent someProp="value" />
+```
+
+## Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `someProp` | `string` | What it controls. Say "Required" here rather than in prose. |
+
+## When to use it
+
+- The case it is for, as an instruction rather than a description.
+- The case it is for.
+
+Do not use it when — name the alternative and link it, so a reader who came to
+the wrong page leaves knowing where to go.
+
+## Behaviour worth knowing
+
+Only for behaviour that surprises: a build that fails, a silent fallback, a
+prop combination that is rejected. Two or three sentences. Delete the section if
+the component has none.
+
+## Accessibility
+
+The semantics it emits and what a consumer still owes — a label, a landmark, a
+focus target. Delete if it renders nothing with semantics of its own.
+
+## What this does not cover
+
+Neighbouring things this component deliberately leaves alone, and who owns them,
+so an omission does not read later as an oversight.

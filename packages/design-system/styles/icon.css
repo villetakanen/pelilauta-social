@@ -1,12 +1,11 @@
 /*
  * Icon sizing tokens.
  *
- * Values match the immutable v20 authority
- * (pelilauta-20 packages/cyan/src/tokens/units.css at
- * 02880fbc995b45d459ce4f264b29d5283b1d8ced) and Cyan 4
- * (@11thdeg/cyan-css tokens/units.css). Legacy cn-icon consumers read the
- * same custom properties from cyan-css until they are migrated; the
- * definitions are identical, so both sources may coexist.
+ * Values match v20 (packages/cyan/src/tokens/units.css) and Cyan 4
+ * (@11thdeg/cyan-css tokens/units.css). Legacy cn-icon consumers read the same
+ * custom properties from cyan-css until they are migrated; the definitions are
+ * identical, so both sources may coexist. No commit is cited: an earlier version
+ * of this comment named a v20 commit that never touched the file.
  *
  * Spec: specs/design-system/components/cn-icon/spec.md
  */

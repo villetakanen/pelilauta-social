@@ -1,13 +1,15 @@
 /*
  * Unit and radius tokens.
  *
- * Values match the immutable v20 authority
- * (pelilauta-20 packages/cyan/src/tokens/units.css at
- * 02880fbc995b45d459ce4f264b29d5283b1d8ced) and Cyan 4
- * (@11thdeg/cyan-css tokens/units.css). Legacy consumers read the same custom
- * properties from cyan-css until they are migrated; the definitions are
- * identical, so both sources may coexist. packages/design-system/test/units.test.ts
- * asserts that equality rather than trusting it.
+ * Values match v20 (packages/cyan/src/tokens/units.css) and Cyan 4
+ * (@11thdeg/cyan-css tokens/units.css), which are character-identical on this
+ * family. Legacy consumers read the same custom properties from cyan-css until
+ * they are migrated; the definitions are identical, so both sources may coexist.
+ * packages/design-system/test/units.test.ts asserts that equality against the
+ * installed cyan-css rather than trusting it — which is the reason no commit is
+ * cited here. An earlier version of this comment named a v20 commit as the
+ * origin of these values; that commit never touched units.css, and a citation
+ * nothing checks is worth less than a test.
  *
  * styles/color-theme.css derives --cn-shadow-elevation-1..4,
  * --cn-shadow-button-hover and --cn-reply-dock-shadow from --cn-grid, so any
