@@ -10,25 +10,6 @@ Pelilauta uses a modern reset, based on the work of
 [Tailwind Preflight](https://tailwindcss.com/docs/preflight). Any deviations from their
 baseline are documented here.
 
-## Extensions
-
-Astro wraps a hydrated component in an `astro-island` element. It is made transparent,
-so an island lays out as though its markup were written in place.
-
-```css
-astro-island { display: contents; }
-```
-
-The document declares both colour schemes, dark first. An application's
-`<meta name="color-scheme">` must state the same order, because the property overrides
-the tag.
-
-```css
-:root { color-scheme: dark light; }
-```
-
-`body` takes the semantic background and text roles rather than literal colours.
-
 ## List markers
 
 Removed only on `[role="list"]`, following Bell; Tailwind removes them from every list.
@@ -40,14 +21,27 @@ way.
 ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
 ```
 
-## Owned elsewhere
+## Prose margins
 
-| Concern | Owner |
-| :--- | :--- |
-| Prose margins, type sizes, leading, heading wrap | the type ramp |
-| Constraining image width | the container holding the image |
-| Scrollbar appearance | themed surfaces, unassigned |
-| How a control looks once normalised | its component |
+Kept. Bell and Tailwind both zero them in the reset; here they stay until the type ramp
+replaces them with a stated rhythm.
 
-Bell and Tailwind both zero prose margins in the reset. Here that waits for the type
-ramp, which states the replacement rhythm in the same change.
+## Colour scheme
+
+Both schemes are declared, dark first. An application's `<meta name="color-scheme">`
+must state the same order, because the property overrides the tag.
+
+```css
+:root { color-scheme: dark light; }
+```
+
+`body` takes the semantic background and text roles rather than literal colours.
+
+## Hydration wrappers
+
+Astro wraps a hydrated component in an `astro-island` element. It is made transparent,
+so an island lays out as though its markup were written in place.
+
+```css
+astro-island { display: contents; }
+```
