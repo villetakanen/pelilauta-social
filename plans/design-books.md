@@ -3,6 +3,23 @@
 Status: In progress 2026-08-01
 Branch: `feat/ds-typography`
 
+## Read first: `principles/color-system` is unverified
+
+The book at `apps/design/src/content/principles/color-system.mdx` builds and its tests
+pass. Nothing beyond that is confirmed. Treat it as a draft that may be wrong.
+
+- The current text has never been looked at in a browser. The last visual check was of the
+  previous draft, before it was rewritten.
+- Four earlier drafts were rejected by the owner as unreadable or as not describing colour
+  at all. The current one has not been reviewed.
+- The role descriptions in the two `RoleTable` calls — "Cards and panels on the page",
+  "Dialogs and the highest chrome", and the rest — were written from token names, not from
+  how the application uses them. They are guesses and several are probably wrong.
+- The `## Not settled` section lists questions the owner has deferred. Do not answer them
+  in prose to make the page feel finished. That is how the earlier drafts went wrong.
+
+Check it against the application before building on it.
+
 ## Why
 
 Four design-site books were whole-page Astro components behind a one-line MDX shell.
@@ -22,6 +39,10 @@ to markup a prototype book emitted.
 - **Colour** — split into `tokens/color` (lexicon) and `principles/color-system` (usage).
   `ColorBook.astro` deleted. Specimens added: `ColorRamp`, `RoleTable`, `ContrastMatrix`,
   and `books/specimens/color.ts` for OKLCH resolution and WCAG contrast. Open in PR #65.
+
+  The specimens and the tests are solid: the contrast and palette figures are computed
+  from the stylesheets and asserted. The prose in `principles/color-system` is not — see
+  the warning above.
 
 ## Remaining
 
@@ -83,6 +104,11 @@ State the fact, then stop. Reasoning belongs in the commit message.
 
 ## Where to continue
 
-`IconBook.astro`, using `books/templates/component.mdx`. Before writing prose, read the
-`git log` for `apps/design/src/content/principles/color-system.mdx` — it was rewritten
-four times, and the last rewrite is the register to match.
+Either finish verifying `principles/color-system` with the owner, or start `IconBook.astro`
+using `books/templates/component.mdx`. They are independent.
+
+Before writing prose for either, read the `git log` for
+`apps/design/src/content/principles/color-system.mdx`. It was rewritten four times in one
+session. The rejections are more useful than the result: describing mechanics instead of
+teaching a decision, showing no colour on a colour page, opening with a paragraph carrying
+no information, and the rhetorical register above.
