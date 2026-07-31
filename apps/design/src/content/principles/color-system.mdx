@@ -1,0 +1,116 @@
+---
+title: Colour System
+description: How colour carries meaning in Pelilauta — the three layers, the roles to reach for, and the contrast guardrails that constrain them.
+order: 7
+prose: true
+---
+
+import ContrastMatrix from '@design-system/books/specimens/ContrastMatrix.astro'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import themeSource from '@design-system/styles/color-theme.css?raw'
+
+Colour in Pelilauta is decided once, as a role, and expressed twice, as Light and Dark.
+A component that reads a role gets both modes for free and keeps working when the
+expression changes. A component that reaches past the role into a palette step gets one
+mode right and the other wrong.
+
+Values are in the [Colour](/tokens/color) lexicon. This book is the choosing.
+
+## Three layers, and consumers read the middle one
+
+**Reference** colours are the literal palette in OKLCH — thirteen steps of primary and
+surface, four each of error, warning, info and love. They say what exists. Nothing in a
+component should name one.
+
+**Semantic** roles say what a colour is *for*: `--cn-text`, `--cn-link`, `--cn-surface-2`,
+`--cn-border-focus`. Each is one declaration whose two `light-dark()` arms point at
+different reference steps. This is the layer to read.
+
+**Compatibility** aliases carry Cyan 4's names onto v21 roles so unmigrated v18 code keeps
+working. Temporary, and shrinking. Nothing new is written against it.
+
+The direction is one-way: semantic roles are built from reference colours, compatibility
+from semantic. A value never travels back up.
+
+## The perceptual palette is why the steps behave
+
+The palette is OKLCH, where the first number is perceived lightness. `surface-50` is half
+as light as white to the eye, not merely half by some channel arithmetic. That is what
+makes a step predictable: moving from `surface-20` to `surface-30` changes apparent
+lightness by the same amount everywhere in the palette, in every hue.
+
+It also means **a colour's step number predicts its contrast**, which is what the
+guardrails below rest on. Derived colours — hover overlays, tints — must therefore mix in
+the same space: `color-mix(in oklch, …)`, never `in hsl`, or the perceptual spacing that
+makes the step numbers meaningful is lost in the mix.
+
+## Surfaces get lighter as they rise, and dark mode is where that bites
+
+Elevation runs `--cn-surface` through `--cn-surface-4`. In Light mode the surfaces move
+towards white as they rise; in Dark they move *away* from black, towards a mid Cerulean.
+So the higher a dark surface, the less room a de-emphasised text colour has.
+
+<ContrastMatrix
+  foregrounds={['--cn-text', '--cn-text-high', '--cn-on-surface', '--cn-text-low', '--cn-on-surface-secondary']}
+  background="--cn-surface"
+  caption="On the base surface — every role passes AA in both modes"
+/>
+
+## The elevation-4 guardrail
+
+At the top of the scale that headroom runs out. These figures are computed from the
+production stylesheets when this page builds, and asserted in
+`packages/design-system/test/color-contrast.test.ts`:
+
+<ContrastMatrix
+  foregrounds={['--cn-text', '--cn-text-high', '--cn-on-surface', '--cn-text-low', '--cn-on-surface-secondary']}
+  background="--cn-surface-4"
+  modes={['dark']}
+  caption="On --cn-surface-4 in Dark mode"
+/>
+
+**On a dark elevation-4 surface, use `--cn-text` or `--cn-text-high` and nothing else.**
+`--cn-text-low` and `--cn-on-surface-secondary` fail outright. `--cn-on-surface` — the
+ordinary body-text role everywhere else — lands in AA Large territory and is not
+sufficient for body copy.
+
+The practical consequence: a card that raises itself to elevation 4 cannot carry the
+timestamp-and-byline treatment it used at rest. Either it stays at a lower elevation, or
+its secondary text is promoted.
+
+<div style="padding: var(--cn-gap); background: var(--cn-surface-4); border-radius: var(--cn-border-radius-large); border: 1px solid var(--cn-border);">
+  <p style="color: var(--cn-text); margin: 0;">This is `--cn-text` on elevation 4 — the role to use.</p>
+  <p style="color: var(--cn-text-low); margin: 0;">This is `--cn-text-low` on elevation 4 — the role the guardrail forbids.</p>
+</div>
+
+<small>In Light mode both lines are legible, which is exactly why the rule has to be
+stated rather than noticed.</small>
+
+## Reach for the role that names the job
+
+<TokenTable
+  source={themeSource}
+  names={['--cn-text', '--cn-text-low', '--cn-text-high', '--cn-link', '--cn-border', '--cn-focus-ring']}
+  swatch
+  caption="The roles reached for most often"
+/>
+
+- **Text** is `--cn-text`. Drop to `--cn-text-low` only for genuinely secondary content,
+  and never on a raised dark surface.
+- **Action** is `--cn-link` for navigation and `--cn-button` for a committed action.
+  Brand colour marks a brand-affirming action; it does not mark a destructive one.
+- **Status** is `error`, `warning`, `info` — and `love` for social approval. A like is not
+  an error, however red it looks.
+- **Focus** is `--cn-focus-ring`, always. It is the one role that may not be suppressed:
+  a keyboard reader who cannot see focus cannot use the page.
+
+Do not override a semantic role locally. If `--cn-link` is wrong for a surface, the role's
+definition is wrong or the surface is; setting `color` to a palette step in one component
+fixes one mode and breaks the other.
+
+## What this does not cover
+
+Token values, including the full role list, are in the [Colour](/tokens/color) lexicon.
+The persisted per-account theme preference in `apps/pelilauta` is application state and
+sits outside this contract — the design system reads only the browser or system setting
+through `color-scheme`, which `styles/preflight.css` owns.

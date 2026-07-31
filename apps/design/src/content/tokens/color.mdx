@@ -1,9 +1,61 @@
 ---
-title: Color themes
-description: The Pelilauta v21 color-theme intent, implementation contract, and compatibility book.
+title: Colour
+description: Every colour token the design system declares — the reference palette, the semantic roles, and the Cyan 4 aliases — with the value as written.
 order: 10
+prose: true
 ---
 
-import ColorBook from '@design-system/books/tokens/ColorBook.astro'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import referenceSource from '@design-system/styles/color-reference.css?raw'
+import themeSource from '@design-system/styles/color-theme.css?raw'
+import compatSource from '@design-system/styles/compat/cyan-4.css?raw'
 
-<ColorBook title={frontmatter.title} />
+This is the lexicon: what the colour tokens are and what each one is worth. Which one to
+reach for, and the contrast rules that constrain the choice, are in the
+[Colour System](/principles/color-system) book.
+
+Every table is read from its stylesheet when this page is built. Swatches resolve through
+the live cascade, so each one shows the arm of `light-dark()` that matches the mode you
+are reading in — switch your system theme and the same page shows the other.
+
+## Semantic roles
+
+What a colour is *for*. Each states Light and Dark as the two arms of one `light-dark()`
+declaration, so there is one place a role is defined and no second theme to keep in step.
+These are what a component reads.
+
+<TokenTable source={themeSource} without="shadow" swatch caption="Semantic roles" />
+
+## Elevation and shadows
+
+Declared in the same stylesheet, but they are shadows rather than colours, so they carry
+no swatch. They are grid multiples and resolve only where `--cn-grid` is defined, which is
+why `styles/tokens.css` composes both families — see
+[Units and grid](/tokens/units).
+
+<TokenTable source={themeSource} prefix="--cn-shadow" caption="Elevation shadows" />
+
+## The reference palette
+
+The literal colours, in OKLCH, where the stack bottoms out. A component should not read
+these — they say what is available, not what it means.
+
+<TokenTable source={referenceSource} prefix="--cn-color-" swatch caption="Reference palette" />
+
+## Cyan 4 compatibility
+
+Legacy names that unmigrated v18 consumers still read, each an alias terminating in a
+semantic role or a reference colour. The layer is temporary and shrinks as consumers
+move; nothing new should be written against it.
+
+<TokenTable source={compatSource} prefix="--" caption="Cyan 4 aliases" />
+
+## What this does not cover
+
+Contrast figures, the guardrails they produce, and which role to reach for are the
+[Colour System](/principles/color-system) book's. Spacing, radii and icon sizes are in
+[Units and grid](/tokens/units).
+
+Two shadow tokens sit outside the `--cn-shadow` family — `--cn-reply-dock-shadow` and the
+Cyan 4 alias `--color-shadow` — and appear in the semantic and compatibility tables
+respectively, because that is where they are declared.
