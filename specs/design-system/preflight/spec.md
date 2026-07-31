@@ -148,9 +148,10 @@ next — join the entry point without either application's shell changing.
 
 Each application imports it where its shell brings in the design system's core CSS:
 `apps/design` in the book layout, whose book stylesheet then keeps only editorial
-vocabulary, and `apps/pelilauta` in both head components. Opt-in stylesheets, icon
-sizing today, stay outside the entry point and are imported by the surfaces that want
-them.
+vocabulary, and `apps/pelilauta` in both head components. A stylesheet that only one
+surface needs — the design site's editorial vocabulary, a book's own demonstration
+sheet — is imported by that surface, and is not a category the entry point has to
+account for.
 
 Its book is the first entry in the `base` group of the design site, described by
 [the navigation spec](../design-site-navigation/spec.md). The book enumerates what the
