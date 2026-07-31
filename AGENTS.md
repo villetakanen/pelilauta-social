@@ -45,6 +45,7 @@
 ## Judgment Boundaries
 
 **NEVER**
+- Create, switch, or delete a branch. Until the beta line ends, this repository has exactly two branches: `main`, and the one long-living `feat/**` branch that all work happens on. Every pull request comes from that branch, whatever its topic. Only an explicit written instruction changes which branch that is: do not branch, and do not ask whether to branch.
 - Break v18 drop-in compatibility without an explicit, approved specification.
 - Add a dependency, alter Firebase schemas/security rules, or make a destructive data migration without approval.
 - Bundle broad refactors with a compatibility migration.
