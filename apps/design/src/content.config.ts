@@ -16,6 +16,12 @@ const bookSchema = z.object({
   description: z.string(),
   /** Navigation sort key within the group; ties fall back to title order. */
   order: z.number().optional(),
+  /**
+   * A prose book: the shell renders its h1 and groups the body. The legacy
+   * `books/*.astro` books lay out their own sections and render their own h1,
+   * which is why the default is false.
+   */
+  prose: z.boolean().default(false),
   status: z.enum(['stable', 'draft']).default('stable'),
 });
 
@@ -27,6 +33,7 @@ const book = (group: string) =>
 
 export const collections = {
   principles: book('principles'),
+  base: book('base'),
   tokens: book('tokens'),
   components: book('components'),
 };

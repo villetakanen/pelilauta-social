@@ -1,0 +1,59 @@
+---
+title: Preflight
+description: Pelilauta's modern reset, and its deviations from the Andy Bell and Tailwind Preflight baseline.
+order: 1
+prose: true
+---
+
+Pelilauta uses a modern reset, based on the work of
+[Andy Bell](https://piccalil.li/blog/a-more-modern-css-reset/) and
+[Tailwind Preflight](https://tailwindcss.com/docs/preflight). Any deviations from their
+baseline are documented here.
+
+## List markers
+
+Removed only on `[role="list"]`, following Bell; Tailwind removes them from every list.
+Safari drops a list's semantics from VoiceOver when `list-style` is removed, so a
+navigation or menu asks for both. Margin and padding are zeroed on every list either
+way.
+
+```css
+ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
+```
+
+## Margins and padding
+
+Removed from every element, following Tailwind rather than Bell, who removes only
+`margin-block-end` from an enumerated set. Removal is explicit: there is no
+application-wide paragraph margin, and spacing is stated by whatever owns the layout.
+
+```css
+*, ::after, ::before, ::backdrop, ::file-selector-button { margin: 0; padding: 0; }
+```
+
+## Media
+
+Not touched, following Bell, whose more modern reset dropped the media rules his earlier
+one had. Tailwind and Radix make images block-level and constrain them to their
+container; here that is the container's decision, because a reset cannot know which
+images are content and which are chrome.
+
+## Colour scheme
+
+Both schemes are declared, dark first. An application's `<meta name="color-scheme">`
+must state the same order, because the property overrides the tag.
+
+```css
+:root { color-scheme: dark light; }
+```
+
+`body` takes the semantic background and text roles rather than literal colours.
+
+## Hydration wrappers
+
+Astro wraps a hydrated component in an `astro-island` element. It is made transparent,
+so an island lays out as though its markup were written in place.
+
+```css
+astro-island { display: contents; }
+```

@@ -1,7 +1,7 @@
 # Typography Token Ownership
 
-Status: Draft 2026-07-30 — initial plan, not approved
-Branch: not opened (proposed `feat/ds-typography`)
+Status: Draft 2026-07-30; corrected 2026-07-31 from the preflight investigation
+Branch: `feat/ds-typography`
 Follows: the core-token epic, which deferred typography for the reasons below
 
 ## Why
@@ -83,9 +83,15 @@ Measured on `apps/pelilauta/src`, 2026-07-30.
 **Almost nothing reads the tokens directly** — two files, both CodeMirror
 (`cnEditorTheme.ts`, `CodeMirrorEditor.svelte`), and five of the seven names they
 read are `--cn-*-ui` (`--cn-font-family-ui`, `-font-size-ui`, `-font-weight-ui`,
-`-letter-spacing-ui`, `-line-height-ui`). **That family is defined nowhere** — not
-in v20, not in Cyan 4, not in the app. The editor has been taking initial values
-in production. Same shape of defect as the dangling radius names.
+`-letter-spacing-ui`, `-line-height-ui`).
+
+Corrected 2026-07-31: **four of those five are defined**, in
+`@11thdeg/cyan-css/src/tokens/buttons.css`, which is also where cyan-css sets the
+font of every button, input and textarea. Only `--cn-line-height-ui` is defined
+nowhere, so the editor takes an initial value for that one alone rather than for
+the family. A UI font family living in the button tokens is itself a symptom: it is
+compensating for a document preflight that never set `font-family: inherit` on form
+controls.
 
 **The app consumes typography through global element styles and utility classes:**
 
@@ -293,50 +299,60 @@ ship, is a delivery-time decision and is deliberately absent here.
 
 One story is not typography at all, for the reason given under it.
 
-### Foundations
+### Preflight
 
-Owner decision 2026-07-30: this is the first story, it is a `principles` book named
-**Foundations**, and `preflight` is in this epic's scope.
+Still the first story. It was drafted 2026-07-30 as a `principles` book named
+**Foundations**; it is neither, for two reasons found on 2026-07-31. What that book
+would have taught — the reader sets the scale, with its 16/20/24px table — is already
+published in the Spatial System book, and `specs/design-system/principles/spec.md`
+says a principles book teaches a decision, which a document reset does not. Its home
+is a new design-site group, **Base**, placed after Principles and holding Preflight
+alone. Tokens keeps its books and its URLs.
 
-The document reset is currently `@11thdeg/cyan-css/src/core/preflight.css`, pulled
-in live by `import '@11thdeg/cyan-css'` at `BaseHead.astro:5`. It owns
-`box-sizing: border-box` on `*`, `body { margin: 0 }`, the `ol, ul` list reset, the
-`[popover]` reset, `:root { color-scheme }` and every scrollbar rule;
-`core/body.css` owns background, foreground and font smoothing. Nothing in
-`packages/design-system` owns any of it, so the terminal Cyan sweep would delete
-the reset out from under the application.
+**Both versions were supposed to have a preflight modelled on modern-normalize and
+Tailwind Preflight, and neither finished one.** Cyan 4 has `core/preflight.css` — box
+model, `body { margin: 0 }`, the list reset, `[popover]`, `color-scheme` and the
+scrollbar rules — which is a small fraction of that model with none of its
+form-control or media normalization. v20 has no preflight file at all: the same job
+is done inline in `packages/cyan/src/layouts/AppShell.astro`'s `<style is:global>`
+block, with the element-level half in `tokens/typography-semantics.css`, mixed
+together with app-shell layout that is not reset material. That inline block is
+drift, not a source.
 
-Deliverables, per the design-system completeness rule:
+So the story is not "port Cyan 4's reset". It is: write the preflight both versions
+intended, with modern-normalize and Tailwind Preflight as the model — copy-pasted
+from as a template, as before, not added as a dependency — and Cyan 4's file as the
+inventory of what the live application currently depends on. This corrects the
+earlier draft of this story, which claimed v20 owned no reset rules at all.
 
-- `specs/design-system/foundations/spec.md`. Intent: the system scales
-  proportionally with the reader's font-size preference and never overrides it; the
-  design system owns what it asserts about the document root. Contract: no
-  stylesheet sets `font-size` on `html` or `:root`; every length derives from
-  `--cn-grid: 0.5rem` in `rem`; breakpoints are `rem`; `color-scheme` is declared
-  once and the meta tag agrees with it; the reset belongs to the design system.
-- `packages/design-system/styles/reset.css`, porting `preflight.css` and `body.css`
-  onto design-system token names. Kept out of `tokens.css`, because a reset is not
-  a token. The scrollbar rules read `--cn-scrollbar-width`,
-  `--cn-scrollbar-border-radius` and `--color-scrollbar-*`; those need enumerating
-  and either owning or adding to `compat/cyan-4.css`.
-- `test/foundations.test.ts` — no `html`/`:root` `font-size`, no `px` `font-size`,
-  no `px` breakpoint. With its blind spot stated plainly: it can only police
-  design-system stylesheets, so the app's 18 `px` breakpoints and `overrides.css`
-  stay uncovered until the breakpoint story.
-- `books/principles/FoundationsBook.astro` +
-  `apps/design/src/content/principles/foundations.mdx`. Demonstrable rather than
-  prose: panels at a 16px, 20px and 24px root showing grid, type and breakpoints
-  moving together.
+Owner decisions, 2026-07-31:
 
-**The one visible change here.** Three places declare the no-preference colour
-default and they disagree: `preflight.css` says `dark light`,
-`styles/color-theme.css` says `light dark`, and the `BaseHead.astro` meta tag says
-`dark light`. `tokens.css` is imported after cyan-css at equal specificity, so the
-design system's `light dark` wins today and both apps default to **light** — and
-because the CSS property overrides the meta tag, that `dark light` meta is inert.
-Owner decision 2026-07-30: **`dark light` is correct, the meta tag is right.** So
-this flips the first-paint default for readers with no OS preference, in both the
-app and the design site, and makes the meta tag meaningful again.
+- Margin zeroing follows Tailwind's enumerated element set, not v20's `*`.
+- `astro-island { display: contents }` is kept. cyan-css instead reaches through the
+  island with duplicated `.flex-col > astro-island > *` selectors in
+  `atomics/flex.css`, which the rule makes redundant.
+- Image `max-width` and the scrollbar rules are **not** preflight decisions — the
+  first is container-level, the second a themed surface. Both exist today only in
+  cyan-css, so the spec records them as knowingly unowned: nothing fails when the
+  terminal sweep deletes them, which is exactly why they need writing down.
+
+**Sequencing.** Three of v20's reset rules cannot travel with this story. `* { margin: 0 }`
+and its restored list markers depend on add-backs that live in
+`typography-semantics.css`, and body's font tokens are typography by definition. All
+three ship with the semantics story.
+
+**Already delivered.** The earlier draft called the no-preference colour default "the
+one visible change here". `55dafc9` shipped it: `styles/color-theme.css` says
+`dark light` and the meta tag agrees. This story carries no visible change.
+
+Deliverables: `specs/design-system/preflight/spec.md`, which owns the rule set;
+`packages/design-system/styles/preflight.css`; the Base group and its Preflight book;
+and a test asserting the stylesheet matches the spec's enumeration, that every custom
+property it reads resolves, and that nothing sets `font-size` on `html` or `:root`.
+The test can only police design-system stylesheets, so the app's 18 `px` breakpoints
+and `overrides.css` stay uncovered until the breakpoint story. The reader that
+changes is the design site: it imports no cyan-css, which is why `styles/docs.css`
+has been hand-rolling a reset of its own.
 
 ### Compat shim
 
@@ -382,8 +398,8 @@ classes, 3 `text-title` sites, 6 `text-link` sites, and the `snippetHelpers.ts`
 default. Roughly 145 call-site edits.
 
 This is what the owner accepts visually. **Dependencies: the scale, and
-Foundations** — v20's `ul, ol { padding-left: calc(var(--cn-grid) * 3) }` only makes
-sense on top of a stripped list, which is Foundations' reset.
+preflight** — v20's `ul, ol { padding-left: calc(var(--cn-grid) * 3) }` only makes
+sense on top of a stripped list, which the preflight owns.
 
 ### Breakpoints in `rem`
 
@@ -394,8 +410,10 @@ is where unbounded scaling actually hurts: `--cn-width-tray` is 21rem, or 504px 
 24px root, and starts eating the content column. `min()` on chrome, nothing clamped
 on prose or headings.
 
-Stated by the Foundations spec, because it is a consequence of that principle rather
-than a separate one. Note that the semantics story introduces the first `rem`
+Owned by `specs/design-system/design-tokens/spec.md`, which already states that
+breakpoints are `rem` for the same reason the grid is — the preflight spec asserts
+what the document does, not what a query measures. Note that the semantics story
+introduces the first `rem`
 breakpoint regardless, since v20's `typography-semantics.css` ships
 `@container (max-width: 38.75rem)`.
 

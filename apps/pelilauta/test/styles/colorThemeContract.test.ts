@@ -271,7 +271,7 @@ describe('v20 color theme contract', () => {
       );
       const cyanIndex = source.indexOf("import '@11thdeg/cyan-css';");
       const tokensIndex = source.indexOf(
-        "import '@design-system/styles/tokens.css';",
+        "import '@design-system/styles/ds.css';",
       );
 
       expect(cyanIndex).toBeGreaterThan(-1);

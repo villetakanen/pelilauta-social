@@ -1,10 +1,9 @@
 /*
  * docs.css — the shared editorial language of the design-system books.
  *
- * Every book page used to carry its own copy of this reset and vocabulary
- * inside a scoped <style> block. The Book layout now imports this file once, so
- * the classes below are global and a book component only styles what is unique
- * to it.
+ * Every book page used to carry its own copy of this vocabulary inside a scoped
+ * <style> block. The Book layout now imports this file once, so the classes below
+ * are global and a book component only styles what is unique to it.
  *
  * Package-owned rather than site-owned: the book components in
  * packages/design-system/books consume .kicker, .lede, .facts, .section-heading
@@ -15,20 +14,16 @@
  * keeping their slightly divergent type sizes.
  */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 html {
   scroll-behavior: smooth;
 }
 
+/*
+ * Editorial only. Box sizing, the body's margin, and its background and
+ * foreground come from styles/preflight.css, which this file hand-rolled until
+ * the design system owned a preflight.
+ */
 body {
-  margin: 0;
-  color: var(--cn-text);
-  background: var(--cn-background);
   font-family: "Avenir Next", Avenir, system-ui, sans-serif;
   line-height: 1.5;
 }

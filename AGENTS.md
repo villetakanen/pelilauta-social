@@ -1,68 +1,51 @@
 # AGENTS.md
 
 > **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library.
-> **Goal:** v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large to finish, so v21 ports the v20 look onto the shipped v18 application instead, one verifiable slice at a time — replacing the legacy Lit.js design system with local Svelte components as it goes.
-> **Core constraint:** Every v21 release is a drop-in replacement for live v18. Behavior, data shapes, routes and Firebase integration are compatibility contracts. Appearance is not — it is expected to change, and v18 is not its reference.
+> **Goal:** v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large to finish, so v21 ports the v20 look onto the shipped v18 application instead, one verifiable step at a time — replacing the legacy Lit.js design system with local Svelte components as it goes.
+> **Core constraint:** v21 will run on its own host, sharing Firestore, Storage and Auth with live v18. What they share is a contract.
 
 ## The `pnpm` Workspace
 
 ```yaml
 - apps
-  - pelilauta      # the ported v18 app, with minor migratory fixes
-  - design         # design system app (design.pelilauta.social)
+  - pelilauta      # the v21 application  → pelilauta.social         · dev :4321
+  - design         # the design-system site, its navigation and IA
+                   #                      → design.pelilauta.social  · dev :4322
 - packages
-  - design-system  # design system package
-- specs            # spec files describing the expected behaviour of the apps
-- plans            # epic level PBIs
+  - design-system  # components, styles, specs, and the books that publish them
+- specs            # approved behaviour, one per capability
+- plans            # epic scope
+  - debt           # known gaps that are nobody's story
 - docs
-  - lessons        # notes for the next harness change
-  - adrs           # ADR records
+  - adrs           # irreversible decisions
+  - lessons        # notes we might act on later; disposable
 ```
 
 ## Delivery Contract
 
-- Treat v17/v18 behavior, Firebase integration, public routes, data shapes, and how user-visible interactions work as compatibility contracts unless an approved spec says otherwise. How they look is not: appearance follows v20, governed by the design-system specs.
-- **DEPENDENCY VERSIONS ARE NOT THEMSELVES COMPATIBILITY CONTRACTS.** Libraries may — and should — be updated, **including across breaking majors**, whenever the update preserves the compatibility contracts above. Staying on a legacy version is not a compatibility requirement and is not a way to reduce delivery risk; it accumulates it. When a problem is caused by an outdated dependency, **check whether the dependency can simply be updated before designing any workaround.** Updates remain an ASK for approval, but the default answer sought is "update it," not "work around it."
-- A feature branch is a continuous context and may deliver multiple slices before it closes. Treat each merge, not the lifetime branch diff, as the deployable and coherently reversible delivery unit.
-- Never commit or push to `main` directly; integrate through a pull request. A long-living feature branch delivers each slice as its own pull request.
-- Evolve factory, harness, and architecture inside the production slice that first establishes and verifies their concrete need. Keep required supporting work visible in slice scope and review; defer unrelated cleanup, unsupported generalization, and additional migration steps.
-- Migrate one bounded surface at a time: preserve its behavior first, then replace its Lit.js dependency with the equivalent local Svelte component.
-- Start each delivery loop with one observable production outcome in a named target application. Consumer-free foundation work requires explicit human approval and a timebox.
-- For a production delivery loop, treat one working day without a production-integrated slice as a mandatory re-scope gate; do not expand prerequisite PBIs or abstractions.
-- Record approved behavior as specs under `specs/`, and irreversible decisions as ADRs in `docs/adrs/`. A PBI describes one change; its linked spec remains the source of truth.
-- Agents prepare reviewable pull requests and stop. The human owner reads the PR, performs any visual acceptance, and decides whether and when to merge. Every merge to `main` deploys and is a release, so its pull request includes the approved root version and release-facing status before integration; passing checks or a ready preview never authorizes the merge.
-- Use targeted deterministic checks while implementing. The root `pnpm verify` command, invoked by the pull-request workflow, owns broad repository verification; do not manually repeat it after unrelated or documentation-only edits.
+- Dependencies may be updated or added, majors included — try the update locally first, and ask before merging one. The versions inherited from v18 are dated, so treat a build or CI failure as a stale dependency until proven otherwise, rather than hacking around it.
+- A merge to `main` during the beta cycle is a release: it deploys and CI tags it. Only on the owner's request or approval.
+- Every pull request bumps the root beta version — `pnpm version prerelease --preid=beta`. The root `package.json` carries the release version; nested app versions keep their own meaning. No approval needed.
+- Fix what the work touches, and defects it uncovers inside the same epic. Unrelated cleanup and speculative generalization stay out. Refusing a fix is a decision, not a default.
+- Replace Cyan one surface at a time. Most of it is CSS — tokens, resets, element styles, utilities — and the rest is Lit components. Check what v20 already built before writing anything; `docs/MIGRATION.md` owns the mechanics.
 
 ## Workspace Contract
 
-- This is a pnpm workspace. Both applications use the latest approved Astro version with TypeScript; repository tooling includes Biome, Lefthook, Conventional Commits, and Playwright.
-- `apps/pelilauta` owns the v21 source for `pelilauta.social`. Its initial baseline is an exact import of the current v17/v18 `main`, after which v21 owns and evolves the code.
-- `apps/design` owns the design-system site at `design.pelilauta.social`, including its shell, navigation, content collections and information architecture.
-- `packages/design-system` owns local Svelte components, styles, and design specifications.
-- Use Vite aliases for source-level links between workspace projects, mirrored by TypeScript path aliases. Do not introduce monorepo package-linking or build-orchestration tooling for these links.
-- Netlify deploys two distinct sites from this repository. `pelilauta.social` builds and publishes `apps/pelilauta`; `design.pelilauta.social` builds and publishes `apps/design`. Both install from the workspace root so shared source is available.
+- Link workspace projects with Vite aliases, mirrored in TypeScript paths. No package-linking or build-orchestration tooling.
+- Netlify publishes each app as its own site, each installing from the workspace root.
 
 ## Judgment Boundaries
 
-**NEVER**
-- Break v18 drop-in compatibility without an explicit, approved specification.
-- Add a dependency, alter Firebase schemas/security rules, or make a destructive data migration without approval.
-- Bundle broad refactors with a compatibility migration.
+Never create, switch, or delete a branch. Until the beta line ends, this repository has exactly two branches: `main`, and the one long-living `feat/**` branch that all work happens on. Every pull request comes from that branch, whatever its topic. Only an explicit written instruction changes which branch that is: do not branch, and do not ask whether to branch.
 
-**ASK**
-- Before integrating a dependency update. Agents may test an update in a disposable local investigation before approval, but must not commit, push, or include it in a delivery slice until approved. Bring the evidence from that check; do not propose a workaround for an outdated-dependency problem without reporting whether updating it works.
-- When the v18 behavior or Firebase contract cannot be established from source, deployed behavior, or existing specifications.
-- Before changing public URLs, authentication/authorization behavior, persisted data, release/versioning behavior, or deployment configuration.
+Ask first, and wait, before:
 
-**ALWAYS**
-- Inspect the relevant v18 implementation and write or update the compatibility spec before changing a migrated surface.
-- When planning or implementing migration of an existing v18/Cyan consumer,
-  read `docs/MIGRATION.md`. It owns shared migration mechanics, inherited E2E
-  debt, and the terminal Cyan sweep; it is not general design-system context.
-- Use the `delivery-slice` skill to prepare each proposed merge. Use `delivery-review` only when the human owner explicitly requests an implementation review; the separate adversarial review required for specs remains mandatory.
+- changing anything v21 shares with live v18 — Firestore schemas or security rules, persisted data, authentication behaviour, public URLs — or departing from v18's behaviour on a shared surface;
+- migrating data destructively;
+- changing deployment configuration, or how releases and versioning work.
 
-## Working Model
+Ask, rather than assume, when v18's behaviour or the Firebase contract cannot be established from source, from the deployed application, or from an existing spec.
 
-Human approval governs product scope, compatibility exceptions, dependencies, data changes, merges, and releases. Agents may investigate, implement a specified bounded change, evolve the supporting factory within that slice, run proportionate deterministic checks, and prepare a reviewable pull request. Treat a failing check or an unverified compatibility assumption as a gate, not a reason to continue to the next migration step. Do not administer human review or acceptance unless asked.
+Before changing a migrated surface, inspect the v18 implementation and write or update its spec.
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.

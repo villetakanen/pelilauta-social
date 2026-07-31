@@ -9,19 +9,28 @@
  * from a rendered <Content /> to this layout. The book's title reaches its <h1>
  * as a prop from the MDX frontmatter instead, so there is one source for it.
  */
-import '@design-system/styles/tokens.css';
+import '@design-system/styles/ds.css';
+// Prototype-age scaffolding, kept only for the legacy books/*.astro pages that
+// consume its hero and stat-tile vocabulary. Prose books do not use it.
 import '@design-system/styles/docs.css';
 import DocsNav from '../components/DocsNav.astro';
 import { groupLabel } from '../lib/books';
 
 interface Props {
   title: string;
+  /**
+   * A prose book: the shell renders its h1 from the frontmatter title and groups the
+   * body in an <article>. It adds no styling — measure, rhythm and type are the
+   * design system's to state once it owns them, and guessing them here would be read
+   * later as a decision. Books look plain until then.
+   */
+  prose?: boolean;
   description: string;
   /** Collection id of the current book, absent on the index page. */
   group?: string;
 }
 
-const { title, description, group } = Astro.props;
+const { title, description, group, prose = false } = Astro.props;
 const context = group ? groupLabel(group) : 'Index';
 ---
 
@@ -29,6 +38,7 @@ const context = group ? groupLabel(group) : 'Index';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="description" content={description} />
     <title>{title} / Pelilauta Design System</title>
   </head>
@@ -54,7 +64,14 @@ const context = group ? groupLabel(group) : 'Index';
       <DocsNav />
 
       <main class="book" id="content">
-        <slot />
+        {prose ? (
+          <article>
+            <h1>{title}</h1>
+            <slot />
+          </article>
+        ) : (
+          <slot />
+        )}
       </main>
     </div>
 

@@ -1,11 +1,9 @@
+/*
+ * color-scheme is not declared here. It is a statement about the document rather
+ * than a colour value, so styles/preflight.css owns it — one declaration, in one
+ * file, which is what this file having a second copy prevented.
+ */
 :root {
-  /*
-   * Dark first: a reader with no OS preference gets dark, which is what the
-   * application's own <meta name="color-scheme"> has always claimed. This
-   * property overrides that tag, so the two must agree or the tag is inert.
-   */
-  color-scheme: dark light;
-
   --cn-surface: light-dark(
     var(--cn-color-surface-99),
     var(--cn-color-surface-20)

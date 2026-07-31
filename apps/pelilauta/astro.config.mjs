@@ -10,6 +10,11 @@ import { optionalProprietary } from '../../packages/design-system/vite/optional-
 export default defineConfig({
   integrations: [svelte()],
 
+  // Pinned so the two apps keep the same ports when the root `dev` script runs
+  // them in parallel. Unpinned, both ask for 4321 and the loser silently takes
+  // 4322, so neither address is knowable in advance.
+  server: { port: 4321 },
+
   output: 'server',
 
   vite: {

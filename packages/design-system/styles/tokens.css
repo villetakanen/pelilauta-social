@@ -5,8 +5,12 @@
  * from --cn-grid. Importing color.css alone leaves those shadows unresolvable,
  * which is the defect this file exists to prevent.
  *
- * Icon sizing (styles/icon.css) is deliberately not included: its consumers opt
- * in, and whether it folds in here is an open question in plans/core-tokens.md.
+ * Icon sizing follows units because it belongs to the same subject: v20 files
+ * both in tokens/units.css, and marks the icon family "absolute, not
+ * grid-derived" — an exception with a reason, not a family of its own. It used
+ * to sit outside this file, imported separately by the application and by two
+ * books, which made a token family look like something a consumer opts into.
  */
 @import "./units.css";
+@import "./icon.css";
 @import "./color.css";
