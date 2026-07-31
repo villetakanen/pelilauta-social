@@ -41,10 +41,21 @@ introduces what follows and is left alone.
 | `source` | `string` | The stylesheet text, imported with `?raw`. Required. |
 | `names` | `string[]` | Exact tokens to show. |
 | `prefix` | `string` | Every token whose name starts with this. |
+| `without` | `string` | Drops tokens whose name contains this, after the include filter. |
+| `swatch` | `boolean` | Renders a colour chip per row, resolved through the live cascade. |
 | `caption` | `string` | Names what the reader is looking at. |
 | `noteLabel` | `string` | Heading for the trailing-comment column. Defaults to `Resolves to`. |
 
 `names` and `prefix` are alternatives; rows come back in the stylesheet's order either way.
+
+`without` exists so one stylesheet can be published as two tables — `color-theme.css`
+declares colour roles and box-shadows together, and a chip is meaningless for a shadow.
+A prefix and its `without` complement cover the file between them, which is asserted
+rather than assumed.
+
+`swatch` resolves `var(--token)` in the reader's own mode, so a `light-dark()` role shows
+the arm currently in force. Each chip carries `data-swatch="--token-name"`, which is how
+the browser check targets one role's resolved colour.
 
 ## When to use it
 

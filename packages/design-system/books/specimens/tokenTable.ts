@@ -30,6 +30,13 @@ export interface TokenFilter {
   names?: readonly string[];
   /** Include every declaration whose name starts with this. */
   prefix?: string;
+  /**
+   * Drop declarations whose name contains this, after the include filter.
+   * One stylesheet can hold two families that want different presentation —
+   * colour.theme.css declares both colour roles and box-shadows — and a table
+   * split that way still has to cover the file between its parts.
+   */
+  without?: string;
 }
 
 interface Comment {
@@ -106,6 +113,7 @@ function trailingNote(
 
 function included(name: string, filter?: TokenFilter): boolean {
   if (!filter) return true;
+  if (filter.without && name.includes(filter.without)) return false;
   if (filter.names) return filter.names.includes(name);
   if (filter.prefix) return name.startsWith(filter.prefix);
   return true;

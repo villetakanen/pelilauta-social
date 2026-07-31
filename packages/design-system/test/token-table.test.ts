@@ -115,6 +115,28 @@ describe('parseTokens', () => {
     expect(parseTokens(unitsSource, { prefix: '--not-a-prefix' })).toEqual([]);
   });
 
+  test('without drops matching declarations after the include filter', () => {
+    const css = ':root{--a-x:1;--a-shadow-y:2;--a-z:3;}';
+
+    expect(
+      parseTokens(css, { prefix: '--a', without: 'shadow' }).map((t) => t.name),
+    ).toEqual(['--a-x', '--a-z']);
+  });
+
+  test('a prefix and its without-complement cover the file between them', () => {
+    // The property that makes a split table safe: two calls, no token in both,
+    // none missed. A lexicon that splits a stylesheet depends on this.
+    const css = ':root{--a-x:1;--a-shadow-y:2;--a-z:3;--a-shadow-w:4;}';
+    const kept = parseTokens(css, { prefix: '--a', without: 'shadow' });
+    const dropped = parseTokens(css, { prefix: '--a-shadow' });
+    const all = parseTokens(css);
+
+    expect(kept.length + dropped.length).toBe(all.length);
+    expect(new Set([...kept, ...dropped].map((t) => t.name))).toEqual(
+      new Set(all.map((t) => t.name)),
+    );
+  });
+
   test('a filter selects a subset, in the stylesheet order rather than its own', () => {
     const tokens = parseTokens(unitsSource, {
       names: ['--cn-line', '--cn-grid'],
