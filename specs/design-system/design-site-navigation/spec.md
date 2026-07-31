@@ -21,24 +21,29 @@ are the design system's decision, declared in one place —
 define. A book's group is its URL group. Within a group a book may declare its
 position, otherwise books order alphabetically by title.
 
-## Authoring
-
-A book is one MDX entry in the content collection named for its group. Adding a
-book is that one file: route files and navigation are never edited, because both
-are derived.
-
-Books are written, not generated. Prose is the body of the MDX, and a book that
-needs live code — a rendered component, a value read from a stylesheet — imports a
-specimen component for that part alone. A book whose content is produced by
-enumerating a source becomes an inventory of what exists rather than guidance on
-what to do, so enumeration belongs to the lexicon books that exist for it.
-
 The site publishes only what exists: an empty group does not appear, and a draft
 entry is neither published nor listed.
 
 Every page carries the same navigation, complete in the served markup, marking
 which book is being read. Where the viewport is too narrow to keep it visible, it
 is reached through a labelled disclosure that needs no JavaScript.
+
+## Blueprint
+
+**The shell.** One layout wraps every page: a skip link as the first focusable
+element, a masthead, the navigation, the book's content in a single main landmark,
+and a footer. The shell owns those landmarks, so a book never styles them.
+
+**A book.** One MDX entry in the content collection named for its group. Adding a
+book is that one file — route files and navigation are never edited, because both
+are derived from the collections and the taxonomy. The entry's frontmatter carries
+the title, which is rendered as the page's only `h1`, so the title has one source.
+
+**Written, not generated.** Prose is the body of the MDX. A book that needs live
+code — a rendered component, a value read from a stylesheet — imports a specimen
+component for that part alone. A book whose content is produced by enumerating a
+source becomes an inventory of what exists rather than guidance on what to do, so
+enumeration belongs to the lexicon books that exist for it.
 
 ## Non-Goals
 
