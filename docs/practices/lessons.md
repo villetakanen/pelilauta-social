@@ -11,8 +11,9 @@ notes and promotes actionable change concepts.
 
 - **Write it only if it needs the owner.** A problem an agent may simply fix gets
   fixed in the pull request; it does not become a file. Notes are for what crosses an
-  approval boundary in `AGENTS.md` — the contract, a skill, a template, a
-  dependency, a new directory.
+  approval boundary in `AGENTS.md`, whatever it later becomes — a change to the
+  contract, a skill or a template, a decision worth an ADR, a product observation, a
+  gap nobody owns.
 - **The commit message is the permanent record.** Commit a note with its reasoning in
   the message body so that deleting the file later costs nothing. Git history is the
   archive; the list is scaffolding.
