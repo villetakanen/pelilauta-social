@@ -1,0 +1,37 @@
+name: tag
+
+# Every merge to main deploys and is a release. The version was already bumped in
+# the pull request, so the tag is derived here rather than applied by hand. An
+# existing tag is left alone: a merge that did not bump the version is not a new
+# release, and a published tag never moves.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: version
+        run: echo "value=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Tag the release commit
+        env:
+          TAG: ${{ steps.version.outputs.value }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "$TAG already exists; nothing to publish."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "$TAG"
+          git push origin "$TAG"
