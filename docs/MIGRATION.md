@@ -14,7 +14,7 @@ Preserve the v18 application's behavior before replacing its Cyan Lit
 dependency. The applicable capability spec owns the local component's approved
 behavior; this guide owns shared migration mechanics and known baseline debt.
 
-A migration slice covers one bounded capability and consumer surface. It does
+A migration pull request covers one bounded capability and consumer surface. It does
 not perform a repository-wide legacy sweep, restore unrelated inherited tests,
 or reopen approved design-system decisions.
 
@@ -26,9 +26,9 @@ historical setup, and not part of the repository gate. Do not cite the suite as
 general acceptance evidence.
 
 Legacy E2E selectors are consumers of Cyan element tags and can become stale as
-source migrates. During a slice, inspect only tests directly related to the
+source migrates. Inspect only tests directly related to the
 changed surface so their assumptions are understood. Repair a test when the
-slice deliberately relies on it or the human owner asks; otherwise leave
+change deliberately relies on it or the human owner asks; otherwise leave
 unrelated suite restoration to dedicated work or the terminal sweep.
 
 ## Per-Slice Inventory
@@ -49,7 +49,7 @@ Inventory the target surface, not the whole repository:
 
 The inventory is repeated for each new consumer context because a later surface
 can be the first to reach a legacy rule. The global terminal scans below are not
-repeated per slice.
+repeated for each one.
 
 ## Styling Boundaries
 
@@ -89,7 +89,7 @@ alone does not prove that an optional package, asset, or registry is optional.
 Run targeted deterministic checks while implementing; the pull-request workflow
 owns broad `pnpm verify` execution. Identify the changed application contexts in
 the PR for the human owner's review. Agents do not administer visual acceptance
-or prescribe Light/Dark review unless the slice itself changes color or theming.
+or prescribe Light/Dark review unless the change itself affects color or theming.
 
 ## Terminal Migration Sweep
 

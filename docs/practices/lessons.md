@@ -10,7 +10,7 @@ notes and promotes actionable change concepts.
 ## Invariants
 
 - **Write it only if it needs the owner.** A problem an agent may simply fix gets
-  fixed in the slice; it does not become a file. Notes are for what crosses an
+  fixed in the pull request; it does not become a file. Notes are for what crosses an
   approval boundary in `AGENTS.md` — the contract, a skill, a template, a
   dependency, a new directory.
 - **The commit message is the permanent record.** Commit a note with its reasoning in

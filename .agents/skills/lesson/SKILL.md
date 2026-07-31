@@ -10,7 +10,7 @@ never assesses, applies, or acts — that is `retro`.
 
 ## Before writing anything
 
-1. Can this be fixed now, inside the current slice, without crossing an approval
+1. Can this be fixed now, inside the current pull request, without crossing an approval
    boundary in `AGENTS.md`? Then fix it. Do not write a file.
 2. Would we want to know this the next time we change the harness — the contract, a
    skill, a template, a workflow, the site's architecture? Then write it down.
