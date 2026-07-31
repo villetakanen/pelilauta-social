@@ -41,6 +41,7 @@ function selectors(source: string): string[] {
 const EXPECTED = [
   // 1. Box model
   '*, ::before, ::after',
+  '*, ::after, ::before, ::backdrop, ::file-selector-button',
   // 2. Document
   ':root',
   'html',
@@ -69,7 +70,6 @@ const EXPECTED = [
   'summary',
   'table',
   '[hidden]',
-  'ol, ul, menu',
   'ol[role="list"], ul[role="list"], menu[role="list"]',
   '[popover]',
   ':target',

@@ -29,6 +29,14 @@
   grid-column: 2;
 }
 
+/*
+ * The reset removes every margin, so prose states its own rhythm. One line of the
+ * grid after each block, which is what the type ramp will restate with its scale.
+ */
+.cn-content-prose :is(p, ul, ol, dl, blockquote) {
+  margin-block-end: var(--cn-line);
+}
+
 /* Markers come from the browser; prose only needs them indented onto the grid. */
 .cn-content-prose :is(ul, ol) {
   padding-inline-start: calc(var(--cn-grid) * 3);

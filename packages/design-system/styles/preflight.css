@@ -25,6 +25,19 @@
   box-sizing: border-box;
 }
 
+/*
+ * Tailwind's rule rather than Bell's: removal is explicit, so spacing is stated by
+ * whatever owns the layout. There is no application-wide paragraph margin.
+ */
+*,
+::after,
+::before,
+::backdrop,
+::file-selector-button {
+  margin: 0;
+  padding: 0;
+}
+
 /* 2. Document -------------------------------------------------------------- */
 
 :root {
@@ -63,7 +76,6 @@ textarea {
   font-family: inherit;
   font-size: 100%;
   line-height: inherit;
-  margin: 0;
 }
 
 button,
@@ -95,7 +107,6 @@ textarea:not([rows]) {
 /* Platform artefacts the design system did not ask for. */
 ::-moz-focus-inner {
   border-style: none;
-  padding: 0;
 }
 
 :-moz-focusring {
@@ -181,13 +192,6 @@ table {
   display: none;
 }
 
-ol,
-ul,
-menu {
-  margin: 0;
-  padding: 0;
-}
-
 /*
  * Markers are removed only where the author asks, because Safari drops a list's
  * semantics from VoiceOver when list-style is removed. A navigation, menu or tray
@@ -201,8 +205,6 @@ menu[role="list"] {
 
 [popover] {
   border: none;
-  margin: 0;
-  padding: 0;
 }
 
 /* An anchored element otherwise lands underneath a sticky header. */
@@ -213,7 +215,6 @@ menu[role="list"] {
 /* 5. Body and framework ---------------------------------------------------- */
 
 body {
-  margin: 0;
   /* So a background covers the viewport on a page shorter than it. */
   min-block-size: 100dvh;
   background: var(--cn-background);

@@ -21,10 +21,15 @@ way.
 ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
 ```
 
-## Prose margins
+## Margins and padding
 
-Kept. Bell and Tailwind both zero them in the reset; here they stay until the type ramp
-replaces them with a stated rhythm.
+Removed from every element, following Tailwind rather than Bell, who removes only
+`margin-block-end` from an enumerated set. Removal is explicit: there is no
+application-wide paragraph margin, and spacing is stated by whatever owns the layout.
+
+```css
+*, ::after, ::before, ::backdrop, ::file-selector-button { margin: 0; padding: 0; }
+```
 
 ## Colour scheme
 

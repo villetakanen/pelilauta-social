@@ -25,9 +25,14 @@ A rule belongs when it corrects a browser default, or establishes a baseline eve
 component may assume, and no component, container or the type ramp could own it
 instead.
 
-**A rule that needs another stylesheet to win against it is in the wrong file.** That
-is the whole reason typography is absent: prose margins, leading and heading wrap only
-make sense stated together with their replacements, and the type ramp states both.
+**A rule that needs another stylesheet to win against it is in the wrong file.** Type
+sizes, leading and heading wrap are therefore absent: each is a value the ramp states,
+not a default to correct.
+
+Margins and padding are removed from every element, following Tailwind rather than
+Bell's enumerated `margin-block-end`. Removal is explicit because there is no
+application-wide paragraph margin: spacing is stated by whatever owns the layout, and
+until the type ramp exists that is each container.
 
 One rule is not a browser correction at all. Astro's hydration wrapper is a box in the
 document that the author did not write, so `astro-island { display: contents }` belongs
@@ -43,7 +48,8 @@ cannot settle whether `optgroup` or a WebKit search pseudo-element is inside it.
 | Concern | Owner |
 | :--- | :--- |
 | Box model, document, control inheritance, element defaults, body, runtime wrappers | the reset |
-| Prose margins, type sizes, leading, heading wrap, link colour | the type ramp |
+| Type sizes, leading, heading wrap, link colour | the type ramp |
+| The spacing that replaces the removed margins | each container, until the type ramp |
 | Constraining image width | the container holding the image |
 | Scrollbar appearance | themed surfaces, unassigned |
 | How a control looks once normalised | its component |
