@@ -24,9 +24,8 @@ position, otherwise books order alphabetically by title.
 The site publishes only what exists: an empty group does not appear, and a draft
 entry is neither published nor listed.
 
-Every page carries the same navigation, complete in the served markup, marking
-which book is being read. Where the viewport is too narrow to keep it visible, it
-is reached through a labelled disclosure that needs no JavaScript.
+Where the viewport is too narrow to keep the temporary navigation visible, it is
+reached through a labelled disclosure that needs no JavaScript.
 
 ## Blueprint
 
@@ -56,14 +55,6 @@ regenerable from a source belongs to a lexicon book.
 
 ### Definition of Done
 
-- Every published book and the index render in one shell carrying the navigation,
-  and every listed link resolves.
-- Each page marks exactly one current location; on a book page its label equals
-  that page's single `h1`.
-- `/tokens/color` and `/components/icon` resolve unchanged;
-  `/principles/iconography` resolves; `/iconography` does not.
-- A draft entry appears in neither the URLs nor the navigation, and an unknown
-  path is not served.
 - At a narrow viewport the navigation and its links are unreachable — by keyboard
   and assistive technology, not merely off-screen — until the disclosure opens.
 - Every page's first focusable element skips the shell to the book's content.
@@ -72,15 +63,6 @@ regenerable from a source belongs to a lexicon book.
 
 ### Regression Guardrails
 
-- A book has one `h1`, whose text is its frontmatter title. Two sources for a
-  book's title must not reappear.
-- No heading in the shell or navigation has the accessible name of a book, and no
-  two published books share a title; existing book specs locate headings by name
-  without a level filter, so either would make their locators ambiguous.
-- The navigation renders once per page, and derives active state from the current
-  path rather than receiving it.
-- Active-state matching tolerates a trailing slash: the dev server and the built
-  output differ in it.
 - Book styles use no selector rooted at `main`, `body` or `footer` — the shell
   owns those, so such rules match nothing, silently.
 

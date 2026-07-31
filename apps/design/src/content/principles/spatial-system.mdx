@@ -69,10 +69,10 @@ control sits 3px low, the fix is its box, not a 3px margin.
 
 ## 3. Vertical rhythm
 
-`--cn-line` is 24px because that is the height of a line of body text. Prose line
-heights are multiples of it, so text set anywhere in the interface lands on the same
-horizontal grid, and a block separated by `--cn-line` puts the next block back on
-that rhythm.
+`--cn-line` is the prose rhythm unit. Body text defaults to a one-`--cn-line` line
+box, and other prose line heights are multiples of it, so text set anywhere in the
+interface lands on the same horizontal grid. A block separated by `--cn-line` puts
+the next block back on that rhythm.
 
 This is why the row-height role and the vertical-rhythm role are the same token
 rather than two that happen to be equal. A control one `--cn-line` tall aligns with
@@ -129,13 +129,12 @@ into it.
 | `--cn-gap` | 16px | 20px | 24px |
 | `--cn-line` | 24px | 30px | 36px |
 
-Two rules keep this true, and both are enforced by
-`packages/design-system/test/root-scaling.test.ts`:
+Two rules keep this true:
 
-1. **No stylesheet sets a font size on `html` or `:root`.** Doing so replaces the
+1. **Do not set a font size on `html` or `:root`.** Doing so replaces the
    reader's preference with a number of ours, and every length in the system is
    measured against it.
-2. **Breakpoints are declared in `rem`.** A media query stated in pixels cannot see
+2. **Declare breakpoints in `rem`.** A media query stated in pixels cannot see
    that the reader asked for larger text: the type grows, the layout keeps deciding
    as though it had not, and columns break before the reader reaches them.
 

@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Spatial System
@@ -27,10 +27,9 @@ multiple of the grid, aligns with nothing else on the page.
 
 ## Vertical Rhythm
 
-`--cn-line` is the height of a line of body text, and is both the row-height role
-and the vertical-rhythm unit — one token rather than two that happen to be equal. A
-control one `--cn-line` tall aligns with the text beside it, because both are
-measured against the same line box.
+`--cn-line` is the prose rhythm unit and the row-height role — one token rather than
+two that happen to be equal. Body text defaults to a one-`--cn-line` line box, so a
+control one `--cn-line` tall aligns with the text beside it.
 
 Stacked blocks are separated by `--cn-line` or a multiple of it.
 

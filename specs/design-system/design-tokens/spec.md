@@ -106,7 +106,6 @@ Consumers read semantic roles.
 - Every added token has a current, named purpose and consumer.
 - The design system's own stylesheets set no root font size and state no pixel
   breakpoint, so a reader who enlarges their default text gets a proportionally
-  larger interface. A package check enforces this; consuming applications are
-  outside its reach and are not covered by it.
+  larger interface. Consuming applications are outside this guarantee.
 - Human review approves visual intent and any deliberate departure from the
   live v18 experience.
