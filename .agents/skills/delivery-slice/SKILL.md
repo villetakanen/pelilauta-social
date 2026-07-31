@@ -49,22 +49,25 @@ itself the review, release, or revert unit.
    Do not infer failure behavior from source syntax.
 7. Use the `delivery-review` skill only when the human owner explicitly requests
    an implementation review. This does not alter the separate mandatory
-   adversarial review for intent specs.
+   adversarial review for specs.
 8. Before committing, inspect status, the complete slice diff, and recent
    commits. Stage only intended files. Keep commits coherent and reviewable;
    dependent feature and factory changes may revert together with the slice.
 9. Commit, push, and open or update a pull request when requested. Then stop for
    the human owner's review. Preparing or opening a pull request never
-   authorizes its merge; merge only on an explicit merge instruction. Never
-   bypass a failing gate. Use Conventional Commits and do not rewrite published
-   history without explicit approval.
+   authorizes its merge. Every merge to `main` deploys and is a release: before
+   integration, use the `release` skill with the owner's exact version so the
+   release metadata lands in this pull request. Merge only on an explicit merge
+   instruction and never bypass a failing gate. Use Conventional Commits and do
+   not rewrite published history without explicit approval.
 10. Before integration, resolve lesson candidates that affect the slice's
     correctness. Apply required accepted changes in the same merge. Optional
     candidates do not block delivery; assess, defer with a concrete trigger, or
     discard them. Keep PR identity, checks, carry-forwards, and remaining work
     in the PR or active plan, not lessons.
-11. Do not infer a named release from an integrated slice or closed branch. Use
-    the `release` skill only after an explicit release request and exact version.
+11. A merge instruction is a release instruction because `main` deploys. Do not
+    merge until the owner has supplied the exact version and the release skill's
+    pre-integration steps are complete.
 
 ## Report
 

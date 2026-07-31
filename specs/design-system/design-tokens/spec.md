@@ -33,6 +33,13 @@ A token holds an input to a value, not a value computed in advance. A consumer
 composes the final measurement, so a decision stays valid when the context around
 it changes.
 
+The base grid is expressed in `rem`, and the design system's stylesheets do not
+override the document's root font size, so every spacing decision scales with the
+reader's font-size preference instead of replacing it. The system's breakpoints are
+expressed in `rem` for the same reason: a query stated in pixels cannot see that the
+reader has asked for larger text, and would keep making layout decisions as though
+they had not.
+
 Reference choices state what is available. Semantic roles state why a choice is
 used. Components consume semantic roles so that their meaning remains stable
 when the visual expression evolves.
@@ -62,6 +69,23 @@ when the visual expression evolves.
 - A new token family is justified by a concrete consumer, not by possible future
   platforms or components.
 
+## Blueprint
+
+Tokens are CSS custom properties declared on the document root, composed in one
+direction through three layers:
+
+- a **reference** layer of literal values, which is where the stack bottoms out;
+- a **semantic** layer naming roles, built from the reference layer and expressing
+  Light and Dark as two arms of one declaration;
+- a **compatibility** layer aliasing legacy Cyan 4 names onto semantic roles. Every
+  entry is an alias terminating in a reference or semantic token.
+
+The grid family is separate from colour and loads first: elevation shadows in the
+semantic layer derive from the grid. One entry point composes the families in that
+order, and consumers import it.
+
+Consumers read semantic roles.
+
 ## Non-Goals
 
 - Tokens do not define component structure, content, interaction, or data
@@ -80,5 +104,8 @@ when the visual expression evolves.
 - Existing consumers continue to work through an explicitly bounded
   compatibility contract until they are migrated.
 - Every added token has a current, named purpose and consumer.
+- The design system's own stylesheets set no root font size and state no pixel
+  breakpoint, so a reader who enlarges their default text gets a proportionally
+  larger interface. Consuming applications are outside this guarantee.
 - Human review approves visual intent and any deliberate departure from the
   live v18 experience.

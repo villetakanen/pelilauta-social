@@ -5,11 +5,10 @@ status: draft
 # <Capability>
 
 <!--
-Intent spec template. Copy to specs/<domain>/<capability>/spec.md.
+Spec template. Copy to specs/<domain>/<capability>/spec.md.
 Authoring rules live in .agents/skills/spec/SKILL.md; this file defines the
 required anatomy. Keep the spec small enough to guide decisions (target well
-under 300 lines). Blueprint detail — file layouts, framework choices, task
-sequencing — belongs in the linked plan, not here.
+under 300 lines).
 -->
 
 ## Intent
@@ -27,27 +26,24 @@ Anchor, don't model: promise only what this capability owns; reference values
 owned by tokens, parent specs, or upstream contracts by linking their owner,
 never by restating them here.
 
+## Blueprint
+
+The shape of the thing: its parts, how they relate, and what a reader or consumer
+encounters. Enough that two people building it independently would produce
+recognisably the same artifact, and that a reviewer can tell a departure from a
+variation.
+
 ## Non-Goals
 
 What this capability deliberately does not do, so scope cannot silently grow
 back in through implementation.
 
-## Contract
-
-The verification half of the spec. Everything here must be checkable.
-
-### Definition of Done
-
-Observable, measurable conditions under which the capability is complete.
-
-### Regression Guardrails
+## Regression Guardrails
 
 Invariants that must survive future changes to this and neighboring
-capabilities. When a guardrail is retired, strike it through with a date
-rather than deleting it.
+capabilities.
 
 ## Acceptance
 
 Concrete, observable acceptance criteria a human or agent can verify against
-the running product and the design-system book. Each criterion should map to
-a deterministic check or a named human review step.
+the running product and the design-system book.
