@@ -108,6 +108,11 @@ Consumers read semantic roles.
   declared, read from that stylesheet at build time. It cannot omit a token that
   exists or state one that does not, and a selection that matches nothing fails
   the build rather than publishing an empty or unfiltered table.
+- The compatibility layer gets no lexicon. It is a contract, asserted by test,
+  not vocabulary to be learned: publishing its aliases beside the roles they
+  alias is how a temporary shim starts reading as part of the system. A book says
+  the layer exists, what guarantees it carries, and where the sweep that removes
+  it is planned.
 - The design system's own stylesheets set no root font size and state no pixel
   breakpoint, so a reader who enlarges their default text gets a proportionally
   larger interface. Consuming applications are outside this guarantee.
