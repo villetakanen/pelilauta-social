@@ -1,5 +1,10 @@
 :root {
-  color-scheme: light dark;
+  /*
+   * Dark first: a reader with no OS preference gets dark, which is what the
+   * application's own <meta name="color-scheme"> has always claimed. This
+   * property overrides that tag, so the two must agree or the tag is inert.
+   */
+  color-scheme: dark light;
 
   --cn-surface: light-dark(
     var(--cn-color-surface-99),
