@@ -1,92 +1,80 @@
 ---
 title: Colour System
-description: How the OKLCH scales are built, why a step number predicts contrast, how Light and Dark are expressed, and the one place the scale runs out.
+description: The six tonal scales, what each is for, how a role looks in Light and Dark, and the one place the scale runs out.
 order: 7
 prose: true
 ---
 
+import ColorRamp from '@design-system/books/specimens/ColorRamp.astro'
+import RoleTable from '@design-system/books/specimens/RoleTable.astro'
 import ContrastMatrix from '@design-system/books/specimens/ContrastMatrix.astro'
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import referenceSource from '@design-system/styles/color-reference.css?raw'
+import themeSource from '@design-system/styles/color-theme.css?raw'
 
-Pick a **role**, never a step. Roles carry both modes; a palette step carries one, so
-reaching past the role gets Light right and Dark wrong. Everything below is about the
-scales underneath, because knowing how they are built is what makes the roles predictable
-— and what tells you when they run out.
+Build with **roles**, not steps. A role carries both modes; a step carries one. The scales
+below are what the roles are made of — worth knowing, not worth reaching into.
 
-## A step number is a lightness
+## The six scales
 
-Every colour is `oklch(L C H)`, and **the step is L × 100**. `surface-50` is `oklch(0.5 …)`.
-Nothing else in the system is numbered that way, and it is the property everything here
-rests on.
+A step number is its perceived lightness: `surface-50` is `oklch(0.5 …)`, and step 40 in
+any family is as light as step 40 in any other. Chroma peaks mid-ramp and falls to zero at
+both ends, which is why 0 and 100 are neutral everywhere.
 
-<TokenTable
-  source={referenceSource}
-  prefix="--cn-color-surface"
-  swatch
-  caption="The surface ramp — read the first number of each value against the step"
+<ColorRamp source={referenceSource} family="surface" intent="Cerulean 242°, held at every step. Backgrounds, elevation, borders, most text." />
+<ColorRamp source={referenceSource} family="primary" intent="The brand ramp. Rotates 185° → 110° as it lightens: deep teal at the bottom, acid neon at the top." />
+
+Primary is the only scale that changes hue as it climbs, so its dark end and its light end
+are different colours, not one colour at two brightnesses. Every other family holds a
+single hue.
+
+<ColorRamp source={referenceSource} family="error" intent="318° — destructive actions and validation failures." />
+<ColorRamp source={referenceSource} family="warning" intent="65° — high-visibility caution, nothing lost yet." />
+<ColorRamp source={referenceSource} family="info" intent="170° — neutral system feedback and state changes." />
+<ColorRamp source={referenceSource} family="love" intent="30° — likes, favourites, social approval. Not an error, however red." />
+
+The four functional scales are four steps deep, not thirteen. There is no `error-30`.
+
+## What the roles look like in both modes
+
+<RoleTable
+  source={themeSource}
+  caption="Surfaces, from the page up"
+  names={['--cn-surface', '--cn-surface-1', '--cn-surface-2', '--cn-surface-3', '--cn-surface-4']}
+  intents={{
+    '--cn-surface': 'The page itself',
+    '--cn-surface-1': 'Cards, panels, anything sitting on the page',
+    '--cn-surface-2': 'A raised element on a card',
+    '--cn-surface-3': 'Menus, popovers',
+    '--cn-surface-4': 'Dialogs and the highest chrome — see the guardrail below',
+  }}
 />
 
-Chroma is not constant along a ramp: it peaks in the middle and falls to zero at both
-ends, because a near-black and a near-white cannot hold saturation. That is why step 0 and
-step 100 are neutral in every family.
+<RoleTable
+  source={themeSource}
+  caption="Text, action and edges"
+  names={['--cn-text', '--cn-text-low', '--cn-text-high', '--cn-link', '--cn-border', '--cn-focus-ring']}
+  intents={{
+    '--cn-text': 'Body copy, the default',
+    '--cn-text-low': 'Secondary — timestamps, captions, metadata',
+    '--cn-text-high': 'Maximum contrast, when the default is not enough',
+    '--cn-link': 'Anything that navigates',
+    '--cn-border': 'Edges and dividers',
+    '--cn-focus-ring': 'Keyboard focus. Never suppressed.',
+  }}
+/>
 
-## The gap between two steps predicts their contrast
+Read the two colour columns against each other: Dark is **not** the palette flipped.
+Surfaces 1–3 are plain white in Light and only separate in Dark. `--cn-surface-4` goes
+*darker* than what it sits on in Light, and lighter in Dark. `--cn-link` is a brand teal in
+Light and a pale blue in Dark — a different family, not a brighter version of the same one.
 
-Because the step is the lightness, the **distance** between two steps in the same family
-puts a floor under their contrast. Measured across every same-family pair in the palette:
-
-| Step gap | Guarantees at least |
-| :--- | :--- |
-| 45 | AA Large — 3:1 |
-| **60** | **AA — 4.5:1** |
-| 70 | AAA — 7:1 |
-
-So `surface-95` on `surface-20` is a gap of 75 and safe without checking. A gap of 40
-guarantees nothing — its worst pair is 2.36:1 — which is the trap, because 40 feels like a
-lot of scale.
-
-These are floors over the whole palette, not predictions: a given pair usually does better.
-They are asserted in `test/color-contrast.test.ts`, so the rule cannot drift from the
-colours.
-
-## Surface holds its hue. Primary does not.
-
-Every family fixes one hue for its whole ramp — surface at 242, error 318, warning 65,
-info 170, love 30 — **except primary, which rotates from 185 at the bottom to 110 at the
-top.** Dark primary is a blue-teal; light primary is a yellow-green. They are ends of one
-ramp, not two colours.
-
-The consequence is practical: a primary step chosen in Light and its counterpart in Dark
-are different hues, not the same hue at different brightness. Surface has no such problem,
-which is why elevation can be built from it.
-
-Primary and surface run thirteen steps, 0 to 100. The four status families run **four** —
-20, 40, 60, 90 — so there is no `error-30`, and the gap rule is the only way to pick
-between the ones that exist.
-
-## Light and Dark are two expressions, not an inversion
-
-One declaration states both, using `light-dark()`. There is no theme class and no
-JavaScript; `styles/preflight.css` declares `color-scheme`, and the browser picks the arm.
-
-It would be easy to assume Dark is the palette flipped — step *n* becoming step *100 − n*.
-It is not. Of 41 roles that state both arms, **29 are not mirror steps and 4 change family
-outright**:
-
-- `--cn-surface-1` through `-3` are pure white in Light, but `surface-30`–`40` in Dark,
-  which is nowhere near their mirror.
-- `--cn-link` is `primary-50` in Light and `surface-80` in Dark — a different family, not a
-  lighter brand colour.
-- Elevation rises in Dark (20 → 50) but **falls at the top in Light**: `--cn-surface-4` is
-  `surface-80`, darker than the white beneath it.
-
-That last one is the whole reason the next section exists.
+That is why you cannot pick a step and expect it to behave. The role has already made these
+decisions.
 
 ## Where the scale runs out
 
-Raised Dark surfaces climb towards mid-Cerulean, so each step up spends the headroom a
-de-emphasised text colour needs. At elevation 4 there is none left:
+Raised Dark surfaces climb towards mid-Cerulean, spending the headroom that de-emphasised
+text needs. By elevation 4 there is none left:
 
 <ContrastMatrix
   foregrounds={['--cn-text', '--cn-text-high', '--cn-on-surface', '--cn-text-low', '--cn-on-surface-secondary']}
@@ -95,34 +83,46 @@ de-emphasised text colour needs. At elevation 4 there is none left:
   caption="On --cn-surface-4 in Dark"
 />
 
-**Use `--cn-text` or `--cn-text-high`, and nothing else.** `--cn-on-surface` — the ordinary
-body role everywhere else — reaches only AA Large here and is not enough for body copy.
+**On elevation 4, use `--cn-text` or `--cn-text-high`. Nothing else.** Even
+`--cn-on-surface` — the ordinary body role everywhere else — only reaches AA Large here.
 
 <div style="padding: var(--cn-gap); background: var(--cn-surface-4); border-radius: var(--cn-border-radius-large); border: 1px solid var(--cn-border);">
   <p style="color: var(--cn-text); margin: 0;">`--cn-text` on elevation 4 — the role to use.</p>
   <p style="color: var(--cn-text-low); margin: 0;">`--cn-text-low` on elevation 4 — the role the guardrail forbids.</p>
 </div>
 
-In Light both lines are legible, which is why the rule has to be stated rather than
-noticed. The practical form: a card that raises itself to elevation 4 cannot keep the
-timestamp-and-byline treatment it used at rest.
+In Light both lines read fine, which is why this has to be stated rather than noticed. In
+practice: a card that raises itself to a dialog cannot keep the byline treatment it used at
+rest.
 
-## Choosing
+## When you do have to pick a step
 
-- **Text** is `--cn-text`; `--cn-text-low` only for genuinely secondary content, never on a
-  raised Dark surface.
-- **Action** is `--cn-link` to navigate, `--cn-button` to commit. Brand colour marks a
-  brand-affirming action, not a destructive one — that is `error`.
-- **Status** is `error`, `warning`, `info`, and `love` for social approval. A like is not
-  an error, however red it looks.
-- **Focus** is `--cn-focus-ring`, and it may not be suppressed.
+Rarely, and then by distance. Because the step is the lightness, the gap between two steps
+in one family puts a floor under their contrast — measured across every pair in the
+palette:
 
-Do not override a role locally. If `--cn-link` is wrong on some surface, either the role or
-the surface is wrong; setting `color` to a step in one component fixes one mode and breaks
-the other.
+| Step gap | Guarantees |
+| :--- | :--- |
+| 45 | AA Large, 3:1 |
+| **60** | **AA, 4.5:1** |
+| 70 | AAA, 7:1 |
+
+A gap of 40 guarantees nothing — its worst pair is 2.36:1 — which is the trap, because 40
+looks like most of a scale.
+
+## Don't
+
+- **Don't override a role locally.** Setting `color` to a step fixes one mode and breaks
+  the other.
+- **Don't use brand colour for destructive actions.** That is `error`.
+- **Don't reach for `--cn-text-low` on a raised Dark surface.** See above.
+- **Don't mix in `hsl`.** Derived colours use `color-mix(in oklch, …)`, or the perceptual
+  spacing that makes step numbers meaningful is lost.
 
 ## What this does not cover
 
-Values are in the [Colour](/tokens/color) lexicon. The palette is not themeable at runtime
-— Cyan 4 allowed swapping the chroma ramps, and v21 has no consumer for that. The
-per-account theme preference in `apps/pelilauta` is application state, outside this system.
+Values are in the [Colour](/tokens/color) lexicon, and the rules above are asserted in
+`test/color-palette.test.ts` and `test/color-contrast.test.ts`. The palette is not
+themeable at runtime — Cyan 4 allowed swapping the ramps and v21 has no consumer for it.
+The per-account theme preference in `apps/pelilauta` is application state, outside this
+system.

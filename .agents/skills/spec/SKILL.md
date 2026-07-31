@@ -23,7 +23,7 @@ anatomy is `specs/TEMPLATE.md`; start new specs from it.
    goals, principles, boundaries, and observable acceptance.
 5. Examples illustrate intent; the current code is the reference for
    implementation.
-6. Record compatibility intent and deliberate behavior changes.
+6. State the capability's current compatibility contract.
 7. Anchor, don't model: a spec promises only what its capability owns. Values
    owned elsewhere — design tokens, parent specs, upstream contracts — are
    referenced as their owner's decision by linking that owner, never restated in

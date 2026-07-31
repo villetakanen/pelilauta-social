@@ -1,0 +1,78 @@
+---
+/**
+ * ColorRamp — one family's tonal scale, as colour.
+ *
+ * v20's colour book renders every family this way and it is the thing our books
+ * were missing: a scale you can see beats a table telling you it exists. Steps
+ * come from the stylesheet, so a ramp cannot show a step that was removed.
+ *
+ * Book: apps/design/src/content/principles/color-system.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** The stylesheet, imported by the book with `?raw`. */
+  source: string;
+  /** Family name, e.g. `surface` — matches `--cn-color-<family>-<step>`. */
+  family: string;
+  /** What the family is for. One line, shown beside the name. */
+  intent?: string;
+}
+
+const { source, family, intent } = Astro.props;
+
+const steps = parseTokens(source, { prefix: `--cn-color-${family}-` }).map(
+  (token) => ({
+    step: token.name.replace(`--cn-color-${family}-`, ''),
+    name: token.name,
+  }),
+);
+
+if (steps.length === 0) {
+  throw new Error(
+    `ColorRamp found no steps for family "${family}". The palette no longer declares it.`,
+  );
+}
+---
+
+<figure class="ramp">
+  <figcaption>
+    <strong>{family}</strong>{intent && <span> — {intent}</span>}
+  </figcaption>
+  <ol>
+    {steps.map(({ step, name }) => (
+      <li>
+        <span class="chip" style={`background: var(${name});`} title={name}></span>
+        <span class="step">{step}</span>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .ramp ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ramp li {
+    flex: 1 1 3rem;
+    text-align: center;
+  }
+  .chip {
+    display: block;
+    block-size: 3rem;
+    border: 1px solid var(--cn-border);
+  }
+  .step {
+    display: block;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+  figcaption {
+    margin-block-end: 0.25rem;
+  }
+</style>

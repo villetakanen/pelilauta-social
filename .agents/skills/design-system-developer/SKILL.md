@@ -26,8 +26,6 @@ Published design systems converge on this — Primer, Polaris, Radix, USWDS and 
 reach an example within a sentence or two, and none of them argues in a heading. **A
 component page that never shows its own invocation has failed**, however well it reads.
 
-Motivation, history and why-it-is-shaped-this-way belong in the spec, not the book.
-
 `prose: true` asks the shell to render the `h1` and group the body. It adds no styling:
 the design system owns neither content grids nor typography yet, so books look plain,
 and inventing a measure or a rhythm here would be read later as a decision it made.
