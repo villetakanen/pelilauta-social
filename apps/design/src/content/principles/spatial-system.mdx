@@ -1,0 +1,150 @@
+---
+title: Spatial System
+description: The 8px baseline, the three spacing roles, vertical rhythm and radii — how to choose a measurement rather than guess one.
+order: 5
+---
+
+<h1>{frontmatter.title}</h1>
+
+Pelilauta is built on a deterministic **8px baseline grid**. One literal measurement
+exists; everything else is a multiple of it. That is what makes spacing decidable
+rather than a matter of taste, and it is why two people spacing two different screens
+arrive at the same answer.
+
+## 1. The atomic unit
+
+The whole system derives from `--cn-grid`. Anchoring it to `0.5rem` rather than `8px`
+is deliberate — see [The reader sets the scale](#5-the-reader-sets-the-scale).
+
+| Token | Derivation | At a 16px root | Role |
+| :--- | :--- | :--- | :--- |
+| `--cn-grid` | `0.5rem` | **8px** | The atomic unit of alignment. |
+| `--cn-gap` | `grid × 2` | **16px** | Standard element spacing — gutters. |
+| `--cn-line` | `grid × 3` | **24px** | Standard row height and vertical rhythm unit. |
+
+Three roles, not three sizes. The question to ask is never "how big should this gap
+be" but "what is the relationship between these two things":
+
+- Space **inside** a component — a chip's padding, the distance from an icon to its
+  label — is `--cn-grid`.
+- Space **between** elements that belong together — cards in a row, fields in a form
+  — is `--cn-gap`. When you are unsure, this is the answer.
+- Space **below a block**, and the height of a row, is `--cn-line`.
+
+## 2. The spacing scale
+
+Spacing is never arbitrary. Use the multiples.
+
+<div style="display: flex; flex-direction: column; gap: var(--cn-grid); padding: var(--cn-gap); background: var(--cn-surface-1); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-large);">
+  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
+    <div style="width: calc(var(--cn-grid) * 0.5); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
+    <code>grid × 0.5 — 4px</code>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
+    <div style="width: var(--cn-grid); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
+    <code>--cn-grid — 8px</code>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
+    <div style="width: var(--cn-gap); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
+    <code>--cn-gap — 16px</code>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
+    <div style="width: var(--cn-line); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
+    <code>--cn-line — 24px</code>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
+    <div style="width: calc(var(--cn-grid) * 4); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
+    <code>grid × 4 — 32px</code>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--cn-gap);">
+    <div style="width: calc(var(--cn-grid) * 6); height: var(--cn-gap); background: var(--cn-link); flex: none;"></div>
+    <code>grid × 6 — 48px</code>
+  </div>
+</div>
+
+**Do** reach for the next role when something feels tight — `--cn-grid` to
+`--cn-gap`, `--cn-gap` to `--cn-line`.
+
+**Don't** invent a step between them. `12px` is not a smaller `--cn-gap`; it is a
+value that will never align with anything else on the page.
+
+**Don't** use a spacing token to fix a problem that is really alignment. If a
+control sits 3px low, the fix is its box, not a 3px margin.
+
+## 3. Vertical rhythm
+
+`--cn-line` is 24px because that is the height of a line of body text. Prose line
+heights are multiples of it, so text set anywhere in the interface lands on the same
+horizontal grid, and a block separated by `--cn-line` puts the next block back on
+that rhythm.
+
+This is why the row-height role and the vertical-rhythm role are the same token
+rather than two that happen to be equal. A control one `--cn-line` tall aligns with
+the text beside it, because both are measured against the same line box.
+
+The practical rule: separate stacked blocks by `--cn-line` or a multiple, not by
+`--cn-gap`. Gaps between blocks are what break a rhythm that padding inside them
+would have kept.
+
+## 4. Border radii
+
+Radii are grid multiples too, so a rounded corner stays in proportion when the
+system rescales.
+
+| Token | Multiplier | At a 16px root |
+| :--- | :--- | :--- |
+| `--cn-border-radius-small` | `× 0.5` | **4px** |
+| `--cn-border-radius-medium` | `× 1` | **8px** |
+| `--cn-border-radius-large` | `× 2` | **16px** |
+| `--cn-border-radius-xl` | `× 4` | **32px** |
+
+<div style="display: flex; flex-wrap: wrap; gap: var(--cn-gap); align-items: center; padding: var(--cn-gap); background: var(--cn-surface-1); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-large);">
+  <div style="width: 5rem; height: 5rem; background: var(--cn-surface-3); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-small); display: grid; place-items: center;"><code>small</code></div>
+  <div style="width: 5rem; height: 5rem; background: var(--cn-surface-3); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-medium); display: grid; place-items: center;"><code>medium</code></div>
+  <div style="width: 5rem; height: 5rem; background: var(--cn-surface-3); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-large); display: grid; place-items: center;"><code>large</code></div>
+  <div style="width: 5rem; height: 5rem; background: var(--cn-surface-3); border: 1px solid var(--cn-border); border-radius: var(--cn-border-radius-xl); display: grid; place-items: center;"><code>xl</code></div>
+</div>
+
+`--cn-border-radius` with no step is the default for a consumer that wants a rounded
+corner without choosing one. It resolves to medium.
+
+Radius reads as a size cue: the larger the surface, the larger the radius it can
+carry. A 4px radius on a full-width card looks like a rendering accident, and a 32px
+radius on a chip turns it into a pill.
+
+## 5. The reader sets the scale
+
+Everything above is stated in `rem`, and no stylesheet in the design system sets a
+`font-size` on `html` or `:root`. Those two facts together are what make the
+interface scale with the reader: someone who sets a 24px default in their browser
+gets a proportionally larger interface, not the same layout with bigger text crammed
+into it.
+
+| Token | 16px root | 20px root | 24px root |
+| :--- | :--- | :--- | :--- |
+| `--cn-grid` | 8px | 10px | 12px |
+| `--cn-gap` | 16px | 20px | 24px |
+| `--cn-line` | 24px | 30px | 36px |
+
+Two rules keep this true, and both are enforced by
+`packages/design-system/test/root-scaling.test.ts`:
+
+1. **No stylesheet sets a font size on `html` or `:root`.** Doing so replaces the
+   reader's preference with a number of ours, and every length in the system is
+   measured against it.
+2. **Breakpoints are declared in `rem`.** A media query stated in pixels cannot see
+   that the reader asked for larger text: the type grows, the layout keeps deciding
+   as though it had not, and columns break before the reader reaches them.
+
+One honest exception, visible on this page: the documentation site sizes its own
+headings against the viewport, so testing this here will not show the headings
+moving. The spatial system does move.
+
+## What is not here yet
+
+Rail and tray geometry, button sizing and icon sizes are part of the spatial system
+in v20, but the design system does not own those tokens yet — they still come from
+Cyan 4. This book grows when they are ported.
+
+For the values themselves rather than the reasoning, see the
+[Units and grid](/tokens/units) lexicon.
