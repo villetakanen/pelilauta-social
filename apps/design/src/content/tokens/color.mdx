@@ -41,21 +41,12 @@ these — they say what is available, not what it means.
 
 <TokenTable source={referenceSource} prefix="--cn-color-" swatch caption="Reference palette" />
 
-## Cyan 4 compatibility is not published here
+## Cyan 4 aliases are not here
 
-`styles/compat/cyan-4.css` aliases roughly 150 legacy names onto these roles so that
-surfaces still running on Cyan keep working while they are replaced. It is scaffolding
-with an expiry — **it is removed before `v21.0.0-rc.1`** — and it is deliberately absent
-from this lexicon. Nothing built for v21 should read one of those names, and a table of
-them beside the roles they alias is how a temporary shim starts reading as vocabulary.
-
-It is tested, but not because it is a contract: a dangling alias fails silently, so
-`packages/design-system/test/token-contract.test.ts` holds the layer to being a mapping
-and nothing more — every alias resolving into a token this system owns, and no colour of
-its own. That keeps it from rotting while it is alive, and makes its deletion cheap.
-
-Migrating a surface and need to know what a legacy name resolves to? Read the stylesheet.
-`docs/MIGRATION.md` owns the sweep that deletes it.
+`styles/compat/cyan-4.css` maps legacy names onto these roles until the surfaces still
+running on Cyan are replaced. It is removed before `v21.0.0-rc.1`, nothing new reads it,
+and it is not published as vocabulary. Read the stylesheet if you are migrating a surface;
+`docs/MIGRATION.md` owns the sweep.
 
 ## What this does not cover
 

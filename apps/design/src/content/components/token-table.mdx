@@ -46,16 +46,11 @@ introduces what follows and is left alone.
 | `caption` | `string` | Names what the reader is looking at. |
 | `noteLabel` | `string` | Heading for the trailing-comment column. Defaults to `Resolves to`. |
 
-`names` and `prefix` are alternatives; rows come back in the stylesheet's order either way.
-
-`without` exists so one stylesheet can be published as two tables — `color-theme.css`
-declares colour roles and box-shadows together, and a chip is meaningless for a shadow.
-A prefix and its `without` complement cover the file between them, which is asserted
-rather than assumed.
+`names` and `prefix` are alternatives; rows come back in the stylesheet's order either
+way, and a prefix with its `without` complement covers the file between them.
 
 `swatch` resolves `var(--token)` in the reader's own mode, so a `light-dark()` role shows
-the arm currently in force. Each chip carries `data-swatch="--token-name"`, which is how
-the browser check targets one role's resolved colour.
+the arm in force. Each chip carries `data-swatch="--token-name"` for browser checks.
 
 ## When to use it
 
