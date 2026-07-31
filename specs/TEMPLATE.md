@@ -8,8 +8,9 @@ status: draft
 Intent spec template. Copy to specs/<domain>/<capability>/spec.md.
 Authoring rules live in .agents/skills/spec/SKILL.md; this file defines the
 required anatomy. Keep the spec small enough to guide decisions (target well
-under 300 lines). Blueprint detail — file layouts, framework choices, task
-sequencing — belongs in the linked plan, not here.
+under 300 lines). Technical detail — framework choices, build configuration,
+task sequencing, code structure — belongs in the linked plan, not here. The
+Blueprint is the shape of the thing, which is not the same as how it is built.
 -->
 
 ## Intent
@@ -26,6 +27,15 @@ positively (what the system does), not as prohibitions where avoidable.
 Anchor, don't model: promise only what this capability owns; reference values
 owned by tokens, parent specs, or upstream contracts by linking their owner,
 never by restating them here.
+
+## Blueprint
+
+The shape of the thing: its parts, how they relate, and what a reader or consumer
+encounters. Enough that two people building it independently would produce
+recognisably the same artifact, and that a reviewer can tell a departure from a
+variation.
+
+Not how it is built — that is the plan's job, and a plan is transient.
 
 ## Non-Goals
 

@@ -60,6 +60,31 @@ data and routes, which `AGENTS.md` governs.
 
 Where a book states something neither v20 nor an owner decision covers, it says so.
 
+## Blueprint
+
+A principles book is one MDX entry in its group's content collection, per
+`specs/design-system/design-site-navigation/spec.md`. Its shape:
+
+- **One `h1`, rendered from `frontmatter.title`.** The layout deliberately does not
+  render it, and the title has one source.
+- **Numbered sections, each answering one decision.** A section that answers no
+  question a reader would actually ask is a section to cut.
+- **Tables that carry a Role column.** Token, derivation, computed value, and what it
+  is *for*. The last column is why the table exists in a principles book at all; the
+  first three are the lexicon's job.
+- **Specimens that illustrate a distinction**, written as inline-styled HTML in the
+  MDX body. A specimen earns its place by showing something prose cannot — v20's
+  physical-versus-visual button size is the model. A grid of every value is an
+  inventory, not a specimen.
+- **Do and don't pairs** wherever a rule is easy to misapply, stated as the mistake a
+  reader would plausibly make rather than as a general caution.
+- **A closing pointer to the lexicon** for the values themselves, and a plain
+  statement of what the design system does not yet own, so a gap reads as a boundary
+  rather than an oversight.
+
+The books to imitate are v20's own, `app/cyan-ds/src/content/principles/` in
+`pelilauta-20-ds` — prose first, tables that explain, specimens that demonstrate.
+
 ## Non-Goals
 
 - Principles books do not restate values owned by the token specs; they link them.

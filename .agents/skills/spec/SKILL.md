@@ -24,8 +24,10 @@ from it.
    `draft` until a human approves it. That is the whole frontmatter.
 4. State why the capability exists, what users and consumers can rely on, its
    goals, principles, boundaries, and observable acceptance.
-5. Exclude framework choices, file layouts, task sequencing, command output,
-   and implementation status. Put those in the linked plan.
+5. Exclude technical detail — framework choices, build configuration, task
+   sequencing, command output, implementation status. Put those in the linked
+   plan. Do not mistake this for excluding the Blueprint: the shape of the thing
+   is spec content, and a plan is too transient to hold it.
 6. Record compatibility intent and deliberate behavior changes without copying
    implementation details into the spec.
 7. Anchor, don't model: a spec promises only what its capability owns. Values
