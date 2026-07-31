@@ -98,6 +98,54 @@ describe('body text meets AA on every base surface', () => {
   }
 });
 
+describe('the step gap predicts contrast', () => {
+  // A step number is a lightness (see color-palette.test.ts), so the distance
+  // between two steps in one family bounds their contrast from below. The book
+  // publishes these thresholds as the rule for picking a pair without measuring
+  // one, so they are floors over every same-family pair in the palette, not
+  // figures from a convenient example.
+  const palette = [
+    ...readFileSync(
+      new URL('../styles/color-reference.css', import.meta.url),
+      'utf8',
+    ).matchAll(/--cn-color-(\w+)-(\d+):\s*(oklch\([^)]+\))/g),
+  ].map((match) => ({
+    family: match[1],
+    step: Number(match[2]),
+    color: parseOklch(match[3]),
+  }));
+
+  /** The worst contrast any same-family pair at least `gap` apart produces. */
+  function floorAt(gap: number): number {
+    let worst = Number.POSITIVE_INFINITY;
+    for (const a of palette) {
+      for (const b of palette) {
+        if (a.family !== b.family || a.step - b.step < gap) continue;
+        if (!a.color || !b.color) throw new Error('unparsed palette entry');
+        worst = Math.min(worst, contrast(a.color, b.color));
+      }
+    }
+    return worst;
+  }
+
+  test('a gap of 60 or more is always AA', () => {
+    expect(floorAt(60)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test('a gap of 70 or more is always AAA', () => {
+    expect(floorAt(70)).toBeGreaterThanOrEqual(7);
+  });
+
+  test('a gap of 45 or more is at least AA Large', () => {
+    expect(floorAt(45)).toBeGreaterThanOrEqual(3);
+  });
+
+  test('40 is not enough, which is why the threshold is not USWDS 50', () => {
+    // Fails the book's own rule if someone rounds the numbers down.
+    expect(floorAt(40)).toBeLessThan(3);
+  });
+});
+
 describe('the elevation-4 guardrail', () => {
   // v20's book states this rule for surface-40 and quotes 4.6:1. The token it
   // describes resolves to surface-50 in dark, and neither figure is that pair's.

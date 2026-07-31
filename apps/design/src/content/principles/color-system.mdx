@@ -1,116 +1,128 @@
 ---
 title: Colour System
-description: How colour carries meaning in Pelilauta — the three layers, the roles to reach for, and the contrast guardrails that constrain them.
+description: How the OKLCH scales are built, why a step number predicts contrast, how Light and Dark are expressed, and the one place the scale runs out.
 order: 7
 prose: true
 ---
 
 import ContrastMatrix from '@design-system/books/specimens/ContrastMatrix.astro'
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
-import themeSource from '@design-system/styles/color-theme.css?raw'
+import referenceSource from '@design-system/styles/color-reference.css?raw'
 
-Colour in Pelilauta is decided once, as a role, and expressed twice, as Light and Dark.
-A component that reads a role gets both modes for free and keeps working when the
-expression changes. A component that reaches past the role into a palette step gets one
-mode right and the other wrong.
+Pick a **role**, never a step. Roles carry both modes; a palette step carries one, so
+reaching past the role gets Light right and Dark wrong. Everything below is about the
+scales underneath, because knowing how they are built is what makes the roles predictable
+— and what tells you when they run out.
 
-Values are in the [Colour](/tokens/color) lexicon. This book is the choosing.
+## A step number is a lightness
 
-## Three layers, and consumers read the middle one
+Every colour is `oklch(L C H)`, and **the step is L × 100**. `surface-50` is `oklch(0.5 …)`.
+Nothing else in the system is numbered that way, and it is the property everything here
+rests on.
 
-**Reference** colours are the literal palette in OKLCH — thirteen steps of primary and
-surface, four each of error, warning, info and love. They say what exists. Nothing in a
-component should name one.
-
-**Semantic** roles say what a colour is *for*: `--cn-text`, `--cn-link`, `--cn-surface-2`,
-`--cn-border-focus`. Each is one declaration whose two `light-dark()` arms point at
-different reference steps. This is the layer to read.
-
-**Compatibility** aliases carry Cyan 4's names onto v21 roles so unmigrated v18 code keeps
-working. Temporary, and shrinking. Nothing new is written against it.
-
-The direction is one-way: semantic roles are built from reference colours, compatibility
-from semantic. A value never travels back up.
-
-## The perceptual palette is why the steps behave
-
-The palette is OKLCH, where the first number is perceived lightness. `surface-50` is half
-as light as white to the eye, not merely half by some channel arithmetic. That is what
-makes a step predictable: moving from `surface-20` to `surface-30` changes apparent
-lightness by the same amount everywhere in the palette, in every hue.
-
-It also means **a colour's step number predicts its contrast**, which is what the
-guardrails below rest on. Derived colours — hover overlays, tints — must therefore mix in
-the same space: `color-mix(in oklch, …)`, never `in hsl`, or the perceptual spacing that
-makes the step numbers meaningful is lost in the mix.
-
-## Surfaces get lighter as they rise, and dark mode is where that bites
-
-Elevation runs `--cn-surface` through `--cn-surface-4`. In Light mode the surfaces move
-towards white as they rise; in Dark they move *away* from black, towards a mid Cerulean.
-So the higher a dark surface, the less room a de-emphasised text colour has.
-
-<ContrastMatrix
-  foregrounds={['--cn-text', '--cn-text-high', '--cn-on-surface', '--cn-text-low', '--cn-on-surface-secondary']}
-  background="--cn-surface"
-  caption="On the base surface — every role passes AA in both modes"
+<TokenTable
+  source={referenceSource}
+  prefix="--cn-color-surface"
+  swatch
+  caption="The surface ramp — read the first number of each value against the step"
 />
 
-## The elevation-4 guardrail
+Chroma is not constant along a ramp: it peaks in the middle and falls to zero at both
+ends, because a near-black and a near-white cannot hold saturation. That is why step 0 and
+step 100 are neutral in every family.
 
-At the top of the scale that headroom runs out. These figures are computed from the
-production stylesheets when this page builds, and asserted in
-`packages/design-system/test/color-contrast.test.ts`:
+## The gap between two steps predicts their contrast
+
+Because the step is the lightness, the **distance** between two steps in the same family
+puts a floor under their contrast. Measured across every same-family pair in the palette:
+
+| Step gap | Guarantees at least |
+| :--- | :--- |
+| 45 | AA Large — 3:1 |
+| **60** | **AA — 4.5:1** |
+| 70 | AAA — 7:1 |
+
+So `surface-95` on `surface-20` is a gap of 75 and safe without checking. A gap of 40
+guarantees nothing — its worst pair is 2.36:1 — which is the trap, because 40 feels like a
+lot of scale.
+
+These are floors over the whole palette, not predictions: a given pair usually does better.
+They are asserted in `test/color-contrast.test.ts`, so the rule cannot drift from the
+colours.
+
+## Surface holds its hue. Primary does not.
+
+Every family fixes one hue for its whole ramp — surface at 242, error 318, warning 65,
+info 170, love 30 — **except primary, which rotates from 185 at the bottom to 110 at the
+top.** Dark primary is a blue-teal; light primary is a yellow-green. They are ends of one
+ramp, not two colours.
+
+The consequence is practical: a primary step chosen in Light and its counterpart in Dark
+are different hues, not the same hue at different brightness. Surface has no such problem,
+which is why elevation can be built from it.
+
+Primary and surface run thirteen steps, 0 to 100. The four status families run **four** —
+20, 40, 60, 90 — so there is no `error-30`, and the gap rule is the only way to pick
+between the ones that exist.
+
+## Light and Dark are two expressions, not an inversion
+
+One declaration states both, using `light-dark()`. There is no theme class and no
+JavaScript; `styles/preflight.css` declares `color-scheme`, and the browser picks the arm.
+
+It would be easy to assume Dark is the palette flipped — step *n* becoming step *100 − n*.
+It is not. Of 41 roles that state both arms, **29 are not mirror steps and 4 change family
+outright**:
+
+- `--cn-surface-1` through `-3` are pure white in Light, but `surface-30`–`40` in Dark,
+  which is nowhere near their mirror.
+- `--cn-link` is `primary-50` in Light and `surface-80` in Dark — a different family, not a
+  lighter brand colour.
+- Elevation rises in Dark (20 → 50) but **falls at the top in Light**: `--cn-surface-4` is
+  `surface-80`, darker than the white beneath it.
+
+That last one is the whole reason the next section exists.
+
+## Where the scale runs out
+
+Raised Dark surfaces climb towards mid-Cerulean, so each step up spends the headroom a
+de-emphasised text colour needs. At elevation 4 there is none left:
 
 <ContrastMatrix
   foregrounds={['--cn-text', '--cn-text-high', '--cn-on-surface', '--cn-text-low', '--cn-on-surface-secondary']}
   background="--cn-surface-4"
   modes={['dark']}
-  caption="On --cn-surface-4 in Dark mode"
+  caption="On --cn-surface-4 in Dark"
 />
 
-**On a dark elevation-4 surface, use `--cn-text` or `--cn-text-high` and nothing else.**
-`--cn-text-low` and `--cn-on-surface-secondary` fail outright. `--cn-on-surface` — the
-ordinary body-text role everywhere else — lands in AA Large territory and is not
-sufficient for body copy.
-
-The practical consequence: a card that raises itself to elevation 4 cannot carry the
-timestamp-and-byline treatment it used at rest. Either it stays at a lower elevation, or
-its secondary text is promoted.
+**Use `--cn-text` or `--cn-text-high`, and nothing else.** `--cn-on-surface` — the ordinary
+body role everywhere else — reaches only AA Large here and is not enough for body copy.
 
 <div style="padding: var(--cn-gap); background: var(--cn-surface-4); border-radius: var(--cn-border-radius-large); border: 1px solid var(--cn-border);">
-  <p style="color: var(--cn-text); margin: 0;">This is `--cn-text` on elevation 4 — the role to use.</p>
-  <p style="color: var(--cn-text-low); margin: 0;">This is `--cn-text-low` on elevation 4 — the role the guardrail forbids.</p>
+  <p style="color: var(--cn-text); margin: 0;">`--cn-text` on elevation 4 — the role to use.</p>
+  <p style="color: var(--cn-text-low); margin: 0;">`--cn-text-low` on elevation 4 — the role the guardrail forbids.</p>
 </div>
 
-<small>In Light mode both lines are legible, which is exactly why the rule has to be
-stated rather than noticed.</small>
+In Light both lines are legible, which is why the rule has to be stated rather than
+noticed. The practical form: a card that raises itself to elevation 4 cannot keep the
+timestamp-and-byline treatment it used at rest.
 
-## Reach for the role that names the job
+## Choosing
 
-<TokenTable
-  source={themeSource}
-  names={['--cn-text', '--cn-text-low', '--cn-text-high', '--cn-link', '--cn-border', '--cn-focus-ring']}
-  swatch
-  caption="The roles reached for most often"
-/>
-
-- **Text** is `--cn-text`. Drop to `--cn-text-low` only for genuinely secondary content,
-  and never on a raised dark surface.
-- **Action** is `--cn-link` for navigation and `--cn-button` for a committed action.
-  Brand colour marks a brand-affirming action; it does not mark a destructive one.
-- **Status** is `error`, `warning`, `info` — and `love` for social approval. A like is not
+- **Text** is `--cn-text`; `--cn-text-low` only for genuinely secondary content, never on a
+  raised Dark surface.
+- **Action** is `--cn-link` to navigate, `--cn-button` to commit. Brand colour marks a
+  brand-affirming action, not a destructive one — that is `error`.
+- **Status** is `error`, `warning`, `info`, and `love` for social approval. A like is not
   an error, however red it looks.
-- **Focus** is `--cn-focus-ring`, always. It is the one role that may not be suppressed:
-  a keyboard reader who cannot see focus cannot use the page.
+- **Focus** is `--cn-focus-ring`, and it may not be suppressed.
 
-Do not override a semantic role locally. If `--cn-link` is wrong for a surface, the role's
-definition is wrong or the surface is; setting `color` to a palette step in one component
-fixes one mode and breaks the other.
+Do not override a role locally. If `--cn-link` is wrong on some surface, either the role or
+the surface is wrong; setting `color` to a step in one component fixes one mode and breaks
+the other.
 
 ## What this does not cover
 
-Token values, including the full role list, are in the [Colour](/tokens/color) lexicon.
-The persisted per-account theme preference in `apps/pelilauta` is application state and
-sits outside this contract — the design system reads only the browser or system setting
-through `color-scheme`, which `styles/preflight.css` owns.
+Values are in the [Colour](/tokens/color) lexicon. The palette is not themeable at runtime
+— Cyan 4 allowed swapping the chroma ramps, and v21 has no consumer for that. The
+per-account theme preference in `apps/pelilauta` is application state, outside this system.
