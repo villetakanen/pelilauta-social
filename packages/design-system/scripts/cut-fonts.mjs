@@ -67,8 +67,27 @@ function sourcePath(face) {
 
 async function cut(face) {
   const source = readFileSync(sourcePath(face));
-  return subsetFont(source, TEXT[face.range], { targetFormat: 'woff2' });
+  return subsetFont(source, TEXT[face.range], {
+    targetFormat: 'woff2',
+    /*
+     * The subsetter drops most name records. 0, 13 and 14 are the copyright, the
+     * licence and the licence URL: both families are OFL, which requires the notice
+     * to travel with the file, and without these a cut face carries none.
+     */
+    preserveNameIds: [0, 13, 14],
+  });
 }
+
+/**
+ * fonts/LICENSE is the notice for every file here. Both applications serve their own
+ * copy, because a licence in the repository is not one a reader of either site can
+ * reach.
+ */
+const NOTICE = join(outDir, 'LICENSE');
+const SERVED = [
+  resolve(root, '../../apps/pelilauta/public/fonts-license.txt'),
+  resolve(root, '../../apps/design/public/fonts-license.txt'),
+];
 
 if (process.argv.includes('--check')) {
   const stale = [];
@@ -77,6 +96,15 @@ if (process.argv.includes('--check')) {
     const target = join(outDir, face.file);
     if (!existsSync(target)) stale.push(`${face.file}: missing`);
     else if (statSync(target).size === 0) stale.push(`${face.file}: empty`);
+  }
+  if (!existsSync(NOTICE)) stale.push('fonts/LICENSE: missing');
+  else {
+    const notice = readFileSync(NOTICE, 'utf8');
+    for (const served of SERVED) {
+      if (!existsSync(served) || readFileSync(served, 'utf8') !== notice) {
+        stale.push(`${served}: does not match fonts/LICENSE`);
+      }
+    }
   }
   if (stale.length > 0) {
     console.error(
@@ -93,6 +121,12 @@ if (process.argv.includes('--check')) {
     writeFileSync(join(outDir, face.file), bytes);
     total += bytes.length;
     console.log(`${face.file}  ${(bytes.length / 1024).toFixed(1)} KB`);
+  }
+  const notice = readFileSync(NOTICE, 'utf8');
+  for (const served of SERVED) {
+    mkdirSync(dirname(served), { recursive: true });
+    writeFileSync(served, notice);
+    console.log(`notice -> ${served}`);
   }
   console.log(
     `Cut ${FACES.length} faces, ${(total / 1024).toFixed(0)} KB total.`,

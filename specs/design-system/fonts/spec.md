@@ -84,6 +84,16 @@ two ranges fall back per glyph.
 
 Each range is a separate face with its own `unicode-range`.
 
+A cut face is a modified copy of someone else's font, and carries that font's
+licence with it: the copyright and licence records survive the cut, the licence text
+and both copyright notices sit beside the files, and each application serves them at
+a URL a reader can open. A repository licence that does not name the exception is a
+licence the fonts are not under.
+
+Whether a family's licence permits the cut, and permits the delivered face to keep the
+family's name, is settled before that face is added. An OFL family that reserves its
+name reserves it against modified versions, and a cut face is a modified version.
+
 No shipped face carries glyphs outside the two ranges. The published full family's
 do: Cyrillic, Greek, Vietnamese and IPA, at 178 KB per face against 31 KB cut to
 latin.
@@ -108,9 +118,9 @@ changing this spec's outcome without touching it.
   included.
 - With every face blocked from loading, both registers still fall to a monospace and a
   sans respectively, and nothing renders in the browser's default serif.
-- A check holds the stylesheet, the typography spec, the face manifest and the files
-  on disk in agreement. It reads the weights from the typography spec rather than
-  restating them.
+- A check holds the stylesheet, the typography spec, the face manifest, the files on
+  disk and the served licence notices in agreement. It reads the weights from the
+  typography spec rather than restating them.
 - A base book documents the delivered system.
 - Human review accepts the weight of text on screen in both applications.
 
