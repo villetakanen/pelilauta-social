@@ -37,8 +37,8 @@ paint, and a preload would compete for bandwidth with the content the page is fo
 
 Faces are declared in one design-system stylesheet, reached through `styles/ds.css`,
 and a consuming application declares none. This is the only design-system stylesheet
-with package dependencies: Lato comes from `lato-font` and Roboto Mono from
-`@fontsource/roboto-mono`, by bare specifier, resolved by each consumer's bundler.
+with package dependencies: face files are referenced by bare specifier and resolved by
+each consumer's bundler.
 
 The design system is consumed as source through a Vite alias, not built, so those
 dependencies install from the workspace root and each application's build fingerprints
@@ -69,12 +69,14 @@ The set is otherwise closed the way the step set is — a face is added or dropp
 changing this spec. It holds two weights no step names, kept from the set the
 application shipped; dropping them is a payload decision, not a consequence of the scale.
 
-The technical register covers latin and latin-ext, each declared with its own
-`unicode-range` — without ranges the second declaration simply wins and the first is
-dead weight. European Latin turns up in player names and in quoted material, and a
-fallback inside a word is worse than one between them: it puts two typefaces in a
-single code block. Coverage beyond those ranges falls through per glyph, which is
-accepted. Lato ships whole faces, so the human register chooses nothing here.
+Both registers cover latin and latin-ext, and nothing else. Finnish, Swedish and
+English need no more: ä ö å é are in latin, š ž in latin-ext. Characters outside the
+two ranges fall back per glyph.
+
+Each range is a separate face with its own `unicode-range`.
+
+No shipped face carries glyphs outside the two ranges. `lato-font`'s do: Cyrillic,
+Greek, Vietnamese and IPA, at 178 KB per face against 22 KB subset to latin.
 
 The family tokens are the design system's to declare, under the names in
 `specs/design-system/design-tokens/spec.md`.
@@ -99,6 +101,8 @@ changing this spec's outcome without touching it.
 - A check asserts that every weight the typography spec names has an upright face,
   that every declared source resolves to an installed file, and that every face
   swaps. It reads the weights from the typography spec rather than restating them.
+- A check asserts that every declared face states a `unicode-range`, and that the
+  ranges are latin and latin-ext only.
 - A book teaches why the faces are ours rather than a CDN's, what swap costs, and why
   nothing is preloaded, and lists every face that loads with its weight and coverage.
   A reader who has it cannot be surprised by the payload.
@@ -112,6 +116,8 @@ changing this spec's outcome without touching it.
   installed, which includes whoever is looking at the screen.
 - A face-package upgrade that moves or renames a file breaks a source silently in any
   bundler that tolerates an unresolved `url()`.
+- Two faces of one family and weight declared without `unicode-range`: the later wins
+  and the earlier never loads.
 
 ### Scenarios
 

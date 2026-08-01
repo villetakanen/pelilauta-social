@@ -1,0 +1,38 @@
+---
+title: The book's title
+description: One sentence. It is the navigation subtitle and the page's meta description, so write it for someone deciding whether to open the page.
+order: 1
+prose: true
+---
+
+{/*
+  BASE BOOK TEMPLATE — copy to apps/design/src/content/base/<slug>.mdx and delete
+  these comments.
+
+  A base book is technical documentation of one design-system feature: what ships,
+  its values, and what it applies to. Why it is shaped that way is its spec's, and
+  is not repeated here — a reader who wants the reasoning is sent to the spec.
+
+  A principles book teaches how to use the system: templates/principles.mdx.
+  A component book is a schema: templates/component.mdx.
+
+  Anything that can go stale by hand — a value, a rule that ships in a stylesheet —
+  belongs to a specimen that reads real source, not to prose.
+
+  Under 300 words. Longer is usually reasoning that belongs in the spec.
+
+  The h1 comes from `title` above — do not write one here.
+*/}
+
+One or two sentences: what ships, and how an application gets it.
+
+## A heading naming what this defines
+
+<SomeSpecimen />
+
+Values go in a table. Prose only where a table cannot carry it, and only for what
+the reader must do — never for why the rule exists.
+
+| Name | Value | Applies to |
+| :--- | :--- | :--- |
+| `--cn-grid` | `0.5rem` | The atomic unit of alignment. |

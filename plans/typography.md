@@ -6,10 +6,13 @@ Follows: the core-token epic, which deferred typography
 
 **Every design decision is `specs/design-system/typography/spec.md`'s, and font delivery
 is `specs/design-system/fonts/spec.md`'s.** Where this file and a spec disagree, the
-spec wins. What is here is what those specs do not carry: measurements of the two
-codebases, archaeology that explains why the application looks the way it does, and the
-hazards each story walks into. Anything that reads like a requirement is a finding, not
-a rule.
+spec wins.
+
+## Out of scope
+
+| Surface | Ruling |
+| --- | --- |
+| Buttons, inputs, `<select>` | Later phase. This epic does not decide their register. |
 
 ## Why
 
