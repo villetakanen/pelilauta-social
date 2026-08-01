@@ -99,15 +99,17 @@ changing this spec's outcome without touching it.
 - A check asserts that every weight the typography spec names has an upright face,
   that every declared source resolves to an installed file, and that every face
   swaps. It reads the weights from the typography spec rather than restating them.
+- A book teaches why the faces are ours rather than a CDN's, what swap costs, and why
+  nothing is preloaded, and lists every face that loads with its weight and coverage.
+  A reader who has it cannot be surprised by the payload.
 - Human review accepts the weight of text on screen in both applications.
 
 ### Regression Guardrails
 
 - A weight named with no face renders synthesised. It is approximately right at every
   size and never fails, so nothing surfaces it but a comparison.
-- A family named in a stack and never loaded renders correctly on the machine of
-  anyone who has that family installed, and differently for everyone else. It cannot
-  be caught by looking.
+- A family named in a stack and never loaded renders correctly for anyone who has it
+  installed, which includes whoever is looking at the screen.
 - A face-package upgrade that moves or renames a file breaks a source silently in any
   bundler that tolerates an unresolved `url()`.
 
