@@ -17,7 +17,14 @@
  * Spec: specs/design-system/content-containers/spec.md
  */
 
-:root {
+/*
+ * The two modes are one declaration. Below the measure plus two gaps the middle
+ * track is the width left after a gutter each side; above it, the measure, with
+ * the 1fr tracks splitting the remainder. They meet exactly where the two terms
+ * are equal, so the content cannot jump — there is no threshold to state and no
+ * query to keep in step with it.
+ */
+.cn-app-main {
   /*
    * The measure: 67 characters of the base paragraph, the line length v20 sets
    * for readable prose.
@@ -31,16 +38,6 @@
    * rounded up to 83. Changing the base font or its size makes this wrong.
    */
   --cn-measure: calc(var(--cn-grid) * 83); /* 41.5rem */
-}
-
-/*
- * The two modes are one declaration. Below the measure plus two gaps the middle
- * track is the width left after a gutter each side; above it, the measure, with
- * the 1fr tracks splitting the remainder. They meet exactly where the two terms
- * are equal, so the content cannot jump — there is no threshold to state and no
- * query to keep in step with it.
- */
-.cn-app-main {
   display: grid;
   grid-template-columns:
     1fr

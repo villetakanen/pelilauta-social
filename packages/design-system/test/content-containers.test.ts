@@ -48,7 +48,9 @@ describe('the two modes', () => {
     expect(track, 'no grid track expression found').not.toBeNull();
 
     const expression = track?.[1].replace(/\s+/g, ' ') ?? '';
-    expect(expression).toContain('min(var(--cn-measure), 100% - 2 * var(--cn-gap))');
+    expect(expression).toContain(
+      'min(var(--cn-measure), 100% - 2 * var(--cn-gap))',
+    );
   });
 
   test('need no container query at all', () => {
@@ -64,9 +66,9 @@ describe('scoping', () => {
   test('every rule sits below the opt-in class', () => {
     // A rule that escapes the class reaches apps/pelilauta, which has not
     // migrated off Cyan's .content-columns.
-    const rules = [...css.matchAll(/(^|[};])\s*([^{}@]+?)\s*\{/g)]
-      .map((m) => m[2].replace(/\s+/g, ' ').trim())
-      .filter((selector) => selector !== ':root');
+    const rules = [...css.matchAll(/(^|[};])\s*([^{}@]+?)\s*\{/g)].map((m) =>
+      m[2].replace(/\s+/g, ' ').trim(),
+    );
 
     expect(rules.length).toBeGreaterThan(0);
     for (const selector of rules) {
@@ -84,7 +86,9 @@ describe('scoping', () => {
       /\.cn-app-main > section,\s*\.cn-app-main > article\s*\{([^}]*)\}/,
     );
     expect(container, 'containers are not declared as expected').not.toBeNull();
-    expect(container?.[1]).toMatch(/container:\s*cn-content\s*\/\s*inline-size/);
+    expect(container?.[1]).toMatch(
+      /container:\s*cn-content\s*\/\s*inline-size/,
+    );
     expect(container?.[1]).not.toMatch(/(inline-size|width)\s*:/);
   });
 });
