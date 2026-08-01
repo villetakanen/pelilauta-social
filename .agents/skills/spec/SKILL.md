@@ -12,18 +12,23 @@ anatomy is `specs/TEMPLATE.md`; start new specs from it.
 
 ## Procedure
 
-1. Read the relevant v18 behavior, approved product direction, and existing
+1. Decide whether this needs a spec at all. A bug fix, a configuration change, a
+   dependency bump or a one-off task does not get one, and neither does anything
+   the codebase already expresses. Say which it is in the approval request; do not
+   let the question go unasked.
+2. Read the relevant v18 behavior, approved product direction, and existing
    parent specs.
-2. Create or update `specs/<domain>/<capability>/spec.md` from
-   `specs/TEMPLATE.md`. Design-system work normally uses
+3. Create or update `specs/<domain>/<capability>/spec.md` from
+   `specs/TEMPLATE.md`, whose anatomy is `asdlc.io/patterns/the-spec` — Blueprint
+   then Contract. Design-system work normally uses
    `specs/design-system/<capability>/spec.md`.
-3. Add frontmatter status: `draft`, `approved`, or `deprecated`. New intent is
+4. Add frontmatter status: `draft`, `approved`, or `deprecated`. New intent is
    `draft` until a human approves it. That is the whole frontmatter.
-4. State why the capability exists, what users and consumers can rely on, its
-   goals, principles, boundaries, and observable acceptance.
-5. Examples illustrate intent; the current code is the reference for
+5. Write what this project decided: its constraints, boundaries and ownership.
+   Assume engineering competence — a paragraph a competent reader could have
+   written without this repository is the thing to cut, whatever section it is in.
+6. Examples illustrate intent; the current code is the reference for
    implementation.
-6. State the capability's current compatibility contract.
 7. Anchor, don't model: a spec promises only what its capability owns. Values
    owned elsewhere — design tokens, parent specs, upstream contracts — are
    referenced as their owner's decision by linking that owner, never restated in
@@ -31,7 +36,9 @@ anatomy is `specs/TEMPLATE.md`; start new specs from it.
 8. Record an irreversible decision as an ADR in `docs/adrs/`, and link it. A
    decision is not spec content.
 9. Run the adversarial review below, resolve or explicitly accept each finding,
-   then ask for human approval before changing status to `approved`.
+   then ask for human approval before changing status to `approved`. The approval
+   request carries the Subtraction outcome in one line — what was cut, or that
+   nothing could be. A request without it is not ready.
 
 ## Adversarial Review Gate
 
@@ -41,8 +48,8 @@ spec — not the code — and records the outcome in the spec review or PR:
 
 - **Ambiguity:** can two reasonable implementers read a requirement
   differently? Name the sentence.
-- **Testability:** can a human confirm each Acceptance criterion by using the
-  product? Flag any that are vibes.
+- **Testability:** can a human confirm each Definition of Done criterion and run
+  each Scenario against the product? Flag any that are vibes.
 - **Edge cases:** missing states (empty, error, unknown input, both themes,
   hydration timing) that the intent implies but the text omits.
 - **Compatibility:** claims about v18 or v20 behavior that no reader can check —
