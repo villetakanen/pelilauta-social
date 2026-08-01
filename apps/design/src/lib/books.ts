@@ -41,14 +41,11 @@ export const groupLabel = (id: string): string =>
 export const samePath = (a: string, b: string): boolean =>
   a.replace(/\/+$/, '') === b.replace(/\/+$/, '');
 
-/** Every published book, grouped and sorted. Groups with no books are omitted. */
+/** Every book, grouped and sorted. Groups with no books are omitted. */
 export async function getBookGroups(): Promise<BookGroup[]> {
   const groups = await Promise.all(
     GROUPS.map(async ({ id, label }) => {
-      const entries = await getCollection(
-        id,
-        ({ data }) => data.status !== 'draft',
-      );
+      const entries = await getCollection(id);
       const books = entries
         .map((entry) => ({
           title: entry.data.title,
