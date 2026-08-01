@@ -68,16 +68,9 @@ the available vocabulary grouped by purpose.
 - Every icon is identified by a semantic noun from the approved catalog. Nouns
   describe meaning (`search`, `fox`), not appearance, so artwork can be revised
   without renaming the noun.
-- The book presents the available vocabulary **grouped by the purposes the
-  catalog actually serves** (for example navigation & system, community &
-  interaction, tabletop/gaming tools), each noun with its meaning and typical
-  context, so a consumer chooses by intent rather than by guessing a name. A
-  purpose group appears only when the catalog contains icons for it; the book
-  never names an empty group or an icon that does not exist.
-- The book enumerates the open-source nouns in full and the managed (myrrys) icons
-  in full when the managed submodule is present, with the bundled fallback shown
-  as the always-available safety net. The managed tier is enumerable, so its
-  icons are listed, not merely exemplified.
+- A consumer can find an icon by the intent it serves, without guessing a name.
+- The published vocabulary is the catalog: every noun the catalog contains is
+  listed, and nothing that is not in it is named.
 - Within the tier that resolves it, one noun maps to exactly one piece of
   artwork, whether statically authored or supplied from data.
 - Aliases (one noun pointing at another's artwork) are deliberately out of scope

@@ -18,7 +18,7 @@ A face is a payload, bought once for both applications. That is a different deci
 from what the scale looks like, and it fails differently: a missing face never errors,
 it approximates.
 
-Faces are self-hosted from npm rather than fetched from a font CDN — v18's
+Faces are self-hosted rather than fetched from a font CDN — v18's
 arrangement, kept deliberately. A third-party font request is a third party watching
 who reads Pelilauta, which is not a trade anyone here agreed to. The cross-site cache
 that used to pay for that is gone, because browsers partition their cache by site: a
@@ -36,13 +36,22 @@ paint, and a preload would compete for bandwidth with the content the page is fo
 ### Architecture
 
 Faces are declared in one design-system stylesheet, reached through `styles/ds.css`,
-and a consuming application declares none. This is the only design-system stylesheet
-with package dependencies: face files are referenced by bare specifier and resolved by
-each consumer's bundler.
+and a consuming application declares none.
 
-The design system is consumed as source through a Vite alias, not built, so those
-dependencies install from the workspace root and each application's build fingerprints
-its own copy of every file.
+Every face the stylesheet names is a file this repository holds. No published
+package delivers the set: the scale needs weights that exist only in the full
+family, and the full family is published only whole, carrying alphabets neither
+application renders. So a face is cut here from a source face, and what a reader
+downloads is a file in version control rather than whatever a dependency resolved
+to on the day of the build.
+
+The design system is consumed as source through a Vite alias, not built, so a face
+is referenced by a path relative to the stylesheet and each application's build
+fingerprints its own copy of every file.
+
+Cutting a face is reproducible from a source face, this spec's coverage ranges and
+a checked-in step. Which tool performs the cut is not this spec's, but a face that
+cannot be reproduced from a stated source is not one this system ships.
 
 The platform stacks behind both family tokens are a fallback for a failed load, not a
 delivery mechanism: neither register renders from what the reader's machine has.
@@ -75,8 +84,9 @@ two ranges fall back per glyph.
 
 Each range is a separate face with its own `unicode-range`.
 
-No shipped face carries glyphs outside the two ranges. `lato-font`'s do: Cyrillic,
-Greek, Vietnamese and IPA, at 178 KB per face against 22 KB subset to latin.
+No shipped face carries glyphs outside the two ranges. The published full family's
+do: Cyrillic, Greek, Vietnamese and IPA, at 178 KB per face against 31 KB cut to
+latin.
 
 The family tokens are the design system's to declare, under the names in
 `specs/design-system/design-tokens/spec.md`.
@@ -99,13 +109,12 @@ changing this spec's outcome without touching it.
 - With every face blocked from loading, both registers still fall to a monospace and a
   sans respectively, and nothing renders in the browser's default serif.
 - A check asserts that every weight the typography spec names has an upright face,
-  that every declared source resolves to an installed file, and that every face
-  swaps. It reads the weights from the typography spec rather than restating them.
+  that every declared source resolves to a file this repository ships, and that
+  every face swaps. It reads the weights from the typography spec rather than
+  restating them.
 - A check asserts that every declared face states a `unicode-range`, and that the
   ranges are latin and latin-ext only.
-- A book teaches why the faces are ours rather than a CDN's, what swap costs, and why
-  nothing is preloaded, and lists every face that loads with its weight and coverage.
-  A reader who has it cannot be surprised by the payload.
+- A base book documents the delivered system.
 - Human review accepts the weight of text on screen in both applications.
 
 ### Regression Guardrails
@@ -114,8 +123,8 @@ changing this spec's outcome without touching it.
   size and never fails, so nothing surfaces it but a comparison.
 - A family named in a stack and never loaded renders correctly for anyone who has it
   installed, which includes whoever is looking at the screen.
-- A face-package upgrade that moves or renames a file breaks a source silently in any
-  bundler that tolerates an unresolved `url()`.
+- A renamed or deleted face file breaks a source silently in any bundler that
+  tolerates an unresolved `url()`.
 - Two faces of one family and weight declared without `unicode-range`: the later wins
   and the earlier never loads.
 

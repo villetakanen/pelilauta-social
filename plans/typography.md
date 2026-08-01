@@ -5,8 +5,8 @@ Branch: `feat/ds-typography`
 Follows: the core-token epic, which deferred typography
 
 **Every design decision is `specs/design-system/typography/spec.md`'s, and font delivery
-is `specs/design-system/fonts/spec.md`'s.** Where this file and a spec disagree, the
-spec wins.
+is `specs/design-system/fonts/spec.md`'s.** Where this file and a spec disagree about a
+design decision, the spec wins. Scope is this file's.
 
 ## Out of scope
 

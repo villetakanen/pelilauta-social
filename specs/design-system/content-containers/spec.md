@@ -64,7 +64,6 @@ containers; typography inside the container. `apps/pelilauta` keeps Cyan's
 
 - Every prose book in `apps/design` renders in the container, and is readable at
   a wide and a narrow window.
-- The capability's book is published in the `base` group.
 
 ### Regression Guardrails
 
