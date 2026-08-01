@@ -41,10 +41,16 @@ introduces what follows and is left alone.
 | `source` | `string` | The stylesheet text, imported with `?raw`. Required. |
 | `names` | `string[]` | Exact tokens to show. |
 | `prefix` | `string` | Every token whose name starts with this. |
+| `without` | `string` | Drops tokens whose name contains this, after the include filter. |
+| `swatch` | `boolean` | Renders a colour chip per row, resolved through the live cascade. |
 | `caption` | `string` | Names what the reader is looking at. |
 | `noteLabel` | `string` | Heading for the trailing-comment column. Defaults to `Resolves to`. |
 
-`names` and `prefix` are alternatives; rows come back in the stylesheet's order either way.
+`names` and `prefix` are alternatives; rows come back in the stylesheet's order either
+way, and a prefix with its `without` complement covers the file between them.
+
+`swatch` resolves `var(--token)` in the reader's own mode, so a `light-dark()` role shows
+the arm in force. Each chip carries `data-swatch="--token-name"` for browser checks.
 
 ## When to use it
 

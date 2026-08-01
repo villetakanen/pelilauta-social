@@ -131,12 +131,16 @@ describe('preflight', () => {
 });
 
 describe('entry point', () => {
-  test('composes the preflight and the tokens, in that order', () => {
+  test('composes the preflight, the tokens and the containers, in that order', () => {
     const entry = withoutComments(read('../styles/ds.css'));
     const imports = [...entry.matchAll(/@import\s+"([^"]+)"/g)].map(
       (m) => m[1],
     );
-    expect(imports).toEqual(['./preflight.css', './tokens.css']);
+    expect(imports).toEqual([
+      './preflight.css',
+      './tokens.css',
+      './content-containers.css',
+    ]);
   });
 
   test('leaves the token entry point usable without a reset', () => {

@@ -15,8 +15,7 @@ never assesses, applies, or acts — that is `retro`.
 2. Would we want to know this the next time we change the harness — the contract, a
    skill, a template, a workflow, the site's architecture? Then write it down.
 3. Is it task state, check output, PR history, current objectives, remaining work, or
-   an already-fixed defect? Then it belongs to its existing operational owner, not
-   here.
+   an already-fixed defect? Then do not write it down.
 
 ## Writing
 

@@ -1,12 +1,10 @@
 /**
  * Declaration parsing for the TokenTable specimen.
  *
- * A lexicon book lists every token its stylesheet declares — so the parser is
- * the thing that decides whether the book is true. It lives here rather than
- * inside TokenTable.astro because a component cannot be asserted directly, and
- * every defect this parser can have is silent: a dropped declaration renders a
- * shorter table, not an error. Both parser defects found in the preflight epic
- * were of that kind, which is why the tests below exist at all.
+ * A lexicon book lists every token its stylesheet declares, so this parser
+ * decides whether the book is correct. It is separate from TokenTable.astro
+ * because a component cannot be asserted directly. A dropped declaration renders
+ * a shorter table and reports no error, so the parse is covered by tests.
  *
  * Book: apps/design/src/content/components/token-table.mdx
  * Spec: specs/design-system/design-tokens/spec.md
@@ -19,8 +17,7 @@ export interface TokenDeclaration {
   value: string;
   /**
    * The trailing inline comment, when the declaration has one. Stylesheets in
-   * this package use it for the resolved length (`8px`), so it carries the
-   * derivation a reader wants beside the formula.
+   * this package use it for the resolved length, e.g. `8px`.
    */
   note?: string;
 }
@@ -30,6 +27,12 @@ export interface TokenFilter {
   names?: readonly string[];
   /** Include every declaration whose name starts with this. */
   prefix?: string;
+  /**
+   * Drop declarations whose name contains this, after the include filter.
+   * color-theme.css declares colour roles and box-shadows together and they are
+   * presented differently.
+   */
+  without?: string;
 }
 
 interface Comment {
@@ -40,13 +43,12 @@ interface Comment {
 
 /**
  * Replace every comment with spaces of the same length, keeping newlines, so
- * indices into the result still address the original source. Masking rather
- * than deleting is what lets a trailing comment be matched back to the
- * declaration it annotates.
+ * indices into the result still address the original source. Masking rather than
+ * deleting lets a trailing comment be matched back to its declaration.
  *
- * Comments must be removed before declarations are matched: prose that names a
- * custom property is common in this package's stylesheet headers, and a naive
- * pattern run over the raw source can lift a token out of a sentence.
+ * Comments are removed before declarations are matched. Stylesheet headers in
+ * this package name custom properties in prose, and a pattern run over the raw
+ * source would parse those as declarations.
  */
 function maskComments(css: string): { masked: string; comments: Comment[] } {
   const comments: Comment[] = [];
@@ -106,6 +108,7 @@ function trailingNote(
 
 function included(name: string, filter?: TokenFilter): boolean {
   if (!filter) return true;
+  if (filter.without && name.includes(filter.without)) return false;
   if (filter.names) return filter.names.includes(name);
   if (filter.prefix) return name.startsWith(filter.prefix);
   return true;
@@ -115,8 +118,7 @@ function included(name: string, filter?: TokenFilter): boolean {
  * Every custom-property declaration in `css`, in source order.
  *
  * A filter that matches nothing returns nothing. Callers that require a
- * non-empty result say so themselves — silently rendering every token because a
- * filter missed is worse than rendering none.
+ * non-empty result check for it.
  */
 export function parseTokens(
   css: string,

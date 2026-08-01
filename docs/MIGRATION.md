@@ -108,3 +108,7 @@ complete. Search source, styles, tests, scripts, and fixtures for:
 Resolve each finding or explicitly retain it with its current owner and reason.
 Remove obsolete compatibility assets and helpers only after no retained runtime
 consumer needs them. When the sweep is complete, delete this guide.
+
+`packages/design-system/styles/compat/cyan-4.css` goes with it. Owner decision,
+2026-07-31: **the compatibility layer is removed before `v21.0.0-rc.1`.** An
+expiry, not a deprecation — nothing new is written against it.

@@ -58,16 +58,10 @@ are grid multiples and depend on `--cn-grid`. `styles/tokens.css` composes both 
 and it is that dependency this page exists to make visible; their declaration order does
 not affect custom-property resolution.
 
-| Token | Declared in |
-| :--- | :--- |
-| `--cn-shadow-elevation-1` | `styles/color-theme.css` |
-| `--cn-shadow-elevation-2` | `styles/color-theme.css` |
-| `--cn-shadow-elevation-3` | `styles/color-theme.css` |
-| `--cn-shadow-elevation-4` | `styles/color-theme.css` |
-
-Their computed values are not shown. `packages/design-system/test/units.test.ts` asserts
-that the token entry point includes the dependency, rather than testing a rendered shadow
-against a page that happened to import it.
+Their values are in the [Colour](/tokens/color) lexicon, which is where the stylesheet
+that declares them is published. `packages/design-system/test/units.test.ts` asserts that
+the token entry point composes both families, rather than testing a rendered shadow
+against a page that happened to import them.
 
 ## What this does not cover
 

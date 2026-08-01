@@ -1,0 +1,76 @@
+---
+/**
+ * RoleTable — a semantic role shown in Light and Dark at once.
+ *
+ * `light-dark()` resolves against `color-scheme`, so a reader normally sees only
+ * their own theme. Scoping `color-scheme` on each cell makes the browser resolve
+ * both arms on one page. Cyan 4's colour book uses the same approach.
+ *
+ * Book: apps/design/src/content/principles/color-system.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** The stylesheet declaring the roles, imported with `?raw`. */
+  source: string;
+  /** Roles to show, in reading order. */
+  names: readonly string[];
+  /** What each role is for, keyed by token name. */
+  intents?: Record<string, string>;
+  /** Names what the reader is looking at. */
+  caption?: string;
+}
+
+const { source, names, intents = {}, caption } = Astro.props;
+
+const roles = parseTokens(source, { names });
+
+const missing = names.filter(
+  (name) => !roles.some((role) => role.name === name),
+);
+if (missing.length > 0) {
+  throw new Error(
+    `RoleTable asked for roles the stylesheet does not declare: ${missing.join(', ')}.`,
+  );
+}
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr>
+      <th scope="col">Role</th>
+      <th scope="col">Light</th>
+      <th scope="col">Dark</th>
+      {Object.keys(intents).length > 0 && <th scope="col">Use for</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {roles.map((role) => (
+      <tr>
+        <th scope="row"><code>{role.name}</code></th>
+        {(['light', 'dark'] as const).map((mode) => (
+          <td>
+            <span
+              class="cell"
+              data-mode={mode}
+              data-role={role.name}
+              style={`color-scheme: ${mode}; background: var(${role.name});`}
+            ></span>
+          </td>
+        ))}
+        {Object.keys(intents).length > 0 && <td>{intents[role.name] ?? ''}</td>}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .cell {
+    display: block;
+    inline-size: 6rem;
+    block-size: 2rem;
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-small);
+  }
+</style>

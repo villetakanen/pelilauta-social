@@ -1,0 +1,61 @@
+---
+/**
+ * ContrastMatrix — measured WCAG contrast for foreground/background pairs.
+ *
+ * Every figure is computed from the production stylesheets at build time.
+ * The thresholds are asserted in
+ * packages/design-system/test/color-contrast.test.ts; this renders them.
+ *
+ * Book: apps/design/src/content/principles/color-system.mdx
+ */
+import referenceSource from '@design-system/styles/color-reference.css?raw';
+import themeSource from '@design-system/styles/color-theme.css?raw';
+import { type Mode, measure, tokenMap } from './color';
+
+interface Props {
+  /** Foreground token names, in the order they should be read. */
+  foregrounds: readonly string[];
+  /** The background they are measured against. */
+  background: string;
+  /** Which modes to show. Defaults to both. */
+  modes?: readonly Mode[];
+  /** Names what the reader is looking at. */
+  caption?: string;
+}
+
+const {
+  foregrounds,
+  background,
+  modes = ['light', 'dark'] as const,
+  caption,
+} = Astro.props;
+
+const tokens = tokenMap(referenceSource, themeSource);
+
+// measure() throws on an unresolvable pair rather than skipping it, so a
+// renamed token fails the build instead of shortening the table.
+const rows = foregrounds.map((foreground) => ({
+  foreground,
+  cells: modes.map((mode) => measure(foreground, background, mode, tokens)),
+}));
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr>
+      <th scope="col">Foreground on <code>{background}</code></th>
+      {modes.map((mode) => <th scope="col">{mode}</th>)}
+    </tr>
+  </thead>
+  <tbody>
+    {rows.map(({ foreground, cells }) => (
+      <tr>
+        <th scope="row"><code>{foreground}</code></th>
+        {cells.map((cell) => (
+          <td>{cell.ratio.toFixed(2)}:1 — {cell.grade}</td>
+        ))}
+      </tr>
+    ))}
+  </tbody>
+</table>

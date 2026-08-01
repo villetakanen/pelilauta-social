@@ -1,9 +1,50 @@
 ---
-title: Color themes
-description: The Pelilauta v21 color-theme intent, implementation contract, and compatibility book.
+title: Colour
+description: Every colour token v21 declares — the reference palette and the semantic roles — with the value as written.
 order: 10
+prose: true
 ---
 
-import ColorBook from '@design-system/books/tokens/ColorBook.astro'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import referenceSource from '@design-system/styles/color-reference.css?raw'
+import themeSource from '@design-system/styles/color-theme.css?raw'
 
-<ColorBook title={frontmatter.title} />
+Every colour token and its declared value. Which token to use is in the
+[Colour System](/principles/color-system) book.
+
+Each table is read from its stylesheet at build time. Swatches resolve in the theme you are
+reading in, so a `light-dark()` role shows the arm currently in force.
+
+## Semantic roles
+
+Components read these. Each states both themes in one declaration.
+
+<TokenTable source={themeSource} without="shadow" swatch caption="Semantic roles" />
+
+## Elevation shadows
+
+Declared in the same stylesheet. They are shadows, so they carry no swatch. They are grid
+multiples and need `--cn-grid`, which `styles/tokens.css` supplies alongside them. See
+[Units and grid](/tokens/units).
+
+<TokenTable source={themeSource} prefix="--cn-shadow" caption="Elevation shadows" />
+
+## Reference palette
+
+The literal colours in OKLCH. Components do not read these.
+
+<TokenTable source={referenceSource} prefix="--cn-color-" swatch caption="Reference palette" />
+
+## Cyan 4 aliases are not here
+
+`styles/compat/cyan-4.css` maps legacy names onto these roles until the surfaces still
+running on Cyan are replaced. It is removed before `v21.0.0-rc.1` and nothing new reads it.
+Read the stylesheet if you are migrating a surface. `docs/MIGRATION.md` owns the sweep.
+
+## What this does not cover
+
+Spacing, radii and icon sizes are in [Units and grid](/tokens/units). Contrast figures and
+theme rules are in the [Colour System](/principles/color-system) book.
+
+One shadow token sits outside the `--cn-shadow` family, `--cn-reply-dock-shadow`, and
+appears in the semantic table because that is where it is declared.

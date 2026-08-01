@@ -26,8 +26,6 @@ Published design systems converge on this — Primer, Polaris, Radix, USWDS and 
 reach an example within a sentence or two, and none of them argues in a heading. **A
 component page that never shows its own invocation has failed**, however well it reads.
 
-Motivation, history and why-it-is-shaped-this-way belong in the spec, not the book.
-
 `prose: true` asks the shell to render the `h1` and group the body. It adds no styling:
 the design system owns neither content grids nor typography yet, so books look plain,
 and inventing a measure or a rhythm here would be read later as a decision it made.
@@ -58,13 +56,11 @@ and do not extend it.
 
 ## Where design intent comes from
 
-v20, and recorded owner decisions. Where either disagrees with the shipped
+v20, and owner direction. Where either disagrees with the shipped
 application, they win: the application is v18's, and appearance is not a
 compatibility contract.
 
 Look for v20's answer before writing your own, and look past the obvious place. Its
 CSS is in `packages/cyan/src/{tokens,core,layouts,utilities}` **and inline in
 `.astro` global style blocks** — a search of the token and core directories alone
-has already produced two wrong conclusions. Its documented intent is in its books. A
-claim neither v20 nor an owner decision covers is marked in the book as this system's
-own.
+has already produced two wrong conclusions. Its documented intent is in its books.

@@ -108,6 +108,9 @@ Consumers read semantic roles.
   declared, read from that stylesheet at build time. It cannot omit a token that
   exists or state one that does not, and a selection that matches nothing fails
   the build rather than publishing an empty or unfiltered table.
+- The compatibility layer gets no lexicon. It is migration scaffolding, removed
+  before `v21.0.0-rc.1`. A book states that it exists and that it is being
+  removed.
 - The design system's own stylesheets set no root font size and state no pixel
   breakpoint, so a reader who enlarges their default text gets a proportionally
   larger interface. Consuming applications are outside this guarantee.

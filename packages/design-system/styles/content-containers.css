@@ -1,0 +1,72 @@
+/*
+ * Content containers — the single centred column.
+ *
+ * An application opts in with `cn-app-main` on its <main>. Its direct children
+ * are containers. Nothing here matches a page that has not opted in, which is why
+ * the stylesheet can ship in the entry point while apps/pelilauta still lays out
+ * with Cyan's .content-columns.
+ *
+ * The <main> is the grid and a container is a cell in it, rather than the
+ * container being a full-width grid with the column as its middle track. Both
+ * centre the content; only this one leaves the container element the same width
+ * as the column, which is what makes `cn-content` measure the column. A
+ * container-type element reports its own border box, so a full-width element
+ * carrying it would report the page — v20 has that shape and the query is wrong
+ * there for the same reason.
+ *
+ * Spec: specs/design-system/content-containers/spec.md
+ */
+
+/*
+ * The two modes are one declaration. Below the measure plus two gaps the middle
+ * track is the width left after a gutter each side; above it, the measure, with
+ * the 1fr tracks splitting the remainder. They meet exactly where the two terms
+ * are equal, so the content cannot jump — there is no threshold to state and no
+ * query to keep in step with it.
+ */
+.cn-app-main {
+  /*
+   * The measure: 67 characters of the base paragraph, the line length v20 sets
+   * for readable prose.
+   *
+   * Stated as a grid multiple rather than as `67ch`, because `ch` resolves
+   * against whatever font is rendering and apps/design ships no font yet, so the
+   * same stylesheet would produce two different columns.
+   *
+   * Measured, not chosen: Lato's `0` advance is 1160/2000 units = 0.58em, so at
+   * the 17px base paragraph 67ch is 660.6px = 41.29rem = 82.58 grid steps,
+   * rounded up to 83. Changing the base font or its size makes this wrong.
+   */
+  --cn-measure: calc(var(--cn-grid) * 83); /* 41.5rem */
+  display: grid;
+  grid-template-columns:
+    1fr
+    min(var(--cn-measure), 100% - 2 * var(--cn-gap))
+    1fr;
+  row-gap: var(--cn-line);
+}
+
+.cn-app-main > * {
+  grid-column: 2;
+}
+
+/*
+ * A container is the column, so `cn-content` reports the column's width.
+ *
+ * It is a grid so that its blocks stack on `row-gap`, which replaces the element
+ * margins the preflight removes — the preflight spec assigns that spacing to each
+ * container until the type ramp. A grid also keeps the spacing correct through an
+ * `astro-island`, which the preflight sets to `display: contents`: the island's
+ * children become items of this grid rather than one unspaced block.
+ */
+.cn-app-main > section,
+.cn-app-main > article {
+  container: cn-content / inline-size;
+  display: grid;
+  row-gap: var(--cn-line);
+}
+
+/* A container that spans the page instead of sitting in the column. */
+.cn-app-main > .cn-grid-full {
+  grid-column: 1 / -1;
+}

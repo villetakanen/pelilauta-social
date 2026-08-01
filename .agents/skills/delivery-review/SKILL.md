@@ -45,7 +45,7 @@ stop and ask rather than reviewing unrelated historical branch work.
 8. **Migration context:** were relevant legacy element selectors, tests,
    imperative APIs, dynamic inputs, persisted values, and accessibility
    semantics considered for the migrated surface?
-9. **Record:** do the spec, plan, PR and reported checks describe the
+9. **Record:** do the spec, PR and reported checks describe the
    implementation accurately?
 10. **Merge coherence:** can the complete merge deploy and revert coherently?
     Do not demand that supporting changes be independently reverted from the
@@ -54,9 +54,8 @@ stop and ask rather than reviewing unrelated historical branch work.
 ## Findings And Gate
 
 Lead with findings ordered by severity and include file or artifact references.
-Distinguish blockers, non-blocking risks, and record corrections. Keep review
-findings and resulting human decisions in the PR, reviewed spec, or owning plan.
-Add only a reusable process or architecture candidate to the lessons queue.
+Distinguish blockers, non-blocking risks, and record corrections. Add only a reusable
+process or architecture candidate to the lessons queue.
 
 An unresolved blocker stops integration. Non-blocking findings are fixed,
 accepted, deferred, or rejected by the human owner. A review finding is

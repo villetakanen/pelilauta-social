@@ -1,49 +1,58 @@
-import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
-const declarationPattern = /(--[\w-]+)\s*:\s*([^;]+);/g;
-const designSystem = new URL(
-  '../../../packages/design-system/',
-  import.meta.url,
-);
-const declarationCount = (relativePath: string) =>
-  [
-    ...readFileSync(new URL(relativePath, designSystem), 'utf8').matchAll(
-      declarationPattern,
-    ),
-  ].length;
+/**
+ * What only a browser knows about colour.
+ *
+ * The declaration counts this spec used to assert are source facts, and the
+ * TokenTable specimen now makes them true by construction — it renders what it
+ * parses and fails the build when a selection matches nothing. Its parser is
+ * asserted in packages/design-system/test/token-table.test.ts, and the contrast
+ * guardrails in test/color-contrast.test.ts, neither of which needs a page.
+ *
+ * What survives here is the one claim no parser can make: that a `light-dark()`
+ * declaration actually resolves to different colours under the two schemes. That
+ * is a cascade fact, and the whole semantic layer rests on it.
+ */
+// --cn-surface is the role the whole elevation scale is built on, and its two
+// light-dark() arms are different reference steps.
+const swatch = '[data-swatch="--cn-surface"]';
 
-test('color book renders the complete CSS contract', async ({ page }) => {
-  const consoleErrors: string[] = [];
-  page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+for (const scheme of ['light', 'dark'] as const) {
+  test(`the colour lexicon renders under the ${scheme} scheme`, async ({
+    page,
+  }) => {
+    const consoleErrors: string[] = [];
+    page.on('console', (message) => {
+      if (message.type() === 'error') consoleErrors.push(message.text());
+    });
+
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.goto('/tokens/color');
+
+    await expect(
+      page.getByRole('heading', { name: 'Colour', level: 1 }),
+    ).toBeVisible();
+    expect(consoleErrors).toEqual([]);
   });
+}
 
-  await page.goto('/tokens/color');
+test('a semantic role resolves to a different colour in each scheme', async ({
+  page,
+}) => {
+  const resolved = async (scheme: 'light' | 'dark') => {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.goto('/tokens/color');
+    return page
+      .locator(swatch)
+      .first()
+      .evaluate((node) => getComputedStyle(node).backgroundColor);
+  };
 
-  await expect(
-    page.getByRole('heading', { name: 'Color themes' }),
-  ).toBeVisible();
-  await expect(page.locator('[data-reference-token]')).toHaveCount(
-    declarationCount('styles/color-reference.css'),
-  );
-  await expect(page.locator('[data-semantic-token]')).toHaveCount(
-    declarationCount('styles/color-theme.css'),
-  );
-  await expect(page.locator('[data-compat-token]')).toHaveCount(
-    declarationCount('styles/compat/cyan-4.css'),
-  );
+  const light = await resolved('light');
+  const dark = await resolved('dark');
 
-  const lightBackground = page
-    .locator(".theme-panel.light [data-computed='--cn-background']")
-    .first();
-  const darkBackground = page
-    .locator(".theme-panel.dark [data-computed='--cn-background']")
-    .first();
-  await expect(lightBackground).not.toHaveText('computed in browser');
-  await expect(darkBackground).not.toHaveText('computed in browser');
-  expect(await lightBackground.textContent()).not.toBe(
-    await darkBackground.textContent(),
-  );
-  expect(consoleErrors).toEqual([]);
+  // Both must be real colours, not a failed var() falling back to transparent.
+  expect(light).toMatch(/^(rgb|oklch|color)/);
+  expect(dark).toMatch(/^(rgb|oklch|color)/);
+  expect(light).not.toBe(dark);
 });
