@@ -30,9 +30,16 @@ const faces = [...source.matchAll(/@font-face\s*\{([^}]*)\}/g)]
       weight: value('font-weight'),
       style: value('font-style'),
       file: src.match(/([^/"']+\.woff2)/)?.[1] ?? src,
-      /* latin-ext is the only range carrying š and ž, so its presence is what the
-         reader needs to know — not 20 code point ranges. */
-      range: value('unicode-range').includes('U+1E00') ? 'latin-ext' : 'latin',
+      /*
+       * A face with no range is a whole family file and covers everything it ships.
+       * Where a publisher splits by alphabet, latin-ext is the range carrying š and
+       * ž, and its presence is what a reader needs to know — not 20 code points.
+       */
+      range: !value('unicode-range')
+        ? 'whole family'
+        : value('unicode-range').includes('U+1E00')
+          ? 'latin-ext'
+          : 'latin',
     };
   })
   .filter((face) => face.family === family);

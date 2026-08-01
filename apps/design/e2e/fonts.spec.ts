@@ -45,9 +45,10 @@ test('every declared face fetches and parses', async ({ page }) => {
   const { failed, declared } = await loadEveryFace(page);
 
   expect(failed).toEqual([]);
-  // Seven weights and their italics in the human register, two ranges each; one
-  // weight and no italic in the technical one.
-  expect(declared.filter((face) => face.startsWith('Lato'))).toHaveLength(28);
+  // Seven weights and their italics in the human register, one whole file each; one
+  // weight and no italic in the technical one, split across the publisher's two
+  // alphabet subsets.
+  expect(declared.filter((face) => face.startsWith('Lato'))).toHaveLength(14);
   expect(
     declared.filter((face) => face.startsWith('Roboto Mono')),
   ).toHaveLength(2);
@@ -68,17 +69,18 @@ test('every weight the scale names has an upright and an italic', async ({
   }
 });
 
-test('the two ranges are two faces, not one omnibus file', async ({ page }) => {
+test('the technical register is two ranged faces, not one omnibus file', async ({
+  page,
+}) => {
   await page.goto(BOOK);
   const ranges = await page.evaluate(() =>
     [...document.fonts]
-      .filter((face) => face.family === 'Lato' && face.weight === '400')
-      .map((face) => face.style + ' ' + face.unicodeRange),
+      .filter((face) => face.family === 'Roboto Mono')
+      .map((face) => face.unicodeRange),
   );
-  // Upright and italic, each split in two: a reader fetches latin-ext only when a
-  // character needs it.
-  expect(ranges).toHaveLength(4);
-  expect(new Set(ranges).size).toBe(4);
+  // A reader fetches latin-ext only when a character needs it.
+  expect(ranges).toHaveLength(2);
+  expect(new Set(ranges).size).toBe(2);
 });
 
 test('the document is in the human register and code is in the technical one', async ({

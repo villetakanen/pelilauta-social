@@ -1,8 +1,8 @@
-The MIT licence below covers this repository except for the font files in
-`packages/design-system/fonts/`. Those are subsets of Lato and Roboto Mono,
-licensed under the SIL Open Font License, Version 1.1, whose terms and copyright
-notices are in `packages/design-system/fonts/LICENSE` and served by both
-applications at `/fonts-license.txt`.
+The MIT licence below covers this repository, but not the Lato and Roboto Mono
+faces the applications deliver. Those are redistributed unmodified under the SIL
+Open Font License, Version 1.1, whose terms and copyright notices are in
+`packages/design-system/fonts-license.txt` and served by both applications at
+`/fonts-license.txt`.
 
 ---
 

@@ -1,9 +1,11 @@
-Fonts in this directory
-=======================
+Fonts this repository redistributes
+==================================
 
-Every .woff2 file here is a subset of a published font, cut by
-scripts/cut-fonts.mjs to the Unicode ranges in scripts/font-manifest.mjs. The
-outlines are unchanged; glyphs outside those ranges are removed.
+Lato and Roboto Mono are delivered as their publishers published them: no
+subsetting, no re-encoding, and no change to a name table. The files come from
+the npm packages `lato-font` and `@fontsource/roboto-mono`, declared in
+packages/design-system/styles/fonts.css, and each application's build emits its
+own copy.
 
 These files are licensed under the SIL Open Font License, Version 1.1, and not
 under the MIT licence covering the rest of this repository.

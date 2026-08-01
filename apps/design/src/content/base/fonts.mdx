@@ -25,8 +25,10 @@ browser synthesises it: it renders, and it is not the typeface.
 
 <FaceTable source={fontsSource} family="Roboto Mono" />
 
-Each face ships as two files, `latin` and `latin-ext`, so a page downloads only the
-coverage it uses. Characters in neither range fall back to the reader's own fonts.
+Faces are their publishers' files, unmodified. Lato is published whole, one file per
+weight, so a Lato face carries alphabets no page here renders. Roboto Mono is
+published split by alphabet, so it takes `latin` and `latin-ext` and a page downloads
+only the one it uses.
 
 Every face is `font-display: swap`. None is preloaded.
 
@@ -46,9 +48,9 @@ with the typography semantics.
 
 ## Changing the face set
 
-The `.woff2` files are committed in `packages/design-system/fonts/`. After adding or
-dropping a face, regenerate them:
+Faces come from the `lato-font` and `@fontsource/roboto-mono` packages, declared in
+`packages/design-system/styles/fonts.css` and resolved by each application's build.
+Adding one means adding a `@font-face` there; nothing is generated.
 
-```
-pnpm --filter @pelilauta/design-system cut:fonts
-```
+Both families are under the SIL Open Font License. Each application serves the notice
+at [/fonts-license.txt](/fonts-license.txt).

@@ -1,21 +1,26 @@
 /**
  * Contract tests for font delivery.
  *
- * Every failure mode here is silent. A weight with no face renders synthesised and
- * is approximately right at every size. A family named in a stack and never loaded
- * renders correctly for anyone who has it installed, which includes whoever is
- * looking at the screen. A renamed face file breaks a `url()` that some bundlers
- * tolerate. So the checks compare the stylesheet against the spec that names the
- * weights and against the files on disk, rather than against a screenshot.
+ * Every failure mode here is silent. A weight with no face renders synthesised and is
+ * approximately right at every size. A family named in a stack and never loaded
+ * renders correctly for anyone who has it installed, which includes whoever is looking
+ * at the screen. A bare specifier that no longer resolves breaks a `url()` that some
+ * bundlers tolerate. And a licence notice that stops matching the one the applications
+ * serve is a notice nobody is served.
+ *
+ * So each check holds two artefacts against each other — the stylesheet against the
+ * typography spec, against the installed packages, against the served notices — rather
+ * than reading the stylesheet and asserting its own contents.
  *
  * Spec: specs/design-system/fonts/spec.md
  */
-import { existsSync, readFileSync } from 'node:fs';
+
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-// @ts-expect-error - plain ESM manifest shared with scripts/cut-fonts.mjs
-import { FACES, RANGES } from '../scripts/font-manifest.mjs';
 
+const require = createRequire(import.meta.url);
 const url = (relative: string) => new URL(relative, import.meta.url);
 const read = (relative: string) =>
   readFileSync(fileURLToPath(url(relative)), 'utf8');
@@ -27,42 +32,37 @@ function withoutComments(source: string) {
   return source.replace(/\/\*[\s\S]*?\*\//g, '');
 }
 
-type Face = {
-  family: string;
-  weight: number;
-  style: string;
-  range: string;
-  file: string;
-  source: string;
-};
-
 type Declared = {
   family: string;
   weight: string;
   style: string;
   display: string;
   src: string;
+  specifier: string;
   range: string;
 };
 
 /** Every @font-face rule in the stylesheet, as the properties this spec constrains. */
 function declaredFaces(source: string): Declared[] {
-  const blocks = [...source.matchAll(/@font-face\s*\{([^}]*)\}/g)];
-  return blocks.map(([, body]) => {
+  return [...source.matchAll(/@font-face\s*\{([^}]*)\}/g)].map(([, body]) => {
     const value = (property: string) =>
       body.match(new RegExp(`${property}\\s*:\\s*([^;]+);`))?.[1].trim() ?? '';
+    const src = value('src');
     return {
       family: value('font-family').replace(/["']/g, ''),
       weight: value('font-weight'),
       style: value('font-style'),
       display: value('font-display'),
-      src: value('src'),
+      src,
+      specifier: src.match(/url\(\s*["']?([^"')]+)["']?\s*\)/)?.[1] ?? '',
       range: value('unicode-range').replace(/\s+/g, ''),
     };
   });
 }
 
 const declared = declaredFaces(withoutComments(fonts));
+const lato = declared.filter((face) => face.family === 'Lato');
+const mono = declared.filter((face) => face.family === 'Roboto Mono');
 
 /**
  * The weights the scale names, read from the typography spec's table rather than
@@ -71,8 +71,9 @@ const declared = declaredFaces(withoutComments(fonts));
  */
 function weightsNamedByTypography(): number[] {
   const spec = read('../../../specs/design-system/typography/spec.md');
-  const rows = [...spec.matchAll(/^\|\s*(\w+)\s*\|.*\|\s*(\d{3})\s*\|\s*$/gm)];
-  const fromTable = rows.map(([, , weight]) => Number(weight));
+  const fromTable = [
+    ...spec.matchAll(/^\|\s*(\w+)\s*\|.*\|\s*(\d{3})\s*\|\s*$/gm),
+  ].map(([, , weight]) => Number(weight));
   const fromProse = [
     ...spec.matchAll(/plus (\d{3}) for [^.]*?and (\d{3}) for/g),
   ].flatMap(([, a, b]) => [Number(a), Number(b)]);
@@ -80,24 +81,9 @@ function weightsNamedByTypography(): number[] {
 }
 
 describe('the face set', () => {
-  test('declares exactly the faces the manifest lists', () => {
-    expect(
-      declared.map(
-        (face) => `${face.family} ${face.weight} ${face.style} ${face.range}`,
-      ),
-    ).toEqual(
-      (FACES as Face[]).map(
-        (face) =>
-          `${face.family} ${face.weight} ${face.style} ${RANGES[face.range].replace(/\s+/g, '')}`,
-      ),
-    );
-  });
-
   test('every weight the typography spec names has an upright face', () => {
     const uprights = new Set(
-      declared
-        .filter((face) => face.style === 'normal' && face.family === 'Lato')
-        .map((face) => Number(face.weight)),
+      lato.filter((f) => f.style === 'normal').map((f) => Number(f.weight)),
     );
     for (const weight of weightsNamedByTypography()) {
       expect([...uprights], `weight ${weight} has no upright face`).toContain(
@@ -108,67 +94,65 @@ describe('the face set', () => {
 
   test('every weight the human register loads also loads its italic', () => {
     // A missing italic is synthesised by slanting the upright, which never fails.
-    const key = (face: Declared) => `${face.weight} ${face.range}`;
-    const uprights = declared
-      .filter((face) => face.family === 'Lato' && face.style === 'normal')
-      .map(key);
     const italics = new Set(
-      declared
-        .filter((face) => face.family === 'Lato' && face.style === 'italic')
-        .map(key),
+      lato.filter((f) => f.style === 'italic').map((f) => f.weight),
     );
-    for (const face of uprights) {
-      expect([...italics], `${face} has no italic`).toContain(face);
-    }
-  });
-
-  test('every declared source resolves to a file this repository ships', () => {
-    for (const face of declared) {
-      const path = face.src.match(/url\(\s*["']?([^"')]+)["']?\s*\)/)?.[1];
-      expect(
-        path,
-        `${face.family} ${face.weight} states no url()`,
-      ).toBeTruthy();
-      expect(
-        existsSync(fileURLToPath(url(`../styles/${path}`))),
-        `${path} does not exist`,
-      ).toBe(true);
-    }
-  });
-
-  test('every face swaps', () => {
-    for (const face of declared) {
-      expect(face.display, `${face.family} ${face.weight} ${face.style}`).toBe(
-        'swap',
+    for (const face of lato.filter((f) => f.style === 'normal')) {
+      expect([...italics], `${face.weight} has no italic`).toContain(
+        face.weight,
       );
     }
   });
 
-  test('every face states a unicode-range, and only latin and latin-ext', () => {
-    const allowed = Object.values(RANGES as Record<string, string>).map(
-      (range) => range.replace(/\s+/g, ''),
-    );
+  test('every declared source resolves to an installed file', () => {
     for (const face of declared) {
       expect(
-        allowed,
-        `${face.file ?? face.src} is outside the two ranges`,
-      ).toContain(face.range);
+        face.specifier,
+        `${face.family} ${face.weight} ${face.style} states no url()`,
+      ).toBeTruthy();
+      expect(() => require.resolve(face.specifier)).not.toThrow();
     }
   });
 
-  test('every face is woff2 and states no other format', () => {
+  test('every face is a publisher file, not one this repository produced', () => {
+    // The spec forbids a modified face. A path into this package would be one.
     for (const face of declared) {
+      expect(face.specifier, face.specifier).not.toMatch(/^[./]/);
+    }
+  });
+
+  test('every face swaps, and states woff2 as its only format', () => {
+    for (const face of declared) {
+      expect(face.display, `${face.family} ${face.weight}`).toBe('swap');
       expect(face.src).toContain('format("woff2")');
       expect(face.src.match(/format\(/g)).toHaveLength(1);
     }
   });
 });
 
+describe('coverage', () => {
+  test('the human register declares no range, because its files are whole', () => {
+    for (const face of lato) {
+      expect(face.range, `${face.weight} ${face.style}`).toBe('');
+    }
+  });
+
+  test('the technical register splits latin and latin-ext, each with its range', () => {
+    // Without ranges the later declaration wins and the earlier never loads.
+    expect(mono).toHaveLength(2);
+    expect(mono.map((f) => f.specifier).sort()).toEqual([
+      '@fontsource/roboto-mono/files/roboto-mono-latin-400-normal.woff2',
+      '@fontsource/roboto-mono/files/roboto-mono-latin-ext-400-normal.woff2',
+    ]);
+    for (const face of mono) {
+      expect(face.range, face.specifier).not.toBe('');
+    }
+    expect(mono[0].range).not.toBe(mono[1].range);
+  });
+});
+
 describe('the two families', () => {
   test('are declared here, with a non-serif fallback for a failed load', () => {
-    expect(fonts).toMatch(/--cn-font-family:\s*Lato/);
-    expect(fonts).toMatch(/--cn-font-family-mono:\s*\n?\s*"Roboto Mono"/);
-    // With every face blocked, neither register may fall to the browser's serif.
     const stacks = [...fonts.matchAll(/--cn-font-family(-mono)?:([^;]+);/g)];
     expect(stacks).toHaveLength(2);
     expect(stacks[0][2]).toMatch(/sans-serif\s*$/);
@@ -199,26 +183,6 @@ describe('the two families', () => {
       ).toEqual([]);
     }
   });
-
-  test('are applied to the document and to the technical roles', () => {
-    const rules = withoutComments(fonts).replace(/@font-face\s*\{[^}]*\}/g, '');
-    expect(rules).toMatch(
-      /body\s*\{[^}]*font-family:\s*var\(--cn-font-family\)/,
-    );
-    for (const selector of [
-      'code',
-      'kbd',
-      'samp',
-      'pre',
-      'select',
-      'textarea',
-    ]) {
-      expect(rules, `${selector} is not in the technical register`).toMatch(
-        new RegExp(`(^|,)\\s*${selector}\\s*(,|\\{)`, 'm'),
-      );
-    }
-    expect(rules).toMatch(/input:not\(/);
-  });
 });
 
 describe('neither application declares a face', () => {
@@ -227,5 +191,27 @@ describe('neither application declares a face', () => {
     expect(withoutComments(overrides)).not.toMatch(
       /@font-face|font-family\s*:/,
     );
+  });
+});
+
+describe('the licence travels with the faces', () => {
+  test('both applications serve the notice this package holds', () => {
+    const notice = read('../fonts-license.txt');
+    expect(notice).toContain('SIL OPEN FONT LICENSE Version 1.1');
+    expect(notice).toContain('Reserved Font Name "Lato"');
+    expect(notice).toContain('The Roboto Mono Project Authors');
+    for (const served of [
+      '../../../apps/pelilauta/public/fonts-license.txt',
+      '../../../apps/design/public/fonts-license.txt',
+    ]) {
+      expect(read(served), served).toBe(notice);
+    }
+  });
+
+  test('the repository licence names the fonts as the exception', () => {
+    // Collapsed, because the notice is prose and wraps wherever it wraps.
+    const license = read('../../../LICENSE').replace(/\s+/g, ' ');
+    expect(license).toContain('SIL Open Font License');
+    expect(license).toContain('fonts-license.txt');
   });
 });
