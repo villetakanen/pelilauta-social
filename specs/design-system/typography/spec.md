@@ -34,11 +34,13 @@ The scale is an Augmented Fourth (1.414) from the reading size.
 | h3 | 34px | 48px | 400 |
 | h4 | 24px | 48px | 400 |
 | text | 17px | 24px | 400 |
+| small | 15px | 24px | 400 |
 | caption | 12px | 24px | 400 |
 
 Sizes are proportions of the reader's default text size, shown against a 16px
-default. Small text is 15px on a 24px line, off the scale, for prose too secondary
-for reading size and too long for caption.
+default. Small is in the table but not on the scale: it is not an Augmented Fourth
+from anything, and it exists for prose too secondary for reading size and too long
+for caption. A lexicon publishes it with the rest.
 
 Weights are those in the table, plus 500 for labels and buttons and 700 for emphasis.
 
@@ -53,7 +55,9 @@ guarantee in `specs/design-system/design-tokens/spec.md`.
 
 Every heading from h1 to h4 renders one step down in a column narrower than the
 reading measure, defined in `specs/design-system/content-containers/spec.md`, so a
-heading in a card or a list row is sized by that card. h4 has
+heading in a card or a list row is sized by that card. A container query cannot read a
+custom property, so the threshold is the only value this system copies rather than
+links; a test asserts the copy still equals the measure. h4 has
 no heading step below it; its step down is reading size at weight 700. The title step
 does not downshift.
 
