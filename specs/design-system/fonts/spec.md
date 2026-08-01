@@ -38,20 +38,23 @@ paint, and a preload would compete for bandwidth with the content the page is fo
 Faces are declared in one design-system stylesheet, reached through `styles/ds.css`,
 and a consuming application declares none.
 
-Every face the stylesheet names is a file this repository holds. No published
-package delivers the set: the scale needs weights that exist only in the full
-family, and the full family is published only whole, carrying alphabets neither
-application renders. So a face is cut here from a source face, and what a reader
-downloads is a file in version control rather than whatever a dependency resolved
-to on the day of the build.
+Faces ship as their publisher published them. This system does not modify a font:
+no subsetting, no re-encoding, no editing of a name table. A face is taken whole or
+not taken.
 
-The design system is consumed as source through a Vite alias, not built, so a face
-is referenced by a path relative to the stylesheet and each application's build
-fingerprints its own copy of every file.
+That is a licensing decision before it is a delivery one. Modifying a font makes a
+Modified Version of it, which is where an OFL family's reserved name and every other
+downstream term start to bite — and the payload a subset would have saved does not
+buy the right to argue about it. Where a publisher offers subsets of its own, those
+are its files and may be used.
 
-Cutting a face is reproducible from a source face, this spec's coverage ranges and
-a checked-in step. Which tool performs the cut is not this spec's, but a face that
-cannot be reproduced from a stated source is not one this system ships.
+The cost is stated rather than hidden: the human register's faces carry alphabets
+neither application renders, at roughly six times a subset's bytes. Coverage the
+reader never needs is the price of shipping a font nobody here has altered.
+
+Faces are referenced by bare specifier and resolved by each consumer's bundler. The
+design system is consumed as source through a Vite alias, not built, so each
+application's build fingerprints its own copy of every file.
 
 The platform stacks behind both family tokens are a fallback for a failed load, not a
 delivery mechanism: neither register renders from what the reader's machine has.
@@ -78,31 +81,23 @@ The set is otherwise closed the way the step set is — a face is added or dropp
 changing this spec. It holds two weights no step names, kept from the set the
 application shipped; dropping them is a payload decision, not a consequence of the scale.
 
-Both registers cover latin and latin-ext, and nothing else. Finnish, Swedish and
-English need no more: ä ö å é are in latin, š ž in latin-ext. Characters outside the
-two ranges fall back per glyph.
+Finnish, Swedish and English need latin and latin-ext: ä ö å é are in latin, š ž in
+latin-ext. Where a publisher ships those as separate files, each is declared with its
+own `unicode-range`, so a page downloads only the coverage it uses. Where a publisher
+ships one file per weight, that file is declared without a range and carries whatever
+the family carries.
 
-Each range is a separate face with its own `unicode-range`.
-
-A cut face is a modified copy of someone else's font, and carries that font's
-licence with it: the copyright and licence records survive the cut, the licence text
-and both copyright notices sit beside the files, and each application serves them at
-a URL a reader can open. A repository licence that does not name the exception is a
-licence the fonts are not under.
-
-Whether a family's licence permits the cut, and permits the delivered face to keep the
-family's name, is settled before that face is added. An OFL family that reserves its
-name reserves it against modified versions, and a cut face is a modified version.
-
-No shipped face carries glyphs outside the two ranges. The published full family's
-do: Cyrillic, Greek, Vietnamese and IPA, at 178 KB per face against 31 KB cut to
-latin.
+A shipped face is a redistributed copy of someone else's font and travels with that
+font's licence: the licence text and every copyright notice sit beside the files, each
+application serves them at a URL a reader can open, and the repository licence names
+the exception. A repository licence that does not name it is a licence the fonts are
+not under.
 
 The family tokens are the design system's to declare, under the names in
 `specs/design-system/design-tokens/spec.md`.
 
 What this spec enforces ends at the stylesheet. The face set, the swap, the format
-order and the subset are here, and a check can see them. Preload markup, cache headers
+order and the coverage are here, and a check can see them. Preload markup, cache headers
 and compression are each application's: the design system states that no face is
 preloaded and cannot stop one being added. An application changing any of those is
 changing this spec's outcome without touching it.
@@ -118,9 +113,9 @@ changing this spec's outcome without touching it.
   included.
 - With every face blocked from loading, both registers still fall to a monospace and a
   sans respectively, and nothing renders in the browser's default serif.
-- A check holds the stylesheet, the typography spec, the face manifest, the files on
-  disk and the served licence notices in agreement. It reads the weights from the
-  typography spec rather than restating them.
+- A check holds the stylesheet, the typography spec, the resolved face files and the
+  served licence notices in agreement. It reads the weights from the typography spec
+  rather than restating them.
 - A base book documents the delivered system.
 - Human review accepts the weight of text on screen in both applications.
 
