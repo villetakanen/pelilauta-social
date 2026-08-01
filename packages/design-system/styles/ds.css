@@ -3,8 +3,8 @@
  * else; where in its shell it does so does not matter, because the preflight
  * states only what no other stylesheet has reason to state.
  *
- * The preflight comes first for reading order, not for the cascade. When the type
- * ramp moves out of Cyan it joins this file, and neither application changes.
+ * The preflight comes first for reading order, not for the cascade. When typography
+ * moves out of Cyan it joins this file, and neither application changes.
  *
  * styles/tokens.css remains meaningful on its own for a consumer that wants
  * tokens without a reset.

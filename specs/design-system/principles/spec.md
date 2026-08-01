@@ -30,7 +30,7 @@ Five books cover the foundations components depend on:
 - **Spatial System** — grid, layout, spacing and radii.
 - **Color & Surface** — primitives, semantic roles and elevation.
 - **System Mechanics** — density, box rules, and cross-cutting do's and don'ts.
-- **Typography** — the type ramp, styles and pairings.
+- **Typography** — the scale, styles and pairings.
 - **Iconography** — the icon grid, stroke rules and library usage.
 
 ## Where Design Intent Comes From

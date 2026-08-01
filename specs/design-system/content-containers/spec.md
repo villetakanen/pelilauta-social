@@ -1,5 +1,5 @@
 ---
-status: approved
+status: draft
 ---
 
 # Content Containers
@@ -50,7 +50,7 @@ wide as the column and holds no wider box to reach for.
 
 Rhythm between containers and between the blocks inside one is `--cn-line`. The
 inside case is the spacing `specs/design-system/preflight/spec.md` assigns to each
-container until the type ramp owns it.
+container until typography owns it.
 
 Not owned here: two-column, three-column and card layouts; Cyan's
 `content-cards`, `content-listing`, `content-editor` and `content-sheet`; nested

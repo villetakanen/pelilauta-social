@@ -55,7 +55,7 @@
  *
  * It is a grid so that its blocks stack on `row-gap`, which replaces the element
  * margins the preflight removes — the preflight spec assigns that spacing to each
- * container until the type ramp. A grid also keeps the spacing correct through an
+ * container until typography. A grid also keeps the spacing correct through an
  * `astro-island`, which the preflight sets to `display: contents`: the island's
  * children become items of this grid rather than one unspaced block.
  */
