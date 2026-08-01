@@ -25,7 +25,9 @@ anatomy is `specs/TEMPLATE.md`; start new specs from it.
    package, which both applications consume. Do not restate that in the spec, and
    do not write a criterion that holds for only one of them.
 4. Add frontmatter status: `draft`, `approved`, or `deprecated`. New intent is
-   `draft` until a human approves it. That is the whole frontmatter.
+   `draft` until a human approves it, and so is altered intent: any edit to an
+   `approved` spec returns it to `draft`, including one made in the same commit as
+   the behaviour it describes. That is the whole frontmatter.
 5. Write what this project decided: its constraints and boundaries.
    Assume engineering competence — a paragraph a competent reader could have
    written without this repository is the thing to cut, whatever section it is in.

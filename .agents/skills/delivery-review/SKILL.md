@@ -45,9 +45,13 @@ stop and ask rather than reviewing unrelated historical branch work.
 8. **Migration context:** were relevant legacy element selectors, tests,
    imperative APIs, dynamic inputs, persisted values, and accessibility
    semantics considered for the migrated surface?
-9. **Record:** do the spec, PR and reported checks describe the
+9. **Placement:** does each change sit in the file its spec assigns the concern
+   to, or in whichever file currently wins the cascade? A rule added where it
+   already loses, or edited where it already wins, passes every visual check and
+   leaves ownership where the spec says it is not.
+10. **Record:** do the spec, PR and reported checks describe the
    implementation accurately?
-10. **Merge coherence:** can the complete merge deploy and revert coherently?
+11. **Merge coherence:** can the complete merge deploy and revert coherently?
     Do not demand that supporting changes be independently reverted from the
     feature that relies on them.
 
