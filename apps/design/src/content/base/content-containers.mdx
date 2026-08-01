@@ -69,8 +69,11 @@ what that measures to: Lato's `0` advance is 0.58em, so at the 17px base
 paragraph 67 characters is 660.6px, or 82.58 grid steps, rounded up to 83.
 
 It is written as a grid multiple rather than as `67ch` because `ch` resolves
-against whichever font is rendering, and this site ships no font yet — the same
-stylesheet would otherwise draw a different column in each application.
+against whichever font is rendering. The design system now
+[ships its faces](/base/fonts), so both applications set the same one — but `ch`
+would still shrink the column to the fallback's advance for as long as the face is
+loading, and a heading inheriting the measure would resolve it against its own
+size. A grid multiple is one column at one width, whatever is rendering it.
 
 Being `rem`, it scales with the reader: a larger default text size gives a
 proportionally wider column. See
@@ -87,7 +90,7 @@ That inside spacing is temporary in shape, not in existence. The
 [preflight](/base/preflight) removes every element margin and hands the
 replacement to whatever owns the layout, so the container supplies one uniform
 step. The space before a heading and the space between two paragraphs are not
-really the same decision, and the type ramp will separate them.
+really the same decision, and typography will separate them.
 
 ## Spanning the page
 
@@ -106,16 +109,3 @@ missing feature: the container is exactly as wide as the column, so there is no
 wider box inside it to reach for. Put what needs the page in its own container.
 
 This page is a single container, so its own specimens sit at the measure.
-
-## What this does not cover
-
-The two-column and three-column layouts, and the card grid. v20 derives all three
-from this same measure by golden-ratio steps, and they are the rest of this
-family.
-
-Cyan's `content-cards`, `content-listing`, `content-editor` and `content-sheet`
-have no answer here yet. `apps/pelilauta` still uses all of them, and
-`docs/MIGRATION.md` lists the screens involved.
-
-Typography inside the container — sizes, leading, the space before a heading —
-belongs to the type ramp.

@@ -104,10 +104,10 @@ Consumers read semantic roles.
 - Existing consumers continue to work through an explicitly bounded
   compatibility contract until they are migrated.
 - Every added token has a current, named purpose and consumer.
-- A lexicon book lists every token its stylesheet declares, with the value as
-  declared, read from that stylesheet at build time. It cannot omit a token that
-  exists or state one that does not, and a selection that matches nothing fails
-  the build rather than publishing an empty or unfiltered table.
+- A lexicon lists every token its stylesheet declares, with the value as declared.
+  It cannot omit a token that exists or state one that does not, and a selection
+  that matches nothing fails the build rather than publishing an empty or
+  unfiltered table.
 - The compatibility layer gets no lexicon. It is migration scaffolding, removed
   before `v21.0.0-rc.1`. A book states that it exists and that it is being
   removed.

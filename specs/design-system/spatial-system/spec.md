@@ -1,5 +1,5 @@
 ---
-status: approved
+status: draft
 ---
 
 # Spatial System
@@ -82,7 +82,7 @@ Spatial System principles book.
   gutters and maximum container width around them — is not owned yet.
 - Box rules, including how a border is counted against a box's own measurements,
   belong to System Mechanics.
-- Typographic sizes are the type ramp's, not the grid's.
+- Typographic sizes are typography's, not the grid's.
 
 ## Regression Guardrails
 

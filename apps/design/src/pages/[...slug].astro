@@ -6,15 +6,12 @@ import { GROUPS, type GroupId } from '../lib/books';
 /**
  * Every book is served from its collection: the collection id is the first URL
  * segment and the entry id the rest, so `color` in `tokens` stays at
- * /tokens/color. Draft entries are not published.
+ * /tokens/color.
  */
 export async function getStaticPaths() {
   const groups = await Promise.all(
     GROUPS.map(async ({ id }) => {
-      const entries = await getCollection(
-        id,
-        ({ data }) => data.status !== 'draft',
-      );
+      const entries = await getCollection(id);
       return entries.map((entry: CollectionEntry<GroupId>) => ({
         params: { slug: `${id}/${entry.id}` },
         props: { entry, group: id },

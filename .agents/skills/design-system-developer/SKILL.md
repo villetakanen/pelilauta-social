@@ -8,6 +8,29 @@ description: Building or changing a design-system component, token, or book.
 A design-system pull request carries its spec, its implementation, and its book on
 the design site.
 
+A check holds two artefacts in agreement — a stylesheet against a spec, a manifest,
+another stylesheet, or the files on disk. A check that reads one stylesheet and
+asserts its own contents is a slow `grep`, and a browser test that reads back what
+the CSS declared tests the browser.
+
+## What the change has to be for
+
+v21 exists to remove Cyan. A design-system change earns its place by moving the
+application off `@11thdeg/cyan-css`, and the test is a dependency — not a deletion,
+and not a screenshot:
+
+**With cyan-css absent, would the application render this correctly?**
+
+Correctly, not identically. What a surface looks like afterwards is v20's and the
+owner's; matching what the application renders today is not evidence of anything, and
+a like-for-like claim is a defect.
+
+Declaring a token Cyan already declares fails this test. Cyan's value is shadowed in
+the cascade while Cyan still supplies the rule that reads it, so the application
+depends on Cyan exactly as much as it did before, in one more place. Tokens are inputs
+to a surface, not a surface: the surface moves when the design system owns what reads
+them too.
+
 ## A book is an MDX file
 
 Copy the template for the kind of book you are writing to
@@ -17,7 +40,8 @@ prose, and markdown tables where a list of values is the point. The `h1` renders
 
 | Writing | Template | Shape |
 | :--- | :--- | :--- |
-| A principles or base book | `books/templates/principles.mdx` | An essay. It teaches a decision, and its headings argue. |
+| A base book | `books/templates/base.mdx` | A technical definition. What ships, its values, what it applies to. Under 300 words. |
+| A principles book | `books/templates/principles.mdx` | Teaches how to use the system: choosing within it, and what goes wrong. |
 | A component book | `books/templates/component.mdx` | A schema. One or two sentences, the example, the props table, then guidance. |
 
 The distinction is not stylistic. A component page is read against the last component's,
@@ -34,10 +58,11 @@ Where the page would otherwise repeat a stylesheet by hand, import a **specimen*
 component for that part and keep the prose in MDX. A specimen reads real source, so
 the book cannot describe a rule or a value that does not ship.
 
-v20's books are the reference for shape and length **of a principles book** —
-`~/dev/pelilauta-20-ds/app/cyan-ds/src/content/principles/*.mdx`, 50 to 200 lines
-each. Longer than that is usually two books. They are not the reference for a
-component book, which is shorter and follows its own template.
+Length is counted in words, not lines: a base book stays under 300, a principles book
+under 600. Over that is reasoning that belongs in a spec, or a second book.
+
+No book in this repository or in v20 is a reference for shape or length. They are
+being replaced for that reason. The templates are the reference.
 
 Groups, ordering and publication are
 `specs/design-system/design-site-navigation/spec.md`.

@@ -1,5 +1,5 @@
 ---
-status: approved
+status: draft
 ---
 
 # Design Site Navigation
@@ -21,8 +21,9 @@ are the design system's decision, declared in one place —
 define. A book's group is its URL group. Within a group a book may declare its
 position, otherwise books order alphabetically by title.
 
-The site publishes only what exists: an empty group does not appear, and a draft
-entry is neither published nor listed.
+The site publishes only what exists: an empty group does not appear, and every book
+in the repository is published. There is no unpublished state — a book documents
+something that shipped, so a book with nothing to document is not written yet.
 
 Where the viewport is too narrow to keep the temporary navigation visible, it is
 reached through a labelled disclosure that needs no JavaScript.

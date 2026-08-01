@@ -30,8 +30,10 @@
    * for readable prose.
    *
    * Stated as a grid multiple rather than as `67ch`, because `ch` resolves
-   * against whatever font is rendering and apps/design ships no font yet, so the
-   * same stylesheet would produce two different columns.
+   * against whatever font is rendering. styles/fonts.css now puts the same face
+   * in both applications, but `ch` would still measure the fallback while that
+   * face loads, and resolve against its own font-size in any element that
+   * inherits the measure.
    *
    * Measured, not chosen: Lato's `0` advance is 1160/2000 units = 0.58em, so at
    * the 17px base paragraph 67ch is 660.6px = 41.29rem = 82.58 grid steps,
@@ -55,7 +57,7 @@
  *
  * It is a grid so that its blocks stack on `row-gap`, which replaces the element
  * margins the preflight removes — the preflight spec assigns that spacing to each
- * container until the type ramp. A grid also keeps the spacing correct through an
+ * container until typography. A grid also keeps the spacing correct through an
  * `astro-island`, which the preflight sets to `display: contents`: the island's
  * children become items of this grid rather than one unspaced block.
  */

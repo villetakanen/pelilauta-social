@@ -39,17 +39,15 @@ against it.
 
 ### Architecture
 
-What must someone else not change? Name the paths, entry points, interfaces and
-data shapes this capability owns, and which way the dependencies run. Not how it
-is built — the code states that, and states it more accurately.
+What would a reader of the code get backwards? State which way the dependencies
+run, and any structural choice that reading one file would not reveal.
 
 ### Constraints
 
-What would be re-derived wrong if it were not written here? Boundaries stated as
-facts about the system, including what this capability does not own, so scope
-cannot grow back in through implementation. A value owned by another spec, by
-design tokens, or by an upstream contract is referenced by linking its owner,
-never restated.
+What would someone guess wrong if it were not written here?
+
+Do not copy a value that is already written somewhere else. Link to it instead —
+two copies can disagree.
 
 ## Contract
 

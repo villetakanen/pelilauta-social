@@ -1,6 +1,6 @@
 # AGENTS.md
 
-> **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library.
+> **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library. It serves Finnish, Swedish and English; every character the three need is in Unicode `latin` and `latin-ext`.
 > **Goal:** v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large to finish, so v21 ports the v20 look onto the shipped v18 application instead, one verifiable step at a time — replacing the legacy Lit.js design system with local Svelte components as it goes.
 > **Core constraint:** v21 will run on its own host, sharing Firestore, Storage and Auth with live v18. What they share is a contract.
 
@@ -27,7 +27,7 @@
 - A merge to `main` during the beta cycle is a release: it deploys and CI tags it. Only on the owner's request or approval.
 - Every pull request bumps the root beta version — `pnpm version prerelease --preid=beta`. The root `package.json` carries the release version; nested app versions keep their own meaning. No approval needed.
 - Fix what the work touches, and defects it uncovers inside the same epic. Unrelated cleanup and speculative generalization stay out. Refusing a fix is a decision, not a default.
-- Replace Cyan one surface at a time. Most of it is CSS — tokens, resets, element styles, utilities — and the rest is Lit components. Check what v20 already built before writing anything; `docs/MIGRATION.md` owns the mechanics.
+- Replace Cyan one surface at a time. Most of it is CSS — resets, element styles, utilities, and the tokens those read — and the rest is Lit components. Check what v20 already built before writing anything; `docs/MIGRATION.md` owns the mechanics.
 
 ## Workspace Contract
 

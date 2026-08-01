@@ -22,7 +22,6 @@ const bookSchema = z.object({
    * which is why the default is false.
    */
   prose: z.boolean().default(false),
-  status: z.enum(['stable', 'draft']).default('stable'),
 });
 
 const book = (group: string) =>

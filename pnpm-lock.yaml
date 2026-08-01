@@ -135,9 +135,6 @@ importers:
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
-      lato-font:
-        specifier: ^3.0.0
-        version: 3.0.0
       marked:
         specifier: ^15.0.11
         version: 15.0.12
@@ -210,6 +207,13 @@ importers:
         version: 7.4.1
 
   packages/design-system:
+    dependencies:
+      '@fontsource/roboto-mono':
+        specifier: ^5.3.0
+        version: 5.3.0
+      lato-font:
+        specifier: ^3.0.0
+        version: 3.0.0
     devDependencies:
       vitest:
         specifier: ^4.1.10
@@ -1649,6 +1653,9 @@ packages:
 
   '@firebase/webchannel-wrapper@1.0.3':
     resolution: {integrity: sha512-2xCRM9q9FlzGZCdgDMJwc0gyUkWFtkosy7Xxr6sFgQwn+wMNIWd7xIvYNauU1r64B5L5rsGKy/n9TKJ0aAFeqQ==}
+
+  '@fontsource/roboto-mono@5.3.0':
+    resolution: {integrity: sha512-yhwplHMHW9dCk+1pZuERfcJe+K3rosGVZEoK0XktkxRSqQ9qsipSwwiuW2/8Qmtp9lzu3Ixa/ie4BMH3i8CkZQ==}
 
   '@google-cloud/firestore@7.11.6':
     resolution: {integrity: sha512-EW/O8ktzwLfyWBOsNuhRoMi8lrC3clHM5LVFhGvO1HCsLozCOOXRAlHrYBoE6HL42Sc8yYMuCb2XqcnJ4OOEpw==}
@@ -9548,6 +9555,8 @@ snapshots:
       tslib: 2.8.1
 
   '@firebase/webchannel-wrapper@1.0.3': {}
+
+  '@fontsource/roboto-mono@5.3.0': {}
 
   '@google-cloud/firestore@7.11.6':
     dependencies:

@@ -1,0 +1,56 @@
+---
+title: Fonts
+description: The two typefaces the design system ships, the faces behind them, and which elements use which.
+order: 3
+prose: true
+---
+
+import FaceTable from '@design-system/books/specimens/FaceTable.astro'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import fontsSource from '@design-system/styles/fonts.css?raw'
+
+The design system ships two typefaces. **Lato** sets interface and content text.
+**Roboto Mono** sets code, identifiers, and text the reader types in.
+
+## Tokens
+
+<TokenTable source={fontsSource} prefix="--cn-font-family" />
+
+## Faces
+
+These weights and styles have a real face. Ask for one that is not here and the
+browser synthesises it: it renders, and it is not the typeface.
+
+<FaceTable source={fontsSource} family="Lato" />
+
+<FaceTable source={fontsSource} family="Roboto Mono" />
+
+Faces are their publishers' files, unmodified. Lato is published whole, one file per
+weight, so a Lato face carries alphabets no page here renders. Roboto Mono is
+published split by alphabet, so it takes `latin` and `latin-ext` and a page downloads
+only the one it uses.
+
+Every face is `font-display: swap`. None is preloaded.
+
+Which weight belongs to which step is [Typography](/principles/typography)'s.
+
+## Which element gets which
+
+| Element | Typeface |
+| :--- | :--- |
+| The document, and everything inheriting from it | Lato |
+| `button` | Lato |
+| `input`, `select`, `textarea` | Roboto Mono |
+| `code`, `kbd`, `samp`, `pre` | Roboto Mono |
+
+Identifiers and slugs are technical too, but nothing selects them yet. They arrive
+with the typography semantics.
+
+## Changing the face set
+
+Faces come from the `lato-font` and `@fontsource/roboto-mono` packages, declared in
+`packages/design-system/styles/fonts.css` and resolved by each application's build.
+Adding one means adding a `@font-face` there; nothing is generated.
+
+Both families are under the SIL Open Font License. Each application serves the notice
+at [/fonts-license.txt](/fonts-license.txt).
