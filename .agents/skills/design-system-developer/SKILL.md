@@ -8,6 +8,24 @@ description: Building or changing a design-system component, token, or book.
 A design-system pull request carries its spec, its implementation, and its book on
 the design site.
 
+## What the change has to be for
+
+v21 exists to remove Cyan. A design-system change earns its place by moving the
+application off `@11thdeg/cyan-css`, and the test is a dependency — not a deletion,
+and not a screenshot:
+
+**With cyan-css absent, would the application render this correctly?**
+
+Correctly, not identically. What a surface looks like afterwards is v20's and the
+owner's; matching what the application renders today is not evidence of anything, and
+a like-for-like claim is a defect.
+
+Declaring a token Cyan already declares fails this test. Cyan's value is shadowed in
+the cascade while Cyan still supplies the rule that reads it, so the application
+depends on Cyan exactly as much as it did before, in one more place. Tokens are inputs
+to a surface, not a surface: the surface moves when the design system owns what reads
+them too.
+
 ## A book is an MDX file
 
 Copy the template for the kind of book you are writing to

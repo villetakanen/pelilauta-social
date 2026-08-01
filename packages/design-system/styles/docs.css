@@ -1,6 +1,12 @@
 /*
  * docs.css — the shared editorial language of the design-system books.
  *
+ * Prototype-age scaffolding. Its hero, kicker, lede and stat-tile vocabulary makes a
+ * documentation page read as a marketing spread, and it survives only because the
+ * .astro books consume it. Do not build on it and do not extend it: a book is an MDX
+ * file, and anything the design system should own belongs in a stylesheet it ships to
+ * both applications, not here. See .agents/skills/design-system-developer/SKILL.md.
+ *
  * Every book page used to carry its own copy of this vocabulary inside a scoped
  * <style> block. The Book layout now imports this file once, so the classes below
  * are global and a book component only styles what is unique to it.

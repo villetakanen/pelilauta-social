@@ -27,7 +27,7 @@
 - A merge to `main` during the beta cycle is a release: it deploys and CI tags it. Only on the owner's request or approval.
 - Every pull request bumps the root beta version — `pnpm version prerelease --preid=beta`. The root `package.json` carries the release version; nested app versions keep their own meaning. No approval needed.
 - Fix what the work touches, and defects it uncovers inside the same epic. Unrelated cleanup and speculative generalization stay out. Refusing a fix is a decision, not a default.
-- Replace Cyan one surface at a time. Most of it is CSS — tokens, resets, element styles, utilities — and the rest is Lit components. Check what v20 already built before writing anything; `docs/MIGRATION.md` owns the mechanics.
+- Replace Cyan one surface at a time. Most of it is CSS — resets, element styles, utilities, and the tokens those read — and the rest is Lit components. Check what v20 already built before writing anything; `docs/MIGRATION.md` owns the mechanics.
 
 ## Workspace Contract
 
