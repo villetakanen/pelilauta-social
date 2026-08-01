@@ -8,6 +8,11 @@ description: Building or changing a design-system component, token, or book.
 A design-system pull request carries its spec, its implementation, and its book on
 the design site.
 
+A check holds two artefacts in agreement — a stylesheet against a spec, a manifest,
+another stylesheet, or the files on disk. A check that reads one stylesheet and
+asserts its own contents is a slow `grep`, and a browser test that reads back what
+the CSS declared tests the browser.
+
 ## What the change has to be for
 
 v21 exists to remove Cyan. A design-system change earns its place by moving the

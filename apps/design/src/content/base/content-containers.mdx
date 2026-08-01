@@ -69,8 +69,11 @@ what that measures to: Lato's `0` advance is 0.58em, so at the 17px base
 paragraph 67 characters is 660.6px, or 82.58 grid steps, rounded up to 83.
 
 It is written as a grid multiple rather than as `67ch` because `ch` resolves
-against whichever font is rendering, and this site ships no font yet — the same
-stylesheet would otherwise draw a different column in each application.
+against whichever font is rendering. The design system now
+[ships its faces](/base/fonts), so both applications set the same one — but `ch`
+would still shrink the column to the fallback's advance for as long as the face is
+loading, and a heading inheriting the measure would resolve it against its own
+size. A grid multiple is one column at one width, whatever is rendering it.
 
 Being `rem`, it scales with the reader: a larger default text size gives a
 proportionally wider column. See

@@ -107,8 +107,7 @@ describe('preflight', () => {
       /var\(\s*(--[\w-]+)\s*(,)?/g,
     );
     for (const [, name, hasFallback] of read_) {
-      // A name the design system does not own yet may be read with a fallback;
-      // --cn-font-family-mono belongs to typography, which is still Cyan's.
+      // A name the design system does not own yet may be read with a fallback.
       if (hasFallback) continue;
       expect(theme, `${name} is read without a fallback`).toContain(`${name}:`);
     }
@@ -120,6 +119,7 @@ describe('preflight', () => {
       '../styles/color.css',
       '../styles/units.css',
       '../styles/icon.css',
+      '../styles/fonts.css',
       '../styles/docs.css',
       '../styles/compat/cyan-4.css',
     ];
@@ -131,7 +131,7 @@ describe('preflight', () => {
 });
 
 describe('entry point', () => {
-  test('composes the preflight, the tokens and the containers, in that order', () => {
+  test('composes the preflight, the tokens, the faces and the containers, in that order', () => {
     const entry = withoutComments(read('../styles/ds.css'));
     const imports = [...entry.matchAll(/@import\s+"([^"]+)"/g)].map(
       (m) => m[1],
@@ -139,6 +139,7 @@ describe('entry point', () => {
     expect(imports).toEqual([
       './preflight.css',
       './tokens.css',
+      './fonts.css',
       './content-containers.css',
     ]);
   });

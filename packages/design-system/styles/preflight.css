@@ -168,14 +168,14 @@ sup {
 }
 
 /*
- * --cn-font-family-mono belongs to typography, which the design system does not
- * own yet, so this carries a fallback rather than a broken reference.
+ * Only the size. Browsers render these at a smaller size than the surrounding text
+ * because they switch family; the family itself is styles/fonts.css's, which is what
+ * chooses a typeface. A reset normalises a default.
  */
 code,
 kbd,
 samp,
 pre {
-  font-family: var(--cn-font-family-mono, monospace);
   font-size: 1em;
 }
 

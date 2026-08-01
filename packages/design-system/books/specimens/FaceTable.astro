@@ -1,0 +1,84 @@
+---
+/**
+ * FaceTable — the faces one family ships, read from the stylesheet that declares
+ * them, with each weight rendered in itself.
+ *
+ * A face fails silently: a weight with no face is synthesised, and looks
+ * approximately right. So the sample column is the specimen — if a row renders in
+ * the wrong shape, the face behind it is not loading.
+ *
+ * Book: apps/design/src/content/base/fonts.mdx
+ */
+interface Props {
+  /** styles/fonts.css, imported by the book with `?raw`. */
+  source: string;
+  /** Family to show, as declared. */
+  family: string;
+  /** What each row renders as its sample. */
+  sample?: string;
+}
+
+const { source, family, sample = 'Hyvä lukija · Šžåäö' } = Astro.props;
+
+const faces = [...source.matchAll(/@font-face\s*\{([^}]*)\}/g)]
+  .map(([, body]) => {
+    const value = (property: string) =>
+      body.match(new RegExp(`${property}\\s*:\\s*([^;]+);`))?.[1].trim() ?? '';
+    const src = value('src');
+    return {
+      family: value('font-family').replace(/["']/g, ''),
+      weight: value('font-weight'),
+      style: value('font-style'),
+      file: src.match(/([^/"']+\.woff2)/)?.[1] ?? src,
+      /* latin-ext is the only range carrying š and ž, so its presence is what the
+         reader needs to know — not 20 code point ranges. */
+      range: value('unicode-range').includes('U+1E00') ? 'latin-ext' : 'latin',
+    };
+  })
+  .filter((face) => face.family === family);
+
+if (faces.length === 0) {
+  throw new Error(
+    `FaceTable matched no @font-face rule for "${family}". The stylesheet no longer declares the family this book claims it does.`,
+  );
+}
+
+/** One row per weight and style; the two ranges are two files behind one row. */
+const rows = [
+  ...new Map(
+    faces.map((face) => [
+      `${face.weight} ${face.style}`,
+      {
+        ...face,
+        files: faces
+          .filter((f) => f.weight === face.weight && f.style === face.style)
+          .map((f) => f.range),
+      },
+    ]),
+  ).values(),
+];
+---
+
+<table>
+  <caption>{family}</caption>
+  <thead>
+    <tr>
+      <th scope="col">Weight</th>
+      <th scope="col">Style</th>
+      <th scope="col">Coverage</th>
+      <th scope="col">Sample</th>
+    </tr>
+  </thead>
+  <tbody>
+    {rows.map((row) => (
+      <tr>
+        <th scope="row"><code>{row.weight}</code></th>
+        <td>{row.style}</td>
+        <td>{row.files.join(', ')}</td>
+        <td
+          style={`font-family: "${family}"; font-weight: ${row.weight}; font-style: ${row.style};`}
+        >{sample}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

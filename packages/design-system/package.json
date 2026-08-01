@@ -9,9 +9,14 @@
   "scripts": {
     "generate:icons": "node scripts/generate-icon-registry.mjs",
     "check:icons": "node scripts/generate-icon-registry.mjs --check",
+    "cut:fonts": "node scripts/cut-fonts.mjs",
+    "check:fonts": "node scripts/cut-fonts.mjs --check",
     "test": "vitest run"
   },
   "devDependencies": {
+    "@fontsource/roboto-mono": "^5.3.0",
+    "lato-font": "^3.0.0",
+    "subset-font": "^2.5.0",
     "vitest": "^4.1.10"
   }
 }

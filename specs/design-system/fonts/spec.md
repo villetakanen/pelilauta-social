@@ -108,12 +108,9 @@ changing this spec's outcome without touching it.
   included.
 - With every face blocked from loading, both registers still fall to a monospace and a
   sans respectively, and nothing renders in the browser's default serif.
-- A check asserts that every weight the typography spec names has an upright face,
-  that every declared source resolves to a file this repository ships, and that
-  every face swaps. It reads the weights from the typography spec rather than
+- A check holds the stylesheet, the typography spec, the face manifest and the files
+  on disk in agreement. It reads the weights from the typography spec rather than
   restating them.
-- A check asserts that every declared face states a `unicode-range`, and that the
-  ranges are latin and latin-ext only.
 - A base book documents the delivered system.
 - Human review accepts the weight of text on screen in both applications.
 

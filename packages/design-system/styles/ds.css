@@ -9,10 +9,15 @@
  * styles/tokens.css remains meaningful on its own for a consumer that wants
  * tokens without a reset.
  *
+ * styles/fonts.css is not a token family and not a reset: it is a payload, plus the
+ * two rules that put each register on an element. It follows the tokens because it
+ * declares the two family names, and precedes anything that reads them.
+ *
  * content-containers.css is the first layout stylesheet here. It is inert until
  * a consumer puts `cn-app-main` on its <main>, so importing it changes nothing
  * for an application that has not adopted the container.
  */
 @import "./preflight.css";
 @import "./tokens.css";
+@import "./fonts.css";
 @import "./content-containers.css";

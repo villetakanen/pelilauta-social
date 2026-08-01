@@ -208,12 +208,30 @@ with the Base group and its book. Three of v20's reset rules could not travel wi
 `* { margin: 0 }` with its restored list markers, and the body font tokens. All three
 ship with the semantics story.
 
-### Fonts
+### Fonts — shipped
 
-The faces and the two families move out of `apps/pelilauta/src/overrides.css` into the
-design system, which applies both registers. Owned end to end by
-`specs/design-system/fonts/spec.md`, including the payload and its reasons. Needs its
-book.
+`packages/design-system/styles/fonts.css`, 30 cut faces committed under
+`packages/design-system/fonts/`, `scripts/cut-fonts.mjs` and its manifest, the base
+book, and checks in `test/fonts.test.ts` and `apps/design/e2e/fonts.spec.ts`. The 12
+`@font-face` rules and the `lato-font` dependency left `apps/pelilauta`; `docs.css`
+and `preflight.css` gave up the families they named.
+
+Three things the story settled that the spec left open:
+
+- **The two unnamed weights are 100 and 900.** The spec says the set holds two the
+  scale does not name, kept from what the application shipped; those are the two, and
+  each keeps its italic as the application had it.
+- **latin-ext is the larger file, not the smaller one.** Lato's latin-ext cut is
+  ~55 KB against ~31 KB for latin, because Lato covers IPA and Latin Extended
+  Additional in full. It loads only when a character needs it, so the payload is
+  right, but the plan's "31 KB cut to latin" was not the whole picture.
+- **Identifiers and slugs are still in the human register.** The technical register
+  reaches the document's form controls and code elements by tag; a `<span>` holding a
+  uid carries no marker to select. That sweep is the semantics story's.
+
+`document.fonts.check()` cannot see a missing face — it answers whether text can be
+rendered, which an installed copy of the family satisfies, so it passes with every
+face blocked. The e2e check loads the FontFaceSet's own entries instead.
 
 ### Compat shim
 

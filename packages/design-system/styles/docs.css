@@ -27,15 +27,12 @@ html {
 /*
  * Editorial only. Box sizing, the body's margin, and its background and
  * foreground come from styles/preflight.css, which this file hand-rolled until
- * the design system owned a preflight.
+ * the design system owned a preflight. Both families come from styles/fonts.css,
+ * which this file also hand-rolled — the design site taught the type system in
+ * whatever the reader's machine offered, which was the point of shipping faces.
  */
 body {
-  font-family: "Avenir Next", Avenir, system-ui, sans-serif;
   line-height: 1.5;
-}
-
-code {
-  font-family: "SFMono-Regular", Consolas, monospace;
 }
 
 a {
