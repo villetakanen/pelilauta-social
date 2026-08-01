@@ -72,9 +72,20 @@ rem in the application.
 The line-height type change is the dangerous one. `cyan-css/src/core/buttons.css:31`
 reads `height: var(--cn-line-height-button, …)`. Cyan 4 sets that token to 38px;
 v20 sets it to `1.5`. Dropping v20's value in front of live cyan-css makes every
-button in the application **1.5 pixels tall**. Twenty-two cyan-css source files
-and seven cyan-lit bundles read typography tokens, so this class of failure is
-not confined to buttons.
+button in the application **1.5 pixels tall**.
+
+Corrected 2026-08-01: this paragraph continued "twenty-two cyan-css source files and
+seven cyan-lit bundles read typography tokens, so this class of failure is not
+confined to buttons." Measured, it is confined. Across both packages a line-height
+token is read in a length position in exactly two places —
+`cyan-css/src/core/buttons.css:31` and
+`cyan-lit/dist/cn-snackbar/cn-snackbar.js:159` — both `--cn-line-height-button`, both
+with a 38px fallback. Every other read is a `line-height` declaration, where a ratio
+is valid.
+
+Superseded 2026-08-01 in any case: `specs/design-system/typography/spec.md` states
+leading as a multiple of the line unit, which is a length. The ratio-versus-length
+hazard leaves the epic with that decision.
 
 ## What the application actually consumes
 
@@ -120,6 +131,82 @@ rules (hairline, thin, light, normal, bold, black, plus italics, woff2 + woff)
 against `lato-font@^3.0.0`. v20 declares 5 (300/400/500/700 + 400 italic, woff2
 only). v20's `--cn-font-family` names `Lato, system-ui, -apple-system, sans-serif`
 against Cyan 4's longer Tailwind-derived stack.
+
+## Decisions settled 2026-08-01, with the spec
+
+`specs/design-system/typography/spec.md` now holds the design decisions. Where the
+sections below disagree with it, the spec wins. What changed:
+
+**Leading is a multiple of the line unit and taller than the text it holds, stated as
+a length.** This is v21's rule, not v20's, and it recomputes most of the scale.
+
+| step | size | line | | v20 had |
+|---|---|---|---|---|
+| title | 96px | 120px | 5 × line | absent |
+| h1 | 68px | 96px | 4 × line | 88px |
+| h2 | 48px | 72px | 3 × line | 64px |
+| h3 | 34px | 48px | 2 × line | 48px |
+| h4 | 24px | 48px | 2 × line | 32px |
+| text | 17px | 24px | 1 × line | 24px |
+| small | 15px | 24px | 1 × line | 14px on 21px |
+| caption | 12px | 24px | 1 × line | 12px on 18px |
+
+h1 takes four line units rather than the three the strict rule gives, because three
+leaves 4px around 68px text.
+
+**Small text is 15px.** v20's token says 15px and its own utility hardcodes 14px; the
+token is right. This supersedes every 14px/21px figure below.
+
+**The title step is 96px on 120px at weight 200**, superseding the 6rem-on-104px
+proposal under "`text-title` is the missing tier above h1" — 104px is not a line
+multiple.
+
+**Weights: title 200, h1 300, h2–h4 and prose 400, labels and buttons 500, emphasis
+700.** 200 is already a loaded face; the app declares 100/200/300/400/700/900. 500 is
+the only named weight with no face, and it gets one, which confirms the font-face
+story as a payload increase.
+
+**Mono is a register, not a tag.** Form inputs, code, and machine-facing values such
+as identifiers and slugs. This is wider than the `--cn-*-ui` repoint below, which
+justified mono by the editor being a markdown source view. It also resolves the two
+case-sensitive caption sites — `User.svelte:24` and `ChannelSettings.svelte:184` are
+technical register, so they leave the caption question rather than becoming
+`.text-label`.
+
+**The narrow-column threshold is the reading measure**, which
+`specs/design-system/content-containers/spec.md` already owns, rather than v20's
+independent `38.75rem`. One owner for the threshold, and it moves with the measure.
+
+**Unchanged from 2026-07-30, and reconfirmed:** the scale stops at h4; `text-h5` and
+`downscaled` heading sites become plain `<h4>` and downshift by column width; caption
+and label split with label carrying the uppercase; the title step exists for
+`text-title`'s call sites.
+
+### Rationale the spec does not carry
+
+The spec states rules; these are the reasons behind them, kept here because no
+typography principles book exists yet. The book is a Definition-of-Done item in the
+spec, and this is the material it has to teach.
+
+- **Why h1 breaks the leading rule.** The strict rule — the smallest line multiple
+  greater than the text — gives 68px text a 72px line, which is 4px of leading and
+  the same line as h2. h1 takes four line units instead.
+- **Why labels uppercase and captions do not.** Roughly 35 of the 47 `text-caption`
+  sites are whole sentences and about 10 are true labels. Finnish compounds are long
+  and lose their word shape in capitals, so uppercase works on a column header or a
+  stat key and fails on a sentence.
+- **Why mono is a register rather than a tag.** A text input is technical whether or
+  not it holds code, and an identifier printed in a `<span>` is technical. A
+  timestamp written for a reader is not. Reading the family off the tag gets all
+  three wrong.
+- **Why the narrow-column threshold is the reading measure.** v20 states `38.75rem`
+  independently of the measure it sets elsewhere, so the two can drift. Pointing at
+  the measure gives the threshold one owner.
+- **Why 15px small text is off the scale.** The scale's step below reading size is
+  12px, which is caption, and captions are too small for sentences. Small text exists
+  for secondary prose that still has to be read.
+- **Why the title step does not downshift.** It is used where the page is the column,
+  so there is no narrower container for it to respond to.
 
 ## Decisions settled 2026-07-30
 
@@ -367,8 +454,15 @@ typography. The set is: `--cn-font-size-{display,h5,caption,overline,mono}`,
 contract test in the shape of `test/token-contract.test.ts`, asserting every name
 cyan-css reads still resolves.
 
-No visual change. **Dependency: must land before the scale story**, or buttons
-collapse to 1.5px.
+No visual change. **Dependency: must land before the scale story.**
+
+Corrected 2026-08-01: the enumerated set above is wrong in both directions. It omits
+names the two packages read and never declare — the `heading-4` family,
+`--cn-font-weight`, `--cn-font-weight-heading`, `--cn-font-weight-strong`,
+`--cn-line-height-ui` — and it lists names cyan-css declares itself, which cannot go
+undefined when the design system declares typography. Derive the set from the
+installed packages at test time rather than restating it here. The button-collapse
+motive is retired by the leading decision.
 
 ### The scale
 
