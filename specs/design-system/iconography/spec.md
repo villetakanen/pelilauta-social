@@ -6,25 +6,15 @@ status: approved
 
 ## Intent
 
-In a text-rich RPG community — discussion threads, character sheets, the shared
-library — icons are functional UI tools, not decoration. They let players and
-game masters find actions and navigation quickly (wayfinding and scannability),
-they keep a given meaning looking the same everywhere it appears (semantic
-consistency — a recurring action carries one mark wherever it shows up), and
-they reinforce the visual hierarchy of a dense interface.
+Pelilauta is text-rich — discussion threads, character sheets, the shared library —
+so an icon here is a tool for finding things, not decoration.
 
-This capability owns the icon **vocabulary and the design principles for using
-it**: why and when an icon is used, when it may stand alone, how it pairs with
-labels, and which semantic nouns exist and what they mean. It also owns the
-governance that keeps the vocabulary trustworthy. It does *not* own how a single
-icon renders — sizes, contextual colour, the size-standardization mechanism, the
-missing glyph, and the assistive-technology announcement are the Icon
-component's contract (`specs/design-system/components/cn-icon/spec.md`), which
-this spec anchors to as their owner.
-
-The observable deliverable is a design-system book page where a consumer can
-**read how to use icons in Pelilauta**: the principles, the do's and don'ts, and
-the available vocabulary grouped by purpose.
+This capability decides the icon vocabulary and how to use it: when an icon is
+used, when it may stand alone, how it pairs with labels, which semantic nouns
+exist and what they mean, and the governance that keeps the catalog trustworthy.
+How a single icon renders is `specs/design-system/components/cn-icon/spec.md` —
+sizes, contextual colour, the size-standardization mechanism, the missing glyph,
+and the assistive-technology announcement.
 
 ## Usage Principles
 
@@ -39,29 +29,17 @@ the available vocabulary grouped by purpose.
 
 ### Accessibility in use
 
-- An icon-only control always has an accessible name that states its action,
-  not its picture; a standalone (non-control) icon conveys its noun's meaning to
-  assistive technology. Either way the *mechanism* is the Icon contract's; this
-  principle governs that consumers provide a name for icon-only controls.
+- An icon-only control always has an accessible name that states its action, not
+  its picture. A consumer supplies that name; the mechanism is the Icon contract.
 - An icon is never the only signal of a state; colour or shape change is paired
   with text or another structural indication.
 
 ### Consistency of size and alignment
 
-- Use the design system's standard icon sizes rather than arbitrary values; a
-  context that needs one size standardizes the icons within it (mechanism owned
-  by the Icon contract).
-- When an icon sits beside text, it aligns to the text rather than floating; the
-  consuming layout owns that alignment, matching legacy behaviour.
-
-### Do and don't
-
-- **Do** pair an unfamiliar or domain icon with a visible label; **don't** ship
-  an ambiguous icon alone.
-- **Do** keep icon sizing uniform within a list or navigation group; **don't**
-  mix sizes or pull in ad-hoc external SVGs inline.
-- **Do** give interactive icons an adequate click/touch target; **don't** attach
-  actions to a bare inline glyph with no target padding.
+- Use the standard icon sizes rather than arbitrary values. A context that needs
+  one size standardizes the icons within it; the mechanism is the Icon contract.
+- An icon beside text aligns to that text. The consuming layout states the
+  alignment.
 
 ## Vocabulary
 
@@ -79,26 +57,17 @@ the available vocabulary grouped by purpose.
 
 ## Where Icons Come From (governance)
 
-Supporting detail behind the vocabulary; the principles above are the primary
-content.
-
-- The catalog is repository-owned, reviewed artwork. Adding, removing, or
-  re-pointing a noun is a human-approved product decision, never an incidental
-  effect of a surface migration.
-- **Admission.** An open-source noun is added by a human-approved change that
-  records the artwork's source in the tier's `PROVENANCE.md` and confirms its
-  licence permits redistribution and modification. The tier admits two kinds of
-  source, and every row states which it is: project-created artwork the project
-  owns, or permissively licensed third-party artwork. A third-party row names the
-  copyright holder, the licence, and the upstream repository at an immutable
-  commit, and the licence text is vendored beside the artwork. Open-source
-  artwork is
-  monochrome and authored to inherit the surrounding foreground.
-- **Admission is one at a time.** Open-source icons are admitted from the
-  existing Pelilauta application or an approved upstream source decisively, one
-  at a time — each an individual human-approved admission, never a bulk import —
-  so the catalog grows alongside the per-consumer Cyan migrations rather than
-  ahead of a real need.
+- Adding, removing, or re-pointing a noun is a product decision a human approves.
+  It is never an incidental effect of a surface migration.
+- **Admission.** Admitting an open-source noun records the artwork's source in the
+  tier's `PROVENANCE.md` and confirms its licence permits redistribution and
+  modification. Every row states which of two kinds it is: project-created
+  artwork, or permissively licensed third-party artwork. A third-party row names
+  the copyright holder, the licence, and the upstream repository at an immutable
+  commit, and the licence text is vendored beside the artwork. Open-source artwork
+  is monochrome and inherits the surrounding foreground.
+- **One at a time.** Icons are admitted individually, never as a bulk import, so
+  the catalog grows alongside the Cyan migration that needs each one.
 - **Source tiers** resolve in precedence **open-source → managed → bundled
   fallback → missing glyph** (ported from v20 `02880fbc`): open-source
   (openly licensed monochrome, in-repo, with provenance), managed (proprietary
@@ -115,33 +84,21 @@ content.
 
 - Does not define the Icon rendering contract — sizes, the size-standardization
   mechanism, colour resolution, missing-glyph rendering, and the
-  assistive-technology announcement are owned by the `cn-icon` spec.
+  assistive-technology announcement are the `cn-icon` spec's.
 - Does not redesign or re-point artwork as an incidental effect of a consumer
-  migration, or rename persisted or dynamic nouns. Deliberate artwork revisions
-  remain human-approved catalog decisions under the governance above.
-- Does not invent artwork or aliases for nouns absent from every approved
-  source, nor promise icons the catalog does not contain; the book documents the
-  vocabulary that actually exists.
+  migration, or rename persisted or dynamic nouns.
+- Does not invent artwork or aliases for nouns absent from every approved source,
+  nor promise icons the catalog does not contain.
 - Does not introduce new registry, build-orchestration, or catalog automation
   beyond the existing generator.
-- Does not decide whether the book content extends the existing Icon book page
-  (`packages/design-system/pages/components/IconPage.astro`) or is a new page —
-  that is a plan decision. It requires only that the content above is readable,
-  without duplicating the Icon component's existing size, colour, and fallback
-  demonstrations.
 
 ## Contract
 
 ### Definition of Done
 
-- **The design-system book makes icon usage readable on
-  `design.pelilauta.social`.** A consumer can read the usage principles (clarity
-  over decoration, accessibility in use, size & alignment) with concrete do's
-  and don'ts, and the available vocabulary grouped by the purposes the catalog
-  serves — the open-source nouns and the managed (myrrys) icons enumerated in full
-  (managed when its submodule is present), with the bundled fallback shown as
-  the safety net, and only populated purpose groups shown. This is the
-  capability's observable deliverable; the spec is its intent.
+- A book on `design.pelilauta.social` carries the usage principles and the
+  vocabulary grouped by purpose. It is this capability's observable deliverable,
+  and the first Acceptance item states what a reader must find there.
 - Every noun in `packages/design-system/icons/open-source/` is openly licensed
   artwork with a `PROVENANCE.md` row recording its source, and no proprietary
   artwork is committed to this repository.
@@ -164,13 +121,11 @@ content.
 
 ## Acceptance
 
-- **Icon usage is readable from the DS book (human, primary).** On
-  `design.pelilauta.social`, a consumer can read the usage principles and do's
-  and don'ts, and the available vocabulary grouped by purpose (open-source nouns
-  and managed (myrrys) icons enumerated in full — managed when its submodule is
-  present — bundled fallback as the safety net; only populated purpose groups
-  shown). The page is legible in both Light and Dark. (Icon rendering across
-  modes is the Icon contract's acceptance, not re-verified here.)
+- **Icon usage is readable from the book (human, primary).** A reader finds the
+  usage principles, a do-and-don't summary, and every noun that resolves, grouped
+  by purpose — managed nouns included when the submodule is present, and only
+  populated groups shown. The page is legible in Light and Dark. Icon rendering
+  across modes is the Icon contract's acceptance and is not re-verified here.
 - **Catalog ↔ provenance parity (deterministic).** Every artwork file under
   `packages/design-system/icons/open-source/` has exactly one `PROVENANCE.md`
   row, and every row (other than the header) names an existing artwork file;
