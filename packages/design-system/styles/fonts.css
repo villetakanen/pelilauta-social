@@ -44,13 +44,11 @@
  * Delivery ends at the element, not at the face: text in either application is in
  * the right family without a consumer naming one.
  *
- * The human register is the document's. The technical register takes the roles
- * specs/design-system/typography/spec.md calls technical — a text input is technical
- * whether or not it holds code. Buttons are written for a person, so they keep the
- * document's family through the reset's `font-family: inherit`.
+ * Lato is the document's. Roboto Mono is code's.
  *
- * Identifiers and slugs are technical too, and carry no marker to select yet. They
- * arrive with the typography semantics, which is what sweeps their call sites.
+ * The form-control rules below are not the typography spec's: it leaves form values,
+ * identifiers and slugs undecided, and these were shipped a phase early. See
+ * plans/debt/form-control-register.md.
  */
 body {
   font-family: var(--cn-font-family);
@@ -67,7 +65,7 @@ textarea {
 }
 
 /*
- * The human register — Lato.
+ * Lato.
  *
  * Weights 200-700 are the ones the typography spec names, each with its italic. 100
  * and 900 are the two the scale does not name, kept from the set apps/pelilauta
@@ -195,9 +193,9 @@ textarea {
 }
 
 /*
- * The technical register — Roboto Mono.
+ * Roboto Mono.
  *
- * One weight and no italic: no technical role sets a heading or takes inline
+ * One weight and no italic: code sets no heading and takes no inline
  * emphasis. Two files, because the publisher splits by alphabet and Finnish, Swedish
  * and English need latin (ä ö å é) and latin-ext (š ž). The ranges are the
  * publisher's own, and without them the second declaration would simply win and the

@@ -18,11 +18,11 @@ layout around it, at whatever text size they asked their browser for.
 
 ### Architecture
 
-Two families carry two registers. **Lato** sets what is written for a person: prose,
-headings, labels, buttons. **Roboto Mono** sets the technical register: form inputs,
-code, and machine-facing values such as identifiers and slugs. The register follows
-the role, not the tag. Which of them loads a face, and how either reaches an
-application, is `specs/design-system/fonts/spec.md`'s.
+**Lato** sets Pelilauta's text. **Roboto Mono** is its monospace, used for code.
+
+Where else monospace applies — a form value, an identifier, a slug — is not decided
+here. Which family loads a face, and how either reaches an application, is
+`specs/design-system/fonts/spec.md`'s.
 
 The scale is an Augmented Fourth (1.414) from the reading size.
 
@@ -48,24 +48,32 @@ Weights are those in the table, plus 500 for labels and buttons and 700 for emph
 
 A line is a multiple of the layout's line unit and taller than the text it holds. The
 unit is defined in `specs/design-system/spatial-system/spec.md`. The table states
-which multiple each step takes.
+which multiple each step takes: the smallest that clears the text, except h1, which
+takes four units rather than three because 68px text on a 72px line leaves 4px of
+leading and the same line as h2.
 
 Nothing in the system sets the document's text size. This is the reader-preference
 guarantee in `specs/design-system/design-tokens/spec.md`.
 
-Every heading from h1 to h4 renders one step down in a column narrower than the
-reading measure, defined in `specs/design-system/content-containers/spec.md`, so a
-heading in a card or a list row is sized by that card. A container query cannot read a
-custom property, so the threshold is the only value this system copies rather than
-links; a test asserts the copy still equals the measure. h4 has
-no heading step below it; its step down is reading size at weight 700. The title step
-does not downshift.
+Every heading from h1 to h4 renders one step down at small-screen width — 38.75rem,
+620px at a 16px root — measured against its container rather than the window, so a
+heading in a card or a list row steps down when that card is as narrow as a small
+screen, whatever the page around it is doing. The threshold is the small-screen
+breakpoint, not the reading measure: the measure is 67 characters of prose and moves
+for reasons that have nothing to do with screen size.
 
-h4 is the smallest heading. The step below it is reading size.
+A container query cannot read a custom property, so this threshold is the one value
+this system states as a literal rather than reading from a token. A test pins the
+literal to the published small-screen breakpoint.
+
+h4 is the smallest heading, so its step down is reading size at weight 700. The title
+step does not downshift.
 
 Label and caption share the caption size and line. A label is uppercased at weight
-500; a caption keeps the casing it is given at weight 400. Content whose casing
-carries meaning is technical register.
+500; a caption keeps the casing it is given at weight 400. A caption is not uppercased
+because Finnish compounds are long and lose their word shape in capitals, which works
+on a column header and fails on a sentence. Content whose casing
+carries meaning is not a label.
 
 The step set is closed. A step is added by changing this spec.
 
@@ -76,7 +84,7 @@ Headings, prose and links take the colour roles defined in
 
 ### Definition of Done
 
-- A principles book teaches the two registers and the scale; a lexicon book lists
+- A principles book teaches the pairing and the scale; a lexicon book lists
   every step the system publishes.
 - Every heading, paragraph, caption, label, input and code block in `apps/pelilauta`
   renders on this system.
@@ -90,19 +98,23 @@ Headings, prose and links take the colour roles defined in
 - Nothing sets the document's text size. One declaration re-pins the system and
   defeats the reader's preference silently.
 - A step resized without recomputing its line breaks the rhythm wherever it appears.
-- A downshift driven by window width instead of column width renders card and
+- A downshift driven by window width instead of container width renders card and
   list-row headings at page sizes.
+- `container-type: inline-size` also applies layout containment, making the container
+  a containing block for absolutely and fixed positioned descendants, and a new
+  stacking context. A FAB, tray or dock positioned against the viewport inside one
+  renders against the container instead: visible, correctly styled, wrongly placed.
 
 ### Scenarios
 
 ```gherkin
-Given an h1, h2, h3 or h4 in a column narrower than the reading measure
+Given an h1, h2, h3 or h4 in a container narrower than small-screen width
 When the page renders
 Then it renders one step down the scale
 ```
 
 ```gherkin
-Given an h4 in a column narrower than the reading measure
+Given an h4 in a container narrower than small-screen width
 When the page renders
 Then its step down is reading size at the emphasis weight
 ```
@@ -114,9 +126,9 @@ Then every step grows in proportion and none is pinned
 ```
 
 ```gherkin
-Given a form input, a code block, or an identifier
+Given a code block
 When it renders
-Then it is set in the technical family
+Then it is set in Roboto Mono
 ```
 
 ```gherkin

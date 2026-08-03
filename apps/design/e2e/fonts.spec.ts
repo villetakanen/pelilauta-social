@@ -45,9 +45,8 @@ test('every declared face fetches and parses', async ({ page }) => {
   const { failed, declared } = await loadEveryFace(page);
 
   expect(failed).toEqual([]);
-  // Seven weights and their italics in the human register, one whole file each; one
-  // weight and no italic in the technical one, split across the publisher's two
-  // alphabet subsets.
+  // Seven Lato weights and their italics, one whole file each; one Roboto Mono weight
+  // and no italic, split across the publisher's two alphabet subsets.
   expect(declared.filter((face) => face.startsWith('Lato'))).toHaveLength(14);
   expect(
     declared.filter((face) => face.startsWith('Roboto Mono')),
@@ -69,7 +68,7 @@ test('every weight the scale names has an upright and an italic', async ({
   }
 });
 
-test('the technical register is two ranged faces, not one omnibus file', async ({
+test('Roboto Mono is two ranged faces, not one omnibus file', async ({
   page,
 }) => {
   await page.goto(BOOK);
@@ -83,9 +82,7 @@ test('the technical register is two ranged faces, not one omnibus file', async (
   expect(new Set(ranges).size).toBe(2);
 });
 
-test('the document is in the human register and code is in the technical one', async ({
-  page,
-}) => {
+test('the document is Lato and code is Roboto Mono', async ({ page }) => {
   await page.goto(BOOK);
   const family = (selector: string) =>
     page
@@ -97,7 +94,7 @@ test('the document is in the human register and code is in the technical one', a
   expect(await family('main code')).toMatch(/^["']?Roboto Mono/);
 });
 
-test('with every face blocked, neither register falls to a serif', async ({
+test('with every face blocked, neither family falls to a serif', async ({
   page,
 }) => {
   await page.route('**/*.woff2', (route) => route.abort());

@@ -48,7 +48,7 @@ downstream term start to bite — and the payload a subset would have saved does
 buy the right to argue about it. Where a publisher offers subsets of its own, those
 are its files and may be used.
 
-The cost is stated rather than hidden: the human register's faces carry alphabets
+The cost is stated rather than hidden: Lato's faces carry alphabets
 neither application renders, at roughly six times a subset's bytes. Coverage the
 reader never needs is the price of shipping a font nobody here has altered.
 
@@ -57,12 +57,11 @@ design system is consumed as source through a Vite alias, not built, so each
 application's build fingerprints its own copy of every file.
 
 The platform stacks behind both family tokens are a fallback for a failed load, not a
-delivery mechanism: neither register renders from what the reader's machine has.
+delivery mechanism: neither family renders from what the reader's machine has.
 
-Delivery ends at the element, not at the face. This stylesheet applies the human
-register to the document and the technical register to the roles
-`specs/design-system/typography/spec.md` names as technical, so text in either
-application is in the right family without a consumer naming one. Nothing else names a
+This stylesheet also puts the families on elements, so text in either application is
+Lato without a consumer naming it, and code is Roboto Mono. Which other elements take
+the monospace is `specs/design-system/typography/spec.md`'s, and is not yet decided. Nothing else names a
 family — including `styles/preflight.css`, which carries the code-element rule today
 and gives it up here: a reset normalises a browser default, and this chooses a
 typeface.
@@ -70,12 +69,12 @@ typeface.
 ### Constraints
 
 Every weight `specs/design-system/typography/spec.md` names is a loaded upright face
-in the human register, and each of them loads its italic: emphasis inside prose is
+in Lato, and each of them loads its italic: emphasis inside prose is
 prose, and a missing italic is synthesised by slanting the upright.
 
-The technical register loads the weights its roles use and no others. No technical
-role sets a heading and none takes inline emphasis, so it loads neither the display
-weights nor an italic. A technical role that needs one adds a face here first.
+Roboto Mono loads only the weights the code it sets uses. Code sets no heading and
+takes no inline emphasis, so it loads neither the display weights nor an italic. A use
+that needs one adds a face here first.
 
 The set is otherwise closed the way the step set is — a face is added or dropped by
 changing this spec. It holds two weights no step names, kept from the set the
@@ -109,9 +108,9 @@ changing this spec's outcome without touching it.
 - One design-system stylesheet declares every face and names every family. Nothing
   else does — not the reset, not either application, not the design site's editorial
   stylesheet.
-- Both applications render both registers from shipped faces, the design site
+- Both applications render both families from shipped faces, the design site
   included.
-- With every face blocked from loading, both registers still fall to a monospace and a
+- With every face blocked from loading, both families still fall to a monospace and a
   sans respectively, and nothing renders in the browser's default serif.
 - A check holds the stylesheet, the typography spec, the resolved face files and the
   served licence notices in agreement. It reads the weights from the typography spec
@@ -140,6 +139,6 @@ Then the text is visible in a fallback, and swaps when the face arrives
 
 ```gherkin
 Given a reader whose machine has neither family installed
-When an identifier, a slug or a code block renders
-Then it is set in the technical family, from a face the design system shipped
+When a code block renders
+Then it is set in Roboto Mono, from a face the design system shipped
 ```
