@@ -6,10 +6,12 @@
  * stylesheet it ships to both applications, not here. See
  * .agents/skills/design-system-developer/SKILL.md.
  *
- * Two things keep it alive. The hero, kicker, lede and stat-tile vocabulary is the
- * index page's — pages/HomePage.astro, which is package-owned and so cannot read app
- * CSS. Everything else is link colour and table rules, which belong to typography and
- * leave with it.
+ * The hero, kicker, lede and stat-tile vocabulary serves pages/HomePage.astro, which
+ * is package-owned and so cannot read app CSS. It stays until an app shell owns it,
+ * and staying visible here is how that work finds it.
+ *
+ * The leading, the link colour and the table type are typography's, and leave with
+ * typography's semantics.
  */
 
 html {

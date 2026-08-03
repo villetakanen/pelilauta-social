@@ -20,16 +20,13 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
 - fonts — done
 - the legacy `.astro` books — done; both are prose MDX now, and every book on the site
   is prose
-- `docs.css` — open; what is left of it is the index page's editorial vocabulary, which
-  needs `pages/HomePage.astro` porting, and the link and table rules, which the
-  semantics story takes
 - compat shim — open; unmigrated cyan-lit keeps its tokens and its light-dom rules, and
   nothing new reads cyan-css
 - the scale — open, waits on the compat shim
 - breakpoints in `rem` — open; the threshold the scale's container downshift is pinned
   against
-- the semantics — open, waits on the scale; the three reset rules preflight left behind
-  and roughly 145 call-site edits
+- the semantics — open, waits on the scale; the three reset rules preflight left behind,
+  roughly 145 call-site edits, and the leading, link colour and table type in `docs.css`
 - the principles book — open; how to choose a step, and what goes wrong
 - the tokens book — open, waits on the scale; the scale itself, read from source
 
@@ -37,6 +34,8 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
 
 - monospace for form values, identifiers and slugs — a later phase; shipped early for
   form controls, `plans/debt/form-control-register.md`
+- `docs.css`'s editorial vocabulary — hero, kicker, lede, facts, section headings — a
+  later app-shell epic; it stays visible until then
 - card-preview treatment, and the heading outline `snippetHelpers.ts` breaks — the cards
   epic
 - a containment audit gate, if a card breaks under `container-type` — the cards epic
