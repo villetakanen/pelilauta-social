@@ -36,6 +36,16 @@ Examples of design-ops harnesses:
 
 ### Decided things, discovered while planning
 
+**Books get their own skill.** 2026-08-03. `design-system-developer` does not absorb it.
+
+**Three constructions are banned, in books, specs, code comments, and the harness files
+that teach them:** "not X, but Y"; an aphorism closing a paragraph; a knowing aside.
+2026-08-01, `plans/design-books.md`.
+
+**"Owner" is replaced by "a human" where it means approval authority.** The application's
+site, page and thread owners keep the word. Applied to `AGENTS.md` 2026-08-03; remaining
+sites are listed under the skill sections below.
+
 ## Exact changes to the harness
 
 ### AGENTS.md
@@ -154,8 +164,120 @@ Two other lines were pruned under change 1, beyond the four rewrites listed abov
 Line 5 lost "What they share is a contract." The ask list at line 43 states that rule
 directly.
 
-### [constitution file x]
+### packages/design-system/books/templates/*.mdx
 
-### [skill file x]
+1,158 words to emit books capped at 300 and 600: `base.mdx` 249, `component.mdx` 420,
+`principles.mdx` 489. Each is a comment block followed by a body. The body is the template.
+The comment block is a fourth copy of the skill.
 
-### .agents/skills/design-system-book.md
+**Cut the comment blocks to the slots.** `base.mdx` lines 8–26, `component.mdx` 8–30,
+`principles.mdx` 8–41. The skill instructs; a template is shape to fill. A comment the
+writer deletes on copy is an instruction delivered once, which is the skill's job.
+
+What the blocks currently duplicate: the three kinds and which template each takes, the
+specimen rule, the length limits, no `h1`, `docs.css` and `books/*.astro` are not patterns,
+never link a spec. `principles.mdx` lines 17–23 describe the other two templates.
+
+**They also argue.** `component.mdx` lines 16–20 cite five design systems to justify a
+shape. Line 27, "however well it reads", is the same aphorism as
+`design-system-developer/SKILL.md:51`.
+
+**One contradiction to settle while cutting.** `component.mdx:29` sets length in lines,
+"Sixty to a hundred lines". `design-system-developer/SKILL.md:61` says length is counted in
+words, not lines. A component book has no word limit anywhere. Give it one.
+
+Keep the slot guidance that is not in the skill: `principles.mdx:48`, headings state an
+outcome rather than a noun phrase; `component.mdx:37`, render before code.
+
+Expect the three to total under 400 words.
+
+### .agents/skills/design-system-developer/SKILL.md
+
+The only skill with book content. 749 words, of which lines 34–68 are the book skill's.
+
+**Delete lines 34–68.** They become `design-system-book/SKILL.md`, rewritten to its budget
+rather than moved.
+
+**Replace them with the handoff.** The book is written with the `design-system-book` skill.
+Invoke it. Do not write MDX from here.
+
+**Line 3, the description.** "Building or changing a design-system component, token, or
+book." Drop "or book", or book work routes here.
+
+**Line 8 stays.** "A design-system pull request carries its spec, its implementation, and
+its book on the design site." The only place the book is mandatory. What changes is who
+writes it, not whether it exists.
+
+**Lines 70–80 stay.** The `.astro` books and `docs.css`: a rule about what not to build,
+read when building. It outlives the last `.astro` book only until `plans/design-books.md`
+deletes them, and then it goes with them.
+
+**Lines 82–92 stay.** The sourcing rule, read when deciding. A book does not read it.
+
+**Register pass on what stays.** The surviving half breaks the bans as badly as the half
+that leaves: lines 13–14, a knowing aside; 19–20, "not a deletion, and not a screenshot";
+23, "Correctly, not identically"; 25–26; 31–32, "Tokens are inputs to a surface, not a
+surface", a "not X but Y" closing on an aphorism.
+
+Expect around 400 words.
+
+### .agents/skills/design-system-book/SKILL.md
+
+A new skill, written under 200 words. Not a move: what does not fit is a template comment,
+or stays in `design-system-developer/SKILL.md`.
+
+Shape, from the `pattern-documentation` skill: gate, slots, check.
+
+**Gate, and the first line.** Which of the three kinds this is. The navigation spec decides
+whether a page exists; the templates cannot decide which one to copy.
+
+**Slots.** The MDX file at `apps/design/src/content/<group>/<slug>.mdx` is the book. Copy a
+template. No `h1`. Anything that ships in source comes from a specimen, never from prose.
+No existing book, here or in v20, is a reference.
+
+**Check.** Base 300 words, principles 600, component per its template. The three banned
+constructions. Primer's four words: "easy", "simply", "quick", "just". Imperative mood and
+contractions, stated positively. The word list is the only part that greps; the plan's
+length check owns the limits, or this skill names the command.
+
+Displaces `design-system-developer/SKILL.md` lines 34–68. Delete them, do not move them.
+Lines 8–32 stay, the Cyan gate. Lines 70–80 stay, the `docs.css` and `.astro` debt: a rule
+about what not to build, read when building.
+
+**When the book cannot state a design intent:** read `docs/DESIGN.md`, then `AGENTS.md`,
+then ask a human. Not v20, and not `design-system-developer/SKILL.md` lines 82–92 — that is
+the sourcing rule for deciding, and a book documents decisions already made. Lines 82–92
+stay where they are and the book skill does not name them.
+
+`docs/DESIGN.md` does not exist. The skill names it regardless. Its own section is below.
+
+A book omits reasoning; it does not hand it off. Reasoning is the spec's and the commit
+message's, and neither is for a design-site reader. Diátaxis links reference to an
+explanation page, and that part does not port.
+
+### docs/DESIGN.md
+
+Does not exist. A book skill under 200 words needs somewhere to send a writer who cannot
+state a design intent, and `AGENTS.md` is the constitution, not the design record.
+
+Decisions are made and then scattered. Three that are settled and not in one place:
+
+- Two themes, Dark default, Light checked before merge. `plans/design-books.md:59`.
+- The font pairing. Commit `7cd8bd8`, and `specs/design-system/fonts`.
+- Appearance is v20's and a human's, and is not a compatibility contract with v18.
+  `AGENTS.md`, and `design-system-developer/SKILL.md:82`.
+
+Plans are not the record: a plan is epic scope and ends with its epic.
+
+Settled 2026-08-03:
+
+**It states decisions, and only the ones no single spec owns.** A decision belonging to one
+capability stays in that capability's spec, and `DESIGN.md` does not mention it. It does
+not index: a pointer into a finished plan rots, and a commit is not navigable.
+
+**It is not published.** `docs/`, not `apps/design/src/content`. Its reader is the agent
+writing a book. It has no length cap and this plan does not govern its shape.
+
+**An agent drafts it and a human approves it,** as with a spec. The first draft is assembly
+from decisions already settled, not authorship. After approval, a decision enters when a
+human makes it.
