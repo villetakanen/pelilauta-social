@@ -96,7 +96,9 @@ Headings, prose and links take the colour roles defined in
 ### Regression Guardrails
 
 - Nothing sets the document's text size. One declaration re-pins the system and
-  defeats the reader's preference silently.
+  defeats the reader's preference silently. v20's own `typography.css` comments that a
+  canonical size is set on `html`; no such rule exists anywhere in its package, so the
+  comment is not a thing to port.
 - A step resized without recomputing its line breaks the rhythm wherever it appears.
 - A downshift driven by window width instead of container width renders card and
   list-row headings at page sizes.
