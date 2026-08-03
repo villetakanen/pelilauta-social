@@ -89,8 +89,11 @@ Headings, prose and links take the colour roles defined in
 
 ### Definition of Done
 
-- A principles book teaches the pairing and the scale; a lexicon book lists
-  every step the system publishes.
+- A principles book teaches the pairing and the scale, and renders the combinations
+  the applications compose — a title over a lede, headings over paragraphs and
+  lists, a definition list between headings, label and caption against real
+  content — so the scale is evaluated on the page that teaches it.
+- A lexicon book lists every step the system publishes.
 - Every heading, paragraph, caption, label, input and code block in `apps/pelilauta`
   renders on this system.
 - The design site's editorial text renders on it too, stating no size or leading of

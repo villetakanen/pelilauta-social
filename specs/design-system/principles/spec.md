@@ -48,12 +48,12 @@ design intent.
 
 ## Blueprint
 
-A principles book is prose. Each section answers one decision a reader is likely
-to arrive with, and the book closes by linking the lexicon that holds the values
+A principles book is the testbed of its subject, per `specs/design-system/spec.md`:
+it renders the combinations it governs — a heading over a list, a definition list
+before a subheading — on the system's own elements, classes and tokens, and the
+prose annotates what the page shows. Each section answers one decision a reader is
+likely to arrive with. The book closes by linking the lexicon that holds the values
 and naming the parts of the subject the design system does not yet own.
-
-Where a distinction is easier to see than to read, the book shows it — a touch
-target drawn around the smaller control inside it, for example.
 
 Books are published as described in
 `specs/design-system/design-site-navigation/spec.md`.
