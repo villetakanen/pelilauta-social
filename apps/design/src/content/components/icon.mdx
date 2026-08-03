@@ -1,9 +1,106 @@
 ---
 title: Icon
-description: The Pelilauta v21 icon component — tiered source resolution, sizing, contextual color, and fallback.
+description: The server-rendered icon — tiered source resolution, sizes read from tokens, contextual colour, and the missing glyph.
 order: 10
 ---
 
-import IconBook from '@design-system/books/components/IconBook.astro'
+import Icon from '@design-system/components/Icon.svelte'
+import IconContext from '@design-system/books/specimens/IconContext.astro'
+import IconSizes from '@design-system/books/specimens/IconSizes.astro'
+import IconTiers from '@design-system/books/specimens/IconTiers.astro'
+import iconSource from '@design-system/styles/icon.css?raw'
+import themeSource from '@design-system/styles/color-theme.css?raw'
 
-<IconBook title={frontmatter.title} />
+A noun resolves to artwork at render time, on the server, so the markup is complete in the
+first response and the icon doesn't move when scripts load. Monochrome artwork takes the
+colour of the text around it. Branded artwork keeps the colours its source encodes.
+
+[Iconography](/principles/iconography) explains which nouns exist and when to use an
+icon at all.
+
+## Example
+
+<Icon noun="fox" />
+
+```mdx
+import Icon from '@design-system/components/Icon.svelte'
+
+<Icon noun="fox" />
+```
+
+## Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `noun` | `string` | The artwork to resolve. Absent or empty renders the missing glyph. |
+| `size` | `xsmall`, `small`, `medium`, `large`, `xlarge` | Defaults to `medium`. |
+| `aria-label` | `string` | Overrides the noun as the accessible name. Defaults to the noun. |
+
+## Sizes
+
+Each size reads one token, so a context that re-declares the tokens resizes every icon
+inside it.
+
+<IconSizes
+  source={iconSource}
+  usage={{
+    xsmall: 'Inline help and status markers',
+    small: 'Buttons and list rows',
+    medium: 'Navigation',
+    large: 'Feature headers',
+    xlarge: 'Empty states',
+  }}
+/>
+
+## Colour
+
+Monochrome artwork is `currentColor` and states no colour of its own. Set `color` on the
+element around it — or let it inherit — and the icon follows, in both themes.
+
+<IconContext
+  source={themeSource}
+  names={['--cn-text', '--cn-text-low', '--cn-link', '--cn-color-error']}
+  caption="One noun, four roles, both themes"
+/>
+
+## Source tiers
+
+A noun resolves through the open-source tier, then the managed tier, then the bundled
+fallback, and finally the missing glyph.
+
+<IconTiers
+  nouns={['search', 'dd5', 'menu', 'no-such-noun']}
+  notes={{
+    search: 'Monochrome: the two cells differ because the text colour does',
+    dd5: 'Branded: identical in both themes',
+    menu: 'A UI symbol that ships in the component',
+    'no-such-noun': 'The missing glyph, at full size',
+  }}
+  caption="One probe per tier"
+/>
+
+## When to use it
+
+- Any icon in `apps/pelilauta` or on this site.
+- Artwork supplied from data, where the noun is a string you don't control.
+
+Don't reach for an inline `<svg>` or a file under `/icons/`. Those URLs stay only for the
+Cyan `cn-icon` consumers still fetching them, and `docs/MIGRATION.md` owns retiring those.
+
+## Behaviour worth knowing
+
+An unknown, empty, or absent noun renders the missing glyph at the requested size. v18
+rendered a blank box for an unknown noun and its default artwork for an empty one, so a
+surface that relied on either now shows a visible miss.
+
+The managed tier is a submodule. With it absent, its nouns fall through to the missing
+glyph and the build completes.
+
+## Accessibility
+
+The icon carries an `aria-label` — the noun, or the one you pass — and keeps the noun as
+its SVG title, which is what a mouse tooltip shows. Passing a label changes the accessible
+name only.
+
+An icon that is a control's only content doesn't name that control. The control owns its
+own accessible name.

@@ -1,0 +1,80 @@
+---
+/**
+ * IconContext — one noun in each colour role, in Dark and Light at once.
+ *
+ * The icon states no colour: monochrome artwork is `currentColor`, so a row's
+ * icon is whatever colour its cell sets. Scoping `color-scheme` per cell makes
+ * the browser resolve both arms of a `light-dark()` role on one page, the same
+ * way RoleTable does.
+ *
+ * Book: apps/design/src/content/components/icon.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** The stylesheet declaring the roles, imported by the book with `?raw`. */
+  source: string;
+  /** Roles to show, in reading order. */
+  names: readonly string[];
+  /** The noun every row renders. */
+  noun?: string;
+  /** Names what the reader is looking at. */
+  caption?: string;
+}
+
+const { source, names, noun = 'search', caption } = Astro.props;
+
+const missing = names.filter(
+  (name) => parseTokens(source, { names: [name] }).length === 0,
+);
+if (missing.length > 0) {
+  throw new Error(
+    `IconContext asked for roles the stylesheet does not declare: ${missing.join(', ')}.`,
+  );
+}
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr>
+      <th scope="col">Role</th>
+      <th scope="col">Dark</th>
+      <th scope="col">Light</th>
+    </tr>
+  </thead>
+  <tbody>
+    {names.map((name) => (
+      <tr>
+        <th scope="row"><code>{name}</code></th>
+        {(['dark', 'light'] as const).map((mode) => (
+          <td>
+            {/* The cell sets colour and background only; the icon inherits. A
+                browser check compares the icon's computed colour to this. */}
+            <span
+              class="cell"
+              data-mode={mode}
+              data-role={name}
+              style={`color-scheme: ${mode}; color: var(${name}); background: var(--cn-background);`}
+            >
+              <Icon noun={noun} size="small" />
+              <span>{noun}</span>
+            </span>
+          </td>
+        ))}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .cell {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+    padding: var(--cn-grid);
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-small);
+  }
+</style>

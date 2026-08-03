@@ -7,8 +7,8 @@ description: Writing or changing a book on the design site.
 
 ## Which kind
 
-Decide before copying anything. Whether the page exists at all is
-`specs/design-system/design-site-navigation/spec.md`'s.
+Decide before copying anything. `specs/design-system/design-site-navigation/spec.md`
+decides whether the page exists at all.
 
 | Kind | Template |
 | :--- | :--- |

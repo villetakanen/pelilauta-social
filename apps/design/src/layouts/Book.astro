@@ -3,15 +3,11 @@
  * Book.astro — the shared document shell for every design-system book.
  *
  * Owns <html>, <head>, the skip link, the masthead, the navigation and the
- * footer. It deliberately does NOT own the page's <h1> or lede: each book's hero
- * carries build-time computed data (declaration counts, live icon vocabulary)
- * that only the book component can produce, and slots do not propagate upward
- * from a rendered <Content /> to this layout. The book's title reaches its <h1>
- * as a prop from the MDX frontmatter instead, so there is one source for it.
+ * footer, and renders a book's <h1> from its frontmatter title.
  */
 import '@design-system/styles/ds.css';
-// Prototype-age scaffolding, kept only for the legacy books/*.astro pages that
-// consume its hero and stat-tile vocabulary. Prose books do not use it.
+// Prototype-age scaffolding: the index page's editorial vocabulary, and the table
+// and link rules no design-system stylesheet owns yet.
 import '@design-system/styles/docs.css';
 import DocsNav from '../components/DocsNav.astro';
 import { groupLabel } from '../lib/books';
@@ -19,15 +15,14 @@ import { groupLabel } from '../lib/books';
 interface Props {
   title: string;
   /**
-   * A prose book: the shell renders its h1 from the frontmatter title and groups the
-   * body in an <article>, which the design system's content container then lays out.
-   * The shell still states no measure, rhythm or type of its own — it opts the page
-   * into the container and the design system decides the rest.
+   * A book: the shell renders its h1 from the frontmatter title and groups the body
+   * in an <article>, which the design system's content container then lays out. The
+   * shell still states no measure, rhythm or type of its own — it opts the page into
+   * the container and the design system decides the rest.
    *
-   * A `prose: false` book lays out its own full-bleed sections and does not get the
-   * container: the implicit `> section` rule would re-lay-out markup that was written
-   * to span the page. `books/components/IconBook.astro` and
-   * `books/principles/IconographyBook.astro` are the last two; this case goes with them.
+   * The index page is the one page this is off for. It lays out its own full-bleed
+   * sections, and the container's implicit `> section` rule would re-lay-out markup
+   * written to span the page.
    */
   prose?: boolean;
   description: string;

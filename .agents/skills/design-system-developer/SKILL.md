@@ -19,7 +19,7 @@ application off `@11thdeg/cyan-css`, and the test is a dependency:
 
 **With cyan-css absent, would the application render this correctly?**
 
-Correctly, not identically. Appearance afterwards is v20's and a human's. A
+Correctly, not identically. v20 and a human decide the appearance afterwards. A
 like-for-like claim against what the application renders today is a defect.
 
 Declaring a token Cyan already declares fails this test. Cyan's value is shadowed in
@@ -31,22 +31,22 @@ when the design system owns the rule that reads the token.
 
 Write it with the `design-system-book` skill. Invoke it. Do not write MDX from here.
 
-## Two things here are not patterns
-
-**`packages/design-system/books/*.astro`** — whole-page book components behind a
-one-line MDX shell. Debt from before there was a design-system app, and the reason
-the navigation spec had to state the MDX rule they break. Do not add one, and do not
-copy their structure.
+## One thing here is not a pattern
 
 **`packages/design-system/styles/docs.css`** — prototype-age scaffolding whose hero,
 kicker, lede and stat-tile vocabulary makes a documentation page read as a marketing
-spread. It survives only because those `.astro` books consume it. Do not build on it
-and do not extend it.
+spread. What is left of it serves the index page, plus link and table rules nothing else
+owns yet. Do not build on it and do not extend it.
+
+A book under `packages/design-system/books/` is a specimen: one component rendering
+one thing an MDX book reads from source. A whole-page book component behind a one-line
+MDX shell is what the site used to have, and what the navigation spec's MDX rule
+exists to prevent. Do not write one.
 
 ## Where design intent comes from
 
 v20, and human direction. Where either disagrees with the shipped
-application, they win: the application is v18's, and appearance is not a
+application, they win: the application still renders v18, and appearance is not a
 compatibility contract.
 
 Look for v20's answer before writing your own, and look past the obvious place. Its

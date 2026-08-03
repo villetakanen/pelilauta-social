@@ -6,22 +6,16 @@ import { glob } from 'astro/loaders';
  * is the first URL segment, so an entry `color` in `tokens` is served at
  * `/tokens/color` — see src/pages/[...slug].astro.
  *
- * A book's MDX body is a thin shell that renders one package-owned Astro
- * component from packages/design-system/books. Frontmatter is the single source
- * of the book's title: the shell passes it into the component, which renders it
- * as the page's only <h1>.
+ * A book is prose in MDX, importing a specimen component from
+ * packages/design-system/books for anything read from source. Frontmatter is the
+ * single source of the book's title, and the layout renders it as the page's only
+ * <h1>, so a book states no h1 of its own.
  */
 const bookSchema = z.object({
   title: z.string(),
   description: z.string(),
   /** Navigation sort key within the group; ties fall back to title order. */
   order: z.number().optional(),
-  /**
-   * A prose book: the shell renders its h1 and groups the body. The legacy
-   * `books/*.astro` books lay out their own sections and render their own h1,
-   * which is why the default is false.
-   */
-  prose: z.boolean().default(false),
 });
 
 const book = (group: string) =>

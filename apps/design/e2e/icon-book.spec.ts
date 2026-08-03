@@ -1,7 +1,20 @@
 import { expect, type Page, test } from '@playwright/test';
 
-// Expected square dimensions at the default 16px root font size, from the
-// design-system icon sizing tokens.
+/**
+ * The icon books in a browser. What needs one is the cascade: a size token
+ * resolving to a box, `currentColor` reaching the artwork through inheritance, and
+ * a `light-dark()` role resolving differently in the two scoped cells. Tier
+ * precedence and the registries are asserted without a browser in
+ * packages/design-system/test/icon-registry.test.ts.
+ *
+ * Specs: specs/design-system/components/cn-icon/spec.md,
+ *        specs/design-system/iconography/spec.md
+ */
+
+const COMPONENT_BOOK = '/components/icon';
+const PRINCIPLES_BOOK = '/principles/iconography';
+
+// The square each size token produces at the default 16px root font size.
 const SIZE_PX: Record<string, number> = {
   xsmall: 16,
   small: 24,
@@ -10,79 +23,136 @@ const SIZE_PX: Record<string, number> = {
   xlarge: 128,
 };
 
-async function box(page: Page, selector: string) {
-  return page
-    .locator(selector)
-    .first()
-    .evaluate((el) => {
-      const r = el.getBoundingClientRect();
-      return { w: Math.round(r.width), h: Math.round(r.height) };
-    });
-}
-
-async function color(page: Page, selector: string) {
-  return page
-    .locator(selector)
-    .first()
-    .evaluate((el) => getComputedStyle(el).color);
-}
-
-test('icon book renders the component server-side across sizes, color, and tiers', async ({
-  page,
-}) => {
-  const consoleErrors: string[] = [];
+const collectConsoleErrors = (page: Page) => {
+  const errors: string[] = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() === 'error') errors.push(message.text());
   });
+  return errors;
+};
 
-  await page.goto('/components/icon');
+const box = (page: Page, selector: string) =>
+  page
+    .locator(selector)
+    .first()
+    .evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { w: Math.round(rect.width), h: Math.round(rect.height) };
+    });
+
+const color = (page: Page, selector: string) =>
+  page
+    .locator(selector)
+    .first()
+    .evaluate((element) => getComputedStyle(element).color);
+
+test('every size token renders its square', async ({ page }) => {
+  await page.goto(COMPONENT_BOOK);
   await expect(
     page.getByRole('heading', { name: 'Icon', level: 1 }),
   ).toBeVisible();
 
-  // Every supported size renders a square box at its token dimension.
   for (const [size, px] of Object.entries(SIZE_PX)) {
     const { w, h } = await box(page, `[data-size="${size}"] .cn-icon`);
-    expect(w, `${size} width`).toBe(h);
+    expect(w, `${size} is square`).toBe(h);
     expect(Math.abs(w - px), `${size} is ${px}px`).toBeLessThanOrEqual(1);
   }
+});
 
-  // Monochrome artwork follows its surrounding foreground: different contexts
-  // in the same panel produce different icon colors, and each matches its row.
-  const linkRow = ".theme-panel.light .context-row[style*='--cn-link']";
-  const lowRow = ".theme-panel.light .context-row[style*='--cn-text-low']";
-  const linkIconColor = await color(page, `${linkRow} .cn-icon`);
-  const lowIconColor = await color(page, `${lowRow} .cn-icon`);
-  expect(linkIconColor).toBe(await color(page, linkRow));
-  expect(lowIconColor).toBe(await color(page, lowRow));
-  expect(linkIconColor).not.toBe(lowIconColor);
+test('monochrome artwork takes the colour of the cell around it', async ({
+  page,
+}) => {
+  await page.goto(COMPONENT_BOOK);
 
-  // The same monochrome context resolves to different colors in Light vs Dark.
-  const lightLink = await color(page, `${linkRow} .cn-icon`);
-  const darkLink = await color(
-    page,
-    ".theme-panel.dark .context-row[style*='--cn-link'] .cn-icon",
+  const cell = (mode: string, role: string) =>
+    `[data-mode="${mode}"][data-role="${role}"]`;
+
+  // The icon states no colour, so its computed colour is the cell's.
+  for (const role of ['--cn-text', '--cn-link', '--cn-color-error']) {
+    expect(
+      await color(page, `${cell('dark', role)} .cn-icon`),
+      `${role} reaches the artwork`,
+    ).toBe(await color(page, cell('dark', role)));
+  }
+
+  // Two roles in the same theme differ, and one role differs between themes.
+  expect(await color(page, `${cell('dark', '--cn-text')} .cn-icon`)).not.toBe(
+    await color(page, `${cell('dark', '--cn-link')} .cn-icon`),
   );
-  expect(lightLink).not.toBe(darkLink);
-
-  // Branded artwork keeps its encoded color rather than inheriting.
-  await expect(page.locator('svg [fill="#BC0F0F"]').first()).toBeAttached();
-
-  // Unknown noun renders the missing glyph with preserved layout and a title.
-  const missing = page.locator(
-    '.tier-icon svg:has(title:text-is("no-such-noun-xyz"))',
+  expect(await color(page, `${cell('dark', '--cn-link')} .cn-icon`)).not.toBe(
+    await color(page, `${cell('light', '--cn-link')} .cn-icon`),
   );
-  await expect(missing).toHaveAttribute('viewBox', '0 0 24 24');
-  const missingBox = await box(
-    page,
-    ".tier-icon:has(title:text-is('no-such-noun-xyz'))",
-  );
-  expect(missingBox.w).toBeGreaterThan(0);
+});
 
-  // Nouns are announced to assistive technology through the artwork title.
+test('branded artwork keeps its own colours in both themes', async ({
+  page,
+}) => {
+  await page.goto(COMPONENT_BOOK);
+
+  const branded = (mode: string) =>
+    `[data-mode="${mode}"][data-noun="dd5"] svg [fill]`;
+  const fill = (mode: string) =>
+    page
+      .locator(branded(mode))
+      .first()
+      .evaluate((element) => getComputedStyle(element).fill);
+
+  // An encoded fill, not currentColor: the same in Dark and in Light.
+  expect(await fill('dark')).toBe(await fill('light'));
+  expect(await fill('dark')).not.toBe(
+    await color(page, '[data-mode="dark"][data-noun="dd5"]'),
+  );
+});
+
+test('an unresolved noun renders the missing glyph at full size', async ({
+  page,
+}) => {
+  await page.goto(COMPONENT_BOOK);
+
+  const probe = '[data-noun="no-such-noun"]';
+  await expect(page.locator(`${probe} svg`).first()).toHaveAttribute(
+    'viewBox',
+    '0 0 24 24',
+  );
+  const { w } = await box(page, `${probe} .cn-icon`);
+  expect(Math.abs(w - SIZE_PX.medium)).toBeLessThanOrEqual(1);
+
+  // The tier the specimen resolved it to, so a precedence change fails here too.
+  await expect(page.locator('[data-tier="missing glyph"]')).toHaveText(
+    'missing glyph',
+  );
+});
+
+test('an icon announces its noun, and an explicit label wins', async ({
+  page,
+}) => {
+  await page.goto(COMPONENT_BOOK);
+
   await expect(
-    page.locator('svg title:text-is("search")').first(),
+    page.getByRole('img', { name: 'fox', exact: true }).first(),
   ).toBeAttached();
+  // The tooltip stays the noun whatever the accessible name is.
+  await expect(page.locator('svg title:text-is("fox")').first()).toBeAttached();
+});
 
-  expect(consoleErrors).toEqual([]);
+test('the catalogue shows every noun that resolves, and no page errors', async ({
+  page,
+}) => {
+  const componentErrors = collectConsoleErrors(page);
+  await page.goto(COMPONENT_BOOK);
+  expect(componentErrors).toEqual([]);
+
+  const principlesErrors = collectConsoleErrors(page);
+  await page.goto(PRINCIPLES_BOOK);
+  await expect(
+    page.getByRole('heading', { name: 'Iconography', level: 1 }),
+  ).toBeVisible();
+
+  // Every listed noun rendered artwork. Which nouns are listed is the registries',
+  // asserted in the package tests.
+  const entries = page.locator('li[data-noun]');
+  const listed = await entries.count();
+  expect(listed).toBeGreaterThan(50);
+  await expect(entries.locator('svg')).toHaveCount(listed);
+  expect(principlesErrors).toEqual([]);
 });

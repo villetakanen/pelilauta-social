@@ -18,8 +18,11 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
 
 - preflight — done
 - fonts — done
-- the legacy `.astro` books — open; the last two go, and `docs.css` with them. A book
-  cannot be written or reviewed until they do, so both book stories wait on it
+- the legacy `.astro` books — done; both are prose MDX now, and every book on the site
+  is prose
+- `docs.css` — open; what is left of it is the index page's editorial vocabulary, which
+  needs `pages/HomePage.astro` porting, and the link and table rules, which the
+  semantics story takes
 - compat shim — open; unmigrated cyan-lit keeps its tokens and its light-dom rules, and
   nothing new reads cyan-css
 - the scale — open, waits on the compat shim
