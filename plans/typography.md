@@ -23,10 +23,9 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
 - compat shim — done; unmigrated Cyan elements keep their typography inputs and
   reached light-DOM rules without adding a new cyan-css reader
 - the scale — done; the closed step set as tokens, the element and step-class rules
-  that read them, and the container downshift, its threshold pinned to the spec's
-  prose until breakpoints publish
-- breakpoints in `rem` — open; the threshold the scale's container downshift is pinned
-  against
+  that read them, and the container downshift
+- breakpoints in `rem` — done; `--cn-breakpoint-small` published in the units lexicon,
+  and the downshift's literal pinned to it by test
 - the semantics — open, waits on the scale; the three reset rules preflight left behind,
   roughly 145 call-site edits, and the leading, link colour and table type in `docs.css`
 - the principles book — open; how to choose a step, and what goes wrong

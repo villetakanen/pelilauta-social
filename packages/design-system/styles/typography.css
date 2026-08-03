@@ -147,7 +147,8 @@ h4 {
  *
  * A container query cannot read a custom property, so the threshold is this
  * system's one literal: 38.75rem, the small-screen breakpoint, 620px at a 16px
- * root. Each heading keeps its own weight — the step down is a size and a line,
+ * root. units.css publishes it as --cn-breakpoint-small, and a test pins this
+ * literal to it. Each heading keeps its own weight — the step down is a size and a line,
  * not a change of voice — except h4, whose step down is reading size and would
  * stop reading as a heading at the text weight, so it takes emphasis.
  *

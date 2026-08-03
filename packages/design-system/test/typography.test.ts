@@ -227,15 +227,20 @@ describe('the rules that read it', () => {
 });
 
 describe('the downshift', () => {
-  test('its threshold is the literal the spec pins, against the container', () => {
+  test('its threshold is the published small-screen breakpoint, against the container', () => {
     // A container query cannot read a custom property, so the spec allows this
-    // one literal and states it. The two must not drift apart.
+    // one literal. It must not drift from the breakpoint units.css publishes,
+    // nor from the value the spec states in prose.
     const pinned = spec.match(/— ([\d.]+)rem,\s+(\d+)px at a 16px root/);
     expect(pinned, 'the spec no longer states the threshold').toBeTruthy();
     const [, rem, px] = pinned as RegExpMatchArray;
     expect(container, 'no container query found').toBeTruthy();
     expect((container as RegExpMatchArray)[1]).toBe(rem);
     expect(Number(rem) * 16).toBe(Number(px));
+    expect(
+      toRem('--cn-breakpoint-small', tokens),
+      'the literal drifted from the published breakpoint',
+    ).toBe(Number(rem));
   });
 
   test('h1 to h3 render one step down, h4 renders reading size at emphasis', () => {

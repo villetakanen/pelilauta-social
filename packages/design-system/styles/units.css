@@ -16,4 +16,11 @@
 
   /* For a consumer that wants "rounded" without choosing a step. */
   --cn-border-radius: var(--cn-border-radius-medium);
+
+  /*
+   * Breakpoints, in rem so a query follows a reader's enlarged default text.
+   * A media or container query cannot read a custom property: a rule that
+   * needs a threshold states the literal, and a test pins the literal here.
+   */
+  --cn-breakpoint-small: 38.75rem; /* 620px; small-screen width */
 }

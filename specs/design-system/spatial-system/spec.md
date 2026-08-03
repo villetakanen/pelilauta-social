@@ -88,6 +88,10 @@ Spatial System principles book.
 
 - The grid is the only literal length, and every measurement derived from it derives
   from it in the stylesheet, not in a comment.
+- A breakpoint is a query threshold, not a measurement on the page, so it is outside
+  the rule above: it does not derive from the grid, and it is stated in `rem` because
+  `specs/design-system/design-tokens/spec.md` requires that of every breakpoint. The
+  published values are in the [Units and grid](/tokens/units) lexicon.
 - Icon sizes are the one named exception: absolute by v20's decision, which states them
   as `rem` literals and marks them "absolute, not grid-derived". Four of the five land
   on the grid anyway; the medium default is 4.5 steps, so the family cannot be

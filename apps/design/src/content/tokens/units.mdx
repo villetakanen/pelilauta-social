@@ -50,6 +50,20 @@ grid.
   prefix="--cn-icon-size"
 />
 
+## Breakpoints
+
+Stated in `rem`, so a threshold follows a reader who enlarges their default text; the
+reasoning is in the [Spatial System](/principles/spatial-system) book, under "The
+reader sets the scale".
+A media or container query can't read a custom property, so a rule that needs the
+threshold states the literal — the typography downshift does this — and a test pins
+the literal to the token declared here.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-breakpoint"
+/>
+
 ## Elevation shadows
 
 The four elevation shadows are declared in `styles/color-theme.css`, not here, but they

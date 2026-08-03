@@ -178,15 +178,29 @@ describe('against the production units.css', () => {
     ]);
   });
 
+  test('the breakpoint reads as declared, with its resolved length', () => {
+    const tokens = parseTokens(unitsSource, { prefix: '--cn-breakpoint' });
+
+    expect(tokens).toEqual([
+      {
+        name: '--cn-breakpoint-small',
+        value: '38.75rem',
+        note: '620px; small-screen width',
+      },
+    ]);
+  });
+
   test('the book cannot miss a token the stylesheet declares', () => {
-    // The lexicon shows spacing and radii, which is every declaration in the
-    // file. If a family is added, this fails until the book accounts for it.
+    // The lexicon shows spacing, radii and breakpoints, which is every
+    // declaration in the file. If a family is added, this fails until the
+    // book accounts for it.
     const all = parseTokens(unitsSource).map((token) => token.name);
     const shown = [
       ...parseTokens(unitsSource, {
         names: ['--cn-grid', '--cn-gap', '--cn-line'],
       }),
       ...parseTokens(unitsSource, { prefix: '--cn-border-radius' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-breakpoint' }),
     ].map((token) => token.name);
 
     expect(new Set(shown)).toEqual(new Set(all));
