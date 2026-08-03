@@ -191,6 +191,24 @@ outcome rather than a noun phrase; `component.mdx:37`, render before code.
 
 Expect the three to total under 400 words.
 
+#### As applied
+
+Applied 2026-08-03. 1,158 words to 615: `base.mdx` 130, `principles.mdx` 207,
+`component.mdx` 278. Over the 400 estimate, which counted the comment blocks going to zero.
+
+Each keeps a two-line comment: where to copy it, that the rules are the
+`design-system-book` skill's, and that a book links books and never a spec. A writer who
+opens a template without the skill loaded is otherwise stranded.
+
+A component book is 400 words. The line count it replaces implied about that, and it sits
+between base and principles.
+
+`component.mdx` lost the justification in its body as well as its comment: "in that order,
+because the reader is confirming they want it before they copy it" is now "in that order".
+
+`principles.mdx` lost the `prose: false` case. `plans/design-books.md:54` deletes it with
+the last `.astro` book.
+
 ### .agents/skills/design-system-developer/SKILL.md
 
 The only skill with book content. 749 words, of which lines 34–68 are the book skill's.
@@ -220,6 +238,15 @@ that leaves: lines 13–14, a knowing aside; 19–20, "not a deletion, and not a
 surface", a "not X but Y" closing on an aphorism.
 
 Expect around 400 words.
+
+#### As applied
+
+Applied 2026-08-03. 749 words to 374. Every proposed change landed as written.
+
+The register pass took the four sites named above. Line 23, "Correctly, not identically",
+stayed: two words carrying the distinction the whole section is about, and not a rhetorical
+construction. Line 52 also lost "owner direction" for "human direction", under the
+replacement recorded in the AGENTS.md section.
 
 ### .agents/skills/design-system-book/SKILL.md
 
@@ -255,6 +282,19 @@ A book omits reasoning; it does not hand it off. Reasoning is the spec's and the
 message's, and neither is for a design-site reader. Diátaxis links reference to an
 explanation page, and that part does not port.
 
+#### As applied
+
+Applied 2026-08-03. 202 words, and symlinked from `.claude/skills/design-system-book` like
+every other skill.
+
+The check names its commands, so it is runnable by the writer: `wc -w` against the limit,
+and `grep -nwE 'easy|simply|quick|just'` returning nothing. Nothing in CI runs either.
+
+It reuses `spec/SKILL.md:32` — cut a paragraph a competent reader could have written
+without this repository. Already written, already dry.
+
+A component book is 400 words, decided in the templates section.
+
 ### docs/DESIGN.md
 
 Does not exist. A book skill under 200 words needs somewhere to send a writer who cannot
@@ -281,3 +321,19 @@ writing a book. It has no length cap and this plan does not govern its shape.
 **An agent drafts it and a human approves it,** as with a spec. The first draft is assembly
 from decisions already settled, not authorship. After approval, a decision enters when a
 human makes it.
+
+#### As applied
+
+Written 2026-08-03, 179 words, `status: draft`. Awaiting approval.
+
+Two sections carry decisions: Authority, and Themes. The font pairing is not among them,
+though it is listed above — `specs/design-system/typography` owns it, and the rule settled
+here keeps a capability's decision in its spec.
+
+A third section, **Not settled**, is not in the proposal. It carries the four deferred
+colour questions from `plans/design-books.md:69`, under one line: a book does not answer
+these. Without it the file is silent on exactly the questions a book invents an answer to,
+which is how four colour drafts were rejected.
+
+The four questions now live in two places. `plans/design-books.md` ends with its epic and
+`DESIGN.md` does not, so the plan's copy goes when the plan does.
