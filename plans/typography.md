@@ -28,7 +28,8 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
   and the downshift's literal pinned to it by test
 - the semantics — open, waits on the scale; the three reset rules preflight left behind,
   roughly 145 call-site edits, and the leading, link colour and table type in `docs.css`
-- the principles book — open; how to choose a step, and what goes wrong
+- the principles book — done; how to choose a step, and what goes wrong, at
+  `/principles/typography`
 - the tokens book — done; every size, line, weight and tracking token read from
   `typography.css` at build time, with the step classes and the downshift stated
 

@@ -1,0 +1,98 @@
+---
+title: Typography
+description: How to put text on the scale, when to reach for a step class, and the mistakes that break the rhythm.
+order: 6
+---
+
+Pelilauta is text: discussion threads, character sheets, the shared library.
+[Lato](/base/fonts) sets all of it, and Roboto Mono sets code. Every size is a step on one closed scale, an
+Augmented Fourth built on the reading size — and the reading size is the reader's,
+taken from their browser, never set by the system. Hierarchy comes from document
+structure: write the element, and it renders on the scale.
+
+## Hierarchy
+
+Ordinary markup is on the scale with no class at all: `body` reads at the text step,
+and `h1` through `h4` read theirs. Choose the heading level by document structure —
+what section the heading opens — and the size follows.
+
+A heading that looks too large for its spot is a layout question, not a reason to
+write an `h3` where the document needs an `h2`. In a narrow container it
+[steps down on its own](#the-downshift).
+
+A step's size, line, weight and tracking are one decision. Overriding any of them — a
+heavier `h2`, a tightened line — takes the text off the system and breaks the
+[rhythm](#rhythm). Emphasis inside a step is `strong`, which renders at the emphasis
+weight.
+
+The step set is closed, and [Typography tokens](/tokens/typography) publishes every
+value. Needing a size between two steps means changing the typography spec, not
+writing a `font-size`.
+
+## Step classes
+
+Four steps have no element of their own and ship as classes:
+
+| Class | Step | Reach for it when |
+| :--- | :--- | :--- |
+| `.cn-text-title` | title | One display line at page scale — a front page, a landing. |
+| `.cn-text-small` | small | Prose too secondary for reading size and too long for caption. |
+| `.cn-text-caption` | caption | Metadata — a timestamp, a byline, a count. |
+| `.cn-text-label` | label | A UI label — a column header, a form label, a badge. |
+
+Small is in the family without being on the scale: it is not an Augmented Fourth from
+anything, and it exists for running text where caption is too small to read at length
+and reading size claims too much weight.
+
+## Labels and captions
+
+Label and caption share the caption size and line; the choice between them is casing.
+A label uppercases whatever it is given and adds weight and tracking. A caption
+renders its content as written.
+
+<p><span class="cn-text-label">Keskiviikon peli-ilta</span><br /><span class="cn-text-caption">Keskiviikon peli-ilta</span></p>
+
+The same content, as a label and as a caption. Finnish compounds are long and lose
+their word shape in capitals, which works on a column header and fails on a
+sentence. Content whose casing carries meaning — a name, a title someone wrote — is
+not a label.
+
+## Rhythm
+
+Every step's line is a multiple of the layout's line unit, `--cn-line`, so text set
+anywhere in the interface shares one grid with the layout around it —
+[Spatial System](/principles/spatial-system) explains the unit.
+
+Two consequences:
+
+- Resizing a step without recomputing its line breaks the rhythm everywhere the step
+  appears.
+- Headings ship no margins. Whatever owns the layout states the spacing — in a
+  [content container](/base/content-containers), the column's row-gap. Adding a
+  margin to a heading double-spaces it there.
+
+## The downshift
+
+Every heading from `h1` to `h4` renders one step down where its container is narrower
+than the small-screen breakpoint. The query measures the container rather than the
+window, so a heading in a narrow card steps down whatever the page around it is doing.
+Each heading keeps its own weight on the way down, except `h4`, whose lower step is
+reading size and takes the emphasis weight to keep reading as a heading. The title
+step does not downshift.
+
+The call site writes nothing — no responsive classes, no media queries — but anything
+that declares `container-type: inline-size` takes a constraint. A container is a
+containing block for absolutely and fixed positioned descendants, and a new stacking
+context. A FAB, tray or dock positioned against the viewport inside one renders
+against the container instead: visible, correctly styled, wrongly placed. Position
+viewport chrome outside the containers.
+
+## The reading size
+
+Every step is stated in `rem`, and nothing in the system sets the document's own text
+size. A reader who asks their browser for larger text gets the whole scale
+proportionally larger.
+
+One declaration defeats this: a `font-size` on `html` or `:root` replaces the
+reader's preference with a number of ours, and every step is measured against it.
+None is written, anywhere.
