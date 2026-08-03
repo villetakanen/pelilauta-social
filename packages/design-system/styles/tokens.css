@@ -1,15 +1,8 @@
 /*
  * The design system's token entry point.
  *
- * styles/color-theme.css derives its elevation shadows from --cn-grid. Importing
- * color.css alone omits that dependency, so this entry point composes colour and
- * units together. Their relative declaration order does not affect var() resolution.
- *
- * Icon sizing follows units because it belongs to the same subject: v20 files
- * both in tokens/units.css, and marks the icon family "absolute, not
- * grid-derived" — an exception with a reason, not a family of its own. It used
- * to sit outside this file, imported separately by the application and by two
- * books, which made a token family look like something a consumer opts into.
+ * color-theme.css derives its elevation shadows from --cn-grid, so colour and units
+ * ship together. Importing color.css alone omits that dependency.
  */
 @import "./units.css";
 @import "./icon.css";

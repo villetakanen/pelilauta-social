@@ -3,18 +3,6 @@
  *
  * Spec: specs/design-system/preflight/spec.md
  * Book: /base/preflight
- *
- * A modern reset, following Andy Bell's and Tailwind Preflight's, both of which
- * build on modern-normalize. Cyan 4 and v20 are read as references for what exists,
- * not as a floor: where v21 differs, the consumer migrates.
- *
- * Five groups, and the set is closed: a sixth concern changes the spec before it
- * changes this file. Typography's own rules are absent — prose margins, leading and
- * heading wrap arrive with typography, which states their replacements in the
- * same breath. Image constraint and scrollbar appearance are absent too; the spec
- * says who owns each.
- *
- * Declares no custom property: every name read here is a token family's.
  */
 
 /* 1. Box model ------------------------------------------------------------- */
@@ -25,10 +13,7 @@
   box-sizing: border-box;
 }
 
-/*
- * Tailwind's rule rather than Bell's: removal is explicit, so spacing is stated by
- * whatever owns the layout. There is no application-wide paragraph margin.
- */
+/* Removal is explicit: whatever owns the layout states the spacing. */
 *,
 ::after,
 ::before,
@@ -42,11 +27,9 @@
 
 :root {
   /*
-   * Dark first: a reader with no OS preference gets dark, which is what both
-   * applications' <meta name="color-scheme"> claims. The property overrides the
-   * tag, so the two must agree or the tag is inert. Declared here and nowhere
-   * else — three files disagreeing about this order is what kept the
-   * no-preference default wrong.
+   * Dark first, and declared here only. The property overrides
+   * <meta name="color-scheme">, so both applications' tags must agree with this
+   * order or the tag is inert.
    */
   color-scheme: dark light;
   -moz-tab-size: 4;
@@ -54,20 +37,13 @@
 }
 
 html {
-  /*
-   * Stop iOS inflating text when the device rotates. No font-size here, ever:
-   * the reader's root size is the origin of every length in the system.
-   */
+  /* Stop iOS inflating text on rotation. No font-size here, ever. */
   -webkit-text-size-adjust: 100%;
 }
 
 /* 3. Inheritance ----------------------------------------------------------- */
 
-/*
- * Form controls do not inherit type from the document on their own, which is why
- * Cyan sets it per control from --cn-*-ui tokens declared in its button tokens.
- * Inheriting by default is what makes that unnecessary.
- */
+/* Form controls do not inherit type from the document on their own. */
 button,
 input,
 optgroup,
@@ -167,11 +143,7 @@ sup {
   top: -0.5em;
 }
 
-/*
- * Only the size. Browsers render these at a smaller size than the surrounding text
- * because they switch family; the family itself is styles/fonts.css's, which is what
- * chooses a typeface. A reset normalises a default.
- */
+/* The size only. The family is fonts.css's. */
 code,
 kbd,
 samp,
@@ -193,9 +165,9 @@ table {
 }
 
 /*
- * Markers are removed only where the author asks, because Safari drops a list's
- * semantics from VoiceOver when list-style is removed. A navigation, menu or tray
- * says role="list" and keeps both.
+ * Markers go only where the author asks: Safari drops a list's semantics from
+ * VoiceOver when list-style is removed. A navigation, menu or tray says
+ * role="list" and keeps both.
  */
 ol[role="list"],
 ul[role="list"],
@@ -225,10 +197,7 @@ body {
 
 /*
  * Astro's hydration wrapper, transparent to layout so it never interposes a box
- * between an element and its semantic child — an icon inside a flex button, for
- * example. Cyan reaches through it instead, with duplicated
- * `.flex-col > astro-island > *` selectors in atomics/flex.css, which this makes
- * redundant.
+ * between an element and its semantic child — an icon inside a flex button, say.
  */
 astro-island {
   display: contents;
