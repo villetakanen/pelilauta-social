@@ -20,8 +20,8 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
 - fonts — done
 - the legacy `.astro` books — done; both are prose MDX now, and every book on the site
   is prose
-- compat shim — open; unmigrated cyan-lit keeps its tokens and its light-dom rules, and
-  nothing new reads cyan-css
+- compat shim — done; unmigrated Cyan elements keep their typography inputs and
+  reached light-DOM rules without adding a new cyan-css reader
 - the scale — open, waits on the compat shim
 - breakpoints in `rem` — open; the threshold the scale's container downshift is pinned
   against
