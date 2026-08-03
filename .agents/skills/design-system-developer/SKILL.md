@@ -14,24 +14,24 @@ contents, and do not browser-test a value the CSS declared.
 
 ## What the change has to be for
 
-v21 exists to remove Cyan. A design-system change earns its place by moving the
-application off `@11thdeg/cyan-css`, and the test is a dependency:
+v21 exists to remove Cyan. A design-system change moves the application off
+`@11thdeg/cyan-css`, and the test is a dependency:
 
 **With cyan-css absent, would the application render this correctly?**
 
-Correctly, not identically. v20 and a human decide the appearance afterwards. A
-like-for-like claim against what the application renders today is a defect.
+Correctly, not identically. A like-for-like claim against what the application renders
+today is a defect.
 
 Declaring a token Cyan already declares fails this test. Cyan's value is shadowed in
 the cascade while Cyan still supplies the rule that reads it, so the application
-depends on Cyan exactly as much as it did before, in one more place. The surface moves
-when the design system owns the rule that reads the token.
+depends on Cyan as much as it did before. The surface moves when the design system owns
+the rule that reads the token.
 
 ## The book
 
 Write it with the `design-system-book` skill. Invoke it. Do not write MDX from here.
 
-## One thing here is not a pattern
+## Not patterns
 
 **`packages/design-system/styles/docs.css`** — prototype-age scaffolding whose hero,
 kicker, lede and stat-tile vocabulary makes a documentation page read as a marketing
@@ -39,17 +39,19 @@ spread. What is left of it serves the index page, plus link and table rules noth
 owns yet. Do not build on it and do not extend it.
 
 A book under `packages/design-system/books/` is a specimen: one component rendering
-one thing an MDX book reads from source. A whole-page book component behind a one-line
-MDX shell is what the site used to have, and what the navigation spec's MDX rule
-exists to prevent. Do not write one.
+one thing an MDX book reads from source. Do not write a whole-page book component
+behind a one-line MDX shell.
 
 ## Where design intent comes from
 
-v20, and human direction. Where either disagrees with the shipped
-application, they win: the application still renders v18, and appearance is not a
-compatibility contract.
+Take the appearance from v20, at `~/dev/pelilauta-20/`. Where it disagrees with the
+shipped application, v20 wins: the application still renders v18, and appearance is not
+a compatibility contract.
 
-Look for v20's answer before writing your own, and look past the obvious place. Its
-CSS is in `packages/cyan/src/{tokens,core,layouts,utilities}` **and inline in
-`.astro` global style blocks** — a search of the token and core directories alone
-has already produced two wrong conclusions. Its documented intent is in its books.
+Find v20's answer before writing your own. Its CSS is in
+`packages/cyan/src/{tokens,core,layouts,utilities}` **and inline in `.astro` global
+style blocks** — search both. Its intent is in its books, under
+`app/cyan-ds/src/content/`.
+
+Where v20 is silent or contradicts itself, ask before deciding, and deliver everything
+that does not depend on the answer.
