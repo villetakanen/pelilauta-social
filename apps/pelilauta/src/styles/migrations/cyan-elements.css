@@ -1,0 +1,228 @@
+/*
+ * Temporary light-DOM support for unmigrated Cyan custom elements.
+ *
+ * Sources are the named @11thdeg/cyan-css files. Each section states its current
+ * consumer and future owner; delete it when that owner replaces the Cyan element
+ * or absorbs the surrounding layout.
+ */
+
+/*
+ * Sources: core/cn-bubble.css, components/cn-card.css and tokens/cards.css.
+ * Consumers: discussion bubbles and application cards. Future owners: Bubble and
+ * Card; remove these rules when both are local components.
+ */
+cn-bubble *:first-child,
+cn-card > *:first-child {
+  margin-top: 0;
+}
+
+cn-bubble {
+  min-height: calc(var(--cn-gap) * 4);
+  padding: var(--cn-gap);
+}
+
+cn-bubble .toolbar {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+cn-bubble .toolbar:first-child {
+  margin-top: calc(-1 * var(--cn-gap));
+}
+
+cn-bubble .toolbar:last-child,
+cn-card .toolbar:last-child {
+  margin-bottom: calc(-1 * var(--cn-grid));
+}
+
+cn-card > *:last-child,
+cn-card p:last-of-type {
+  margin-bottom: 0;
+}
+
+/*
+ * Sources: core/cn-loader.css, core/buttons.css and core/fab.css.
+ * Consumer: loading states. Future owners: Loader, Button and Fab; remove after
+ * those local components own their composition.
+ */
+section > cn-loader,
+article > cn-loader,
+cn-card > cn-loader {
+  margin: var(--cn-line) auto;
+}
+
+button cn-loader:first-child:not(:only-child),
+a.button cn-loader:first-child:not(:only-child) {
+  margin-left: calc(var(--cn-grid) * -1);
+}
+
+button cn-loader:only-child,
+a.button cn-loader:only-child {
+  margin-top: 1px;
+  margin-right: -9px;
+  margin-left: -9px;
+}
+
+button.fab cn-loader:first-child:not(:only-child),
+a.button.fab cn-loader:first-child:not(:only-child) {
+  margin-left: 0;
+}
+
+/*
+ * Source: core/cn-menu.css. Consumer: reply actions. Future owner: Menu; remove
+ * when the reply menu no longer renders cn-menu.
+ */
+main :where(cn-menu) ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+:where(cn-menu) ul + ul {
+  margin-top: -1px;
+  border-top: 1px solid var(--color-border);
+}
+
+:where(cn-menu) li::before {
+  display: none;
+}
+
+main :where(cn-menu) ul > li {
+  margin: 0;
+  padding: 0 var(--cn-grid);
+}
+
+:where(cn-menu) ul > li > a,
+:where(cn-menu) ul > li > button {
+  text-decoration: none;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: var(--cn-grid);
+  align-items: center;
+  height: calc(var(--cn-grid) * 5);
+}
+
+cn-menu ul li:hover {
+  background: color-mix(in hsl, var(--color-link), transparent 90%);
+  outline: none;
+}
+
+/*
+ * Sources: components/cn-lightbox.css and cn-reaction-button.css.
+ * Consumers: thread media and reactions. Future owners: Lightbox and Reaction;
+ * remove each host bridge with its Cyan component.
+ */
+cn-lightbox {
+  --cn-lightbox-background: var(--color-surface-2);
+  --cn-lightbox-color: var(--color-on-surface);
+  --cn-lightbox-border-radius: var(--cn-border-radius-medium);
+  --cn-lightbox-image-border-radius: var(--cn-border-radius-small);
+  --cn-lightbox-inner-spacing: var(--cn-grid);
+}
+
+cn-reaction-button {
+  --background-reaction-button: var(--color-button-text);
+  --background-reaction-button-hover: var(--color-button-text-hover);
+  --background-reaction-button-active: linear-gradient(
+    120deg,
+    var(--color-reaction-red) 11%,
+    var(--color-error) 90%
+  );
+  --color-reaction-button: var(--color-text-low);
+  --color-reaction-button-active: var(--color-surface);
+}
+
+/*
+ * Sources: components/cn-sortable-list.css, utilities/content-cards.css and
+ * utilities/toolbar.css. Consumers: sortable editors, card lists and settings
+ * controls. Future owners: those component and layout epics.
+ */
+/*
+ * No line-height: Cyan reads --cn-line-height-ui and declares it nowhere, so the
+ * leading inherits today. Restating the read here would change it as soon as
+ * anything declares that name.
+ */
+cn-sortable-list {
+  display: block;
+  font-family: var(--cn-font-family-ui);
+  font-weight: var(--cn-font-weight-ui);
+  font-size: var(--cn-font-size-ui);
+  letter-spacing: var(--cn-letter-spacing-ui);
+}
+
+.content-cards cn-card {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.toolbar cn-toggle-button {
+  flex-grow: 0;
+  flex-shrink: 1;
+  display: inline-flex;
+}
+
+/*
+ * Sources: components/cn-d20-ability-score.css and components/cn-dice.css.
+ * Consumers: character sheets and rendered dice notation. Future owners: Dice
+ * and Ability Score; remove when those external elements are replaced.
+ */
+cn-d20-ability-score {
+  display: inline-block;
+}
+
+p cn-dice {
+  display: inline-flex;
+  margin: 0 0.1em;
+}
+
+/*
+ * Sources: core/navigation.css, core/main.css, core/rail.css and core/tray.css.
+ * Consumer: PageWithTray. Future owner: App Shell; remove when local navigation
+ * owns tray state and placement.
+ */
+a:has(cn-navigation-icon) {
+  text-decoration: none;
+}
+
+cn-tray-button {
+  position: fixed;
+  top: var(--cn-grid);
+  left: calc(var(--cn-grid) * 1.5);
+  z-index: var(--z-index-tray-button, 3000);
+}
+
+body:has(cn-tray-button[aria-expanded="false"]) nav#tray {
+  transform: translateX(100%);
+}
+
+@media screen and (max-width: 620px) {
+  cn-tray-button {
+    left: auto;
+    right: calc(var(--cn-grid) * 1.5);
+  }
+
+  body:has(cn-tray-button) cn-app-bar {
+    margin-right: calc(var(--cn-width-rail) - var(--cn-gap));
+  }
+}
+
+@media (min-width: 621px) {
+  body:has(cn-tray-button[aria-expanded="true"]):has(nav#rail) main {
+    margin-left: calc(var(--cn-width-tray) + var(--cn-gap));
+  }
+
+  body:has(cn-tray-button) nav#rail {
+    padding-top: calc(var(--cn-grid) * 10);
+  }
+
+  body:has(cn-tray-button[aria-expanded="false"]) nav#tray {
+    transform: translateX(0);
+  }
+}
+
+body:has(nav#rail) cn-app-bar {
+  margin-left: calc(var(--cn-margin-for-rail) - var(--cn-grid));
+}

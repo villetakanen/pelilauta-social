@@ -171,6 +171,7 @@ describe('the two families', () => {
       '../styles/content-containers.css',
       '../styles/docs.css',
       '../styles/compat/cyan-4.css',
+      '../styles/compat/cyan-typography.css',
     ]) {
       // `font-family: inherit` names nothing — it is the reset handing a control
       // back to whatever the document decided, which is this stylesheet's decision.

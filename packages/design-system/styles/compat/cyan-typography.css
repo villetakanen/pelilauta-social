@@ -1,0 +1,29 @@
+/*
+ * Typography inputs used by unmigrated Cyan Lit components.
+ *
+ * These values preserve Cyan 4's component metrics while the local typography
+ * scale replaces Cyan's document rules. Remove each family when no installed
+ * Cyan component reads it.
+ */
+:root {
+  /*
+   * Cyan's UI family is used by toggle buttons, snackbars and sortable lists.
+   *
+   * --cn-line-height-ui is deliberately absent. Cyan reads it in core/input-text.css
+   * and components/cn-sortable-list.css and declares it nowhere, so those
+   * declarations are invalid at computed-value time today and the line height
+   * inherits. Declaring it here would make those rules take effect and tighten the
+   * leading in every text input. The typography semantics decide what a control's
+   * leading is; test/typography-compat.test.ts holds the hole open.
+   */
+  --cn-font-family-ui: var(--cn-font-family);
+  --cn-font-size-ui: var(--cn-font-size-text, 1.0625rem);
+  --cn-font-weight-ui: var(--cn-font-weight-text, 400);
+  --cn-letter-spacing-ui: normal;
+
+  /* Cyan Lit still uses h5 for compact app-bar and stat-block labels. */
+  --cn-font-size-h5: calc(var(--cn-grid) / 8 * 21);
+  --cn-font-weight-h5: 500;
+  --cn-line-height-h5: calc(var(--cn-grid) * 4);
+  --cn-letter-spacing-h5: calc(var(--cn-grid) / 8 * 0.15);
+}
