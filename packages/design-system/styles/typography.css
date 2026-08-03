@@ -1,0 +1,181 @@
+/*
+ * typography.css — the scale, and the rules that read it.
+ *
+ * Spec: specs/design-system/typography/spec.md
+ *
+ * An Augmented Fourth (1.414) from the reading size. Every size is a rem
+ * proportion of the reader's default text size and every line derives from the
+ * layout's line unit in the declaration, so the whole system follows a reader
+ * who asks for larger text. Nothing here sets the document's font size.
+ */
+:root {
+  /* Sizes, shown against a 16px default. */
+  --cn-font-size-title: 6rem; /* 96px */
+  --cn-font-size-h1: 4.25rem; /* 68px */
+  --cn-font-size-h2: 3rem; /* 48px */
+  --cn-font-size-h3: 2.125rem; /* 34px */
+  --cn-font-size-h4: 1.5rem; /* 24px */
+  --cn-font-size-text: 1.0625rem; /* 17px */
+  --cn-font-size-small: 0.9375rem; /* 15px */
+  --cn-font-size-caption: 0.75rem; /* 12px */
+
+  /*
+   * Lines: the smallest multiple of the line unit that clears the text, except
+   * h1, which takes four units rather than three because 68px text on a 72px
+   * line leaves 4px of leading and the same line as h2.
+   */
+  --cn-line-height-title: calc(var(--cn-line) * 5); /* 120px */
+  --cn-line-height-h1: calc(var(--cn-line) * 4); /* 96px */
+  --cn-line-height-h2: calc(var(--cn-line) * 3); /* 72px */
+  --cn-line-height-h3: calc(var(--cn-line) * 2); /* 48px */
+  --cn-line-height-h4: calc(var(--cn-line) * 2); /* 48px */
+  --cn-line-height-text: var(--cn-line); /* 24px */
+  --cn-line-height-small: var(--cn-line); /* 24px */
+  --cn-line-height-caption: var(--cn-line); /* 24px */
+
+  /* Weights: the table's, plus 500 for labels and buttons, 700 for emphasis. */
+  --cn-font-weight-title: 200;
+  --cn-font-weight-h1: 300;
+  --cn-font-weight-h2: 400;
+  --cn-font-weight-h3: 400;
+  --cn-font-weight-h4: 400;
+  --cn-font-weight-text: 400;
+  --cn-font-weight-small: 400;
+  --cn-font-weight-caption: 400;
+  --cn-font-weight-label: 500;
+  --cn-font-weight-emphasis: 700;
+
+  /* Tracking: v20's values; the label's is v20's uppercase treatment. */
+  --cn-letter-spacing-title: -0.02em;
+  --cn-letter-spacing-h1: -0.02em;
+  --cn-letter-spacing-h2: -0.01em;
+  --cn-letter-spacing-h3: 0.01em;
+  --cn-letter-spacing-h4: normal;
+  --cn-letter-spacing-text: 0.03em;
+  --cn-letter-spacing-small: 0.03em;
+  --cn-letter-spacing-caption: 0.03em;
+  --cn-letter-spacing-label: 0.05em;
+}
+
+/* The document reads at the text step. The family is fonts.css's. */
+body {
+  font-size: var(--cn-font-size-text);
+  line-height: var(--cn-line-height-text);
+  font-weight: var(--cn-font-weight-text);
+  letter-spacing: var(--cn-letter-spacing-text);
+}
+
+/*
+ * Headings. No margins: whatever owns the layout states the spacing, which in a
+ * content container is the column's row-gap. Colour roles are color-theme.css's.
+ */
+h1 {
+  font-size: var(--cn-font-size-h1);
+  font-weight: var(--cn-font-weight-h1);
+  line-height: var(--cn-line-height-h1);
+  letter-spacing: var(--cn-letter-spacing-h1);
+  color: var(--cn-text-heading);
+}
+
+h2 {
+  font-size: var(--cn-font-size-h2);
+  font-weight: var(--cn-font-weight-h2);
+  line-height: var(--cn-line-height-h2);
+  letter-spacing: var(--cn-letter-spacing-h2);
+  color: var(--cn-text-heading);
+}
+
+h3 {
+  font-size: var(--cn-font-size-h3);
+  font-weight: var(--cn-font-weight-h3);
+  line-height: var(--cn-line-height-h3);
+  letter-spacing: var(--cn-letter-spacing-h3);
+  color: var(--cn-text-subheading);
+}
+
+h4 {
+  font-size: var(--cn-font-size-h4);
+  font-weight: var(--cn-font-weight-h4);
+  line-height: var(--cn-line-height-h4);
+  letter-spacing: var(--cn-letter-spacing-h4);
+  color: var(--cn-text-subheading);
+}
+
+/* Steps without an element of their own. */
+
+.cn-text-title {
+  font-size: var(--cn-font-size-title);
+  font-weight: var(--cn-font-weight-title);
+  line-height: var(--cn-line-height-title);
+  letter-spacing: var(--cn-letter-spacing-title);
+  color: var(--cn-text-heading);
+}
+
+.cn-text-small {
+  font-size: var(--cn-font-size-small);
+  font-weight: var(--cn-font-weight-small);
+  line-height: var(--cn-line-height-small);
+  letter-spacing: var(--cn-letter-spacing-small);
+}
+
+/*
+ * Label and caption share the caption size and line. A label is uppercased; a
+ * caption keeps the casing it is given, because Finnish compounds lose their
+ * word shape in capitals. Content whose casing carries meaning is not a label.
+ */
+.cn-text-caption {
+  font-size: var(--cn-font-size-caption);
+  font-weight: var(--cn-font-weight-caption);
+  line-height: var(--cn-line-height-caption);
+  letter-spacing: var(--cn-letter-spacing-caption);
+}
+
+.cn-text-label {
+  font-size: var(--cn-font-size-caption);
+  font-weight: var(--cn-font-weight-label);
+  line-height: var(--cn-line-height-caption);
+  letter-spacing: var(--cn-letter-spacing-label);
+  text-transform: uppercase;
+}
+
+/*
+ * The downshift: every heading renders one step down at small-screen width,
+ * measured against its container rather than the window, so a heading in a
+ * narrow card steps down whatever the page around it is doing. An element with
+ * no ancestor container measures against the small viewport, which is the same
+ * decision at page level.
+ *
+ * A container query cannot read a custom property, so the threshold is this
+ * system's one literal: 38.75rem, the small-screen breakpoint, 620px at a 16px
+ * root. Each heading keeps its own weight — the step down is a size and a line,
+ * not a change of voice — except h4, whose step down is reading size and would
+ * stop reading as a heading at the text weight, so it takes emphasis.
+ *
+ * The title step does not downshift.
+ */
+@container (max-width: 38.75rem) {
+  h1 {
+    font-size: var(--cn-font-size-h2);
+    line-height: var(--cn-line-height-h2);
+    letter-spacing: var(--cn-letter-spacing-h2);
+  }
+
+  h2 {
+    font-size: var(--cn-font-size-h3);
+    line-height: var(--cn-line-height-h3);
+    letter-spacing: var(--cn-letter-spacing-h3);
+  }
+
+  h3 {
+    font-size: var(--cn-font-size-h4);
+    line-height: var(--cn-line-height-h4);
+    letter-spacing: var(--cn-letter-spacing-h4);
+  }
+
+  h4 {
+    font-size: var(--cn-font-size-text);
+    line-height: var(--cn-line-height-text);
+    letter-spacing: var(--cn-letter-spacing-text);
+    font-weight: var(--cn-font-weight-emphasis);
+  }
+}

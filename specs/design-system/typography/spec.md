@@ -26,16 +26,16 @@ here. Which family loads a face, and how either reaches an application, is
 
 The scale is an Augmented Fourth (1.414) from the reading size.
 
-| step | size | line | weight |
-| :--- | ---: | ---: | ---: |
-| title | 96px | 120px | 200 |
-| h1 | 68px | 96px | 300 |
-| h2 | 48px | 72px | 400 |
-| h3 | 34px | 48px | 400 |
-| h4 | 24px | 48px | 400 |
-| text | 17px | 24px | 400 |
-| small | 15px | 24px | 400 |
-| caption | 12px | 24px | 400 |
+| step | size | line | weight | tracking |
+| :--- | ---: | ---: | ---: | ---: |
+| title | 96px | 120px | 200 | -0.02em |
+| h1 | 68px | 96px | 300 | -0.02em |
+| h2 | 48px | 72px | 400 | -0.01em |
+| h3 | 34px | 48px | 400 | 0.01em |
+| h4 | 24px | 48px | 400 | normal |
+| text | 17px | 24px | 400 | 0.03em |
+| small | 15px | 24px | 400 | 0.03em |
+| caption | 12px | 24px | 400 | 0.03em |
 
 Sizes are proportions of the reader's default text size, shown against a 16px
 default. Small is in the table but not on the scale: it is not an Augmented Fourth
@@ -43,6 +43,11 @@ from anything, and it exists for prose too secondary for reading size and too lo
 for caption. A lexicon publishes it with the rest.
 
 Weights are those in the table, plus 500 for labels and buttons and 700 for emphasis.
+
+Tracking is v20's, for the steps v20 states. The steps v20 does not have derive:
+title takes h1's, small and caption take text's — the value v20's inheritance gave
+them. An uppercased label tracks 0.05em, v20's one uppercase treatment. A step's
+downshift takes the lower step's tracking with its size and line.
 
 ### Constraints
 

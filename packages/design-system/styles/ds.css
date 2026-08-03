@@ -4,5 +4,6 @@
 @import "./preflight.css";
 @import "./tokens.css";
 @import "./fonts.css";
+@import "./typography.css";
 @import "./compat/cyan-typography.css";
 @import "./content-containers.css";

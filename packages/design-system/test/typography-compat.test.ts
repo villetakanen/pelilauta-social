@@ -72,6 +72,7 @@ describe('Cyan Lit typography compatibility', () => {
       './preflight.css',
       './tokens.css',
       './fonts.css',
+      './typography.css',
       './compat/cyan-typography.css',
       './content-containers.css',
     ]);

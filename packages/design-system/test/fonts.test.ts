@@ -169,6 +169,7 @@ describe('the two families', () => {
       '../styles/color-theme.css',
       '../styles/color-reference.css',
       '../styles/content-containers.css',
+      '../styles/typography.css',
       '../styles/docs.css',
       '../styles/compat/cyan-4.css',
       '../styles/compat/cyan-typography.css',

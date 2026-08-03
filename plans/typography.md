@@ -22,7 +22,9 @@ So, that pelilauta app no longer needs Cyan 4 typography styles or tokens.
   is prose
 - compat shim — done; unmigrated Cyan elements keep their typography inputs and
   reached light-DOM rules without adding a new cyan-css reader
-- the scale — open, waits on the compat shim
+- the scale — done; the closed step set as tokens, the element and step-class rules
+  that read them, and the container downshift, its threshold pinned to the spec's
+  prose until breakpoints publish
 - breakpoints in `rem` — open; the threshold the scale's container downshift is pinned
   against
 - the semantics — open, waits on the scale; the three reset rules preflight left behind,
