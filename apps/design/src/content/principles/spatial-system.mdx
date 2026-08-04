@@ -12,7 +12,7 @@ arrive at the same answer.
 ## 1. The atomic unit
 
 The whole system derives from `--cn-grid`. Anchoring it to `0.5rem` rather than `8px`
-is deliberate — see [The reader sets the scale](#5-the-reader-sets-the-scale).
+is deliberate — see [The reader sets the scale](#6-the-reader-sets-the-scale).
 
 | Token | Derivation | At a 16px root | Role |
 | :--- | :--- | :--- | :--- |
@@ -65,6 +65,18 @@ value that will never align with anything else on the page.
 **Don't** use a spacing token to fix a problem that is really alignment. If a
 control sits 3px low, the fix is its box, not a 3px margin.
 
+### The surface takes the decision away
+
+`.surface` is the design system's named container, and its padding is `--cn-gap` on
+every side, at every width. That is the between-elements role turned inward: what
+separates a card's content from the card's edge is the same relationship as what
+separates one card from the next, so it is the same value. A consumer does not
+choose it, which is the point — the padding of a panel is the one spacing decision
+most likely to be made forty times and differently.
+
+The class is documented in [Surface](/base/surface), which owns everything else it
+does.
+
 ## 3. Vertical rhythm
 
 `--cn-line` is the prose rhythm unit. Body text defaults to a one-`--cn-line` line
@@ -113,7 +125,26 @@ Inside a rounded container the padding is `--cn-grid` or more, so the curve neve
 closes in on the content it wraps. A small radius against tight padding is what makes
 a corner look like it is cutting into the text.
 
-## 5. The reader sets the scale
+## 5. Elevation shadows
+
+A shadow is a measurement, so it comes from the grid like everything else. Each is
+a fixed offset and blur in grid steps, with the colour supplied by the theme.
+
+| Token | Offset | Blur | At a 16px root |
+| :--- | :--- | :--- | :--- |
+| `--cn-shadow-elevation-1` | `× 0.125` | `× 0.5` | 1px 1px 4px |
+| `--cn-shadow-elevation-2` | `× 0.25` | `× 1` | 2px 2px 8px |
+| `--cn-shadow-elevation-3` | `× 0.5` | `× 2` | 4px 4px 16px |
+| `--cn-shadow-elevation-4` | `× 0.75` | `× 3` | 6px 6px 24px |
+
+Offset and blur grow together, so a larger lift is softer as well as further, and
+the whole family rescales with the reader's text size along with the spacing around
+it. Three of the four are elevation values; `--cn-shadow-elevation-1` names the
+smallest shadow the system can draw and no elevation level uses it, because a
+one-level lift is shadowless. Which shadow a level uses, and what happens when
+levels nest, belong to [Colour & Surface](/principles/color-system).
+
+## 6. The reader sets the scale
 
 Everything above is stated in `rem`, and no stylesheet in the design system sets a
 `font-size` on `html` or `:root`. Those two facts together are what make the

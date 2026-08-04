@@ -32,7 +32,10 @@
   --cn-on-background: var(--cn-on-surface);
 
   --cn-text: light-dark(var(--cn-color-surface-10), var(--cn-color-surface-95));
-  --cn-text-high: light-dark(black, var(--cn-color-surface-100));
+  --cn-text-high: light-dark(
+    var(--cn-color-surface-0),
+    var(--cn-color-surface-100)
+  );
   --cn-text-low: light-dark(
     var(--cn-color-surface-30),
     var(--cn-color-surface-60)
@@ -179,7 +182,10 @@
     color-mix(in oklch, var(--cn-color-primary-40), transparent 70%)
   );
   --cn-on-selection: var(--cn-on-surface);
-  --cn-backdrop: light-dark(rgb(0 0 0 / 50%), rgb(0 0 0 / 70%));
+  --cn-backdrop: light-dark(
+    color-mix(in oklch, var(--cn-color-surface-0), transparent 50%),
+    color-mix(in oklch, var(--cn-color-surface-0), transparent 30%)
+  );
   --cn-lightbox-background: var(--cn-color-surface-30);
   --cn-lightbox-color: var(--cn-color-surface-95);
 }

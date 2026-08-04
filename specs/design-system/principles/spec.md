@@ -4,72 +4,83 @@ status: approved
 
 # Principles
 
-## Intent
-
-The principles collection describes the design system's visual and spatial rules
-– the grid, spacing, colour architecture, type, icons, and the mechanics that cut
-across them.
-
-## Guidance And Lexicons
-
-The design system says two different things about the same subject.
-
-A principles book teaches a decision: the rule, why the system is shaped that way,
-and the mistake the rule prevents.
-
-A lexicon book enumerates: what exists, and what each entry resolves to. Spacing
-has both — a principles book about rhythm and choice, and a lexicon listing every
-unit.
-
-Neither restates the other. A principles book links the lexicon for values.
-
-## The Chapter
-
-Five books cover the foundations components depend on:
-
-- **Spatial System** — grid, layout, spacing and radii.
-- **Colour & Surface** — primitives, semantic colour roles and elevation.
-- **System Mechanics** — density, box rules, and cross-cutting do's and don'ts.
-- **Typography** — the scale, styles and pairings.
-- **Iconography** — the icon grid, stroke rules and library usage.
-
-## Where Design Intent Comes From
-
-Design intent comes from v20 and from approved owner decisions. Where v20
-documents a foundation, the v21 book ports and adapts it.
-
-A claim that neither covers is marked in the book as this system's own.
-
-The v20 books are in `pelilauta-20-ds` at `app/cyan-ds/src/content/principles/`.
-
-Application behaviour, data and routes are governed by `AGENTS.md`, not here. How
-Cyan 4 used a token is a fact about the code being replaced, not a source of
-design intent.
-
 ## Blueprint
 
-A principles book is the testbed of its subject, per `specs/design-system/spec.md`:
-it renders the combinations it governs — a heading over a list, a definition list
-before a subheading — on the system's own elements, classes and tokens, and the
-prose annotates what the page shows. Each section answers one decision a reader is
-likely to arrive with. The book closes by linking the lexicon that holds the values
-and naming the parts of the subject the design system does not yet own.
+### Context
 
-Books are published as described in
+The principles collection teaches the visual and spatial decisions that components
+share. Each book defines how to choose within one foundation, explains the reason
+for the rule, and renders the result so the decision can be evaluated where it is
+documented.
+
+### Architecture
+
+The design site separates three documentation responsibilities:
+
+- A **principles book** teaches a design rule and its application.
+- A **lexicon book** enumerates source-owned names and values.
+- A **component book** documents a component's public schema and composition.
+
+A subject may require both principles and a lexicon. The principles book links the
+lexicon where values are needed; it does not reproduce them.
+
+Five principles books cover the foundations consumed by components:
+
+- **Spatial System** covers grid, spacing, layout relationships, and radii.
+- **Colour & Surface** covers reference colour, semantic roles, themes, and
+  elevation.
+- **System Mechanics** covers density, box rules, and cross-cutting composition.
+- **Typography** covers typefaces, scale, rhythm, and responsive type behavior.
+- **Iconography** covers the icon grid, drawing rules, and library selection.
+
+Books are published according to
 `specs/design-system/design-site-navigation/spec.md`.
 
-## Non-Goals
+### Constraints
 
-- Values belong to the lexicon and to the specs that own them.
-- Component APIs belong to component books.
-- A new token family does not oblige a principles book.
+A principles book states approved decisions that the design system ships. A new
+token family or implementation detail does not require a principles book unless it
+introduces a design choice that readers must apply.
 
-## Regression Guardrails
+Each section addresses one decision. Prose states the rule, its rationale, and the
+implementation mistake it prevents. Links to lexicons and adjacent books appear at
+the decision that requires them.
 
-- A principles book is written. Content that can be regenerated from a stylesheet
-  belongs to a lexicon book.
+The book renders its subject through the design system's shipped elements,
+classes, tokens, and components. Private specimen styling does not substitute for
+the rule being evaluated.
 
-## Acceptance
+Content generated from source belongs in a lexicon. Component props, slots, and
+composition regions belong in the component book.
 
-- A developer reads the book and chooses correctly between two plausible options
-  in a case the book does not name.
+## Contract
+
+### Definition of Done
+
+- Every owned foundation has a principles book that renders the decisions it
+  teaches.
+- Each live specimen uses the shipped design-system source it evaluates.
+- Human review accepts the rendered decision and the guidance used to reach it.
+
+### Regression Guardrails
+
+- A principles book does not copy a source-owned value or inventory that a lexicon
+  can generate.
+- A principles book does not document a component API or use private styling to
+  simulate shipped behavior.
+- Removing a rationale must not leave two plausible choices with no rule for
+  selecting between them.
+
+### Scenarios
+
+```gherkin
+Given a reader choosing between two plausible treatments for an unlisted case
+When they apply the relevant principles book
+Then the published rule leads to one treatment
+```
+
+```gherkin
+Given documentation that can be generated from a stylesheet or component schema
+When the design site publishes it
+Then it appears in the owning lexicon or component book rather than principles prose
+```

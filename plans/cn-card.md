@@ -24,13 +24,14 @@ onboarding cards.
 
 ## Known scope
 
-- **Surfaces and elevation** — open; the elevation utilities v20's Card stands on
-  (`elevation-0`–`4` with the relative-nesting engine), their spec, and the deferred
-  elevation decisions resolved with a human: what elevation means, whether five
-  surface roles are needed, and whether sub-AA contrast on a raised Dark surface is
-  acceptable. The surface roles, shadows, radii and spacing tokens already ship; the
-  one radius decision is whether v20's `--cn-border-radius-card` alias survives.
-  Settles `plans/debt/book-vocabulary-classes.md` for `.elevation-1` and `.surface`
+- **Surfaces and elevation** — delivered; `elevation-0`–`4` and the relative-nesting
+  engine ship in `packages/design-system/styles/surface.css` with `.surface` as the
+  padded, contained default at level 1, under an approved spec. The three deferred
+  decisions are recorded: elevation is background and shadow paired into five levels,
+  all five roles are kept, and Surface sets no foreground, so a level-4 consumer picks
+  a role that clears AA there. `--cn-border-radius-card` is untouched — Surface sets no
+  radius, and the alias is now the Card capability contract's decision. Settles
+  `plans/debt/book-vocabulary-classes.md` for `.elevation-1` and `.surface`
 - **Call-site classification** — open; every `cn-card` consumer and card-shaped
   composition is classified: a Card, a plain surface, or removed. A v18 card that is
   a static box moves to the elevation utilities, not to Card
@@ -42,8 +43,10 @@ onboarding cards.
 - **Card foundation** — open, waits on the capability contract; the local Svelte
   component, component tests and public styles implement the approved contract
   without reading Cyan component rules
-- **Surfaces and elevation book** — open, waits on surfaces and elevation; a
-  principles book on the elevation model, rendered from the utilities
+- **Surfaces and elevation book** — delivered; `/principles/color-system` is Colour &
+  Surface and carries the elevation model rendered from the utilities in both themes,
+  `/base/surface` is the utility API, and Spatial System takes the `.surface` padding
+  role and the grid derivation of the shadows
 - **Card component book** — open, waits on the foundation; the API, content guidance,
   states, covers, links, actions and narrow-container behaviour render through focused
   specimens on the design site

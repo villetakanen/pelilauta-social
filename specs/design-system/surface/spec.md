@@ -50,9 +50,6 @@ from its nearest elevated ancestor:
 | 3 to 4 | none |
 
 Without a positive-level elevated ancestor, the standalone shadow applies.
-Explicit descendant rules implement the finite relative model. Their source order
-resolves an increasing chain against its nearest elevated ancestor. Shadow values
-are not arithmetically decomposed in CSS.
 
 ### Constraints
 

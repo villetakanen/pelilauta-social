@@ -4,112 +4,101 @@ status: approved
 
 # Spatial System
 
-## Intent
-
-Every interface decision about distance — padding, gutters, row heights, the space
-below a block, corner radii — is answered by one grid rather than by judgment. Two
-people spacing two different screens reach the same measurement, and a screen built
-by an agent looks like one built by hand.
-
-## The Three Roles
-
-Spacing is chosen by the relationship between two things, not by how large the gap
-should look.
-
-- Space **inside** a component — a chip's padding, an icon to its label — is
-  `--cn-grid`.
-- Space **between** elements that belong together — cards in a row, fields in a form
-  — is `--cn-gap`. This is the answer when the relationship is unclear.
-- Space **below a block**, and the height of a row, is `--cn-line`.
-
-There is no step between the roles. A measurement that is not one of them, or a
-multiple of the grid, aligns with nothing else on the page.
-
-## Vertical Rhythm
-
-`--cn-line` is the prose rhythm unit and the row-height role — one token rather than
-two that happen to be equal. Body text defaults to a one-`--cn-line` line box, so a
-control one `--cn-line` tall aligns with the text beside it.
-
-Stacked blocks are separated by `--cn-line` or a multiple of it.
-
-## Radii
-
-Radii are grid multiples, so a corner stays in proportion when the system rescales.
-Radius reads as a size cue: a large surface carries a large radius, and a small one
-does not. A consumer that wants a rounded corner without choosing a step gets the
-medium one.
-
-Radii are the one place a half step appears. A box has two corners across each edge,
-so a half-step radius spends one full step and leaves the box on the grid. Spacing
-has no half step.
-
-Inside a rounded container the padding is `--cn-grid` or more, so the curve does not
-close in on the content it wraps.
-
-## Icon Sizes
-
-Five sizes — xsmall, small, medium, large, xlarge — stated as `rem` literals rather
-than grid multiples, following v20, whose `tokens/units.css` files them beside the grid
-and marks them "absolute, not grid-derived". They scale with the reader like every
-other `rem` length; they simply do not derive from `--cn-grid`. The medium default is
-the reason the family is absolute: at 2.25rem it is four and a half grid steps, so
-expressing it as a multiple would mean changing it.
-
-Values are in the [Units and grid](/tokens/units) lexicon.
-
-## Scaling
-
-The grid is relative, so the system scales with the reader rather than around them.
-That property, and the rules that keep it, are owned by
-`specs/design-system/design-tokens/spec.md`.
-
 ## Blueprint
 
-One literal measurement exists — the grid. Spacing roles, radii and elevation
-shadow measurements are stated as multiples of it, so changing the grid moves the
-whole system and nothing else has to be revisited. Surface owns which elevation
-uses each shadow and how nesting changes the visible shadow.
+### Context
 
-Values are in the [Units and grid](/tokens/units) lexicon; the reasoning is in the
-Spatial System principles book. That book presents `.surface` as a content
-container whose forced padding takes the `--cn-gap` relationship role; Surface
-owns the class and its complete behavior.
+The spatial system coordinates spacing, vertical rhythm, radii, and shadow
+measurements through one base grid. A spatial role is selected by the relationship
+between elements, allowing unrelated components to align without sharing layout
+code.
 
-## Non-Goals
+### Architecture
 
-- Rail and tray geometry and button sizing are part of the spatial system in v20 and
-  are not owned here yet; they still come from Cyan 4. Icon sizes are owned — see the
-  exception below.
-- The layout grid — how many columns sit inside a breakpoint, and the margins,
-  gutters and maximum container width around them — is not owned yet.
-- Box rules, including how a border is counted against a box's own measurements,
-  belong to System Mechanics.
-- Typographic sizes are typography's, not the grid's.
-- A surface's elevation, background and shadow belong to
-  `specs/design-system/surface/spec.md`. A consuming component chooses its radius;
-  this capability owns the available radius and measurement rules.
+The grid is the base measurement for proportional spatial decisions. Three roles
+apply it to recurring relationships:
 
-## Regression Guardrails
+| role | relationship |
+| :--- | :--- |
+| `--cn-grid` | Space inside a component, including control padding and the distance from an icon to its label. |
+| `--cn-gap` | Space between elements that form one group, including fields in a form and cards in a listing. |
+| `--cn-line` | Prose rhythm, space between stacked blocks, and row height. |
 
-- The grid is the only literal length, and every measurement derived from it derives
-  from it in the stylesheet, not in a comment.
-- A breakpoint is a query threshold, not a measurement on the page, so it is outside
-  the rule above: it does not derive from the grid, and it is stated in `rem` because
-  `specs/design-system/design-tokens/spec.md` requires that of every breakpoint. The
-  published values are in the [Units and grid](/tokens/units) lexicon.
-- Icon sizes are the one named exception: absolute by v20's decision, which states them
-  as `rem` literals and marks them "absolute, not grid-derived". Four of the five land
-  on the grid anyway; the medium default is 4.5 steps, so the family cannot be
-  expressed as multiples without moving it. No other design-system stylesheet states an
-  absolute length.
-- The token entry point supplies the grid dependency used by Surface's elevation
-  shadows.
+Radii and elevation-shadow measurements derive from the grid. Surface owns which
+background and shadow form an elevation and how nested elevation behaves, as
+defined by `specs/design-system/surface/spec.md`.
 
-## Acceptance
+Icon sizes are independent `rem` values. They form the named exception to
+grid-derived component measurements. Breakpoint thresholds are also independent
+`rem` values because they describe query conditions rather than distances rendered
+on the page.
 
-- A reader who sets a larger default text size in their browser gets a
-  proportionally larger interface, not the same layout with larger text in it.
-- A control one `--cn-line` tall sits on the same rhythm as the text beside it.
-- A developer choosing spacing for an unlisted case picks a role by the
-  relationship between the two elements, and lands on a grid multiple.
+The [Units and grid](/tokens/units) lexicon publishes the values. The Spatial
+System principles book explains their selection and presents `.surface` as a
+content container whose inset uses the `--cn-gap` relationship. Surface owns the
+class and its complete behavior.
+
+### Constraints
+
+Spacing uses a named role or another grid multiple. No intermediate spacing step
+is introduced for local visual adjustment.
+
+`--cn-line` remains both the prose rhythm and row-height role. Body text uses one
+line unit, allowing a control one line unit high to align with adjacent text.
+
+Radius steps derive from the grid. A rounded container provides at least one grid
+unit of padding, preventing its curve from crowding the content. A consumer that
+requires a rounded corner without selecting a size uses the default radius role.
+
+The grid, icon sizes, and breakpoint thresholds use `rem`. The design system does
+not set the root text size, so these measurements follow the reader's default.
+
+Page-grid columns and margins, component dimensions, typography, and border box
+rules are outside this capability. A component selects from the available spatial
+roles according to its own structure.
+
+## Contract
+
+### Definition of Done
+
+- The Spatial System principles book demonstrates the three relationship roles,
+  vertical rhythm, radius proportionality, and `.surface` padding.
+- A source-driven lexicon publishes every unit and radius token.
+- Human review accepts the resulting rhythm and proportions at default and enlarged
+  browser text sizes.
+
+### Regression Guardrails
+
+- Every grid-derived measurement is calculated from `--cn-grid` in the stylesheet.
+- Icon sizes and breakpoint thresholds remain the only independent spatial `rem`
+  families owned by this capability.
+- No design-system stylesheet sets the root text size or expresses a breakpoint in
+  pixels.
+- The token entry point supplies the grid dependency required by elevation-shadow
+  declarations.
+
+### Scenarios
+
+```gherkin
+Given an unlisted spacing decision
+When the relationship between the elements is identified
+Then the selected spacing is the corresponding role or a grid multiple
+```
+
+```gherkin
+Given body text beside a control one line unit high
+When both render on the same row
+Then the control aligns with the text rhythm
+```
+
+```gherkin
+Given content inside a rounded container
+When the container renders
+Then its padding is at least one grid unit
+```
+
+```gherkin
+Given a reader who enlarges the browser's default text size
+When a spatial unit is evaluated
+Then its rem-based measurement scales with that preference
+```

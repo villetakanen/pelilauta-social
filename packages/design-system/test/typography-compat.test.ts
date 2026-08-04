@@ -68,13 +68,25 @@ describe('Cyan Lit typography compatibility', () => {
       ([, path]) => path,
     );
 
-    expect(imports).toEqual([
-      './preflight.css',
-      './tokens.css',
-      './fonts.css',
-      './typography.css',
-      './compat/cyan-typography.css',
-      './content-containers.css',
-    ]);
+    // The claim is a position, not a list. The whole composition is asserted
+    // once, in preflight.test.ts; a second copy of it here would only drift.
+    const at = (path: string) => {
+      const index = imports.indexOf(path);
+      expect(
+        index,
+        `${path} is not imported by the entry point`,
+      ).toBeGreaterThan(-1);
+      return index;
+    };
+
+    expect(at('./compat/cyan-typography.css')).toBeGreaterThan(
+      at('./fonts.css'),
+    );
+    expect(at('./compat/cyan-typography.css')).toBeGreaterThan(
+      at('./typography.css'),
+    );
+    expect(at('./compat/cyan-typography.css')).toBeLessThan(
+      at('./content-containers.css'),
+    );
   });
 });
