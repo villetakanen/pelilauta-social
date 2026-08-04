@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Typography
@@ -8,23 +8,20 @@ status: draft
 
 ### Context
 
-Nothing in v21 defines Pelilauta's text styles. Every heading and paragraph is
-styled by the package v21 removes, and the two systems v21 draws from disagree about
-what text should look like, so there is no version to copy. The scale here is
-decided, and appearance changes where it has to.
+Pelilauta needs a professional, well formed typography system. This system is built
+on a well functioning font pairing — Lato for human conversation, Roboto Mono for
+machine text — and a functional, but elegant Augmented Fourth (1.414) scale.
 
-The system gives a reader hierarchy they can scan, on a rhythm that agrees with the
-layout around it, at whatever text size they asked their browser for.
+Where the scale and accessibility are in conflict, the conflict is manually
+resolved.
 
 ### Architecture
 
-**Lato** sets Pelilauta's text. **Roboto Mono** is its monospace, used for code.
+**Roboto Mono** sets machine text: code, and the label step, where systemic data
+must read as machine text. Face loading and family delivery are decided in
+`specs/design-system/fonts/spec.md`.
 
-Where else monospace applies — a form value, an identifier, a slug — is not decided
-here. Which family loads a face, and how either reaches an application, is
-`specs/design-system/fonts/spec.md`'s.
-
-The scale is an Augmented Fourth (1.414) from the reading size.
+The scale is built on a 17px reading size, set for Lato's proportions:
 
 | step | size | line | weight | tracking |
 | :--- | ---: | ---: | ---: | ---: |
@@ -38,60 +35,41 @@ The scale is an Augmented Fourth (1.414) from the reading size.
 | caption | 12px | 24px | 500 | 0.05em |
 
 Sizes are proportions of the reader's default text size, shown against a 16px
-default. Small is in the table but not on the scale: it is not an Augmented Fourth
-from anything, and it exists for prose too secondary for reading size and too long
-for caption. A lexicon publishes it with the rest.
+default. Weights are those in the table, plus 700 for emphasis.
 
-Weights are those in the table, plus 700 for emphasis.
+Small is not on the scale: the mathematical step is adjusted for legibility.
 
-Tracking is v20's, for the steps v20 states. The steps v20 does not have derive:
-title takes h1's, and small takes text's. The caption's 0.05em is v20's own
-`.text-caption` treatment. A step's downshift takes the lower step's tracking with
-its size and line.
+Tracking is v20's for the steps v20 states; the steps v20 lacks derive from a
+neighbour — title takes h1's, small takes text's.
 
 ### Constraints
 
-A line is a multiple of the layout's line unit and taller than the text it holds. The
-unit is defined in `specs/design-system/spatial-system/spec.md`. The table states
-which multiple each step takes: the smallest that clears the text, except h1, which
-takes four units rather than three because 68px text on a 72px line leaves 4px of
-leading and the same line as h2.
+Line height is the smallest visually satisfying multiple of `--cn-line`
+(`specs/design-system/spatial-system/spec.md`). For h1 it is one step larger than
+the mathematical optimum used for the rest of the styles.
 
-Nothing in the system sets the document's text size. This is the reader-preference
-guarantee in `specs/design-system/design-tokens/spec.md`.
+HTML document text size is not set. The values presented here, and in
+documentation, expect the 16px default. This is an intentional decision on
+accessibility; see `specs/design-system/design-tokens/spec.md` for more.
 
-Every heading from h1 to h4 renders one step down at small-screen width — 38.75rem,
-620px at a 16px root — measured against its container rather than the window, so a
-heading in a card or a list row steps down when that card is as narrow as a small
-screen, whatever the page around it is doing. The threshold is the small-screen
-breakpoint, not the reading measure: the measure is 67 characters of prose and moves
-for reasons that have nothing to do with screen size.
+Every heading from h1 to h4 renders one step down when its container is narrower
+than the small-screen breakpoint — 38.75rem, 620px at a 16px root. 
 
-A container query cannot read a custom property, so this threshold is the one value
-this system states as a literal rather than reading from a token. A test pins the
-literal to the published small-screen breakpoint.
+CSS cannot read a token inside a `@container` query, so the stylesheet hardcodes
+`38.75rem` into the query.
 
 h4 is the smallest heading, so its step down is reading size at weight 700. The title
 step does not downshift.
 
-The step classes carry v20's own names. Each heading step ships its mirror class —
-`.text-h1` through `.text-h4`, v20's "utilities mirroring semantic tag behaviors" —
-for text that renders at a heading step without opening a section. A mirror renders
-identically to its element, downshift included, and the element is preferred where
-the text is a heading. The text step's mirror is `.text-body`: it renders any
-element at the text step, a heading visually as prose among them.
+Every element step ships a mirror class that renders identically to its element,
+downshift included.
 
-Caption and label share the caption size and line. `.text-caption` is v20's:
-uppercased at weight 500 with 0.05em tracking, the metadata register the
-application already writes. `.text-label` is an approved exception to v20
-(human decision 2026-08-04): it keeps the casing it is given at the text weight and
-tracking, because some captions are labels — content whose casing carries
-meaning — and Finnish compounds lose their word shape in capitals.
+`.text-label` is intended for caption-sized data whose casing carries meaning; a
+Finnish compound loses its word shape in capitals.
 
-The step set is closed. A step is added by changing this spec.
-
-Headings, prose and links take the colour roles defined in
-`specs/design-system/design-tokens/spec.md`.
+Not decided here yet: link styling, heading wrap, and table typography. The
+boundaries in `specs/design-system/preflight/spec.md` assign them to this
+capability.
 
 ## Contract
 

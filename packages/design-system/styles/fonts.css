@@ -16,10 +16,12 @@
 }
 
 /*
- * Lato is the document's, Roboto Mono is code's, so a consumer names neither.
+ * Lato is the document's, Roboto Mono is code's and the label step's — a label is
+ * metadata and systemic data, so it reads as machine text (human decision
+ * 2026-08-04). A consumer names neither family.
  *
- * Form values, identifiers and slugs are undecided in the typography spec; these
- * rules shipped early. See plans/debt/form-control-register.md.
+ * Form values, identifiers and slugs shipped early against the same intent. See
+ * plans/debt/form-control-register.md.
  */
 body {
   font-family: var(--cn-font-family);
@@ -29,6 +31,7 @@ code,
 kbd,
 samp,
 pre,
+.text-label,
 input:not([type="button"], [type="reset"], [type="submit"]),
 select,
 textarea {
