@@ -1,0 +1,88 @@
+---
+/**
+ * Composition — a rendered combination of elements, framed so the reader can
+ * tell the demonstration from the book around it.
+ *
+ * The slot content is set entirely by the design system: real elements, step
+ * classes and tokens, nothing of this component's. The frame and caption are
+ * the only styling here, and they read the system's tokens.
+ *
+ * Spec: specs/design-system/spec.md — a page renders the combinations it
+ * governs, and a demonstration with private styling evaluates nothing.
+ */
+interface Props {
+  /** Names what the reader is looking at. Set in the caption step. */
+  caption?: string;
+  /**
+   * Renders the slot in a container narrower than the small-screen breakpoint,
+   * so the typography downshift can be seen operating. The width is test rig,
+   * not a system value.
+   */
+  narrow?: boolean;
+  /**
+   * Renders the slot twice, side by side, one panel per colour scheme, so the
+   * same content is evaluated in Light and Dark on one page.
+   */
+  themes?: boolean;
+}
+
+const { caption, narrow = false, themes = false } = Astro.props;
+const content = themes ? await Astro.slots.render('default') : undefined;
+const MODES = ['light', 'dark'] as const;
+---
+
+<figure>
+  {
+    themes ? (
+      <div class="modes">
+        {MODES.map((mode) => (
+          <div
+            class="composition themed"
+            data-mode={mode}
+            style={`color-scheme: ${mode};`}
+            set:html={content}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class:list={['composition', { narrow }]}>
+        <slot />
+      </div>
+    )
+  }
+  {caption && <figcaption class="text-label">{caption}</figcaption>}
+</figure>
+
+<style>
+  figure {
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-medium);
+  }
+
+  .composition {
+    display: grid;
+    row-gap: var(--cn-line);
+    padding: var(--cn-gap);
+  }
+
+  .narrow {
+    container-type: inline-size;
+    max-inline-size: 20rem;
+  }
+
+  .modes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  .themed {
+    color: var(--cn-text);
+    background: var(--cn-background);
+  }
+
+  figcaption {
+    padding: var(--cn-grid) var(--cn-gap);
+    color: var(--cn-text-low);
+    border-block-start: 1px solid var(--cn-border);
+  }
+</style>

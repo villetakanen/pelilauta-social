@@ -82,13 +82,28 @@ describe('scoping', () => {
     // container-type reports the element's own border box. Declaring cn-content
     // on a full-width element would report the page, and every query written
     // against it would be answered with 30rem more room than the column has.
-    const container = css.match(
-      /\.cn-app-main > section,\s*\.cn-app-main > article\s*\{([^}]*)\}/,
+    // A section is the column; an article spans the page for breakouts, so the
+    // container moves to its column-width blocks.
+    const section = css.match(/\.cn-app-main > section\s*\{([^}]*)\}/);
+    expect(section, 'the section container is not declared').not.toBeNull();
+    expect(section?.[1]).toMatch(/container:\s*cn-content\s*\/\s*inline-size/);
+    expect(section?.[1]).not.toMatch(/(inline-size|width)\s*:/);
+
+    const blocks = css.match(/\.cn-app-main > article > \*\s*\{([^}]*)\}/);
+    expect(blocks, "the article's blocks are not containers").not.toBeNull();
+    expect(blocks?.[1]).toMatch(/container:\s*cn-content\s*\/\s*inline-size/);
+    expect(blocks?.[1]).toMatch(/grid-column:\s*2/);
+  });
+
+  test('a breakout block takes its own width, centred, and stops being a container', () => {
+    const breakout = css.match(
+      /\.cn-app-main > article > \.cn-breakout\s*\{([^}]*)\}/,
     );
-    expect(container, 'containers are not declared as expected').not.toBeNull();
-    expect(container?.[1]).toMatch(
-      /container:\s*cn-content\s*\/\s*inline-size/,
-    );
-    expect(container?.[1]).not.toMatch(/(inline-size|width)\s*:/);
+    expect(breakout, 'cn-breakout is not declared').not.toBeNull();
+    expect(breakout?.[1]).toMatch(/grid-column:\s*1 \/ -1/);
+    expect(breakout?.[1]).toMatch(/justify-self:\s*center/);
+    expect(breakout?.[1]).toMatch(/max-inline-size:\s*100%/);
+    // Its width is its content's: a full-span container would report the page.
+    expect(breakout?.[1]).toMatch(/container:\s*none/);
   });
 });

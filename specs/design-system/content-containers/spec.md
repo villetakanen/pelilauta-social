@@ -18,8 +18,11 @@ leaves the rest of v20's family unbuilt.
 `packages/design-system/styles/content-containers.css`, reached through
 `styles/ds.css` rather than imported by name.
 
-An application opts in with `cn-app-main` on its `<main>`; direct `section` and
-`article` children are then containers. No wrapper element, no component.
+An application opts in with `cn-app-main` on its `<main>`. A direct `section`
+child is a container in the column. A direct `article` spans the page and lays
+its blocks out on the page grid through subgrid: each block sits in the column
+and is itself the container, and a block marked `cn-breakout` takes the width its
+content wants, centred, up to the page. No wrapper element, no component.
 
 The `<main>` is the grid and a container is a cell in it. The alternative — a
 full-width container whose middle track holds the content — centres the same way
@@ -37,16 +40,19 @@ The measure is 67 characters of the base paragraph, expressed as a multiple of
 `--cn-grid` and re-measured when the base font or its size changes.
 
 A container is `cn-content` and reports the column's width, so a component inside
-one measures the column and not the page.
+one measures the column and not the page. In an article the container is each
+block, never the page-spanning article itself, and a `cn-breakout` block is no
+container at all — its width is its content's.
 
 The two modes are one track expression, not a breakpoint: the measure and the
 width remaining after a gutter each side, whichever is smaller. They are equal
 exactly where the measure and its gutters fit, so there is no threshold to state
 and none to keep in step.
 
-Spanning the page is a property of a whole container, not of something inside
-one. A child cannot escape its container, because the container is exactly as
-wide as the column and holds no wider box to reach for.
+In a section, spanning the page is a property of the whole container: a child
+cannot escape it, because the container is exactly as wide as the column. An
+article exists for the content that needs to: its blocks reach the page grid
+directly, and `cn-breakout` is the marked exception rather than an override.
 
 Rhythm between containers and between the blocks inside one is `--cn-line`. The
 inside case is the spacing `specs/design-system/preflight/spec.md` assigns to each

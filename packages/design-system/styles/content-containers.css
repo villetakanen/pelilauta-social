@@ -33,17 +33,41 @@
 }
 
 /*
- * A container is the column, so `cn-content` reports the column's width.
+ * A section is the column, so `cn-content` reports the column's width.
  *
  * It is a grid so `row-gap` replaces the element margins the preflight removes, and
  * so that spacing survives an `astro-island`, which the preflight sets to
  * `display: contents`.
  */
-.cn-app-main > section,
-.cn-app-main > article {
+.cn-app-main > section {
   container: cn-content / inline-size;
   display: grid;
   row-gap: var(--cn-line);
+}
+
+/*
+ * An article spans the page and lays out on the page grid through subgrid: its
+ * blocks sit in the column, and a block marked `cn-breakout` may take the width
+ * its content wants, centred, up to the page. The container moves with the
+ * blocks: each stays column-width, so `cn-content` still reports the column.
+ */
+.cn-app-main > article {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: var(--cn-line);
+}
+
+.cn-app-main > article > * {
+  grid-column: 2;
+  container: cn-content / inline-size;
+}
+
+.cn-app-main > article > .cn-breakout {
+  grid-column: 1 / -1;
+  justify-self: center;
+  max-inline-size: 100%;
+  container: none;
 }
 
 /* A container that spans the page instead of sitting in the column. */

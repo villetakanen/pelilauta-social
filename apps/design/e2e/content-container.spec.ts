@@ -25,8 +25,12 @@ const steps = (page: Page, count: number) =>
 
 const boxes = async (page: Page) => {
   const main = await page.locator('main#content').boundingBox();
-  // The container is the column, so its own box is what we measure.
-  const column = await page.locator('main#content > article').boundingBox();
+  // The article spans the page for breakouts; its blocks are the column, so a
+  // block's box is what we measure.
+  const column = await page
+    .locator('main#content > article > p')
+    .first()
+    .boundingBox();
   if (!main || !column) throw new Error('container not rendered');
   return { main, column };
 };
@@ -95,13 +99,16 @@ test('a query against cn-content resolves against the column, not the page', asy
     `,
   });
   await page.evaluate(() => {
+    // A block of the article is the container, so the probes live inside one.
     const article = document.querySelector('main#content > article');
+    const host = document.createElement('div');
     for (const id of ['probe-narrow', 'probe-wide']) {
       const probe = document.createElement('p');
       probe.id = id;
       probe.textContent = id;
-      article?.append(probe);
+      host.append(probe);
     }
+    article?.append(host);
   });
 
   await expect(page.locator('#probe-narrow')).toHaveCSS(
@@ -132,6 +139,33 @@ test('a container marked full width spans the page', async ({ page }) => {
 
   expect(bleed.width).toBeGreaterThan(measure);
   expect(bleed.width).toBeCloseTo(main.width, 0);
+});
+
+test('a breakout block takes its content width, centred, capped by the page', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BOOK);
+
+  await page.evaluate(() => {
+    const block = document.createElement('div');
+    block.id = 'breakout';
+    block.className = 'cn-breakout';
+    block.innerHTML = '<div style="inline-size: 60rem;">wide content</div>';
+    document.querySelector('main#content > article')?.append(block);
+  });
+
+  const measure = await steps(page, MEASURE_STEPS);
+  const { main } = await boxes(page);
+  const breakout = await page.locator('#breakout').boundingBox();
+  if (!breakout) throw new Error('the breakout did not render');
+
+  // Wider than the column, its own content's width, and centred on the page.
+  expect(breakout.width).toBeGreaterThan(measure);
+  expect(breakout.width).toBeLessThanOrEqual(main.width);
+  const left = breakout.x - main.x;
+  const right = main.x + main.width - (breakout.x + breakout.width);
+  expect(left).toBeCloseTo(right, 0);
 });
 
 test('the column widens proportionally when the reader enlarges their text', async ({

@@ -1,5 +1,5 @@
 ---
-status: approved
+status: draft
 ---
 
 # Typography
@@ -35,19 +35,19 @@ The scale is an Augmented Fourth (1.414) from the reading size.
 | h4 | 24px | 48px | 400 | normal |
 | text | 17px | 24px | 400 | 0.03em |
 | small | 15px | 24px | 400 | 0.03em |
-| caption | 12px | 24px | 400 | 0.03em |
+| caption | 12px | 24px | 500 | 0.05em |
 
 Sizes are proportions of the reader's default text size, shown against a 16px
 default. Small is in the table but not on the scale: it is not an Augmented Fourth
 from anything, and it exists for prose too secondary for reading size and too long
 for caption. A lexicon publishes it with the rest.
 
-Weights are those in the table, plus 500 for labels and buttons and 700 for emphasis.
+Weights are those in the table, plus 700 for emphasis.
 
 Tracking is v20's, for the steps v20 states. The steps v20 does not have derive:
-title takes h1's, small and caption take text's — the value v20's inheritance gave
-them. An uppercased label tracks 0.05em, v20's one uppercase treatment. A step's
-downshift takes the lower step's tracking with its size and line.
+title takes h1's, and small takes text's. The caption's 0.05em is v20's own
+`.text-caption` treatment. A step's downshift takes the lower step's tracking with
+its size and line.
 
 ### Constraints
 
@@ -74,11 +74,19 @@ literal to the published small-screen breakpoint.
 h4 is the smallest heading, so its step down is reading size at weight 700. The title
 step does not downshift.
 
-Label and caption share the caption size and line. A label is uppercased at weight
-500; a caption keeps the casing it is given at weight 400. A caption is not uppercased
-because Finnish compounds are long and lose their word shape in capitals, which works
-on a column header and fails on a sentence. Content whose casing
-carries meaning is not a label.
+The step classes carry v20's own names. Each heading step ships its mirror class —
+`.text-h1` through `.text-h4`, v20's "utilities mirroring semantic tag behaviors" —
+for text that renders at a heading step without opening a section. A mirror renders
+identically to its element, downshift included, and the element is preferred where
+the text is a heading. The text step's mirror is `.text-body`: it renders any
+element at the text step, a heading visually as prose among them.
+
+Caption and label share the caption size and line. `.text-caption` is v20's:
+uppercased at weight 500 with 0.05em tracking, the metadata register the
+application already writes. `.text-label` is an approved exception to v20
+(human decision 2026-08-04): it keeps the casing it is given at the text weight and
+tracking, because some captions are labels — content whose casing carries
+meaning — and Finnish compounds lose their word shape in capitals.
 
 The step set is closed. A step is added by changing this spec.
 
@@ -142,7 +150,7 @@ Then it is set in Roboto Mono
 ```
 
 ```gherkin
-Given a label and a caption with the same content
+Given a caption and a label with the same content
 When both render
-Then the label is uppercased and the caption keeps the casing it was given
+Then the caption is uppercased and the label keeps the casing it was given
 ```

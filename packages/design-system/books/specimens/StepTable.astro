@@ -1,0 +1,121 @@
+---
+/**
+ * StepTable — every scale step rendered as a live specimen in Dark and Light,
+ * with the values the step resolves to.
+ *
+ * The rendered cells use the system's own classes; heading steps render through
+ * their mirror classes so a specimen table adds nothing to the document
+ * outline. The values come from the stylesheet the book imports, so the table
+ * cannot state a size the scale does not ship.
+ *
+ * Book: apps/design/src/content/principles/typography.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** styles/typography.css, imported by the book with `?raw`. */
+  source: string;
+  /** The word every specimen cell renders. */
+  word?: string;
+}
+
+const { source, word = 'Pelilauta' } = Astro.props;
+
+/** The scale's steps, with how a consumer reaches each. */
+const STEPS = [
+  { step: 'title', markup: '.text-title', className: 'text-title' },
+  { step: 'h1', markup: 'h1 · .text-h1', className: 'text-h1' },
+  { step: 'h2', markup: 'h2 · .text-h2', className: 'text-h2' },
+  { step: 'h3', markup: 'h3 · .text-h3', className: 'text-h3' },
+  { step: 'h4', markup: 'h4 · .text-h4', className: 'text-h4' },
+  {
+    step: 'text',
+    markup: 'body · p · li · .text-body',
+    className: 'text-body',
+  },
+  { step: 'small', markup: '.text-small', className: 'text-small' },
+  {
+    step: 'caption',
+    markup: '.text-caption · .text-label',
+    className: 'text-label',
+  },
+] as const;
+
+/** A token family keyed by step name, from the imported stylesheet. */
+function family(prefix: string) {
+  const byStep = new Map<string, { value: string; note?: string }>();
+  for (const token of parseTokens(source, { prefix })) {
+    byStep.set(token.name.replace(`${prefix}-`, ''), token);
+  }
+  return byStep;
+}
+
+const sizes = family('--cn-font-size');
+const lines = family('--cn-line-height');
+const weights = family('--cn-font-weight');
+const trackings = family('--cn-letter-spacing');
+
+const rows = STEPS.map(({ step, markup, className }) => {
+  const size = sizes.get(step);
+  const line = lines.get(step);
+  if (!size || !line) {
+    throw new Error(
+      `StepTable: the stylesheet no longer declares the ${step} step.`,
+    );
+  }
+  return {
+    step,
+    markup,
+    className,
+    values: [
+      size.note ?? size.value,
+      line.note ?? line.value,
+      weights.get(step)?.value,
+      trackings.get(step)?.value,
+    ]
+      .filter(Boolean)
+      .join(' · '),
+  };
+});
+
+const MODES = ['dark', 'light'] as const;
+---
+
+<div class="scroll cn-breakout">
+  <table>
+    <thead>
+      <tr>
+        {MODES.map((mode) => <th scope="col">{mode}</th>)}
+        <th scope="col">markup</th>
+        <th scope="col">size · line · weight · tracking</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map(({ step, markup, className, values }) => (
+        <tr>
+          {MODES.map((mode) => (
+            <td class="specimen" data-mode={mode} style={`color-scheme: ${mode};`}>
+              <span class={className} data-step={step}>{word}</span>
+            </td>
+          ))}
+          <td><code>{markup}</code></td>
+          <td class="text-label">{values}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  /* A 96px specimen beside three columns overflows a phone's column. */
+  .scroll {
+    overflow-x: auto;
+  }
+
+  .specimen {
+    color: var(--cn-text);
+    background: var(--cn-background);
+    padding-inline: var(--cn-gap);
+    white-space: nowrap;
+  }
+</style>

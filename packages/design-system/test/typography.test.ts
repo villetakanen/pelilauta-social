@@ -107,11 +107,18 @@ function scaleFromSpec(): Step[] {
   return rows;
 }
 
-/** The rules of a stylesheet fragment, as selector -> body. */
+/**
+ * The rules of a stylesheet fragment, one entry per selector: a grouped rule
+ * (`h1, .text-h1 { … }`) registers its body under each of its selectors.
+ */
 function rules(source: string): Map<string, string> {
   const found = new Map<string, string>();
-  for (const [, selector, body] of source.matchAll(/([^{}@;]+)\{([^{}]*)\}/g)) {
-    found.set(selector.trim(), body.trim());
+  for (const [, selectors, body] of source.matchAll(
+    /([^{}@;]+)\{([^{}]*)\}/g,
+  )) {
+    for (const selector of selectors.split(',')) {
+      found.set(selector.trim(), body.trim());
+    }
   }
   return found;
 }
@@ -164,31 +171,34 @@ describe('the scale', () => {
     }
   });
 
-  test('the two prose weights are published for labels and emphasis', () => {
-    const prose = spec.match(
-      /plus (\d{3}) for labels and buttons and (\d{3}) for emphasis/,
-    );
-    expect(prose, 'the spec no longer states the prose weights').toBeTruthy();
-    const [, label, emphasis] = prose as RegExpMatchArray;
-    expect(tokens.get('--cn-font-weight-label')).toBe(label);
+  test('the emphasis weight the prose states is published', () => {
+    const prose = spec.match(/plus (\d{3}) for emphasis/);
+    expect(prose, 'the spec no longer states the emphasis weight').toBeTruthy();
+    const [, emphasis] = prose as RegExpMatchArray;
     expect(tokens.get('--cn-font-weight-emphasis')).toBe(emphasis);
   });
 });
 
 describe('the rules that read it', () => {
-  test('the document reads at the text step', () => {
+  test('the document reads at the text step, and .text-body mirrors it', () => {
     const body = document.get('body');
     expect(body).toContain('font-size: var(--cn-font-size-text)');
     expect(body).toContain('line-height: var(--cn-line-height-text)');
+    // One rule, two selectors: the mirror cannot drift from the document.
+    expect(document.get('.text-body')).toBe(body);
   });
 
-  test('each heading element renders its own step', () => {
+  test('each heading element and its mirror class render the same step', () => {
     for (const name of ['h1', 'h2', 'h3', 'h4']) {
-      const rule = document.get(name);
-      expect(rule, `${name} has no rule`).toBeTruthy();
-      expect(rule).toContain(`font-size: var(--cn-font-size-${name})`);
-      expect(rule).toContain(`font-weight: var(--cn-font-weight-${name})`);
-      expect(rule).toContain(`line-height: var(--cn-line-height-${name})`);
+      for (const selector of [name, `.text-${name}`]) {
+        const rule = document.get(selector);
+        expect(rule, `${selector} has no rule`).toBeTruthy();
+        expect(rule).toContain(`font-size: var(--cn-font-size-${name})`);
+        expect(rule).toContain(`font-weight: var(--cn-font-weight-${name})`);
+        expect(rule).toContain(`line-height: var(--cn-line-height-${name})`);
+      }
+      // One rule, two selectors: a mirror that drifts from its element fails here.
+      expect(document.get(name)).toBe(document.get(`.text-${name}`));
     }
   });
 
@@ -199,15 +209,15 @@ describe('the rules that read it', () => {
       ['h2', '--cn-text-heading'],
       ['h3', '--cn-text-subheading'],
       ['h4', '--cn-text-subheading'],
-      ['.cn-text-title', '--cn-text-heading'],
+      ['.text-title', '--cn-text-heading'],
     ] as const) {
       expect(theme.has(role), `${role} is not a theme role`).toBe(true);
       expect(document.get(selector), selector).toContain(`color: var(${role})`);
     }
   });
 
-  test('label and caption share the caption size and line, and only the label is uppercased', () => {
-    for (const selector of ['.cn-text-label', '.cn-text-caption']) {
+  test('caption and label share the caption size and line, and only the caption is uppercased', () => {
+    for (const selector of ['.text-caption', '.text-label']) {
       const rule = document.get(selector);
       expect(rule, selector).toContain(
         'font-size: var(--cn-font-size-caption)',
@@ -216,13 +226,17 @@ describe('the rules that read it', () => {
         'line-height: var(--cn-line-height-caption)',
       );
     }
-    expect(document.get('.cn-text-label')).toContain(
+    expect(document.get('.text-caption')).toContain(
       'text-transform: uppercase',
     );
-    expect(document.get('.cn-text-label')).toContain(
-      'font-weight: var(--cn-font-weight-label)',
+    expect(document.get('.text-caption')).toContain(
+      'font-weight: var(--cn-font-weight-caption)',
     );
-    expect(document.get('.cn-text-caption')).not.toContain('text-transform');
+    // The approved exception to v20: a label keeps the casing it is given.
+    expect(document.get('.text-label')).not.toContain('text-transform');
+    expect(document.get('.text-label')).toContain(
+      'font-weight: var(--cn-font-weight-text)',
+    );
   });
 });
 
@@ -254,6 +268,8 @@ describe('the downshift', () => {
       expect(rule).toContain(
         `letter-spacing: var(--cn-letter-spacing-${below})`,
       );
+      // The mirror class downshifts with its element.
+      expect(narrow.get(`.text-${name}`)).toBe(rule);
     }
     expect(narrow.get('h4')).toContain(
       'font-weight: var(--cn-font-weight-emphasis)',

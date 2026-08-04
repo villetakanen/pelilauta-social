@@ -43,26 +43,27 @@ than three: 68px text on a 72px line leaves 4px of leading and the same line as 
 
 ## Weights
 
-The steps' own weights, plus 500 for labels and buttons and 700 for emphasis.
+The steps' own weights, plus 700 for emphasis.
 
 <TokenTable source={typographySource} prefix="--cn-font-weight" />
 
 ## Tracking
 
-v20's values for the steps v20 states; the rest derive — title takes h1's, small and
-caption take text's. The label's `0.05em` is v20's one uppercase treatment.
+v20's values for the steps v20 states; the rest derive — title takes h1's, and small
+takes text's. The caption's `0.05em` is v20's own `.text-caption` treatment.
 
 <TokenTable source={typographySource} prefix="--cn-letter-spacing" />
 
 ## What reads them
 
 `body` reads the text step, and `h1` through `h4` read theirs, so ordinary markup is on
-the scale with no class at all. The steps without an element of their own ship as
-classes: `.cn-text-title`, `.cn-text-small`, `.cn-text-caption` and `.cn-text-label`.
+the scale with no class at all. Every element step also ships its mirror class —
+`.text-body`, `.text-h1` through `.text-h4` — and the steps without an element ship as
+classes: `.text-title`, `.text-small`, `.text-caption` and `.text-label`.
 
-Label and caption share the caption size and line. The label adds its own weight and
-tracking and uppercases; give content whose casing carries meaning the caption class
-instead, since a caption keeps the casing it is given — Finnish compounds lose their
+Caption and label share the caption size and line. The caption adds its own weight and
+tracking and uppercases; give content whose casing carries meaning the label class
+instead, since a label keeps the casing it is given — Finnish compounds lose their
 word shape in capitals.
 
 ## The downshift
