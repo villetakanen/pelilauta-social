@@ -19,6 +19,8 @@
 - docs
   - adrs           # irreversible decisions
   - lessons        # notes we might act on later; disposable
+- .agents/skills   # portable skills
+- .claude/skills   # symlinked from .agents/skills, to enable dual use with claude 
 ```
 
 ## Delivery Contract

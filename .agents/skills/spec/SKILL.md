@@ -26,6 +26,20 @@ states a change. The anatomy and the writing rules are `specs/TEMPLATE.md`.
 6. Run the review gate, then ask for human approval. The request carries the
    Subtraction outcome in one line — what was cut, or that nothing could be.
 
+## Prose
+
+Write in the register of a corporate design specification (Material Design's,
+for example): dry, strict, technical.
+
+- Declaratives and imperatives. State the fact or the requirement; no setup,
+  no pleasantries, no personal pronouns.
+- No aphorisms, no metaphor, no consequence-drama. A contrast ("X, not Y")
+  appears only when Y is a mistake an implementer would actually make.
+- Complete sentences in the template's sections; values in tables, behaviour
+  in Gherkin.
+- Density comes from the template's sentence test, not from fragmenting
+  sentences.
+
 ## Review Gate
 
 Before requesting `draft` → `approved`, a critic pass that has not just written
