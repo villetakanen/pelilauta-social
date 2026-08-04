@@ -3,8 +3,7 @@
  *
  * Prototype-age scaffolding, and shrinking. Do not build on it and do not extend it:
  * a book is an MDX file, and anything the design system should own belongs in a
- * stylesheet it ships to both applications, not here. See
- * .agents/skills/design-system-developer/SKILL.md.
+ * stylesheet it ships to both applications, not here.
  *
  * The hero, kicker, lede and stat-tile vocabulary serves pages/HomePage.astro, which
  * is package-owned and so cannot read app CSS. It stays until an app shell owns it,
