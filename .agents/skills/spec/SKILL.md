@@ -28,9 +28,11 @@ anatomy is `specs/TEMPLATE.md`; start new specs from it.
    `draft` until a human approves it, and so is altered intent: any edit to an
    `approved` spec returns it to `draft`, including one made in the same commit as
    the behaviour it describes. That is the whole frontmatter.
-5. Write what this project decided: its constraints and boundaries.
-   Assume engineering competence — a paragraph a competent reader could have
-   written without this repository is the thing to cut, whatever section it is in.
+5. Write what this project decided: its constraints and boundaries, rationale
+   first, then the rule. State decisions, never their history — no datelines, no
+   narrative of how a decision was reached; git carries both. Assume engineering
+   competence — a paragraph a competent reader could have written without this
+   repository is the thing to cut, whatever section it is in.
 6. Examples illustrate intent; the current code is the reference for
    implementation.
 7. Anchor, don't model. Do not copy a value that is already written somewhere
@@ -59,9 +61,10 @@ spec — not the code — and records the outcome in the spec review or PR:
   follows v20, so a v18 look-alike claim is a defect, not evidence.
 - **Scope:** is the spec about one capability, and does it repeat anything another
   spec already states?
-- **Subtraction:** run last. What can be deleted without losing a checkable
-  claim? Every other axis asks whether the spec says enough; this one is the
-  only counterweight.
+- **Subtraction:** run last, line by line. Can an agent derive this from the
+  code? If the code can say it, cut it — a section the code fully expresses
+  states `(implicit)`. Every other axis asks whether the spec says enough; this
+  one is the only counterweight.
 
 Unresolved findings go to the human owner with the approval request; do not
 silently drop them.
