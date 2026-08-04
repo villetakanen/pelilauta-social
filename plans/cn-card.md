@@ -1,4 +1,4 @@
-# Cards
+# cn-card
 
 ## Goal
 
@@ -24,12 +24,26 @@ onboarding cards.
 
 ## Known scope
 
-- **Card capability contract** — open; reverse-specifies the Cyan element and all v21
-  consumers, then resolves them against v20's Card API, semantics, responsive
-  containment, elevation, indicators, links, cover treatment and action composition
-- **Card foundation** — open, waits on the capability contract and typography epic;
-  the local Svelte component, component tests and public styles implement the approved
-  contract without reading Cyan component rules
+- **Surfaces and elevation** — open; the elevation utilities v20's Card stands on
+  (`elevation-0`–`4` with the relative-nesting engine), their spec, and the deferred
+  elevation decisions resolved with a human: what elevation means, whether five
+  surface roles are needed, and whether sub-AA contrast on a raised Dark surface is
+  acceptable. The surface roles, shadows, radii and spacing tokens already ship; the
+  one radius decision is whether v20's `--cn-border-radius-card` alias survives.
+  Settles `plans/debt/book-vocabulary-classes.md` for `.elevation-1` and `.surface`
+- **Call-site classification** — open; every `cn-card` consumer and card-shaped
+  composition is classified: a Card, a plain surface, or removed. A v18 card that is
+  a static box moves to the elevation utilities, not to Card
+- **Card capability contract** — open, waits on the classification; reverse-specifies
+  the Cyan element and the consumers classified as Cards, then resolves them against
+  v20's Card API, semantics, responsive containment, elevation, indicators, links,
+  cover treatment and action composition. Anything v21 omits from either source is
+  recorded in the spec
+- **Card foundation** — open, waits on the capability contract; the local Svelte
+  component, component tests and public styles implement the approved contract
+  without reading Cyan component rules
+- **Surfaces and elevation book** — open, waits on surfaces and elevation; a
+  principles book on the elevation model, rendered from the utilities
 - **Card component book** — open, waits on the foundation; the API, content guidance,
   states, covers, links, actions and narrow-container behaviour render through focused
   specimens on the design site
@@ -64,4 +78,8 @@ onboarding cards.
   smallest bridge required by migrated Card consumers remains here
 - Redesigning subscription, profile, site, character or admin business logic — the
   owning application capabilities; Card only preserves their current composition
-- Card-shaped surfaces that do not consume `cn-card` — their owning component epics
+- Migrating the application's 41 `.surface`-class compositions that do not consume
+  `cn-card` — their owning component epics; the elevation utilities shipped here are
+  what they will migrate onto
+- Spacing between cards — a listing layout's decision; no card margin token exists
+  and none is added
