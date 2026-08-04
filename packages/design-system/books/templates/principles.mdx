@@ -2,33 +2,41 @@
 title: The book's title
 description: One sentence. It is the navigation subtitle and the page's meta description, so write it for someone deciding whether to open the page.
 order: 1
-prose: true
 ---
 
 {/*
   PRINCIPLES BOOK — copy to apps/design/src/content/principles/<slug>.mdx, delete
-  these comments. Rules are the design-system-book skill's. Link books, never a spec.
+  these comments. Rules are the design-system-book skill's; the exemplar is
+  /principles/typography. Link books, never a spec. Document only what ships.
 */}
 
-Open with what this is and who needs it, in two or three sentences. State the
-decision the reader arrives with, and answer it here rather than at the end.
+Open with what this subject does for the product and the means we chose, in two or
+three first-person-plural sentences. "We rely on two complementary typefaces: Lato
+provides an approachable, highly readable voice, while Roboto Mono brings structure
+and precision to code and metadata."
 
-## A heading that states the outcome
+## A Topic, Named Plainly
 
-Not "Overview" and not a noun phrase — "Form controls inherit their type", "The
-grid is the only literal length". A reader scanning headings should be able to
-learn the rules without reading the paragraphs.
+Headings are Title Case topic names — "Type Scale & Vertical Rhythm" — optionally
+carrying their qualities: "Lato: Warmth, Clarity, and Universal Scale". A heading is
+not a slogan and not a sentence.
 
-Prose explains how to choose and what goes wrong. Values belong in a table:
+Every choice carries its rationale, comparative where alternatives were live and
+quantified where numbers exist:
 
-| Token | Value | Role |
-| :--- | :--- | :--- |
-| `--cn-grid` | `0.5rem` | The atomic unit of alignment. |
+* A Labeled Quality: What the choice provides, tied to this product's real surfaces.
+* Another Quality: With the numbers — "because 1.414² = 2, every two steps doubles
+  the size (17px → 24px → 34px)".
 
-## A heading with live source under it
+### A Subsection For One Decision
 
-<SomeSpecimen />
+A `##` topic holds its decisions as `###` subsections rather than spawning sibling
+topics.
 
-Use a specimen where the page would otherwise repeat a stylesheet by hand. Say in
-one line what the reader is looking at; do not narrate what the specimen already
-shows.
+<SomeSpecimen source={stylesheetSource} />
+
+A demonstration renders from source — a table the stylesheet fills, a composition in
+both themes — so the page cannot state what does not ship. Say in one line what the
+reader is looking at; do not narrate what the specimen already shows.
+
+For the complete token reference, see the subject's lexicon book.

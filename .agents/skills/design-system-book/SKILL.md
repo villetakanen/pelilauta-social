@@ -30,11 +30,16 @@ Read the component's own header comment and its spec before writing. What resolv
 what a value inherits, and where the implementation departs from v20 are stated there and
 nowhere else.
 
+## Voice
+
+Read `/principles/typography` before writing: it is the exemplar, set by the owner.
+First person plural, declarative, no contractions. Every choice carries its
+rationale — comparative where alternatives were live, quantified where numbers
+exist. A book documents only what ships.
+
 ## Before the pull request
 
 Cut a paragraph a competent reader could have written without this repository.
 
 Never: "not X, but Y". An aphorism closing a paragraph. A knowing aside.
 `grep -nwE 'easy|simply|quick|just'` returns nothing.
-
-Imperative mood. Contractions.
