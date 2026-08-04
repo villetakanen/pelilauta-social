@@ -41,8 +41,9 @@ reader has asked for larger text, and would keep making layout decisions as thou
 they had not.
 
 Reference choices state what is available. Semantic roles state why a choice is
-used. Components consume semantic roles so that their meaning remains stable
-when the visual expression evolves.
+used. Surface combines background and elevation-shadow roles into levels;
+components consume those levels and other semantic roles so that their meaning
+remains stable when the visual expression evolves.
 
 ## Product Goals
 
@@ -87,6 +88,10 @@ The grid family is separate from colour, and elevation shadows in the semantic l
 derive from it. One entry point composes both families so consumers receive the shadow
 declarations and their grid dependency together.
 
+`specs/design-system/surface/spec.md` owns which background and shadow roles form
+an elevation, and how nested elevations change the visible shadow. This capability
+owns the token vocabulary and its dependency composition.
+
 Consumers read semantic roles.
 
 ## Non-Goals
@@ -101,7 +106,7 @@ Consumers read semantic roles.
 
 ## Acceptance
 
-- A participating production surface and its design-system book express the
+- A participating production consumer and its design-system book express the
   same approved visual intent.
 - Light and Dark modes preserve understandable hierarchy, states, and contrast.
 - Existing consumers continue to work through an explicitly bounded

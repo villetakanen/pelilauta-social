@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Spatial System
@@ -67,11 +67,14 @@ That property, and the rules that keep it, are owned by
 ## Blueprint
 
 One literal measurement exists — the grid. Spacing roles, radii and elevation
-shadows are stated as multiples of it, so changing the grid moves the whole system
-and nothing else has to be revisited.
+shadow measurements are stated as multiples of it, so changing the grid moves the
+whole system and nothing else has to be revisited. Surface owns which elevation
+uses each shadow and how nesting changes the visible shadow.
 
 Values are in the [Units and grid](/tokens/units) lexicon; the reasoning is in the
-Spatial System principles book.
+Spatial System principles book. That book presents `.surface` as a content
+container whose forced padding takes the `--cn-gap` relationship role; Surface
+owns the class and its complete behavior.
 
 ## Non-Goals
 
@@ -83,6 +86,9 @@ Spatial System principles book.
 - Box rules, including how a border is counted against a box's own measurements,
   belong to System Mechanics.
 - Typographic sizes are typography's, not the grid's.
+- A surface's elevation, background and shadow belong to
+  `specs/design-system/surface/spec.md`. A consuming component chooses its radius;
+  this capability owns the available radius and measurement rules.
 
 ## Regression Guardrails
 
@@ -97,7 +103,8 @@ Spatial System principles book.
   on the grid anyway; the medium default is 4.5 steps, so the family cannot be
   expressed as multiples without moving it. No other design-system stylesheet states an
   absolute length.
-- The token entry point supplies the grid dependency used by the elevation shadows.
+- The token entry point supplies the grid dependency used by Surface's elevation
+  shadows.
 
 ## Acceptance
 

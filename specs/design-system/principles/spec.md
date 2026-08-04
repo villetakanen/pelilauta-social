@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Principles
@@ -28,7 +28,7 @@ Neither restates the other. A principles book links the lexicon for values.
 Five books cover the foundations components depend on:
 
 - **Spatial System** — grid, layout, spacing and radii.
-- **Color & Surface** — primitives, semantic roles and elevation.
+- **Colour & Surface** — primitives, semantic colour roles and elevation.
 - **System Mechanics** — density, box rules, and cross-cutting do's and don'ts.
 - **Typography** — the scale, styles and pairings.
 - **Iconography** — the icon grid, stroke rules and library usage.
