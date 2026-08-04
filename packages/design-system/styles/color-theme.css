@@ -1,8 +1,4 @@
-/*
- * color-scheme is not declared here. It is a statement about the document rather
- * than a colour value, so styles/preflight.css owns it — one declaration, in one
- * file, which is what this file having a second copy prevented.
- */
+/* color-scheme is preflight.css's: it states the document, not a colour. */
 :root {
   --cn-surface: light-dark(
     var(--cn-color-surface-99),

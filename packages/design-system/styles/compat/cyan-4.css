@@ -1,5 +1,5 @@
 :root {
-  /* Cyan 4 chroma names retain their names but resolve to v20 references. */
+  /* Cyan 4 chroma names. */
   --chroma-K-S: var(--cn-color-surface-100);
   --chroma-S-K: var(--cn-color-surface-0);
   --chroma-primary-10: var(--cn-color-primary-10);
@@ -43,7 +43,7 @@
     transparent 90%
   );
 
-  /* Cyan 4 semantic names map to established v20 roles. */
+  /* Cyan 4 semantic names. */
   --color-surface: var(--cn-surface);
   --color-surface-1: var(--cn-surface-1);
   --color-surface-2: var(--cn-surface-2);
@@ -52,8 +52,8 @@
   --color-surface-hover: var(--cn-hover);
   --color-on-surface: var(--cn-on-surface);
   --color-on-surface-secondary: var(--cn-on-surface-secondary);
-  /* Bare --color-on stays undefined: legacy cn-icon relies on
-     var(--color-on, currentColor) falling back to its contextual color. */
+  /* Bare --color-on stays undefined, so legacy cn-icon's
+     var(--color-on, currentColor) keeps its contextual colour. */
   --color-on-primary: var(--cn-on-button);
   --color-secondary: var(--cn-surface-4);
   --color-secondary-1: var(--cn-surface-3);
@@ -148,7 +148,7 @@
     transparent 30%
   );
 
-  /* Older cn-color consumers remain available during component migration. */
+  /* Older cn-color names. */
   --cn-color-primary: var(--cn-color-primary-70);
   --cn-color-primary-variant: var(--cn-color-primary-80);
   --cn-color-on-primary: var(--cn-on-button);

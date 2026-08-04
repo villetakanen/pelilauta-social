@@ -78,7 +78,10 @@ direction through three layers:
 - a **semantic** layer naming roles, built from the reference layer and expressing
   Light and Dark as two arms of one declaration;
 - a **compatibility** layer aliasing legacy Cyan 4 names onto semantic roles. Every
-  entry is an alias terminating in a reference or semantic token.
+  entry is an alias terminating in a reference or semantic token. Which names it must
+  cover is derived from the installed Cyan packages by a check, not written down: an
+  enumeration was wrong in both directions, missing names the packages read and never
+  declare, and listing names they declare themselves.
 
 The grid family is separate from colour, and elevation shadows in the semantic layer
 derive from it. One entry point composes both families so consumers receive the shadow

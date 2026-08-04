@@ -18,13 +18,17 @@ maintenance burden.
 
 A spec anchors. It does not model. It holds in place what would otherwise drift,
 and is legitimately silent about everything else — most things do not drift, and
-of those that do, a compiler or a test catches most. Every section below asks
-what would drift, not what the thing is like.
+of those that do, a compiler or a test catches most.
 
-Test each line by deleting it. If nothing goes wrong, it was description: cut it.
-If someone would re-derive it wrong in six months, it is an anchor: keep it.
-Assume engineering competence — a paragraph a competent reader could have written
-without this repository never survives that test.
+The test for every line: can an agent derive this from the code? If the code can
+say it, do not. What survives is the rationale first, then the rule. A section the
+code fully expresses states `(implicit)` — an empty slot is an answer, not a gap
+to fill.
+
+A spec states decisions, not their history: no datelines, no provenance, no
+narrative of how a decision was reached — git carries all three. It does not
+announce its own authority ("the set is closed; a step is added by changing this
+spec"), and it does not restate AGENTS.md or another spec.
 
 Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.
 -->
@@ -33,9 +37,9 @@ Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.
 
 ### Context
 
-Why this exists, and what goes wrong without it. One paragraph, not a product
-brief. This is the anchor against scope drift; everything else is measured
-against it.
+The standing capability: its goal, and its conflict rules — what wins when goals
+collide. Never the world before the work; a context describing what does not
+exist yet is false the day the work lands. One paragraph, not a product brief.
 
 ### Architecture
 

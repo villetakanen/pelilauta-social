@@ -92,7 +92,7 @@ describe('the face set', () => {
     }
   });
 
-  test('every weight the human register loads also loads its italic', () => {
+  test('every weight Lato loads also loads its italic', () => {
     // A missing italic is synthesised by slanting the upright, which never fails.
     const italics = new Set(
       lato.filter((f) => f.style === 'italic').map((f) => f.weight),
@@ -131,13 +131,13 @@ describe('the face set', () => {
 });
 
 describe('coverage', () => {
-  test('the human register declares no range, because its files are whole', () => {
+  test('Lato declares no range, because its files are whole', () => {
     for (const face of lato) {
       expect(face.range, `${face.weight} ${face.style}`).toBe('');
     }
   });
 
-  test('the technical register splits latin and latin-ext, each with its range', () => {
+  test('Roboto Mono splits latin and latin-ext, each with its range', () => {
     // Without ranges the later declaration wins and the earlier never loads.
     expect(mono).toHaveLength(2);
     expect(mono.map((f) => f.specifier).sort()).toEqual([
@@ -169,8 +169,10 @@ describe('the two families', () => {
       '../styles/color-theme.css',
       '../styles/color-reference.css',
       '../styles/content-containers.css',
+      '../styles/typography.css',
       '../styles/docs.css',
       '../styles/compat/cyan-4.css',
+      '../styles/compat/cyan-typography.css',
     ]) {
       // `font-family: inherit` names nothing — it is the reset handing a control
       // back to whatever the document decided, which is this stylesheet's decision.

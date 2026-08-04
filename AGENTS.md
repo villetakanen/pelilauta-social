@@ -2,7 +2,7 @@
 
 > **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library. It serves Finnish, Swedish and English; every character the three need is in Unicode `latin` and `latin-ext`.
 > **Goal:** v21 is v20's design on v18's business logic. v19 and v20 were upgrades too large to finish, so v21 ports the v20 look onto the shipped v18 application instead, one verifiable step at a time — replacing the legacy Lit.js design system with local Svelte components as it goes.
-> **Core constraint:** v21 will run on its own host, sharing Firestore, Storage and Auth with live v18. What they share is a contract.
+> **Core constraint:** v21 will run on its own host, sharing Firestore, Storage and Auth with live v18.
 
 ## The `pnpm` Workspace
 
@@ -23,11 +23,11 @@
 
 ## Delivery Contract
 
-- Dependencies may be updated or added, majors included — try the update locally first, and ask before merging one. The versions inherited from v18 are dated, so treat a build or CI failure as a stale dependency until proven otherwise, rather than hacking around it.
-- A merge to `main` during the beta cycle is a release: it deploys and CI tags it. Only on the owner's request or approval.
-- Every pull request bumps the root beta version — `pnpm version prerelease --preid=beta`. The root `package.json` carries the release version; nested app versions keep their own meaning. No approval needed.
-- Fix what the work touches, and defects it uncovers inside the same epic. Unrelated cleanup and speculative generalization stay out. Refusing a fix is a decision, not a default.
-- Replace Cyan one surface at a time. Most of it is CSS — resets, element styles, utilities, and the tokens those read — and the rest is Lit components. Check what v20 already built before writing anything; `docs/MIGRATION.md` owns the mechanics.
+- Dependencies may be updated or added, majors included. Try the update locally first, and ask before merging one. Treat a build or CI failure as a stale dependency until proven otherwise.
+- During the beta phase, the active `feat/**` branch is released by a pull request and a merge to **main**. A human approves every release.
+- Every pull request bumps the root beta version with `pnpm version prerelease --preid=beta`. No approval needed.
+- Fix what the work touches, and any defect it uncovers in the same epic.
+- Replace Cyan one surface at a time. Most of Cyan is CSS: resets, element styles, utilities, and the tokens those read. The rest is Lit components. Check what v20 already built before writing anything. `docs/MIGRATION.md` owns the mechanics.
 
 ## Workspace Contract
 
@@ -36,7 +36,7 @@
 
 ## Judgment Boundaries
 
-Never create, switch, or delete a branch. Until the beta line ends, this repository has exactly two branches: `main`, and the one long-living `feat/**` branch that all work happens on. Every pull request comes from that branch, whatever its topic. Only an explicit written instruction changes which branch that is: do not branch, and do not ask whether to branch.
+Never create, switch, or delete a branch. All work happens on the one long-living `feat/**` branch, and only a written instruction from a human changes which branch that is.
 
 Ask first, and wait, before:
 
@@ -44,7 +44,7 @@ Ask first, and wait, before:
 - migrating data destructively;
 - changing deployment configuration, or how releases and versioning work.
 
-Ask, rather than assume, when v18's behaviour or the Firebase contract cannot be established from source, from the deployed application, or from an existing spec.
+Ask when v18's behaviour or the Firebase contract cannot be established from source, from the deployed application, or from an existing spec.
 
 Before changing a migrated surface, inspect the v18 implementation and write or update its spec.
 

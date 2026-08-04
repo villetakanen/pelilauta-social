@@ -1,0 +1,81 @@
+---
+title: Typography
+description: Every typographic token the design system declares — sizes, lines, weights and tracking — with the value as written in the stylesheet.
+order: 7
+---
+
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import typographySource from '@design-system/styles/typography.css?raw'
+
+This is the lexicon: the steps the scale publishes, and what each token is worth. The
+scale is an Augmented Fourth (1.414) from the reading size, and the step set is closed:
+adding a step is a spec change. [Fonts](/base/fonts) names the families the steps
+render in.
+
+Every table below is read from `styles/typography.css` when this page is built, so it
+cannot list a token that does not exist or miss one that does.
+
+## Sizes
+
+Stated in `rem`, so every step is a proportion of the reader's default text size and
+nothing in the system sets the document's own. Small is in the family without being on
+the scale: it is not an Augmented Fourth from anything, and it exists for prose too
+secondary for reading size and too long for caption.
+
+<TokenTable
+  source={typographySource}
+  prefix="--cn-font-size"
+  noteLabel="At a 16px default"
+/>
+
+## Lines
+
+Each line is a multiple of the layout's line unit — `--cn-line`, published in
+[Units and grid](/tokens/units) — so text and layout share one rhythm. Every step takes
+the smallest multiple that clears its text, except h1, which takes four units rather
+than three: 68px text on a 72px line leaves 4px of leading and the same line as h2.
+
+<TokenTable
+  source={typographySource}
+  prefix="--cn-line-height"
+  noteLabel="At a 16px default"
+/>
+
+## Weights
+
+The steps' own weights, plus 700 for emphasis.
+
+<TokenTable source={typographySource} prefix="--cn-font-weight" />
+
+## Tracking
+
+v20's values for the steps v20 states; the rest derive — title takes h1's, and small
+takes text's. The caption's `0.05em` is v20's own `.text-caption` treatment.
+
+<TokenTable source={typographySource} prefix="--cn-letter-spacing" />
+
+## What reads them
+
+`body` reads the text step, and `h1` through `h4` read theirs, so ordinary markup is on
+the scale with no class at all. Every element step also ships its mirror class —
+`.text-body`, `.text-h1` through `.text-h4` — and the steps without an element ship as
+classes: `.text-title`, `.text-small`, `.text-caption` and `.text-label`.
+
+Caption and label share the caption size and line. The caption adds its own weight and
+tracking and uppercases, in Lato; give content whose casing carries meaning the label
+class instead, since a label keeps the casing it is given and renders in Roboto Mono —
+systemic data reads as machine text, and Finnish compounds lose their word shape in
+capitals.
+
+## The downshift
+
+Every heading renders one step down where its container is narrower than the
+small-screen breakpoint, measured against the container rather than the window, so a
+heading in a narrow card steps down whatever the page around it is doing. A container
+query cannot read a custom property, so the threshold is this system's one literal —
+`38.75rem` — pinned by test to `--cn-breakpoint-small` in
+[Units and grid](/tokens/units).
+
+Each heading keeps its own weight on the way down, except h4, whose lower step is
+reading size and takes the emphasis weight to keep reading as a heading. The title step
+does not downshift.

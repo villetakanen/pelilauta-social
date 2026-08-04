@@ -131,7 +131,7 @@ describe('preflight', () => {
 });
 
 describe('entry point', () => {
-  test('composes the preflight, the tokens, the faces and the containers, in that order', () => {
+  test('composes preflight, tokens, faces, typography, compatibility and containers in that order', () => {
     const entry = withoutComments(read('../styles/ds.css'));
     const imports = [...entry.matchAll(/@import\s+"([^"]+)"/g)].map(
       (m) => m[1],
@@ -140,6 +140,8 @@ describe('entry point', () => {
       './preflight.css',
       './tokens.css',
       './fonts.css',
+      './typography.css',
+      './compat/cyan-typography.css',
       './content-containers.css',
     ]);
   });

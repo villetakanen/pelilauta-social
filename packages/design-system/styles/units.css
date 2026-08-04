@@ -1,24 +1,6 @@
 /*
  * Unit and radius tokens.
  *
- * Values match v20 (packages/cyan/src/tokens/units.css) and Cyan 4
- * (@11thdeg/cyan-css tokens/units.css), which are character-identical on this
- * family. Legacy consumers read the same custom properties from cyan-css until
- * they are migrated; the definitions are identical, so both sources may coexist.
- * packages/design-system/test/units.test.ts asserts that equality against the
- * installed cyan-css rather than trusting it — which is the reason no commit is
- * cited here. An earlier version of this comment named a v20 commit as the
- * origin of these values; that commit never touched units.css, and a citation
- * nothing checks is worth less than a test.
- *
- * styles/color-theme.css derives --cn-shadow-elevation-1..4,
- * --cn-shadow-button-hover and --cn-reply-dock-shadow from --cn-grid, so any
- * consumer of those shadows must load this file. styles/tokens.css does that.
- *
- * Note: cyan-css annotates --cn-border-radius-large as 12px and -xl as 16px.
- * Both comments are stale — the formulas compute to 16px and 32px, which the
- * --cn-border-radius-card fallback of 16px confirms. The formulas are authoritative.
- *
  * Spec: specs/design-system/design-tokens/spec.md
  */
 :root {
@@ -32,9 +14,13 @@
   --cn-border-radius-large: calc(var(--cn-grid) * 2); /* 16px */
   --cn-border-radius-xl: calc(var(--cn-grid) * 4); /* 32px */
 
-  /*
-   * The default radius, for a consumer that wants "rounded" without choosing a
-   * step. Human decision 2026-07-30: the default is medium.
-   */
+  /* For a consumer that wants "rounded" without choosing a step. */
   --cn-border-radius: var(--cn-border-radius-medium);
+
+  /*
+   * Breakpoints, in rem so a query follows a reader's enlarged default text.
+   * A media or container query cannot read a custom property: a rule that
+   * needs a threshold states the literal, and a test pins the literal here.
+   */
+  --cn-breakpoint-small: 38.75rem; /* 620px; small-screen width */
 }

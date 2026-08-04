@@ -1,0 +1,83 @@
+---
+/**
+ * IconTiers — which tier a noun resolves from, and how it renders in both themes.
+ *
+ * The tier is computed here from the registries the component reads, in the
+ * component's precedence order, so a noun that moves between tiers moves in this
+ * table. A book naming the tier itself would keep publishing the old answer.
+ *
+ * Each row renders in Dark and Light. Monochrome artwork changes colour between
+ * the two cells and branded artwork does not, which is the whole difference
+ * between them.
+ *
+ * Book: apps/design/src/content/components/icon.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+import { FallbackIcons } from '../../components/icon-fallback';
+import { getManagedIcon } from '../../components/managed-tier';
+import { getIcon as getOpenSourceIcon } from '../../icons/open-source';
+
+interface Props {
+  /** Probe nouns, one per tier, in precedence order. */
+  nouns: readonly string[];
+  /** What each probe demonstrates, keyed by noun. */
+  notes?: Record<string, string>;
+  /** Names what the reader is looking at. */
+  caption?: string;
+}
+
+const { nouns, notes = {}, caption } = Astro.props;
+
+/** The component's own precedence: open-source → managed → fallback → missing. */
+const tierOf = (noun: string) => {
+  if (getOpenSourceIcon(noun)) return 'open-source';
+  if (getManagedIcon(noun)) return 'managed';
+  if (FallbackIcons[noun]) return 'bundled fallback';
+  return 'missing glyph';
+};
+
+const rows = nouns.map((noun) => ({ noun, tier: tierOf(noun) }));
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr>
+      <th scope="col">Noun</th>
+      <th scope="col">Resolves from</th>
+      {Object.keys(notes).length > 0 && <th scope="col">Shows</th>}
+      <th scope="col">Dark</th>
+      <th scope="col">Light</th>
+    </tr>
+  </thead>
+  <tbody>
+    {rows.map(({ noun, tier }) => (
+      <tr>
+        <th scope="row"><code>{noun}</code></th>
+        <td data-tier={tier}>{tier}</td>
+        {Object.keys(notes).length > 0 && <td>{notes[noun] ?? ''}</td>}
+        {(['dark', 'light'] as const).map((mode) => (
+          <td>
+            <span
+              class="cell"
+              data-mode={mode}
+              data-noun={noun}
+              style={`color-scheme: ${mode}; color: var(--cn-text); background: var(--cn-background);`}
+            >
+              <Icon noun={noun} size="medium" />
+            </span>
+          </td>
+        ))}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .cell {
+    display: inline-flex;
+    padding: var(--cn-grid);
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-small);
+  }
+</style>

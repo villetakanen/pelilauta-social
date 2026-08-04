@@ -2,36 +2,11 @@
  * fonts.css — the faces the design system delivers, and the two families that read
  * them.
  *
- * Spec: specs/design-system/fonts/spec.md. The scale that names the weights is
- * specs/design-system/typography/spec.md's.
+ * Spec: specs/design-system/fonts/spec.md
  *
- * One stylesheet declares every face and names every family. Nothing else may name
- * one — not styles/preflight.css, which normalises a browser default and does not
- * choose a typeface; not either application; not the design site's editorial
- * stylesheet.
- *
- * Every face is its publisher's file, referenced by bare specifier and resolved by
- * each consumer's bundler. Nothing here is subsetted, re-encoded or renamed: a
- * modified font is a Modified Version under its licence, and the bytes a subset saves
- * do not buy the right to argue about that. Lato is published whole, one file per
- * weight covering every alphabet it supports, so a Lato face carries Cyrillic, Greek,
- * Vietnamese and IPA that neither application renders. Roboto Mono is published
- * pre-split by alphabet, so it takes only the two files it needs, each with the
- * publisher's own range.
- *
- * Both families are OFL. fonts-license.txt is the notice, and both applications serve
- * a copy at /fonts-license.txt.
- *
- * Every face swaps. On a discussion site the text is the product, and a page showing
- * nothing until a face arrives is worse than one that changes shape once. The reflow
- * is a real cost and it is accepted. Nothing is preloaded: the fallback carries the
- * first paint, and a preload would compete for the content the page is for.
- */
-
-/*
- * The two families. The platform stacks behind them are what a reader sees when a
- * face fails to load — not a delivery mechanism, and never the browser's default
- * serif.
+ * Every face is its publisher's file, by bare specifier. Nothing is subsetted,
+ * re-encoded or renamed: a modified font is a Modified Version under the OFL. Both
+ * applications serve the notice at /fonts-license.txt.
  */
 :root {
   --cn-font-family: Lato, ui-sans-serif, system-ui, sans-serif;
@@ -41,16 +16,12 @@
 }
 
 /*
- * Delivery ends at the element, not at the face: text in either application is in
- * the right family without a consumer naming one.
+ * Lato is the document's, Roboto Mono is code's and the label step's — a label is
+ * metadata and systemic data, so it reads as machine text (human decision
+ * 2026-08-04). A consumer names neither family.
  *
- * The human register is the document's. The technical register takes the roles
- * specs/design-system/typography/spec.md calls technical — a text input is technical
- * whether or not it holds code. Buttons are written for a person, so they keep the
- * document's family through the reset's `font-family: inherit`.
- *
- * Identifiers and slugs are technical too, and carry no marker to select yet. They
- * arrive with the typography semantics, which is what sweeps their call sites.
+ * Form values, identifiers and slugs shipped early against the same intent. See
+ * plans/debt/form-control-register.md.
  */
 body {
   font-family: var(--cn-font-family);
@@ -60,6 +31,7 @@ code,
 kbd,
 samp,
 pre,
+.text-label,
 input:not([type="button"], [type="reset"], [type="submit"]),
 select,
 textarea {
@@ -67,12 +39,8 @@ textarea {
 }
 
 /*
- * The human register — Lato.
- *
- * Weights 200-700 are the ones the typography spec names, each with its italic. 100
- * and 900 are the two the scale does not name, kept from the set apps/pelilauta
- * shipped. No `unicode-range`: each file is the whole family, and a range would claim
- * a coverage the file does not have.
+ * Lato. No `unicode-range`: each file is the whole family, and a range would claim a
+ * coverage the file does not have.
  */
 
 @font-face {
@@ -195,13 +163,9 @@ textarea {
 }
 
 /*
- * The technical register — Roboto Mono.
- *
- * One weight and no italic: no technical role sets a heading or takes inline
- * emphasis. Two files, because the publisher splits by alphabet and Finnish, Swedish
- * and English need latin (ä ö å é) and latin-ext (š ž). The ranges are the
- * publisher's own, and without them the second declaration would simply win and the
- * first would never load.
+ * Roboto Mono. Two files, because the publisher splits by alphabet and Finnish,
+ * Swedish and English need latin (ä ö å é) and latin-ext (š ž). The ranges are the
+ * publisher's; without them the second declaration wins and the first never loads.
  */
 
 @font-face {

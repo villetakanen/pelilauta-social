@@ -1,0 +1,88 @@
+---
+/**
+ * IconSizes — every icon size the design system declares, rendered at it.
+ *
+ * The rows come from the sizing stylesheet, so a size added or removed there
+ * changes this table. The size a book asks the component for is the token name
+ * minus its prefix, and `--cn-icon-size` is the unsuffixed default.
+ *
+ * Book: apps/design/src/content/components/icon.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** styles/icon.css, imported by the book with `?raw`. */
+  source: string;
+  /** The noun every row renders. Monochrome, so it takes the page's colour. */
+  noun?: string;
+  /** What each size is for, keyed by the size a consumer passes. */
+  usage?: Record<string, string>;
+}
+
+const { source, noun = 'search', usage = {} } = Astro.props;
+
+const SIZES = ['xsmall', 'small', 'medium', 'large', 'xlarge'] as const;
+type Size = (typeof SIZES)[number];
+
+const rows = parseTokens(source, { prefix: '--cn-icon-size' }).map((token) => ({
+  ...token,
+  size: token.name.replace(/^--cn-icon-size-?/, '') || 'medium',
+}));
+
+if (rows.length === 0) {
+  throw new Error(
+    'IconSizes found no --cn-icon-size declarations. The stylesheet no longer declares the sizes this book claims it does.',
+  );
+}
+
+const unknown = rows.filter((row) => !SIZES.includes(row.size as Size));
+if (unknown.length > 0) {
+  throw new Error(
+    `IconSizes found sizing tokens the component cannot render: ${unknown
+      .map((row) => row.name)
+      .join(', ')}.`,
+  );
+}
+---
+
+{/*
+  The scroll container is load-bearing. A 128px sample beside five columns is wider
+  than a phone's content column, and a grid item that can overflow refuses to shrink
+  below its own content — so without this the table widens the column, and the page
+  around it, for every element on the page.
+*/}
+<div class="scroll">
+<table>
+  <caption>Sizes</caption>
+  <thead>
+    <tr>
+      <th scope="col">Size</th>
+      <th scope="col">Token</th>
+      <th scope="col">Declared value</th>
+      {Object.keys(usage).length > 0 && <th scope="col">Use for</th>}
+      <th scope="col">Rendered</th>
+    </tr>
+  </thead>
+  <tbody>
+    {rows.map((row) => (
+      <tr>
+        <th scope="row"><code>{row.size}</code></th>
+        <td><code>{row.name}</code></td>
+        <td><code>{row.value}</code>{row.note && <span> — {row.note}</span>}</td>
+        {Object.keys(usage).length > 0 && <td>{usage[row.size] ?? ''}</td>}
+        {/* Named so a browser check can measure the box the token produced. */}
+        <td data-size={row.size}>
+          <Icon noun={noun} size={row.size as Size} />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+</div>
+
+<style>
+  .scroll {
+    overflow-x: auto;
+  }
+</style>

@@ -9,7 +9,7 @@ Ordinary work does not use this skill. Every pull request bumps the beta version
 every merge deploys, and CI tags the merge commit from the root version. That is
 the release process.
 
-Two things are decisions, and they are the owner's.
+Two things are decisions, and only the owner makes them.
 
 ## Leaving beta
 

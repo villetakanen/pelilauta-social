@@ -1,114 +1,57 @@
-# v18 Design-System Migration
+# Replacing v18's UX
 
-Read this guide when planning or implementing the replacement of an existing
-v18/Cyan consumer with a local Svelte design-system component. It is not general
-design-system development context, a progress tracker, or a delivery plan.
+v21 replaces Pelilauta v18's user experience with the v20 design system. It is a
+breaking change, not an update: screens change shape, and what v18 renders today is not
+a target. Business logic, persisted data and the Firebase contract are not part of it.
 
-This guide exists only for the duration of the v18 design-system migration. The
-terminal migration sweep removes it after all findings are resolved or
-explicitly retained.
+What follows is what the source cannot tell you. When the migration is done, this file
+goes.
 
-## Migration Contract
+## The cascade restyles the application before you touch a call site
 
-Preserve the v18 application's behavior before replacing its Cyan Lit
-dependency. The applicable capability spec owns the local component's approved
-behavior; this guide owns shared migration mechanics and known baseline debt.
+v20 and Cyan 4 name the same tokens. Declaring a family's v20 values restyles the
+running application the moment they land: cyan-css reads those names and the design
+system loads after it. Appearance is therefore accepted twice per family — when the
+values land, and again when cyan's remaining rules for that family are removed. Colour
+worked this way, typography does, and layout will, where it also means rewriting most
+screens.
 
-A migration pull request covers one bounded capability and consumer surface. It does
-not perform a repository-wide legacy sweep, restore unrelated inherited tests,
-or reopen approved design-system decisions.
+## The inherited e2e suite is not evidence
 
-## Inherited E2E Debt
+`apps/pelilauta/e2e` came from v18. It is ad hoc, depends on emulator and historical
+setup, and is not part of the repository gate, so it cannot be cited as acceptance. Its
+selectors read Cyan element tags and go stale as source migrates: inspect a test only
+where the change relies on it, and leave the rest to the terminal sweep.
 
-The complete `apps/pelilauta/e2e` suite is inherited v18 debt. It is rudimentary,
-ad hoc, barely functional as a complete suite, dependent on emulator and
-historical setup, and not part of the repository gate. Do not cite the suite as
-general acceptance evidence.
+## A local element does not inherit a legacy tag rule
 
-Legacy E2E selectors are consumers of Cyan element tags and can become stale as
-source migrates. Inspect only tests directly related to the
-changed surface so their assumptions are understood. Repair a test when the
-change deliberately relies on it or the human owner asks; otherwise leave
-unrelated suite restoration to dedicated work or the terminal sweep.
+A class-bearing local element does not match a Cyan custom-element tag selector, so
+size, margin and layout that arrived through a tag rule have to be re-expressed against
+the component. Record what the legacy rule established — properties, values,
+specificity and rendered outcome — rather than translating its selector. Icon sizing
+comes from the public `--cn-icon-size-*` tokens, never from the component's private
+variables.
 
-## Per-Slice Inventory
+Svelte's scoped styles do not cross a child-component boundary. Where a consumer owns
+the layout around a local component, target the child's public class with `:global(…)`
+rather than moving consumer-specific layout into the component to avoid the boundary.
 
-Inventory the target surface, not the whole repository:
+## Temporary bridges have a home
 
-1. Read the applicable capability spec and relevant v18 implementation.
-2. Find declarative custom-element markup and imperative use such as
-   `document.createElement('cn-...')`, `customElements`, element properties,
-   methods, events, and slots.
-3. Find legacy CSS rules that can match the element in this consumer context.
-   Record the properties, values, specificity, and rendered outcome they
-   establish; do not translate selectors mechanically.
-4. Find directly related test selectors and fixtures. Their presence describes
-   coupling, not trustworthy suite coverage.
-5. Identify dynamic or persisted values passed into the component and preserve
-   their meaning and storage shape.
+While an unmigrated capability still owns legacy behaviour, keep the smallest bridge
+under `apps/pelilauta/src/styles/migrations/`, recording where the behaviour came from,
+what still reads the bridge, which capability takes it over, and what has to be true to
+delete it. Nothing temporary becomes intrinsic to a migrated component.
 
-The inventory is repeated for each new consumer context because a later surface
-can be the first to reach a legacy rule. The global terminal scans below are not
-repeated for each one.
+## v18 failed invisibly; v21 does not
 
-## Styling Boundaries
+A v18 SVG 404 painted nothing. A local missing-glyph fallback is visible, so an input
+that was quietly absent now shows. Exercise the real missing and optional states: a
+build-time resolver can eagerly resolve a dynamic import, so source syntax alone does
+not prove an input is optional.
 
-A class-bearing local element does not match a legacy custom-element tag rule.
-Size, margin, layout, and other tag-scoped behavior must be deliberately
-re-expressed against the local component.
+## The terminal sweep
 
-Svelte scoped styles also do not cross a child-component boundary. When a
-consumer owns layout around the local component, target the child's public
-class explicitly with `:global(...)`; do not move consumer-specific layout into
-the component merely to avoid the boundary.
-
-When an unmigrated capability owns the legacy behavior, keep the smallest
-temporary bridge under `apps/pelilauta/src/styles/migrations/`. Record its
-legacy source, current consumers, future owner, and removal condition. Do not
-make temporary Button, Fab, layout, or typography behavior intrinsic to a
-migrated component.
-
-For Icon specifically, contexts standardize size through the public
-`--cn-icon-size-*` tokens defined by its capability contract. Do not override
-the component's private variables or reproduce a legacy selector without first
-checking the actual v18 box-size outcome.
-
-## Missing And Optional Inputs
-
-Resolve dynamic inputs across every value reachable in the migrated surface.
-For Icon nouns, use reviewed catalog artwork or an explicit human decision to
-render the missing glyph. A v18 SVG 404 painted nothing, while the local missing
-glyph is visible; those are different outcomes.
-
-Exercise real optional and missing states when the contract depends on them.
-Build-time resolvers can still eagerly resolve dynamic imports, so source syntax
-alone does not prove that an optional package, asset, or registry is optional.
-
-## Implementation And Review
-
-Run targeted deterministic checks while implementing; the pull-request workflow
-owns broad `pnpm verify` execution. Identify the changed application contexts in
-the PR for the human owner's review. Agents do not administer visual acceptance
-or prescribe Light/Dark review unless the change itself affects color or theming.
-
-## Terminal Migration Sweep
-
-Do one repository-wide sweep only when the v18/Cyan migration is believed
-complete. Search source, styles, tests, scripts, and fixtures for:
-
-- `<cn-` custom-element markup;
-- `['"]cn-` string references, including imperative element creation;
-- `customElements` registration and lookup;
-- imports from `@11thdeg/cyan-*`;
-- legacy custom-element CSS selectors;
-- test selectors and fixtures that assume Cyan markup;
-- retained public assets and application migration helpers;
-- remaining Cyan dependencies.
-
-Resolve each finding or explicitly retain it with its current owner and reason.
-Remove obsolete compatibility assets and helpers only after no retained runtime
-consumer needs them. When the sweep is complete, delete this guide.
-
-`packages/design-system/styles/compat/cyan-4.css` goes with it. Owner decision,
-2026-07-31: **the compatibility layer is removed before `v21.0.0-rc.1`.** An
-expiry, not a deprecation — nothing new is written against it.
+One repository-wide sweep when the migration is believed complete. Resolve every
+remaining Cyan reference, or record why it stays and what still needs it. Remove the
+compatibility assets no remaining consumer reads, and delete this file.

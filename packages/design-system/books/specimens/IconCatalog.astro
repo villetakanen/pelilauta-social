@@ -1,0 +1,114 @@
+---
+/**
+ * IconCatalog — the whole icon vocabulary, grouped by the purposes it serves.
+ *
+ * The nouns come from the registries, so the page cannot name artwork that does
+ * not resolve or hide artwork that does: a noun the book has not placed in a
+ * group lands in the trailing group rather than disappearing. Grouping is
+ * editorial and comes from the book.
+ *
+ * A noun a group names but no tier resolves is dropped without failing the
+ * build. The managed tier is a submodule that may be absent, and a build with it
+ * absent has to publish the rest of the catalogue.
+ *
+ * Book: apps/design/src/content/principles/iconography.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+import { FallbackIcons } from '../../components/icon-fallback';
+import { getManagedNouns } from '../../components/managed-tier';
+import { getNouns as openSourceNouns } from '../../icons/open-source';
+
+interface PurposeGroup {
+  /** What the group is for, as the figure's caption. */
+  title: string;
+  /** One line beside the title. */
+  detail?: string;
+  /** Nouns to show, in reading order. Ones that do not resolve are dropped. */
+  nouns: readonly string[];
+}
+
+interface Props {
+  /** Purpose groups, in reading order. */
+  groups: readonly PurposeGroup[];
+  /** Caption for the nouns no group claimed. */
+  remainderTitle?: string;
+  /** One line beside that caption. */
+  remainderDetail?: string;
+}
+
+const {
+  groups,
+  remainderTitle = 'Everything else in the catalogue',
+  remainderDetail = 'Available nouns no purpose group claims yet.',
+} = Astro.props;
+
+const openSource = new Set(openSourceNouns());
+const managed = new Set(getManagedNouns());
+// The missing glyph is the absence of artwork, not a noun a consumer may ask for.
+const fallback = new Set(
+  Object.keys(FallbackIcons).filter((noun) => noun !== 'missing'),
+);
+const available = new Set([...openSource, ...managed, ...fallback]);
+
+/** Proprietary when the managed tier is what resolves it. */
+const isManaged = (noun: string) => !openSource.has(noun) && managed.has(noun);
+
+const claimed = new Set<string>();
+const shown = groups
+  .map((group) => {
+    const nouns = group.nouns.filter((noun) => available.has(noun));
+    for (const noun of nouns) claimed.add(noun);
+    return { ...group, nouns };
+  })
+  .filter((group) => group.nouns.length > 0);
+
+const remainder = [...available].filter((noun) => !claimed.has(noun)).sort();
+
+const sections = [
+  ...shown,
+  ...(remainder.length > 0
+    ? [{ title: remainderTitle, detail: remainderDetail, nouns: remainder }]
+    : []),
+];
+---
+
+{sections.map((section) => (
+  <figure class="group">
+    <figcaption>
+      <strong>{section.title}</strong>
+      {section.detail && <span> — {section.detail}</span>}
+    </figcaption>
+    <ul role="list">
+      {section.nouns.map((noun) => (
+        <li data-noun={noun} data-tier={isManaged(noun) ? 'managed' : 'open'}>
+          <Icon noun={noun} size="large" />
+          <code>{noun}</code>
+          {isManaged(noun) && <small>proprietary</small>}
+        </li>
+      ))}
+    </ul>
+  </figure>
+))}
+
+<style>
+  /* Wide enough for the longest noun the catalogue holds, on one line. */
+  .group ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--cn-gap);
+    margin-block-start: var(--cn-gap);
+  }
+  .group li {
+    display: grid;
+    justify-items: center;
+    gap: var(--cn-grid);
+    padding: var(--cn-grid);
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-small);
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+  .group li small {
+    color: var(--cn-text-low);
+  }
+</style>

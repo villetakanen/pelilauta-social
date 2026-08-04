@@ -1,23 +1,16 @@
 /*
- * docs.css — the shared editorial language of the design-system books.
+ * docs.css — what the design site still has no owner for.
  *
- * Prototype-age scaffolding. Its hero, kicker, lede and stat-tile vocabulary makes a
- * documentation page read as a marketing spread, and it survives only because the
- * .astro books consume it. Do not build on it and do not extend it: a book is an MDX
- * file, and anything the design system should own belongs in a stylesheet it ships to
- * both applications, not here. See .agents/skills/design-system-developer/SKILL.md.
+ * Prototype-age scaffolding, and shrinking. Do not build on it and do not extend it:
+ * a book is an MDX file, and anything the design system should own belongs in a
+ * stylesheet it ships to both applications, not here.
  *
- * Every book page used to carry its own copy of this vocabulary inside a scoped
- * <style> block. The Book layout now imports this file once, so the classes below
- * are global and a book component only styles what is unique to it.
+ * The hero, kicker, lede and stat-tile vocabulary serves pages/HomePage.astro, which
+ * is package-owned and so cannot read app CSS. It stays until an app shell owns it,
+ * and staying visible here is how that work finds it.
  *
- * Package-owned rather than site-owned: the book components in
- * packages/design-system/books consume .kicker, .lede, .facts, .section-heading
- * and .table-scroll, and a package component must not depend on app CSS.
- *
- * Values are the color book's, which was the most recently authored of the
- * three; the iconography and icon books converge onto this scale rather than
- * keeping their slightly divergent type sizes.
+ * The leading, the link colour and the table type are typography's, and leave with
+ * typography's semantics.
  */
 
 html {
@@ -25,11 +18,9 @@ html {
 }
 
 /*
- * Editorial only. Box sizing, the body's margin, and its background and
- * foreground come from styles/preflight.css, which this file hand-rolled until
- * the design system owned a preflight. Both families come from styles/fonts.css,
- * which this file also hand-rolled — the design site taught the type system in
- * whatever the reader's machine offered, which was the point of shipping faces.
+ * Editorial only. Box sizing, the body's margin, and its background and foreground
+ * come from styles/preflight.css; both families from styles/fonts.css. This file
+ * hand-rolled all of it until the design system owned them.
  */
 body {
   line-height: 1.5;
@@ -44,7 +35,7 @@ a:hover {
   color: var(--cn-link-hover);
 }
 
-/* Books are laid out as a stack of full-bleed sections. */
+/* The index is a stack of full-bleed sections; a book is a single column. */
 .book {
   overflow: hidden;
 }
@@ -123,16 +114,7 @@ a:hover {
   line-height: 0.95;
 }
 
-.section-heading > p:last-child {
-  color: var(--cn-text-low);
-  font-size: 1.05rem;
-}
-
-/* Reference tables are wide by nature and scroll inside their own container. */
-.table-scroll {
-  overflow-x: auto;
-}
-
+/* A book's tables come from its specimens, and are wide by nature. */
 .book table {
   inline-size: 100%;
   border-collapse: collapse;
@@ -148,16 +130,6 @@ a:hover {
 
 .book th {
   color: var(--cn-text-low);
-}
-
-.book details {
-  border-block: 1px solid var(--cn-border);
-}
-
-.book summary {
-  padding-block: 1rem;
-  cursor: pointer;
-  font-weight: 700;
 }
 
 @media (prefers-reduced-motion: reduce) {

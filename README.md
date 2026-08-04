@@ -46,8 +46,8 @@ to own their internal custom-element usage until those components are migrated.
 
 | Delivery | State | Evidence |
 | --- | --- | --- |
-| v18 import baseline | Complete and deployed | `plans/v18-import.md` |
-| Color-theme compatibility | Complete and approved | `plans/color-theme-compatibility.md` |
+| v18 import baseline | Complete and deployed | `pelilauta-17@bac42a7`, imported at `18.13.3` |
+| Color-theme compatibility | Complete and approved | `packages/design-system/styles/color-theme.css` |
 | Local Icon (app bar, footer, featured tags) | Complete and approved | `specs/design-system/components/cn-icon/spec.md`, PR #30, `v21.0.0-beta.2` |
 | Lit-to-Svelte components | In progress | Each component is a separate intent-specified compatibility slice |
 

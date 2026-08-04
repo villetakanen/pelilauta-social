@@ -1,9 +1,111 @@
 ---
 title: Iconography
-description: How to use icons in Pelilauta — usage principles, do's and don'ts, and the available vocabulary grouped by purpose.
+description: When an icon earns its place, when it may stand alone, and the vocabulary to choose it from.
 order: 10
 ---
 
-import IconographyBook from '@design-system/books/principles/IconographyBook.astro'
+import IconCatalog from '@design-system/books/specimens/IconCatalog.astro'
 
-<IconographyBook title={frontmatter.title} />
+Pelilauta is a text-rich site — threads, character sheets, the shared library. An icon
+here does a job: it makes a row scannable, it marks a recurring action, it anchors a
+control. Read this to decide whether the thing you're building takes an icon at all, and
+which one. [Icon](/components/icon) explains how a single icon renders.
+
+## An icon that doesn't aid understanding goes
+
+Add one where it speeds recognition of something the reader already knows, or where it
+anchors an interaction they'll repeat. If it makes the element ambiguous, drop it.
+
+Give one meaning one noun, everywhere it appears. A reader who has learned `label-tag` on
+a thread should recognise it in the library.
+
+## Reserve icon-only controls for actions everyone knows
+
+Close, search, menu, settings. Everything domain-specific — publish a site, archive a
+thread, roll a die — carries visible text beside its icon.
+
+An icon-only control still needs an accessible name, and that name states the action it
+performs — "Close" for a control carrying a cross. The control owns that name; the icon
+doesn't supply it.
+
+## Never let colour or an icon carry a state alone
+
+A state reaches the reader as text or a structural change. An icon or a colour reinforces
+it. A row that says "error" only by turning an icon red says nothing to a reader who
+can't see it, and little to one skimming.
+
+## One group, one size
+
+A list, a navigation rail, a row of buttons: pick a size for the context and hold every
+icon in it to that size. Sizes come from the tokens, never from a hand-written length.
+[Icon](/components/icon) lists them and says which is which.
+
+An icon beside text aligns to that text. The layout around it owns that alignment.
+
+## Do and don't
+
+| Do | Don't |
+| :--- | :--- |
+| Pair an unfamiliar or domain icon with a visible label | Ship an ambiguous icon alone |
+| Keep one size within a list or navigation group | Mix sizes, or drop in an inline SVG |
+| Give an interactive icon a target big enough to hit | Attach an action to a bare glyph with no padding |
+| Signal state with text or shape, and reinforce with the icon | Signal state with colour alone |
+
+## Choose by meaning, from what exists
+
+Every icon is a noun that describes meaning — `search`, `fox` — so artwork can be redrawn
+without renaming it. Pick from the catalogue below by the purpose you're serving. A noun
+outside it renders the missing glyph.
+
+Nouns marked proprietary come from the managed tier: licensed artwork the project doesn't
+own, available only where that submodule is.
+
+<IconCatalog
+  groups={[
+    {
+      title: 'Wayfinding and chrome',
+      detail: 'Getting around, and the controls that reveal or reorder things.',
+      nouns: ['menu', 'search', 'close', 'filter', 'sort', 'reduce', 'dots', 'kebab', 'open-down', 'chevron-left', 'chevron-right', 'arrow-left', 'arrow-up', 'arrow-down', 'drag', 'dragger'],
+    },
+    {
+      title: 'Account and identity',
+      detail: 'Who the reader is, and where else they are.',
+      nouns: ['account', 'avatar', 'login', 'admin', 'google', 'youtube', 'bsky'],
+    },
+    {
+      title: 'Writing and editing',
+      detail: 'Making and changing content.',
+      nouns: ['add', 'edit', 'delete', 'save', 'undo', 'copy-md', 'quote', 'font', 'palette', 'design'],
+    },
+    {
+      title: 'Content and the library',
+      detail: 'Things the community publishes, and what a reader does with them.',
+      nouns: ['card', 'books', 'assets', 'pdf', 'label-tag', 'tokens', 'tools', 'share', 'send', 'fork', 'idea'],
+    },
+    {
+      title: 'Status and feedback',
+      detail: 'Reinforcing a state the interface has already said in words.',
+      nouns: ['check', 'info', 'warning', 'clock', 'love'],
+    },
+    {
+      title: 'At the table',
+      detail: 'Dice, characters, and play.',
+      nouns: ['d8', 'd12', 'd20', 'adventurer', 'monsters', 'homebrew', 'gamepad', 'hood', 'moon', 'discussion', 'fox'],
+    },
+    {
+      title: 'Brands and game systems',
+      detail: 'Marks for supported systems and sites. Branded artwork keeps its own colours.',
+      nouns: ['dd5', 'pathfinder', 'll-ampersand', 'pbta', 'pbta-logo', 'karu', 'mekanismi', 'thequick', 'veil-advance', 'spiral', 'myrrys-scarlet'],
+    },
+  ]}
+/>
+
+## Adding a noun is a decision, not a step
+
+The catalogue grows one icon at a time, alongside the surface that needs it. Admitting
+open-source artwork means recording its source and licence in the tier's `PROVENANCE.md`,
+and a human approving it. Artwork the project can't license lives in the managed submodule
+and never in this repository.
+
+A migration doesn't rename a noun or re-point it at different artwork. Both are catalogue
+decisions of their own.
