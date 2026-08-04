@@ -1,12 +1,11 @@
 /**
  * Package unit tests for the token layers.
  *
- * The token system is a data contract: three stylesheets that must compose in
- * one direction — literal reference values, semantic v20 roles built from them,
- * and a Cyan 4 compatibility layer that renames those roles for unmigrated v18
- * consumers. Every claim here is a property of the source text, so none of it
- * needs a browser. What genuinely needs a cascade — whether a resolved token
- * differs between light and dark — belongs in the design-site browser checks.
+ * The token system is a data contract: literal reference values followed by
+ * semantic roles built from them. Every claim here is a property of the source
+ * text, so none of it needs a browser. What genuinely needs a cascade — whether
+ * a resolved token differs between light and dark — belongs in the design-site
+ * browser checks.
  *
  * Spec: specs/design-system/design-tokens/spec.md
  */
@@ -80,7 +79,6 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
 
 const reference = read('color-reference.css');
 const theme = read('color-theme.css');
-const compat = read('compat/cyan-4.css');
 
 /** Everything the package itself defines, across all its stylesheets. */
 const declaredInPackage = new Set(
@@ -93,10 +91,9 @@ describe('layer composition', () => {
       (match) => match[1],
     );
 
-    expect(imports).toEqual([
+    expect(imports.slice(0, 2)).toEqual([
       './color-reference.css',
       './color-theme.css',
-      './compat/cyan-4.css',
     ]);
   });
 
@@ -106,6 +103,18 @@ describe('layer composition', () => {
       .map((declaration) => declaration.name);
 
     expect(referencing).toEqual([]);
+  });
+
+  test('semantic colours derive from the reference layer', () => {
+    const literalColours = declarations(theme)
+      .filter((declaration) =>
+        /#[0-9a-fA-F]{3,8}\b|\b(?:black|white)\b|\b(?:oklch|rgba?|hsla?)\(/.test(
+          declaration.value,
+        ),
+      )
+      .map((declaration) => `${declaration.name}: ${declaration.value}`);
+
+    expect(literalColours).toEqual([]);
   });
 
   test('no stylesheet declares the same property twice', () => {
@@ -153,48 +162,5 @@ describe('resolvability', () => {
       .map((declaration) => declaration.name);
 
     expect(incomplete).toEqual([]);
-  });
-});
-
-describe('cyan 4 compatibility layer', () => {
-  const compatDeclarations = declarations(compat);
-  const ownedByV20 = new Set(
-    [...declarations(reference), ...declarations(theme)].map((d) => d.name),
-  );
-
-  test('the compat layer is a mapping, never a second source of values', () => {
-    const literal = compatDeclarations
-      .filter((declaration) => !declaration.value.includes('var(--cn-'))
-      .map((declaration) => `${declaration.name}: ${declaration.value}`);
-
-    // A raw value here would let a legacy name drift away from the v20 role it
-    // is supposed to alias.
-    expect(literal).toEqual([]);
-  });
-
-  test('the compat layer declares no colour of its own', () => {
-    const hardcoded = compatDeclarations
-      .filter((declaration) =>
-        /#[0-9a-fA-F]{3,8}\b|\boklch\(|\brgba?\(|\bhsla?\(/.test(
-          declaration.value,
-        ),
-      )
-      .map((declaration) => declaration.name);
-
-    expect(hardcoded).toEqual([]);
-  });
-
-  test('every legacy alias resolves into a token the v20 layer owns', () => {
-    const unresolved = compatDeclarations.flatMap((declaration) =>
-      varReferences(declaration.value)
-        .filter((usage) => !usage.hasFallback)
-        .filter((usage) => !ownedByV20.has(usage.name))
-        .map((usage) => `${declaration.name} -> ${usage.name}`),
-    );
-
-    // The compat layer must terminate in the owned reference/theme layers, not
-    // in itself: an alias chain that stays inside compat has no v20 authority
-    // behind it.
-    expect(unresolved).toEqual([]);
   });
 });

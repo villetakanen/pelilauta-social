@@ -1,106 +1,202 @@
 ---
-title: Colour System
-description: The two themes, the colour roles components read, and the tonal scales those roles are built from.
+title: Colour & Surface
+description: Pelilauta's perceptual colour scales, semantic roles, two themes, and surface hierarchy.
 order: 7
 ---
 
-import ColorRamp from '@design-system/books/specimens/ColorRamp.astro'
-import RoleTable from '@design-system/books/specimens/RoleTable.astro'
-import referenceSource from '@design-system/styles/color-reference.css?raw'
-import themeSource from '@design-system/styles/color-theme.css?raw'
+import ColorRamp from "@design-system/books/specimens/ColorRamp.astro";
+import Composition from "@design-system/books/specimens/Composition.astro";
+import RoleTable from "@design-system/books/specimens/RoleTable.astro";
+import referenceSource from "@design-system/styles/color-reference.css?raw";
+import themeSource from "@design-system/styles/color-theme.css?raw";
 
-Pelilauta ships two themes, Dark and Light. Both ship in the same release.
+Pelilauta combines a cool cerulean surface palette with a primary palette that
+moves from teal to an acid yellow-green. The surface family carries most of the
+interface; primary colour identifies navigation, focus, and high-emphasis actions.
+Error, warning, information, and love retain distinct hues for functional and
+social signals.
 
-Dark is the default and the theme the interface is designed in. Light is checked before a
-change merges. Where the two disagree, Dark is kept and Light is adjusted.
+Dark and Light are two expressions of this system. We design in Dark, then review
+Light as a complete theme. Both preserve the same semantic roles and elevation
+hierarchy even where their palette steps differ.
 
-The browser or operating system selects the theme through `color-scheme`. A signed-in
-account may pin one theme; `apps/pelilauta` applies that at SSR. The design system reads
-`color-scheme` only and never reads account state.
+## Layered colour model
 
-## Roles
+We separate the system into three layers:
 
-The design system declares about forty roles. Each resolves to one colour in Dark and one
-in Light. Components read roles. A literal colour has a single value and cannot follow the
-theme, so components do not state one.
+1. Reference scales define the colours available to the system.
+2. Semantic roles assign purpose and provide one value for each theme.
+3. Components consume roles according to meaning.
+
+This direction lets the palette evolve without changing the purpose expressed by
+a component. A link continues to consume `--cn-link`; the semantic layer decides
+which reference colour represents a link in each theme. The complete declarations
+are in [Colour tokens](/tokens/color).
+
+## Perceptual scales
+
+The reference palette is expressed in OKLCH. A step number records perceived
+lightness: step 40 has the same lightness across every family, while chroma and hue
+determine its colour. Steps 0 and 100 are neutral endpoints.
+
+The surface and primary families provide the full tonal range needed for themes,
+text, borders, and interaction states.
+
+<ColorRamp
+  source={referenceSource}
+  family="surface"
+  intent="Backgrounds, elevation, borders, and most text."
+/>
+<ColorRamp
+  source={referenceSource}
+  family="primary"
+  intent="Links, focus, and high-emphasis actions."
+/>
+
+Surface holds one hue so changes in its step read primarily as changes in
+lightness. Primary rotates through the scale, moving from teal at the dark end to
+yellow-green at the light end. This rotation gives interactive colour a stronger
+identity than the surfaces supporting it.
+
+### Functional colour
+
+Functional families provide the four tonal positions used by current semantic
+roles. Their separate hues keep destructive action, caution, system information,
+and social affirmation visually distinct.
+
+<ColorRamp
+  source={referenceSource}
+  family="error"
+  intent="Destructive actions and validation failures."
+/>
+<ColorRamp
+  source={referenceSource}
+  family="warning"
+  intent="Caution and warning."
+/>
+<ColorRamp
+  source={referenceSource}
+  family="info"
+  intent="System feedback and neutral state changes."
+/>
+<ColorRamp
+  source={referenceSource}
+  family="love"
+  intent="Likes and favourites."
+/>
+
+### Contrast by construction
+
+Reference steps are selected when defining a semantic role. Components continue
+to consume the role rather than choosing a palette step directly. Because the step
+records lightness, the distance between two steps provides a tested lower bound
+for their contrast across the palette.
+
+| Step difference | Minimum contrast   |
+| :-------------- | :----------------- |
+| 45              | WCAG AA Large, 3:1 |
+| 60              | WCAG AA, 4.5:1     |
+| 70              | WCAG AAA, 7:1      |
+
+A difference of 40 provides no WCAG guarantee; the lowest measured ratio among
+those pairs is 2.36:1.
+
+## Semantic roles and themes
+
+Semantic roles are the component-facing colour vocabulary. Each role resolves to
+one reference colour in Light and another in Dark through `color-scheme`. The
+tables show both expressions together.
 
 <RoleTable
   source={themeSource}
   caption="Surfaces"
-  names={['--cn-surface', '--cn-surface-1', '--cn-surface-2', '--cn-surface-3', '--cn-surface-4']}
+  names={[
+    "--cn-surface",
+    "--cn-surface-1",
+    "--cn-surface-2",
+    "--cn-surface-3",
+    "--cn-surface-4",
+  ]}
   intents={{
-    '--cn-surface': 'The page',
-    '--cn-surface-1': 'Cards and panels on the page',
-    '--cn-surface-2': 'A raised element on a card',
-    '--cn-surface-3': 'Menus and popovers',
-    '--cn-surface-4': 'Dialogs and the highest chrome',
+    "--cn-surface": "The page",
+    "--cn-surface-1": "Cards and panels on the page",
+    "--cn-surface-2": "Content raised above a resting surface",
+    "--cn-surface-3": "Menus and popovers",
+    "--cn-surface-4": "Dialogs and the highest chrome",
   }}
 />
 
 <RoleTable
   source={themeSource}
   caption="Text, action and edges"
-  names={['--cn-text', '--cn-text-low', '--cn-text-high', '--cn-link', '--cn-border', '--cn-focus-ring']}
+  names={[
+    "--cn-text",
+    "--cn-text-low",
+    "--cn-text-high",
+    "--cn-link",
+    "--cn-border",
+    "--cn-focus-ring",
+  ]}
   intents={{
-    '--cn-text': 'Body copy',
-    '--cn-text-low': 'Timestamps, captions, metadata',
-    '--cn-text-high': 'Maximum contrast',
-    '--cn-link': 'Anything that navigates',
-    '--cn-border': 'Edges and dividers',
-    '--cn-focus-ring': 'Keyboard focus',
+    "--cn-text": "Body copy",
+    "--cn-text-low": "Timestamps, captions, metadata",
+    "--cn-text-high": "Maximum contrast",
+    "--cn-link": "Anything that navigates",
+    "--cn-border": "Edges and dividers",
+    "--cn-focus-ring": "Keyboard focus",
   }}
 />
 
-The two colour columns are not mirror images. Three cases to know:
+Theme mappings preserve purpose rather than numerical symmetry. Levels 1 to 3 use
+the same white background in Light. Dark gives levels 1 and 2 the same background,
+then increases lightness at level 3. Link colour comes from the primary family in
+Light and the surface family in Dark, while its role remains navigation in both.
 
-- `--cn-surface-1` to `--cn-surface-3` are all white in Light. In Dark they are separate
-  steps.
-- `--cn-surface-4` is darker than the surface beneath it in Light, and lighter in Dark.
-- `--cn-link` comes from the primary scale in Light and the surface scale in Dark.
+## Surface and elevation
 
-## The scales
+Elevation establishes the visual order between the page, its content, and elements
+temporarily raised above that content. We express it through five levels:
 
-Six families. A step number is its perceived lightness: `surface-50` is `oklch(0.5 …)`.
-Step 40 in one family is as light as step 40 in another. Chroma peaks in the middle of a
-ramp and falls to zero at both ends, so step 0 and step 100 are neutral in every family.
+- Level 0 is the application ground plane.
+- Level 1 holds resting content such as cards and panels.
+- Level 2 raises content above a resting surface.
+- Level 3 holds floating or active content such as menus and popovers.
+- Level 4 is reserved for the highest system layer, including dialogs.
 
-<ColorRamp source={referenceSource} family="surface" intent="Hue 242. Backgrounds, elevation, borders, most text." />
-<ColorRamp source={referenceSource} family="primary" intent="Hue 185 at the dark end to 110 at the light end. Links, focus, the FAB, and success." />
+<Composition themes caption="The five levels in Light and Dark">
+  <div class="surface elevation-0">Level 0: ground plane</div>
+  <div class="surface elevation-1">Level 1: resting content</div>
+  <div class="surface elevation-2">Level 2: raised content</div>
+  <div class="surface elevation-3">Level 3: floating content</div>
+  <div class="surface elevation-4" style="color: var(--cn-text-high);">
+    Level 4: system layer
+  </div>
+</Composition>
 
-Primary is the only family whose hue changes along the ramp. The others hold one hue.
+### Colour and shadow
 
-Steps 50 and 70 carry most of primary's work: `--cn-link` and `--cn-button-light` use 50,
-and `--cn-fab` and `--cn-color-primary` use 70. Steps 80 to 99 are used by two roles.
+Colour and shadow work together at every level. Light uses one white background
+for levels 1 to 3, so shadow provides most of their separation. Dark distinguishes
+levels 2 and 3 through both lightness and shadow. The shadows derive from the same
+grid as the surrounding spacing, keeping their scale proportional to the
+composition.
 
-<ColorRamp source={referenceSource} family="error" intent="Hue 318. Destructive actions and validation failures." />
-<ColorRamp source={referenceSource} family="warning" intent="Hue 65. Caution." />
-<ColorRamp source={referenceSource} family="info" intent="Hue 170. System feedback and state changes." />
-<ColorRamp source={referenceSource} family="love" intent="Hue 30. Likes and favourites." />
+Levels 0 and 1 are shadowless. A nested surface also remains shadowless when it
+rises by one level; larger rises use a shadow relative to the nearest elevated
+ancestor. This prevents a nested composition from accumulating the full shadow of
+every absolute level.
 
-These four families have four steps, not thirteen. There is no `error-30`.
+### The highest layer
 
-Success has no family of its own. `--cn-color-success` resolves to `primary-60`, so success
-and the brand share a hue.
+Level 4 deliberately changes the tonal direction. It is darker than the lower
+surfaces in Light and lighter in Dark, separating system-level content from the
+page hierarchy in both themes.
 
-### Choosing a step directly
+This background narrows the available foreground choices in Dark. `--cn-text` and
+`--cn-text-high` meet WCAG AA on `--cn-surface-4`; `--cn-on-surface`,
+`--cn-text-low`, and `--cn-on-surface-secondary` do not. Components placed at
+level 4 must therefore select a foreground role that meets the contrast required
+by their content.
 
-Components read roles, so this applies to the design system itself. The gap between two
-steps in one family puts a floor under their contrast, because the step is the lightness.
-Measured across every pair in the palette:
-
-| Step gap | Guarantees |
-| :--- | :--- |
-| 45 | AA Large, 3:1 |
-| 60 | AA, 4.5:1 |
-| 70 | AAA, 7:1 |
-
-A gap of 40 guarantees nothing. Its worst pair is 2.36:1.
-
-## Not settled
-
-- What elevation means, and whether five surface roles are all needed. Three are identical
-  in Light.
-- Whether contrast below AA is ever acceptable on a raised Dark surface. `--cn-on-surface`
-  on `--cn-surface-4` measures 4.32:1.
-- Whether colour may carry meaning without an icon or label.
-- Whether success sharing the primary hue is intended.
+The [Spatial System](/principles/spatial-system) defines the shadow measurements.
+The [Surface reference](/base/surface) documents the classes and their composition.

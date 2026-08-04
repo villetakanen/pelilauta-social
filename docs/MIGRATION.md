@@ -16,6 +16,34 @@ values land, and again when cyan's remaining rules for that family are removed. 
 worked this way, typography does, and layout will, where it also means rewriting most
 screens.
 
+## `.surface` and `.elevation-*` are shipped, and cyan still declares them
+
+The design system now declares `.surface` and `.elevation-0` through `.elevation-4`
+(`packages/design-system/styles/surface.css`). Cyan 4 declares a `.surface` and an
+`.elevation-1` to `.elevation-4` of its own at the same specificity, so which one wins
+is decided by import order alone: `@11thdeg/cyan-css` first, `@design-system/styles/ds.css`
+second, as both `BaseHead.astro` and `EditorHead.astro` do it. Reorder those two imports
+and the application silently reverts to Cyan's rules.
+
+These differences land in `apps/pelilauta` the moment the stylesheet ships, without a
+call site moving:
+
+- A `.surface` renders at elevation 1, not the ground plane. In Dark it lightens from
+  surface-20 to surface-30; in Light it goes from surface-99 to white.
+- A `.surface` keeps `--cn-gap` of padding below 620px, where Cyan dropped it to
+  `--cn-grid`.
+- The design-system `.surface` loads after Cyan's atomic spacing classes at equal
+  specificity. Existing compositions such as `.surface.p-1` therefore receive the
+  forced Surface inset until their owning capability migrates them.
+- Cyan's `.surface` still sets `color: var(--color-on-surface)`, because the design
+  system's Surface sets no foreground. That declaration disappears with Cyan, and the
+  components on those surfaces then own their text colour.
+- Nested elevations now show only their rise above the nearest elevated ancestor. A
+  one-level rise is shadowless, including an elevation-2 child inside elevation 1.
+
+The remaining call sites are migration inputs, not a stable inventory. The terminal
+sweep classifies every use before Cyan's declarations are removed.
+
 ## The inherited e2e suite is not evidence
 
 `apps/pelilauta/e2e` came from v18. It is ad hoc, depends on emulator and historical

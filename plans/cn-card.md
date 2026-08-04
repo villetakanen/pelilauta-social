@@ -1,4 +1,4 @@
-# Cards
+# cn-card
 
 ## Goal
 
@@ -24,12 +24,29 @@ onboarding cards.
 
 ## Known scope
 
-- **Card capability contract** — open; reverse-specifies the Cyan element and all v21
-  consumers, then resolves them against v20's Card API, semantics, responsive
-  containment, elevation, indicators, links, cover treatment and action composition
-- **Card foundation** — open, waits on the capability contract and typography epic;
-  the local Svelte component, component tests and public styles implement the approved
-  contract without reading Cyan component rules
+- **Surfaces and elevation** — delivered; `elevation-0`–`4` and the relative-nesting
+  engine ship in `packages/design-system/styles/surface.css` with `.surface` as the
+  padded, contained default at level 1, under an approved spec. The three deferred
+  decisions are recorded: elevation is background and shadow paired into five levels,
+  all five roles are kept, and Surface sets no foreground, so a level-4 consumer picks
+  a role that clears AA there. `--cn-border-radius-card` is untouched — Surface sets no
+  radius, and the alias is now the Card capability contract's decision. Settles
+  `plans/debt/book-vocabulary-classes.md` for `.elevation-1` and `.surface`
+- **Call-site classification** — open; every `cn-card` consumer and card-shaped
+  composition is classified: a Card, a plain surface, or removed. A v18 card that is
+  a static box moves to the elevation utilities, not to Card
+- **Card capability contract** — open, waits on the classification; reverse-specifies
+  the Cyan element and the consumers classified as Cards, then resolves them against
+  v20's Card API, semantics, responsive containment, elevation, indicators, links,
+  cover treatment and action composition. Anything v21 omits from either source is
+  recorded in the spec
+- **Card foundation** — open, waits on the capability contract; the local Svelte
+  component, component tests and public styles implement the approved contract
+  without reading Cyan component rules
+- **Surfaces and elevation book** — delivered; `/principles/color-system` is Colour &
+  Surface and carries the elevation model rendered from the utilities in both themes,
+  `/base/surface` is the utility API, and Spatial System takes the `.surface` padding
+  role and the grid derivation of the shadows
 - **Card component book** — open, waits on the foundation; the API, content guidance,
   states, covers, links, actions and narrow-container behaviour render through focused
   specimens on the design site
@@ -64,4 +81,8 @@ onboarding cards.
   smallest bridge required by migrated Card consumers remains here
 - Redesigning subscription, profile, site, character or admin business logic — the
   owning application capabilities; Card only preserves their current composition
-- Card-shaped surfaces that do not consume `cn-card` — their owning component epics
+- Migrating the application's 41 `.surface`-class compositions that do not consume
+  `cn-card` — their owning component epics; the elevation utilities shipped here are
+  what they will migrate onto
+- Spacing between cards — a listing layout's decision; no card margin token exists
+  and none is added

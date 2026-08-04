@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Content Containers
@@ -60,9 +60,11 @@ container until typography owns it.
 
 Not owned here: two-column, three-column and card layouts; Cyan's
 `content-cards`, `content-listing`, `content-editor` and `content-sheet`; nested
-containers; typography inside the container. `apps/pelilauta` keeps Cyan's
-`.content-columns`, and its container surfaces are inventoried in
-`docs/MIGRATION.md`.
+containers; typography inside the container. Surface owns `.surface` background,
+elevation treatment, padding and local query boundary. This capability owns
+page-content measure, gutters, page-grid participation and `cn-content` query
+boundaries. `apps/pelilauta` keeps Cyan's `.content-columns`; existing `.surface`
+consumers are inventoried in `docs/MIGRATION.md`.
 
 ## Contract
 

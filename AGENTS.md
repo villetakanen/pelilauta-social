@@ -17,8 +17,10 @@
 - plans            # epic scope
   - debt           # known gaps that are nobody's story
 - docs
-  - adrs           # irreversible decisions
-  - lessons        # notes we might act on later; disposable
+  - adrs           # hard-to-reverse decisions log
+  - lessons        # notes we might act on later
+- .agents/skills   # portable skills
+- .claude/skills   # symlinked from .agents/skills, to enable dual use with claude 
 ```
 
 ## Delivery Contract

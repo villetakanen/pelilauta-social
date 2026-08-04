@@ -4,118 +4,97 @@ status: approved
 
 # Design Tokens
 
-## Intent
-
-Design tokens give Pelilauta a shared vocabulary for recurring visual decisions.
-They allow the product and its design-system book to express the same visual
-intent without each component or page inventing its own values.
-
-The goal is a coherent, recognizable, and maintainable Pelilauta interface.
-Changing an approved design decision should update every participating surface
-consistently, while existing product behavior remains compatible during the v21
-migration.
-
-## Scope
-
-The token system describes visual decisions that are shared across multiple
-surfaces, including:
-
-- reference choices such as the available color palette;
-- semantic roles such as text, background, border, link, focus, and status;
-- Light and Dark expressions of the same semantic intent;
-- one base grid, with spacing, radius and elevation decisions derived from it
-  rather than stated independently;
-- compatibility meanings needed while legacy Cyan consumers are replaced;
-- future shared decisions for typography, motion, and other visual foundations
-  when a product feature requires them.
-
-A token holds an input to a value, not a value computed in advance. A consumer
-composes the final measurement, so a decision stays valid when the context around
-it changes.
-
-The base grid is expressed in `rem`, and the design system's stylesheets do not
-override the document's root font size, so every spacing decision scales with the
-reader's font-size preference instead of replacing it. The system's breakpoints are
-expressed in `rem` for the same reason: a query stated in pixels cannot see that the
-reader has asked for larger text, and would keep making layout decisions as though
-they had not.
-
-Reference choices state what is available. Semantic roles state why a choice is
-used. Components consume semantic roles so that their meaning remains stable
-when the visual expression evolves.
-
-## Product Goals
-
-- Pelilauta presents one deliberate visual language across old and new UI.
-- Light and Dark modes preserve the same hierarchy, affordances, feedback, and
-  readability.
-- Shared visual decisions can evolve without unrelated component-by-component
-  value changes.
-- Legacy compatibility is explicit and temporary rather than becoming the
-  permanent vocabulary of the v21 design system.
-- Every token family is introduced by a production feature that demonstrates
-  its value and by a design-system book that communicates its intent.
-
-## Principles
-
-- Tokens represent reviewed design decisions, not every literal value in the
-  interface.
-- Names communicate purpose rather than a particular implementation technique.
-- Semantic meaning takes precedence over preserving historical visual values.
-- Accessibility, visible interaction states, and readable contrast are part of
-  the token intent in every supported mode.
-- The smallest vocabulary that serves current product needs is preferred over a
-  speculative complete system.
-- A new token family is justified by a concrete consumer, not by possible future
-  platforms or components.
-
 ## Blueprint
 
-Tokens are CSS custom properties declared on the document root, composed in one
-direction through three layers:
+### Context
 
-- a **reference** layer of literal values, which is where the stack bottoms out;
-- a **semantic** layer naming roles, built from the reference layer and expressing
-  Light and Dark as two arms of one declaration;
-- a **compatibility** layer aliasing legacy Cyan 4 names onto semantic roles. Every
-  entry is an alias terminating in a reference or semantic token. Which names it must
-  cover is derived from the installed Cyan packages by a check, not written down: an
-  enumeration was wrong in both directions, missing names the packages read and never
-  declare, and listing names they declare themselves.
+Design tokens carry recurring visual decisions across the design system and both
+applications. Reference tokens define the available values; semantic tokens name
+their purpose. Consumers depend on that purpose, allowing a visual expression to
+change without changing the meaning of every use.
 
-The grid family is separate from colour, and elevation shadows in the semantic layer
-derive from it. One entry point composes both families so consumers receive the shadow
-declarations and their grid dependency together.
+### Architecture
 
-Consumers read semantic roles.
+The permanent model runs in one direction:
 
-## Non-Goals
+1. The **reference layer** declares literal values.
+2. The **semantic layer** assigns roles. A theme-dependent role expresses Light
+   and Dark as two arms of one declaration; a theme-invariant role uses one
+   expression.
+3. **Consumers** read semantic roles according to purpose.
 
-- Tokens do not define component structure, content, interaction, or data
-  behavior.
-- Tokens do not require visual parity with Cyan 4 when an approved v21 design
-  direction intentionally differs.
-- Tokens do not require a platform-neutral interchange format or generation
-  pipeline before a concrete non-web consumer exists.
-- Tokens are not a reason to migrate unrelated product surfaces together.
+Surface consumes background and shadow roles to form elevation levels as defined
+by `specs/design-system/surface/spec.md`. Components compose those levels where
+required; they do not reconstruct the elevation token mapping.
 
-## Acceptance
+The grid family is independent of colour. Semantic shadow declarations derive
+from the grid, so the token entry point composes both families and supplies every
+dependency together.
 
-- A participating production surface and its design-system book express the
-  same approved visual intent.
-- Light and Dark modes preserve understandable hierarchy, states, and contrast.
-- Existing consumers continue to work through an explicitly bounded
-  compatibility contract until they are migrated.
-- Every added token has a current, named purpose and consumer.
-- A lexicon lists every token its stylesheet declares, with the value as declared.
-  It cannot omit a token that exists or state one that does not, and a selection
-  that matches nothing fails the build rather than publishing an empty or
-  unfiltered table.
-- The compatibility layer gets no lexicon. It is migration scaffolding, removed
-  before `v21.0.0-rc.1`. A book states that it exists and that it is being
-  removed.
-- The design system's own stylesheets set no root font size and state no pixel
-  breakpoint, so a reader who enlarges their default text gets a proportionally
-  larger interface. Consuming applications are outside this guarantee.
-- Human review approves visual intent and any deliberate departure from the
-  live v18 experience.
+Cyan 4 compatibility aliases are outside the permanent model. They keep legacy
+consumers testable while migration is incomplete. An alias is added when a
+remaining legacy consumer requires it and terminates in a reference or semantic
+token. The aliases are removed before `v21.0.0-rc.1`.
+
+### Constraints
+
+A token represents a reviewed decision shared by current consumers. One-off
+component values do not require tokens, and a possible future consumer does not
+justify a token family.
+
+Tokens remain inputs to CSS calculations. Consumers compose final measurements
+from them instead of storing precomputed results that would stop responding when
+an input changes.
+
+The grid uses `rem`, the design system sets no root text size, and every breakpoint
+uses `rem`. Spacing and query thresholds therefore follow the reader's default
+text size.
+
+Semantic colour roles preserve purpose, hierarchy, interaction states, and
+readable contrast in Light and Dark. A consumer uses a semantic role where the
+system has named that purpose; it does not select a reference colour as a local
+substitute.
+
+Transparency may be mixed with a reference colour to derive an overlay. It does
+not introduce another palette colour into the semantic layer.
+
+Compatibility aliases receive no lexicon and no new consumer. They are migration
+scaffolding, not an alternative public vocabulary or a completeness contract.
+They receive no dedicated compatibility test.
+
+## Contract
+
+### Definition of Done
+
+- A new token family has a named production use and is documented by the book
+  that owns its design intent.
+- A source-driven lexicon lists every token declared by its stylesheet and the
+  value as declared. A selection matching no token fails the build.
+- Human review accepts the hierarchy, states, and contrast produced by semantic
+  roles in Light and Dark.
+
+### Regression Guardrails
+
+- A semantic colour token depends only on reference colours or other semantic
+  tokens. A reference token does not depend on the semantic or compatibility
+  vocabulary.
+- The token entry point supplies the grid dependency required by semantic shadow
+  declarations.
+- No design-system stylesheet sets the root text size or uses a pixel breakpoint.
+- The compatibility vocabulary does not appear in a lexicon and is removed before
+  `v21.0.0-rc.1`.
+
+### Scenarios
+
+```gherkin
+Given a semantic colour role used by a component
+When the active colour scheme changes between Light and Dark
+Then the role resolves to the expression for that scheme
+And its purpose in the component does not change
+```
+
+```gherkin
+Given a reader who enlarges the browser's default text size
+When a rem-based design-system measurement or breakpoint is evaluated
+Then its rem-based value scales with that preference
+```

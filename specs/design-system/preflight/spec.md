@@ -21,8 +21,8 @@ no Cyan, keeps a private copy inside its book stylesheet.
 ## What Belongs In It
 
 A rule belongs when it corrects a browser default, or establishes a baseline every
-component may assume, and no component, container or typography could state it
-instead.
+component may assume, and no component, container, Surface or typography
+capability could state it instead.
 
 **A rule that needs another stylesheet to win against it is in the wrong file.** Type
 sizes, leading and heading wrap are therefore absent: each is a value typography states,
@@ -46,6 +46,8 @@ cannot settle whether `optgroup` or a WebKit search pseudo-element is inside it.
 | Concern | Stated by |
 | :--- | :--- |
 | Box model, document, control inheritance, element defaults, body, runtime wrappers | the reset |
+| Applying the document's base background and foreground | the reset |
+| Ground-plane meaning and elevated surface utilities | Surface |
 | Which family any element renders in | fonts |
 | Type sizes, leading, heading wrap, link colour | typography |
 | The spacing that replaces the removed margins | each container, until typography |
@@ -73,8 +75,8 @@ The `hidden` attribute keeps elements out of layout, except for
 `hidden="until-found"`: that state remains the browser's so find-in-page can reveal it.
 
 Scrollbars are the browser's. Cyan 4 is the only source that styles them, and it is the
-source being replaced. Styling them later would be a themed-surface capability with its
-own tokens and spec, not a gap in this one.
+source being replaced. Styling them later would be a separate scrollbar and theming
+capability with its own tokens and spec, not a gap in this one or in Surface.
 
 Media constraint and Cyan's scrollbar rules both disappear with Cyan, and nothing fails
 when they do, which is why they are written down rather than left to be discovered.

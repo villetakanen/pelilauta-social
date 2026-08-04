@@ -1,0 +1,110 @@
+/*
+ * Surface — the padded container, and the five elevation levels.
+ *
+ * Spec: specs/design-system/surface/spec.md
+ *
+ * Two vocabularies, one model. `.surface` is the container: padding and an
+ * inline-size query boundary. `.elevation-0` through `.elevation-4` are the
+ * visual levels, usable on their own. A surface renders at level 1 unless an
+ * elevation class on the same element selects another level.
+ *
+ * Source order carries meaning twice here, and both are load-bearing:
+ *
+ *   1. `.surface` declares its default level before the elevation utilities, at
+ *      the same specificity, so an elevation class on the same element wins by
+ *      order. Moving this block below them pins every surface to level 1.
+ *   2. The nesting rules run from the lowest ancestor level to the highest. A
+ *      descendant with several elevated ancestors matches several of them, and
+ *      the nearest ancestor is always the last rule to match, so it wins.
+ *
+ * Pelilauta loads this after `@11thdeg/cyan-css`, which ships a `.surface` and an
+ * `.elevation-*` family of its own at these same specificities. Equal specificity
+ * resolves by order, so these rules win only while the design system's entry
+ * point is imported second.
+ */
+
+/*
+ * Padding and containment are the surface's own. Its background and shadow are
+ * level 1's, restated here rather than composed, because a class the element
+ * does not carry cannot be inherited from.
+ */
+.surface {
+  padding: var(--cn-gap);
+  container: surface-area / inline-size;
+  background-color: var(--cn-surface-1);
+  box-shadow: none;
+}
+
+/*
+ * The levels. `background-color` rather than the `background` shorthand, so a
+ * consumer's image or gradient survives the utility.
+ */
+.elevation-0 {
+  background-color: var(--cn-surface);
+  box-shadow: none;
+}
+
+.elevation-1 {
+  background-color: var(--cn-surface-1);
+  box-shadow: none;
+}
+
+.elevation-2 {
+  background-color: var(--cn-surface-2);
+  box-shadow: var(--cn-shadow-elevation-2);
+}
+
+.elevation-3 {
+  background-color: var(--cn-surface-3);
+  box-shadow: var(--cn-shadow-elevation-3);
+}
+
+.elevation-4 {
+  background-color: var(--cn-surface-4);
+  box-shadow: var(--cn-shadow-elevation-4);
+}
+
+/*
+ * Relative nesting. A descendant keeps the background of its own absolute level
+ * and shows only the shadow of its rise above the nearest elevated ancestor, so
+ * stacked shadows never compound.
+ *
+ * The level-1 ancestor is either the class or a surface that has not been
+ * overridden. `:where()` zeroes that arm so every rule below stays at one
+ * specificity, which is what leaves source order in charge of the chain.
+ */
+:is(
+    .elevation-1,
+    :where(.surface:not(.elevation-0, .elevation-2, .elevation-3, .elevation-4))
+  )
+  .elevation-2 {
+  box-shadow: none;
+}
+
+:is(
+    .elevation-1,
+    :where(.surface:not(.elevation-0, .elevation-2, .elevation-3, .elevation-4))
+  )
+  .elevation-3 {
+  box-shadow: var(--cn-shadow-elevation-2);
+}
+
+:is(
+    .elevation-1,
+    :where(.surface:not(.elevation-0, .elevation-2, .elevation-3, .elevation-4))
+  )
+  .elevation-4 {
+  box-shadow: var(--cn-shadow-elevation-3);
+}
+
+.elevation-2 .elevation-3 {
+  box-shadow: none;
+}
+
+.elevation-2 .elevation-4 {
+  box-shadow: var(--cn-shadow-elevation-2);
+}
+
+.elevation-3 .elevation-4 {
+  box-shadow: none;
+}
