@@ -5,73 +5,46 @@ description: Create or update a Pelilauta spec when a capability needs its why a
 
 # Spec
 
-Use this skill for approved product or design-system intent.
-
-Specs follow the ASDLC.io Living Specs practice, adapted here. The required
-anatomy is `specs/TEMPLATE.md`; start new specs from it.
+Use this skill for approved product or design-system intent. Specs follow the
+ASDLC.io Living Specs practice: a spec states the system's current state; a plan
+states a change. The anatomy and the writing rules are `specs/TEMPLATE.md`.
 
 ## Procedure
 
-1. Decide whether this needs a spec at all. A bug fix, a configuration change, a
-   dependency bump or a one-off task does not get one, and neither does anything
-   the codebase already expresses. Say which it is in the approval request; do not
-   let the question go unasked.
-2. Read the relevant v18 behavior, approved product direction, and existing
-   parent specs.
-3. Create or update `specs/<domain>/<capability>/spec.md` from
-   `specs/TEMPLATE.md`, whose anatomy is `asdlc.io/patterns/the-spec` — Blueprint
-   then Contract. Design-system work normally uses
-   `specs/design-system/<capability>/spec.md`. Its subject is the design-system
-   package, which both applications consume. Do not restate that in the spec, and
-   do not write a criterion that holds for only one of them.
-4. Add frontmatter status: `draft`, `approved`, or `deprecated`. New intent is
-   `draft` until a human approves it, and so is altered intent: any edit to an
-   `approved` spec returns it to `draft`, including one made in the same commit as
-   the behaviour it describes. That is the whole frontmatter.
-5. Write what this project decided: its constraints and boundaries, rationale
-   first, then the rule. State decisions, never their history — no datelines, no
-   narrative of how a decision was reached; git carries both. Assume engineering
-   competence — a paragraph a competent reader could have written without this
-   repository is the thing to cut, whatever section it is in.
-6. Examples illustrate intent; the current code is the reference for
-   implementation.
-7. Anchor, don't model. Do not copy a value that is already written somewhere
-   else — a design token, another spec, an upstream contract. Link to it.
-8. Record an irreversible decision as an ADR in `docs/adrs/`, and link it. A
-   decision is not spec content.
-9. Run the adversarial review below, resolve or explicitly accept each finding,
-   then ask for human approval before changing status to `approved`. The approval
-   request carries the Subtraction outcome in one line — what was cut, or that
-   nothing could be. A request without it is not ready.
+1. Decide whether this needs a spec. A bug fix, a configuration change, a
+   dependency bump or a one-off task does not get one. Say the decision in the
+   approval request.
+2. Read the sources: v20 for design intent, v18 for business behaviour that must
+   keep working, and the parent specs.
+3. Create or update `specs/<domain>/<capability>/spec.md` from the template. A
+   design-system spec's subject is the package both applications consume; do not
+   write a criterion that holds for only one of them.
+4. Frontmatter is `status: draft | approved | deprecated`, nothing else. New and
+   altered intent is `draft` until a human approves it — any edit to an approved
+   spec returns it to `draft`.
+5. Record an irreversible decision as an ADR in `docs/adrs/`, and link it.
+6. Run the review gate, then ask for human approval. The request carries the
+   Subtraction outcome in one line — what was cut, or that nothing could be.
 
-## Adversarial Review Gate
+## Review Gate
 
-Before requesting `draft` → `approved`, a reviewer (a separate agent session or
-a deliberate critic pass that has not just written the text) challenges the
-spec — not the code — and records the outcome in the spec review or PR:
+Before requesting `draft` → `approved`, a critic pass that has not just written
+the text challenges the spec, not the code:
 
-- **Ambiguity:** can two reasonable implementers read a requirement
-  differently? Name the sentence.
-- **Testability:** can a human confirm each Definition of Done criterion and run
-  each Scenario against the product? Flag any that are vibes.
-- **Edge cases:** missing states (empty, error, unknown input, both themes,
-  hydration timing) that the intent implies but the text omits.
-- **Compatibility:** claims about v18 or v20 behavior that no reader can check —
-  no test, no link to the spec that states it, no reachable upstream source. Appearance
-  follows v20, so a v18 look-alike claim is a defect, not evidence.
-- **Scope:** is the spec about one capability, and does it repeat anything another
-  spec already states?
-- **Subtraction:** run last, line by line. Can an agent derive this from the
-  code? If the code can say it, cut it — a section the code fully expresses
-  states `(implicit)`. Every other axis asks whether the spec says enough; this
-  one is the only counterweight.
+- **Ambiguity:** can two implementers read a requirement differently?
+- **Testability:** can each Definition of Done criterion and Scenario be run
+  against the product?
+- **Edge cases:** states the intent implies and the text omits — empty, error,
+  unknown input, both themes.
+- **Compatibility:** claims about v18 or v20 that no reader can check.
+  Appearance follows v20; a v18 look-alike claim is a defect.
+- **Scope:** one capability, and nothing another spec already states.
+- **Subtraction:** run last, line by line — the template's derivability test.
 
-Unresolved findings go to the human owner with the approval request; do not
-silently drop them.
+Unresolved findings go to the human with the approval request.
 
 ## Maintenance
 
-Keep the spec small enough to guide decisions. If implementation discovers a
-real intent ambiguity, reconcile the spec with the human owner rather than
-silently treating either prose or code as automatically correct. When behavior
-changes, update the spec in the same commit as the change.
+Implementation findings update the spec in the same commit as the behaviour
+change. A real intent ambiguity is reconciled with a human, not resolved by
+trusting either prose or code.
