@@ -1,0 +1,185 @@
+---
+/**
+ * SpatialComposition — one Pelilauta preview using all three core measurements.
+ *
+ * The specimen validates every token and utility it claims to demonstrate,
+ * then lets the live cascade determine the rendered measurements.
+ *
+ * Book: apps/design/src/content/principles/spatial-system.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** styles/units.css, imported by the book with `?raw`. */
+  source: string;
+  /** styles/spatial.css, imported by the book with `?raw`. */
+  utilitySource: string;
+}
+
+const { source, utilitySource } = Astro.props;
+const names = [
+  '--cn-grid',
+  '--cn-gap',
+  '--cn-line',
+  '--cn-border-radius-small',
+  '--cn-border-radius-large',
+];
+const tokens = parseTokens(source, { names });
+const missing = names.filter(
+  (name) => !tokens.some((token) => token.name === name),
+);
+
+if (missing.length > 0) {
+  throw new Error(
+    `SpatialComposition asked for tokens the stylesheet does not declare: ${missing.join(', ')}.`,
+  );
+}
+
+if (
+  !/\.border-radius\s*\{[^}]*border-radius:\s*var\(--cn-border-radius-large\)/s.test(
+    utilitySource,
+  )
+) {
+  throw new Error(
+    'SpatialComposition expects .border-radius to apply --cn-border-radius-large.',
+  );
+}
+---
+
+<figure>
+  <div class="stage">
+    <article class="preview surface elevation-1 border-radius">
+      <div class="identity">
+        <span class="avatar" aria-hidden="true">P</span>
+        <div>
+          <h3>Pelisuunnittelun periaatteet</h3>
+          <p class="text-label">Suunnittelu · tänään</p>
+        </div>
+      </div>
+      <div class="body">
+        <p>Yhteinen rytmi tekee pitkistä keskusteluista helpommin hahmotettavia.</p>
+        <div class="actions text-label">
+          <span>12 vastausta</span>
+          <span>Seuraa keskustelua</span>
+        </div>
+      </div>
+    </article>
+  </div>
+  <dl>
+    <div>
+      <dt><code>--cn-grid</code></dt>
+      <dd>title to metadata</dd>
+    </div>
+    <div>
+      <dt><code>--cn-gap</code></dt>
+      <dd>avatar to text, surface inset, and related actions</dd>
+    </div>
+    <div>
+      <dt><code>--cn-line</code></dt>
+      <dd>identity to content block</dd>
+    </div>
+  </dl>
+  <figcaption class="text-label">
+    One discussion preview combines all three core measurements.
+  </figcaption>
+</figure>
+
+<style>
+  figure {
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-medium);
+    overflow: hidden;
+  }
+
+  .stage {
+    padding: var(--cn-line);
+    background: var(--cn-surface-1);
+  }
+
+  .preview {
+    display: grid;
+    gap: var(--cn-line);
+    max-inline-size: 34rem;
+    margin-inline: auto;
+  }
+
+  .identity,
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .identity > div {
+    display: grid;
+    gap: var(--cn-grid);
+  }
+
+  .identity > div,
+  .body {
+    min-inline-size: 0;
+  }
+
+  .identity h3 {
+    overflow-wrap: anywhere;
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: calc(var(--cn-grid) * 5);
+    block-size: calc(var(--cn-grid) * 5);
+    color: var(--cn-on-button);
+    background: var(--cn-button);
+    border-radius: var(--cn-border-radius-small);
+  }
+
+  .body {
+    display: grid;
+    gap: var(--cn-gap);
+  }
+
+  .actions {
+    flex-wrap: wrap;
+    gap: var(--cn-gap);
+    color: var(--cn-text-low);
+  }
+
+  h3,
+  p,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+  dl div {
+    padding: var(--cn-grid) var(--cn-gap);
+  }
+
+  dt {
+    font-weight: var(--cn-font-weight-emphasis);
+  }
+
+  dd {
+    color: var(--cn-text-low);
+  }
+
+  figcaption {
+    padding: var(--cn-grid) var(--cn-gap);
+    color: var(--cn-text-low);
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+  @media (max-width: 32rem) {
+    .stage {
+      padding: var(--cn-gap);
+    }
+  }
+</style>

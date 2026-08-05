@@ -130,6 +130,21 @@ test('the default radius is medium', () => {
   );
 });
 
+test('.border-radius agrees with Cyan 4 on the large radius token', () => {
+  const utility = read(
+    new URL('../styles/spatial.css', import.meta.url).pathname,
+  );
+  const cyanUtility = read(
+    installed('@11thdeg/cyan-css/dist/atomics/border-radius.css'),
+  );
+  const declaration = /\.border-radius\s*\{[^}]*border-radius:\s*([^;]+);/s;
+
+  expect(utility.match(declaration)?.[1].trim()).toBe(
+    cyanUtility.match(declaration)?.[1].trim(),
+  );
+  expect(utility.match(declaration)?.[1]).toContain('--cn-border-radius-large');
+});
+
 test('the token entry point includes the elevation shadows and their grid dependency', () => {
   const theme = declarations(
     read(new URL('../styles/color-theme.css', import.meta.url).pathname),

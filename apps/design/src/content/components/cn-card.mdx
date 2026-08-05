@@ -66,6 +66,10 @@ CnCard composes the shared elevation levels, keeping their background and shadow
 one place. Notification and alert are visual flags; the text supplied by a consumer
 still communicates what each state means.
 
+At elevation 0, CnCard adds the standard one-pixel border so its edge remains visible
+against the application ground plane. Elevation 4 uses the high-contrast text role on
+the primary background.
+
 <Composition themes caption="Five elevations followed by information and warning states">
   <CardSpecimens group="elevation" />
 </Composition>
@@ -96,7 +100,7 @@ stay at the bottom when neighboring CnCards contain more text.
 
 ## Narrow containers
 
-CnCard establishes its own inline-size container, so supplied content adapts to the
+CnCard establishes inline-size containment, so supplied content adapts to the
 CnCard's width rather than the viewport's. The title is the exception: it keeps
 Typography's h4 size, weight, line height, and tracking at every container width,
 preserving the v20 card hierarchy in a sidebar or compact listing. The heading occupies
@@ -112,7 +116,7 @@ at most two rendered lines.
 - Compose independent destinations or controls around one primary subject destination.
 
 Use [Surface](/base/surface) for untitled boxes and workflow-scale content. The
-containing layout owns CnCard width and spacing between CnCards.
+containing layout defines CnCard width and spacing between CnCards.
 
 ## Accessibility
 

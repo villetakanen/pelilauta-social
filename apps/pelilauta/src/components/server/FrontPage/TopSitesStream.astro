@@ -2,7 +2,7 @@
 import { type Site, SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
-import OnboardingCard from '../../svelte/frontpage/OnboardingCard.svelte';
+import OnboardingCallout from '../../svelte/frontpage/OnboardingCallout.svelte';
 import SiteCard from '../ui/SiteCard.astro';
 
 const siteListResponse = await fetch(`${Astro.url.origin}/api/sites?limit=5`);
@@ -25,16 +25,23 @@ if (siteListResponse.ok) {
   });
 }
 ---
-<section>
-  <OnboardingCard client:only="svelte"/>
+<section class="site-stream">
+  <OnboardingCallout client:only="svelte"/>
   <div class="flex flex-col">
     {sites.map((site) => (
       site && <SiteCard site={site}/>
     ))}
   </div>
-  <div class="flex items-center mt-2">
+  <div class="flex items-center">
     <a href="/sites" class="button">
       {t('actions:showMore')}
     </a>
   </div>
 </section>
+
+<style>
+  .site-stream {
+    display: grid;
+    gap: var(--cn-gap);
+  }
+</style>

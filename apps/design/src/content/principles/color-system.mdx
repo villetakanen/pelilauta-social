@@ -147,10 +147,11 @@ tables show both expressions together.
   }}
 />
 
-Theme mappings preserve purpose rather than numerical symmetry. Levels 1 to 3 use
-the same white background in Light. Dark gives levels 1 and 2 the same background,
-then increases lightness at level 3. Link colour comes from the primary family in
-Light and the surface family in Dark, while its role remains navigation in both.
+Theme mappings preserve purpose rather than numerical symmetry. The Light ground
+plane uses surface step 95, while levels 1 to 3 use white. Dark gives levels 1 and
+2 the same background, then increases lightness at level 3. Level 4 uses the
+primary family in both themes. Link colour comes from the primary family in Light
+and the surface family in Dark, while its role remains navigation in both.
 
 ## Surface and elevation
 
@@ -168,9 +169,7 @@ temporarily raised above that content. We express it through five levels:
   <div class="surface elevation-1">Level 1: resting content</div>
   <div class="surface elevation-2">Level 2: raised content</div>
   <div class="surface elevation-3">Level 3: floating content</div>
-  <div class="surface elevation-4" style="color: var(--cn-text-high);">
-    Level 4: system layer
-  </div>
+  <div class="surface elevation-4">Level 4: system layer</div>
 </Composition>
 
 ### Colour and shadow
@@ -188,15 +187,15 @@ every absolute level.
 
 ### The highest layer
 
-Level 4 deliberately changes the tonal direction. It is darker than the lower
-surfaces in Light and lighter in Dark, separating system-level content from the
-page hierarchy in both themes.
+Level 4 uses primary step 99 in Light and primary step 40 in Dark, separating the
+highest system layer from the surface hierarchy. The Dark step is chosen so the
+inherited body foreground stays readable on it: a system-layer surface needs no
+foreground of its own. `--cn-text-high` remains the role for emphasis here.
 
-This background narrows the available foreground choices in Dark. `--cn-text` and
-`--cn-text-high` meet WCAG AA on `--cn-surface-4`; `--cn-on-surface`,
-`--cn-text-low`, and `--cn-on-surface-secondary` do not. Components placed at
-level 4 must therefore select a foreground role that meets the contrast required
-by their content.
+The de-emphasised roles are the exception. `--cn-text-low` and `--cn-link` do not
+reach WCAG 2.2 AA on `--cn-surface-4` in Dark, so metadata and links inside a
+system-layer surface take a stronger role. A component that uses another foreground
+verifies its contrast against `--cn-surface-4` in both themes.
 
 The [Spatial System](/principles/spatial-system) defines the shadow measurements.
 The [Surface reference](/base/surface) documents the classes and their composition.

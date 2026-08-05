@@ -8,9 +8,9 @@ import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
 import iconSource from '@design-system/styles/icon.css?raw'
 
-This is the lexicon: what the tokens are, and what each one is worth. Why the system is
-shaped this way — how to pick between the three spacing roles, why radii have a half step
-and spacing does not — is in the [Spatial System](/principles/spatial-system) book.
+This is the lexicon: what the tokens are, and what each one is worth. How these
+measurements recur in components, and how radii relate to the grid, is documented
+in the [Spatial System](/principles/spatial-system) book.
 
 Every table below is read from `styles/units.css` when this page is built, so it cannot
 list a token that does not exist or miss one that does.
@@ -53,8 +53,8 @@ grid.
 ## Breakpoints
 
 Stated in `rem`, so a threshold follows a reader who enlarges their default text; the
-reasoning is in the [Spatial System](/principles/spatial-system) book, under "The
-reader sets the scale".
+behaviour is documented under "Browser Font Settings" in the
+[Spatial System](/principles/spatial-system) book.
 A media or container query can't read a custom property, so a rule that needs the
 threshold states the literal — the typography downshift does this — and a test pins
 the literal to the token declared here.

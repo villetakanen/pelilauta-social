@@ -4,7 +4,7 @@
  *
  * The article remains passive when `href` is present: only the title and the
  * decorative cover link to the destination, leaving supplied controls independent.
- * CnCard composes the shared elevation utilities and owns no background or shadow.
+ * CnCard composes the shared elevation utilities and defines no background or shadow.
  *
  * Spec: specs/design-system/components/cn-card/spec.md
  */
@@ -128,6 +128,10 @@ let {
       --cn-border-radius-card,
       var(--cn-border-radius-large)
     );
+  }
+
+  .cn-card.elevation-0 {
+    border: 1px solid var(--cn-border);
   }
 
   .cn-card::after {
@@ -295,6 +299,19 @@ let {
   .cn-card:is(.elevation-1, .elevation-2, .elevation-3, .elevation-4) .eyebrow,
   .cn-card:is(.elevation-1, .elevation-2, .elevation-3, .elevation-4) .description {
     color: light-dark(var(--cn-text-low), var(--cn-text));
+  }
+
+  .cn-card.elevation-4,
+  .cn-card.elevation-4 .eyebrow,
+  .cn-card.elevation-4 .description,
+  .cn-card.elevation-4 .title,
+  .cn-card.elevation-4 .cover-noun,
+  .cn-card.elevation-4 :global(a) {
+    color: var(--cn-text-high);
+  }
+
+  .cn-card.elevation-4 :global(a:focus-visible) {
+    outline-color: currentColor;
   }
 
   .actions {

@@ -6,9 +6,10 @@
  * OKLCH, the semantic layer states both modes in one `light-dark()` declaration,
  * and the resulting ratio appears in no stylesheet.
  *
- * These tests are also what keeps the colour books honest. v20's colour book
- * publishes a contrast guardrail naming the wrong surface and quoting a ratio
- * that belongs to neither — the failure this file exists to prevent here.
+ * These tests are also what keeps the colour books honest. A book that states a
+ * guardrail as prose can name the wrong role or quote a ratio belonging to
+ * another pair and still read correctly; the numbers are computed here so the
+ * books cite them rather than restate them.
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
@@ -147,45 +148,40 @@ describe('the step gap predicts contrast', () => {
 });
 
 describe('the elevation-4 guardrail', () => {
-  // v20's book states this rule for surface-40 and quotes 4.6:1. The token it
-  // describes resolves to surface-50 in dark, and neither figure is that pair's.
-  // The rule is real; its particulars were not, so they are computed here and
-  // the books read these numbers rather than restating them.
+  // Level 4 leaves the surface family, so it is the one level whose foreground
+  // pairing cannot be read off the step gap. Surface sets no foreground, which
+  // means an elevation-4 element with no override inherits `--cn-text` from the
+  // body. That inherited default is the pairing that has to hold: a consumer who
+  // forgets to choose gets it, and no rule anywhere else catches them.
 
-  test('dark elevation 4 is surface-50, not the surface-40 v20 documents', () => {
-    expect(resolve('var(--cn-surface-4)', 'dark', tokens)).toEqual(
-      resolve('var(--cn-color-surface-50)', 'dark', tokens),
-    );
-  });
-
-  test('--cn-text and --cn-text-high stay readable on it', () => {
-    for (const foreground of ['--cn-text', '--cn-text-high']) {
-      const { ratio } = measure(foreground, '--cn-surface-4', 'dark', tokens);
-      expect(
-        ratio,
-        `${foreground} at ${ratio.toFixed(2)}:1`,
-      ).toBeGreaterThanOrEqual(4.5);
+  test('the inherited body foreground is readable on it', () => {
+    for (const mode of ['light', 'dark'] as const) {
+      const { ratio } = measure('--cn-text', '--cn-surface-4', mode, tokens);
+      expect(ratio, `${mode} at ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(
+        4.5,
+      );
     }
   });
 
-  test('the de-emphasised roles do not, which is what the rule forbids', () => {
-    // Asserted in both directions. If a palette change makes these pass, the
-    // book's statement is out of date and this test fails.
-    for (const foreground of ['--cn-text-low', '--cn-on-surface-secondary']) {
+  test('the roles a consumer may raise to are readable on it', () => {
+    for (const mode of ['light', 'dark'] as const) {
+      for (const foreground of ['--cn-text-high', '--cn-text-heading']) {
+        const { ratio } = measure(foreground, '--cn-surface-4', mode, tokens);
+        expect(
+          ratio,
+          `${foreground} in ${mode} at ${ratio.toFixed(2)}:1`,
+        ).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  test('the de-emphasised roles do not survive it in Dark', () => {
+    // Asserted in both directions. A palette change that makes these pass means
+    // the specs and books telling consumers to raise their foreground at this
+    // level are out of date, and this test is where that is noticed.
+    for (const foreground of ['--cn-text-low', '--cn-link']) {
       const { ratio } = measure(foreground, '--cn-surface-4', 'dark', tokens);
       expect(ratio, `${foreground} at ${ratio.toFixed(2)}:1`).toBeLessThan(4.5);
     }
-  });
-
-  test('--cn-on-surface misses AA on it, which v20 does not mention', () => {
-    const { ratio, grade: result } = measure(
-      '--cn-on-surface',
-      '--cn-surface-4',
-      'dark',
-      tokens,
-    );
-    expect(result).toBe('AA Large');
-    expect(ratio).toBeLessThan(4.5);
-    expect(ratio).toBeGreaterThanOrEqual(3);
   });
 });

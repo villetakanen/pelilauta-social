@@ -1,0 +1,123 @@
+---
+/**
+ * SpatialMeasurements — the three recurring measurements at their shipped lengths.
+ *
+ * The stylesheet supplies both the available roles and their declarations. A
+ * renamed or removed role fails the design-site build instead of leaving stale
+ * guidance behind.
+ *
+ * Book: apps/design/src/content/principles/spatial-system.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** styles/units.css, imported by the book with `?raw`. */
+  source: string;
+}
+
+const { source } = Astro.props;
+
+const MEASUREMENTS = [
+  {
+    name: '--cn-grid',
+    use: 'Base increment',
+    example: 'Compact spacing and geometry',
+  },
+  {
+    name: '--cn-gap',
+    use: 'Standard gap',
+    example: 'Avatar to text, component and layout gaps',
+  },
+  {
+    name: '--cn-line',
+    use: 'Line and row unit',
+    example: 'Body rhythm and minimum row height',
+  },
+] as const;
+
+const tokens = parseTokens(source, {
+  names: MEASUREMENTS.map(({ name }) => name),
+});
+const byName = new Map(tokens.map((token) => [token.name, token]));
+const missing = MEASUREMENTS.filter(({ name }) => !byName.has(name));
+
+if (missing.length > 0) {
+  throw new Error(
+    `SpatialMeasurements asked for tokens the stylesheet does not declare: ${missing.map(({ name }) => name).join(', ')}.`,
+  );
+}
+---
+
+<figure>
+  <div class="roles">
+    {
+      MEASUREMENTS.map(({ name, use, example }) => {
+        const token = byName.get(name);
+        return (
+          <section>
+            <div class="measure" aria-hidden="true">
+              <span style={`inline-size: var(${name});`}></span>
+            </div>
+            <h3><code>{name}</code></h3>
+            <p>{use}</p>
+            <p class="text-label">{example}</p>
+            <p class="value text-label">{token?.value} · {token?.note}</p>
+          </section>
+        );
+      })
+    }
+  </div>
+  <figcaption class="text-label">
+    Each bar resolves through the live design-system token shown below it.
+  </figcaption>
+</figure>
+
+<style>
+  figure {
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-medium);
+    overflow: hidden;
+  }
+
+  .roles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    background: var(--cn-surface-1);
+  }
+
+  section {
+    display: grid;
+    align-content: start;
+    gap: var(--cn-grid);
+    padding: var(--cn-gap);
+  }
+
+  .measure {
+    display: flex;
+    align-items: center;
+    block-size: var(--cn-line);
+  }
+
+  .measure span {
+    display: block;
+    block-size: var(--cn-grid);
+    background: var(--cn-link);
+    border-radius: var(--cn-border-radius-small);
+  }
+
+  h3,
+  p {
+    margin: 0;
+  }
+
+  .value {
+    color: var(--cn-text-low);
+  }
+
+  figcaption {
+    padding: var(--cn-grid) var(--cn-gap);
+    color: var(--cn-text-low);
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+</style>

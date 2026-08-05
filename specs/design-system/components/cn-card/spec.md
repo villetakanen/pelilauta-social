@@ -11,7 +11,7 @@ status: approved
 CnCard presents a concise preview of one independently meaningful subject. It gives
 that subject a stable title, optional visual identity, supporting content, and a
 bounded action region. A composition without a title or with workflow-scale
-content is a Surface or an owning application component rather than a CnCard.
+content is a Surface or an application component rather than a CnCard.
 
 ### Architecture
 
@@ -46,15 +46,17 @@ assistive-technology link. The article itself never becomes a link, allowing the
 eyebrow, body, and actions to contain independent destinations and controls.
 
 CnCard composes `.elevation-0` through `.elevation-4` from
-`specs/design-system/surface/spec.md`; elevation 1 is the default. CnCard owns its
+`specs/design-system/surface/spec.md`; elevation 1 is the default. CnCard defines its
 padding, radius, clipping, containment, and foreground treatment, so it does not
 compose the `.surface` container class or reproduce elevation declarations.
+At elevation 0, CnCard adds a one-pixel `--cn-border` edge to remain distinct from
+the application ground plane. Other consumers of `.elevation-0` remain borderless.
 Its inset is one grid unit vertically and one gap horizontally. The body region
 adds one grid unit of vertical separation around the description and supplied
 content.
 
 CnCard establishes inline-size containment so its cover resolves against the
-CnCard's own width instead of the viewport. The title preserves v20's local card
+CnCard width instead of the viewport. The title preserves v20's local card
 headline treatment: Typography's h4 size, weight, line height, and tracking at every
 container width. CnCard has a minimum block size of seven line units, giving its
 preview and action region stable proportions in a listing.
@@ -84,7 +86,7 @@ landmark because it accepts both links and command controls. The horizontal row 
 anchored to the bottom of the CnCard. It is seven grid units high, uses standard gap
 and horizontal padding, and bleeds through the CnCard's horizontal padding to its
 outer edges. Direct children are vertically centred and distributed with space
-between them. They supply their own typography, labels, destinations, and behavior.
+between them. They supply typography, labels, destinations, and behavior.
 CnCard does not supply application actions or business logic.
 
 A cover is decorative, lazily loaded, cropped to 16:9, and may receive native
@@ -112,12 +114,14 @@ preserving v20's identity-first stacking.
 
 CnCard uses the large radius by default and permits `--cn-border-radius-card` to
 override it. The radius applies to the CnCard, cover, image, and tint. A containing
-layout owns CnCard width, arrangement, and spacing between CnCards.
+layout defines CnCard width, arrangement, and spacing between CnCards.
 
 The title and nouns use the heading foreground. Eyebrow, description, and inherited
-body content use the low-emphasis foreground. CnCard strengthens an owned foreground
-at an elevation where the v20 role would otherwise fail WCAG 2.2 AA. Supplied
-content that sets another foreground owns that pairing.
+body content use the low-emphasis foreground. At elevation 4, the title, nouns,
+eyebrow, description, inherited body content, and links use the high-contrast text
+role. Link hover retains that foreground, and keyboard focus uses it for the focus
+outline. Supplied content that sets another foreground is responsible for that
+pairing.
 
 CnCard renders its complete initial structure without browser globals, data fetching,
 or client-side effects. Reactivity may update supplied content and states after
@@ -135,7 +139,7 @@ hydration without changing the component's semantics.
 - Component checks verify semantic structure, optional-region ordering, links,
   image attributes, indicators, elevation composition, and server rendering.
 - Browser checks verify linked-title focus, two-line truncation, cover sizing and
-  tint, action-row geometry, stable card-title typography, and CnCard-owned
+  tint extent, action-row geometry, stable card-title typography, and CnCard
   foreground contrast.
 - Human review accepts every documented variant in Light and Dark and at narrow
   and wide container sizes.
@@ -146,11 +150,13 @@ hydration without changing the component's semantics.
   whole-CnCard control.
 - CnCard consumes the shared elevation utilities; it does not declare another
   background or shadow model.
+- The elevation-0 border remains specific to CnCard and does not alter the shared
+  elevation utility.
 - A linked decorative cover never creates a duplicate keyboard focus stop or
   accessible name.
 - Actions remain at the bottom edge without CnCard acquiring margins or
   listing-layout rules.
-- CnCard indicators add no accessible state of their own; consumers provide the
+- CnCard indicators add no independent accessible state; consumers provide the
   state meaning separately.
 - The initial server response contains the complete CnCard structure and content.
 
@@ -218,9 +224,16 @@ Then the alert flag has visual precedence
 ```
 
 ```gherkin
+Given a CnCard at elevation 0
+When it renders on the application ground plane
+Then it has a one-pixel border using `--cn-border`
+```
+
+```gherkin
 Given a CnCard at elevation 4 in Light or Dark
-When its title, eyebrow, description and inherited body foreground render
-Then each CnCard-owned foreground meets WCAG 2.2 AA
+When its title, nouns, eyebrow, description, inherited body and links render
+Then each CnCard foreground uses `--cn-text-high`
+And meets WCAG 2.2 AA
 ```
 
 ```gherkin

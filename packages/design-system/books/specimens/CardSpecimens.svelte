@@ -1,5 +1,5 @@
 <script lang="ts">
-/** CnCard book fixtures. Styling here arranges specimens; CnCard owns their rendering. */
+/** CnCard book fixtures. Styling here arranges specimens; CnCard renders them. */
 import CnCard from '../../components/CnCard.svelte';
 
 let {
@@ -9,7 +9,7 @@ let {
 } = $props();
 </script>
 
-<div class:narrow={group === 'narrow'} class="card-specimens" data-card-group={group}>
+<div class:narrow={group === 'narrow'} class:wide={group === 'wide'} class="card-specimens" data-card-group={group}>
   {#if group === 'basic'}
     <div data-variant="basic">
       <CnCard title="Aamunkoin vartijat" description="A concise preview with the default elevation." />
@@ -24,6 +24,7 @@ let {
       <div data-elevation={elevation}>
         <CnCard title={`Elevation ${elevation}`} elevation={elevation as 0 | 1 | 2 | 3 | 4}>
           The foreground remains readable on this surface.
+          {#if elevation === 4}<a href="#elevation-4">System-level action</a>{/if}
         </CnCard>
       </div>
     {/each}

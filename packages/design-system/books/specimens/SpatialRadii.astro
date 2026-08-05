@@ -1,0 +1,157 @@
+---
+/**
+ * SpatialRadii — the radius family rendered from its shipped declarations.
+ *
+ * The specimen also verifies the unsuffixed default and the historical
+ * `.border-radius` utility before describing either one.
+ *
+ * Book: apps/design/src/content/principles/spatial-system.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** styles/units.css, imported by the book with `?raw`. */
+  source: string;
+  /** styles/spatial.css, imported by the book with `?raw`. */
+  utilitySource: string;
+}
+
+const { source, utilitySource } = Astro.props;
+const STEPS = [
+  '--cn-border-radius-small',
+  '--cn-border-radius-medium',
+  '--cn-border-radius-large',
+  '--cn-border-radius-xl',
+] as const;
+const names = [...STEPS, '--cn-border-radius'];
+const tokens = parseTokens(source, { names });
+const byName = new Map(tokens.map((token) => [token.name, token]));
+const missing = names.filter((name) => !byName.has(name));
+
+if (missing.length > 0) {
+  throw new Error(
+    `SpatialRadii asked for tokens the stylesheet does not declare: ${missing.join(', ')}.`,
+  );
+}
+
+if (
+  byName.get('--cn-border-radius')?.value !== 'var(--cn-border-radius-medium)'
+) {
+  throw new Error(
+    'SpatialRadii expects --cn-border-radius to resolve to --cn-border-radius-medium.',
+  );
+}
+
+if (
+  !/\.border-radius\s*\{[^}]*border-radius:\s*var\(--cn-border-radius-large\)/s.test(
+    utilitySource,
+  )
+) {
+  throw new Error(
+    'SpatialRadii expects .border-radius to apply --cn-border-radius-large.',
+  );
+}
+---
+
+<figure>
+  <div class="samples">
+    {
+      STEPS.map((name) => {
+        const token = byName.get(name);
+        return (
+          <section>
+            <div class="shape" style={`border-radius: var(${name});`} aria-hidden="true">
+              <span></span>
+            </div>
+            <h3><code>{name}</code></h3>
+            <p class="text-label">{token?.value} · {token?.note}</p>
+          </section>
+        );
+      })
+    }
+  </div>
+  <dl>
+    <div>
+      <dt><code>--cn-border-radius</code></dt>
+      <dd>medium default</dd>
+    </div>
+    <div>
+      <dt><code>.border-radius</code></dt>
+      <dd>large utility</dd>
+    </div>
+  </dl>
+  <figcaption class="text-label">
+    Each container uses one grid unit of inset and the live radius token named below it.
+  </figcaption>
+</figure>
+
+<style>
+  figure {
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-medium);
+    overflow: hidden;
+  }
+
+  .samples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    background: var(--cn-surface-1);
+  }
+
+  section {
+    display: grid;
+    align-content: start;
+    gap: var(--cn-grid);
+    min-inline-size: 0;
+    padding: var(--cn-gap);
+  }
+
+  .shape {
+    display: grid;
+    min-block-size: calc(var(--cn-grid) * 8);
+    padding: var(--cn-grid);
+    background: var(--cn-link);
+  }
+
+  .shape span {
+    border: 1px dashed var(--cn-on-button);
+    border-radius: inherit;
+  }
+
+  h3,
+  p,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  h3 {
+    overflow-wrap: anywhere;
+  }
+
+  p,
+  dd,
+  figcaption {
+    color: var(--cn-text-low);
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+  dl div,
+  figcaption {
+    padding: var(--cn-grid) var(--cn-gap);
+  }
+
+  dt {
+    font-weight: var(--cn-font-weight-emphasis);
+  }
+
+  figcaption {
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+</style>

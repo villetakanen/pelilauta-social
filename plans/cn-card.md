@@ -5,8 +5,8 @@
 At the end of this epic cycle, the v20 card is a specified, documented and
 operational v21 design-system component, and every Pelilauta card that depends on
 Cyan 4's `cn-card` uses it instead. The front page adopts the v20 card hierarchy
-without losing the v18 application behaviour carried by its thread, site and
-onboarding cards.
+without losing the v18 application behaviour carried by its thread and site cards
+or the neighboring onboarding callout.
 
 ## Success criterion
 
@@ -16,7 +16,7 @@ onboarding cards.
 3. Every current `cn-card` consumer in Pelilauta uses the local CnCard, with existing
    application behaviour and link destinations preserved unless the approved spec
    records an intentional v20 change
-4. Thread, site and onboarding cards on the front page form the epic's visual
+4. Thread and site cards plus the onboarding callout on the front page form the epic's visual
    acceptance surface across narrow and wide containers, authenticated and anonymous
    sessions, covers and no covers, and light and dark themes
 5. Pelilauta no longer contains a `cn-card` call site, a `CnCard` type dependency, or
@@ -53,9 +53,14 @@ onboarding cards.
 - **Front-page thread cards** — open, waits on the foundation; the v20 hierarchy lands
   while rich previews, author and channel links, reaction writes, unread indication,
   reply counts and unread-jump destinations keep their shipped v18 behaviour
-- **Front-page site and onboarding cards** — open, waits on the foundation; site
-  identity, membership state, activity time, responsive images and the anonymous login
-  invitation move to the local CnCard without changing their session or navigation logic
+- **Front-page onboarding callout** — delivered; the anonymous login invitation is an
+  application-owned elevation-4 system Surface rather than a preview card. Its
+  client-owned session visibility, localization, artwork, login destination and
+  existing Cyan Button remain unchanged while the surrounding `cn-card` dependency is
+  removed
+- **Front-page site cards** — open, waits on the foundation; site identity, membership
+  state, activity time and responsive images move to the local CnCard without changing
+  their session or navigation logic
 - **Site and character library cards** — open, waits on the foundation; reusable site,
   character and keeper cards move together so their links, membership markers, child
   content and supplied actions remain coherent in card listings
