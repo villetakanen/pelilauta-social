@@ -8,19 +8,21 @@
 
 ```yaml
 - apps
-  - pelilauta      # the v21 application  → pelilauta.social         · dev :4321
-  - design         # the design-system site, its navigation and IA
-                   #                      → design.pelilauta.social  · dev :4322
+  - pelilauta       # the v21 application  → pelilauta.social         · dev :4321
+  - design          # the design-system site, its navigation and IA
+                    #                      → design.pelilauta.social  · dev :4322
 - packages
-  - design-system  # components, styles, specs, and the books that publish them
-- specs            # approved behaviour, one per capability
-- plans            # epic scope
-  - debt           # known gaps that are nobody's story
+  - design-system    # components, styles, specs, and the books that publish them
+- specs              # approved behaviour, one per capability
+- plans              # epic scope
+  - debt             # known gaps that are nobody's story
 - docs
-  - adrs           # hard-to-reverse decisions log
-  - lessons        # notes we might act on later
-- .agents/skills   # portable skills
-- .claude/skills   # symlinked from .agents/skills, to enable dual use with claude 
+  - adrs             # hard-to-reverse decisions log
+  - lessons          # notes we might act on later
+  - DESIGN.md        # Design vision and goals
+  - ARCHITECTURE.md  # Project architecture vision, and rules
+- .agents/skills     # portable skills
+- .claude/skills     # symlinked from .agents/skills, to enable dual use with claude 
 ```
 
 ## Delivery Contract
