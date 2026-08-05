@@ -126,8 +126,17 @@ const context = group ? groupLabel(group) : 'Index';
         letter-spacing: 0.12em;
         text-transform: uppercase;
       }
-      .wordmark { color: inherit; }
-      .context { margin-inline-end: auto; }
+      .wordmark {
+        flex: none;
+        color: inherit;
+      }
+      .context {
+        min-inline-size: 0;
+        margin-inline-end: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
       /* Visually hidden but focusable: `hidden` would remove the only
          keyboard route into the drawer. */
@@ -143,6 +152,7 @@ const context = group ? groupLabel(group) : 'Index';
         white-space: nowrap;
       }
       .nav-toggle-label {
+        flex: none;
         padding: 0.4rem 0.8rem;
         color: var(--cn-text-high);
         border: 1px solid var(--cn-border);

@@ -1,7 +1,7 @@
 /* color-scheme is preflight.css's: it states the document, not a colour. */
 :root {
   --cn-surface: light-dark(
-    var(--cn-color-surface-99),
+    var(--cn-color-surface-95),
     var(--cn-color-surface-20)
   );
   --cn-surface-1: light-dark(
@@ -17,8 +17,8 @@
     var(--cn-color-surface-40)
   );
   --cn-surface-4: light-dark(
-    var(--cn-color-surface-80),
-    var(--cn-color-surface-50)
+    var(--cn-color-primary-99),
+    var(--cn-color-primary-50)
   );
   --cn-on-surface: light-dark(
     var(--cn-color-surface-10),
@@ -49,7 +49,7 @@
     var(--cn-color-surface-80)
   );
 
-  --cn-link: light-dark(var(--cn-color-primary-50), var(--cn-color-surface-80));
+  --cn-link: light-dark(var(--cn-color-primary-40), var(--cn-color-surface-80));
   --cn-link-hover: light-dark(
     var(--cn-color-surface-50),
     var(--cn-color-primary-80)

@@ -57,14 +57,14 @@ Choose the level by the role of the element in the composition; the
   </div>
 </Composition>
 
-Elevation 0 paints an opaque ground plane. Elevations 0 and 1 are shadowless.
-Elevations 2 to 4 apply progressively larger shadows when they render without an
-elevated ancestor.
+Elevation 0 paints an opaque ground plane using surface step 95 in Light and step
+20 in Dark. Elevations 0 and 1 are shadowless. Elevations 2 to 4 apply progressively
+larger shadows when they render without an elevated ancestor.
 
 The Light and Dark themes do not derive depth from colour in the same way. Levels
 1 to 3 share one background in Light, while Dark separates levels 2 and 3 by
-lightness. Level 4 changes direction in both themes to remain distinct from the
-content layers below it.
+lightness. Level 4 leaves the surface family: it uses primary step 99 in Light and
+step 50 in Dark.
 
 ## Overriding a surface's level
 

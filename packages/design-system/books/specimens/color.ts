@@ -5,8 +5,8 @@
  * `light-dark()` declaration, so a contrast figure appears in no stylesheet. It
  * has to be computed per theme, after the `var()` chain is resolved.
  *
- * v20's colour book states a contrast rule for surface-40 where the token it
- * describes resolves to surface-50, and quotes a ratio matching neither.
+ * Contrast guardrails are computed from the current semantic assignments rather
+ * than copied from a reference pair in prose.
  *
  * Books: apps/design/src/content/tokens/color.mdx
  *        apps/design/src/content/principles/color-system.mdx

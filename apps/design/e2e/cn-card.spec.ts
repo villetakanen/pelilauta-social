@@ -45,6 +45,7 @@ const styles = (locator: Locator) =>
       fontSize: style.fontSize,
       lineHeight: style.lineHeight,
       fontWeight: style.fontWeight,
+      outlineColor: style.outlineColor,
       outlineStyle: style.outlineStyle,
       outlineWidth: style.outlineWidth,
     };
@@ -200,7 +201,7 @@ test('a covered noun stacks above the alert flag', async ({ page }) => {
 });
 
 for (const mode of ['light', 'dark'] as const) {
-  test(`CnCard-owned foregrounds meet AA on every elevation in ${mode}`, async ({
+  test(`CnCard foregrounds meet AA on every elevation in ${mode}`, async ({
     page,
   }) => {
     for (const level of [0, 1, 2, 3, 4]) {
@@ -216,5 +217,31 @@ for (const mode of ['light', 'dark'] as const) {
         ).toBeGreaterThanOrEqual(4.5);
       }
     }
+  });
+
+  test(`the elevation-4 link retains the high foreground in ${mode}`, async ({
+    page,
+  }) => {
+    const link = page.locator(
+      `[data-mode="${mode}"] [data-elevation="4"] .cn-card a`,
+    );
+    const expected = await link.evaluate((element) => {
+      const theme = element.closest('[data-mode]');
+      if (!theme) throw new Error('CnCard specimen has no theme context');
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--cn-text-high)';
+      theme.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+
+    expect((await styles(link)).color).toBe(expected);
+    await link.hover();
+    expect((await styles(link)).color).toBe(expected);
+    await link.focus();
+    const focused = await styles(link);
+    expect(focused.color).toBe(expected);
+    expect(focused.outlineColor).toBe(expected);
   });
 }

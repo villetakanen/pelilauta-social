@@ -1,0 +1,186 @@
+---
+/**
+ * SpatialComparison — paired compositions for grouping and vertical rhythm.
+ *
+ * Positive examples preserve grouping and repeat one interval across equivalent
+ * rows. Negative examples flatten the grouping or vary the repeated interval.
+ *
+ * Book: apps/design/src/content/principles/spatial-system.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** styles/units.css, imported by the book with `?raw`. */
+  source: string;
+}
+
+const { source } = Astro.props;
+const names = ['--cn-grid', '--cn-gap', '--cn-line'];
+const tokens = parseTokens(source, { names });
+const missing = names.filter(
+  (name) => !tokens.some((token) => token.name === name),
+);
+
+if (missing.length > 0) {
+  throw new Error(
+    `SpatialComparison asked for roles the stylesheet does not declare: ${missing.join(', ')}.`,
+  );
+}
+---
+
+<div class="comparisons">
+  <figure>
+    <figcaption>
+      <strong>Group by relationship</strong>
+      <span class="text-label">Related details stay close; the next action receives more space.</span>
+    </figcaption>
+    <div class="pair">
+      <section>
+        <p class="verdict text-label">Use the roles</p>
+        <div class="grouping good">
+          <div>
+            <strong>Ilmoitukset</strong>
+            <span class="text-label">Kolme uutta viestiä</span>
+          </div>
+          <span class="action">Näytä viestit</span>
+        </div>
+      </section>
+      <section>
+        <p class="verdict text-label">Avoid equal spacing</p>
+        <div class="grouping flat">
+          <div>
+            <strong>Ilmoitukset</strong>
+            <span class="text-label">Kolme uutta viestiä</span>
+          </div>
+          <span class="action">Näytä viestit</span>
+        </div>
+      </section>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption>
+      <strong>Preserve vertical rhythm</strong>
+      <span class="text-label">Each row uses <code>--cn-line</code> as its minimum block size.</span>
+    </figcaption>
+    <div class="pair">
+      <section>
+        <p class="verdict text-label">Use equal rows</p>
+        <ul class="rhythm good">
+          <li>Pelimaailma</li>
+          <li>Hahmot</li>
+          <li>Peliraportit</li>
+        </ul>
+      </section>
+      <section>
+        <p class="verdict text-label">Avoid unequal intervals</p>
+        <ul class="rhythm uneven">
+          <li>Pelimaailma</li>
+          <li>Hahmot</li>
+          <li>Peliraportit</li>
+        </ul>
+      </section>
+    </div>
+  </figure>
+</div>
+
+<style>
+  .comparisons {
+    display: grid;
+    gap: var(--cn-line);
+  }
+
+  figure {
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-border-radius-medium);
+    overflow: hidden;
+  }
+
+  figcaption {
+    display: grid;
+    gap: var(--cn-grid);
+    padding: var(--cn-gap);
+    background: var(--cn-surface-1);
+    border-block-end: 1px solid var(--cn-border);
+  }
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  section {
+    display: grid;
+    align-content: start;
+    gap: var(--cn-gap);
+    min-block-size: 14rem;
+    padding: var(--cn-gap);
+  }
+
+  section + section {
+    border-inline-start: 1px solid var(--cn-border);
+  }
+
+  .verdict {
+    margin: 0;
+    color: var(--cn-text-low);
+    text-transform: uppercase;
+  }
+
+  .grouping,
+  .grouping div {
+    display: grid;
+  }
+
+  .grouping.good {
+    gap: var(--cn-line);
+  }
+
+  .grouping.good div {
+    gap: var(--cn-grid);
+  }
+
+  .grouping.flat,
+  .grouping.flat div {
+    gap: var(--cn-gap);
+  }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    min-block-size: calc(var(--cn-grid) * 5);
+    padding-inline: var(--cn-gap);
+    color: var(--cn-on-button);
+    background: var(--cn-button);
+    border-radius: var(--cn-border-radius-large);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rhythm li {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--cn-line);
+    border-block-end: 1px solid var(--cn-border);
+  }
+
+  .rhythm.uneven li:nth-child(2) {
+    min-block-size: calc(var(--cn-line) + var(--cn-grid));
+  }
+
+  @media (max-width: 36rem) {
+    .pair {
+      grid-template-columns: 1fr;
+    }
+
+    section + section {
+      border-block-start: 1px solid var(--cn-border);
+      border-inline-start: 0;
+    }
+  }
+</style>

@@ -57,7 +57,7 @@
   --color-on-primary: var(--cn-on-button);
   --color-secondary: var(--cn-surface-4);
   --color-secondary-1: var(--cn-surface-3);
-  --color-on-secondary: var(--cn-on-surface);
+  --color-on-secondary: var(--cn-text-high);
   --color-background: var(--cn-background);
   --color-on-background: var(--cn-on-background);
   --color-text: var(--cn-text);

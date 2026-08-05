@@ -147,45 +147,17 @@ describe('the step gap predicts contrast', () => {
 });
 
 describe('the elevation-4 guardrail', () => {
-  // v20's book states this rule for surface-40 and quotes 4.6:1. The token it
-  // describes resolves to surface-50 in dark, and neither figure is that pair's.
-  // The rule is real; its particulars were not, so they are computed here and
-  // the books read these numbers rather than restating them.
-
-  test('dark elevation 4 is surface-50, not the surface-40 v20 documents', () => {
-    expect(resolve('var(--cn-surface-4)', 'dark', tokens)).toEqual(
-      resolve('var(--cn-color-surface-50)', 'dark', tokens),
-    );
-  });
-
-  test('--cn-text and --cn-text-high stay readable on it', () => {
-    for (const foreground of ['--cn-text', '--cn-text-high']) {
-      const { ratio } = measure(foreground, '--cn-surface-4', 'dark', tokens);
-      expect(
-        ratio,
-        `${foreground} at ${ratio.toFixed(2)}:1`,
-      ).toBeGreaterThanOrEqual(4.5);
+  test('--cn-text-high stays readable on it', () => {
+    for (const mode of ['light', 'dark'] as const) {
+      const { ratio } = measure(
+        '--cn-text-high',
+        '--cn-surface-4',
+        mode,
+        tokens,
+      );
+      expect(ratio, `${mode} at ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(
+        4.5,
+      );
     }
-  });
-
-  test('the de-emphasised roles do not, which is what the rule forbids', () => {
-    // Asserted in both directions. If a palette change makes these pass, the
-    // book's statement is out of date and this test fails.
-    for (const foreground of ['--cn-text-low', '--cn-on-surface-secondary']) {
-      const { ratio } = measure(foreground, '--cn-surface-4', 'dark', tokens);
-      expect(ratio, `${foreground} at ${ratio.toFixed(2)}:1`).toBeLessThan(4.5);
-    }
-  });
-
-  test('--cn-on-surface misses AA on it, which v20 does not mention', () => {
-    const { ratio, grade: result } = measure(
-      '--cn-on-surface',
-      '--cn-surface-4',
-      'dark',
-      tokens,
-    );
-    expect(result).toBe('AA Large');
-    expect(ratio).toBeLessThan(4.5);
-    expect(ratio).toBeGreaterThanOrEqual(3);
   });
 });

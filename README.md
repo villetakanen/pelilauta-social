@@ -58,8 +58,8 @@ The root workspace version identifies v21 releases. The version in
 version until a separate product decision requires changing it.
 
 `v21.0.0-beta.9` builds on `v21.0.0-beta.8` with the Spatial System principles
-book: the 8px baseline, spacing roles, prose rhythm, grid-derived radii, and the
-reader-owned root scale. It also makes dark the no-preference color-scheme
+book: the 8px baseline, recurring measurements, prose rhythm, grid-derived radii,
+and browser font scaling. It also makes dark the no-preference color-scheme
 default consistently in both applications and corrects the book, spec, lesson,
 and delivery harness discovered while establishing those foundations.
 

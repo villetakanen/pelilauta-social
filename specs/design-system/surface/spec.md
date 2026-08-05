@@ -1,5 +1,5 @@
 ---
-status: approved
+status: draft
 ---
 
 # Surface
@@ -9,9 +9,9 @@ status: approved
 ### Context
 
 Surface establishes a padded container and a visual depth hierarchy. Five levels
-coordinate background colour and shadow to distinguish the application ground
-plane, resting content, raised content, floating content and the highest system
-layer. Colour and shadow express one hierarchy in both themes.
+coordinate background colour and shadow to encode the application ground plane,
+resting content, raised content, floating content and the highest system layer.
+Colour and shadow express one hierarchy in both themes.
 
 ### Architecture
 
@@ -24,16 +24,16 @@ elevation class.
 
 The elevation classes are also public utilities independent of `.surface`. Each
 sets `background-color` and `box-shadow`, consuming the surface and shadow roles
-owned by `specs/design-system/design-tokens/spec.md`. Components such as Card
+defined by `specs/design-system/design-tokens/spec.md`. Components such as Card
 compose these utilities rather than restating their declarations.
 
-| level | role | background | standalone shadow |
-| :--- | :--- | :--- | :--- |
-| 0 | application ground plane | `--cn-surface` | none |
-| 1 | resting surface | `--cn-surface-1` | none |
-| 2 | raised surface | `--cn-surface-2` | `--cn-shadow-elevation-2` |
-| 3 | floating or active surface | `--cn-surface-3` | `--cn-shadow-elevation-3` |
-| 4 | highest system layer | `--cn-surface-4` | `--cn-shadow-elevation-4` |
+| level | role | Light background | Dark background | standalone shadow |
+| :--- | :--- | :--- | :--- | :--- |
+| 0 | application ground plane | `--cn-surface`: surface 95 | `--cn-surface`: surface 20 | none |
+| 1 | resting surface | surface 100 | surface 30 | none |
+| 2 | raised surface | surface 100 | surface 30 | `--cn-shadow-elevation-2` |
+| 3 | floating or active surface | surface 100 | surface 40 | `--cn-shadow-elevation-3` |
+| 4 | highest system layer | `--cn-surface-4`: primary 99 | `--cn-surface-4`: primary 50 | `--cn-shadow-elevation-4` |
 
 Levels in a nested elevation chain increase from ancestor to descendant. A child
 therefore has a level greater than every elevated ancestor. Its background remains
@@ -62,11 +62,11 @@ not remove a consumer's background image or gradient.
 
 Surface sets no foreground colour and does not make every foreground role suitable
 for every level. Its book specimens choose roles that meet WCAG 2.2 AA for their
-content in both themes; consuming capabilities own the same decision for their
+content in both themes; consuming capabilities make the same decision for their
 content.
 
 Surface sets no radius, border, size, foreground or component semantics.
-`.surface` owns only its forced padding, named inline-size containment and default
+`.surface` provides only its forced padding, named inline-size containment and default
 elevation; an elevation utility alone adds no padding or containment.
 
 ## Contract
@@ -124,7 +124,7 @@ And it has the full shadow for its level
 ```gherkin
 Given an elevated child whose level is greater than every elevated ancestor
 When both render
-Then the child paints the surface colour for its own level
+Then the child paints the surface colour assigned to its level
 And its shadow equals the difference between the two levels
 ```
 

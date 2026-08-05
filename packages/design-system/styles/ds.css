@@ -6,5 +6,6 @@
 @import "./fonts.css";
 @import "./typography.css";
 @import "./compat/cyan-typography.css";
+@import "./spatial.css";
 @import "./content-containers.css";
 @import "./surface.css";
