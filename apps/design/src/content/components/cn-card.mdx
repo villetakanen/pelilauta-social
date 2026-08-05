@@ -74,6 +74,25 @@ the primary background.
   <CardSpecimens group="elevation" />
 </Composition>
 
+### Setting a flag on the client
+
+Both flags are also a class hook on the card root, for a state that is only known
+after the page arrives — an unread thread, an item that needs attention once a session
+resolves. Toggle `has-notify` or `has-alert` on the `.cn-card` element instead of
+re-rendering the card:
+
+```ts
+const card = document.querySelector('#thread-card-abc123 .cn-card')
+card?.classList.toggle('has-notify', unread)
+```
+
+`cn-card`, `has-notify` and `has-alert` are part of the public contract for this
+reason. The flag rules read the classes and nothing else, so a listing that renders
+its cards on the server and hydrates none of them can still raise one triangle. The
+flag fades in, so a late state does not snap into place. Give the card root a handle
+you can query — the surrounding element is usually enough, since CnCard takes no `id`
+prop.
+
 ## Visual identity
 
 A noun identifies the subject without repeating its name to assistive technology. It

@@ -37,7 +37,7 @@ The public schema preserves the v20 names and composition model:
 | `cover` | Optional cover-image URL. |
 | `srcset`, `sizes` | Optional native responsive-image values used with `cover`. |
 | `noun` | Optional icon noun. |
-| `notify`, `alert` | Optional visual-state flags; both default to false. |
+| `notify`, `alert` | Optional visual-state flags; both default to false. Also settable on the client through the class hook below. |
 | `eyebrow`, `actions`, `children` | Optional Svelte snippets for the three composition regions. |
 
 An optional destination links the title. When a cover is present, the cover points
@@ -128,6 +128,21 @@ supplementary visual states. A consumer that uses either state provides its mean
 through text or another accessible state. A covered noun renders above either flag,
 preserving v20's identity-first stacking.
 
+The two flag states are also a public class hook. The root carries the `cn-card`
+class, and each flag renders from `has-notify` or `has-alert` on that root, so a
+consumer that learns the state after the server response toggles the class on the
+root instead of supplying a new prop value. `cn-card`, `has-notify` and `has-alert`
+are named in this contract and are not internal names a refactor may rename.
+
+The hook exists because CnCard's states arrive from two different times. A prop is
+resolved when the page renders; unread signalling, session-dependent attention and
+anything else a browser learns is resolved afterwards, in a CnCard that a
+server-rendered listing does not hydrate. Without the hook such a consumer would
+have to hydrate every card in a listing to change one triangle. The flag rules
+therefore depend on the class alone and stay independent of how the class arrived.
+Both flags carry a short opacity transition, so a state that resolves late fades in
+rather than appearing abruptly.
+
 CnCard uses the large radius by default and permits `--cn-border-radius-card` to
 override it. The radius applies to the CnCard, cover, image, and tint. A containing
 layout defines CnCard width, arrangement, and spacing between CnCards.
@@ -155,8 +170,9 @@ hydration without changing the component's semantics.
 - Component checks verify semantic structure, optional-region ordering, links,
   image attributes, indicators, elevation composition, and server rendering.
 - Browser checks verify linked-title focus, two-line truncation, cover sizing and
-  tint extent, action-row geometry, stable card-title typography, and CnCard
-  foreground contrast.
+  tint extent, action-row geometry, stable card-title typography, CnCard
+  foreground contrast, and the flag class hook taking effect on a CnCard that
+  rendered without the flag and was never hydrated.
 - Human review accepts every documented variant in Light and Dark and at narrow
   and wide container sizes.
 
@@ -179,6 +195,8 @@ hydration without changing the component's semantics.
   listing-layout rules.
 - CnCard indicators add no independent accessible state; consumers provide the
   state meaning separately.
+- The flag rules read `has-notify` and `has-alert` on the `cn-card` root and nothing
+  else, so a class toggled after the server response takes effect without hydration.
 - The initial server response contains the complete CnCard structure and content.
 
 ### Scenarios
@@ -249,6 +267,12 @@ And the first child is at the row start and the second is at the row end
 Given a CnCard with notify and alert active
 When it renders
 Then the alert flag has visual precedence
+```
+
+```gherkin
+Given a server-rendered CnCard that renders no flag and is never hydrated
+When a consumer adds `has-notify` to its `cn-card` root on the client
+Then the notification flag becomes visible
 ```
 
 ```gherkin
