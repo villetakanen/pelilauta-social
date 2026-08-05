@@ -18,7 +18,7 @@
   );
   --cn-surface-4: light-dark(
     var(--cn-color-primary-99),
-    var(--cn-color-primary-50)
+    var(--cn-color-primary-40)
   );
   --cn-on-surface: light-dark(
     var(--cn-color-surface-10),

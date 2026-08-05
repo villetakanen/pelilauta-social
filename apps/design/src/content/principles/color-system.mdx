@@ -169,9 +169,7 @@ temporarily raised above that content. We express it through five levels:
   <div class="surface elevation-1">Level 1: resting content</div>
   <div class="surface elevation-2">Level 2: raised content</div>
   <div class="surface elevation-3">Level 3: floating content</div>
-  <div class="surface elevation-4" style="color: var(--cn-text-high);">
-    Level 4: system layer
-  </div>
+  <div class="surface elevation-4">Level 4: system layer</div>
 </Composition>
 
 ### Colour and shadow
@@ -189,10 +187,15 @@ every absolute level.
 
 ### The highest layer
 
-Level 4 uses primary step 99 in Light and primary step 50 in Dark, separating the
-highest system layer from the surface hierarchy. `--cn-text-high` is the general
-foreground for this level. Components that use another foreground must verify its
-contrast against `--cn-surface-4` in both themes.
+Level 4 uses primary step 99 in Light and primary step 40 in Dark, separating the
+highest system layer from the surface hierarchy. The Dark step is chosen so the
+inherited body foreground stays readable on it: a system-layer surface needs no
+foreground of its own. `--cn-text-high` remains the role for emphasis here.
+
+The de-emphasised roles are the exception. `--cn-text-low` and `--cn-link` do not
+reach WCAG 2.2 AA on `--cn-surface-4` in Dark, so metadata and links inside a
+system-layer surface take a stronger role. A component that uses another foreground
+verifies its contrast against `--cn-surface-4` in both themes.
 
 The [Spatial System](/principles/spatial-system) defines the shadow measurements.
 The [Surface reference](/base/surface) documents the classes and their composition.

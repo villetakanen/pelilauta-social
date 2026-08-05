@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Surface
@@ -33,7 +33,7 @@ compose these utilities rather than restating their declarations.
 | 1 | resting surface | surface 100 | surface 30 | none |
 | 2 | raised surface | surface 100 | surface 30 | `--cn-shadow-elevation-2` |
 | 3 | floating or active surface | surface 100 | surface 40 | `--cn-shadow-elevation-3` |
-| 4 | highest system layer | `--cn-surface-4`: primary 99 | `--cn-surface-4`: primary 50 | `--cn-shadow-elevation-4` |
+| 4 | highest system layer | `--cn-surface-4`: primary 99 | `--cn-surface-4`: primary 40 | `--cn-shadow-elevation-4` |
 
 Levels in a nested elevation chain increase from ancestor to descendant. A child
 therefore has a level greater than every elevated ancestor. Its background remains
@@ -65,6 +65,13 @@ for every level. Its book specimens choose roles that meet WCAG 2.2 AA for their
 content in both themes; consuming capabilities make the same decision for their
 content.
 
+Every level admits the inherited body foreground at WCAG 2.2 AA in both themes. An
+element that carries an elevation utility and states no foreground is therefore
+readable, and a consumer raises its foreground to strengthen a role rather than to
+repair one. This constrains which background a level may take: level 4 leaves the
+surface family, and its Dark step is selected so the inherited default still holds.
+De-emphasised roles remain unsuitable at level 4.
+
 Surface sets no radius, border, size, foreground or component semantics.
 `.surface` provides only its forced padding, named inline-size containment and default
 elevation; an elevation utility alone adds no padding or containment.
@@ -95,6 +102,11 @@ elevation; an elevation utility alone adds no padding or containment.
 - Level 4 remains intentionally discontinuous with the lower surfaces in both
   themes. Normalising it into a linear tonal sequence removes its system-layer
   distinction.
+- The inherited body foreground meets WCAG 2.2 AA on every level in both themes,
+  checked against the semantic tokens rather than a specimen.
+- Level 4 remains distinguishable from both the ground plane and the resting
+  surface. Darkening its Dark step until the inherited foreground is comfortable
+  collapses it into level 1.
 - Elevation utilities do not acquire `.surface` padding or containment. The
   composition remains explicit in the class vocabulary.
 
@@ -138,6 +150,12 @@ Then each child shadow represents its rise from the nearest elevated ancestor
 Given an elevated element with a background image or gradient
 When a surface utility is applied
 Then the image or gradient remains
+```
+
+```gherkin
+Given an element at any elevation that states no foreground colour
+When it renders in Light or Dark
+Then the inherited body foreground meets WCAG 2.2 AA on its background
 ```
 
 ```gherkin
