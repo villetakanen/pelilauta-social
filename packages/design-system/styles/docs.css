@@ -17,15 +17,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/*
- * Editorial only. Box sizing, the body's margin, and its background and foreground
- * come from styles/preflight.css; both families from styles/fonts.css. This file
- * hand-rolled all of it until the design system owned them.
- */
-body {
-  line-height: 1.5;
-}
-
 a {
   color: var(--cn-link);
   text-underline-offset: 0.18em;

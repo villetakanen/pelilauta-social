@@ -47,6 +47,10 @@ CSS classes are named plainly for the purpose, without a prefix. The classes, su
 as `.surface` or `.content-column` omit the prefix, as all classes are expected to
 be provided by the DS.
 
+Component hooks are the exception. A component root uses a `.cn-*` hook, such as
+`.cn-card`, to identify component-owned markup. A hook is not a public class that
+consumers apply to their own elements.
+
 ## Decision
 
 v21 preserves a conforming v20 public design-system component's source name when
@@ -71,7 +75,8 @@ ported. Component-private custom properties may use concise local names. Depreca
 v20 namespaces such as `--cyan-*` and undocumented `--color-*` names are not
 introduced.
 
-Public CSS classes lose any `.cn-` prefix that was inadvertently added.
+Public CSS classes lose any `.cn-` prefix that was inadvertently added. Component
+hooks retain `.cn-*` and are not public styling utilities.
 
 Reusable Astro and Svelte component files use PascalCase with matching import
 identifiers. Ported public components preserve their v20 names. Private
@@ -97,14 +102,12 @@ components must be classified by reach: a component reusable by several books us
 Application-owned components remain unprefixed. No `App*` component is moved,
 created, or renamed until its ownership and location are decided separately.
 
-Public CSS classes must be inventoried and any inadvertently introduced `.cn-`
-prefix removed together with every selector, specimen, compatibility bridge, and
-test that consumes it. This is a source-breaking change while local and Cyan styles
-coexist, so each renamed class must be checked for collisions and cascade changes;
-the prefix is not retained as a compatibility alias without a concrete migration
-dependency. Token names do not follow that class migration: public tokens remain
-`--cn-*`, with `--chroma-*` as the deliberate palette exception and local custom
-properties remaining private.
+CSS classes must be inventoried by role. Public styling classes lose any
+inadvertently introduced `.cn-` prefix together with the selectors, specimens,
+compatibility bridges, and tests that consume it. Component hooks retain `.cn-*`
+and consumers do not apply them as styling utilities. Token names follow neither
+class category: public tokens remain `--cn-*`, with `--chroma-*` as the deliberate
+palette exception and local custom properties remaining private.
 
 Approved capability specifications changed by these renames return to draft for
 human approval. Repository-wide import and selector churn is accepted during early

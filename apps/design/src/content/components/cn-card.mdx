@@ -1,0 +1,120 @@
+---
+title: CnCard
+description: A server-rendered preview with a stable title, optional identity and content, and an independent action region.
+order: 20
+---
+
+import CnCard from '@design-system/components/CnCard.svelte'
+import CardSpecimens from '@design-system/books/specimens/CardSpecimens.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+CnCard presents one independently meaningful subject. Its required title gives every
+preview a stable identity, while optional cover, noun, supporting content, and actions
+build the amount of context a reader needs before following it.
+
+## Example
+
+<Composition themes caption="A basic CnCard in Light and Dark">
+  <CnCard title="Aamunkoin vartijat" description="A concise preview with the default elevation.">
+    The next game is on Thursday.
+  </CnCard>
+</Composition>
+
+```svelte
+import CnCard from '@design-system/components/CnCard.svelte'
+
+<CnCard
+  title="Aamunkoin vartijat"
+  description="A concise preview with the default elevation."
+>
+  The next game is on Thursday.
+</CnCard>
+```
+
+## Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `title` | `string` | Required CnCard heading. |
+| `description` | `string` | Secondary text after the heading. |
+| `elevation` | `0 \| 1 \| 2 \| 3 \| 4` | Shared surface level. Defaults to `1`. |
+| `href` | `string` | Links the title and, when present, the decorative cover. |
+| `cover` | `string` | Decorative cover image URL. |
+| `srcset` | `string` | Native responsive-image candidates used with `cover`. |
+| `sizes` | `string` | Native responsive-image sizing hints used with `cover`. |
+| `noun` | `string` | Decorative Icon noun, small by the title or large over a cover. |
+| `notify` | `boolean` | Draws the information flag. Defaults to `false`. |
+| `alert` | `boolean` | Draws the warning flag above notification. Defaults to `false`. |
+| `eyebrow` | `Snippet` | Caption content before the title. |
+| `children` | `Snippet` | Concise supporting content after the description. |
+| `actions` | `Snippet` | Links and controls anchored at the bottom edge. |
+
+## Destinations
+
+The article remains passive when `href` is supplied. The title becomes the keyboard and
+assistive-technology destination; a cover points to the same location for pointer users
+without adding another focus stop. Independent links and controls remain operable in the
+eyebrow, body, and action region.
+
+<Composition themes caption="Basic and linked CnCards">
+  <CardSpecimens group="basic" />
+</Composition>
+
+## Elevation and indicators
+
+CnCard composes the shared elevation levels, keeping their background and shadow model in
+one place. Notification and alert are visual flags; the text supplied by a consumer
+still communicates what each state means.
+
+<Composition themes caption="Five elevations followed by information and warning states">
+  <CardSpecimens group="elevation" />
+</Composition>
+
+## Visual identity
+
+A noun identifies the subject without repeating its name to assistive technology. It
+sits beside the title until a cover gives it a larger upper-right field. Covers crop to
+16:9 and carry the primary tint in both colour schemes.
+
+<Composition themes caption="Noun, cover, and linked cover with noun">
+  <CardSpecimens group="identity" />
+</Composition>
+
+<Composition caption="Wide cover specimen for comparison with v20">
+  <CardSpecimens group="wide" />
+</Composition>
+
+## Composition regions
+
+Use the eyebrow for a category, channel, edition, or system. Keep body content to one to
+three short paragraphs. Actions accept links and controls in a neutral container and
+stay at the bottom when neighboring CnCards contain more text.
+
+<Composition themes caption="Eyebrow, description, body, and two actions">
+  <CardSpecimens group="content" />
+</Composition>
+
+## Narrow containers
+
+CnCard establishes its own inline-size container. Its h4 therefore follows Typography's
+narrow-container step in a sidebar or compact listing, independent of viewport width.
+The heading occupies at most two rendered lines.
+
+<Composition themes caption="Long title in a 17rem CnCard">
+  <CardSpecimens group="narrow" />
+</Composition>
+
+## When to use it
+
+- Preview one subject that has a title and a bounded amount of supporting content.
+- Compose independent destinations or controls around one primary subject destination.
+
+Use [Surface](/base/surface) for untitled boxes and workflow-scale content. The
+containing layout owns CnCard width and spacing between CnCards.
+
+## Accessibility
+
+CnCard renders an `article` with an h4 and no implicit whole-CnCard control. Place it where
+h4 is valid in the surrounding heading hierarchy. Covers, nouns, and indicators are
+supplementary visuals; consumers communicate their meaning in text or another
+accessible state.
