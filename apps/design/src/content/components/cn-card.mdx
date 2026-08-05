@@ -96,9 +96,11 @@ stay at the bottom when neighboring CnCards contain more text.
 
 ## Narrow containers
 
-CnCard establishes its own inline-size container. Its h4 therefore follows Typography's
-narrow-container step in a sidebar or compact listing, independent of viewport width.
-The heading occupies at most two rendered lines.
+CnCard establishes its own inline-size container, so supplied content adapts to the
+CnCard's width rather than the viewport's. The title is the exception: it keeps
+Typography's h4 size, weight, line height, and tracking at every container width,
+preserving the v20 card hierarchy in a sidebar or compact listing. The heading occupies
+at most two rendered lines.
 
 <Composition themes caption="Long title in a 17rem CnCard">
   <CardSpecimens group="narrow" />

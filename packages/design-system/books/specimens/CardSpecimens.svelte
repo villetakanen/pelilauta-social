@@ -70,7 +70,7 @@ let {
   {:else}
     <div data-variant="long-narrow">
       <CnCard title="A title long enough to occupy more than two complete rendered lines" noun="fox">
-        The CnCard's own width drives its h4 downshift.
+        The title holds its h4 metrics at this width.
       </CnCard>
     </div>
   {/if}
