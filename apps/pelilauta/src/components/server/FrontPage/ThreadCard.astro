@@ -1,4 +1,5 @@
 ---
+import CnCard from '@design-system/components/CnCard.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { t } from '@utils/i18n';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
@@ -49,34 +50,35 @@ const channel = thread.channel || 'Yleinen';
 const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
 ---
 
-<div style="flex-basis: auto; width: 100%">
-  <cn-card
+<!--
+  The wrapper carries the card's handle: CardSubscription resolves the reader's
+  unread state in the browser and toggles CnCard's `has-notify` state class on a
+  CnCard that is server-rendered and never hydrated.
+-->
+<div id={`thread-card-${thread.key}`} style="flex-basis: auto; width: 100%">
+  <CnCard
     href={`/threads/${thread.key}`}
     title={thread.title}
     cover={poster}
     srcset={posterSrcset}
     sizes="(max-width: 768px) 100vw, 450px"
-    elevation="1"
+    elevation={1}
     {noun}
-    id={`thread-card-${thread.key}`}
   >
-    <p class="text-caption pb-1 mb-1 border-b">
+    <Fragment slot="eyebrow">
       {t("threads:card.inChannel")}
-      <a href={`/channels/${channelSlug}`} class="no-decoration">
-        {channel}
-      </a>
-    </p>
+      <a href={`/channels/${channelSlug}`}>{channel}</a>
+    </Fragment>
+
     <Fragment set:html={snippet} />
     <CardSubscription thread={thread} client:only="svelte" />
 
-    <div slot="actions" class="toolbar">
-      <div class="grow">
-        <p class="m-0 px-1 text-small">
-          <ProfileLink uid={thread.owners?.[0] || ""} client:only="svelte" />
-          <br />
-          {toDisplayString(thread.flowTime)}
-        </p>
-      </div>
+    <Fragment slot="actions">
+      <p class="m-0 px-1 text-small">
+        <ProfileLink uid={thread.owners?.[0] || ""} client:only="svelte" />
+        <br />
+        {toDisplayString(thread.flowTime)}
+      </p>
 
       <ReactionButton
         key={thread.key}
@@ -93,6 +95,6 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
         <Icon noun="discussion" size="small" />
         <span class="text-caption">{thread.replyCount || 0}</span>
       </a>
-    </div>
-  </cn-card>
+    </Fragment>
+  </CnCard>
 </div>
