@@ -245,3 +245,36 @@ for (const mode of ['light', 'dark'] as const) {
     expect(focused.outlineColor).toBe(expected);
   });
 }
+
+test('a cover that cannot load falls back to the system artwork', async ({
+  page,
+}) => {
+  const img = page.locator(
+    '[data-mode="light"] [data-variant="cover-failed"] .cover img',
+  );
+
+  // The supplied URL is untouched: the fallback is painted behind the image, not
+  // substituted for it, which is what lets it work with no script on the page.
+  await expect(img).toHaveAttribute(
+    'src',
+    '/card-cover-that-does-not-exist.webp',
+  );
+
+  const painted = await img.evaluate((element) => {
+    const image = element as HTMLImageElement;
+    return {
+      naturalWidth: image.naturalWidth,
+      background: getComputedStyle(image).backgroundImage,
+      backgroundSize: getComputedStyle(image).backgroundSize,
+    };
+  });
+  // The image itself really did fail, so what a reader sees is the fallback.
+  expect(painted.naturalWidth).toBe(0);
+  expect(painted.background).toContain('data:image/svg+xml');
+  expect(painted.backgroundSize).toBe('cover');
+
+  // The region keeps the geometry a working cover would have had.
+  const box = await img.boundingBox();
+  expect(box).not.toBeNull();
+  if (box) expect(box.width / box.height).toBeCloseTo(16 / 9, 1);
+});

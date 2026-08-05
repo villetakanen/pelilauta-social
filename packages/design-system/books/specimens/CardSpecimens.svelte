@@ -1,6 +1,10 @@
 <script lang="ts">
 /** CnCard book fixtures. Styling here arranges specimens; CnCard renders them. */
 import CnCard from '../../components/CnCard.svelte';
+import { COVER_PLACEHOLDER_URI } from '../../components/cover-placeholder';
+
+/** A URL guaranteed not to resolve, so the specimen exercises the real error path. */
+const BROKEN_COVER = '/card-cover-that-does-not-exist.webp';
 
 let {
   group,
@@ -39,15 +43,20 @@ let {
       <CnCard title="Fox without a cover" noun="fox">The noun sits with the title.</CnCard>
     </div>
     <div data-variant="cover">
-      <CnCard title="The archipelago" cover="/card-cover.svg">A decorative 16:9 cover.</CnCard>
+      <CnCard title="The archipelago" cover={COVER_PLACEHOLDER_URI}>A decorative 16:9 cover.</CnCard>
     </div>
     <div data-variant="cover-noun">
-      <CnCard title="The iron tower" href="#cover-card" cover="/card-cover.svg" noun="fox">
+      <CnCard title="The iron tower" href="#cover-card" cover={COVER_PLACEHOLDER_URI} noun="fox">
         The cover and title share one destination and one keyboard focus stop.
       </CnCard>
     </div>
+    <div data-variant="cover-failed">
+      <CnCard title="The lost chart" cover={BROKEN_COVER} noun="fox">
+        The supplied cover could not load, so the system artwork keeps the region's proportions.
+      </CnCard>
+    </div>
     <div data-variant="cover-noun-alert">
-      <CnCard title="The tower needs attention" cover="/card-cover.svg" noun="fox" alert>
+      <CnCard title="The tower needs attention" cover={COVER_PLACEHOLDER_URI} noun="fox" alert>
         The noun remains above the warning flag.
       </CnCard>
     </div>
@@ -64,7 +73,7 @@ let {
     </div>
   {:else if group === 'wide'}
     <div data-variant="wide-cover">
-      <CnCard title="The iron tower" href="#wide-cover" cover="/card-cover.svg" noun="fox">
+      <CnCard title="The iron tower" href="#wide-cover" cover={COVER_PLACEHOLDER_URI} noun="fox">
         A wide comparison specimen for the v20 cover, headline, and foreground hierarchy.
       </CnCard>
     </div>
