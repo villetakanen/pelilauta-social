@@ -18,7 +18,7 @@ or the neighboring onboarding callout.
    records an intentional v20 change
 4. Thread and site cards plus the onboarding callout on the front page form the epic's visual
    acceptance surface across narrow and wide containers, authenticated and anonymous
-   sessions, covers and no covers, and light and dark themes
+   sessions, covers, no covers and unreachable covers, and light and dark themes
 5. Pelilauta no longer contains a `cn-card` call site, a `CnCard` type dependency, or
    a Cyan light-DOM bridge whose only reader is `cn-card`
 
@@ -58,10 +58,19 @@ or the neighboring onboarding callout.
   client-owned session visibility, localization, artwork, login destination and
   existing Cyan Button remain unchanged while the surrounding `cn-card` dependency is
   removed
-- **Front-page site cards** — open, waits on the foundation; site identity, membership
-  state, activity time and responsive images move to the local CnCard without changing
-  their session or navigation logic
-- **Site and character library cards** — open, waits on the foundation; reusable site,
+- **Site cards** — implemented, pending acceptance; one application-owned Svelte
+  SiteCard now composes the local CnCard across the front page, public and profile
+  listings, the site library, character views and the site-theme preview. It preserves
+  responsive images, links, activity time, loading content and each existing consumer's
+  owner/player indication
+- **Unreachable cover** — delivered; a cover that cannot load falls back to the design
+  system's own cover artwork, painted behind the image so the region keeps its geometry,
+  tint and noun without a script or hydration. The artwork moved out of the design app's
+  `public/` directory into the capability, so the specimen that demonstrates a working
+  cover and the fallback are one source. A cover with transparency now composites over
+  the artwork rather than the card surface — the accepted cost of a fallback that works
+  in a CnCard that is never hydrated
+- **Character and keeper library cards** — open, waits on the foundation; reusable
   character and keeper cards move together so their links, membership markers, child
   content and supplied actions remain coherent in card listings
 - **Workflow and status cards** — open, waits on the foundation; thread information,

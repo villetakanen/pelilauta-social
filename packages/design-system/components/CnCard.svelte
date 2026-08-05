@@ -9,6 +9,7 @@
  * Spec: specs/design-system/components/cn-card/spec.md
  */
 import type { Snippet } from 'svelte';
+import { COVER_PLACEHOLDER_URI } from './cover-placeholder';
 import Icon from './Icon.svelte';
 
 let {
@@ -40,6 +41,19 @@ let {
   actions?: Snippet;
   children?: Snippet;
 } = $props();
+
+/**
+ * The cover's fallback artwork, painted behind the image rather than swapped in
+ * on error. A broken image with empty alt text paints nothing at all, so the
+ * region shows what is underneath it — which means the fallback needs no error
+ * event, no state and no hydration. It therefore works in a CnCard that is
+ * server-rendered and never hydrated, which is every specimen on the design site.
+ *
+ * Carried as a custom property because a component stylesheet cannot interpolate
+ * a module value, and duplicating the artwork into CSS would give the capability
+ * two copies of it.
+ */
+const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
 </script>
 
 <article
@@ -51,11 +65,11 @@ let {
     <div class="cover" aria-hidden="true">
       {#if href}
         <a href={href} tabindex="-1">
-          <img src={cover} {srcset} {sizes} alt="" loading="lazy" />
+          <img src={cover} {srcset} {sizes} alt="" loading="lazy" style={coverFallback} />
           <span class="tint"></span>
         </a>
       {:else}
-        <img src={cover} {srcset} {sizes} alt="" loading="lazy" />
+        <img src={cover} {srcset} {sizes} alt="" loading="lazy" style={coverFallback} />
         <span class="tint"></span>
       {/if}
     </div>
@@ -183,6 +197,9 @@ let {
     inline-size: calc(100cqw + var(--cn-gap) * 2);
     aspect-ratio: 16 / 9;
     object-fit: cover;
+    background-image: var(--cn-cover-fallback);
+    background-position: center;
+    background-size: cover;
     border-radius: var(
       --cn-border-radius-card,
       var(--cn-border-radius-large)

@@ -36,15 +36,17 @@ test.describe('Library Page - User Sites Store', () => {
     expect(footerText).toBeTruthy();
 
     // Verify at least one site card is rendered
-    // UserSitesList uses FilteredSites which renders cn-card elements
-    const siteCards = page.locator('cn-card');
+    // UserSitesList uses FilteredSites which renders local CnCard components.
+    const siteCards = page.locator('article.cn-card');
     const cardCount = await siteCards.count();
 
     // The authenticated user should have at least 1 site (e2e-test-site)
     expect(cardCount).toBeGreaterThanOrEqual(1);
 
     // Verify that e2e-test-site is in the list
-    const testSiteCard = page.locator('cn-card:has-text("E2E Test Site")');
+    const testSiteCard = page.locator(
+      'article.cn-card:has-text("E2E Test Site")',
+    );
     await expect(testSiteCard).toBeVisible();
   });
 

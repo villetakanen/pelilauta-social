@@ -80,9 +80,22 @@ A noun identifies the subject without repeating its name to assistive technology
 sits beside the title until a cover gives it a larger upper-right field. Covers crop to
 16:9 and carry the primary tint in both colour schemes.
 
-<Composition themes caption="Noun, cover, and linked cover with noun">
+<Composition themes caption="Noun, cover, failed cover, and linked cover with noun">
   <CardSpecimens group="identity" />
 </Composition>
+
+A cover that cannot load falls back to the system cover artwork, so a deleted or moved
+image leaves the card's proportions, tint and noun intact rather than an empty 16:9
+band. The third specimen above points at a URL that does not resolve, so what it shows
+is the real fallback rather than a picture of one — which is also why it resembles the
+working covers beside it: they are the same artwork. Pass no `cover` at all and CnCard
+renders no cover region, which stays the way to say a subject has no image.
+
+The artwork sits behind the image rather than replacing it on error, so it needs no
+script and appears in a CnCard that is never hydrated — every specimen on this page is
+server-rendered. It also fills the moment before a lazily loaded cover arrives. The
+trade is that a cover with transparency composites over the artwork rather than over
+the card surface.
 
 <Composition caption="Wide cover specimen for comparison with v20">
   <CardSpecimens group="wide" />

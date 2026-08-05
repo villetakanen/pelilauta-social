@@ -1,7 +1,7 @@
 <script lang="ts">
-import SiteCard from '@components/svelte/site-library/SiteCard.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
+import SiteCard from '../SiteCard.svelte';
 import SiteThemeImageInput from './SiteThemeImageInput.svelte';
 
 interface Props {
@@ -21,7 +21,7 @@ const previewContainerStyles = $derived.by(() => {
   style={previewContainerStyles}>
   <h2>{t('site:settings.theming.title')}</h2>
   
-  <SiteCard {site} />
+  <SiteCard {site} showPlayerIndicator />
   
   <br />
 

@@ -97,6 +97,22 @@ upward gradient made from 70% `--cn-color-primary-95` in Light and
 most 44% of the cover height. The cover has no alternative text because the title
 carries the subject's accessible identity.
 
+A supplied cover that cannot load falls back to the design system's own cover
+artwork, so the region keeps its geometry, tint and noun rather than reserving 16:9
+of nothing. The artwork ships with the capability rather than as an application
+asset, and is painted behind the image rather than substituted for it: an image
+that fails paints nothing, so what is behind it shows through without an error
+event, component state or hydration. The fallback is therefore present in a CnCard
+that is server-rendered and never hydrated, and it also covers the interval before
+a lazily loaded cover arrives.
+
+The consequence is that a cover with transparency composites over the artwork
+instead of over the CnCard surface. Covers are photographic subject previews, and
+the alternative — substituting on an error event — cannot work without hydration.
+
+A CnCard given no cover renders no cover region at all, which remains how a subject
+without an image is expressed.
+
 An optional noun supplies visual identity. Without a cover it is small and appears
 with the title. With a cover it is large and appears in the cover's upper-right
 area. The noun is decorative in CnCard because the required title already names the
@@ -134,8 +150,8 @@ hydration without changing the component's semantics.
 - Both applications can import and server-render CnCard from the local design
   system package.
 - A component book documents the public schema and renders the basic, linked,
-  elevation, indicator, cover, noun, eyebrow, action, long-title, and narrow-card
-  variants from source in Light and Dark.
+  elevation, indicator, cover, failed-cover, noun, eyebrow, action, long-title, and
+  narrow-card variants from source in Light and Dark.
 - Component checks verify semantic structure, optional-region ordering, links,
   image attributes, indicators, elevation composition, and server rendering.
 - Browser checks verify linked-title focus, two-line truncation, cover sizing and
@@ -152,6 +168,11 @@ hydration without changing the component's semantics.
   background or shadow model.
 - The elevation-0 border remains specific to CnCard and does not alter the shared
   elevation utility.
+- The cover fallback artwork and the artwork a book specimen renders as a working
+  cover are one source, so the documented state and the shipped one cannot diverge.
+- The fallback needs no script, so it survives in a CnCard that is never hydrated.
+- The artwork is not published as an application asset; a CnCard consumer serves
+  nothing for the fallback to work.
 - A linked decorative cover never creates a duplicate keyboard focus stop or
   accessible name.
 - Actions remain at the bottom edge without CnCard acquiring margins or
@@ -187,6 +208,13 @@ And the cover is decorative and absent from keyboard navigation
 Given a linked CnCard whose eyebrow, body or actions contain another link or control
 When a reader operates that nested element
 Then only the nested element's action occurs
+```
+
+```gherkin
+Given a CnCard whose supplied cover cannot load
+When the CnCard renders, hydrated or not
+Then the cover region shows the design system's cover artwork
+And it keeps the cover geometry, tint and noun
 ```
 
 ```gherkin

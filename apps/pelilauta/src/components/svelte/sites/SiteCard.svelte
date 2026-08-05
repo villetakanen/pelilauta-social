@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnCard from '@design-system/components/CnCard.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -8,8 +9,10 @@ import { uid } from '../../../stores/session';
 
 interface Props {
   site: Site;
+  loading?: boolean;
+  showPlayerIndicator?: boolean;
 }
-const { site }: Props = $props();
+const { site, loading = false, showPlayerIndicator = false }: Props = $props();
 const owns = $derived(() => site.owners.includes($uid));
 const plays = $derived(() => site.players?.includes($uid));
 
@@ -31,24 +34,42 @@ const coverSrcset = $derived.by(() => {
   });
 });
 </script>
-<cn-card
+
+<CnCard
   title={site.name}
   href={`/sites/${site.key}`}
   noun={systemToNoun(site.system)}
   cover={coverSrc}
   srcset={coverSrcset}
   sizes="(max-width: 768px) 100vw, 450px"
+  description={site.description}
 >
-  <p>{site.description}</p>
-  <div slot="actions" class="toolbar">
-    {#if owns()}
-      <Icon noun="avatar" />
-    {/if}
-    {#if plays()}
-      <Icon noun="adventurer" />
-    {/if}
-    <div>
-      <p>{toDisplayString(site.flowTime)}</p>
-    </div>
-  </div>
-</cn-card>
+  {#if loading}
+    <span class="loading"><cn-loader></cn-loader></span>
+  {/if}
+
+  {#snippet actions()}
+    <span class="membership">
+      {#if owns()}
+        <Icon noun="avatar" size="small" />
+      {/if}
+      {#if showPlayerIndicator && plays()}
+        <Icon noun="adventurer" size="small" />
+      {/if}
+    </span>
+    <p>{toDisplayString(site.flowTime)}</p>
+  {/snippet}
+</CnCard>
+
+<style>
+  .membership {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+  }
+</style>

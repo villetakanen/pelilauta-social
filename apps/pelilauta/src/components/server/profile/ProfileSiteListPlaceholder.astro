@@ -1,7 +1,7 @@
 ---
 import { createSite, type Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
-import SiteCard from '../ui/SiteCard.astro';
+import SiteCard from '../../svelte/sites/SiteCard.svelte';
 
 // A placeholder when loading user's sites.
 
@@ -15,10 +15,6 @@ const loadingSite: Site = createSite({
 <section class="column-s">
   <h2>{t("profile:siteList.title")}</h2>
   <div class="flex flex-col">
-    <SiteCard site={loadingSite}>
-      <div class="flex justify-center">
-        <cn-loader></cn-loader>
-      </div>
-    </SiteCard>
+    <SiteCard site={loadingSite} loading />
   </div>
 </section>
