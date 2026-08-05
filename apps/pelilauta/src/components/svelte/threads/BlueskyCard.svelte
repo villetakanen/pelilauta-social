@@ -52,19 +52,24 @@ async function handleShare() {
 }
 </script>
 
+<!--
+  A prompt for one action, not a preview of a subject, so it is neither a CnCard nor a
+  Surface: it takes the thread info column's own idiom — a border-separated section with
+  a downscaled heading — which is what ThreadInfoActions below it and the Bluesky embed
+  that replaces it in this slot both render.
+-->
 {#if bskyFeatureEnabled && isAuthorOrAdmin}
-  <cn-card title={t("threads:info.blueskyTitle")} noun="share" class="mt-2">
-    <p class="text-caption mb-2">
+  <section class="flex flex-col border-t p-2 mt-2">
+    <h4 class="downscaled m-0">{t("threads:info.blueskyTitle")}</h4>
+    <p class="text-caption mb-1">
       {t("threads:share.description")}
     </p>
 
-    <div class="toolbar items-center">
-      <button onclick={handleShare} disabled={isSharing}>
-        <Icon noun="share" />
-        <span>
-          {isSharing ? t("threads:share.sharing") : t("threads:share.button")}
-        </span>
-      </button>
-    </div>
-  </cn-card>
+    <button onclick={handleShare} disabled={isSharing}>
+      <Icon noun="share" />
+      <span>
+        {isSharing ? t("threads:share.sharing") : t("threads:share.button")}
+      </span>
+    </button>
+  </section>
 {/if}
