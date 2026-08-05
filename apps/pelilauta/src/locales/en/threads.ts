@@ -1,6 +1,9 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const threads: Locale = {
+  card: {
+    inChannel: 'In channel ',
+  },
   fork: {
     title: 'Fork as new thread',
     quoted: 'Quote',

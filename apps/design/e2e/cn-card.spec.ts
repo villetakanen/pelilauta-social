@@ -185,6 +185,54 @@ test('the CnCard title retains v20 h4 metrics in a narrow container', async ({
   expect(actual.lineHeight).toBe(expected.lineHeight);
 });
 
+test('a flag class added on the client raises the flag on an unhydrated CnCard', async ({
+  page,
+}) => {
+  // Holds the published state hook against the component's scoped styles: the app
+  // toggles these classes on cards it never hydrates, and Svelte's scoping and CSS
+  // pruning could disconnect the rule from the class without any specimen changing.
+  const card = page.locator(
+    '[data-mode="light"] [data-variant="basic"] .cn-card',
+  );
+  const flag = () =>
+    card.evaluate((element) => {
+      const style = getComputedStyle(element, '::after');
+      return { opacity: style.opacity, background: style.backgroundColor };
+    });
+
+  expect((await flag()).opacity).toBe('0');
+
+  for (const [state, role] of [
+    ['has-notify', '--cn-color-info'],
+    ['has-alert', '--cn-color-warning'],
+  ] as const) {
+    const expected = await card.evaluate((element, token) => {
+      const probe = document.createElement('span');
+      probe.style.color = `var(${token})`;
+      element.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, role);
+
+    await card.evaluate((element, className) => {
+      element.classList.add(className);
+    }, state);
+    // The transition has to settle before the computed opacity is the resting one.
+    await expect
+      .poll(async () => (await flag()).opacity, { timeout: 2000 })
+      .toBe('1');
+    expect((await flag()).background).toBe(expected);
+
+    await card.evaluate((element, className) => {
+      element.classList.remove(className);
+    }, state);
+    await expect
+      .poll(async () => (await flag()).opacity, { timeout: 2000 })
+      .toBe('0');
+  }
+});
+
 test('a covered noun stacks above the alert flag', async ({ page }) => {
   const card = page.locator(
     '[data-mode="light"] [data-variant="cover-noun-alert"] .cn-card',

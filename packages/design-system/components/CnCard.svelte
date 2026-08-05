@@ -56,6 +56,12 @@ let {
 const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
 </script>
 
+<!--
+  `cn-card`, `has-notify` and `has-alert` are public names: a consumer whose state
+  resolves after the server response toggles the flag classes on this root rather
+  than re-rendering a card the listing never hydrates. The flag rules below read the
+  classes only, so neither name may be renamed or bound to the prop path.
+-->
 <article
   class="cn-card elevation-{elevation}"
   class:has-notify={notify}
