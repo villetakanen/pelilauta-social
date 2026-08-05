@@ -8,19 +8,21 @@
 
 ```yaml
 - apps
-  - pelilauta      # the v21 application  → pelilauta.social         · dev :4321
-  - design         # the design-system site, its navigation and IA
-                   #                      → design.pelilauta.social  · dev :4322
+  - pelilauta       # the v21 application  → pelilauta.social         · dev :4321
+  - design          # the design-system site, its navigation and IA
+                    #                      → design.pelilauta.social  · dev :4322
 - packages
-  - design-system  # components, styles, specs, and the books that publish them
-- specs            # approved behaviour, one per capability
-- plans            # epic scope
-  - debt           # known gaps that are nobody's story
+  - design-system    # components, styles, specs, and the books that publish them
+- specs              # approved behaviour, one per capability
+- plans              # epic scope
+  - debt             # known gaps that are nobody's story
 - docs
-  - adrs           # hard-to-reverse decisions log
-  - lessons        # notes we might act on later
-- .agents/skills   # portable skills
-- .claude/skills   # symlinked from .agents/skills, to enable dual use with claude 
+  - adrs             # hard-to-reverse decisions log
+  - lessons          # notes we might act on later
+  - DESIGN.md        # Design vision and goals
+  - ARCHITECTURE.md  # Project architecture vision, and rules
+- .agents/skills     # portable skills
+- .claude/skills     # symlinked from .agents/skills, to enable dual use with claude 
 ```
 
 ## Delivery Contract
@@ -48,6 +50,9 @@ Ask first, and wait, before:
 
 Ask when v18's behaviour or the Firebase contract cannot be established from source, from the deployed application, or from an existing spec.
 
-Before changing a migrated surface, inspect the v18 implementation and write or update its spec.
+Before changing a migrated surface, inspect the v18 implementation. A design-system
+capability requires a spec. An obvious `apps/pelilauta` feature does not require one
+when the migration preserves its established purpose and behaviour; write or update
+its spec when the work defines or changes either.
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
