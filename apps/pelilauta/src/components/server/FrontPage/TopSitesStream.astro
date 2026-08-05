@@ -3,7 +3,7 @@ import { type Site, SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import OnboardingCallout from '../../svelte/frontpage/OnboardingCallout.svelte';
-import SiteCard from '../ui/SiteCard.astro';
+import SiteCard from '../../svelte/sites/SiteCard.svelte';
 
 const siteListResponse = await fetch(`${Astro.url.origin}/api/sites?limit=5`);
 
@@ -29,7 +29,7 @@ if (siteListResponse.ok) {
   <OnboardingCallout client:only="svelte"/>
   <div class="flex flex-col">
     {sites.map((site) => (
-      site && <SiteCard site={site}/>
+      site && <SiteCard site={site} client:load />
     ))}
   </div>
   <div class="flex items-center">

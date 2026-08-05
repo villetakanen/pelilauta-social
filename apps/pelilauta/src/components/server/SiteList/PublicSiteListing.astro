@@ -3,7 +3,7 @@ import { type Site, SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import MySitesButton from '../../svelte/sites/MySitesButton.svelte';
-import SiteCard from '../ui/SiteCard.astro';
+import SiteCard from '../../svelte/sites/SiteCard.svelte';
 
 const origin = Astro.url.origin;
 let sites: Site[] = [];
@@ -35,7 +35,7 @@ try {
   </header>
 
   {sites && sites.map((site) => (
-    <SiteCard site={site}></SiteCard>
+    <SiteCard site={site} client:load />
   ))}
 
   <footer>
@@ -46,5 +46,3 @@ try {
   </footer>
 
 </section>
-
-

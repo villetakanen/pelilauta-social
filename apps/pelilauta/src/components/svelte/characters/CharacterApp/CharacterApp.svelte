@@ -6,7 +6,7 @@
  * to display and interact with the character.
  */
 
-import SiteCard from '@components/svelte/site-library/SiteCard.svelte';
+import SiteCard from '@components/svelte/sites/SiteCard.svelte';
 import type { Character } from '@schemas/CharacterSchema';
 import type { CharacterSheet } from '@schemas/CharacterSheetSchema';
 import type { Site } from '@schemas/SiteSchema';
@@ -58,7 +58,7 @@ const isOwner = $derived.by(() => {
 
     <aside class="flex wide-flex-col">
       {#if site}
-        <SiteCard {site} />
+        <SiteCard {site} showPlayerIndicator />
       {/if}
       <CharacterCard character={$character}></CharacterCard>
     </aside>

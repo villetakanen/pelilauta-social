@@ -1,7 +1,7 @@
 <script lang="ts">
 import { userSites } from '../../../stores/userSites';
+import SiteCard from '../sites/SiteCard.svelte';
 import { filters } from './filters.svelte';
-import SiteCard from './SiteCard.svelte';
 
 const filtered = $derived.by(() => {
   const sites = [...$userSites];
@@ -15,5 +15,5 @@ const filtered = $derived.by(() => {
 </script>
 
 {#each filtered as site (site.key)}
-<SiteCard {site}></SiteCard>
+<SiteCard {site} showPlayerIndicator />
 {/each}
