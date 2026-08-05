@@ -50,6 +50,9 @@ Ask first, and wait, before:
 
 Ask when v18's behaviour or the Firebase contract cannot be established from source, from the deployed application, or from an existing spec.
 
-Before changing a migrated surface, inspect the v18 implementation and write or update its spec.
+Before changing a migrated surface, inspect the v18 implementation. A design-system
+capability requires a spec. An obvious `apps/pelilauta` feature does not require one
+when the migration preserves its established purpose and behaviour; write or update
+its spec when the work defines or changes either.
 
 Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
