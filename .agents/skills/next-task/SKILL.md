@@ -13,6 +13,10 @@ surfaces in question.
 Treat an Open item that declares a capability boundary or contract undecided as a
 valid task. Do not answer it implicitly by selecting an implementation first.
 
+Do not treat Known scope as closed. A task may split an Open item or name newly
+discovered work absent from the plan when that work is necessary to the epic's Goal
+or Success criterion. Reject work outside the epic's Goal.
+
 Choose exactly one task. Prefer the smallest vertical slice that produces observable,
 verifiable value and can ship on its own. Check the relevant specs before proposing
 implementation. If a required spec is missing, or the work needs a substantive change
