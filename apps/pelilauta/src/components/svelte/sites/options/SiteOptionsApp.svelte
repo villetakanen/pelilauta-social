@@ -18,16 +18,10 @@ async function setOption(
     | 'useHandouts'
     | 'useRecentChanges'
     | 'useSidebar'
-    | 'usePlainTextURLs'
-    | 'useCharacters'
-    | 'useCharacterKeeper',
+    | 'usePlainTextURLs',
   value: boolean,
 ) {
-  if (option === 'useCharacters' && value === false) {
-    update({ useCharacters: false, useCharacterKeeper: false });
-  } else {
-    update({ [option]: value });
-  }
+  update({ [option]: value });
 }
 
 async function setSidebarKey(key: string) {
@@ -54,21 +48,6 @@ async function setSidebarKey(key: string) {
       pressed={$site.useHandouts || undefined}
       onchange={(e: Event) => setOption('useHandouts', (e.target as CnToggleButton).pressed)}
     ></cn-toggle-button>
-
-    <cn-toggle-button 
-      label={t('site:options.useCharacters')}
-      pressed={$site.useCharacters || undefined}
-      onchange={(e: Event) => setOption('useCharacters', (e.target as CnToggleButton).pressed)}
-    ></cn-toggle-button>
-
-    {#if $site.useCharacters}
-      <cn-toggle-button
-        class="nested"
-        label={t('site:options.useCharacterKeeper')}
-        pressed={$site.useCharacterKeeper || undefined}
-        onchange={(e: Event) => setOption('useCharacterKeeper', (e.target as CnToggleButton).pressed)}
-      ></cn-toggle-button>
-    {/if}
 
     <cn-toggle-button 
       label={t('site:options.useRecentChanges')}

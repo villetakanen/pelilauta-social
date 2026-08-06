@@ -122,8 +122,6 @@ export const site: Locale = {
     useClocks: 'Kellot',
     useHandouts: 'Salaisuudet',
     sidebar: 'Sivupalkki',
-    useCharacters: 'Hahmot',
-    useCharacterKeeper: 'Hahmokansio',
     useRecentChanges: 'Viimeisimmät muutokset -paneeli',
     useSidebar: 'Käytä sivupalkkia',
     sidebarPage: 'Sivupalkin sisältö',

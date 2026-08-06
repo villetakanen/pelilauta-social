@@ -125,8 +125,6 @@ describe('SiteUpdateSchema', () => {
         useHandouts: true,
         useRecentChanges: false,
         useSidebar: true,
-        useCharacters: true,
-        useCharacterKeeper: false,
       };
 
       const result = SiteUpdateSchema.parse(update);
@@ -135,8 +133,6 @@ describe('SiteUpdateSchema', () => {
       expect(result.useHandouts).toBe(true);
       expect(result.useRecentChanges).toBe(false);
       expect(result.useSidebar).toBe(true);
-      expect(result.useCharacters).toBe(true);
-      expect(result.useCharacterKeeper).toBe(false);
     });
 
     it('should accept players array', () => {
@@ -180,17 +176,6 @@ describe('SiteUpdateSchema', () => {
       const result = SiteUpdateSchema.parse(update);
       expect(result.useSidebar).toBe(true);
       expect(result.sidebarKey).toBe('sidebar-page');
-    });
-
-    it('should accept character keeper configuration', () => {
-      const update: SiteUpdate = {
-        useCharacterKeeper: true,
-        characterKeeperSheetKey: 'sheet-template-1',
-      };
-
-      const result = SiteUpdateSchema.parse(update);
-      expect(result.useCharacterKeeper).toBe(true);
-      expect(result.characterKeeperSheetKey).toBe('sheet-template-1');
     });
 
     it('should accept combined updates from different sections', () => {
