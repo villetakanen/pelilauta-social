@@ -1,5 +1,9 @@
 # <Epic>
 
+A plan coordinates an active epic. Its entries exist to make the work and what
+remains legible, not as a delivery record. It may be deleted after the epic closes;
+deletion is not a closeout requirement.
+
 ## Goal
 
 The outcome this branch delivers. At most a paragraph.
@@ -20,8 +24,9 @@ Each entry carries its known scope, and what it waits on, in at most 220 charact
 
 ### Done
 
-One line each, at most 72 characters, kept for reference. A done story's decisions belong
-to the spec it delivered, and its reasoning to its commit message.
+One line each, at most 72 characters, so the remaining work stays legible. A done
+story's decisions belong to the spec it delivered, and its reasoning to its commit
+message.
 
 - <done story>
 
