@@ -10,8 +10,11 @@ branch and `plans/`. Read every Open item, the domain's parent spec, the existin
 specs for candidate capabilities, and v20's implementation and books for the
 surfaces in question.
 
-Treat an Open item that declares a capability boundary or contract undecided as a
-valid task. Do not answer it implicitly by selecting an implementation first.
+Treat an Open item that leaves the relationship between elements, components or
+documents undecided as a candidate, not an automatic task. Split it until one
+decision directly enables one deliverable. Do not put a plan-wide classification
+question ahead of concrete work unless every smaller candidate depends on that exact
+decision.
 
 Do not treat Known scope as closed. A task may split an Open item or name newly
 discovered work absent from the plan when that work is necessary to the epic's Goal
@@ -21,6 +24,13 @@ Choose exactly one task. Prefer the smallest vertical slice that produces observ
 verifiable value and can ship on its own. Check the relevant specs before proposing
 implementation. If a required spec is missing, or the work needs a substantive change
 to its intent, propose completing and approving that spec first.
+
+Name the artifacts that define the deliverable. For a new or updated spec, plan or
+other document, put its exact repository path in `Task`; approval is part of
+completing a spec, not a substitute for naming it. For implementation, name the
+changed behaviour, where a user encounters it, and the few major artifacts needed to
+make the task boundary clear. If that cannot fit within the answer limits, split the
+candidate again.
 
 A minor clarification or correction to an existing spec, including one needed by a
 bug fix, may stay inside the delivery slice. The slice must present the amendment to
@@ -44,23 +54,36 @@ Reject a candidate that:
 - changes behaviour outside the epic;
 - is cleanup or scaffolding that can wait until after the first useful slice.
 
-Answer as exactly three unbulleted lines in this template:
+Answer as exactly three unbulleted paragraphs, with one blank line between them:
 
 ```text
 Task: <terse technical description of the task>
+
 Rationale: <why this task should be done now>
+
 Risks: <caveats and risks of taking this route>
 ```
 
 Limit the `Task` value to 73 characters. Limit the `Rationale` and `Risks` values
 to 221 characters each. The labels do not count toward these limits. Make the
 rationale compare the task's timing with its closest alternatives. State concrete
-uncertainty, coupling or regression exposure in risks; say when none is material.
+evidence for that comparison and the dependency this task clears. State a failure
+mode or unknown specific to this task in risks, including adjacent specs or decisions
+that may still be missing. Do not substitute generic costs of specification,
+implementation or review. Say when no material risk exists.
 
-Do not list files, call sites, commands, tests, implementation steps or acceptance
-criteria. Write for someone deciding whether the result is worth doing, not for its
-implementer. Use technical terms only when they identify the task or its tradeoffs
-more precisely. Do not add an introduction, conclusion or alternative candidate.
+Name artifacts when they make the deliverable or a dependency concrete. Do not give
+an exhaustive supporting-file or call-site inventory, commands, test procedures,
+implementation steps or acceptance criteria. Write for someone deciding whether the
+result is worth doing, not for its implementer. Use technical terms only when they
+identify the task or its tradeoffs more precisely. Avoid placeholder nouns such as
+ownership, capability, contract, boundary, surface and slice; name the affected
+elements, components, behaviour, artifact or decision instead. Do not add an
+introduction, conclusion or alternative candidate.
+
+Before answering, replace `owns`, `owned`, `owner` and `ownership` with the concrete
+relationship: specifies, implements, imports, renders, references, provides or keeps.
+If none fits, inspect the artifacts until the relationship can be stated.
 
 Do not edit the epic, create task files, or begin implementation unless explicitly
 requested.
