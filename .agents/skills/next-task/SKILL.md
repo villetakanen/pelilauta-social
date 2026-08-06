@@ -6,8 +6,12 @@ description: Briefly propose the next small, contained, atomic, deliverable and 
 # Next Task
 
 Read the named epic. If none is named, identify the active epic from the current
-branch and `plans/`. Inspect only the contracts, specs and source needed to understand
-its current state.
+branch and `plans/`. Read every Open item, the domain's parent spec, the existing
+specs for candidate capabilities, and v20's implementation and books for the
+surfaces in question.
+
+Treat an Open item that declares a capability boundary or contract undecided as a
+valid task. Do not answer it implicitly by selecting an implementation first.
 
 Choose exactly one task. Prefer the smallest vertical slice that produces observable,
 verifiable value and can ship on its own. Check the relevant specs before proposing
