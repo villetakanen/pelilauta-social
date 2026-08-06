@@ -37,3 +37,16 @@ Do not introduce `--cyan-*` or undocumented `--color-*` tokens.
 
 Consumers apply public classes, never component hooks. Remove `.cn-` from a public
 class when its capability migrates; retain it on component hooks.
+
+## v18 compatibility
+
+And known deviations.
+
+### Character sub-app deprecation
+
+v21 removes the character library, the character view, editor and deletion flow, the
+creation wizard, the per-site listing, the GM keeper and the character-sheet admin
+tooling, with the API routes, stores, schemas, Firestore access, locale strings and
+`SiteSchema` fields behind them. No successor is planned.
+
+See [ADR 0003](adrs/0003-discontinue-characters.md).

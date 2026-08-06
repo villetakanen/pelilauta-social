@@ -82,9 +82,6 @@ export const SiteSchema = EntrySchema.extend({
   useRecentChanges: z.boolean().optional(),
   useSidebar: z.boolean().default(true),
   sidebarKey: z.string().optional(),
-  useCharacters: z.boolean().optional(),
-  useCharacterKeeper: z.boolean().optional(),
-  characterKeeperSheetKey: z.string().optional(),
 });
 
 export type Site = z.infer<typeof SiteSchema>;
@@ -144,9 +141,6 @@ export const SiteUpdateSchema = z.object({
   useRecentChanges: z.boolean().optional(),
   useSidebar: z.boolean().optional(),
   sidebarKey: z.string().optional(),
-  useCharacters: z.boolean().optional(),
-  useCharacterKeeper: z.boolean().optional(),
-  characterKeeperSheetKey: z.string().optional(),
 });
 
 export type SiteUpdate = z.infer<typeof SiteUpdateSchema>;

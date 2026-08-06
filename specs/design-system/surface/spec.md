@@ -76,6 +76,27 @@ Surface sets no radius, border, size, foreground or component semantics.
 `.surface` provides only its forced padding, named inline-size containment and default
 elevation; an elevation utility alone adds no padding or containment.
 
+### Attention states
+
+`has-notify` and `has-alert` are public state classes usable on any element. Each
+paints a triangular corner flag in the upper-right: notification takes the
+information role, alert the warning role, and alert wins when both are present.
+The flag is a seven-grid-unit square clipped to `polygon(100% 0, 0 0, 100% 100%)`,
+inherits its host's corner radius, and takes no pointer events. `--cn-flag-inset`
+offsets it, so a host that clips its own overflow can pull the flag over its border.
+
+The flag is supplementary. A consumer that uses either state carries its meaning in
+text or another accessible state, because the classes announce nothing.
+
+The states live with Surface rather than inside a component because a card and a
+listing row are the same signal on different containers. Any capability that needs
+the flag composes these classes instead of restating the geometry.
+
+A state may be toggled after the server response, on an element that is never
+hydrated: the rules read the classes and nothing else. The pseudo-element exists
+only while a class does, so the fade is an animation rather than a transition,
+suppressed under `prefers-reduced-motion`.
+
 ## Contract
 
 ### Definition of Done
@@ -94,6 +115,9 @@ elevation; an elevation utility alone adds no padding or containment.
 - Automated browser checks verify `.surface`, its explicit elevation override and
   the computed background and shadow of every standalone level and supported
   nested transition in both themes.
+- A Surface utilities book documents the attention states, and a browser check
+  verifies that a class added on the client paints the flag in its role colour on a
+  surface that rendered without it.
 - Human review accepts the hierarchy and foreground contrast of the principles and
   utility specimens in both themes.
 
@@ -109,6 +133,11 @@ elevation; an elevation utility alone adds no padding or containment.
   collapses it into level 1.
 - Elevation utilities do not acquire `.surface` padding or containment. The
   composition remains explicit in the class vocabulary.
+- The attention flag is declared once. A capability that shows it composes
+  `has-notify` or `has-alert`; restating the geometry in a component gives the
+  system two flags that can drift.
+- The flag rules read the state classes and nothing else, so a class toggled after
+  the server response takes effect without hydration.
 
 ### Scenarios
 
@@ -178,4 +207,16 @@ Given a surface with no elevation class containing an element at elevation 3
 When both render
 Then the surface participates as an elevation 1 ancestor
 And the child has the shadow for a two-level rise
+```
+
+```gherkin
+Given an element carrying `has-notify`
+When it renders
+Then a triangular flag in the information role fills its upper-right corner
+```
+
+```gherkin
+Given a server-rendered surface carrying no state class
+When a consumer adds `has-alert` to it on the client
+Then the warning flag appears without the element being hydrated
 ```

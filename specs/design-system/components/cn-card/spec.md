@@ -37,7 +37,7 @@ The public schema preserves the v20 names and composition model:
 | `cover` | Optional cover-image URL. |
 | `srcset`, `sizes` | Optional native responsive-image values used with `cover`. |
 | `noun` | Optional icon noun. |
-| `notify`, `alert` | Optional visual-state flags; both default to false. Also settable on the client through the class hook below. |
+| `notify`, `alert` | Optional visual-state flags composing Surface's attention states; both default to false. Also settable on the client through the class hook below. |
 | `eyebrow`, `actions`, `children` | Optional Svelte snippets for the three composition regions. |
 
 An optional destination links the title. When a cover is present, the cover points
@@ -120,28 +120,22 @@ subject; CnCard suppresses the Icon capability's default announcement in this
 context. Artwork resolution and sizing otherwise follow
 `specs/design-system/components/cn-icon/spec.md`.
 
-`notify` and `alert` render triangular flags in the upper-right corner. Notification
-uses the information role; alert uses the warning role and takes visual precedence
-when both are present. Each flag occupies a seven-grid-unit square clipped to the
-upper-right triangle with `polygon(100% 0, 0 0, 100% 100%)`. The flags are
-supplementary visual states. A consumer that uses either state provides its meaning
-through text or another accessible state. A covered noun renders above either flag,
-preserving v20's identity-first stacking.
+`notify` and `alert` compose Surface's attention states from
+`specs/design-system/surface/spec.md`: CnCard carries `has-notify` or `has-alert` and
+restates none of the flag's geometry or colour. It contributes only the inset that
+pulls the flag over its elevation-0 border, under its own clipping. A covered noun
+renders above either flag, preserving v20's identity-first stacking.
 
-The two flag states are also a public class hook. The root carries the `cn-card`
-class, and each flag renders from `has-notify` or `has-alert` on that root, so a
-consumer that learns the state after the server response toggles the class on the
-root instead of supplying a new prop value. `cn-card`, `has-notify` and `has-alert`
-are named in this contract and are not internal names a refactor may rename.
+The states are also CnCard's public class hook. The root carries the `cn-card` class,
+so a consumer that learns the state after the server response toggles `has-notify` or
+`has-alert` on that root instead of supplying a new prop value. All three names are
+part of this contract and are not internal names a refactor may rename.
 
 The hook exists because CnCard's states arrive from two different times. A prop is
 resolved when the page renders; unread signalling, session-dependent attention and
 anything else a browser learns is resolved afterwards, in a CnCard that a
-server-rendered listing does not hydrate. Without the hook such a consumer would
-have to hydrate every card in a listing to change one triangle. The flag rules
-therefore depend on the class alone and stay independent of how the class arrived.
-Both flags carry a short opacity transition, so a state that resolves late fades in
-rather than appearing abruptly.
+server-rendered listing does not hydrate. Without the hook such a consumer would have
+to hydrate every card in a listing to change one triangle.
 
 CnCard uses the large radius by default and permits `--cn-border-radius-card` to
 override it. The radius applies to the CnCard, cover, image, and tint. A containing
@@ -195,7 +189,9 @@ hydration without changing the component's semantics.
   listing-layout rules.
 - CnCard indicators add no independent accessible state; consumers provide the
   state meaning separately.
-- The flag rules read `has-notify` and `has-alert` on the `cn-card` root and nothing
+- CnCard composes the shared attention states and declares no flag of its own, so
+  the card and every other surface cannot show different flags.
+- The flag responds to `has-notify` and `has-alert` on the `cn-card` root and nothing
   else, so a class toggled after the server response takes effect without hydration.
 - The initial server response contains the complete CnCard structure and content.
 

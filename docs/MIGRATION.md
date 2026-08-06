@@ -78,6 +78,12 @@ that was quietly absent now shows. Exercise the real missing and optional states
 build-time resolver can eagerly resolve a dynamic import, so source syntax alone does
 not prove an input is optional.
 
+## 21.0.0 actions
+
+- Export `characters` and `charsheets` as Markdown to their authors, then delete both
+  collections and clear `useCharacters`, `useCharacterKeeper` and
+  `characterKeeperSheetKey` from site documents (ADR 0003).
+
 ## The terminal sweep
 
 One repository-wide sweep when the migration is believed complete. Resolve every

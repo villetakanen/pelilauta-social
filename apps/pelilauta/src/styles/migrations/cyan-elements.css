@@ -7,12 +7,11 @@
  */
 
 /*
- * Sources: core/cn-bubble.css, components/cn-card.css and tokens/cards.css.
- * Consumers: discussion bubbles and application cards. Future owners: Bubble and
- * Card; remove these rules when both are local components.
+ * Source: core/cn-bubble.css.
+ * Consumer: discussion bubbles. Future owner: Bubble; remove when the bubble is a
+ * local component.
  */
-cn-bubble *:first-child,
-cn-card > *:first-child {
+cn-bubble *:first-child {
   margin-top: 0;
 }
 
@@ -30,14 +29,8 @@ cn-bubble .toolbar:first-child {
   margin-top: calc(-1 * var(--cn-gap));
 }
 
-cn-bubble .toolbar:last-child,
-cn-card .toolbar:last-child {
+cn-bubble .toolbar:last-child {
   margin-bottom: calc(-1 * var(--cn-grid));
-}
-
-cn-card > *:last-child,
-cn-card p:last-of-type {
-  margin-bottom: 0;
 }
 
 /*
@@ -46,8 +39,7 @@ cn-card p:last-of-type {
  * those local components own their composition.
  */
 section > cn-loader,
-article > cn-loader,
-cn-card > cn-loader {
+article > cn-loader {
   margin: var(--cn-line) auto;
 }
 
@@ -136,9 +128,9 @@ cn-reaction-button {
 }
 
 /*
- * Sources: components/cn-sortable-list.css, utilities/content-cards.css and
- * utilities/toolbar.css. Consumers: sortable editors, card lists and settings
- * controls. Future owners: those component and layout epics.
+ * Sources: components/cn-sortable-list.css and utilities/toolbar.css.
+ * Consumers: sortable editors and settings controls. Future owners: those
+ * component and layout epics.
  */
 /*
  * No line-height: Cyan reads --cn-line-height-ui and declares it nowhere, so the
@@ -151,11 +143,6 @@ cn-sortable-list {
   font-weight: var(--cn-font-weight-ui);
   font-size: var(--cn-font-size-ui);
   letter-spacing: var(--cn-letter-spacing-ui);
-}
-
-.content-cards cn-card {
-  width: 100%;
-  flex-grow: 1;
 }
 
 .toolbar cn-toggle-button {

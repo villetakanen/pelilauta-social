@@ -1,7 +1,6 @@
 import type { Locale } from '../../utils/i18n';
 import { actions } from './actions';
 import { admin } from './admin';
-import { characters } from './characters';
 import { common } from './common';
 import { entries } from './entries';
 import { frontPage } from './frontPage';
@@ -25,7 +24,6 @@ export const en: Locale = {
     },
   },
   common,
-  characters,
   entries,
   frontPage,
   login,

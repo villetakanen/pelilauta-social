@@ -19,11 +19,6 @@ export const site: Locale = {
     },
     empty: 'Ei kelloja',
   },
-  characters: {
-    title: 'Hahmot',
-    empty: 'Sivustolla ei ole vielä hahmoja',
-    count: '{count} hahmoa',
-  },
   create: {
     title: 'Luo sivusto',
     description:
@@ -98,21 +93,6 @@ export const site: Locale = {
   members: {
     title: 'Jäsenet',
   },
-  keeper: {
-    title: 'Keeper',
-    lastUpdated: 'Päivitetty {date}',
-    error: {
-      title: 'Hahmojen lataus epäonnistui',
-    },
-    noCharacters: {
-      title: 'Ei hahmoja',
-      description: 'Sivustolla ei ole vielä hahmoja.',
-    },
-    noSheet: {
-      title: 'Hahmolomaketta ei ole valittu',
-      description: 'Valitse hahmolomake nähdäksesi hahmot.',
-    },
-  },
   options: {
     title: 'Työkalut',
     description:
@@ -122,13 +102,10 @@ export const site: Locale = {
     useClocks: 'Kellot',
     useHandouts: 'Salaisuudet',
     sidebar: 'Sivupalkki',
-    useCharacters: 'Hahmot',
-    useCharacterKeeper: 'Hahmokansio',
     useRecentChanges: 'Viimeisimmät muutokset -paneeli',
     useSidebar: 'Käytä sivupalkkia',
     sidebarPage: 'Sivupalkin sisältö',
     selectPage: 'Valitse sivu',
-    selectSheet: 'Valitse hahmolomake',
     selectSidebarPage: 'Oletus',
     sidebarPageDescription:
       'Valitse mukautettu sivu sivupalkkia varten. Jos sivua ei valita, käytetään oletussivupalkkia.',

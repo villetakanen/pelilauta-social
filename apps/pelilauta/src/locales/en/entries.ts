@@ -81,14 +81,4 @@ export const entries: Locale = {
     tickSize: 'Size',
     ticks: 'Steps',
   },
-  character: {
-    name: 'Name',
-    description: 'Description',
-    site: 'Game / Site',
-    placeholders: {
-      name: 'e.g. Gandalf the Grey',
-      description: 'Character description or backstory...',
-    },
-    sheet: 'Character sheet',
-  },
 };

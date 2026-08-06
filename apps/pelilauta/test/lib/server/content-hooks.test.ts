@@ -54,7 +54,6 @@ describe('Content Update Hooks', () => {
     updatedAt: new Date(),
     assets: [],
     description: 'A test site for unit testing',
-    characterKeeperSheetKey: undefined,
   };
 
   beforeEach(() => {
