@@ -188,4 +188,9 @@
   );
   --cn-lightbox-background: var(--cn-color-surface-30);
   --cn-lightbox-color: var(--cn-color-surface-95);
+
+  --cn-loader-color: light-dark(
+    var(--cn-color-primary-60),
+    var(--cn-color-surface-60)
+  );
 }

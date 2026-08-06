@@ -146,6 +146,7 @@ describe('entry point', () => {
       './spatial.css',
       './content-containers.css',
       './surface.css',
+      './loader.css',
     ]);
   });
 

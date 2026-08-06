@@ -196,5 +196,4 @@
   --background-mobile-nav-bar: var(--cn-surface);
   --background-editor: var(--cn-input);
   --cn-input-border: 1px solid var(--cn-border);
-  --cn-loader-color: var(--cn-link);
 }

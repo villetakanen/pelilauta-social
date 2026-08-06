@@ -10,7 +10,17 @@ import Composition from '@design-system/books/specimens/Composition.astro'
 
 CnCard presents one independently meaningful subject. Its required title gives every
 preview a stable identity, while optional cover, noun, supporting content, and actions
-build the amount of context a reader needs before following it.
+build the amount of context a reader needs before following it. Every CnCard on this page
+is rendered on the server and hydrated by nothing, which is how the listings that use it
+run.
+
+## When to use it
+
+- Preview one subject that has a title and a bounded amount of supporting content.
+- Compose independent destinations or controls around one primary subject destination.
+
+Use [Surface](/base/surface) for untitled boxes and workflow-scale content. The
+containing layout defines CnCard width and spacing between CnCards.
 
 ## Example
 
@@ -20,7 +30,7 @@ build the amount of context a reader needs before following it.
   </CnCard>
 </Composition>
 
-```svelte
+```mdx
 import CnCard from '@design-system/components/CnCard.svelte'
 
 <CnCard
@@ -31,25 +41,13 @@ import CnCard from '@design-system/components/CnCard.svelte'
 </CnCard>
 ```
 
-## Props
+## Variants and states
 
-| Prop | Type | Purpose |
-| :--- | :--- | :--- |
-| `title` | `string` | Required CnCard heading. |
-| `description` | `string` | Secondary text after the heading. |
-| `elevation` | `0 \| 1 \| 2 \| 3 \| 4` | Shared surface level. Defaults to `1`. |
-| `href` | `string` | Links the title and, when present, the decorative cover. |
-| `cover` | `string` | Decorative cover image URL. |
-| `srcset` | `string` | Native responsive-image candidates used with `cover`. |
-| `sizes` | `string` | Native responsive-image sizing hints used with `cover`. |
-| `noun` | `string` | Decorative Icon noun, small by the title or large over a cover. |
-| `notify` | `boolean` | Draws the information flag. Defaults to `false`. |
-| `alert` | `boolean` | Draws the warning flag above notification. Defaults to `false`. |
-| `eyebrow` | `Snippet` | Caption content before the title. |
-| `children` | `Snippet` | Concise supporting content after the description. |
-| `actions` | `Snippet` | Links and controls anchored at the bottom edge. |
+Four axes vary independently: whether the subject has a destination, which elevation and
+attention flags the card carries, whether it shows a noun or a cover, and how narrow its
+container is.
 
-## Destinations
+### Destinations
 
 The article remains passive when `href` is supplied. The title becomes the keyboard and
 assistive-technology destination; a cover points to the same location for pointer users
@@ -60,7 +58,7 @@ eyebrow, body, and action region.
   <CardSpecimens group="basic" />
 </Composition>
 
-## Elevation and indicators
+### Elevation and indicators
 
 CnCard composes the shared elevation levels, keeping their background and shadow model in
 one place. Notification and alert are visual flags; the text supplied by a consumer
@@ -74,7 +72,7 @@ the primary background.
   <CardSpecimens group="elevation" />
 </Composition>
 
-### Setting a flag on the client
+#### Setting a flag on the client
 
 Both flags are also a class hook on the card root, for a state that is only known
 after the page arrives — an unread thread, an item that needs attention once a session
@@ -96,7 +94,7 @@ prop.
 The flag itself belongs to [Surface](/base/surface): a card and a listing row show the
 same signal, so CnCard composes those states rather than drawing its own.
 
-## Visual identity
+### Visual identity
 
 A noun identifies the subject without repeating its name to assistive technology. It
 sits beside the title until a cover gives it a larger upper-right field. Covers crop to
@@ -114,26 +112,15 @@ working covers beside it: they are the same artwork. Pass no `cover` at all and 
 renders no cover region, which stays the way to say a subject has no image.
 
 The artwork sits behind the image rather than replacing it on error, so it needs no
-script and appears in a CnCard that is never hydrated — every specimen on this page is
-server-rendered. It also fills the moment before a lazily loaded cover arrives. The
-trade is that a cover with transparency composites over the artwork rather than over
-the card surface.
+script and appears in a CnCard that is never hydrated. It also fills the moment before a
+lazily loaded cover arrives. The trade is that a cover with transparency composites over
+the artwork rather than over the card surface.
 
 <Composition caption="Wide cover specimen for comparison with v20">
   <CardSpecimens group="wide" />
 </Composition>
 
-## Composition regions
-
-Use the eyebrow for a category, channel, edition, or system. Keep body content to one to
-three short paragraphs. Actions accept links and controls in a neutral container and
-stay at the bottom when neighboring CnCards contain more text.
-
-<Composition themes caption="Eyebrow, description, body, and two actions">
-  <CardSpecimens group="content" />
-</Composition>
-
-## Narrow containers
+### Narrow containers
 
 CnCard establishes inline-size containment, so supplied content adapts to the
 CnCard's width rather than the viewport's. The title is the exception: it keeps
@@ -145,13 +132,51 @@ at most two rendered lines.
   <CardSpecimens group="narrow" />
 </Composition>
 
-## When to use it
+## Composition
 
-- Preview one subject that has a title and a bounded amount of supporting content.
-- Compose independent destinations or controls around one primary subject destination.
+Use the eyebrow for a category, channel, edition, or system. Keep body content to one to
+three short paragraphs. Actions accept links and controls in a neutral container and
+stay at the bottom when neighboring CnCards contain more text.
 
-Use [Surface](/base/surface) for untitled boxes and workflow-scale content. The
-containing layout defines CnCard width and spacing between CnCards.
+<Composition themes caption="Eyebrow, description, body, and two actions">
+  <CardSpecimens group="content" />
+</Composition>
+
+The action region is a single row of commands and metadata — buttons, icon buttons,
+reactions, a timestamp — seven grid units high whatever it holds. Content taller than the
+row is clipped by the card, so a control that needs more height belongs in the body.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `title` | `string` | Required CnCard heading. |
+| `description` | `string` | Secondary text after the heading. |
+| `elevation` | `0 \| 1 \| 2 \| 3 \| 4` | Shared surface level. Defaults to `1`. |
+| `href` | `string` | Links the title and, when present, the decorative cover. |
+| `cover` | `string` | Decorative cover image URL. |
+| `srcset` | `string` | Native responsive-image candidates used with `cover`. |
+| `sizes` | `string` | Native responsive-image sizing hints used with `cover`. |
+| `noun` | `string` | Decorative Icon noun, small by the title or large over a cover. |
+| `notify` | `boolean` | Draws the information flag. Defaults to `false`. |
+| `alert` | `boolean` | Draws the warning flag above notification. Defaults to `false`. |
+| `eyebrow` | `Snippet` | Caption content before the title. |
+| `children` | `Snippet` | Concise supporting content after the description. |
+| `actions` | `Snippet` | Links and controls anchored at the bottom edge. |
+
+### Tokens
+
+CnCard declares no tokens of its own. Its background, shadow and attention flags come
+from [Surface](/base/surface) and the elevation levels, its type from
+[Typography](/tokens/typography), and its spacing from the
+[grid](/tokens/units) — which is why a change to those systems reaches every card without
+touching this component.
+
+It reads one hook a consumer may declare: `--cn-border-radius-card`. Nothing declares it,
+so corners resolve to `--cn-border-radius-large` (16px) until a container sets it, and the
+cover, its tint and the card itself then round together.
 
 ## Accessibility
 
@@ -159,3 +184,18 @@ CnCard renders an `article` with an h4 and no implicit whole-CnCard control. Pla
 h4 is valid in the surrounding heading hierarchy. Covers, nouns, and indicators are
 supplementary visuals; consumers communicate their meaning in text or another
 accessible state.
+
+## Not shown here
+
+**A flag raised after render.** The specimens above pass `notify` and `alert` as props.
+The class hook that a listing toggles once its session resolves needs a hydrated page,
+which the design site does not build, so the recipe above stands without a live
+demonstration. The classes themselves are covered by the CnCard tests.
+
+**A transparent cover.** The composite described under Visual identity — artwork behind a
+cover with an alpha channel — has no specimen, because every cover this system ships is
+opaque. Treat the trade as stated rather than as shown.
+
+**A loading card.** A CnCard whose subject is still resolving has no design-system
+treatment for its content region, and the consumer centres a loader there. That gap is
+recorded as debt, not settled here.
