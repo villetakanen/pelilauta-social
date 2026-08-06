@@ -66,12 +66,10 @@ The following pages are private and not discoverable via search engines:
 
 - **Admin Section** (`/admin/*`) - Site administration tools
 - **User Settings** (`/settings`) - Personal preferences
-- **Content Creation** (`/create/*`) - Create threads, sites, characters
+- **Content Creation** (`/create/*`) - Create threads and sites
 - **Site Management** (`/sites/[siteKey]/settings`) - Campaign administration
 - **Editing Tools** (`/*/edit`, `/*/delete`) - Content editing and moderation
-- **Character Keeper** (`/sites/[siteKey]/keeper`) - Private character management
 - **Private Handouts** (`/sites/[siteKey]/handouts`) - GM-only materials
-- **Character Library** (`/library/characters`) - Members-only character profiles (beta feature, part of upcoming Characters App)
 
 ## Search Engine Optimization
 
