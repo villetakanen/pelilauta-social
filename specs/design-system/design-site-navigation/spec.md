@@ -55,8 +55,8 @@ regenerable from a source belongs to a lexicon book.
   chrome are not decided, and get no stand-in: books render plain until the design system
   owns typography and content grids. What styling exists is disposable —
   `packages/design-system/styles/docs.css` predates this spec, and what remains of it
-  is the index page's editorial vocabulary plus the link and table rules nothing else
-  owns. It is replaced opportunistically, and never gates or sequences other work.
+  is the index page's editorial vocabulary plus the table rules nothing else owns. It
+  is replaced opportunistically, and never gates or sequences other work.
 
 ## Contract
 
