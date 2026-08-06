@@ -2,54 +2,98 @@
 title: ComponentName
 description: One sentence. It is the navigation subtitle and the page's meta description, so write it for someone deciding whether to open the page.
 order: 10
-prose: true
 ---
 
 {/*
   COMPONENT BOOK — copy to apps/design/src/content/components/<slug>.mdx, delete
   these comments. Rules are the design-system-book skill's. Link books, never a spec.
 
-  Keep these headings in this order and drop the ones that do not apply: the reader
-  is scanning this page against the last component's. Always show the invocation.
+  The heading order below is fixed. Delete a section that has nothing that ships;
+  never reorder the ones that remain, because a reader scans this page against the
+  last component's. Nest to h4 where an axis has sub-cases, and keep every heading
+  name unique within the page — the book tests locate headings by name alone.
+
+  Worked instances: apps/design/src/content/components/cn-loader.mdx (small),
+  apps/design/src/content/components/cn-card.mdx (four axes, nested).
 */}
 
-The mechanism a reader cannot derive from the invocation below: what resolves when,
-what a value inherits, what it costs at build or render time. Delete this paragraph
-if the invocation already says it — do not restate the component's name.
-
-## Example
-
-Show it rendering, then the code that produced it, in that order.
-
-<TheComponent someProp="value" />
-
-```mdx
-import TheComponent from '@design-system/books/…/TheComponent.astro'
-
-<TheComponent someProp="value" />
-```
-
-## Props
-
-| Prop | Type | Purpose |
-| :--- | :--- | :--- |
-| `someProp` | `string` | What it controls. Say "Required" here rather than in prose. |
+What it is, and the one mechanism a reader cannot derive from the invocation below:
+what resolves when, what a value inherits, what it costs at build or render time.
+Two or three sentences. Do not restate the component's name.
 
 ## When to use it
 
 - The case it is for, as an instruction rather than a description.
 - The case it is for.
 
-Do not use it when — name the alternative and link it, so a reader who came to
-the wrong page leaves knowing where to go.
+Close on the case it is not for, naming the alternative and linking its book, so a
+reader who came to the wrong page leaves knowing where to go. State what the
+component does not do when a reader would otherwise assume it — a progress
+indicator that cannot report progress says so here.
 
-## Behaviour worth knowing
+## Example
 
-Only for behaviour that surprises: a build that fails, a silent fallback, a
-prop combination that is rejected. Two or three sentences. Delete the section if
-the component has none.
+The canonical invocation rendered, then the code that produced it, in that order.
+One example. Variants belong in the next section.
+
+<Composition themes caption="Names what the reader is looking at">
+  <TheSpecimen group="basic" />
+</Composition>
+
+```mdx
+import TheComponent from '@design-system/components/TheComponent.svelte'
+
+<TheComponent />
+```
+
+## Variants and states
+
+Open with a sentence naming the axes, so a reader scanning the h2s knows what varies
+without opening the section. Then one h3 per axis, each with its own specimen
+rendered in both colour schemes. Cover every combination that ships — a state with
+no specimen is a state the book does not document.
+
+### An axis
+
+What varies along it, and what a consumer chooses between.
+
+#### A sub-case of that axis
+
+Only when the axis has one: a client-side recipe, a fallback, a failure. Do not
+promote it to an axis of its own.
+
+## Composition
+
+Where the component may sit and what the parent must provide for it to behave: the
+container rules that apply to it, the region it belongs in, the constraint that
+clips or stretches it. Delete when nothing outside the component matters.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `someProp` | `string` | What it controls. Say "Required" here rather than in prose. |
+
+### Tokens
+
+Rendered by `TokenTable` from the stylesheet, imported with `?raw`. Never retype a
+value into this page. When the component declares no tokens of its own, say so and
+name the systems it composes; when it reads a hook a consumer may declare, name the
+hook and what the value resolves to until one does.
+
+<TokenTable source={componentSource} prefix="--cn-thing" caption="From styles/thing.css" />
 
 ## Accessibility
 
 The semantics it emits and what a consumer still owes — a label, a landmark, a
 focus target. Delete if it renders nothing with semantics of its own.
+
+## Not shown here
+
+Every behaviour this book states and does not demonstrate, each with the reason it
+has no specimen and how it was established instead: a query a page cannot emulate for
+one subtree, a state that needs hydration the design site does not build, a gap
+recorded as debt. Name a test only where one already exists — do not write one to
+fill this section.
