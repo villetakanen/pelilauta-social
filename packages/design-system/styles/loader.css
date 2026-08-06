@@ -1,0 +1,21 @@
+/*
+ * Loader tokens and auto-centering rules.
+ *
+ * Spec: specs/design-system/components/cn-loader/spec.md
+ */
+:root {
+  --cn-loader-size: calc(var(--cn-line) * 3); /* 72px */
+  --cn-loader-line-width: calc(var(--cn-grid) / 2); /* 4px */
+}
+
+/*
+ * Auto-centres <span class="cn-loader"> inside common container shells. A CnCard
+ * is deliberately absent: its action row carries commands, and a card whose
+ * subject is still resolving shows the loader in its content region, which this
+ * rule does not reach (plans/debt/card-loading-region.md).
+ */
+section > .cn-loader,
+article > .cn-loader {
+  display: block;
+  margin: var(--cn-line) auto;
+}

@@ -14,7 +14,7 @@ status: approved
 
 `CnLoader` is a Svelte 5 component (`CnLoader.svelte`) emitting `<span class="cn-loader">` with a nested `<span class="lds-dual-ring">` and a nested `<CnIcon>`. It does not register a custom element or use Shadow DOM.
 
-A companion global stylesheet (`cn-loader.css`) styles auto-centering layout rules for direct children of `<section>`, `<article>`, and `article.cn-card > nav.actions`.
+A companion global stylesheet (`loader.css`) styles auto-centering layout rules for direct children of `<section>` and `<article>`. A CnCard receives none: its action row carries commands, and a card whose subject is still resolving shows the loader in its content region, which the rule does not reach.
 
 ### Constraints
 
@@ -33,9 +33,9 @@ The ring uses 0.72 opacity and line width `calc(var(--cn-grid) / 2)`. The center
 - `CnLoader.svelte` exports a Svelte 5 component rendering `<span class="cn-loader">` with `role="status"`.
 - `inline` prop switches host and nested icon size between `--cn-loader-size` and `--cn-line`.
 - Tokens `--cn-loader-size`, `--cn-loader-line-width`, and `--cn-loader-color` are declared on `:root` with `light-dark()` values.
-- `cn-loader.css` provides container auto-centering rules for section, article, and card action slots.
+- `loader.css` provides container auto-centering rules for section and article children.
 - `prefers-reduced-motion: reduce` stops ring rotation.
-- The **Links, Actions and Buttons** Base book renders `CnLoader` in standalone and inline states across Light and Dark.
+- The **CnLoader** Component book renders `CnLoader` in standalone and inline states across Light and Dark.
 
 ### Regression Guardrails
 
