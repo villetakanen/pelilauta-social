@@ -27,11 +27,6 @@ export const seo = {
     title: 'Kirjasto',
     description:
       'Selaa Pelilaudan julkista kirjastoa. Löydä hahmoja, resursseja ja inspiraatiota omiin roolipeliseikkailuihisi.',
-    characters: {
-      title: 'Hahmokirjasto',
-      description:
-        'Selaa julkisia hahmoja. Inspiroidu tai käytä hahmoja omissa peleissäsi. Jaa omat luomuksesi muiden kanssa.',
-    },
   },
   profile: {
     fallback:

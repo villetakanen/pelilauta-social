@@ -27,11 +27,6 @@ export const seo = {
     title: 'Library',
     description:
       'Browse Pelilauta public library. Find characters, resources, and inspiration for your own role-playing adventures.',
-    characters: {
-      title: 'Character Library',
-      description:
-        'Browse public characters. Get inspired or use characters in your own games. Share your own creations.',
-    },
   },
   profile: {
     fallback:

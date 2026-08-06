@@ -8,11 +8,4 @@ export const library: Locale = {
     title: 'Pelit ja sivustot',
     count: '{count} sivustoa.',
   },
-  characters: {
-    title: 'Hahmot',
-    description:
-      'Vielä hieman kokeellinen toiminto hahmojen luomiseen ja muokkaamiseen.',
-    empty: 'Ei hahmoja, voit luoda uuden hahmon altakulman painikkeesta.',
-    count: '{count} hahmoa.',
-  },
 };

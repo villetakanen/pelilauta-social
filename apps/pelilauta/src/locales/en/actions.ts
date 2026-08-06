@@ -10,7 +10,6 @@ export const actions: Locale = {
     clock: 'New clock',
     tick: 'New tick',
     handout: 'Create secret',
-    character: 'Create character',
   },
   choose: 'Choose',
   confirm: {
