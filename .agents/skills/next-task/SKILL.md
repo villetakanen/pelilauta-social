@@ -10,18 +10,27 @@ branch and `plans/`. Inspect only the contracts, specs and source needed to unde
 its current state.
 
 Choose exactly one task. Prefer the smallest vertical slice that produces observable,
-verifiable value and can ship on its own. Account internally for its necessary spec,
-implementation, tests, migration and documentation; do not expose that delivery plan
-before the task is accepted. Prefer existing paths and settled decisions over new
-infrastructure.
+verifiable value and can ship on its own. Check the relevant specs before proposing
+implementation. If a required spec is missing, or the work needs a substantive change
+to its intent, propose completing and approving that spec first.
+
+A minor clarification or correction to an existing spec, including one needed by a
+bug fix, may stay inside the delivery slice. The slice must present the amendment to
+the spec approver and receive approval before continuing with work that relies on it.
+Account internally for its spec changes, implementation, tests, migration and
+documentation; do not expose that delivery plan before the task is accepted. Prefer
+existing paths and settled decisions over new infrastructure.
 
 Make the slice complete where its value is expected. When design-system work is meant
 for Pelilauta, include enough Pelilauta adoption for the result to be useful there. Do
-not propose only the underlying styles, component, spec or book and leave their first
-real use for a later task.
+not propose only the underlying styles, component or book and leave their first real
+use for a later task. A missing or substantively incomplete spec is a complete task
+when implementation cannot begin without settling its intent.
 
 Reject a candidate that:
 
+- starts implementation without a required spec, or relies on an unapproved change
+  to one;
 - needs a later task before it is useful, verifiable or safe to release;
 - bundles an independent outcome;
 - changes behaviour outside the epic;
