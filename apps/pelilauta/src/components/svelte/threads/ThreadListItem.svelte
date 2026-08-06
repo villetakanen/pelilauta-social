@@ -16,7 +16,7 @@ const { thread }: Props = $props();
 <article class="cols-2 surface" id={`thread-${thread.key}`}>
   <div>
     <h4 class="downscaled m-0">
-      <a href={`/threads/${thread.key}`} class="no-decoration">
+      <a href={`/threads/${thread.key}`}>
         {thread.title}
       </a>
     </h4>

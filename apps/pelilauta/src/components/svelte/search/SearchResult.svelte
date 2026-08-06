@@ -19,7 +19,7 @@ const snippet = createPlainSnippet(result.markdownContent || '', 150);
 
 <div class="search-result mb-2 border-t">
   <h3 class="text-h5 m-0">
-    <a href={url} class="no-underline hover-underline">
+    <a href={url}>
       {result.title}
     </a>
   </h3>

@@ -13,7 +13,7 @@ const { channelWithStats } = Astro.props;
   <div class="flex flex-row">
     <span class="flex-none"><Icon noun={channelWithStats.icon} /></span>
     <div>
-    <a href={`/channels/${channelWithStats.slug}`} class="no-underline hover-underline">
+    <a href={`/channels/${channelWithStats.slug}`}>
       <h3 class="text-h5 m-0">
           {channelWithStats.name}
       </h3>

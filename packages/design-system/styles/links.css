@@ -1,0 +1,32 @@
+/*
+ * Native links
+ *
+ * The low-specificity selectors let a specified component treatment, and the
+ * later button and FAB capabilities, replace presentation without changing an
+ * anchor's navigation behaviour.
+ *
+ * Spec: specs/design-system/links-and-actions/spec.md
+ */
+
+a:where([href]:not(.button, .fab)),
+a:where([href]:not(.button, .fab)):visited {
+  color: var(--cn-link);
+}
+
+a:where([href]:not(.button, .fab)) {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+a:where([href]:not(.button, .fab)):hover {
+  color: var(--cn-link-hover);
+}
+
+a:where([href]:not(.button, .fab)):active {
+  color: var(--cn-link-active);
+}
+
+a:where([href]:not(.button, .fab)):focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}

@@ -53,12 +53,10 @@ const onIndex = samePath(pathname, '/');
      nav's own internal styling lives here. */
   .index-link {
     display: block;
-    color: var(--cn-text-low);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    text-decoration: none;
   }
 
   .nav-group {
@@ -87,38 +85,6 @@ const onIndex = samePath(pathname, '/');
   li a {
     display: block;
     padding-block: 0.55rem;
-    color: var(--cn-text);
     font-size: 1.05rem;
-    text-decoration: none;
-  }
-
-  li a:hover {
-    color: var(--cn-link-hover);
-  }
-
-  a:focus-visible {
-    outline: 2px solid var(--cn-focus-ring);
-    outline-offset: 2px;
-  }
-
-  /* The current book is the one typographic emphasis in the index. */
-  li a[aria-current='page'] {
-    color: var(--cn-text-high);
-    font-weight: 600;
-  }
-
-  li a[aria-current='page']::before {
-    content: '';
-    display: inline-block;
-    inline-size: 0.5rem;
-    block-size: 0.5rem;
-    margin-inline-end: 0.5rem;
-    border-radius: 50%;
-    background: var(--cn-focus-ring);
-    vertical-align: 0.1em;
-  }
-
-  .index-link[aria-current='page'] {
-    color: var(--cn-text-high);
   }
 </style>

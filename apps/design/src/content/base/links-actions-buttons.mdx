@@ -1,0 +1,49 @@
+---
+title: Links, Actions and Buttons
+description: How Pelilauta distinguishes navigation from commands and renders native links through every interaction state.
+order: 5
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import LinkStateTable from '@design-system/books/specimens/LinkStateTable.astro'
+import linkSource from '@design-system/styles/links.css?raw'
+
+We distinguish links from actions by outcome. A link moves the reader to a document,
+resource, or location. An action submits data or changes the current task.
+
+<Composition themes caption="Native links in prose and on their own, rendered in Light and Dark">
+  <p>Pelilauta's <a href="/principles/typography">typography principles</a> set the reading voice and scale.</p>
+  <p><a href="/principles/color-system">Explore colour and surface roles</a></p>
+</Composition>
+
+## Choose by outcome
+
+The element records what activation means. Destination, form behaviour, keyboard
+operation, and assistive-technology identity all follow from that first choice.
+
+| Intended outcome | Element | Required information |
+| :--- | :--- | :--- |
+| Move to another document, resource, or location | `<a href>` | An explicit destination. |
+| Submit a form | `<button type="submit">` | The form and submitted values. |
+| Reset a form | `<button type="reset">` | The form whose values are reset. |
+| Run a command in the current task | `<button type="button">` | The command triggered on activation. |
+
+A command remains an action even when successful completion redirects elsewhere. Its
+immediate outcome is still a mutation.
+
+_Cancel_ is one example. An editor control that returns to its explicit view URL is
+an `<a class="button" href="…">`; a control with the same label that closes a
+dialog is a `<button type="button">`. Both share the visual presentation.
+
+## Native-link states
+
+A native link is always underlined, so it stays recognisable without relying on colour.
+
+<LinkStateTable source={linkSource} />
+
+### Exceptions
+
+A component might replace the resting colour or underline only when its own design
+defines another link cue and preserves visible hover and keyboard focus.
+
+For an example, see [CnCard](/components/cn-card).

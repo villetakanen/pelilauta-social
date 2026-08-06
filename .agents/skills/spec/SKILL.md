@@ -20,11 +20,22 @@ states a change. The anatomy and the writing rules are `specs/TEMPLATE.md`.
    design-system spec's subject is the package both applications consume; do not
    write a criterion that holds for only one of them.
 4. Frontmatter is `status: draft | approved | deprecated`, nothing else. New and
-   altered intent is `draft` until a human approves it — any edit to an approved
-   spec returns it to `draft`.
+   altered intent is `draft` until the spec approver approves it — any edit to an
+   approved spec returns it to `draft`.
 5. Record an irreversible decision as an ADR in `docs/adrs/`, and link it.
-6. Run the review gate, then ask for human approval. The request carries the
-   Subtraction outcome in one line — what was cut, or that nothing could be.
+6. Run the review gate, then ask the spec approver for approval. The request
+   carries the Subtraction outcome in one line — what was cut, or that nothing
+   could be.
+
+## Delivery Boundary
+
+A missing spec, or a substantive change that requires intent to be settled, is a
+separate task. Approve it before implementation begins.
+
+A minor clarification or correction to an existing spec may be part of its delivery
+slice, including when a bug fix uncovers it. Write the amendment, run the review gate
+and request approval mid-flight. Pause work that relies on the amendment until the
+spec approver decides; do not defer the request to delivery review.
 
 ## Prose
 
@@ -55,10 +66,10 @@ the text challenges the spec, not the code:
 - **Scope:** one capability, and nothing another spec already states.
 - **Subtraction:** run last, line by line — the template's derivability test.
 
-Unresolved findings go to the human with the approval request.
+Unresolved findings go to the spec approver with the approval request.
 
 ## Maintenance
 
 Implementation findings update the spec in the same commit as the behaviour
-change. A real intent ambiguity is reconciled with a human, not resolved by
-trusting either prose or code.
+change. A real intent ambiguity is reconciled with the spec approver, not resolved
+by trusting either prose or code.

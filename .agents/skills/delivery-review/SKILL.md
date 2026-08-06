@@ -22,18 +22,29 @@ practical and scale the review to the named concern.
 Establish the exact delta this pull request proposes. If the boundary is unclear,
 stop and ask rather than reviewing unrelated historical branch work.
 
+Plans are working scaffolding for an active epic. They may help establish the
+claimed outcome, but their status, reconciliation and eventual deletion are not
+integration evidence or delivery findings.
+
+The owner's request for a release assessment is downstream of owner UAT. Do not
+audit, infer or report owner-only acceptance unless the owner asks for an acceptance
+checklist or the delivery record falsely claims an automated check performed it.
+
 ## Challenges
 
 1. **Outcome:** does the delta deliver the tangible thing it claims, in
    `apps/pelilauta` or `apps/design`?
 2. **Compatibility:** are v18 behavior claims supported by cited source,
    deployed evidence, an immutable upstream revision, or a human decision? Are
-   departures explicit and approved?
+   departures explicit and approved? Read an approved decision by its named
+   capability, affected population and accepted consequences, not as an exhaustive
+   inventory of files or fields. A discovered implementation detail is covered when
+   it does not widen those boundaries.
 3. **Coupling:** does every included change serve this outcome or make its
    evidence trustworthy? Flag unrelated cleanup and speculative generalization,
    not the supporting work the change needs.
 4. **Verification reachability:** does every claimed check actually run through
-   the stated command, hook, deploy gate, or named human step? Identify suites
+   the stated command, hook or deploy gate? Identify suites
    silently skipped by filters or `--if-present` behavior.
 5. **Verification fidelity:** do checks exercise the production implementation
    and consumer context rather than copied logic, fixtures, or a surrogate?
@@ -49,8 +60,9 @@ stop and ask rather than reviewing unrelated historical branch work.
    to, or in whichever file currently wins the cascade? A rule added where it
    already loses, or edited where it already wins, passes every visual check and
    leaves ownership where the spec says it is not.
-10. **Record:** do the spec, PR and reported checks describe the
-   implementation accurately?
+10. **Record:** do the spec, PR and reported checks describe the implementation
+    accurately enough to operate, revert and extend it? Do not report incidental
+    summary-count drift.
 11. **Merge coherence:** can the complete merge deploy and revert coherently?
     Do not demand that supporting changes be independently reverted from the
     feature that relies on them.
@@ -61,6 +73,9 @@ Lead with findings ordered by severity and include file or artifact references.
 Distinguish blockers, non-blocking risks, and record corrections. Add only a reusable
 process or architecture candidate to the lessons queue.
 
-An unresolved blocker stops integration. Non-blocking findings are fixed,
-accepted, deferred, or rejected by the human owner. A review finding is
-evidence, not automatic permission to expand the pull request.
+A blocker is a defect in the proposed delta that makes its claimed outcome false,
+unsafe, undeployable or incoherent to revert. An unresolved blocker stops
+integration. Stale scaffolding, unrecorded owner state and work authorised for a
+later delta are not blockers. Non-blocking findings are fixed, accepted, deferred,
+or rejected by the human owner. A review finding is evidence, not automatic
+permission to expand the pull request.

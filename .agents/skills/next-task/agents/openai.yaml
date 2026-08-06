@@ -1,0 +1,4 @@
+interface:
+  display_name: "Next Task"
+  short_description: "Propose the smallest releasable epic slice"
+  default_prompt: "Use $next-task to briefly propose the next complete, releasable task from the active epic in plain language."

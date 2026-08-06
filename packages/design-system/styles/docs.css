@@ -9,21 +9,12 @@
  * is package-owned and so cannot read app CSS. It stays until an app shell owns it,
  * and staying visible here is how that work finds it.
  *
- * The leading, the link colour and the table type are typography's, and leave with
- * typography's semantics.
+ * The leading and table type are typography's, and leave with typography's
+ * semantics.
  */
 
 html {
   scroll-behavior: smooth;
-}
-
-a {
-  color: var(--cn-link);
-  text-underline-offset: 0.18em;
-}
-
-a:hover {
-  color: var(--cn-link-hover);
 }
 
 /* The index is a stack of full-bleed sections; a book is a single column. */

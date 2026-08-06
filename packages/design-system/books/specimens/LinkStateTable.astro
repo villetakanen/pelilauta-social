@@ -1,0 +1,128 @@
+---
+/**
+ * LinkStateTable — every native-link state rendered in Light and Dark.
+ *
+ * Browsers cannot hold hover, active and keyboard focus at once. This specimen
+ * scopes the shipped stylesheet and maps its pseudo-classes to documentation-
+ * only attributes, so every cell still renders from the production rules.
+ *
+ * Book: apps/design/src/content/base/links-actions-buttons.mdx
+ */
+interface Props {
+  /** styles/links.css, imported by the book with `?raw`. */
+  source: string;
+}
+
+const { source } = Astro.props;
+
+const LINK_SELECTOR = 'a:where([href]:not(.button, .fab))';
+const states = [
+  {
+    name: 'Resting',
+    attribute: undefined,
+    label: 'Read the typography principles',
+    href: '/principles/typography',
+    treatment: 'Underlined, using --cn-link.',
+    purpose: 'Keeps navigation identifiable without relying on colour.',
+  },
+  {
+    name: 'Visited',
+    attribute: 'visited',
+    label: 'Return to this book',
+    href: '/base/links-actions-buttons',
+    treatment: 'The resting treatment.',
+    purpose: 'Does not disclose browsing history globally.',
+  },
+  {
+    name: 'Hover',
+    attribute: 'hover',
+    label: 'Explore colour and surface roles',
+    href: '/principles/color-system',
+    treatment: 'Underlined, using --cn-link-hover.',
+    purpose: 'Confirms the pointer target.',
+  },
+  {
+    name: 'Active',
+    attribute: 'active',
+    label: 'Review the font system',
+    href: '/base/fonts',
+    treatment: 'Underlined, using --cn-link-active.',
+    purpose: 'Confirms activation while it occurs.',
+  },
+  {
+    name: 'Keyboard focus',
+    attribute: 'focus-visible',
+    label: 'Study surface elevation',
+    href: '/base/surface',
+    treatment: 'A --cn-focus-ring outline with the current link treatment.',
+    purpose: 'Marks keyboard position with shape as well as colour.',
+  },
+] as const;
+
+if (!source.includes(LINK_SELECTOR)) {
+  throw new Error('LinkStateTable could not find the native-link selector.');
+}
+
+let specimenSource = source.replaceAll(
+  LINK_SELECTOR,
+  `.cn-link-state-specimen ${LINK_SELECTOR}`,
+);
+for (const state of states) {
+  if (!state.attribute) continue;
+  specimenSource = specimenSource.replaceAll(
+    `:${state.attribute}`,
+    `[data-link-state="${state.attribute}"]`,
+  );
+}
+
+const MODES = ['light', 'dark'] as const;
+---
+
+<div class="scroll cn-breakout">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">State</th>
+        {MODES.map((mode) => <th scope="col">{mode}</th>)}
+        <th scope="col">Treatment</th>
+        <th scope="col">Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      {states.map((state) => (
+        <tr>
+          <th scope="row">{state.name}</th>
+          {MODES.map((mode) => (
+            <td
+              class="specimen cn-link-state-specimen"
+              data-mode={mode}
+              style={`color-scheme: ${mode};`}
+            >
+              <a href={state.href} data-link-state={state.attribute}>
+                {state.label}
+              </a>
+            </td>
+          ))}
+          <td>{state.treatment}</td>
+          <td>{state.purpose}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style is:inline set:html={specimenSource} />
+
+<style>
+  .scroll {
+    overflow-x: auto;
+  }
+
+  .specimen {
+    min-inline-size: 15rem;
+    padding-inline: var(--cn-gap);
+    color: var(--cn-text);
+    background: var(--cn-background);
+    white-space: nowrap;
+  }
+</style>

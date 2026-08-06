@@ -49,7 +49,8 @@ cannot settle whether `optgroup` or a WebKit search pseudo-element is inside it.
 | Applying the document's base background and foreground | the reset |
 | Ground-plane meaning and elevated surface utilities | Surface |
 | Which family any element renders in | fonts |
-| Type sizes, leading, heading wrap, link colour | typography |
+| Type sizes, leading, heading wrap | typography |
+| Native link presentation and navigation-versus-command semantics | Links and Actions |
 | The spacing that replaces the removed margins | each container, until typography |
 | Constraining media width, and whether media is block-level | the container holding it |
 | Scrollbar appearance | nothing: browser default |
