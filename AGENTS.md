@@ -6,43 +6,34 @@
 > **Core constraint:** v21 will run on its own host, sharing Firestore, Storage and Auth with live v18.
 > **Scope deviation:** v21 deprecates, and removes, the characters sub-app of v18 (`docs/adrs/0003-discontinue-characters.md`).
 
-## The `pnpm` Workspace
+## Project Map
 
-```yaml
-- apps
-  - pelilauta       # the v21 application  → pelilauta.social         · dev :4321
-  - design          # the design-system site, its navigation and IA
-                    #                      → design.pelilauta.social  · dev :4322
-- packages
-  - design-system    # components, styles, specs, and the books that publish them
-- specs              # approved behaviour, one per capability
-- plans              # epic scope
-  - debt             # known gaps that are nobody's story
-- docs
-  - adrs             # hard-to-reverse decisions log
-  - lessons          # notes we might act on later
-  - DESIGN.md        # Design vision and goals
-  - ARCHITECTURE.md  # Project architecture vision, and rules
-- .agents/skills     # portable skills
-- .claude/skills     # symlinked from .agents/skills, to enable dual use with claude 
-```
+- `apps/pelilauta` is the v21 application; `apps/design` publishes the design system.
+- `packages/design-system` contains the components, styles, specs and books both use.
+- `specs` contains approved behaviour, one capability per directory.
+- `plans` contains transient epic scope; `plans/debt` contains known unplanned gaps.
 
 ## Delivery Contract
 
-- Dependencies may be updated or added, majors included. Try the update locally first, and ask before merging one. Treat a build or CI failure as a stale dependency until proven otherwise.
-- During the beta phase, the active `feat/**` branch is released by a pull request and a merge to **main**. A human approves every release.
-- Every pull request bumps the root beta version with `pnpm version prerelease --preid=beta`. No approval needed.
+- Dependency additions and updates, including majors, may be tried locally. Merging them
+  requires explicit approval.
+- During beta, a release is the merge of the active `feat/**` pull request to **main**;
+  that merge is its approval.
+- Every pull request bumps the root beta version with
+  `pnpm version prerelease --preid=beta`.
 - Fix what the work touches, and any defect it uncovers in the same epic.
-- Replace Cyan one surface at a time. Most of Cyan is CSS: resets, element styles, utilities, and the tokens those read. The rest is Lit components. Check what v20 already built before writing anything. `docs/MIGRATION.md` owns the mechanics.
+- Replace Cyan one surface at a time. Most of Cyan is CSS: resets, element styles,
+  utilities and their tokens; the rest is Lit components. Check v20 before writing
+  anything, and follow `docs/MIGRATION.md` for migration mechanics.
 
 ## Workspace Contract
 
 - Link workspace projects with Vite aliases, mirrored in TypeScript paths. No package-linking or build-orchestration tooling.
-- Netlify publishes each app as its own site, each installing from the workspace root.
 
 ## Judgment Boundaries
 
-Never create, switch, or delete a branch. All work happens on the one long-living `feat/**` branch, and only a written instruction from a human changes which branch that is.
+Stay on the current long-lived `feat/**` branch. Create, switch or delete a branch only
+when explicitly instructed.
 
 Ask first, and wait, before:
 
@@ -56,5 +47,3 @@ Before changing a migrated surface, inspect the v18 implementation. A design-sys
 capability requires a spec. An obvious `apps/pelilauta` feature does not require one
 when the migration preserves its established purpose and behaviour; write or update
 its spec when the work defines or changes either.
-
-Spec, lessons, and review conventions follow the practices published at [ASDLC.io](https://asdlc.io), adapted to this repository.
