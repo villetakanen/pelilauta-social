@@ -1,5 +1,4 @@
 <script lang="ts">
-import type { CnCard } from '@11thdeg/cyan-lit';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { uid } from '../../../stores/session';
 import { hasSeen } from '../../../stores/subscription';
@@ -9,21 +8,19 @@ interface Props {
 }
 const { thread }: Props = $props();
 
+/**
+ * Unread signalling for a thread row in a channel listing. The row is a Surface,
+ * not a card, so it takes the design system's `has-notify` attention state — the
+ * same signal the front page's CnCard shows, on the container this listing uses.
+ *
+ * See specs/design-system/surface/spec.md.
+ */
 $effect(() => {
-  const element = document.getElementById(`thread-${thread.key}`) as CnCard;
-  if (!element) return;
+  const row = document.getElementById(`thread-${thread.key}`);
+  if (!row) return;
 
-  // This efffect should only run if we have an active user session
-  if (!$uid) {
-    element.classList.remove('notify');
-    return;
-  }
-
-  // As we have an UID, we can check if the thread has been seen
-  if ($hasSeen(thread.key, thread.flowTime)) {
-    element.classList.remove('notify');
-    return;
-  }
-  element.classList.add('notify');
+  // Only an active session has read state to signal.
+  const unread = !!$uid && !$hasSeen(thread.key, thread.flowTime);
+  row.classList.toggle('has-notify', unread);
 });
 </script>

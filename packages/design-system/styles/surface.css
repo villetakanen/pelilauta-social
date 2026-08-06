@@ -65,6 +65,65 @@
 }
 
 /*
+ * Attention states. A corner flag any surface may carry: `has-notify` for
+ * information, `has-alert` for warning, the alert winning when both are present
+ * because it is declared second.
+ *
+ * Declared here rather than inside a component because two capabilities need the
+ * same flag — a card and a listing row are the same signal on different
+ * containers — and two copies of this geometry would drift. CnCard composes these
+ * classes and adds only its inset.
+ *
+ * The pseudo-element exists only while a class does, so the fade comes from an
+ * animation rather than a transition: a state resolved in the browser, after the
+ * server response, still arrives rather than snapping in. `--cn-flag-inset` lets a
+ * host that clips its own overflow pull the flag over its border.
+ */
+.has-notify,
+.has-alert {
+  position: relative;
+}
+
+.has-notify::after,
+.has-alert::after {
+  position: absolute;
+  z-index: 0;
+  inset-block-start: var(--cn-flag-inset, 0);
+  inset-inline-end: var(--cn-flag-inset, 0);
+  inline-size: calc(7 * var(--cn-grid));
+  block-size: calc(7 * var(--cn-grid));
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  border-start-end-radius: inherit;
+  pointer-events: none;
+  content: "";
+  animation: cn-flag-in 0.2s ease-in-out;
+}
+
+.has-notify::after {
+  background-color: var(--cn-color-info);
+}
+
+.has-alert::after {
+  background-color: var(--cn-color-warning);
+}
+
+@keyframes cn-flag-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-notify::after,
+  .has-alert::after {
+    animation: none;
+  }
+}
+
+/*
  * Relative nesting. A descendant keeps the background of its own absolute level
  * and shows only the shadow of its rise above the nearest elevated ancestor, so
  * stacked shadows never compound.

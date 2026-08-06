@@ -123,3 +123,33 @@ accumulating.
 
 `.surface` participates in this calculation at elevation 1 by default. When it also
 has an elevation class, the selected level is used.
+
+## Attention states
+
+`has-notify` and `has-alert` paint a triangular flag in the upper-right corner of any
+element. Notification uses the information role, alert the warning role, and alert
+wins when both are set. The flag inherits its host's corner radius and takes no
+pointer events.
+
+```html
+<div class="surface has-notify">A row with unread content</div>
+```
+
+<Composition themes caption="A surface with each attention state">
+  <div class="surface has-notify">Notification</div>
+  <div class="surface has-alert">Alert</div>
+</Composition>
+
+The states are here rather than inside a component because a card and a listing row
+are the same signal on different containers: [CnCard](/components/cn-card) composes
+these same classes and adds only the inset that pulls the flag over its border.
+
+They are safe to toggle from the client on an element that is never hydrated — the
+rules read the classes and nothing else:
+
+```ts
+row.classList.toggle('has-notify', unread)
+```
+
+The flag announces nothing. A consumer that shows one carries the meaning in text or
+another accessible state.

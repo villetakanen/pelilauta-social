@@ -59,8 +59,9 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
 <!--
   `cn-card`, `has-notify` and `has-alert` are public names: a consumer whose state
   resolves after the server response toggles the flag classes on this root rather
-  than re-rendering a card the listing never hydrates. The flag rules below read the
-  classes only, so neither name may be renamed or bound to the prop path.
+  than re-rendering a card the listing never hydrates. The flags are Surface's
+  shared attention states (styles/surface.css), which read the classes and nothing
+  else, so neither name may be renamed or bound to the prop path.
 -->
 <article
   class="cn-card elevation-{elevation}"
@@ -148,38 +149,14 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
       --cn-border-radius-card,
       var(--cn-border-radius-large)
     );
+    /* The shared attention flag, pulled a pixel out so it covers the
+       elevation-0 border; the card's own clipping keeps it square with the
+       corner. Geometry and colour live in surface.css. */
+    --cn-flag-inset: -1px;
   }
 
   .cn-card.elevation-0 {
     border: 1px solid var(--cn-border);
-  }
-
-  .cn-card::after {
-    position: absolute;
-    z-index: 0;
-    inset-block-start: -1px;
-    inset-inline-end: -1px;
-    inline-size: calc(7 * var(--cn-grid));
-    block-size: calc(7 * var(--cn-grid));
-    clip-path: polygon(100% 0, 0 0, 100% 100%);
-    border-start-end-radius: var(
-      --cn-border-radius-card,
-      var(--cn-border-radius-large)
-    );
-    pointer-events: none;
-    content: '';
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-  }
-
-  .cn-card.has-notify::after {
-    background-color: var(--cn-color-info);
-    opacity: 1;
-  }
-
-  .cn-card.has-alert::after {
-    background-color: var(--cn-color-warning);
-    opacity: 1;
   }
 
   .cover {

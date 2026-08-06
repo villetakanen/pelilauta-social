@@ -188,19 +188,19 @@ test('the CnCard title retains v20 h4 metrics in a narrow container', async ({
 test('a flag class added on the client raises the flag on an unhydrated CnCard', async ({
   page,
 }) => {
-  // Holds the published state hook against the component's scoped styles: the app
-  // toggles these classes on cards it never hydrates, and Svelte's scoping and CSS
-  // pruning could disconnect the rule from the class without any specimen changing.
+  // Holds CnCard against the shared attention states: the card draws no flag of its
+  // own, so a rename or a stray copy in the component's scoped styles would show up
+  // here rather than in a specimen.
   const card = page.locator(
     '[data-mode="light"] [data-variant="basic"] .cn-card',
   );
   const flag = () =>
     card.evaluate((element) => {
       const style = getComputedStyle(element, '::after');
-      return { opacity: style.opacity, background: style.backgroundColor };
+      return { content: style.content, background: style.backgroundColor };
     });
 
-  expect((await flag()).opacity).toBe('0');
+  expect((await flag()).content).toBe('none');
 
   for (const [state, role] of [
     ['has-notify', '--cn-color-info'],
@@ -218,18 +218,12 @@ test('a flag class added on the client raises the flag on an unhydrated CnCard',
     await card.evaluate((element, className) => {
       element.classList.add(className);
     }, state);
-    // The transition has to settle before the computed opacity is the resting one.
-    await expect
-      .poll(async () => (await flag()).opacity, { timeout: 2000 })
-      .toBe('1');
-    expect((await flag()).background).toBe(expected);
+    await expect.poll(async () => (await flag()).background).toBe(expected);
 
     await card.evaluate((element, className) => {
       element.classList.remove(className);
     }, state);
-    await expect
-      .poll(async () => (await flag()).opacity, { timeout: 2000 })
-      .toBe('0');
+    await expect.poll(async () => (await flag()).content).toBe('none');
   }
 });
 

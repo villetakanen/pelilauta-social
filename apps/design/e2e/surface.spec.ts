@@ -295,3 +295,59 @@ for (const scheme of ['light', 'dark'] as const) {
     });
   });
 }
+
+test('an attention class paints its flag on a surface rendered without one', async ({
+  page,
+}) => {
+  // The state exists for consumers that learn it in the browser and never hydrate
+  // the element, so the class alone has to be enough. Both roles are read from the
+  // page rather than written down here.
+  await page.goto(BOOK);
+
+  const flags = await page.evaluate(() => {
+    const host = document.createElement('div');
+    document.body.append(host);
+
+    const read = (className: string) => {
+      const element = document.createElement('div');
+      element.className = 'surface';
+      host.append(element);
+      const resting = getComputedStyle(element, '::after').content;
+      element.classList.add(className);
+      const style = getComputedStyle(element, '::after');
+      const flagged = {
+        content: style.content,
+        background: style.backgroundColor,
+        clipPath: style.clipPath,
+        pointerEvents: style.pointerEvents,
+      };
+      element.remove();
+      return { resting, ...flagged };
+    };
+
+    const role = (token: string) => {
+      const probe = document.createElement('span');
+      probe.style.color = `var(${token})`;
+      host.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    };
+
+    const result = {
+      notify: read('has-notify'),
+      alert: read('has-alert'),
+      info: role('--cn-color-info'),
+      warning: role('--cn-color-warning'),
+    };
+    host.remove();
+    return result;
+  });
+
+  expect(flags.notify.resting).toBe('none');
+  expect(flags.notify.content).not.toBe('none');
+  expect(flags.notify.background).toBe(flags.info);
+  expect(flags.alert.background).toBe(flags.warning);
+  expect(flags.notify.clipPath).toContain('polygon');
+  expect(flags.notify.pointerEvents).toBe('none');
+});
