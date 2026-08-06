@@ -38,8 +38,15 @@ if (thread.blueskyPostUri) {
 }
 ---
 
+<!--
+  The column is a list of border-separated sections: tags, the Bluesky prompt or embed,
+  and the owner's actions. This block summarises the thread the reader is already on, so
+  it has no destination to preview and takes the same idiom rather than a card. It leads
+  the column, so the separators below it are what divide the blocks.
+-->
 <section class="column-s flex flex-col">
-  <cn-card title={t("threads:info.title")} noun="discussion">
+  <section class="flex flex-col p-2">
+    <h4 class="downscaled m-0">{t("threads:info.title")}</h4>
     <p>
       {toDisplayString(thread.flowTime)}
     </p>
@@ -49,22 +56,22 @@ if (thread.blueskyPostUri) {
       <a href={`/channels/${channel}`} class="link">
         {channel.charAt(0).toUpperCase() + channel.slice(1)}
       </a>
-      <div slot="actions" class="toolbar items-center">
-        <div class="flex align-center">
-          <Icon noun="send" size="small" />
-          <span class="text-caption decoration-none">
-            {thread.replyCount}
-          </span>
-        </div>
-        <ReactionButton
-          target="thread"
-          key={thread.key}
-          title={thread.title}
-          client:only="svelte"
-        />
-      </div>
     </p>
-  </cn-card>
+    <div class="toolbar items-center">
+      <div class="flex align-center">
+        <Icon noun="send" size="small" />
+        <span class="text-caption decoration-none">
+          {thread.replyCount}
+        </span>
+      </div>
+      <ReactionButton
+        target="thread"
+        key={thread.key}
+        title={thread.title}
+        client:only="svelte"
+      />
+    </div>
+  </section>
 
   <EntryTagsWithLabelsSection thread={thread} />
 
