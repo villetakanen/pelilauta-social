@@ -67,9 +67,10 @@ downshift included.
 `.text-label` is intended for caption-sized data whose casing carries meaning; a
 Finnish compound loses its word shape in capitals.
 
-Not decided here yet: link styling, heading wrap, and table typography. The
-boundaries in `specs/design-system/preflight/spec.md` assign them to this
-capability.
+Heading wrap and table typography remain undecided here; the table in
+`specs/design-system/preflight/spec.md` lists them under Typography. Link presentation
+and the distinction between navigation and commands are specified in
+`specs/design-system/links-and-actions/spec.md`.
 
 ## Contract
 
