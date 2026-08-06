@@ -92,7 +92,7 @@ test.describe('Library Page - User Sites Store', () => {
     await page.waitForTimeout(2000);
 
     // Get initial count of site cards
-    const siteCards = page.locator('cn-card');
+    const siteCards = page.locator('article.cn-card');
     const initialCount = await siteCards.count();
 
     // Verify we have sites to test with
@@ -108,7 +108,7 @@ test.describe('Library Page - User Sites Store', () => {
     await page.waitForTimeout(500);
 
     // Verify cards are still visible (filter didn't break anything)
-    const cardsAfterSort = await page.locator('cn-card').count();
+    const cardsAfterSort = await page.locator('article.cn-card').count();
     expect(cardsAfterSort).toBe(initialCount);
   });
 
@@ -174,7 +174,7 @@ test.describe('Library Page - User Sites Store', () => {
     await page.waitForTimeout(2000);
 
     // Count visible site cards
-    const siteCards = page.locator('cn-card');
+    const siteCards = page.locator('article.cn-card');
     const cardCount = await siteCards.count();
 
     // Get footer text which should show the count (use specific selector)

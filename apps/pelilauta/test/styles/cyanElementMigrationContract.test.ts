@@ -14,7 +14,6 @@ describe('Cyan element migration contract', () => {
   it('keeps a bridge for every reached element context', () => {
     const contexts = [
       'cn-bubble',
-      'cn-card',
       'cn-loader',
       'cn-menu',
       'cn-lightbox',
@@ -36,9 +35,6 @@ describe('Cyan element migration contract', () => {
       'cn-bubble .toolbar:first-child { margin-top: calc(-1 * var(--cn-gap)); }',
     );
     expect(compact).toContain(
-      'cn-card > *:last-child, cn-card p:last-of-type { margin-bottom: 0; }',
-    );
-    expect(compact).toContain(
       'main :where(cn-menu) ul { list-style-type: none; margin: 0; padding: 0; display: flex; flex-direction: column; }',
     );
     expect(compact).toContain(
@@ -51,6 +47,13 @@ describe('Cyan element migration contract', () => {
     expect(compact).toContain(
       'body:has(cn-tray-button[aria-expanded="false"]) nav#tray { transform: translateX(100%); }',
     );
+  });
+
+  it('keeps no bridge for an element the application no longer renders', () => {
+    // CnCard is a local component and no `cn-card` element is left in the
+    // application, so a rule reappearing here would be styling nothing — and
+    // would read as a live dependency to whoever finds it.
+    expect(migration).not.toMatch(/\bcn-card\b/);
   });
 
   it('does not copy selectors that cannot cross a component shadow root', () => {
