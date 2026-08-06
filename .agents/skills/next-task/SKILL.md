@@ -36,19 +36,23 @@ Reject a candidate that:
 - changes behaviour outside the epic;
 - is cleanup or scaffolding that can wait until after the first useful slice.
 
-Answer in at most 100 words and exactly these three fields:
+Answer as exactly three unbulleted lines in this template:
 
-- **Next:** one plain-language sentence naming the complete outcome and where it appears.
-- **Includes:** one or two sentences naming the observable behaviour, main affected
-  surfaces or a useful count, and any important behaviour that stays unchanged.
-- **Later:** one sentence naming the closest adjacent work left for later.
+```text
+Task: <terse technical description of the task>
+Rationale: <why this task should be done now>
+Risks: <caveats and risks of taking this route>
+```
+
+Limit the `Task` value to 73 characters. Limit the `Rationale` and `Risks` values
+to 221 characters each. The labels do not count toward these limits. Make the
+rationale compare the task's timing with its closest alternatives. State concrete
+uncertainty, coupling or regression exposure in risks; say when none is material.
 
 Do not list files, call sites, commands, tests, implementation steps or acceptance
 criteria. Write for someone deciding whether the result is worth doing, not for its
-implementer. Avoid architecture and process jargon such as capability, entry point,
-migration, or which layer controls the result when plain product language says what
-changes. Do not add an introduction, conclusion, justification section or alternative
-candidate.
+implementer. Use technical terms only when they identify the task or its tradeoffs
+more precisely. Do not add an introduction, conclusion or alternative candidate.
 
 Do not edit the epic, create task files, or begin implementation unless explicitly
 requested.
