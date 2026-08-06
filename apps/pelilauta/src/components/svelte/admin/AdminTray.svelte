@@ -59,11 +59,6 @@ async function testSSRNoAuth() {
       </a>
     </li>
     <li>
-      <a href="/admin/sheets">
-        <Icon noun="adventurer" size="small" /> Character Sheets
-      </a>
-    </li>
-    <li>
       <a href="/admin/sites">
         <Icon noun="mekanismi" size="small" /> Site Activity
       </a>
