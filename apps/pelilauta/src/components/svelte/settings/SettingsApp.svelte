@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { profile, profileMissing } from '@stores/session/profile';
 import ProfileSection from '../../shared/ProfileSection.svelte';
 import Actions from './Actions.svelte';
@@ -30,7 +31,7 @@ import RemoveAccountSection from './RemoveAccountSection.svelte';
     </div>
   {:else}
     <div>
-      <cn-loader></cn-loader>
+      <CnLoader />
     </div>
   {/if}
 </div>

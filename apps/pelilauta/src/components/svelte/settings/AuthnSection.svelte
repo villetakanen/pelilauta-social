@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import stores and utilities
 
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authUser, uid } from 'src/stores/session'; // Use centralized session stores
 import { profile } from 'src/stores/session/profile'; // $profile is used directly as per nanostores/svelte
@@ -83,7 +84,7 @@ async function updateAvatar() {
           onclick={updateAvatar}
         >
           {#if loadingAvatarUpdate}
-            <cn-loader></cn-loader>
+            <CnLoader inline />
           {:else}
             <Icon noun="avatar" />
           {/if}
