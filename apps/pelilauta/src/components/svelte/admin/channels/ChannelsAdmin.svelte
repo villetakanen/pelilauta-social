@@ -142,7 +142,7 @@ function handleChannelDeleted(deletedSlug: string) {
           <Icon noun="info" size="small" />
           {error}
         </p>
-                <button onclick={() => error = null} class="btn btn-sm mt-2">
+                <button onclick={() => error = null} class="mt-2">
           <Icon noun="tools" />
           {t('admin:errors.retry')}
         </button>

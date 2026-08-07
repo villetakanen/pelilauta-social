@@ -164,7 +164,6 @@ describe('the two families', () => {
       '../styles/preflight.css',
       '../styles/tokens.css',
       '../styles/units.css',
-      '../styles/icon.css',
       '../styles/color.css',
       '../styles/color-theme.css',
       '../styles/color-reference.css',

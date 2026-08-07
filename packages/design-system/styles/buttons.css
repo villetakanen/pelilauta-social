@@ -18,20 +18,6 @@
   --cn-font-weight-button: var(--cn-font-weight-caption);
   --cn-line-height-button: var(--cn-line-height-small);
   --cn-letter-spacing-button: var(--cn-letter-spacing-caption);
-
-  /* Shared interaction motion, as v20 declares it. */
-  --cn-duration-ui: 0.22s;
-  --cn-easing-ui: ease-in-out;
-  /*
-   * Two roles the button is the first to need, and neither is a button decision:
-   * elevation resolves faster than surface, and entering a state eases out while
-   * leaving keeps the neutral curve. Both belong to a motion capability that v21
-   * has not written yet, which is why they are declared here and specified
-   * nowhere — the buttons spec says only that feedback uses the shared roles.
-   * Move them, with their reasoning, when motion gets its own home.
-   */
-  --cn-duration-ui-fast: calc(var(--cn-duration-ui) / 2);
-  --cn-easing-ui-enter: ease-out;
 }
 
 /*
@@ -69,8 +55,16 @@ a.button[href]:not(.fab) {
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
+  /*
+   * Elevation resolves faster than surface, and a state's arrival eases out while
+   * its departure keeps the neutral curve. Both are private to the button: one
+   * consumer, tuned by review, and no other capability may read them until one
+   * needs them (docs/ARCHITECTURE.md).
+   */
+  --_elevation-duration: calc(var(--cn-duration-ui) / 2);
+  --_enter-easing: ease-out;
   transition:
-    box-shadow var(--cn-duration-ui-fast) var(--cn-easing-ui),
+    box-shadow var(--_elevation-duration) var(--cn-easing-ui),
     opacity var(--cn-duration-ui) var(--cn-easing-ui);
 
   /*
@@ -146,7 +140,7 @@ a.button[href]:not(.fab)::after {
 button:not(.fab):hover::after,
 a.button[href]:not(.fab):hover::after {
   background-color: var(--cn-hover);
-  transition-timing-function: var(--cn-easing-ui-enter);
+  transition-timing-function: var(--_enter-easing);
 }
 
 button:not(.fab):active::after,
@@ -157,7 +151,7 @@ a.button[href]:not(.fab):active::after {
 button:not(.fab):hover,
 a.button[href]:not(.fab):hover {
   box-shadow: var(--cn-shadow-button-hover);
-  transition-timing-function: var(--cn-easing-ui-enter);
+  transition-timing-function: var(--_enter-easing);
 }
 
 button:not(.fab):focus-visible,

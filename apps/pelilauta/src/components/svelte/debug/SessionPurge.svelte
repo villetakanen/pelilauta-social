@@ -163,7 +163,7 @@ async function purgeSession() {
     </div>
 
     <div class="toolbar justify-end mt-2">
-      <button onclick={purgeSession} disabled={isPurging} class="button-warn">
+      <button onclick={purgeSession} disabled={isPurging} >
         {#if isPurging}
           <CnLoader inline />
         {/if}
@@ -185,8 +185,4 @@ async function purgeSession() {
 </section>
 
 <style>
-  .button-warn {
-    --background-color: var(--cn-color-status-error);
-    --text-color: var(--cn-color-on-status-error);
-  }
 </style>

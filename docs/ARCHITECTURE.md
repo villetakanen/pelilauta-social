@@ -22,7 +22,14 @@ ported. `App*` is reserved pending a separate ownership decision.
 | :--- | :--- | :--- |
 | Public design-system token | `--cn-*` | `--cn-grid` |
 | Theme palette | `--chroma-*` | `--chroma-primary-50` |
+| Private to a scope | `--_*` | `--_elevation-duration` |
 | Component private | local | `--icon-dim` |
+
+A token private to a scope carries `_` where a public one carries `cn-`, and is
+declared on the scope that owns it rather than on `:root`. Another capability may read
+a `--cn-*` token; a `--_*` token may change or disappear with its scope. A value with
+one consumer is private. Renaming it to `--cn-*` requires a second capability that
+needs it.
 
 Do not introduce `--cyan-*` or undocumented `--color-*` tokens.
 

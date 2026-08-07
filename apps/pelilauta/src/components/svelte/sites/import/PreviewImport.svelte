@@ -170,7 +170,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
   
   <div class="toolbar mb-2">
     <span class="text-small text-low">{pages.length} file{pages.length === 1 ? '' : 's'} ready</span>
-    <button class="button outlined small" onclick={clearAll}>Clear All</button>
+    <button class="button" onclick={clearAll}>Clear All</button>
   </div>
   
   <div class="flex flex-col">
@@ -208,7 +208,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
           </div>
           
           <button 
-            class="button outlined small"
+            class="button"
             onclick={() => removeFile(index)}
           >
             Remove
@@ -220,7 +220,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
   
   <div class="toolbar mt-4">
     <button 
-      class="button primary" 
+      class="button" 
       onclick={importPages}
       disabled={!canImport}
     >
@@ -230,7 +230,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
         Import {pages.length} Page{pages.length === 1 ? '' : 's'}
       {/if}
     </button>
-    <button class="button outlined" onclick={clearAll} disabled={importing}>
+    <button class="button" onclick={clearAll} disabled={importing}>
       Cancel
     </button>
   </div>

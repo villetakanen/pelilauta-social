@@ -185,7 +185,7 @@ function setUsePlainTextURLs(e: Event) {
           <button 
             disabled={!valid}
             type="submit" 
-            class="call-to-action">
+            class="cta">
             {t('actions:create.site')}
           </button>
         </div>

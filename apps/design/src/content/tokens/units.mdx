@@ -6,7 +6,6 @@ order: 5
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
-import iconSource from '@design-system/styles/icon.css?raw'
 
 This is the lexicon: what the tokens are, and what each one is worth. How these
 measurements recur in components, and how radii relate to the grid, is documented
@@ -53,12 +52,28 @@ every other `rem` length; they simply do not derive from `--cn-grid`. Four of th
 on the grid anyway — the medium default is four and a half steps, which is the reason the
 family is stated absolutely.
 
-They are declared in `styles/icon.css`, imported by `styles/tokens.css` alongside the
-grid.
+They are declared in `styles/units.css` beside the grid: two token files of a dozen lines
+each bought nothing, so the primitives that are not colour share one stylesheet.
 
 <TokenTable
-  source={iconSource}
+  source={unitsSource}
   prefix="--cn-icon-size"
+/>
+
+## Motion
+
+How long a control takes to answer a pointer, and the curve it uses. Every control that
+responds to hover, activation or focus reads these two; a control that needs a second
+speed derives it privately rather than publishing another role.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-duration"
+/>
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-easing"
 />
 
 ## Breakpoints

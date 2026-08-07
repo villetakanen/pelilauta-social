@@ -5,5 +5,4 @@
  * ship together. Importing color.css alone omits that dependency.
  */
 @import "./units.css";
-@import "./icon.css";
 @import "./color.css";
