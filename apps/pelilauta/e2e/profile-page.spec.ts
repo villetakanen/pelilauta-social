@@ -87,8 +87,8 @@ test.describe('Profile Page - Site List', () => {
     );
 
     // The ProfileSiteListPlaceholder should be visible initially
-    // It contains a cn-loader element
-    const loader = page.locator('cn-loader, .cn-loader');
+    // It renders a CnLoader
+    const loader = page.locator('.cn-loader');
 
     // If the page loads very quickly, the loader might not be visible
     // So we use a short timeout and don't fail if it's not found

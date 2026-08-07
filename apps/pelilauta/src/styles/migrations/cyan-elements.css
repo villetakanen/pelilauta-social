@@ -34,33 +34,6 @@ cn-bubble .toolbar:last-child {
 }
 
 /*
- * Sources: core/cn-loader.css, core/buttons.css and core/fab.css.
- * Consumer: loading states. Future owners: Loader, Button and Fab; remove after
- * those local components own their composition.
- */
-section > cn-loader,
-article > cn-loader {
-  margin: var(--cn-line) auto;
-}
-
-button cn-loader:first-child:not(:only-child),
-a.button cn-loader:first-child:not(:only-child) {
-  margin-left: calc(var(--cn-grid) * -1);
-}
-
-button cn-loader:only-child,
-a.button cn-loader:only-child {
-  margin-top: 1px;
-  margin-right: -9px;
-  margin-left: -9px;
-}
-
-button.fab cn-loader:first-child:not(:only-child),
-a.button.fab cn-loader:first-child:not(:only-child) {
-  margin-left: 0;
-}
-
-/*
  * Source: core/cn-menu.css. Consumer: reply actions. Future owner: Menu; remove
  * when the reply menu no longer renders cn-menu.
  */
