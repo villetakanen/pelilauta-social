@@ -64,6 +64,12 @@ the text challenges the spec, not the code:
 - **Compatibility:** claims about v18 or v20 that no reader can check.
   Appearance follows v20; a v18 look-alike claim is a defect.
 - **Scope:** one capability, and nothing another spec already states.
+- **Consequence:** line by line, ask of every requirement — *could a competent
+  agent, working only from this spec, make a choice that would be wrong in a way a
+  reviewer would notice across components?* If no choice it permits is wrong, the
+  line states a technique and belongs in a code comment. If a wrong choice would
+  show up in more than this capability, the line is another capability's role, and
+  this spec names the role rather than its value. What survives is the intent.
 - **Subtraction:** run last, line by line — the template's derivability test.
 
 Unresolved findings go to the spec approver with the approval request.

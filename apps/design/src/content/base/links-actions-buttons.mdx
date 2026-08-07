@@ -6,7 +6,10 @@ order: 5
 
 import Composition from '@design-system/books/specimens/Composition.astro'
 import LinkStateTable from '@design-system/books/specimens/LinkStateTable.astro'
+import ButtonSpecimens from '@design-system/books/specimens/ButtonSpecimens.astro'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import linkSource from '@design-system/styles/links.css?raw'
+import unitsSource from '@design-system/styles/units.css?raw'
 
 We distinguish links from actions by outcome. A link moves the reader to a document,
 resource, or location. An action submits data or changes the current task.
@@ -47,3 +50,79 @@ A component might replace the resting colour or underline only when its own desi
 defines another link cue and preserves visible hover and keyboard focus.
 
 For an example, see [CnCard](/components/cn-card).
+
+## Buttons
+
+A button is presentation, never a change of meaning: a command is a `button`, and
+navigation that looks like a button is an `a class="button"` with a destination. The
+stylesheet selects those two elements, so the same variant on either one looks the same
+and behaves as its element does.
+
+<Composition themes caption="The four variants, in Light and Dark">
+  <ButtonSpecimens group="variants" />
+</Composition>
+
+| Variant | Reach for it when |
+| :--- | :--- |
+| Default | The action or destination is a standard one. |
+| `.text` | The action is secondary, and a filled control would outrank the content. |
+| `.cta` | It is the single most important action or destination in the composition. |
+| `.secondary` | v20's alternate chroma is explicitly required. It is not the low-prominence variant. |
+
+`.secondary` applies only where the button itself carries the class. An ancestor with
+that class recolours nothing, which is why the default variant states its surface
+against the other three by name.
+
+<Composition themes caption="The same variant as a command and as a destination">
+  <ButtonSpecimens group="elements" />
+</Composition>
+
+### Content
+
+A button holds a label, a leading icon with a label, an icon alone, or an inline
+`CnLoader` with or without a label. The button is a context that requires one icon size,
+so it sets the icon-size tokens in its own scope and every icon inside renders small
+whatever size it selected.
+
+<Composition themes caption="Label, leading icon, icon only, and a command in flight">
+  <ButtonSpecimens group="compositions" />
+</Composition>
+
+An icon or loader alone makes the control a circle. A command in flight is a disabled
+native button holding an inline loader — the loader reports progress while the button
+keeps the accessible name of the command. Loading is not a state a link button has.
+
+### States
+
+Hover adds the button elevation and a wash over the variant's own surface; active uses
+the stronger wash. Neither touches the foreground, so a label keeps its contrast.
+Keyboard focus adds the focus ring rather than a colour change. Only a native button has
+a disabled state, at half opacity: a link button is either navigable or absent, and the
+design system publishes no disabled-link presentation.
+
+<Composition themes caption="Resting, disabled, and a text link button">
+  <ButtonSpecimens group="states" />
+</Composition>
+
+State changes use the shared UI duration and easing, `--cn-duration-ui` and
+`--cn-easing-ui`, and resolve without motion for a reader who asks for reduced motion.
+
+### Geometry
+
+<Composition themes caption="Intrinsic width, a stretched button, and a label that truncates">
+  <ButtonSpecimens group="layout" />
+</Composition>
+
+A labelled button sizes to its content and stretches when its layout stretches it.
+Truncation belongs to the label: the icon or loader keeps its square while the text gives
+way. The visible pill is narrower than the row it occupies, so a button centres on the
+grid without its row growing.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-button"
+  caption="Control geometry, from styles/units.css"
+/>
+
+The radius is half the visible block size, the inline padding is one gap, and the gap
+between an icon and its label is one grid unit.

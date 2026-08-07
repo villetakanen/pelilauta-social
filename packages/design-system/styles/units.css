@@ -17,6 +17,10 @@
   /* For a consumer that wants "rounded" without choosing a step. */
   --cn-border-radius: var(--cn-border-radius-medium);
 
+  /* Control geometry: the visible pill, and the row it occupies. */
+  --cn-button-size: calc(var(--cn-grid) * 4.75); /* 38px */
+  --cn-button-physical-size: calc(var(--cn-grid) * 7); /* 56px */
+
   /*
    * Breakpoints, in rem so a query follows a reader's enlarged default text.
    * A media or container query cannot read a custom property: a rule that

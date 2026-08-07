@@ -34,6 +34,17 @@ choosing one.
   prefix="--cn-border-radius"
 />
 
+## Control geometry
+
+A button's visible pill and the row it occupies, both grid multiples. The pill is narrower
+than the row so a control centres on the grid without the row growing around it; the
+button stylesheet reads both and derives its radius from the first.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-button"
+/>
+
 ## Icon sizes
 
 Absolute `rem` literals rather than grid multiples, following v20, which files them beside

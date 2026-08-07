@@ -22,19 +22,22 @@ describe('Cyan Icon migration contract', () => {
     const source = compact(readFileSync(migrationPath, 'utf8'));
 
     expect(source).toContain(
-      ':where(button, a.button, .fab) .cn-icon { --cn-icon-size-xsmall: var(--cn-icon-size-small); --cn-icon-size: var(--cn-icon-size-small); --cn-icon-size-large: var(--cn-icon-size-small); --cn-icon-size-xlarge: var(--cn-icon-size-small); }',
-    );
-    expect(source).toContain(
-      'button .cn-icon:first-child:not(:only-child), a.button .cn-icon:first-child:not(:only-child) { margin-left: calc(var(--cn-grid) * -1); }',
-    );
-    expect(source).toContain(
-      'button .cn-icon:only-child, a.button .cn-icon:only-child { margin-top: 1px; margin-right: -9px; margin-left: -9px; }',
+      ':where(.fab) .cn-icon { --cn-icon-size-xsmall: var(--cn-icon-size-small); --cn-icon-size: var(--cn-icon-size-small); --cn-icon-size-large: var(--cn-icon-size-small); --cn-icon-size-xlarge: var(--cn-icon-size-small); }',
     );
     expect(source).toContain(
       'button.fab .cn-icon:first-child:not(:only-child), a.button.fab .cn-icon:first-child:not(:only-child) { margin-left: 0; }',
     );
     expect(source).toContain('.flex.items-start > .cn-icon { flex-grow: 0; }');
     expect(source).toContain('h3 .cn-icon { vertical-align: middle; }');
+  });
+
+  it('leaves the button context to the design system', () => {
+    // styles/buttons.css sets the icon-size tokens in the button's own scope and
+    // states the leading-icon offset, so a rule here would restate a capability
+    // the package now provides — and would read as a live Cyan dependency.
+    const source = compact(readFileSync(migrationPath, 'utf8'));
+
+    expect(source).not.toMatch(/(?<!\.)\bbutton(?![.\w-])[^{]*\.cn-icon/);
   });
 
   it('loads after stable Icon CSS and before application overrides', () => {
