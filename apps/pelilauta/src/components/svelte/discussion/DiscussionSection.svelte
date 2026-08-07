@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import {
   REPLIES_COLLECTION,
@@ -99,7 +100,7 @@ onMount(async () => {
 
     {#if isLoading}
       <div class="toolbar items-center">
-        <cn-loader small></cn-loader>
+        <CnLoader inline />
       </div>
     {:else if isAuthenticated}
       <ReplyDialog {thread} />

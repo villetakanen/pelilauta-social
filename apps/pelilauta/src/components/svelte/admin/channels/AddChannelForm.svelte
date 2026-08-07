@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import { forumTopics } from '@stores/admin/ChannelsAdminStore';
@@ -198,7 +199,7 @@ function handleSubmit(event: SubmitEvent) {
         disabled={isSaving || !channelName || !selectedCategory}
       >
         {#if isSaving}
-          <cn-loader small></cn-loader>
+          <CnLoader inline />
         {:else}
           <Icon noun="add" />
         {/if}

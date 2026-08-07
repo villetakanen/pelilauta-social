@@ -14,7 +14,6 @@ describe('Cyan element migration contract', () => {
   it('keeps a bridge for every reached element context', () => {
     const contexts = [
       'cn-bubble',
-      'cn-loader',
       'cn-menu',
       'cn-lightbox',
       'cn-reaction-button',
@@ -54,6 +53,11 @@ describe('Cyan element migration contract', () => {
     // application, so a rule reappearing here would be styling nothing — and
     // would read as a live dependency to whoever finds it.
     expect(migration).not.toMatch(/\bcn-card\b/);
+
+    // CnLoader replaced every `cn-loader` element, including the ones inside
+    // buttons and fabs whose negative margins pulled a 72px ring back into a
+    // control. The inline variant needs none of that.
+    expect(migration).not.toMatch(/\bcn-loader\b/);
   });
 
   it('does not copy selectors that cannot cross a component shadow root', () => {

@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { isActive, isRehydrating } from 'src/stores/session/computed';
 import { profile } from 'src/stores/session/profile';
 import { t } from 'src/utils/i18n';
@@ -6,7 +7,7 @@ import { t } from 'src/utils/i18n';
 
 {#if $isRehydrating}
   <div class="p-1">
-    <cn-loader small></cn-loader>
+    <CnLoader inline />
   </div>
 {:else if $isActive}
   <!-- Using isActive ensures we only show the authenticated UI when the session is fully verified -->

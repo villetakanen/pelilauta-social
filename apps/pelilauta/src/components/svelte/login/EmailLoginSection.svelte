@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import utilities, stores, and lifecycle functions
 
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
@@ -289,7 +290,7 @@ onMount(async () => {
       <div class="toolbar justify-end">
         <button type="submit" disabled={suspend}>
           {#if suspend}
-            <cn-loader></cn-loader>
+            <CnLoader inline />
           {/if}
           <span>Verify Login Link</span>
         </button>
@@ -311,7 +312,7 @@ onMount(async () => {
       <div class="toolbar justify-end">
         <button type="submit" disabled={suspend}>
           {#if suspend}
-            <cn-loader></cn-loader>
+            <CnLoader inline />
           {:else}
             <Icon noun="send" />
           {/if}

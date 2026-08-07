@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import utilities and i18n function
 
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
@@ -74,7 +75,7 @@ async function loginWithGoogle(e: SubmitEvent) {
   <form onsubmit={loginWithGoogle}>
     <button type="submit" disabled={loading}>
       {#if loading}
-        <cn-loader noun="google"></cn-loader>
+        <CnLoader inline noun="google" />
       {:else}
         <Icon noun="google" />
       {/if}

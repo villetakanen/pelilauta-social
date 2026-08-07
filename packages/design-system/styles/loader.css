@@ -10,9 +10,8 @@
 
 /*
  * Auto-centres <span class="cn-loader"> inside common container shells. A CnCard
- * is deliberately absent: its action row carries commands, and a card whose
- * subject is still resolving shows the loader in its content region, which this
- * rule does not reach (plans/debt/card-loading-region.md).
+ * is deliberately absent: a card stands for one subject, so a listing that is
+ * still loading shows a loader in place of its cards rather than inside one.
  */
 section > .cn-loader,
 article > .cn-loader {

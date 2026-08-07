@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import stores, utilities, and i18n function
 
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils'; // For user feedback
 import { t } from 'src/utils/i18n';
@@ -103,7 +104,7 @@ async function deRegister(e: SubmitEvent) {
             class="cta"
           >
             {#if loading}
-              <cn-loader></cn-loader>
+              <CnLoader inline />
             {:else}
               <Icon noun="check" />
             {/if}

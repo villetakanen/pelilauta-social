@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
 import { getProfileAtom, loading } from '../../../stores/profiles';
@@ -25,7 +26,7 @@ const isLoading = $derived.by(() => {
 </script>
 
 {#if isLoading}
-  <cn-loader inline></cn-loader>
+  <CnLoader inline />
 {:else if profile}
   <a class="cn-nick" href="/profiles/{profile.key}">{profile.nick}</a>
 {:else}

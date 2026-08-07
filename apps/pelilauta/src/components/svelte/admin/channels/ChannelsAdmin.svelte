@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import {
@@ -115,7 +116,7 @@ function handleChannelDeleted(deletedSlug: string) {
       <div class="flex gap-2">
         <button onclick={refreshAllChannels} class="text" disabled={isLoading}>
           {#if isLoading}
-            <cn-loader small></cn-loader>
+            <CnLoader inline />
           {:else}
             <Icon noun="spiral" />
           {/if}
@@ -148,7 +149,7 @@ function handleChannelDeleted(deletedSlug: string) {
       </div>
     {:else if isLoading}
       <div class="p-4 text-center">
-        <cn-loader></cn-loader>
+        <CnLoader />
         <p class="text-caption">{t('admin:channels.loading')}</p>
       </div>
     {:else}  

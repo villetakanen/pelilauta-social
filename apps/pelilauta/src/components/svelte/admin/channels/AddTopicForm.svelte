@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch, authedPost } from '@firebase/client/apiClient';
 import { addTopicFormOpen } from '@stores/admin/ChannelsAdminStore';
@@ -69,7 +70,7 @@ function handleCancel() {
           disabled={!topicName.trim() || isSubmitting}
         >
           {#if isSubmitting}
-            <cn-loader small></cn-loader>
+            <CnLoader inline />
           {:else}
             <Icon noun="tag" />
           {/if}

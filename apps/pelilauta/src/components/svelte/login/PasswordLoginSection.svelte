@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
 import { captureError } from 'src/utils/client/sentry';
@@ -120,7 +121,7 @@ async function loginWithPassword(e: SubmitEvent) {
     <div class="toolbar justify-end">
       <button type="submit" disabled={loading}>
         {#if loading}
-          <cn-loader></cn-loader>
+          <CnLoader inline />
         {/if}
         <span>Login</span>
       </button>

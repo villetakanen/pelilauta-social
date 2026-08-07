@@ -1,20 +1,16 @@
 ---
-import { createSite, type Site } from 'src/schemas/SiteSchema';
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { t } from 'src/utils/i18n';
-import SiteCard from '../../svelte/sites/SiteCard.svelte';
 
-// A placeholder when loading user's sites.
-
-const loadingSite: Site = createSite({
-  key: 'loading',
-  name: 'Loading...',
-  system: 'mekanismi',
-});
+/*
+ * The server:defer fallback for ProfileSiteList. It keeps the section and its
+ * heading, so the column does not move when the real list arrives, and shows a
+ * loader where the cards will be. It renders no card: a card stands for one site,
+ * and there is no site to stand for yet.
+ */
 ---
 
 <section class="column-s">
   <h2>{t("profile:siteList.title")}</h2>
-  <div class="flex flex-col">
-    <SiteCard site={loadingSite} loading />
-  </div>
+  <CnLoader />
 </section>
