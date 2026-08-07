@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { pushSnack } from '@utils/client/snackUtils';
 import { logError } from '@utils/logHelpers';
 import { getAllAccounts } from 'src/firebase/client/admin/getAllAccounts';
@@ -43,7 +44,7 @@ async function purgeUser(uid: string) {
     <article class="column-l">
       <h1>Users</h1>
       {#await getAllAccounts()}
-        <cn-loader></cn-loader>
+        <CnLoader />
       {:then accounts}
       <div class="user-grid">
         <div class="elevation-1 p-2">NICK</div>
