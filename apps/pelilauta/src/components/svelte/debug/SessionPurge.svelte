@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { logDebug, logError } from 'src/utils/logHelpers';
 
 // Component state
@@ -164,7 +165,7 @@ async function purgeSession() {
     <div class="toolbar justify-end mt-2">
       <button onclick={purgeSession} disabled={isPurging} class="button-warn">
         {#if isPurging}
-          <cn-loader></cn-loader>
+          <CnLoader inline />
         {/if}
         <span>Purge Session & Reset</span>
       </button>
