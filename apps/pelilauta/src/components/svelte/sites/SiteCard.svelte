@@ -1,6 +1,5 @@
 <script lang="ts">
 import CnCard from '@design-system/components/CnCard.svelte';
-import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -10,10 +9,9 @@ import { uid } from '../../../stores/session';
 
 interface Props {
   site: Site;
-  loading?: boolean;
   showPlayerIndicator?: boolean;
 }
-const { site, loading = false, showPlayerIndicator = false }: Props = $props();
+const { site, showPlayerIndicator = false }: Props = $props();
 const owns = $derived(() => site.owners.includes($uid));
 const plays = $derived(() => site.players?.includes($uid));
 
@@ -45,10 +43,6 @@ const coverSrcset = $derived.by(() => {
   sizes="(max-width: 768px) 100vw, 450px"
   description={site.description}
 >
-  {#if loading}
-    <span class="loading"><CnLoader /></span>
-  {/if}
-
   {#snippet actions()}
     <span class="membership">
       {#if owns()}
@@ -69,8 +63,4 @@ const coverSrcset = $derived.by(() => {
     gap: var(--cn-grid);
   }
 
-  .loading {
-    display: flex;
-    justify-content: center;
-  }
 </style>
