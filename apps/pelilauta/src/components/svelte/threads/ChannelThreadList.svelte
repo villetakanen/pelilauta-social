@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import type { Channel } from '@schemas/ChannelSchema';
 import type { Thread } from '@schemas/ThreadSchema';
@@ -101,7 +102,7 @@ async function loadMoreThreads() {
           class="flex-none"
         >
           {#if isLoading}
-            <cn-loader noun={channel.icon}></cn-loader>
+            <CnLoader inline noun={channel.icon} />
           {:else}
             <Icon noun={channel.icon} />
           {/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -173,7 +174,7 @@ function onAddFiles(newFiles: File[]) {
     <div class="grow"></div>
     <button type="submit" disabled={saving || !changed} data-testid="send-thread-button">
       {#if saving}
-        <cn-loader noun="send" style="display:inline-block;vertical-align: middle"></cn-loader>
+        <CnLoader inline noun="send" />
       {:else}
         <Icon noun="send" />
       {/if}
