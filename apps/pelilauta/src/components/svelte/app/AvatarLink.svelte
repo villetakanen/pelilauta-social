@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { getProfileAtom, loading } from '../../../stores/profiles';
 
 interface Props {
@@ -12,7 +13,7 @@ const isLoading = $derived($loading.includes(uid));
 </script>
 
 {#if isLoading}
-  <cn-loader icon="avatar"></cn-loader>
+  <CnLoader inline noun="avatar" />
 {:else if profile}
   <a href="/profiles/{profile.key}" aria-label="{profile.nick}">
     <cn-avatar

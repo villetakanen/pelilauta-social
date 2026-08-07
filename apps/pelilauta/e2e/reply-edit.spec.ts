@@ -34,10 +34,10 @@ test('can create and edit a reply', async ({ page }) => {
       'Test failed: User is not logged in (Sign in button visible)',
     );
   }
-  if (await page.locator('cn-loader').isVisible()) {
+  if (await page.locator('cn-loader, .cn-loader').isVisible()) {
     console.log('Loader is visible, waiting...');
     await page
-      .locator('cn-loader')
+      .locator('cn-loader, .cn-loader')
       .waitFor({ state: 'hidden', timeout: 10000 });
   }
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { getSite, loading } from 'src/stores/sites/sitesStore';
 import { t } from 'src/utils/i18n';
 
@@ -13,7 +14,7 @@ const isLoading = $derived($loading.includes(siteKey));
 </script>
 
 {#if isLoading && !site}
-  <cn-loader inline></cn-loader>
+  <CnLoader inline />
 {:else if site}
   <a href="/sites/{site.key}">{site.name}</a>
 {:else}
