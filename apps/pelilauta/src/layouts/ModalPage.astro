@@ -1,6 +1,7 @@
 ---
 import AppBar from '../components/server/AppBar.astro';
 import AppRail from '../components/server/AppRail.astro';
+import AppChrome from '../components/server/app/AppChrome.astro';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 import BaseTail from '../components/server/BaseTail.astro';
 
@@ -32,9 +33,15 @@ const { title, shortTitle, description, image } = Astro.props;
     <main>
       <slot />
     </main>
-    <nav id="fab-tray">
-      <slot name="fab-tray" />
-    </nav>
+    {
+      /* No `rail` prop: this layout hides the rail on handheld screens, so there
+         is no block-end chrome for the tray to clear. */
+      Astro.slots.has('fab-tray') && (
+        <AppChrome>
+          <slot name="fab-tray" />
+        </AppChrome>
+      )
+    }
     <BaseTail />
   </body>
 </html>
