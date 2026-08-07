@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import { forumTopics } from '@stores/admin/ChannelsAdminStore';
@@ -175,7 +176,7 @@ async function moveTopicDown() {
     aria-label={t('admin:topics.moveUp')}
     >
     {#if isMoving}
-      <cn-loader small></cn-loader>
+      <CnLoader inline />
     {:else}
       <Icon noun="arrow-up" />
     {/if}
@@ -187,7 +188,7 @@ async function moveTopicDown() {
     aria-label={t('admin:topics.moveDown')}
     >
     {#if isMoving}
-      <cn-loader small></cn-loader>
+      <CnLoader inline />
     {:else}
       <Icon noun="arrow-down" />
     {/if}
@@ -200,7 +201,7 @@ async function moveTopicDown() {
       title={hasChannels ? t('admin:topics.deleteDisabled') : t('admin:topics.delete')}
     >
       {#if isDeleting}
-        <cn-loader small></cn-loader>
+        <CnLoader inline />
       {:else}
         <Icon noun="delete" />
       {/if}

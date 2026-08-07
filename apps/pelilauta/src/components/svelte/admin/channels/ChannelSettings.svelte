@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import type { Channel } from 'src/schemas/ChannelSchema';
@@ -203,7 +204,7 @@ async function handleDelete() {
           disabled={!changes || isSaving}
         >
           {#if isSaving}
-            <cn-loader small></cn-loader>
+            <CnLoader inline />
           {/if}
           {t('actions:save')}
         </button>
@@ -231,7 +232,7 @@ async function handleDelete() {
       title="Refresh channel statistics"
     >
       {#if isRefreshing}
-        <cn-loader small></cn-loader>
+        <CnLoader inline />
       {:else}
         <Icon noun="tools" />
       {/if}
@@ -246,7 +247,7 @@ async function handleDelete() {
       title={t('admin:channels.actions.delete')}
     >
       {#if isDeleting}
-        <cn-loader small></cn-loader>
+        <CnLoader inline />
       {:else}
         <Icon noun="delete" />
       {/if}
