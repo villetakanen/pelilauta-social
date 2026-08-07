@@ -82,9 +82,14 @@
   --cn-fab-cta: var(--cn-color-error-60);
   --cn-fab-cta-blend: var(--cn-color-surface-50);
   --cn-on-fab-cta: var(--cn-color-surface-100);
-  --cn-fab-secondary: var(--cn-color-surface-30);
-  --cn-fab-secondary-blend: var(--cn-color-surface-60);
-  --cn-on-fab-secondary: var(--cn-color-surface-100);
+  /* v20 builds the secondary fab from the button grey, blended toward on-surface. */
+  --cn-fab-secondary: var(--cn-button);
+  --cn-fab-secondary-blend: color-mix(
+    in oklch,
+    var(--cn-button),
+    var(--cn-on-surface) 22%
+  );
+  --cn-on-fab-secondary: var(--cn-on-button);
   --cn-hover: light-dark(
     color-mix(in oklch, var(--cn-color-surface-50), transparent 90%),
     color-mix(in oklch, var(--cn-color-surface-50), transparent 80%)

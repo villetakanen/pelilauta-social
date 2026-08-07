@@ -44,6 +44,13 @@ button stylesheet reads both and derives its radius from the first.
   prefix="--cn-button"
 />
 
+The floating action button is the row's full height, so a fab and a button row agree.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-fab"
+/>
+
 ## Icon sizes
 
 Absolute `rem` literals rather than grid multiples, following v20, which files them beside
@@ -58,6 +65,16 @@ each bought nothing, so the primitives that are not colour share one stylesheet.
 <TokenTable
   source={unitsSource}
   prefix="--cn-icon-size"
+/>
+
+## Stacking
+
+Which layer a pinned element occupies. The FAB tray is the only v21 consumer; dialogs,
+modals and transient messages still come from Cyan at higher values.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-z"
 />
 
 ## Motion

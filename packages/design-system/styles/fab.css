@@ -1,0 +1,164 @@
+/*
+ * Floating action buttons and the tray that pins them.
+ *
+ * A FAB is a native `button.fab`, an `a.fab[href]` or an `a.button.fab[href]`; the
+ * tray is a `nav.fab-tray`, of which a composition has one. The tray places, the FAB
+ * does not: a control carries its geometry and states and never its own offsets.
+ *
+ * Spec: specs/design-system/fab/spec.md
+ */
+
+/*
+ * The control. `flex: 0 0 auto` is stated because a FAB commonly sits in a flex row
+ * that would otherwise stretch it, and the spec fixes its geometry against growth.
+ */
+button.fab,
+a.fab[href],
+a.button.fab[href] {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cn-grid);
+  min-inline-size: var(--cn-fab-size);
+  block-size: var(--cn-fab-size);
+  padding-inline: var(--cn-gap);
+  border: none;
+  border-radius: var(--cn-border-radius-large);
+  vertical-align: middle;
+  font-family: inherit;
+  font-size: var(--cn-font-size-button);
+  font-weight: var(--cn-font-weight-button);
+  line-height: var(--cn-line-height-button);
+  letter-spacing: var(--cn-letter-spacing-button);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  background-image: linear-gradient(
+    in oklab 137deg,
+    var(--cn-fab),
+    var(--cn-fab-blend)
+  );
+  color: var(--cn-on-fab);
+  box-shadow: var(--cn-shadow-elevation-1);
+  /* Elevation resolves faster than the surface it lifts from, as the button does. */
+  --_elevation-duration: calc(var(--cn-duration-ui) / 2);
+  --_enter-easing: ease-out;
+  transition:
+    box-shadow var(--_elevation-duration) var(--cn-easing-ui),
+    opacity var(--cn-duration-ui) var(--cn-easing-ui);
+
+  /* The FAB is an icon-size context, set the way the cn-icon spec names it. */
+  --cn-icon-size-xsmall: var(--cn-icon-size-small);
+  --cn-icon-size: var(--cn-icon-size-small);
+  --cn-icon-size-large: var(--cn-icon-size-small);
+  --cn-icon-size-xlarge: var(--cn-icon-size-small);
+}
+
+:is(button, a).fab.cta {
+  background-image: linear-gradient(
+    in oklab 137deg,
+    var(--cn-fab-cta),
+    var(--cn-fab-cta-blend)
+  );
+  color: var(--cn-on-fab-cta);
+}
+
+/* The secondary surface runs against the grain: v20 turns its gradient to -37deg. */
+:is(button, a).fab.secondary {
+  background-image: linear-gradient(
+    in oklab -37deg,
+    var(--cn-fab-secondary),
+    var(--cn-fab-secondary-blend)
+  );
+  color: var(--cn-on-fab-secondary);
+}
+
+/* The small modifier collapses both measurements to the regular button size. */
+:is(button, a).fab.small {
+  min-inline-size: var(--cn-button-size);
+  block-size: var(--cn-button-size);
+}
+
+:is(button, a).fab:hover {
+  box-shadow: var(--cn-shadow-elevation-4);
+  transition-timing-function: var(--_enter-easing);
+}
+
+:is(button, a).fab:active {
+  box-shadow: var(--cn-shadow-elevation-2);
+}
+
+:is(button, a).fab:focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Only a native FAB has a disabled state; an anchor is navigable or absent. */
+button.fab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* An icon-only or loader-only FAB is square at its selected size. */
+:is(button, a).fab:has(> :is(.cn-icon, .cn-loader):only-child) {
+  inline-size: var(--cn-fab-size);
+  padding-inline: 0;
+}
+
+:is(button, a).fab.small:has(> :is(.cn-icon, .cn-loader):only-child) {
+  inline-size: var(--cn-button-size);
+}
+
+:is(button, a).fab > :is(.cn-icon, .cn-loader) {
+  flex: none;
+}
+
+/*
+ * The tray pins to the lower inline-end corner of the composition that owns it:
+ * the shell's dynamic-viewport box in an application, a bounded specimen in a
+ * book. That composition is the tray's containing block, so it is positioned or a
+ * container itself; a page supplies no offsets of its own.
+ *
+ * The tray spans its container's inline size and aligns its children to the
+ * inline end, rather than shrinking to the widest FAB. The width is what the
+ * label query below reads, and it has to be the room a FAB has, not the room a
+ * FAB took. Pointer events pass through the spanned area and resume on the FABs.
+ */
+nav.fab-tray {
+  position: absolute;
+  z-index: var(--cn-z-fab);
+  inset-block-end: calc(var(--cn-gap) + var(--cn-block-end-chrome, 0px));
+  inset-inline: var(--cn-gap);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--cn-grid);
+  container: tray / inline-size;
+  pointer-events: none;
+}
+
+nav.fab-tray > * {
+  pointer-events: auto;
+}
+
+/*
+ * The label answers the tray's container rather than the window: below the
+ * small-screen threshold a FAB shows its icon and keeps its accessible name. The
+ * literal restates --cn-breakpoint-small, which a container query cannot read.
+ */
+@container tray (max-width: 38.75rem) {
+  :is(button, a).fab > span {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.fab,
+  a.fab[href],
+  a.button.fab[href] {
+    transition: none;
+  }
+}
