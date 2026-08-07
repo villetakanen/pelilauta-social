@@ -24,7 +24,7 @@ import RemoveAccountSection from './RemoveAccountSection.svelte';
         If the issue persists, your profile data might be corrupted.
       </p>
       <div class="toolbar">
-        <a href="/onboarding" class="button cyan-button primary">
+        <a href="/onboarding" class="button">
           Repair Profile
         </a>
       </div>

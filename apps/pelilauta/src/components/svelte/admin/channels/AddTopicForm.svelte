@@ -66,7 +66,7 @@ function handleCancel() {
       <div class="flex gap-1">
         <button 
           type="submit" 
-          class="btn btn-primary btn-sm" 
+           
           disabled={!topicName.trim() || isSubmitting}
         >
           {#if isSubmitting}
@@ -79,7 +79,7 @@ function handleCancel() {
         <button 
           type="button" 
           onclick={handleCancel} 
-          class="btn btn-sm"
+          
           disabled={isSubmitting}
         >
           {t('actions:cancel')}

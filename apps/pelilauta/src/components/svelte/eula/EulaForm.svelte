@@ -122,10 +122,10 @@ async function handleCancel(event: Event) {
       </div>
 
       <div class="flex justify-end gap-2 pt-4 border-t mt-4">
-        <button type="button" class="cyan-button text" onclick={handleCancel}>
+        <button type="button" class="text" onclick={handleCancel}>
           {t('login:eula.decline')}
         </button>
-        <button type="submit" class="cyan-button primary" disabled={!valid}>
+        <button type="submit"  disabled={!valid}>
           {t('login:eula.accept')}
         </button>
       </div>

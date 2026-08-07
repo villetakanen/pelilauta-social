@@ -36,6 +36,6 @@ async function handleSubmit(event: Event) {
     <textarea id="bio" bind:value={bio}></textarea>
   </div>
   <div class="pt-4">
-    <button type="submit" class="cyan-button primary">Save Profile</button>
+    <button type="submit" >Save Profile</button>
   </div>
 </form>

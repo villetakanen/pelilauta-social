@@ -176,7 +176,7 @@ function handleSubmit(event: SubmitEvent) {
     <div class="toolbar pt-4">
       <button 
         type="button" 
-        class="btn" 
+         
         onclick={handleCancel} 
         disabled={isSaving}
       >
@@ -185,7 +185,7 @@ function handleSubmit(event: SubmitEvent) {
       
       <button 
         type="button"
-        class="btn text"
+        class="text"
         onclick={resetForm}
         disabled={isSaving}
       >
@@ -195,7 +195,7 @@ function handleSubmit(event: SubmitEvent) {
       
       <button 
         type="submit" 
-        class="btn btn-primary" 
+         
         disabled={isSaving || !channelName || !selectedCategory}
       >
         {#if isSaving}

@@ -52,7 +52,7 @@ async function onSubmit(e: Event) {
     />
     <div class="toolbar justify-center">
       <button
-        class="call-to-action notify"
+        class="cta notify"
         type="submit"
         disabled={deleteConfirm !== deleteConfirmPhrase}
       >

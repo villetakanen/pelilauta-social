@@ -226,7 +226,7 @@ async function handleDelete() {
     
     <button 
       type="button"
-      class="btn btn-sm"
+      
       onclick={forceRefresh}
       disabled={isRefreshing}
       title="Refresh channel statistics"
@@ -241,7 +241,7 @@ async function handleDelete() {
     
     <button 
       type="button" 
-      class="btn btn-sm btn-outline text-danger"
+      
       onclick={handleDelete}
       disabled={isDeleting}
       title={t('admin:channels.actions.delete')}

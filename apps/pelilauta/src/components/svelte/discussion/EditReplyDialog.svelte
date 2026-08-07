@@ -133,7 +133,7 @@ async function handleSave() {
             </button>
             <button
                 type="button"
-                class="call-to-action"
+                class="cta"
                 disabled={saving}
                 onclick={handleSave}
             >

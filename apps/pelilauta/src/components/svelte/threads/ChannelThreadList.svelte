@@ -116,7 +116,7 @@ async function loadMoreThreads() {
         <p class="text-error mb-2">{error}</p>
         <button 
           onclick={loadMoreThreads} 
-          class="px-2 py-1 bg-transparent text-primary border border-primary radius-s cursor-pointer text-caption"
+          class="text border border-primary radius-s cursor-pointer text-caption"
         >
           <Icon noun={channel.icon} />
           <span>{t('actions:retry')}</span>

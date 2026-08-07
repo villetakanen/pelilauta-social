@@ -191,7 +191,7 @@ const hasFiles = $derived(uploadedFiles.length > 0);
     </button>
     
     {#if hasFiles}
-      <button class="button outlined" onclick={clearUploads}>
+      <button class="button" onclick={clearUploads}>
         Clear ({uploadedFiles.length})
       </button>
     {/if}
