@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { ASSET_LICENSES_KEYS } from '@schemas/AssetSchema';
 import { systemToNounMapping } from '@schemas/nouns';
@@ -156,7 +157,7 @@ const descriptionLength = $derived($activeSite?.description?.length || 0);
         type="submit" 
         disabled={!$dirty || $isSaving}>
         {#if $isSaving}
-          <cn-loader noun="save"></cn-loader>
+          <CnLoader inline noun="save" />
         {:else}
           <Icon noun="save" />
         {/if}

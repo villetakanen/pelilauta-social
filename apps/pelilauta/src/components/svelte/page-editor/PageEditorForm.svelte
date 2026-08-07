@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -159,7 +160,7 @@ function handleEditorChange(event: CustomEvent<string>) {
       </a>
       <button type="submit" class="button cta" data-testid="save-button" disabled={!hasChanges || saving}>
         {#if saving}
-          <cn-loader noun="save"></cn-loader>
+          <CnLoader inline noun="save" />
         {:else}
           <Icon noun="save" />
         {/if}

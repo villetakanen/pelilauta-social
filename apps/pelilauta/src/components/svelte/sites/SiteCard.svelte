@@ -1,5 +1,6 @@
 <script lang="ts">
 import CnCard from '@design-system/components/CnCard.svelte';
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -45,7 +46,7 @@ const coverSrcset = $derived.by(() => {
   description={site.description}
 >
   {#if loading}
-    <span class="loading"><cn-loader></cn-loader></span>
+    <span class="loading"><CnLoader /></span>
   {/if}
 
   {#snippet actions()}

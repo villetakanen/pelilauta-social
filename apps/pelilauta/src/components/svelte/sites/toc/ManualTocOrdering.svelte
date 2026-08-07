@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { CnListItem } from '@11thdeg/cyan-lit';
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { updatePageRefsOrder } from '@firebase/client/site/updatePageRefsOrder';
 import type { PageRef, Site } from '@schemas/SiteSchema';
@@ -167,7 +168,7 @@ function createReorderHandler(categorySlug: string) {
 
   {#if saving}
     <div class="flex items-center gap-1 mb-2">
-      <cn-loader size="small"></cn-loader>
+      <CnLoader inline />
       <span class="text-low">{t("site:toc.manualOrder.saving")}</span>
     </div>
   {/if}
