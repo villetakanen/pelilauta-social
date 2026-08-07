@@ -1,0 +1,109 @@
+---
+import CnLoader from '../../components/CnLoader.svelte';
+/**
+ * ButtonSpecimens — real buttons and link buttons, one group per axis.
+ *
+ * The elements are the ones a consumer writes: a native `button` for a command,
+ * an `a.button[href]` for navigation. Nothing here styles them; every rule comes
+ * from styles/buttons.css.
+ *
+ * Book: apps/design/src/content/base/links-actions-buttons.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+
+interface Props {
+  /** Which axis to render. */
+  group: 'variants' | 'elements' | 'compositions' | 'states' | 'layout';
+}
+
+const { group } = Astro.props;
+---
+
+<div class="button-specimens" data-group={group}>
+  {group === 'variants' && (
+    <div class="row" data-variant="variants">
+      <button type="button">Default</button>
+      <button type="button" class="text">Text</button>
+      <button type="button" class="cta">Call to action</button>
+      <button type="button" class="secondary">Secondary</button>
+    </div>
+  )}
+
+  {group === 'elements' && (
+    <div class="row" data-variant="elements">
+      <button type="button">Command</button>
+      <a class="button" href="/base/links-actions-buttons">Destination</a>
+    </div>
+  )}
+
+  {group === 'compositions' && (
+    <div class="row" data-variant="compositions">
+      <button type="button">Label only</button>
+      <button type="button">
+        <Icon noun="send" />
+        <span>Leading icon</span>
+      </button>
+      <button type="button" aria-label="Send">
+        <Icon noun="send" />
+      </button>
+      <button type="button" disabled>
+        <CnLoader inline noun="send" />
+        <span>Sending…</span>
+      </button>
+      <button type="button" disabled aria-label="Sending">
+        <CnLoader inline noun="send" />
+      </button>
+    </div>
+  )}
+
+  {group === 'states' && (
+    <div class="row" data-variant="states">
+      <button type="button">Resting</button>
+      <button type="button" disabled>Disabled</button>
+      <a class="button text" href="/base/links-actions-buttons">Text link button</a>
+    </div>
+  )}
+
+  {group === 'layout' && (
+    <div class="stack" data-variant="layout">
+      <button type="button">Intrinsic width</button>
+      <div class="stretch">
+        <button type="button">Stretched by its layout</button>
+      </div>
+      <div class="narrow">
+        <button type="button">
+          <Icon noun="send" />
+          <span>A label long enough to need truncating in a narrow control</span>
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--cn-gap);
+  }
+
+  /* Test rig, not a system value: a container that stretches its child. */
+  .stretch {
+    display: grid;
+    inline-size: 100%;
+  }
+
+  /* Test rig: narrow enough that a label has to give way. */
+  .narrow {
+    display: grid;
+    inline-size: 14rem;
+  }
+</style>

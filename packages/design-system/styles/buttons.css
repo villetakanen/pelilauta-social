@@ -1,0 +1,219 @@
+/*
+ * Native buttons and link buttons.
+ *
+ * A command is a `button`; navigation that looks like a button is an
+ * `a.button[href]`. Presentation never changes that choice, so every rule here
+ * selects the element the consumer already picked.
+ *
+ * Spec: specs/design-system/buttons/spec.md
+ */
+:root {
+  /*
+   * The v20 button type role, aliased onto v21's scale so another button
+   * presentation — a fab, a toggle — consumes the role without restating its
+   * relationship to the type steps. The aliases live here rather than in
+   * typography.css: the scale there is a closed set of reading steps.
+   */
+  --cn-font-size-button: var(--cn-font-size-small);
+  --cn-font-weight-button: var(--cn-font-weight-caption);
+  --cn-line-height-button: var(--cn-line-height-small);
+  --cn-letter-spacing-button: var(--cn-letter-spacing-caption);
+
+  /* Shared interaction motion, as v20 declares it. */
+  --cn-duration-ui: 0.22s;
+  --cn-easing-ui: ease-in-out;
+  /*
+   * Two roles the button is the first to need, and neither is a button decision:
+   * elevation resolves faster than surface, and entering a state eases out while
+   * leaving keeps the neutral curve. Both belong to a motion capability that v21
+   * has not written yet, which is why they are declared here and specified
+   * nowhere — the buttons spec says only that feedback uses the shared roles.
+   * Move them, with their reasoning, when motion gets its own home.
+   */
+  --cn-duration-ui-fast: calc(var(--cn-duration-ui) / 2);
+  --cn-easing-ui-enter: ease-out;
+}
+
+/*
+ * Geometry, type and the interaction frame. `.fab` is excluded throughout: a
+ * floating action button is its own capability and still takes Cyan's rules.
+ */
+button:not(.fab),
+a.button[href]:not(.fab) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cn-grid);
+  block-size: var(--cn-button-size);
+  /* The visible pill centres in a seven-unit row, so a button sits on the grid
+     whether or not it is the tallest thing in its line. */
+  margin-block: calc(
+    (var(--cn-button-physical-size) - var(--cn-button-size)) /
+    2
+  );
+  padding-inline: var(--cn-gap);
+  overflow: hidden;
+  border: none;
+  border-radius: calc(var(--cn-button-size) / 2);
+  vertical-align: middle;
+  /* A zero-size shadow at rest, so hover spreads the elevation rather than
+     fading it in: interpolating from `none` keeps the full 8px blur and only
+     raises its alpha, which reads as sluggish at the shared UI duration. */
+  box-shadow: 0 0 0 var(--cn-shadow-color);
+  font-family: inherit;
+  font-size: var(--cn-font-size-button);
+  font-weight: var(--cn-font-weight-button);
+  line-height: var(--cn-line-height-button);
+  letter-spacing: var(--cn-letter-spacing-button);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--cn-duration-ui-fast) var(--cn-easing-ui),
+    opacity var(--cn-duration-ui) var(--cn-easing-ui);
+
+  /*
+   * The button is a context that requires one icon size, so it sets the size
+   * tokens in its own scope and every icon inside resolves to the small step
+   * without reading its own selection (cn-icon spec). The small token itself is
+   * left alone, which is what keeps the substitution from cycling.
+   */
+  --cn-icon-size-xsmall: var(--cn-icon-size-small);
+  --cn-icon-size: var(--cn-icon-size-small);
+  --cn-icon-size-large: var(--cn-icon-size-small);
+  --cn-icon-size-xlarge: var(--cn-icon-size-small);
+}
+
+/*
+ * The variants are mutually exclusive, and each names its own surface and
+ * foreground. The default excludes the other three by selector rather than by
+ * load order, so a legacy ancestor cannot recolour a button that did not ask
+ * for the alternate treatment.
+ */
+:is(button, a.button[href]):not(.fab):not(.cta):not(.text):not(.secondary) {
+  background-color: transparent;
+  background-image: linear-gradient(
+    in oklab 137deg,
+    var(--cn-button-light),
+    var(--cn-button)
+  );
+  color: var(--cn-on-button);
+}
+
+:is(button, a.button[href]).cta:not(.fab) {
+  background-color: transparent;
+  background-image: linear-gradient(
+    in oklab 137deg,
+    var(--cn-button-cta),
+    var(--cn-button)
+  );
+  color: var(--cn-on-button-cta);
+}
+
+:is(button, a.button[href]).text:not(.fab) {
+  background-image: none;
+  background-color: color-mix(in oklab, var(--cn-button) 33%, transparent);
+  color: var(--cn-on-surface);
+  box-shadow: none;
+}
+
+/* v20's alternate chroma treatment, and only where the button itself asks. */
+:is(button, a.button[href]).secondary:not(.fab) {
+  background-color: transparent;
+  background-image: linear-gradient(
+    in oklab 137deg,
+    var(--cn-button-secondary-light),
+    var(--cn-button-secondary)
+  );
+  color: var(--cn-on-button);
+}
+
+/*
+ * Hover and active wash over the variant's own surface, so the foreground keeps
+ * its identity: an overlay rather than a brightness filter.
+ */
+button:not(.fab)::after,
+a.button[href]:not(.fab)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+button:not(.fab):hover::after,
+a.button[href]:not(.fab):hover::after {
+  background-color: var(--cn-hover);
+  transition-timing-function: var(--cn-easing-ui-enter);
+}
+
+button:not(.fab):active::after,
+a.button[href]:not(.fab):active::after {
+  background-color: var(--cn-active);
+}
+
+button:not(.fab):hover,
+a.button[href]:not(.fab):hover {
+  box-shadow: var(--cn-shadow-button-hover);
+  transition-timing-function: var(--cn-easing-ui-enter);
+}
+
+button:not(.fab):focus-visible,
+a.button[href]:not(.fab):focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Only a native button has a disabled state. A link button is either navigable
+ * or absent, so no `disabled`, `aria-disabled` or `.disabled` presentation is
+ * published for an anchor.
+ */
+button:not(.fab):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/*
+ * An icon or an inline loader on its own makes the control a circle: equal
+ * inline and block size, and a radius already half of it.
+ */
+:is(button, a.button[href]):not(.fab):has(
+    > :is(.cn-icon, .cn-loader):only-child
+  ) {
+  inline-size: var(--cn-button-size);
+  padding-inline: 0;
+}
+
+/* A leading icon or loader sits closer to the edge than the label does. */
+:is(button, a.button[href]):not(.fab)
+  > :is(.cn-icon, .cn-loader):first-child:not(:only-child) {
+  margin-inline-start: calc(-1 * var(--cn-grid));
+}
+
+/*
+ * Truncation belongs to the label, not to the button: an icon or loader keeps
+ * its square while the text gives way.
+ */
+:is(button, a.button[href]):not(.fab) > :is(.cn-icon, .cn-loader) {
+  flex: none;
+}
+
+:is(button, a.button[href]):not(.fab) > :is(span, .label) {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:not(.fab),
+  a.button[href]:not(.fab),
+  button:not(.fab)::after,
+  a.button[href]:not(.fab)::after {
+    transition: none;
+  }
+}

@@ -191,15 +191,16 @@ describe('against the production units.css', () => {
   });
 
   test('the book cannot miss a token the stylesheet declares', () => {
-    // The lexicon shows spacing, radii and breakpoints, which is every
-    // declaration in the file. If a family is added, this fails until the
-    // book accounts for it.
+    // The lexicon shows spacing, radii, control geometry and breakpoints, which
+    // is every declaration in the file. If a family is added, this fails until
+    // the book accounts for it.
     const all = parseTokens(unitsSource).map((token) => token.name);
     const shown = [
       ...parseTokens(unitsSource, {
         names: ['--cn-grid', '--cn-gap', '--cn-line'],
       }),
       ...parseTokens(unitsSource, { prefix: '--cn-border-radius' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-button' }),
       ...parseTokens(unitsSource, { prefix: '--cn-breakpoint' }),
     ].map((token) => token.name);
 

@@ -67,6 +67,15 @@
   --cn-button-cta: var(--cn-color-error-40);
   --cn-on-button: var(--cn-color-surface-100);
   --cn-on-button-cta: var(--cn-color-surface-100);
+  /* v20's alternate button chroma, mapped per scheme as v20 maps it. */
+  --cn-button-secondary-light: light-dark(
+    var(--cn-color-primary-40),
+    var(--cn-color-primary-80)
+  );
+  --cn-button-secondary: light-dark(
+    var(--cn-color-primary-60),
+    var(--cn-color-primary-95)
+  );
   --cn-fab: var(--cn-color-primary-70);
   --cn-fab-blend: var(--cn-color-surface-50);
   --cn-on-fab: var(--cn-color-surface-100);

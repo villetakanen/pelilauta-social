@@ -143,6 +143,7 @@ describe('entry point', () => {
       './typography.css',
       './compat/cyan-typography.css',
       './links.css',
+      './buttons.css',
       './spatial.css',
       './content-containers.css',
       './surface.css',
