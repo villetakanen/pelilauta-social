@@ -2,6 +2,7 @@
 import AuthManager from '@components/svelte/AuthManager.svelte';
 import AppBar from '../components/server/AppBar.astro';
 import AppRail from '../components/server/AppRail.astro';
+import AppChrome from '../components/server/app/AppChrome.astro';
 import AppFooter from '../components/server/app/AppFooter.astro';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 import BaseTail from '../components/server/BaseTail.astro';
@@ -41,9 +42,13 @@ const { title, description, image, noun, shortTitle, noSharing } = Astro.props;
       </div>
       <AppFooter />
     </main>
-    <nav id="fab-tray" style="container: tray / inline-size">
-      <slot name="fab-tray" />
-    </nav>
+    {
+      Astro.slots.has('fab-tray') && (
+        <AppChrome rail>
+          <slot name="fab-tray" />
+        </AppChrome>
+      )
+    }
     <slot name="app-background-poster" />
     <AuthManager client:only="svelte" />
     <BaseTail />
