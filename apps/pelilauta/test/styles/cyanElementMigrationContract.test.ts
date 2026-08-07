@@ -58,7 +58,24 @@ describe('Cyan element migration contract', () => {
     // buttons and fabs whose negative margins pulled a 72px ring back into a
     // control. The inline variant needs none of that.
     expect(migration).not.toMatch(/\bcn-loader\b/);
+
+    // The design system places the tray, so no bridge restates its geometry.
+    expect(migration).not.toMatch(/fab-tray/);
   });
+
+  it.each(['Page.astro', 'PageWithTray.astro', 'ModalPage.astro'])(
+    'leaves tray placement to the design system in %s',
+    (layout) => {
+      // Cyan styles `nav#fab-tray` and the design system styles `nav.fab-tray`.
+      // An identifier beats a class whatever the import order, so a layout that
+      // reintroduced the id would silently take Cyan's fixed placement back and
+      // strand the chrome layer.
+      const source = readFileSync(join(appRoot, 'src/layouts', layout), 'utf8');
+
+      expect(source).not.toMatch(/id="fab-tray"/);
+      expect(source).toContain('<AppChrome');
+    },
+  );
 
   it('does not copy selectors that cannot cross a component shadow root', () => {
     expect(migration).not.toMatch(/cn-sortable-list\s+(?:ul|\.item|\.title)/);

@@ -37,9 +37,7 @@ const { title, description, image, noun, shortTitle, noSharing } = Astro.props;
     </nav>
 
     <main>
-      <div class="view-patch">
-        <slot />
-      </div>
+      <slot />
       <AppFooter />
     </main>
     {
