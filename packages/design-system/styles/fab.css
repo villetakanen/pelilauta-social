@@ -5,7 +5,8 @@
  * tray is a `nav.fab-tray`, of which a composition has one. The tray places, the FAB
  * does not: a control carries its geometry and states and never its own offsets.
  *
- * Spec: specs/design-system/fab/spec.md
+ * Specs: specs/design-system/actions/spec.md (the control),
+ * specs/design-system/fab-tray/spec.md (the tray).
  */
 
 /*
