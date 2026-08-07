@@ -125,9 +125,9 @@ test('pbta-logo artwork matches the v18 front-page logo viewBox', () => {
   expect(getManagedIcon('pbta-logo')!.viewBox).toBe('0 0 256 256');
 });
 
-test('icon.css :root defines exactly the five sizing tokens with the v20 values', () => {
+test('units.css declares exactly the five icon sizes with the v20 values', () => {
   const css = readFileSync(
-    new URL('../styles/icon.css', import.meta.url),
+    new URL('../styles/units.css', import.meta.url),
     'utf8',
   );
   const rootBlock = css.match(/:root\s*\{([^}]*)\}/);
@@ -147,23 +147,6 @@ test('icon.css :root defines exactly the five sizing tokens with the v20 values'
     found.length,
     'no unrelated icon sizing tokens are defined at :root',
   ).toBe(5);
-});
-
-test('icon.css owns only the stable icon token vocabulary', () => {
-  const css = readFileSync(
-    new URL('../styles/icon.css', import.meta.url),
-    'utf8',
-  );
-  const context = css.replace(/:root\s*\{[^}]*\}/, '');
-
-  expect(
-    /\S/.test(context.replace(/\/\*[\s\S]*?\*\//g, '')),
-    'no contextual rules follow :root',
-  ).toBe(false);
-  expect(
-    /button|\.fab|\.flex|h3/.test(css),
-    'consumer contexts stay outside stable Icon CSS',
-  ).toBe(false);
 });
 
 test('open-source registry generation is deterministic (--check passes)', () => {

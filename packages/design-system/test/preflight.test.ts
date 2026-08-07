@@ -118,7 +118,6 @@ describe('preflight', () => {
       '../styles/color-theme.css',
       '../styles/color.css',
       '../styles/units.css',
-      '../styles/icon.css',
       '../styles/fonts.css',
       '../styles/docs.css',
       '../styles/compat/cyan-4.css',

@@ -20,6 +20,20 @@
   /* Control geometry: the visible pill, and the row it occupies. */
   --cn-button-size: calc(var(--cn-grid) * 4.75); /* 38px */
   --cn-button-physical-size: calc(var(--cn-grid) * 7); /* 56px */
+  /*
+   * Icon sizes: absolute lengths rather than grid multiples, following v20, which
+   * files them beside the grid and marks them absolute. Spec:
+   * specs/design-system/components/cn-icon/spec.md
+   */
+  --cn-icon-size-xsmall: 1rem; /* 16px at the default root font size */
+  --cn-icon-size-small: 1.5rem; /* 24px */
+  --cn-icon-size: 2.25rem; /* 36px, the medium default */
+  --cn-icon-size-large: 4.5rem; /* 72px */
+  --cn-icon-size-xlarge: 8rem; /* 128px */
+
+  /* Interaction motion, shared by every control that answers a pointer. */
+  --cn-duration-ui: 0.22s;
+  --cn-easing-ui: ease-in-out;
 
   /*
    * Breakpoints, in rem so a query follows a reader's enlarged default text.

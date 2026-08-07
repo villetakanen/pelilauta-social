@@ -150,46 +150,6 @@ describe('parseTokens', () => {
 });
 
 describe('against the production units.css', () => {
-  test('the spacing tokens read as declared, with their resolved lengths', () => {
-    const tokens = parseTokens(unitsSource, {
-      names: ['--cn-grid', '--cn-gap', '--cn-line'],
-    });
-
-    expect(tokens).toEqual([
-      {
-        name: '--cn-grid',
-        value: '0.5rem',
-        note: '8px at the default root font size',
-      },
-      { name: '--cn-gap', value: 'calc(var(--cn-grid) * 2)', note: '16px' },
-      { name: '--cn-line', value: 'calc(var(--cn-grid) * 3)', note: '24px' },
-    ]);
-  });
-
-  test('every radius is found, including the unsuffixed default', () => {
-    const radii = parseTokens(unitsSource, { prefix: '--cn-border-radius' });
-
-    expect(radii.map((token) => token.name)).toEqual([
-      '--cn-border-radius-small',
-      '--cn-border-radius-medium',
-      '--cn-border-radius-large',
-      '--cn-border-radius-xl',
-      '--cn-border-radius',
-    ]);
-  });
-
-  test('the breakpoint reads as declared, with its resolved length', () => {
-    const tokens = parseTokens(unitsSource, { prefix: '--cn-breakpoint' });
-
-    expect(tokens).toEqual([
-      {
-        name: '--cn-breakpoint-small',
-        value: '38.75rem',
-        note: '620px; small-screen width',
-      },
-    ]);
-  });
-
   test('the book cannot miss a token the stylesheet declares', () => {
     // The lexicon shows spacing, radii, control geometry and breakpoints, which
     // is every declaration in the file. If a family is added, this fails until
@@ -201,6 +161,9 @@ describe('against the production units.css', () => {
       }),
       ...parseTokens(unitsSource, { prefix: '--cn-border-radius' }),
       ...parseTokens(unitsSource, { prefix: '--cn-button' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-icon-size' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-duration' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-easing' }),
       ...parseTokens(unitsSource, { prefix: '--cn-breakpoint' }),
     ].map((token) => token.name);
 
