@@ -1,6 +1,6 @@
 ---
 title: CnPoster
-description: The decorative artwork that replaces the ground plane behind one page's content, attenuated so the page stays readable over material the design system does not control.
+description: "Decorative background artwork layer with automatic tint attenuation and contrast preservation."
 order: 50
 runtime: static
 poster: "https://picsum.photos/1920/1080"
@@ -9,19 +9,17 @@ poster: "https://picsum.photos/1920/1080"
 import Composition from "@design-system/books/specimens/Composition.astro";
 import PosterPinToggle from "@design-system/books/specimens/PosterPinToggle.astro";
 
-CnPoster replaces the ground plane behind one page's content with a decorative image of that
-page's subject.
-
-This page is the specimen. The photograph behind these words is random, reloaded on every
-visit, and mounted the way an application mounts one.
+`CnPoster` replaces the document ground plane with an attenuated background image.
+A multi-stop gradient wash overlays the image; foreground typography and
+surfaces target WCAG 2.2 AA contrast over arbitrary photography, where feasible.
 
 ## When to use it
 
-Use a poster on a landing or index page whose subject has a picture. Mount one per page.
+- Landing pages, community hubs, or profile headers featuring hero artwork.
+- Maximum one poster instance per page.
 
-Use [Surface](/base/surface) behind prose. CnPoster ships no script, so it cannot detect a
-failed load and never substitutes a fallback the way [CnCard](/components/cn-card) does with
-a cover.
+Use standard [Surface](/base/surface) containers for prose and dense data. `CnPoster`
+renders statically and does not provide image error fallbacks.
 
 ## Example
 
@@ -39,96 +37,79 @@ import CnPoster from '@design-system/components/CnPoster.astro'
 </Page>
 ```
 
-The design site has no application shell. This book declares `poster` in frontmatter and the
-book layout performs the same mount into `body`.
-
 ## Variants and states
 
-### Placement
+`CnPoster` supports scrolling and pinned viewport placements, adaptive theme tinting, and media query suppression.
 
-A scrolling poster occupies the first screen and dissolves into the page at its lower edge.
-`pinned` fixes the poster to the viewport; content scrolls over it and there is no lower edge
-to dissolve.
+### Placement modes
+
+- **Scrolling (default):** Covers the initial viewport height and dissolves smoothly into the page ground plane at its lower edge.
+- **Pinned (`pinned={true}`):** Fixes the poster relative to the viewport; content scrolls continuously over the background layer.
 
 <PosterPinToggle />
 
-### Colour scheme
+### Theme tint and blending
 
-| Scheme | Tint                       | Blend        | Strength |
-| :----- | :------------------------- | :----------- | :------- |
-| Light  | surface 90, primary 40, 80 | `overlay`    | 100%     |
-| Dark   | primary 10 rising to 80    | `hard-light` | 44%      |
+The artwork renders at 72% opacity under theme-specific colour overlay washes:
 
-The image renders at 72% opacity in both schemes and carries no filter. Switch your system
-scheme with this page open: the photograph stays, the wash changes around it.
+| Theme | Overlay Tints | Blend Mode | Strength |
+| :--- | :--- | :--- | :--- |
+| Light | Surface 90, Primary 40 / 80 | `overlay` | 100% |
+| Dark | Primary 10 to 80 | `hard-light` | 44% |
 
-### Where a poster paints nothing
+### Viewport and media query suppression
 
-Below 620 pixels, under `prefers-reduced-transparency`, under `forced-colors`, and in print,
-the poster renders nothing and the surfaces above render as they do without one. Narrow this
-window past 620 pixels to see it.
+The poster layer is automatically suppressed (rendering pure background surfaces) under:
+- Viewport widths below 620px (`@media (max-width: 620px)`).
+- `prefers-reduced-transparency: reduce`.
+- `forced-colors: active`.
+- Print stylesheets (`@media print`).
 
 ## Composition
 
-The `app-background-poster` slot places the poster as a direct child of `body`. It is the only
-supported mount; inside `main` the poster positions itself against whatever box contains it.
+Mount `CnPoster` in the `app-background-poster` slot as a direct child of `<body>`.
 
-One page carries one poster. The id is what the rules below match on.
+When an element with `id="cn-poster"` exists in the DOM, surrounding application chrome
+adapts transparency:
 
-While an element with the id `cn-poster` is in the document:
-
-| Surface                          | Treatment     |
-| :------------------------------- | :------------ |
+| Surface Selector | Applied Treatment |
+| :--- | :--- |
 | `--cn-app-bar-background-sticky` | `transparent` |
-| `nav#rail`, `nav#tray`           | `transparent` |
-| `.elevation-0`                   | 80% opaque    |
-| `.elevation-1` to `.elevation-4` | unchanged     |
+| `nav#rail`, `nav#tray` | `transparent` |
+| `.elevation-0` | 80% opacity |
+| `.elevation-1` to `.elevation-4` | Unmodified |
 
-This site's index cedes the same way.
-
-<Composition caption="Elevation 0 and elevation 2 — pin the poster to see them over artwork">
-  <div class="surface elevation-0">Elevation 0, the application ground plane</div>
-  <div class="surface elevation-2">Elevation 2, unchanged</div>
+<Composition caption="Elevation 0 (translucent) and elevation 2 (opaque) over background artwork">
+  <div class="surface elevation-0">Elevation 0: Ground plane (80% opacity)</div>
+  <div class="surface elevation-2">Elevation 2: Raised surface (100% opacity)</div>
 </Composition>
-
-Eighty per cent holds the inherited body foreground at WCAG 2.2 AA over near-white artwork in
-Dark, which is the tightest case, and with no artwork at all. Over artwork the design system
-does not control, AA is the target the attenuation is tuned to, not a guarantee.
 
 ## Reference
 
 ### Props
 
-| Prop     | Type      | Purpose                                                         |
-| :------- | :-------- | :-------------------------------------------------------------- |
-| `src`    | `string`  | Required artwork URL, and the candidate used below the `md` width |
-| `md`     | `string`  | A wider candidate, selected from 960 device pixels up            |
-| `pinned` | `boolean` | Fixes the poster to the viewport. Defaults to `false`            |
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `src` | `string` | Required artwork image URL (default and mobile viewports). |
+| `md` | `string` | High-resolution candidate URL loaded on viewports >= 960px. |
+| `pinned` | `boolean` | Fixes poster to the viewport. Defaults to `false`. |
 
 ### Tokens
 
-CnPoster declares none. The tint reads the ramps published by [Colour](/tokens/color), the
-dissolve and the ground plane read `--cn-surface`, and the level it changes belongs to
-[Surface](/base/surface). It writes `--cn-app-bar-background-sticky` on `body`, so the sticky
-bar interpolates between two transparent values instead of sliding an opaque band over the
-artwork.
+`CnPoster` declares no custom properties. It reads colour ramps from [Colour](/tokens/color),
+ground plane tokens from `--cn-surface`, and overrides `--cn-app-bar-background-sticky` on `body`.
 
 ## Accessibility
 
-The image carries an empty `alt` and is absent from the accessibility tree. The poster takes
-no pointer events and holds nothing focusable. A poster carries no information; a page that
-needs its subject named names it in the content.
+`CnPoster` renders an `<img>` with an empty `alt=""` attribute and is omitted from the
+accessibility tree. It disables pointer events (`pointer-events: none`) and carries no
+tab stops.
 
 ## Not shown here
 
-**The chrome ceding its surface.** The application bar, `nav#rail` and `nav#tray` belong to
-apps/pelilauta and this site ships none of them. Their rules sit in `styles/poster.css`,
-inside the same guard as the poster.
+**Application chrome surface attenuation.** Chrome adaptation rules for `nav#rail` and
+`nav#tray` are declared in `styles/poster.css`.
 
-**Near-white and near-black artwork.** The photograph is random, so the extremes arrive only
-by chance. Rendered contrast was measured against both, in both schemes, both placements, and
-with no artwork; the tightest of the twelve cases was 10.5:1.
+**High-contrast and reduced-transparency emulation.** Verified in emulated browser environments
+via automated media query tests.
 
-**`prefers-reduced-transparency`, `forced-colors` and print.** No page can emulate them for
-itself. They share the media query the 620-pixel behaviour demonstrates, and each was
-confirmed by hand in an emulated browser.

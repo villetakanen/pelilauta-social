@@ -1,6 +1,6 @@
 ---
 title: CnAvatar
-description: The pictorial identity mark's component schema — its props, what each state needs, and the roles it consumes.
+description: "Pictorial identity mark rendering profile pictures, derived initial fallbacks, or anonymous glyphs."
 order: 40
 runtime: static
 ---
@@ -8,30 +8,21 @@ runtime: static
 import Composition from '@design-system/books/specimens/Composition.astro'
 import IdentitySpecimens from '@design-system/books/specimens/IdentitySpecimens.svelte'
 
-`CnAvatar` renders the pictorial identity mark: a profile's image, its initials, or
-the generic glyph. Its fallback needs no script: the initials render beneath the
-image, and a failed image load paints nothing over them. The backdrop behind the initials is derived from `nick` at render time, so it
-appears in no stylesheet and cannot be set by a consumer.
+`CnAvatar` renders user and system profile avatars. It supports static server-side rendering
+with pure CSS fallback layering: initials render beneath the profile image and display
+automatically if image loading fails. Initial backdrops are computed deterministically from `nick`.
 
 ## When to use it
 
-Render `CnAvatar` wherever a profile appears as a picture. Pass `nick` whenever it is
-known, including alongside `src` — it supplies the initials and the backdrop the mark
-falls back to, and the accessible name.
+- Profile representations in feeds, discussion threads, headers, and member lists.
+- Pass `nick` alongside `src` to supply initials, fallback backdrops, and accessible names.
 
-Use the textual mark, `.cn-nick`, where the profile appears as a name instead. Both
-marks, when to reach for which, and what an anchor does to either are in
-[Identity Mark](/base/identity-mark), which is also where the states below are shown
-in Light and Dark.
-
-The component does not name a missing nick. What the absence means — a deleted
-profile, an anonymous one, a redacted one — and the localised word for it are the
-application's; it prints the word in its own text while the mark stays the generic
-glyph.
+Use the textual mark `.cn-nick` when displaying names as text. Architectural principles
+and avatar list patterns are defined in [Identity Mark](/base/identity-mark).
 
 ## Example
 
-<Composition themes caption="The default mark, with an image and a nick">
+<Composition themes caption="Default avatar with image and nickname">
   <IdentitySpecimens group="basic" />
 </Composition>
 
@@ -41,38 +32,50 @@ import CnAvatar from '@design-system/components/CnAvatar.svelte'
 <CnAvatar src={profile.avatarURL} nick={profile.nick} />
 ```
 
+## Variants and states
+
+`CnAvatar` provides size options and three hierarchical fallback states.
+
+### Fallback states
+
+1. **Image:** Profile photograph clipped to a circular boundary.
+2. **Initials fallback:** First two characters of `nick` over a derived backdrop.
+3. **Anonymous glyph:** Generic avatar icon on `--cn-surface-2` when `nick` is omitted.
+
+### Size variants
+
+- **`small` (1.5 lines / 36px):** Sized for inline text pairings.
+- **`medium` (2 lines / 48px, default):** Sized for feed items and section headings.
+- **`large` (3 lines / 72px):** Sized for a view about the profile itself.
+
 ## Reference
 
 ### Props
 
 | Prop | Type | Purpose |
 | :--- | :--- | :--- |
-| `src` | `string` | The profile's image. Falls back to the initials, or to the glyph, when absent or unloadable. |
-| `nick` | `string` | The profile's name. Supplies the initials, the backdrop, and the accessible name. Absent, the mark is anonymous. |
-| `size` | `'small' \| 'medium'` | One and a half lines, or two. Defaults to `'medium'`. |
-| `aria-hidden` | `boolean` | Hides the mark from assistive technology. Defaults to `false`. |
+| `src` | `string` | Profile image URL. Falls back to initials or anonymous glyph on failure. |
+| `nick` | `string` | Profile nickname. Supplies initials, derived backdrop hue, and accessible name. |
+| `size` | `'small' \| 'medium' \| 'large'` | Size variant. Defaults to `'medium'`. |
+| `aria-hidden` | `boolean` | Hides the avatar from assistive technology. Defaults to `false`. |
 
 ### Tokens
 
-The component declares no colour of its own. It consumes the identity roles —
-`--cn-avatar-backdrop-from`, `--cn-avatar-backdrop-to` and `--cn-on-avatar` — which
-[Identity Mark](/base/identity-mark) publishes with the contrast they guarantee.
-Geometry comes from `--cn-line`, and elevation from `--cn-shadow-elevation-1`.
+`CnAvatar` declares no component-specific custom properties. It consumes backdrop tokens
+`--cn-avatar-backdrop-from`, `--cn-avatar-backdrop-to`, and `--cn-on-avatar` from
+[Identity Mark](/base/identity-mark), with line-height multiples from [Units and grid](/tokens/units).
 
 ## Accessibility
 
-The mark announces `nick` as its accessible name, and nothing else: the design
-system publishes no wording around it, because it serves three languages and
-translates none of them.
+`CnAvatar` announces `nick` as its accessible name.
 
-Pass `aria-hidden` wherever the composition already names the profile — a linked
-avatar whose anchor carries the nick, or a mark beside the textual one. A mark with
-no `nick` is always hidden, since it has no name to announce.
+Pass `aria-hidden="true"` when the avatar is paired with adjacent text that already names
+the profile (such as an anchor containing both avatar and nickname). Avatars without a `nick`
+are automatically hidden from assistive technology.
 
 ## Not shown here
 
-**Initials under an image with transparent regions.** Inside a hydrated island the
-component hides the initials once the image reports a successful load, so they
-cannot show through the image's transparency. Server-rendered without hydration,
-the initials stay painted beneath the image. The behaviour needs hydration this
-site does not build, so the pages here render only the scriptless layering.
+**Client-side hydration transparency cleanup.** In hydrated client environments, the component
+hides underlying initials upon verified image load to prevent bleed-through on transparent PNGs.
+The static specimens here demonstrate pure CSS scriptless layering.
+

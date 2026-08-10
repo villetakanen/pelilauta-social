@@ -1,64 +1,59 @@
 ---
 title: Iconography
-description: When an icon earns its place, when it may stand alone, and the vocabulary to choose it from.
+description: "Icon usage criteria, semantic naming rules, sizing consistency, and catalogue vocabulary."
 order: 10
 ---
 
 import IconCatalog from '@design-system/books/specimens/IconCatalog.astro'
 
-Pelilauta is a text-rich site — threads, character sheets, the shared library. An icon
-here does a job: it makes a row scannable, it marks a recurring action, it anchors a
-control. Read this to decide whether the thing you're building takes an icon at all, and
-which one. [Icon](/components/icon) explains how a single icon renders.
+Icons accelerate scanning, reinforce recurring interactions, and anchor primary UI
+controls. Every icon is identified by a semantic noun describing its meaning rather
+than its visual appearance.
 
-## An icon that doesn't aid understanding goes
+For component invocation details and source resolution tiers, see [Icon component](/components/icon).
 
-Add one where it speeds recognition of something the reader already knows, or where it
-anchors an interaction they'll repeat. If it makes the element ambiguous, drop it.
+## Purpose and recognition
 
-Give one meaning one noun, everywhere it appears. A reader who has learned `label-tag` on
-a thread should recognise it in the library.
+Icons are visual aids rather than primary content:
+- Use icons to accelerate recognition of established actions or concepts.
+- Omit icons where they add visual clutter or ambiguity.
+- Maintain consistent noun assignments across all applications (for example, `label-tag` represents tags in discussion threads and library entries alike).
 
-## Reserve icon-only controls for actions everyone knows
+## Icon-only controls
 
-Close, search, menu, settings. Everything domain-specific — publish a site, archive a
-thread, roll a die — carries visible text beside its icon.
+Reserve icon-only controls for universal interface conventions: `close`, `search`,
+`menu`, and `settings`.
 
-An icon-only control still needs an accessible name, and that name states the action it
-performs — "Close" for a control carrying a cross. The control owns that name; the icon
-doesn't supply it.
+All domain-specific actions (such as archiving threads, publishing articles, or rolling
+dice) require a visible text label beside the icon. Every icon-only interactive control
+must declare an accessible name on its parent button (for example, `aria-label="Close"`).
 
-## Never let colour or an icon carry a state alone
+## Reinforcing state
 
-A state reaches the reader as text or a structural change. An icon or a colour reinforces
-it. A row that says "error" only by turning an icon red says nothing to a reader who
-can't see it, and little to one skimming.
+Never rely on an icon or colour alone to communicate system state. Status changes must
+be expressed in text or structural change; icons and semantic colours reinforce that
+state for visual scanning.
 
-## One group, one size
+## Sizing and visual consistency
 
-A list, a navigation rail, a row of buttons: pick a size for the context and hold every
-icon in it to that size. Sizes come from the tokens, never from a hand-written length.
-[Icon](/components/icon) lists them and says which is which.
+UI regions must maintain uniform icon sizing across sibling controls. In lists, navigation
+rails, and button groups, all icons share a single tokenized size step.
 
-An icon beside text aligns to that text. The layout around it owns that alignment.
-
-## Do and don't
+## Usage guidelines
 
 | Do | Don't |
 | :--- | :--- |
-| Pair an unfamiliar or domain icon with a visible label | Ship an ambiguous icon alone |
-| Keep one size within a list or navigation group | Mix sizes, or drop in an inline SVG |
-| Give an interactive icon a target big enough to hit | Attach an action to a bare glyph with no padding |
-| Signal state with text or shape, and reinforce with the icon | Signal state with colour alone |
+| Pair unfamiliar or domain-specific icons with visible text labels | Display ambiguous icons without text labels |
+| Maintain a single icon size within a list or navigation bar | Mix icon sizes within a single control group |
+| Communicate state with text and reinforce with icon and colour | Communicate state changes through colour alone |
 
-## Choose by meaning, from what exists
+## Icon catalogue by semantic domain
 
-Every icon is a noun that describes meaning — `search`, `fox` — so artwork can be redrawn
-without renaming it. Pick from the catalogue below by the purpose you're serving. A noun
-outside it renders the missing glyph.
+Icons are grouped by semantic domain. Any noun requested outside this vocabulary renders
+the fallback missing glyph.
 
-Nouns marked proprietary come from the managed tier: licensed artwork the project doesn't
-own, available only where that submodule is.
+A noun is stable: artwork behind it may be redrawn, but the noun is not renamed or
+re-pointed at different artwork, so a noun stored in data keeps meaning what it meant.
 
 <IconCatalog
   groups={[
@@ -100,12 +95,3 @@ own, available only where that submodule is.
   ]}
 />
 
-## Adding a noun is a decision, not a step
-
-The catalogue grows one icon at a time, alongside the surface that needs it. Admitting
-open-source artwork means recording its source and licence in the tier's `PROVENANCE.md`,
-and a human approving it. Artwork the project can't license lives in the managed submodule
-and never in this repository.
-
-A migration doesn't rename a noun or re-point it at different artwork. Both are catalogue
-decisions of their own.

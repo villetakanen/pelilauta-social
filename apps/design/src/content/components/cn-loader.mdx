@@ -1,6 +1,6 @@
 ---
 title: CnLoader
-description: The design system's progress indicator — a spinning dual ring over a static noun icon, in a standalone and an inline size.
+description: "Progress indicator combining an animated dual ring over a static noun icon in standalone and inline sizes."
 order: 30
 runtime: static
 ---
@@ -12,115 +12,120 @@ import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import loaderSource from '@design-system/styles/loader.css?raw'
 import colorThemeSource from '@design-system/styles/color-theme.css?raw'
 
-`CnLoader` combines two signals in one element: a ring whose rotation says that work is
-in flight, and a static icon at its centre that says what the work is about. The icon is
-the same `Icon` every other surface uses, so the loader inherits the noun vocabulary of
-the thing it stands in for.
+`CnLoader` combines two visual signals: a spinning dual ring indicating active background
+processing, and a centred static icon identifying the entity or domain being loaded.
 
 ## When to use it
 
-Render `CnLoader` while a region cannot yet show its content, and give it the noun of the
-subject being fetched — a reader who sees the fox knows which listing is late. Use the
-standalone size when the loader replaces a region, and `inline` when it sits on a text
-line or inside a control.
+- Render in unpopulated view containers while asynchronous data resolves.
+- Pass the semantic noun corresponding to the subject being loaded (for example, `noun="fox"` for user feeds).
+- Use `inline` mode when placing the loader on a text line or beside an action label.
 
-The ring reports that something is happening and never how much of it is done. The design
-system publishes no determinate indicator, so a task whose progress is measurable is not
-served by this component.
+In a button, render the command's `Icon` while the control is ready and an inline
+`CnLoader` with the same noun while it processes. The glyph stays where it was and takes
+the ring around it, so the control reads as the same button, busy.
+[Links, Actions and Buttons](/base/links-actions-buttons) specifies the composition.
+
+```svelte
+<button type="button" disabled={sending}>
+  {#if sending}
+    <CnLoader inline noun="send" />
+  {:else}
+    <Icon noun="send" />
+  {/if}
+  <span>Send</span>
+</button>
+```
+
+<Composition themes caption="The same noun and label: the button ready, and the button processing">
+  <LoaderSpecimens group="button" />
+</Composition>
 
 ## Example
 
-<Composition themes caption="The standalone loader, and the inline loader, in Light and Dark">
+<Composition themes caption="Standalone and inline loaders in Light and Dark">
   <LoaderSpecimens group="basic" />
   <LoaderSpecimens group="inline" />
 </Composition>
 
-```mdx
-import CnLoader from '@design-system/components/CnLoader.svelte'
+```svelte
+<script>
+  import CnLoader from '@design-system/components/CnLoader.svelte'
+</script>
 
-<CnLoader />
-<CnLoader inline />
+<!-- Standalone block loader with default fox noun -->
+<CnLoader label="Ladataan sisältöä..." />
+
+<!-- Inline loader on text baseline -->
+<CnLoader inline label="Tallennetaan..." />
 ```
 
 ## Variants and states
 
-**Standalone**, the default, is three lines square (72px) and renders as a block. It is
-the size for a region that has nothing else in it yet.
+`CnLoader` provides standalone and inline sizing variants, arbitrary icon noun configuration, and reduced-motion states.
 
-**Inline** is one line square (24px) and renders inline, so it sits on a text baseline
-beside a label without disturbing the line box. Its icon steps down with it; ring
-thickness does not, which keeps the motion visible at the smaller size.
+### Sizing modes
 
-**Any noun** may be passed. The icon resolves through the same tiers as `Icon`, so an
-unknown noun renders the missing glyph rather than an empty ring.
+- **Standalone (default):** Sized to 3 line units (`72px` / `--cn-loader-size`) and renders as a block container. Uses a large centred icon.
+- **Inline (`inline={true}`):** Sized to 1 line unit (`24px` / `--cn-line`) and renders inline-block for integration on text lines without expanding the line box. Uses a small centred icon.
 
-<Composition themes caption="A custom noun with the accessible label that names its subject">
+### Semantic noun assignment
+
+Any approved catalogue noun can be passed to `noun`. Unknown nouns fall back to the standard missing glyph via `Icon`.
+
+<Composition themes caption="Custom noun with accessible descriptive label">
   <LoaderSpecimens group="custom" />
 </Composition>
 
-```mdx
-<CnLoader noun="cat" label="Loading feline data…" />
-```
-
 ## Composition
 
-A loader that is a direct child of a `<section>` or an `<article>` is centred
-horizontally and given one line of margin above and below, by `styles/loader.css` rather
-than by the component, so a container gets the treatment without the loader knowing where
-it stands.
+A loader placed as a direct child of `<section>` or `<article>` is automatically centred
+horizontally with 1 line of vertical margin via `styles/loader.css`.
 
-<Composition themes caption="The standalone loader as a direct child of a section">
+<Composition themes caption="Standalone loader as direct child of a section">
   <LoaderSpecimens group="section" />
 </Composition>
 
-Any other parent positions the loader itself. A `CnCard` whose subject is still resolving
-is the case to know about: its content region is a wrapper of the card's own, so the rule
-above does not reach it and the consumer centres the loader there.
+Within custom layout containers (such as inside a `CnCard`), the parent container must
+explicitly position and centre the loader.
 
 ## Reference
 
 ### Props
 
-| Prop | Type | Purpose |
-| :--- | :--- | :--- |
-| `noun` | `string` | The subject's icon, resolved by `Icon`. Defaults to `"fox"`. |
-| `inline` | `boolean` | Renders the one-line size on a text line. Defaults to `false`. |
-| `label` | `string` | The accessible name of the loading region. Defaults to `"Loading"`. |
+| Prop | Type | Default | Purpose |
+| :--- | :--- | :--- | :--- |
+| `noun` | `string` | `'fox'` | Semantic icon noun displayed at the centre. |
+| `inline` | `boolean` | `false` | Renders the 1-line inline-block variant. |
+| `label` | `string` | `'Loading'` | Accessible region label for assistive technology. |
 
 ### Tokens
 
 <TokenTable
   source={loaderSource}
   prefix="--cn-loader"
-  caption="Geometry, from styles/loader.css"
+  caption="Loader geometry from styles/loader.css"
 />
 
 <TokenTable
   source={colorThemeSource}
   names={['--cn-loader-color']}
   swatch
-  caption="The colour role, from styles/color-theme.css"
+  caption="Color token from styles/color-theme.css"
 />
 
-Ring and icon share the one colour role and separate by opacity: the ring at 0.72 carries
-the motion, the icon at 0.44 reads as a quiet label under it.
+The ring and centred icon share `--cn-loader-color`: the ring at 0.72 opacity and the
+centred icon at 0.44 opacity.
 
 ## Accessibility
 
-The loader is a live region: `role="status"` on the root, named by `label`. A consumer
-that knows the subject passes a label that names it, because "Loading" alone tells a
-screen-reader user which region is busy only when one region is.
-
-The ring is decorative and hidden. The icon is not: it announces its noun, as `Icon` does
-everywhere else in the system.
+`CnLoader` implements an accessible live status region:
+- Emits `role="status"` on the root container.
+- Declares the accessible name via `aria-label={label}`.
+- Hides the animated ring via `aria-hidden="true"`.
 
 ## Not shown here
 
-**Reduced motion.** Under `prefers-reduced-motion: reduce` the ring stops and the loader
-stays legible as a static ring and icon. A book cannot emulate the query for one subtree
-without duplicating the animation, and a demonstration that fakes it teaches the wrong
-thing, so the behaviour is covered by `apps/design/e2e/cn-loader.spec.ts`.
-
-**Inside a button.** The inline loader is meant for a command in flight, which needs the
-button's own loading state. That state is not specified yet, so the composition is absent
-from this book until it is.
+**Reduced-motion pause.** Under `@media (prefers-reduced-motion: reduce)`, the ring animation
+freezes while preserving the static dual ring and icon. This behaviour is asserted in
+`apps/design/e2e/cn-loader.spec.ts`.

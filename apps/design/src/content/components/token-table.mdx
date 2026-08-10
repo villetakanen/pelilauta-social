@@ -1,6 +1,6 @@
 ---
 title: TokenTable
-description: Renders every custom property a stylesheet declares, read from the stylesheet at build time.
+description: "Renders custom property declarations parsed directly from source stylesheets at build time."
 order: 20
 runtime: static
 ---
@@ -8,9 +8,17 @@ runtime: static
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-Renders the custom properties a stylesheet declares, read from that stylesheet when the
-page is built. Lexicon books use it so a published value cannot drift from the one that
-ships.
+`TokenTable` parses and renders CSS custom properties directly from raw stylesheet text
+at build time. Trailing inline comments in CSS declarations populate the table's note
+column.
+
+## When to use it
+
+- Render token declarations in lexicon books without manually transcribing values.
+- Display verified token subsets with live cascade colour swatches.
+
+Do not use `TokenTable` to explain design principles or token selection rationale;
+refer to the appropriate principles book (such as [Spatial System](/principles/spatial-system)).
 
 ## Example
 
@@ -31,41 +39,40 @@ import unitsSource from '@design-system/styles/units.css?raw'
 />
 ```
 
-A declaration's trailing inline comment becomes its last column. A comment on its own line
-introduces what follows and is left alone.
+## Variants and states
 
-## Props
+`TokenTable` supports filtering by explicit names or name prefixes, and optional colour swatch rendering.
+
+### Token filtering
+
+Pass `names` for an explicit token list, or `prefix` to include all tokens matching a leading substring. Use `without` to exclude matching substrings from a prefix query.
+
+### Colour swatches
+
+Setting `swatch={true}` renders an inline colour chip per row evaluated against the active theme (`light-dark()`). Each swatch element renders a `data-swatch="--token-name"` attribute.
+
+## Reference
+
+### Props
 
 | Prop | Type | Purpose |
 | :--- | :--- | :--- |
-| `source` | `string` | The stylesheet text, imported with `?raw`. Required. |
-| `names` | `string[]` | Exact tokens to show. |
-| `prefix` | `string` | Every token whose name starts with this. |
-| `without` | `string` | Drops tokens whose name contains this, after the include filter. |
-| `swatch` | `boolean` | Renders a colour chip per row, resolved through the live cascade. |
-| `caption` | `string` | Names what the reader is looking at. |
-| `noteLabel` | `string` | Heading for the trailing-comment column. Defaults to `Resolves to`. |
+| `source` | `string` | Raw stylesheet string imported with `?raw`. Required. |
+| `names` | `string[]` | Explicit token names to render. |
+| `prefix` | `string` | Prefix filter matching custom property names. |
+| `without` | `string` | Substring exclusion filter applied after prefix matching. |
+| `swatch` | `boolean` | Renders a live colour swatch per row. Defaults to `false`. |
+| `caption` | `string` | Accessible table caption text. |
+| `noteLabel` | `string` | Header label for trailing comment column. Defaults to `"Resolves to"`. |
 
-`names` and `prefix` are alternatives; rows come back in the stylesheet's order either
-way, and a prefix with its `without` complement covers the file between them.
+## Accessibility
 
-`swatch` resolves `var(--token)` in the reader's own mode, so a `light-dark()` role shows
-the arm in force. Each chip carries `data-swatch="--token-name"` for browser checks.
+`TokenTable` emits standard semantic HTML `<table>` elements with accessible `<caption>`
+headers. Swatches are decorative elements hidden from assistive technology.
 
-## When to use it
+## Not shown here
 
-- Any page that would otherwise state a token's value by hand.
-- A lexicon book, where listing every token in a family is the page's job.
+**Build failure on unmatched filters.** If a configured `names` or `prefix` filter matches zero
+declarations in `source`, the component raises a build error. This build-time validation is
+verified by `packages/design-system/test/token-table.test.ts`.
 
-Do not use it to explain *which* token to reach for — that is a principles book's, such as
-[Spatial System](/principles/spatial-system).
-
-## Behaviour worth knowing
-
-**A selection that matches nothing fails the build**, naming the filter that missed. After
-a rename the alternatives are an empty table or every token in the file, and both publish
-a page that is wrong without saying so.
-
-It guarantees completeness, not correctness: it shows what the stylesheet declares, and
-proves nothing about whether those values are right. Parity and derivation are asserted in
-`packages/design-system/test/units.test.ts`.
