@@ -207,4 +207,21 @@
     var(--cn-color-primary-60),
     var(--cn-color-surface-60)
   );
+
+  /* An identity backdrop is any mix of these two, so both ends and everything
+     between them answer to --cn-on-avatar, and to the page behind the mark. The
+     bands invert per mode: dark chips on the light page, light chips on the dark
+     one. */
+  --cn-avatar-backdrop-from: light-dark(
+    var(--cn-color-primary-30),
+    var(--cn-color-primary-60)
+  );
+  --cn-avatar-backdrop-to: light-dark(
+    var(--cn-color-surface-50),
+    var(--cn-color-surface-80)
+  );
+  --cn-on-avatar: light-dark(
+    var(--cn-color-surface-95),
+    var(--cn-color-surface-10)
+  );
 }

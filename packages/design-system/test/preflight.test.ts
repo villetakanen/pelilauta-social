@@ -148,6 +148,7 @@ describe('entry point', () => {
       './content-containers.css',
       './surface.css',
       './loader.css',
+      './identity.css',
     ]);
   });
 

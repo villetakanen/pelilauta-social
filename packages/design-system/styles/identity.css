@@ -1,0 +1,44 @@
+/*
+ * Identity marks
+ *
+ * The textual mark, and what an anchor does to either mark. The pictorial mark
+ * styles itself; only its response to a link lives here, because a component's
+ * scoped styles cannot reach the anchor that wraps it.
+ *
+ * Spec: specs/design-system/identity-mark/spec.md
+ */
+
+.cn-nick {
+  font-weight: var(--cn-font-weight-emphasis);
+  color: var(--cn-text-high);
+  text-decoration: none;
+}
+
+a.cn-nick:hover {
+  color: var(--cn-link-hover);
+}
+
+a.cn-nick:active {
+  color: var(--cn-link-active);
+}
+
+/* An anchor around the pictorial mark is the mark's own box: no underline
+   across the circle, and no line-height gap between the two. */
+a:has(> .cn-avatar) {
+  display: inline-flex;
+  text-decoration: none;
+}
+
+a:hover .cn-avatar {
+  box-shadow: var(--cn-shadow-elevation-2);
+}
+
+/* The focus ring follows the circle rather than the anchor's rectangle. */
+a:has(> .cn-avatar):focus-visible {
+  outline: none;
+}
+
+a:focus-visible .cn-avatar {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}

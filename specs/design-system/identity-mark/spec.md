@@ -41,12 +41,14 @@ is acceptable. The derivation method is the implementer's, judged on the result:
 varied backdrops that sit in the surface palette, with initials legible against
 them in both Light and Dark.
 
-The marks carry no design-system-authored human-readable strings; the application
-is trilingual and the design system has no translator. Standalone, the pictorial
-mark announces the bare nick to assistive technology. Inside a composition that
-already names the profile — a labelled anchor, an adjacent textual mark — it is
-decorative. The anonymous placeholder is decorative; naming the anonymous state is
-the consumer's.
+The marks carry no design-system-authored human-readable strings. Standalone,
+the pictorial mark announces the bare nick to assistive technology. Inside a
+composition that already names the profile — a labelled anchor, an adjacent
+textual mark — it is decorative. A nick is missing when it is absent or empty;
+the anonymous placeholder a missing nick yields is decorative. A missing nick
+may stand for a deleted, an anonymous or a redacted profile, and naming the
+state, in visible text and to assistive technology, is the application's,
+localised where it is printed.
 
 ## Contract
 
