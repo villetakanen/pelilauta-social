@@ -20,13 +20,18 @@ states a change. The anatomy and the writing rules are `specs/TEMPLATE.md`.
    design-system spec's subject is the package both applications consume; do not
    write a criterion that holds for only one of them. The template is the model;
    a sibling spec is not. Its length, structure and habits are not evidence.
-4. Frontmatter is `status: draft | approved | deprecated`, nothing else. New and
-   altered intent is `draft` until the spec approver approves it — any edit to an
-   approved spec returns it to `draft`.
-5. Record an irreversible decision as an ADR in `docs/adrs/`, and link it.
-6. Run the review gate, then ask the spec approver for approval. The request
-   carries the Subtraction outcome in one line — what was cut, or that nothing
-   could be.
+4. Frontmatter is `status: draft | approved | deprecated`, nothing else. A new
+   spec starts `draft`. `approved` means a human has read the spec through and
+   agrees with it, and no spec change is committed without that.
+5. Ask the spec approver, and wait, before editing an approved spec. Name the
+   file and state the change in one line; do not write the edit until they
+   answer. The edit returns the spec to `draft`, and their acceptance returns it
+   to `approved`.
+6. Record an irreversible decision as an ADR in `docs/adrs/`, and link it.
+7. Run the review gate for a new spec or substantially altered intent, then ask
+   the spec approver for approval. The request carries the Subtraction outcome in
+   one line — what was cut, or that nothing could be. A change small enough to
+   state in the ask is approved in the ask, and needs no gate of its own.
 
 ## Delivery Boundary
 
@@ -34,9 +39,9 @@ A missing spec, or a substantive change that requires intent to be settled, is a
 separate task. Approve it before implementation begins.
 
 A minor clarification or correction to an existing spec may be part of its delivery
-slice, including when a bug fix uncovers it. Write the amendment, run the review gate
-and request approval mid-flight. Pause work that relies on the amendment until the
-spec approver decides; do not defer the request to delivery review.
+slice, including when a bug fix uncovers it. Ask, then write the amendment. Pause work
+that relies on it until the spec approver decides; do not defer the request to
+delivery review.
 
 ## Prose
 
@@ -90,6 +95,6 @@ Unresolved findings go to the spec approver with the approval request.
 
 ## Maintenance
 
-Implementation findings update the spec in the same commit as the behaviour
-change. A real intent ambiguity is reconciled with the spec approver, not resolved
-by trusting either prose or code.
+An implementation finding is raised with the spec approver before it is written, and
+lands in the same commit as the behaviour it describes. A real intent ambiguity is
+reconciled with the spec approver, not resolved by trusting either prose or code.

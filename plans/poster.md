@@ -31,6 +31,9 @@ artwork it renders.
    one or where their images come from
 8. Pelilauta has no live dependency on Cyan's background-poster selectors,
    gradient, light-scheme filter or navigation blend rule
+9. A page carrying a poster can carry its copyright note, readable and
+   selectable over artwork the design system does not control, without the
+   poster ceasing to be decorative
 
 ## Known scope
 
@@ -42,12 +45,20 @@ plus a legibility halo on `nav#rail` and `nav#tray`. The flat surface override
 belongs to the poster's stylesheet, conditioned on a poster being mounted, so
 `surface.css` keeps one unconditional definition per level.
 
+The copyright note is the one part of the poster that is not decorative. It is
+readable and selectable, it takes a focus stop when it carries a link, and it
+sits over the artwork rather than on the ground plane, so it needs a legibility
+treatment of its own. It withdraws wherever the poster paints nothing, since
+there is then nothing to credit, and it holds its position under both the
+scrolling and the pinned placement.
+
 ### Open
 
-- The capability contract and the design-system component: spec, scriptless
-  `CnPoster.astro`, its stylesheet in the CSS entry point, and the Component
-  book demonstrating both placements. Needs a poster slot on the design site's
-  book layout.
+- The copyright note: a design-system component taking the note as a string and
+  an optional link, mounted through its own slot beside the poster. The design
+  system does not model licences — the consuming application composes the
+  string, from `assets[]` or from anywhere else. Needs a spec and a Component
+  book.
 - Hub pages onto the design-system poster: front page, channels index, channel,
   library. Retires the app-local `ui/BackgroundPoster.astro` and neutralises
   Cyan's poster rules.
@@ -57,10 +68,15 @@ belongs to the poster's stylesheet, conditioned on a poster being mounted, so
 
 ### Done
 
-- None
+- The capability contract and the design-system component: spec, scriptless
+  `CnPoster.astro`, its stylesheet in the CSS entry point, and the Component
+  book, which mounts a real poster through the book layout because a page-level
+  singleton cannot be demonstrated inside a figure.
 
 ## Outscoped
 
+- The licence vocabulary, and how an application derives a copyright note from
+  `assets[]`, `site.license` or anything else
 - `SiteListItem`'s card-level poster and its shader
 - Application bar, rail and tray beyond the transparency and halo the poster needs
 - Site theming settings, and how a site's background image is chosen or uploaded
