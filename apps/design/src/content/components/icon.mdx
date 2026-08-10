@@ -35,6 +35,7 @@ import Icon from '@design-system/components/Icon.svelte'
 | `noun` | `string` | The artwork to resolve. Absent or empty renders the missing glyph. |
 | `size` | `xsmall`, `small`, `medium`, `large`, `xlarge` | Defaults to `medium`. |
 | `aria-label` | `string` | Overrides the noun as the accessible name. Defaults to the noun. |
+| `decorative` | `boolean` | Removes the accessible name and the title tooltip. Defaults to `false`. |
 
 ## Sizes
 
@@ -100,7 +101,9 @@ glyph and the build completes.
 
 The icon carries an `aria-label` — the noun, or the one you pass — and keeps the noun as
 its SVG title, which is what a mouse tooltip shows. Passing a label changes the accessible
-name only.
+name only. A `decorative` icon exposes neither: nothing is announced, and no tooltip
+appears, for an icon whose composition already carries the meaning or deliberately
+withholds it.
 
 An icon that is a control's only content doesn't name that control. The control owns its
 own accessible name.

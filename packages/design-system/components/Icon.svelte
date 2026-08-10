@@ -14,7 +14,9 @@
  * preserving observed v18 behavior (spec decision 2026-07-20). A consumer may
  * pass an explicit `aria-label` that overrides the noun as the icon's aria-label
  * when the noun is not the meaning to convey — e.g. a brand mark. This affects
- * ARIA only: the <title> tooltip stays the noun.
+ * ARIA only: the <title> tooltip stays the noun. A `decorative` icon exposes
+ * nothing: no role, no aria-label, and no <title>, so no tooltip either
+ * (spec decision 2026-08-10).
  *
  * Spec: specs/design-system/components/cn-icon/spec.md
  */
@@ -26,10 +28,12 @@ let {
   noun = '',
   size = 'medium',
   'aria-label': ariaLabel = '',
+  decorative = false,
 }: {
   noun?: string;
   size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   'aria-label'?: string;
+  decorative?: boolean;
 } = $props();
 
 // Resolved icon as pre-normalized inner markup plus a viewBox. The open-source
@@ -75,8 +79,14 @@ const dimension = $derived(sizes[size] || sizes.medium);
 </script>
 
 <span class="cn-icon" data-noun={noun} style="--icon-dim: {dimension};">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox={resolved.viewBox} role="img" aria-label={ariaLabel || noun}>
-    <title>{noun}</title>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox={resolved.viewBox}
+    role={decorative ? undefined : 'img'}
+    aria-label={decorative ? undefined : ariaLabel || noun}
+    aria-hidden={decorative ? 'true' : undefined}
+  >
+    {#if !decorative}<title>{noun}</title>{/if}
     {@html resolved.inner}
   </svg>
 </span>
