@@ -25,6 +25,25 @@
     7
   ); /* 56px, the standard floating action button */
   /*
+   * The identity mark's three diameters, in lines rather than grid units: a mark
+   * sits beside text, so it measures in the text's leading. Both the mark and a
+   * list's overflow count read them, which is why they are named here rather
+   * than restated in each. Spec: specs/design-system/identity-mark/spec.md
+   */
+  --cn-avatar-size-small: calc(
+    var(--cn-line) *
+    1.5
+  ); /* 36px, beside one line */
+  --cn-avatar-size-medium: calc(
+    var(--cn-line) *
+    2
+  ); /* 48px, heading a region */
+  --cn-avatar-size-large: calc(
+    var(--cn-line) *
+    3
+  ); /* 72px, standing for the profile itself; Cyan's one diameter */
+
+  /*
    * Icon sizes: absolute lengths rather than grid multiples, following v20, which
    * files them beside the grid and marks them absolute. Spec:
    * specs/design-system/components/cn-icon/spec.md

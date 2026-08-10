@@ -162,6 +162,7 @@ describe('against the production units.css', () => {
       ...parseTokens(unitsSource, { prefix: '--cn-border-radius' }),
       ...parseTokens(unitsSource, { prefix: '--cn-button' }),
       ...parseTokens(unitsSource, { prefix: '--cn-fab' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-avatar-size' }),
       ...parseTokens(unitsSource, { prefix: '--cn-icon-size' }),
       ...parseTokens(unitsSource, { prefix: '--cn-z' }),
       ...parseTokens(unitsSource, { prefix: '--cn-duration' }),

@@ -6,9 +6,6 @@ body {
 main > footer {
   text-shadow: 1px 1px 12px var(--color-background);
 }
-main > footer cn-avatar {
-  text-shadow: none;
-}
 main > footer a {
   color: var(--cn-link);
 }
