@@ -44,10 +44,11 @@ The mark renders the anonymous state without naming it. What a missing nick mean
 a deleted profile, an anonymous one, a redacted one — and the localised word for it
 are decided by the application, which prints the word in its own text.
 
-The mark has two sizes. Small is one and a half lines, for a mark beside a line of
-text; medium, the default, is two lines, for a mark that heads a region.
+The mark has three sizes. Small is one and a half lines, for a mark beside a line of
+text; medium, the default, is two lines, for a mark that heads a region; large is
+three lines, for the page that is about the profile itself.
 
-<Composition themes caption="Small and medium">
+<Composition themes caption="Small, medium and large">
   <IdentitySpecimens group="sizes" />
 </Composition>
 
@@ -76,6 +77,73 @@ backdrops on the light page, light backdrops on the dark one.
   swatch
   caption="The ends of the backdrop range and the text role over it, from styles/color-theme.css"
 />
+
+## A list of marks
+
+Where a view shows who is present rather than who did one thing — the readers
+active in the community, the people who keep a site — the marks go in a list. The
+class is `cn-avatar-list` on whichever element the composition calls for, usually a
+`ul`. It arranges the marks it is given; how many of them there are is yours.
+
+<Composition themes caption="Six linked marks in a list">
+  <IdentitySpecimens group="list" />
+</Composition>
+
+The marks overlap, so a crowd reads as a crowd rather than as a row of separate
+pictures. Overlapping costs them the separation that standing apart gave them, and
+each mark takes it back from its own backdrop: inside a list the image draws within
+the circle instead of filling it, leaving a rim of the colour its nick derived. The
+list therefore needs to know nothing about the surface it sits on, and a mark
+outside a list is unchanged.
+
+A list does not size its marks — pass the size you want to each, and use one size
+throughout a list.
+
+<Composition themes caption="A list of small marks, and the same list at the default size">
+  <IdentitySpecimens group="list-sizes" />
+</Composition>
+
+Past the width it is given, a list wraps. Every line begins at the same inline
+position, so a wrapped list keeps a straight leading edge.
+
+<Composition themes caption="A crowd wrapped in a narrow column">
+  <IdentitySpecimens group="list-wrapped" />
+</Composition>
+
+### The marks a list does not show
+
+A list may close with a count: `cn-avatar-list__overflow`, a plus and a numeral,
+matching the marks in geometry and taking the anonymous mark's presentation because
+it stands for no one profile. It carries no word — the design system serves three
+languages and translates none of them, and a numeral needs no translation. Take the
+matching size modifier when the marks are anything but medium.
+
+<Composition themes caption="Four marks and a count, at both sizes">
+  <IdentitySpecimens group="list-overflow" />
+</Composition>
+
+```mdx
+<ul class="cn-avatar-list">
+  {shown.map((profile) => (
+    <li>
+      <a href={`/profiles/${profile.key}`} aria-label={profile.nick}>
+        <CnAvatar src={profile.avatarURL} nick={profile.nick} aria-hidden />
+      </a>
+    </li>
+  ))}
+  <li><span class="cn-avatar-list__overflow" aria-hidden="true">+{rest}</span></li>
+</ul>
+```
+
+The count is decorative. A list whose total matters names it in the application's
+own text, in the reader's language, the way the anonymous mark's meaning is named.
+
+Marks with no nick derive no backdrop, so a run of them has nothing but each mark's
+elevation between one circle and the next. It is the thinnest the overlap gets.
+
+<Composition themes caption="The anonymous run: no nicks, no derived backdrops">
+  <IdentitySpecimens group="list-anonymous" />
+</Composition>
 
 ## Inside a link
 

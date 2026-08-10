@@ -3,13 +3,16 @@ import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import AvatarLink from '../../svelte/app/AvatarLink.svelte';
 
-// Fetch active users from the API and dislplay the first 11 users
-// in the footer of the app.
+// Fetch active users from the API and display the first 11 in the footer of the
+// app, with a count standing for the rest.
 //
 // On error, the widget will simply not be displayed -
 // and the error will be logged.
 
+const SHOWN = 11;
+
 let activeUids: string[] = [];
+let overflow = 0;
 
 try {
   const activeUidsRequest = await fetch(
@@ -19,8 +22,8 @@ try {
   if (!Array.isArray(response)) {
     throw new Error('Invalid response format: expected array');
   }
-  // Limit to 11 latest users
-  activeUids = response.slice(0, 11);
+  activeUids = response.slice(0, SHOWN);
+  overflow = Math.max(0, response.length - activeUids.length);
 } catch (e) {
   logError(e, 'Failed to fetch active users');
 }
@@ -28,17 +31,30 @@ try {
 {activeUids.length > 0 && (
   <section class="active-users-widget">
     <h4>{t('app:footer.activeUsers.title')}</h4>
-    <div class="grid aug">
+    <ul class="cn-avatar-list">
       {activeUids.map((uid: string) => (
-        <AvatarLink uid={uid} client:only="svelte"/>
+        <li><AvatarLink uid={uid} size="medium" client:only="svelte"/></li>
       ))}
-    </div>
+      {overflow > 0 && (
+        <li>
+          <span class="cn-avatar-list__overflow" aria-hidden="true">
+            +{overflow}
+          </span>
+        </li>
+      )}
+    </ul>
   </section>
 )}
 
 <style>
-.aug {
-  --gw: 7;
-  grid-template-columns: calc(var(--cn-grid) * var(--gw)) calc(var(--cn-grid) * var(--gw)) calc(var(--cn-grid) * var(--gw)) calc(var(--cn-grid) * var(--gw));
+/*
+ * AvatarLink resolves its profile in the browser, so each island is empty until
+ * it hydrates and the list would collapse and then jump. Hold the small mark's
+ * box until then. Retire this with the island: v20 resolves the profile upstream
+ * and renders the mark on the server.
+ */
+.active-users-widget li {
+  min-inline-size: var(--cn-avatar-size-medium);
+  min-block-size: var(--cn-avatar-size-medium);
 }
 </style>

@@ -20,7 +20,7 @@ let {
 }: {
   src?: string;
   nick?: string;
-  size?: 'small' | 'medium';
+  size?: 'small' | 'medium' | 'large';
   'aria-hidden'?: boolean;
 } = $props();
 
@@ -38,16 +38,15 @@ const initials = $derived([...nick].slice(0, 2).join('').toUpperCase());
 const decorative = $derived(ariaHidden || !nick);
 
 /**
- * Client-side enhancement only: hides the initials under an image with
- * transparent regions. The image may load before hydration, so the effect
- * re-checks the element instead of trusting the load event alone.
+ * Only the quote and the backslash need escaping inside `url("…")`; everything
+ * else a Storage URL or a data URI carries is already legal there. Percent-
+ * encoding the whole string would re-encode the escapes a data URI is made of.
  */
-let image: HTMLImageElement | undefined = $state();
-let loaded = $state(false);
-$effect(() => {
-  src;
-  loaded = Boolean(image?.complete && image.naturalWidth > 0);
-});
+const imageLayer = $derived(
+  src
+    ? `background-image: url("${src.replaceAll('\\', '%5C').replaceAll('"', '%22')}")`
+    : '',
+);
 </script>
 
 <div
@@ -59,25 +58,18 @@ $effect(() => {
   aria-hidden={decorative ? 'true' : undefined}
 >
   {#if nick}
-    <span class="cn-avatar__initials" class:covered={loaded} aria-hidden="true">
+    <span class="cn-avatar__initials" aria-hidden="true">
       {initials}
     </span>
   {:else}
-    <Icon noun="avatar" decorative size={size === 'small' ? 'small' : 'medium'} />
+    <Icon noun="avatar" decorative />
   {/if}
   {#if src}
-    <!-- Painted over the always-rendered fallback: a failed load with an empty
-         alt paints nothing, so recovery needs no script. -->
-    <img
-      {src}
-      alt=""
-      loading="lazy"
-      decoding="async"
-      bind:this={image}
-      onload={() => {
-        loaded = true;
-      }}
-    />
+    <!-- The image is a background rather than an <img> so that recovery needs no
+         script: a background that fails to load paints nothing at all, while a
+         broken <img> paints the browser's own glyph over the fallback — a torn
+         page in Chrome, a question mark in Safari, neither of them removable. -->
+    <span class="cn-avatar__image" style={imageLayer}></span>
   {/if}
 </div>
 
@@ -103,12 +95,18 @@ $effect(() => {
     );
   }
 
+  /* All three diameters are named in styles/units.css, because a list's overflow
+     count has to match them without restating the arithmetic. */
   .cn-avatar--small {
-    --cn-avatar-size: calc(var(--cn-line) * 1.5);
+    --cn-avatar-size: var(--cn-avatar-size-small);
   }
 
   .cn-avatar--medium {
-    --cn-avatar-size: calc(var(--cn-line) * 2);
+    --cn-avatar-size: var(--cn-avatar-size-medium);
+  }
+
+  .cn-avatar--large {
+    --cn-avatar-size: var(--cn-avatar-size-large);
   }
 
   .cn-avatar--anonymous {
@@ -116,16 +114,25 @@ $effect(() => {
     color: var(--cn-on-surface);
   }
 
-  .cn-avatar img {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
+  /* The glyph is a proportion of the mark rather than a step on the icon scale:
+     the mark has three diameters and the scale has no step between 36px and 72px,
+     so a large mark would take a glyph that runs to its rim. The proportion is the
+     one the medium mark already had. */
+  .cn-avatar :global(.cn-icon) {
+    width: calc(var(--cn-avatar-size) * 0.75);
+    height: calc(var(--cn-avatar-size) * 0.75);
   }
 
-  .cn-avatar__initials.covered {
-    visibility: hidden;
+  /* Inside a list the ring insets the image, leaving a rim of the nick's own
+     backdrop to separate the mark from the one it overlaps. Outside one the ring
+     is zero and the image fills the circle. */
+  .cn-avatar__image {
+    position: absolute;
+    inset: var(--cn-avatar-ring, 0px);
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   .cn-avatar__initials {
@@ -134,5 +141,8 @@ $effect(() => {
     font-size: calc(var(--cn-avatar-size) * 0.4);
     line-height: 1;
     text-transform: uppercase;
+    /* The initials answer to the backdrop the nick derived, not to the text
+       treatment of the surface the mark was dropped onto. */
+    text-shadow: none;
   }
 </style>

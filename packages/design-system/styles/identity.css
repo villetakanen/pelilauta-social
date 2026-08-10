@@ -1,9 +1,10 @@
 /*
  * Identity marks
  *
- * The textual mark, and what an anchor does to either mark. The pictorial mark
- * styles itself; only its response to a link lives here, because a component's
- * scoped styles cannot reach the anchor that wraps it.
+ * The textual mark, the list of pictorial marks, and what an anchor does to
+ * either mark. The pictorial mark styles itself; what lives here is what its
+ * scoped styles cannot reach — the anchor that wraps it, and the list that
+ * arranges it beside its neighbours.
  *
  * Spec: specs/design-system/identity-mark/spec.md
  */
@@ -41,4 +42,73 @@ a:has(> .cn-avatar):focus-visible {
 a:focus-visible .cn-avatar {
   outline: 2px solid var(--cn-focus-ring);
   outline-offset: 2px;
+}
+
+/*
+ * A list of pictorial marks: who is present, rather than who did one thing.
+ *
+ * The marks overlap, and each takes back the separation it loses from its own
+ * backdrop — the ring insets the image so the nick's colour shows around it —
+ * so a list needs to know nothing about the surface it sits on.
+ */
+.cn-avatar-list {
+  --cn-avatar-list-overlap: var(--cn-grid);
+  --cn-avatar-ring: calc(var(--cn-grid) * 0.25);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: var(--cn-grid);
+  column-gap: 0;
+  /* Cancels the leading mark's negative margin. Every wrapped line carries the
+     same negative margin, so every line begins at the same inline position. */
+  padding-inline-start: var(--cn-avatar-list-overlap);
+  padding-block: 0;
+  padding-inline-end: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.cn-avatar-list > * {
+  /* Positioned so the marks paint in document order: a later mark over an
+     earlier one, carrying its shadow onto the neighbour beneath it. */
+  position: relative;
+  margin-inline-start: calc(-1 * var(--cn-avatar-list-overlap));
+}
+
+/* The marks a list does not show, as a plus and a numeral. It stands for no one
+   profile, so it takes the anonymous mark's presentation. */
+.cn-avatar-list__overflow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--cn-avatar-size-medium);
+  block-size: var(--cn-avatar-size-medium);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  box-shadow: var(--cn-shadow-elevation-1);
+  background: var(--cn-surface-2);
+  color: var(--cn-on-surface);
+  font-family: var(--cn-font-family-ui);
+  font-weight: var(--cn-font-weight-emphasis);
+  /* Below the initials' step: the count runs to three characters, they run to two. */
+  font-size: calc(var(--cn-avatar-size-medium) * 0.3);
+  line-height: 1;
+  user-select: none;
+  /* As with the initials: the count reads against the anonymous mark's surface,
+     not against the text treatment of whatever the list sits on. */
+  text-shadow: none;
+}
+
+.cn-avatar-list__overflow--small {
+  inline-size: var(--cn-avatar-size-small);
+  block-size: var(--cn-avatar-size-small);
+  font-size: calc(var(--cn-avatar-size-small) * 0.3);
+}
+
+.cn-avatar-list__overflow--large {
+  inline-size: var(--cn-avatar-size-large);
+  block-size: var(--cn-avatar-size-large);
+  font-size: calc(var(--cn-avatar-size-large) * 0.3);
 }

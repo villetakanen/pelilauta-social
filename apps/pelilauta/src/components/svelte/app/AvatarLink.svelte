@@ -5,8 +5,10 @@ import { getProfileAtom, loading } from '../../../stores/profiles';
 
 interface Props {
   uid: string;
+  /** Small by default: most links sit beside a single line of text. */
+  size?: 'small' | 'medium' | 'large';
 }
-const { uid }: Props = $props();
+const { uid, size = 'small' }: Props = $props();
 
 const profileAtom = getProfileAtom(uid);
 const profile = $derived($profileAtom);
@@ -17,8 +19,8 @@ const isLoading = $derived($loading.includes(uid));
   <CnLoader inline noun="avatar" />
 {:else if profile}
   <a href="/profiles/{profile.key}" aria-label={profile.nick}>
-    <CnAvatar src={profile.avatarURL} nick={profile.nick} size="small" aria-hidden />
+    <CnAvatar src={profile.avatarURL} nick={profile.nick} {size} aria-hidden />
   </a>
 {:else}
-  <CnAvatar size="small" />
+  <CnAvatar {size} />
 {/if}

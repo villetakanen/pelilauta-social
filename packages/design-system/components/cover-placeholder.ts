@@ -15,8 +15,15 @@
  * Spec: specs/design-system/components/cn-card/spec.md
  */
 
-/** 16:9, so it drops into a cover region without changing its geometry. */
-export const COVER_PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+/**
+ * 16:9, so it drops into a cover region without changing its geometry.
+ *
+ * The root carries `width` and `height` as well as the `viewBox`: with the
+ * viewBox alone the artwork has no intrinsic size, and a host box of another
+ * shape scales the drawing inside the SVG instead of letting `object-fit` crop
+ * it — a circle would letterbox the landscape rather than fill.
+ */
+export const COVER_PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#102d3b"/>

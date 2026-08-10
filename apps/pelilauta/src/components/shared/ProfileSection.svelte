@@ -13,7 +13,7 @@ const { profile }: Props = $props();
   class="column-s flex"
   style="flex-direction: column; align-items: center;"
 >
-  <CnAvatar src={profile.avatarURL} nick={profile.nick} aria-hidden />
+  <CnAvatar src={profile.avatarURL} nick={profile.nick} size="large" aria-hidden />
 
   <p class="m-0 text-center">
     <strong>{profile.nick}</strong><br />
