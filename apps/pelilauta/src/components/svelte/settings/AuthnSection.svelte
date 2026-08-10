@@ -1,6 +1,7 @@
 <script lang="ts">
 // Import stores and utilities
 
+import CnAvatar from '@design-system/components/CnAvatar.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { authUser, uid } from 'src/stores/session'; // Use centralized session stores
@@ -73,9 +74,9 @@ async function updateAvatar() {
         <p>{avatarURL || '---'}</p>
         {#if avatarURL && avatarURL !== $profile?.avatarURL}
           <div class="flex flex-row items-center my-1">
-            <cn-avatar src={$profile?.avatarURL} alt="Current Avatar"></cn-avatar>
+            <CnAvatar src={$profile?.avatarURL} aria-hidden />
             <span class="mx-1"><Icon noun="add" /></span>
-            <cn-avatar src={avatarURL} alt="New Avatar"></cn-avatar>
+            <CnAvatar src={avatarURL} aria-hidden />
           </div>
           <button
           type="button"
