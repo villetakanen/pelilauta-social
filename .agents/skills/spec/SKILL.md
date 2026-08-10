@@ -18,7 +18,8 @@ states a change. The anatomy and the writing rules are `specs/TEMPLATE.md`.
    keep working, and the parent specs.
 3. Create or update `specs/<domain>/<capability>/spec.md` from the template. A
    design-system spec's subject is the package both applications consume; do not
-   write a criterion that holds for only one of them.
+   write a criterion that holds for only one of them. The template is the model;
+   a sibling spec is not. Its length, structure and habits are not evidence.
 4. Frontmatter is `status: draft | approved | deprecated`, nothing else. New and
    altered intent is `draft` until the spec approver approves it — any edit to an
    approved spec returns it to `draft`.
@@ -48,6 +49,10 @@ for example): dry, strict, technical.
   appears only when Y is a mistake an implementer would actually make.
 - Complete sentences in the template's sections; values in tables, behaviour
   in Gherkin.
+- One fact per sentence. A `because`, `so that` or `not X` tail states the reason
+  for a requirement, and the reason belongs in the commit message. Keep it only
+  where the reason is itself the requirement.
+- No sentence restates the one before it in other words.
 - Density comes from the template's sentence test, not from fragmenting
   sentences.
 
@@ -58,7 +63,12 @@ the text challenges the spec, not the code:
 
 - **Ambiguity:** can two implementers read a requirement differently?
 - **Testability:** can each Definition of Done criterion and Scenario be run
-  against the product?
+  against the product? A method — the fixture, artwork, viewport or scheme a check
+  uses — belongs in Definition of Done. In Blueprint it is a check wearing intent's
+  clothes.
+- **Guarantee:** does a requirement promise an outcome over input the capability
+  does not control? State it as the target the implementation is tuned to, and put
+  the measurable case in Definition of Done.
 - **Edge cases:** states the intent implies and the text omits — empty, error,
   unknown input, both themes.
 - **Compatibility:** claims about v18 or v20 that no reader can check.
@@ -71,6 +81,10 @@ the text challenges the spec, not the code:
   show up in more than this capability, the line is another capability's role, and
   this spec names the role rather than its value. What survives is the intent.
 - **Subtraction:** run last, line by line — the template's derivability test.
+
+Every gate above Subtraction adds text. Apply their findings, then run Subtraction
+over the result: a spec that leaves the gate longer than it entered has usually
+failed it.
 
 Unresolved findings go to the spec approver with the approval request.
 
