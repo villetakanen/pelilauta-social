@@ -149,6 +149,7 @@ describe('entry point', () => {
       './surface.css',
       './loader.css',
       './identity.css',
+      './poster-credits.css',
       // Last, so its ground-plane override outranks surface.css by source order.
       './poster.css',
     ]);

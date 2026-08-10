@@ -14,5 +14,6 @@
 @import "./surface.css";
 @import "./loader.css";
 @import "./identity.css";
+@import "./poster-credits.css";
 /* Last: the poster overrides the ground plane surface.css declares. */
 @import "./poster.css";

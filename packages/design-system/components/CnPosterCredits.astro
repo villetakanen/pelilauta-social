@@ -1,0 +1,29 @@
+---
+/**
+ * CnPosterCredits — the copyright note for a page poster's artwork.
+ *
+ * Spec: specs/design-system/components/cn-poster-credits/spec.md
+ *
+ * The note is a string the application composes. The design system holds no
+ * licence vocabulary and derives no text.
+ *
+ * Book: apps/design/src/content/components/cn-poster-credits.mdx
+ */
+interface Props {
+  /** The copyright text. An empty one emits nothing. */
+  note: string;
+  /** Links the note to the copyright holder or the licence. */
+  href?: string;
+}
+
+const { note, href } = Astro.props;
+const text = note?.trim();
+---
+
+{
+  text && (
+    <p class="cn-poster-credits text-small">
+      {href ? <a href={href}>{text}</a> : text}
+    </p>
+  )
+}
