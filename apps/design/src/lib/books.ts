@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import taxonomy from '@design-system/books/groups.json';
+import runtimeVocabulary from '@design-system/books/runtimes.json';
 
 /**
  * The site reads the design system's own taxonomy and fills it from the content
@@ -16,6 +17,20 @@ export type GroupId = 'principles' | 'base' | 'tokens' | 'components';
 
 export const GROUPS: readonly { id: GroupId; label: string }[] =
   taxonomy.groups as { id: GroupId; label: string }[];
+
+/**
+ * What an application must do to make a component work in the browser. A tuple,
+ * because the collection schema builds its enum from these ids — which keeps
+ * runtimes.json the only place the vocabulary is written.
+ */
+export const RUNTIME_IDS = runtimeVocabulary.runtimes.map(
+  (runtime) => runtime.id,
+) as [string, ...string[]];
+
+export type RuntimeId = (typeof RUNTIME_IDS)[number];
+
+export const runtimeLabel = (id: string): string =>
+  runtimeVocabulary.runtimes.find((runtime) => runtime.id === id)?.label ?? id;
 
 export interface BookLink {
   title: string;

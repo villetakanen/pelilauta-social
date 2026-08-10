@@ -5,12 +5,13 @@
  * Owns <html>, <head>, the skip link, the masthead, the navigation and the
  * footer, and renders a book's <h1> from its frontmatter title.
  */
+import CnPoster from '@design-system/components/CnPoster.astro';
 import '@design-system/styles/ds.css';
 // Prototype-age scaffolding: the index page's editorial vocabulary, and the table
 // and link rules no design-system stylesheet owns yet.
 import '@design-system/styles/docs.css';
 import DocsNav from '../components/DocsNav.astro';
-import { groupLabel } from '../lib/books';
+import { groupLabel, runtimeLabel } from '../lib/books';
 
 interface Props {
   title: string;
@@ -28,9 +29,32 @@ interface Props {
   description: string;
   /** Collection id of the current book, absent on the index page. */
   group?: string;
+  /**
+   * Artwork for a poster behind this book. The shell mounts it as a direct
+   * child of <body>, which is the only placement CnPoster supports, and cedes
+   * its own chrome the way an application shell cedes the app bar and the rail.
+   * The book column takes no ground plane: an opaque page over the artwork
+   * would leave a poster with nothing to show, which is the whole point of the
+   * one book that mounts one.
+   */
+  poster?: string;
+  /**
+   * What an application must do to make this component work in the browser.
+   * Only component books declare it, so its absence keeps the subtitle off
+   * every other page without a check on the group. It renders in the design
+   * system's caption step; the shell states no type of its own.
+   */
+  runtime?: string;
 }
 
-const { title, description, group, prose = false } = Astro.props;
+const {
+  title,
+  description,
+  group,
+  poster,
+  runtime,
+  prose = false,
+} = Astro.props;
 const context = group ? groupLabel(group) : 'Index';
 ---
 
@@ -43,6 +67,8 @@ const context = group ? groupLabel(group) : 'Index';
     <title>{title} / Pelilauta Design System</title>
   </head>
   <body>
+    {poster && <CnPoster src={poster} />}
+
     <a class="skip-link" href="#content">Skip to content</a>
 
     <div class="shell">
@@ -67,6 +93,7 @@ const context = group ? groupLabel(group) : 'Index';
         {prose ? (
           <article>
             <h1>{title}</h1>
+            {runtime && <p class="text-caption">{runtimeLabel(runtime)}</p>}
             <slot />
           </article>
         ) : (
@@ -177,6 +204,17 @@ const context = group ? groupLabel(group) : 'Index';
         padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 2rem);
         background: var(--cn-surface-1);
         border-block-end: 1px solid var(--cn-border);
+      }
+
+      /* While a poster paints, the index cedes its surface, as the rail does in
+         apps/pelilauta. Without this the poster would show only in the gutters
+         and the page would misrepresent what mounting one looks like.
+
+         The masthead keeps its own surface: it is sticky, so ceding it would
+         scroll the book's own prose through it. An application bar solves that
+         with a legibility halo this shell does not have. */
+      body:has(#cn-poster) .shell :global(.docs-nav) {
+        background: color-mix(in oklch, var(--cn-surface-1), transparent 66%);
       }
 
       .site-footer {

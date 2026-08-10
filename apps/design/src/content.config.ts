@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { RUNTIME_IDS } from './lib/books';
 
 /**
  * Documentation books, one collection per navigation group. The collection id
@@ -16,17 +17,32 @@ const bookSchema = z.object({
   description: z.string(),
   /** Navigation sort key within the group; ties fall back to title order. */
   order: z.number().optional(),
+  /**
+   * Artwork for a CnPoster mounted behind this book. A poster is a page-level
+   * singleton, so the only way a book can demonstrate one is to be one, and the
+   * only way to declare it is here — the layout owns <body>, not the MDX.
+   */
+  poster: z.string().optional(),
 });
 
-const book = (group: string) =>
+/**
+ * Only a component book states what an application must do to make the thing
+ * work in the browser. Required, so the build fails on a book that omits it:
+ * a template can be skipped, a schema cannot. Vocabulary: books/runtimes.json.
+ */
+const componentSchema = bookSchema.extend({
+  runtime: z.enum(RUNTIME_IDS),
+});
+
+const book = (group: string, schema: z.ZodTypeAny = bookSchema) =>
   defineCollection({
     loader: glob({ pattern: '**/*.mdx', base: `./src/content/${group}` }),
-    schema: bookSchema,
+    schema,
   });
 
 export const collections = {
   principles: book('principles'),
   base: book('base'),
   tokens: book('tokens'),
-  components: book('components'),
+  components: book('components', componentSchema),
 };

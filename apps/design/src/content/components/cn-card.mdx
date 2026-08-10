@@ -1,7 +1,8 @@
 ---
 title: CnCard
-description: A server-rendered preview with a stable title, optional identity and content, and an independent action region.
+description: A preview with a stable title, optional identity and content, and an independent action region.
 order: 20
+runtime: progressive
 ---
 
 import CnCard from '@design-system/components/CnCard.svelte'
@@ -10,9 +11,7 @@ import Composition from '@design-system/books/specimens/Composition.astro'
 
 CnCard presents one independently meaningful subject. Its required title gives every
 preview a stable identity, while optional cover, noun, supporting content, and actions
-build the amount of context a reader needs before following it. Every CnCard on this page
-is rendered on the server and hydrated by nothing, which is how the listings that use it
-run.
+build the amount of context a reader needs before following it.
 
 ## When to use it
 

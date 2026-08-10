@@ -1,0 +1,134 @@
+---
+title: CnPoster
+description: The decorative artwork that replaces the ground plane behind one page's content, attenuated so the page stays readable over material the design system does not control.
+order: 50
+runtime: static
+poster: "https://picsum.photos/1920/1080"
+---
+
+import Composition from "@design-system/books/specimens/Composition.astro";
+import PosterPinToggle from "@design-system/books/specimens/PosterPinToggle.astro";
+
+CnPoster replaces the ground plane behind one page's content with a decorative image of that
+page's subject.
+
+This page is the specimen. The photograph behind these words is random, reloaded on every
+visit, and mounted the way an application mounts one.
+
+## When to use it
+
+Use a poster on a landing or index page whose subject has a picture. Mount one per page.
+
+Use [Surface](/base/surface) behind prose. CnPoster ships no script, so it cannot detect a
+failed load and never substitutes a fallback the way [CnCard](/components/cn-card) does with
+a cover.
+
+## Example
+
+```astro
+---
+import CnPoster from '@design-system/components/CnPoster.astro'
+---
+
+<Page>
+  <CnPoster
+    slot="app-background-poster"
+    src="/sites/aamunkoin-vartijat/poster.webp"
+    md="/sites/aamunkoin-vartijat/poster-wide.webp"
+  />
+</Page>
+```
+
+The design site has no application shell. This book declares `poster` in frontmatter and the
+book layout performs the same mount into `body`.
+
+## Variants and states
+
+### Placement
+
+A scrolling poster occupies the first screen and dissolves into the page at its lower edge.
+`pinned` fixes the poster to the viewport; content scrolls over it and there is no lower edge
+to dissolve.
+
+<PosterPinToggle />
+
+### Colour scheme
+
+| Scheme | Tint                       | Blend        | Strength |
+| :----- | :------------------------- | :----------- | :------- |
+| Light  | surface 90, primary 40, 80 | `overlay`    | 100%     |
+| Dark   | primary 10 rising to 80    | `hard-light` | 44%      |
+
+The image renders at 72% opacity in both schemes and carries no filter. Switch your system
+scheme with this page open: the photograph stays, the wash changes around it.
+
+### Where a poster paints nothing
+
+Below 620 pixels, under `prefers-reduced-transparency`, under `forced-colors`, and in print,
+the poster renders nothing and the surfaces above render as they do without one. Narrow this
+window past 620 pixels to see it.
+
+## Composition
+
+The `app-background-poster` slot places the poster as a direct child of `body`. It is the only
+supported mount; inside `main` the poster positions itself against whatever box contains it.
+
+One page carries one poster. The id is what the rules below match on.
+
+While an element with the id `cn-poster` is in the document:
+
+| Surface                          | Treatment     |
+| :------------------------------- | :------------ |
+| `--cn-app-bar-background-sticky` | `transparent` |
+| `nav#rail`, `nav#tray`           | `transparent` |
+| `.elevation-0`                   | 80% opaque    |
+| `.elevation-1` to `.elevation-4` | unchanged     |
+
+This site's index cedes the same way.
+
+<Composition caption="Elevation 0 and elevation 2 — pin the poster to see them over artwork">
+  <div class="surface elevation-0">Elevation 0, the application ground plane</div>
+  <div class="surface elevation-2">Elevation 2, unchanged</div>
+</Composition>
+
+Eighty per cent holds the inherited body foreground at WCAG 2.2 AA over near-white artwork in
+Dark, which is the tightest case, and with no artwork at all. Over artwork the design system
+does not control, AA is the target the attenuation is tuned to, not a guarantee.
+
+## Reference
+
+### Props
+
+| Prop     | Type      | Purpose                                                         |
+| :------- | :-------- | :-------------------------------------------------------------- |
+| `src`    | `string`  | Required artwork URL, and the candidate used below the `md` width |
+| `md`     | `string`  | A wider candidate, selected from 960 device pixels up            |
+| `pinned` | `boolean` | Fixes the poster to the viewport. Defaults to `false`            |
+
+### Tokens
+
+CnPoster declares none. The tint reads the ramps published by [Colour](/tokens/color), the
+dissolve and the ground plane read `--cn-surface`, and the level it changes belongs to
+[Surface](/base/surface). It writes `--cn-app-bar-background-sticky` on `body`, so the sticky
+bar interpolates between two transparent values instead of sliding an opaque band over the
+artwork.
+
+## Accessibility
+
+The image carries an empty `alt` and is absent from the accessibility tree. The poster takes
+no pointer events and holds nothing focusable. A poster carries no information; a page that
+needs its subject named names it in the content.
+
+## Not shown here
+
+**The chrome ceding its surface.** The application bar, `nav#rail` and `nav#tray` belong to
+apps/pelilauta and this site ships none of them. Their rules sit in `styles/poster.css`,
+inside the same guard as the poster.
+
+**Near-white and near-black artwork.** The photograph is random, so the extremes arrive only
+by chance. Rendered contrast was measured against both, in both schemes, both placements, and
+with no artwork; the tightest of the twelve cases was 10.5:1.
+
+**`prefers-reduced-transparency`, `forced-colors` and print.** No page can emulate them for
+itself. They share the media query the 620-pixel behaviour demonstrates, and each was
+confirmed by hand in an emulated browser.

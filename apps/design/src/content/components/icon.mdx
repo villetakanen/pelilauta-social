@@ -1,7 +1,8 @@
 ---
 title: Icon
-description: The server-rendered icon — tiered source resolution, sizes read from tokens, contextual colour, and the missing glyph.
+description: Tiered source resolution, sizes read from tokens, contextual colour, and the missing glyph.
 order: 10
+runtime: static
 ---
 
 import Icon from '@design-system/components/Icon.svelte'
@@ -11,8 +12,8 @@ import IconTiers from '@design-system/books/specimens/IconTiers.astro'
 import iconSource from '@design-system/styles/units.css?raw'
 import themeSource from '@design-system/styles/color-theme.css?raw'
 
-A noun resolves to artwork at render time, on the server, so the markup is complete in the
-first response and the icon doesn't move when scripts load. Monochrome artwork takes the
+A noun resolves to artwork before the response leaves, so an icon never moves when scripts
+load. Monochrome artwork takes the
 colour of the text around it. Branded artwork keeps the colours its source encodes.
 
 [Iconography](/principles/iconography) explains which nouns exist and when to use an

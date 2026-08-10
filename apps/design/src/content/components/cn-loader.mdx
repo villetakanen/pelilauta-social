@@ -2,6 +2,7 @@
 title: CnLoader
 description: The design system's progress indicator — a spinning dual ring over a static noun icon, in a standalone and an inline size.
 order: 30
+runtime: static
 ---
 
 import CnLoader from '@design-system/components/CnLoader.svelte'
@@ -14,7 +15,7 @@ import colorThemeSource from '@design-system/styles/color-theme.css?raw'
 `CnLoader` combines two signals in one element: a ring whose rotation says that work is
 in flight, and a static icon at its centre that says what the work is about. The icon is
 the same `Icon` every other surface uses, so the loader inherits the noun vocabulary of
-the thing it stands in for. It renders on the server and never hydrates.
+the thing it stands in for.
 
 ## When to use it
 

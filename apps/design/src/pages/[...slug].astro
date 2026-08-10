@@ -29,12 +29,18 @@ interface Props {
 
 const { entry, group } = Astro.props as Props;
 const { Content } = await render(entry);
+
+/* Only the components collection declares a runtime, so the union narrows on the
+   field rather than on the group id. */
+const runtime = 'runtime' in entry.data ? entry.data.runtime : undefined;
 ---
 
 <Book
   title={entry.data.title}
   description={entry.data.description}
   group={group}
+  poster={entry.data.poster}
+  runtime={runtime}
   prose
 >
   <Content />

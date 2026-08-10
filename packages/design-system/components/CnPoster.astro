@@ -1,0 +1,36 @@
+---
+/**
+ * CnPoster — one page's subject, painted behind everything that page renders.
+ *
+ * Spec: specs/design-system/components/cn-poster/spec.md
+ *
+ * The component is markup and nothing else. Every rule that positions,
+ * attenuates or withdraws the poster lives in styles/poster.css, because the
+ * same conditions that decide whether the artwork paints also decide whether
+ * the application bar, the navigation and the ground plane cede their surfaces
+ * to it. One stylesheet holds that agreement; a scoped style block here would
+ * split it in two.
+ *
+ * The root carries the id `cn-poster` rather than v20's `cn-background-poster`,
+ * which Cyan still styles while both stylesheets load in apps/pelilauta.
+ *
+ * Book: apps/design/src/content/components/cn-poster.mdx
+ */
+interface Props {
+  /** The artwork. Required, and the candidate used below the `md` width. */
+  src: string;
+  /** A wider candidate, selected from 960 device pixels up. */
+  md?: string;
+  /** Fixes the poster to the viewport instead of scrolling with the page. */
+  pinned?: boolean;
+}
+
+const { src, md, pinned = false } = Astro.props;
+---
+
+<div id="cn-poster" class:list={{ pinned }}>
+  <picture>
+    {md && <source media="(min-width: 960px)" srcset={md} />}
+    <img src={src} alt="" loading="lazy" />
+  </picture>
+</div>

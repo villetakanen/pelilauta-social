@@ -2,15 +2,15 @@
 title: CnAvatar
 description: The pictorial identity mark's component schema — its props, what each state needs, and the roles it consumes.
 order: 40
+runtime: static
 ---
 
 import Composition from '@design-system/books/specimens/Composition.astro'
 import IdentitySpecimens from '@design-system/books/specimens/IdentitySpecimens.svelte'
 
 `CnAvatar` renders the pictorial identity mark: a profile's image, its initials, or
-the generic glyph. It renders on the server, and its fallback needs no script: the
-initials render beneath the image, and a failed image load paints nothing over
-them. The backdrop behind the initials is derived from `nick` at render time, so it
+the generic glyph. Its fallback needs no script: the initials render beneath the
+image, and a failed image load paints nothing over them. The backdrop behind the initials is derived from `nick` at render time, so it
 appears in no stylesheet and cannot be set by a consumer.
 
 ## When to use it
