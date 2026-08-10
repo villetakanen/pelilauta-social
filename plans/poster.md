@@ -45,26 +45,9 @@ plus a legibility halo on `nav#rail` and `nav#tray`. The flat surface override
 belongs to the poster's stylesheet, conditioned on a poster being mounted, so
 `surface.css` keeps one unconditional definition per level.
 
-The copyright note is the one part of the poster that is not decorative. It is
-readable and selectable, it takes a focus stop when it carries a link, and it
-sits over the artwork rather than on the ground plane, so it needs a legibility
-treatment of its own. It withdraws wherever the poster paints nothing, since
-there is then nothing to credit, and it holds its position under both the
-scrolling and the pinned placement.
-
 ### Open
 
-- The copyright note: a design-system component taking the note as a string and
-  an optional link, mounted through its own slot beside the poster. The design
-  system does not model licences — the consuming application composes the
-  string, from `assets[]` or from anywhere else. Needs a spec and a Component
-  book.
-- Hub pages onto the design-system poster: front page, channels index, channel,
-  library. Retires the app-local `ui/BackgroundPoster.astro` and neutralises
-  Cyan's poster rules.
-- Site pages onto the design-system poster, from the unchanged
-  `site.backgroundURL`, and Cyan's `nav#rail` multiply blend gone. Real user
-  artwork is the check for the wash in both schemes.
+Nothing.
 
 ### Done
 
@@ -72,6 +55,14 @@ scrolling and the pinned placement.
   `CnPoster.astro`, its stylesheet in the CSS entry point, and the Component
   book, which mounts a real poster through the book layout because a page-level
   singleton cannot be demonstrated inside a figure.
+- The copyright note as a design-system capability: spec, `CnPosterCredits`, its
+  stylesheet, and its Component book.
+- Pelilauta's migration: hub pages and site pages mount `CnPoster` from their
+  unchanged image sources, the four hub pages mount `CnPosterCredits`,
+  `PageWithTray` forwards the footer credits slot it was dropping, and
+  `ui/BackgroundPoster.astro` is gone — with it every match for Cyan's
+  `#cn-background-poster` rules, including the light-scheme filter and the
+  `nav#rail` multiply blend.
 
 ## Outscoped
 

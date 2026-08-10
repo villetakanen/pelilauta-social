@@ -1,8 +1,9 @@
 ---
+import CnPoster from '@design-system/components/CnPoster.astro';
+import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { t } from 'src/utils/i18n';
 import LibraryTray from '../../components/server/library/LibraryTray.astro';
-import BackgroundPoster from '../../components/server/ui/BackgroundPoster.astro';
 import LibrarySitesFabs from '../../components/svelte/site-library/LibrarySitesFabs.svelte';
 import UserSitesList from '../../components/svelte/site-library/UserSitesList.svelte';
 import PageWithTray from '../../layouts/PageWithTray.astro';
@@ -30,12 +31,14 @@ const description = t('library:description');
   <LibraryTray slot="app-tray" />
   <UserSitesList client:only="svelte" />
   <LibrarySitesFabs slot="fab-tray" client:only="svelte"/>
-  <BackgroundPoster
-      slot="app-background-poster"
-      src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp"
-      md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2-960.webp"
-    />
-    <p class="text-caption text-center" style="opacity:0.44" slot="app-footer-credits">
-      Taustakuva © Juno Viinikka (<a href="https://linktr.ee/junowski">https://linktr.ee/junowski</a>)
-    </p>
+  <CnPoster
+    slot="app-background-poster"
+    src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp"
+    md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2-960.webp"
+  />
+  <CnPosterCredits
+    note="Taustakuva © Juno Viinikka"
+    href="https://linktr.ee/junowski"
+    slot="app-footer-credits"
+  />
 </PageWithTray>

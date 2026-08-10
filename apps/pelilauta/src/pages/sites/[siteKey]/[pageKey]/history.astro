@@ -1,10 +1,10 @@
 ---
+import CnPoster from '@design-system/components/CnPoster.astro';
 import { PageSchema } from 'src/schemas/PageSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { systemToNoun } from 'src/utils/schemaHelpers';
 import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
-import BackgroundPoster from '../../../../components/server/ui/BackgroundPoster.astro';
 import PageHistoryApp from '../../../../components/svelte/sites/history/PageHistoryApp.svelte';
 import PageWithTray from '../../../../layouts/PageWithTray.astro';
 
@@ -48,6 +48,6 @@ const revision = Number(
 
     <SiteTray slot="app-tray" site={site}/>
   { site.backgroundURL && 
-    <BackgroundPoster src={site.backgroundURL} slot="app-background-poster"/>
+    <CnPoster src={site.backgroundURL} slot="app-background-poster"/>
   }
 </PageWithTray>

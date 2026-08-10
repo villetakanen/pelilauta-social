@@ -1,10 +1,11 @@
 ---
+import CnPoster from '@design-system/components/CnPoster.astro';
+import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import { parseChannel } from 'src/schemas/ChannelSchema';
 import { parseThread, type Thread } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import { logDebug, logError } from 'src/utils/logHelpers';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
-import BackgroundPoster from '../../components/server/ui/BackgroundPoster.astro';
 import ChannelFabs from '../../components/svelte/threads/ChannelFabs.svelte';
 import ChannelThreadList from '../../components/svelte/threads/ChannelThreadList.svelte';
 import Page from '../../layouts/Page.astro';
@@ -78,19 +79,15 @@ try {
 
   <ChannelFabs client:only="svelte" slot="fab-tray" />
 
-  <BackgroundPoster
+  <CnPoster
     slot="app-background-poster"
     src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp"
     md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2-960.webp"
   />
 
-  <p
-    class="text-caption text-center"
-    style="opacity:0.44"
+  <CnPosterCredits
+    note="Taustakuva © Juno Viinikka"
+    href="https://linktr.ee/junowski"
     slot="app-footer-credits"
-  >
-    Taustakuva © Juno Viinikka (<a href="https://linktr.ee/junowski"
-      >https://linktr.ee/junowski</a
-    >)
-  </p>
+  />
 </Page>
