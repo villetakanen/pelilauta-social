@@ -1,6 +1,6 @@
 ---
 title: Identity Mark
-description: The pictorial and textual marks for a profile, their fallback states, the backdrop derivation, and their behaviour inside a link.
+description: The pictorial and textual marks for a profile, fallback states, derived backdrops, and interactive behavior.
 order: 6
 ---
 
@@ -9,117 +9,105 @@ import IdentitySpecimens from '@design-system/books/specimens/IdentitySpecimens.
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import colorThemeSource from '@design-system/styles/color-theme.css?raw'
 
-An identity mark stands for one profile. There are two: the pictorial mark, the
-`CnAvatar` component, and the textual mark, the `.cn-nick` class. Both arrive with
-the design system's stylesheet, and `CnAvatar` renders on the server without
-hydrating.
+Identity marks represent user and system profiles. We provide two formats: the pictorial
+mark (`CnAvatar`) and the textual mark (`.cn-nick`). `CnAvatar` renders statically on the
+server with pure CSS fallback layering.
 
-<Composition themes caption="The pictorial mark and the textual mark, in Light and Dark">
+<Composition themes caption="The pictorial mark and textual mark in Light and Dark">
   <IdentitySpecimens group="basic" />
   <IdentitySpecimens group="nick" />
 </Composition>
 
-## What the pictorial mark shows
+## Pictorial mark states and sizes
 
-The mark shows the profile's image. Where no image renders, it shows the first two
-characters of the nick over a backdrop derived from that nick. Where there is no
-nick either, it shows the generic glyph on `--cn-surface-2`: with no nick there is
-nothing to derive a backdrop from.
+`CnAvatar` renders an image avatar, initials fallback, or anonymous glyph:
 
-The fallback is layered, not scripted. The initials render beneath the image, and
-an image that fails to load paints nothing over them, so the mark recovers without
-hydrating.
+1. **Image:** Profile picture clipped to a circle.
+2. **Initials:** First two characters of `nick` over a deterministic backdrop color derived from the nickname string.
+3. **Anonymous:** Default `avatar` icon on `--cn-surface-2` when no nickname is provided.
 
-<Composition themes caption="Image, initials, the anonymous mark, and an image that failed to load">
+Initials render beneath the image in DOM order, providing a scriptless fallback if image
+loading fails.
+
+<Composition themes caption="Image, initials, anonymous glyph, and failed image fallback">
   <IdentitySpecimens group="states" />
 </Composition>
 
-| State | Shown | Backdrop |
+| State | Visual | Backdrop |
 | :--- | :--- | :--- |
-| Image | The profile's picture, cropped to the circle | Covered by the image |
-| Initials | Two characters of the nick | Derived from the nick |
-| Anonymous | The `avatar` glyph | `--cn-surface-2` |
+| Image | Profile picture cropped to circle | Covered by image |
+| Initials | Two characters of `nick` | Derived from `nick` |
+| Anonymous | `avatar` icon | `--cn-surface-2` |
 
-The mark renders the anonymous state without naming it. What a missing nick means —
-a deleted profile, an anonymous one, a redacted one — and the localised word for it
-are decided by the application, which prints the word in its own text.
+The component supports three standard sizes aligned to layout line multiples:
+- **Small (1.5 lines / 36px):** Inline beside body text.
+- **Medium (2 lines / 48px, default):** Section headers and feed items.
+- **Large (3 lines / 72px):** Profile pages and dedicated account views.
 
-The mark has three sizes. Small is one and a half lines, for a mark beside a line of
-text; medium, the default, is two lines, for a mark that heads a region; large is
-three lines, for the page that is about the profile itself.
-
-<Composition themes caption="Small, medium and large">
+<Composition themes caption="Small, medium, and large avatar sizes">
   <IdentitySpecimens group="sizes" />
 </Composition>
 
-## Telling profiles apart
+## Dynamic backdrops and contrast
 
-The backdrop exists to separate the profiles that share a view. We derive it from
-the nick, which keeps a profile's colour stable within a page and across the pages
-of one release.
+Initials backdrops are derived from the nick, between `--cn-avatar-backdrop-from` and
+`--cn-avatar-backdrop-to`, to separate the profiles that share a view. The derivation is an
+implementation detail and the colour is not promised: both ends are token roles, so a
+palette revision recolours every avatar. A consumer needing a stable colour stores one.
 
-<Composition themes caption="Six nicks, six backdrops">
+<Composition themes caption="Six distinct nicknames and resulting derived backdrops">
   <IdentitySpecimens group="distinct" />
 </Composition>
 
-We do not promise the colour beyond that. The derivation is an implementation
-detail, and both ends of the range it mixes between are token roles, so a palette
-revision recolours every avatar in the community. A consumer that needs a stable
-colour for a profile stores one rather than reading it here.
-
-Every colour the range can produce carries the initials at 4.5:1 and separates from
-the page behind it at 3:1, in both schemes. The range inverts between them: dark
-backdrops on the light page, light backdrops on the dark one.
+All derived backdrop values maintain WCAG AA contrast:
+- 4.5:1 against `--cn-on-avatar` for the initials.
+- 3:1 against the page surface behind the mark.
 
 <TokenTable
   source={colorThemeSource}
   names={['--cn-avatar-backdrop-from', '--cn-avatar-backdrop-to', '--cn-on-avatar']}
   swatch
-  caption="The ends of the backdrop range and the text role over it, from styles/color-theme.css"
+  caption="Backdrop interpolation tokens and text color role"
 />
 
-## A list of marks
+## Avatar lists
 
-Where a view shows who is present rather than who did one thing — the readers
-active in the community, the people who keep a site — the marks go in a list. The
-class is `cn-avatar-list` on whichever element the composition calls for, usually a
-`ul`. It arranges the marks it is given; how many of them there are is yours.
+Use `.cn-avatar-list` (typically on `<ul>`) to group multiple identity marks.
 
-<Composition themes caption="Six linked marks in a list">
+<Composition themes caption="Linked avatars in an avatar list">
   <IdentitySpecimens group="list" />
 </Composition>
 
-The marks overlap, so a crowd reads as a crowd rather than as a row of separate
-pictures. Overlapping costs them the separation that standing apart gave them, and
-each mark takes it back from its own backdrop: inside a list the image draws within
-the circle instead of filling it, leaving a rim of the colour its nick derived. The
-list therefore needs to know nothing about the surface it sits on, and a mark
-outside a list is unchanged.
+List avatars overlap horizontally. To preserve visual separation without depending on
+external surface backgrounds, avatars within a list inset their image, revealing a
+perimeter rim of the derived backdrop color.
 
-A list does not size its marks — pass the size you want to each, and use one size
-throughout a list.
+All avatars in a single list should use the same size modifier.
 
-<Composition themes caption="A list of small marks, and the same list at the default size">
+<Composition themes caption="Avatar lists in small and medium sizes">
   <IdentitySpecimens group="list-sizes" />
 </Composition>
 
-Past the width it is given, a list wraps. Every line begins at the same inline
-position, so a wrapped list keeps a straight leading edge.
+When list content exceeds container width, the list wraps with aligned leading edges.
 
-<Composition themes caption="A crowd wrapped in a narrow column">
+<Composition themes caption="Avatar list wrapping in narrow containers">
   <IdentitySpecimens group="list-wrapped" />
 </Composition>
 
-### The marks a list does not show
+### Overflow count
 
-A list may close with a count: `cn-avatar-list__overflow`, a plus and a numeral,
-matching the marks in geometry and taking the anonymous mark's presentation because
-it stands for no one profile. It carries no word — the design system serves three
-languages and translates none of them, and a numeral needs no translation. Take the
-matching size modifier when the marks are anything but medium.
+To indicate additional profiles, append `<span class="cn-avatar-list__overflow">`
+containing a plus prefix and count. The overflow badge uses anonymous mark styling and
+must match the list size modifier.
 
-<Composition themes caption="Four marks and a count, at both sizes">
+<Composition themes caption="Avatar list with overflow counter">
   <IdentitySpecimens group="list-overflow" />
+</Composition>
+
+Marks with no nick derive no backdrop, so a run of them separates only by elevation.
+
+<Composition themes caption="An anonymous run: no nicks, no derived backdrops">
+  <IdentitySpecimens group="list-anonymous" />
 </Composition>
 
 ```mdx
@@ -135,48 +123,29 @@ matching size modifier when the marks are anything but medium.
 </ul>
 ```
 
-The count is decorative. A list whose total matters names it in the application's
-own text, in the reader's language, the way the anonymous mark's meaning is named.
+## Interactive states
 
-Marks with no nick derive no backdrop, so a run of them has nothing but each mark's
-elevation between one circle and the next. It is the thinnest the overlap gets.
+Identity marks are non-interactive by default. When wrapped in an `<a>` anchor:
+- The circular avatar suppresses default text underlines, lifts to elevation 2 on hover, and applies a circular keyboard focus ring.
+- The textual nick (`.cn-nick`) keeps its resting colour and applies `--cn-link-hover` and `--cn-link-active`.
 
-<Composition themes caption="The anonymous run: no nicks, no derived backdrops">
-  <IdentitySpecimens group="list-anonymous" />
-</Composition>
-
-## Inside a link
-
-Both marks are inert on their own: no pointer cursor, no hover response, no click
-handler. Navigation belongs to the anchor that wraps a mark, not to the mark.
-
-Inside an anchor, the circle loses the underline the anchor would otherwise draw
-across it, takes the second elevation on hover, and takes a keyboard focus ring
-that follows the circle rather than the anchor's rectangle. The textual mark keeps
-its weight and colour and takes the link roles on hover and activation.
-
-<Composition themes caption="The linked mark beside the same mark standing alone">
+<Composition themes caption="Standalone vs anchor-wrapped identity marks">
   <IdentitySpecimens group="linked" />
 </Composition>
 
-[Links, Actions and Buttons](/base/links-actions-buttons) defines the states these
-roles carry.
+For link and focus state specifications, see [Links, Actions and Buttons](/base/links-actions-buttons).
 
 ## Reference
 
-The pictorial mark is the `CnAvatar` component, and [its book](/components/cn-avatar)
-carries the props.
-
-The textual mark takes no props. It is the class `.cn-nick` on whichever element the
-composition calls for, and it presents the same on an anchor and on a span.
+- **`CnAvatar` component:** See [CnAvatar component reference](/components/cn-avatar).
+- **`.cn-nick` class:** Applies emphasis weight and `--cn-text-high` on both `<span>` and `<a>`.
 
 ## Accessibility
 
-The pictorial mark announces the nick and nothing else. We publish no wording around
-it — no "avatar of", no "profile picture" — because the design system serves three
-languages and translates none of them.
+`CnAvatar` announces `nick` as its accessible name.
 
-A mark inside a composition that already names the profile takes `aria-hidden`, so
-that a linked avatar beside its nick announces the profile once. The anonymous mark
-is always hidden, and a consumer that must name the anonymous state names it in its
-own text.
+When an avatar is paired with visible text naming the profile (such as `.cn-nick` or a
+text link), pass `aria-hidden="true"` to `CnAvatar` to prevent duplicate screen reader
+announcements. The anonymous mark without a `nick` is hidden from assistive technology
+by default.
+

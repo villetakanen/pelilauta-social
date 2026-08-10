@@ -1,32 +1,31 @@
 ---
 title: Units and grid
-description: Every spacing and radius token the design system declares, with its value as written in the stylesheet.
+description: "Declared tokens for spatial grid units, radii, control dimensions, icon sizes, z-index stacking, and animation."
 order: 5
 ---
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-This is the lexicon: what the tokens are, and what each one is worth. How these
-measurements recur in components, and how radii relate to the grid, is documented
-in the [Spatial System](/principles/spatial-system) book.
+Declared spatial custom properties. Spatial hierarchy and alignment principles are
+defined in [Spatial System](/principles/spatial-system).
 
-Every table below is read from `styles/units.css` when this page is built, so it cannot
-list a token that does not exist or miss one that does.
+## Spatial grid
 
-## Spacing
-
-One literal measurement, and two multiples of it.
+Three base measurements govern component alignment, internal padding, and vertical rhythm:
+- `--cn-grid` (0.5rem / 8px): Base atomic unit.
+- `--cn-gap` (1rem / 16px): Standard gap and surface inset (2x grid).
+- `--cn-line` (1.5rem / 24px): Standard line height and block spacing (3x grid).
 
 <TokenTable
   source={unitsSource}
   names={['--cn-grid', '--cn-gap', '--cn-line']}
 />
 
-## Radii
+## Border radii
 
-Four steps, plus an unsuffixed default for a consumer that wants a rounded corner without
-choosing one.
+Four progressive radius steps. The unsuffixed `--cn-border-radius` token resolves to the
+medium step (`8px`).
 
 <TokenTable
   source={unitsSource}
@@ -35,27 +34,20 @@ choosing one.
 
 ## Control geometry
 
-A button's visible pill and the row it occupies, both grid multiples. The pill is narrower
-than the row so a control centres on the grid without the row growing around it; the
-button stylesheet reads both and derives its radius from the first.
+Declared dimensions for interactive buttons, floating action buttons, and identity marks.
 
 <TokenTable
   source={unitsSource}
   prefix="--cn-button"
 />
 
-The floating action button is the row's full height, so a fab and a button row agree.
-
 <TokenTable
   source={unitsSource}
   prefix="--cn-fab"
 />
 
-The identity mark measures in lines rather than grid units, because it sits beside text and
-should agree with the text's leading: one and a half lines beside a single line, two lines
-heading a region, three lines on the page that is about the profile itself — the one
-diameter Cyan had. Both the mark and the overflow count of an
-[avatar list](/base/identity-mark) read these, so neither restates the arithmetic.
+Avatar dimensions scale in line-height multiples (`--cn-line`), ensuring visual alignment
+with adjacent text leading.
 
 <TokenTable
   source={unitsSource}
@@ -64,35 +56,27 @@ diameter Cyan had. Both the mark and the overflow count of an
 
 ## Icon sizes
 
-Absolute `rem` literals rather than grid multiples, following v20, which files them beside
-the grid and marks them "absolute, not grid-derived". They scale with the reader like
-every other `rem` length; they simply do not derive from `--cn-grid`. Four of the five land
-on the grid anyway — the medium default is four and a half steps, which is the reason the
-family is stated absolutely.
-
-They are declared in `styles/units.css` beside the grid: two token files of a dozen lines
-each bought nothing, so the primitives that are not colour share one stylesheet.
+Declared icon dimensions in `rem`. Values scale proportionally with browser font size
+settings. Icon selection and usage are defined in [Iconography principles](/principles/iconography)
+and [Icon component](/components/icon).
 
 <TokenTable
   source={unitsSource}
   prefix="--cn-icon-size"
 />
 
-## Stacking
+## Stacking layers
 
-Which layer a pinned element occupies. The FAB tray is the only v21 consumer; dialogs,
-modals and transient messages still come from Cyan at higher values.
+Global z-index scale for pinned and elevated UI layers.
 
 <TokenTable
   source={unitsSource}
   prefix="--cn-z"
 />
 
-## Motion
+## Motion and transitions
 
-How long a control takes to answer a pointer, and the curve it uses. Every control that
-responds to hover, activation or focus reads these two; a control that needs a second
-speed derives it privately rather than publishing another role.
+Standard transition durations and easing curves for interactive UI feedback.
 
 <TokenTable
   source={unitsSource}
@@ -104,14 +88,10 @@ speed derives it privately rather than publishing another role.
   prefix="--cn-easing"
 />
 
-## Breakpoints
+## Layout breakpoints
 
-Stated in `rem`, so a threshold follows a reader who enlarges their default text; the
-behaviour is documented under "Browser Font Settings" in the
-[Spatial System](/principles/spatial-system) book.
-A media or container query can't read a custom property, so a rule that needs the
-threshold states the literal — the typography downshift does this — and a test pins
-the literal to the token declared here.
+Breakpoints defined in `rem`, allowing responsive layout thresholds to scale with user
+browser font settings.
 
 <TokenTable
   source={unitsSource}
@@ -120,12 +100,7 @@ the literal to the token declared here.
 
 ## Elevation shadows
 
-The four elevation shadows are declared in `styles/color-theme.css`, not here, but they
-are grid multiples and depend on `--cn-grid`. `styles/tokens.css` composes both families,
-and it is that dependency this page exists to make visible; their declaration order does
-not affect custom-property resolution.
+The four elevation shadows are declared in `styles/color-theme.css`, not here, but they are
+grid multiples and depend on `--cn-grid`. `styles/tokens.css` composes both families; this
+section states that dependency. Their values are in [Colour](/tokens/color).
 
-Their values are in the [Colour](/tokens/color) lexicon, which is where the stylesheet
-that declares them is published. `packages/design-system/test/units.test.ts` asserts that
-the token entry point composes both families, rather than testing a rendered shadow
-against a page that happened to import them.

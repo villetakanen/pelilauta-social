@@ -1,6 +1,6 @@
 ---
 title: Links, Actions and Buttons
-description: How Pelilauta distinguishes navigation from commands and renders native links through every interaction state.
+description: Semantic distinction between navigation and commands, button variants, and interactive states.
 order: 5
 ---
 
@@ -13,198 +13,186 @@ import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import linkSource from '@design-system/styles/links.css?raw'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-We distinguish links from actions by outcome. A link moves the reader to a document,
-resource, or location. An action submits data or changes the current task.
+We distinguish links from actions by outcome. A link navigates to a document,
+resource, or location. An action triggers a command, submits data, or modifies state.
 
-<Composition themes caption="Native links in prose and on their own, rendered in Light and Dark">
+<Composition themes caption="Native links in prose and standalone in Light and Dark">
   <p>Pelilauta's <a href="/principles/typography">typography principles</a> set the reading voice and scale.</p>
   <p><a href="/principles/color-system">Explore colour and surface roles</a></p>
 </Composition>
 
-## Choose by outcome
+## Semantic distinction
 
-The element records what activation means. Destination, form behaviour, keyboard
-operation, and assistive-technology identity all follow from that first choice.
+HTML element selection defines control semantics, keyboard interaction, and accessibility
+tree roles:
 
-| Intended outcome | Element | Required information |
+| Outcome | Element | Required attributes |
 | :--- | :--- | :--- |
-| Move to another document, resource, or location | `<a href>` | An explicit destination. |
-| Submit a form | `<button type="submit">` | The form and submitted values. |
-| Reset a form | `<button type="reset">` | The form whose values are reset. |
-| Run a command in the current task | `<button type="button">` | The command triggered on activation. |
+| Navigate to another document or URL | `<a href>` | `href` with explicit destination |
+| Submit form values | `<button type="submit">` | None |
+| Reset form values | `<button type="reset">` | Explicit `type="reset"` |
+| Execute an in-page command | `<button type="button">` | Explicit `type="button"` |
 
-A command remains an action even when successful completion redirects elsewhere. Its
-immediate outcome is still a mutation.
+A command remains an action even if execution terminates in a page redirect.
 
-_Cancel_ is one example. An editor control that returns to its explicit view URL is
-an `<a class="button" href="…">`; a control with the same label that closes a
-dialog is a `<button type="button">`. Both share the visual presentation.
+For example, a *Cancel* control returning to a previous URL is an `<a class="button" href="...">`,
+while a *Cancel* control closing a modal dialog is a `<button type="button" class="button">`.
+Both share identical button styling while maintaining correct native behavior.
 
-## Native-link states
+## Link states
 
-A native link is always underlined, so it stays recognisable without relying on colour.
+Native text links always display an underline, ensuring legibility independent of color perception.
 
 <LinkStateTable source={linkSource} />
 
-### Exceptions
+### Custom link presentations
 
-A component might replace the resting colour or underline only when its own design
-defines another link cue and preserves visible hover and keyboard focus.
+Components may suppress the default resting underline only when an alternative visual cue
+identifies the element as interactive and visible hover and focus states are preserved.
 
 For an example, see [CnCard](/components/cn-card).
 
-## Buttons
+## Button variants
 
-A button is presentation, never a change of meaning: a command is a `button`, and
-navigation that looks like a button is an `a class="button"` with a destination. The
-stylesheet selects those two elements, so the same variant on either one looks the same
-and behaves as its element does.
+Button styling is purely presentation and does not alter element semantics: `<button>` executes
+commands, and `<a class="button">` navigates destinations. Both elements support the same
+visual variants.
 
-<Composition themes caption="The four variants, in Light and Dark">
+<Composition themes caption="The four button variants in Light and Dark">
   <ButtonSpecimens group="variants" />
 </Composition>
 
-| Variant | Reach for it when |
+| Variant | Purpose |
 | :--- | :--- |
-| Default | The action or destination is a standard one. |
-| `.text` | The action is secondary, and a filled control would outrank the content. |
-| `.cta` | It is the single most important action or destination in the composition. |
-| `.secondary` | v20's alternate chroma is explicitly required. It is not the low-prominence variant. |
+| Default | Standard priority actions and destinations. |
+| `.text` | Low-prominence secondary actions where filled styling would compete with body content. |
+| `.cta` | Primary call to action in a view (maximum one per region). |
+| `.secondary` | The alternate chroma treatment, where it is explicitly required. Not the low-prominence variant. |
 
-`.secondary` applies only where the button itself carries the class. An ancestor with
-that class recolours nothing, which is why the default variant states its surface
-against the other three by name.
+`.secondary` applies only when declared directly on the button element. Ancestor classes
+do not cascade secondary color tokens to child buttons.
 
-<Composition themes caption="The same variant as a command and as a destination">
+<Composition themes caption="Button variants as commands and destinations">
   <ButtonSpecimens group="elements" />
 </Composition>
 
-### Content
+### Button anatomy and content
 
-A button holds a label, a leading icon with a label, an icon alone, or an inline
-`CnLoader` with or without a label. The button is a context that requires one icon size,
-so it sets the icon-size tokens in its own scope and every icon inside renders small
-whatever size it selected.
+A button supports:
+1. Text label.
+2. Leading icon with label.
+3. Icon-only control.
+4. Inline `CnLoader` with or without label.
 
-<Composition themes caption="Label, leading icon, icon only, and a command in flight">
+Buttons establish a scoped icon size, ensuring descendant `Icon` components automatically
+render at the standard button size (small).
+
+<Composition themes caption="Label, leading icon, icon-only, and loading state">
   <ButtonSpecimens group="compositions" />
 </Composition>
 
-An icon or loader alone makes the control a circle. A command in flight is a disabled
-native button holding an inline loader — the loader reports progress while the button
-keeps the accessible name of the command. Loading is not a state a link button has.
+An icon-only or loader-only button renders as a circular control. A command in flight uses a
+disabled native `<button>` containing an inline `CnLoader`; the button retains the command's
+accessible name while the loader indicates progress. Link buttons do not support loading states.
 
-### States
+### Interaction states
 
-Hover adds the button elevation and a wash over the variant's own surface; active uses
-the stronger wash. Neither touches the foreground, so a label keeps its contrast.
-Keyboard focus adds the focus ring rather than a colour change. Only a native button has
-a disabled state, at half opacity: a link button is either navigable or absent, and the
-design system publishes no disabled-link presentation.
+- **Hover:** Elevates the control and overlays a subtle tint.
+- **Active:** Deepens the tint while maintaining text contrast.
+- **Keyboard focus:** Draws `--cn-focus-ring` around the control.
+- **Disabled:** Native `<button>` elements render at half opacity. Links do not support disabled states; unavailable destinations must be omitted from markup.
 
-<Composition themes caption="Resting, disabled, and a text link button">
+<Composition themes caption="Resting, disabled, and text link buttons">
   <ButtonSpecimens group="states" />
 </Composition>
 
-State changes use the shared UI duration and easing, `--cn-duration-ui` and
-`--cn-easing-ui`, and resolve without motion for a reader who asks for reduced motion.
+Transitions use `--cn-duration-ui` and `--cn-easing-ui`, disabling animation under
+`prefers-reduced-motion: reduce`.
 
-### Geometry
+### Button geometry
 
-<Composition themes caption="Intrinsic width, a stretched button, and a label that truncates">
+Labelled buttons size to content by default and stretch to fill parent flex or grid tracks
+when requested. When constrained, text labels truncate with an ellipsis while icons and
+loaders maintain fixed square dimensions.
+
+<Composition themes caption="Intrinsic width, stretched button, and truncated label">
   <ButtonSpecimens group="layout" />
 </Composition>
-
-A labelled button sizes to its content and stretches when its layout stretches it.
-Truncation belongs to the label: the icon or loader keeps its square while the text gives
-way. The visible pill is narrower than the row it occupies, so a button centres on the
-grid without its row growing.
 
 <TokenTable
   source={unitsSource}
   prefix="--cn-button"
-  caption="Control geometry, from styles/units.css"
+  caption="Button geometry tokens"
 />
 
-The radius is half the visible block size, the inline padding is one gap, and the gap
-between an icon and its label is one grid unit.
+The corner radius equals half the visible block size, inline padding is `--cn-gap`, and
+the space between an icon and its label is `--cn-grid` (0.5rem).
 
-## Floating actions
+## Floating action buttons (FAB)
 
-A floating action button presents a view's prominent contextual action above the
-content, and the FAB tray keeps it reachable at the lower inline-end corner. A FAB is
-the same choice by outcome as any other control: a `button.fab` for a command, an
-`a.fab` or `a.button.fab` with a destination for navigation.
+A floating action button (FAB) exposes the primary contextual action for a view. Use
+`<button class="fab">` for commands and `<a class="fab">` for navigation.
 
-<Composition themes caption="The three variants, in Light and Dark">
+<Composition themes caption="The three FAB variants in Light and Dark">
   <FabSpecimens group="variants" />
 </Composition>
 
-| Variant | Reach for it when |
+| Variant | Purpose |
 | :--- | :--- |
-| Default | The view has one prominent contextual action. |
-| `.cta` | That action needs the strongest attention in the view. |
-| `.secondary` | A supporting action sits beside the prominent one. |
+| Default | Standard contextual action. |
+| `.cta` | High-emphasis primary action. |
+| `.secondary` | Supporting action beside a primary FAB. |
 
-### Size and content
+### FAB sizes and content
 
-A FAB carries an icon, or an icon and a trailing label. There are two sizes: the
-standard seven-unit control, and `.small`, which matches the regular button size. An
-icon-only FAB is square at its size, a labelled one grows in the inline direction, and
-neither stretches to fill a flex or grid track.
+FABs support an icon alone or an icon with trailing label. Two sizes are available:
+- **Standard (7 grid units / 56px):** Primary view action.
+- **Small (`.small` / 38px):** Collapses to `--cn-button-size`.
 
-<Composition themes caption="Standard and small, as a command and as a destination">
+Icon-only FABs are square. Labelled FABs expand inline; neither variant stretches to fill
+flex tracks.
+
+<Composition themes caption="Standard and small FAB sizes">
   <FabSpecimens group="sizes" />
 </Composition>
 
-<Composition themes caption="Icon only, icon with a label, and a command in flight">
+<Composition themes caption="Icon-only, labelled, and in-flight FAB">
   <FabSpecimens group="compositions" />
 </Composition>
 
-An icon-only FAB takes its accessible name from the control, never from the icon. A
-command in flight is a disabled native button holding an inline `CnLoader` that keeps
-the name of the command it is running.
+Icon-only FABs derive their accessible name from the button `aria-label`, never from the icon.
+In-flight commands use a disabled native button containing an inline `CnLoader`.
 
-### States
+### FAB interaction states
 
-Hover lifts the FAB from the resting elevation, active settles it between the two, and
-keyboard focus adds the focus ring. Each state keeps the variant's own surface and
-foreground. Only a native FAB has a disabled state; a link FAB is navigable or absent.
+Hover lifts the FAB above its resting elevation, active settles between elevations, and
+keyboard focus applies `--cn-focus-ring`. Only native button FABs support the disabled state.
 
-<Composition themes caption="Resting, disabled, and a navigable FAB">
+<Composition themes caption="Resting, disabled, and navigable FABs">
   <FabSpecimens group="states" />
 </Composition>
 
-### The tray
+### FAB tray container
 
-The tray is a `nav class="fab-tray"`, and a composition has one. It pins itself to the
-composition that owns it — an application shell, or the bounded demonstrations below —
-and spans that composition's inline size so its children align to the inline end. A
-page contributes no margins or offsets of its own.
+Use `<nav class="fab-tray">` to pin FABs to the lower inline-end corner of the composition
+that owns it, which is its containing block. The tray spans that composition's inline size
+and aligns its children to the inline end. It stacks at `--cn-z-fab` and clears block-end
+navigation through `--cn-block-end-chrome`.
 
-Both demonstrations use the shipped tray. The first is drawn at window size and scaled
-down to fit this column, which is how the same markup behaves on the application
-canvas; the second is handheld-sized, with persistent block-end navigation the tray
-clears through `--cn-block-end-chrome`.
-
-<Composition caption="A window-sized shell, scaled to fit: labels visible, actions stacked upward">
+<Composition caption="App shell layout: FAB labels visible, actions stacked upward">
   <FabTrayDemo shell="app" />
 </Composition>
 
-<Composition themes caption="A handheld-sized shell in Light and Dark: labels omitted, clearing the rail">
+<Composition themes caption="Handheld shell: FAB labels collapsed to icons in Light and Dark">
   <FabTrayDemo shell="handheld" />
 </Composition>
 
-Below the small-screen threshold the label is omitted and the icon remains, while the
-control keeps its accessible name. The threshold is read from the tray's own container,
-not from the browser window, so the narrow shell above shows the handheld presentation
-in the same window that shows the wide one with labels.
+Below the small-screen container query threshold, the tray automatically collapses text
+labels and displays icon-only controls while preserving accessible names.
 
 <TokenTable
   source={unitsSource}
   prefix="--cn-fab"
-  caption="FAB geometry, from styles/units.css"
+  caption="FAB geometry tokens"
 />
 
-The tray sits above content and persistent navigation at `--cn-z-fab`, and below
-dialogs, modal surfaces and transient messages.

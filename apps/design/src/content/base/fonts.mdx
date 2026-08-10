@@ -1,6 +1,6 @@
 ---
 title: Fonts
-description: The two typefaces the design system ships, the faces behind them, and which elements use which.
+description: The two typeface families in our design system, available font faces, and default element assignments.
 order: 3
 ---
 
@@ -8,48 +8,43 @@ import FaceTable from '@design-system/books/specimens/FaceTable.astro'
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import fontsSource from '@design-system/styles/fonts.css?raw'
 
-The design system ships two typefaces. **Lato** sets interface and content text.
-**Roboto Mono** sets code, identifiers, and text the reader types in.
+We provide two typefaces. **Lato** sets UI and editorial content. **Roboto Mono** sets
+machine text: code, the label step, and text the reader types in.
 
 ## Tokens
 
 <TokenTable source={fontsSource} prefix="--cn-font-family" />
 
-## Faces
+## Available faces
 
-These weights and styles have a real face. Ask for one that is not here and the
-browser synthesises it: it renders, and it is not the typeface.
+Our stylesheets declare only the weights and styles listed below. Declaring an unlisted
+combination triggers browser font synthesis (faux bold or oblique).
 
 <FaceTable source={fontsSource} family="Lato" />
 
 <FaceTable source={fontsSource} family="Roboto Mono" />
 
 Faces are their publishers' files, unmodified. Lato is published whole, one file per
-weight, so a Lato face carries alphabets no page here renders. Roboto Mono is
-published split by alphabet, so it takes `latin` and `latin-ext` and a page downloads
-only the one it uses.
+weight. Roboto Mono is published split by alphabet, so it takes the publisher's `latin`
+and `latin-ext` files. Every face declares `font-display: swap`. No face is preloaded.
 
-Every face is `font-display: swap`. None is preloaded.
+For step mappings and typographic hierarchy, see [Typography](/principles/typography).
 
-[Typography](/principles/typography) explains which weight belongs to which step.
-
-## Which element gets which
+## Element assignments
 
 | Element | Typeface |
 | :--- | :--- |
-| The document, and everything inheriting from it | Lato |
+| Root document and inherited text | Lato |
 | `button` | Lato |
 | `input`, `select`, `textarea` | Roboto Mono |
 | `code`, `kbd`, `samp`, `pre` | Roboto Mono |
+| `.text-label` | Roboto Mono |
 
-Identifiers and slugs are technical too, but nothing selects them yet. They arrive
-with the typography semantics.
+## Packaging and licensing
 
-## Changing the face set
+Faces are declared in `packages/design-system/styles/fonts.css` from the `lato-font` and
+`@fontsource/roboto-mono` packages.
 
-Faces come from the `lato-font` and `@fontsource/roboto-mono` packages, declared in
-`packages/design-system/styles/fonts.css` and resolved by each application's build.
-Adding one means adding a `@font-face` there; nothing is generated.
+Both families are licensed under the SIL Open Font License. The full license notice is
+served at [/fonts-license.txt](/fonts-license.txt).
 
-Both families are under the SIL Open Font License. Each application serves the notice
-at [/fonts-license.txt](/fonts-license.txt).

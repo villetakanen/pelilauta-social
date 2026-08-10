@@ -6,43 +6,40 @@ order: 4
 
 import Composition from "@design-system/books/specimens/Composition.astro";
 
-Surface provides the standard container for bounded content and five utilities for
-expressing elevation. Applications receive both from
-`@design-system/styles/ds.css`.
+`.surface` provides the standard container for bounded content, applying default inset
+and establishing a container query context. Five accompanying elevation utilities
+(`.elevation-0` through `.elevation-4`) control visual depth and shadow geometry.
 
-Use `.surface` when content needs the system inset and a local query context. Use
-an elevation utility on its own when an existing component needs only the visual
-level.
+Use `.surface` when content requires standard padding and a local query context. Apply
+an elevation utility directly when an existing element requires only visual elevation.
 
-## The container
+## Container model
 
-`.surface` applies the standard content inset and establishes the `surface-area`
-query container. Components inside it can therefore respond to the width available
-inside the surface, independently of the viewport. Its default visual treatment is
-elevation 1.
+`.surface` applies standard content inset and establishes the `surface-area` query
+container. Descendant components evaluate container queries against the surface's
+computed inline size rather than the viewport. Default presentation is elevation 1.
 
-| Declaration | Value                        |
-| :---------- | :--------------------------- |
-| `padding`   | `--cn-gap`                   |
+| Property | Value |
+| :--- | :--- |
+| `padding` | `--cn-gap` |
 | `container` | `surface-area / inline-size` |
-| Level       | 1                            |
+| Default elevation | 1 |
 
-The inset remains `--cn-gap` at every width. A composition requiring another inset
-must state that exception where it is used.
+The inset remains `--cn-gap` across all viewports. Compositions requiring custom inset
+must declare it explicitly.
 
-## The levels
+## Elevation levels
 
-Each elevation utility applies the background and shadow assigned to one level.
-Choose the level by the role of the element in the composition; the
-[Colour & Surface principles](/principles/color-system) define that hierarchy.
+Each elevation utility applies the background color role and box shadow assigned to
+that level. Elevation hierarchy is defined in [Colour & Surface principles](/principles/color-system).
 
-| Class          | Background       | Shadow                    | Use for                                        |
-| :------------- | :--------------- | :------------------------ | :--------------------------------------------- |
-| `.elevation-0` | `--cn-surface`   | none                      | The application ground plane                   |
-| `.elevation-1` | `--cn-surface-1` | none                      | Resting content: cards and panels              |
-| `.elevation-2` | `--cn-surface-2` | `--cn-shadow-elevation-2` | Content raised above a resting surface         |
+| Class | Background | Shadow | Primary use |
+| :--- | :--- | :--- | :--- |
+| `.elevation-0` | `--cn-surface` | none | Application ground plane |
+| `.elevation-1` | `--cn-surface-1` | none | Resting content: cards and panels |
+| `.elevation-2` | `--cn-surface-2` | `--cn-shadow-elevation-2` | Raised content above a resting surface |
 | `.elevation-3` | `--cn-surface-3` | `--cn-shadow-elevation-3` | Floating or active content: menus and popovers |
-| `.elevation-4` | `--cn-surface-4` | `--cn-shadow-elevation-4` | The highest system layer: dialogs              |
+| `.elevation-4` | `--cn-surface-4` | `--cn-shadow-elevation-4` | Highest system layer: modal dialogs |
 
 <Composition
   themes
@@ -55,25 +52,23 @@ Choose the level by the role of the element in the composition; the
   <div class="surface elevation-4">elevation-4</div>
 </Composition>
 
-Elevation 0 paints an opaque ground plane using surface step 95 in Light and step
-20 in Dark. Elevations 0 and 1 are shadowless. Elevations 2 to 4 apply progressively
-larger shadows when they render without an elevated ancestor.
+Elevation 0 renders an opaque ground plane (surface step 95 in Light, step 20 in Dark).
+Elevations 0 and 1 are shadowless. Elevations 2 through 4 apply progressively larger box
+shadows when rendered without an elevated ancestor.
 
-The Light and Dark themes do not derive depth from colour in the same way. Levels
-1 to 3 share one background in Light, while Dark separates levels 2 and 3 by
-lightness. Level 4 leaves the surface family: it uses primary step 99 in Light and
-step 40 in Dark.
+In Light theme, levels 1 through 3 share one background, so the raised level's shadow
+carries the separation. In Dark theme, levels 2 and 3 separate through both background
+lightness and shadow. Level 4 transitions to the primary color family (step 99 in Light, step 40
+in Dark).
 
-Every level carries the inherited body foreground at WCAG 2.2 AA, so an element
-with an elevation class and no colour of its own is readable. Raise a foreground to
-strengthen it, not to rescue it. Level 4 is the exception worth naming: the
-de-emphasised roles are unreadable on it in Dark, so metadata and links inside a
-system-layer surface take a stronger role.
+Every level carries the inherited body foreground at WCAG 2.2 AA in both themes. Surface
+sets no foreground: a consumer raises one to strengthen a role, not to repair it.
+De-emphasised roles are unsuitable at level 4.
 
-## Overriding a surface's level
+## Level overrides
 
-Add one elevation class to `.surface` to select another visual level. Padding and
-containment remain unchanged.
+To change visual elevation while preserving standard padding and container query context,
+combine `.surface` with an explicit elevation class.
 
 ```html
 <div class="surface elevation-3">A menu panel</div>
@@ -87,25 +82,23 @@ containment remain unchanged.
   <div class="surface elevation-3">Surface at elevation 3</div>
 </Composition>
 
-## Nesting
+## Nested elevation
 
-Nested elevation is relative to the nearest elevated ancestor. The child keeps the
-background assigned to its own level; its visible shadow represents only the
-difference between the two levels. Levels in a nested chain increase from ancestor
-to descendant.
+Nested elevation is calculated relative to the nearest elevated ancestor. The child element
+retains its assigned background role, while its visible box shadow reflects only the level
+difference between ancestor and child.
 
-| Ancestor | Child | Visible shadow            |
-| :------- | :---- | :------------------------ |
-| 1        | 2     | none                      |
-| 1        | 3     | `--cn-shadow-elevation-2` |
-| 1        | 4     | `--cn-shadow-elevation-3` |
-| 2        | 3     | none                      |
-| 2        | 4     | `--cn-shadow-elevation-2` |
-| 3        | 4     | none                      |
+| Ancestor | Child | Visible shadow |
+| :--- | :--- | :--- |
+| 1 | 2 | none |
+| 1 | 3 | `--cn-shadow-elevation-2` |
+| 1 | 4 | `--cn-shadow-elevation-3` |
+| 2 | 3 | none |
+| 2 | 4 | `--cn-shadow-elevation-2` |
+| 3 | 4 | none |
 
-A rise of one level is always shadowless. Larger rises use the shadow corresponding
-to the distance from the nearest ancestor, preventing nested shadows from
-accumulating.
+An elevation difference of +1 is shadowless. Differences of +2 or +3 render shadows
+scaled to relative distance, preventing nested shadows from compounding into dark halos.
 
 <Composition
   themes
@@ -121,15 +114,15 @@ accumulating.
   </div>
 </Composition>
 
-`.surface` participates in this calculation at elevation 1 by default. When it also
-has an elevation class, the selected level is used.
+`.surface` evaluates as elevation 1 by default in nesting calculations. When combined
+with an explicit elevation class, the declared level applies.
 
-## Attention states
+## Attention flags
 
-`has-notify` and `has-alert` paint a triangular flag in the upper-right corner of any
-element. Notification uses the information role, alert the warning role, and alert
-wins when both are set. The flag inherits its host's corner radius and takes no
-pointer events.
+`has-notify` and `has-alert` render a triangular status flag in the upper-right corner
+of any container. `has-notify` applies the information role, `has-alert` applies the
+warning role, and `has-alert` takes precedence when both classes are present. The flag
+matches the host element's corner radius and disables pointer events.
 
 ```html
 <div class="surface has-notify">A row with unread content</div>
@@ -140,16 +133,17 @@ pointer events.
   <div class="surface has-alert">Alert</div>
 </Composition>
 
-The states are here rather than inside a component because a card and a listing row
-are the same signal on different containers: [CnCard](/components/cn-card) composes
-these same classes and adds only the inset that pulls the flag over its border.
+Attention flags are utility classes rather than component-bound states. Components such
+as [CnCard](/components/cn-card) compose `.has-notify` and `.has-alert` directly.
 
-They are safe to toggle from the client on an element that is never hydrated — the
-rules read the classes and nothing else:
+Client scripts can toggle attention flags on static, server-rendered DOM elements without
+component hydration:
 
 ```ts
 row.classList.toggle('has-notify', unread)
 ```
 
-The flag announces nothing. A consumer that shows one carries the meaning in text or
-another accessible state.
+Attention flags are purely visual indicators and provide no screen reader announcements.
+Applications must communicate unread or alert states through accessible text or ARIA live
+regions.
+
