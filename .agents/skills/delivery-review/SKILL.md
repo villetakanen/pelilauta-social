@@ -1,13 +1,13 @@
 ---
 name: delivery-review
-description: Use only when the human owner explicitly requests an adversarial implementation review of one proposed Pelilauta merge.
+description: Use only on an explicit request for an adversarial implementation review of one proposed Pelilauta merge.
 ---
 
 # Delivery Review
 
-This skill is not an automatic delivery gate and does not replace the human
-owner's PR review. Use it only on explicit request. The mandatory separate
-adversarial review of a spec is owned by the `spec` skill and is
+This skill is not an automatic delivery gate and does not replace the merge
+approver's PR review. Use it only on explicit request. The mandatory separate
+adversarial review of a spec is the `spec` skill's review gate and is
 unaffected by this boundary.
 
 Review one pull request, not the lifetime diff of its feature branch. The purpose
@@ -26,9 +26,10 @@ Plans are working scaffolding for an active epic. They may help establish the
 claimed outcome, but their status, reconciliation and eventual deletion are not
 integration evidence or delivery findings.
 
-The owner's request for a release assessment is downstream of owner UAT. Do not
-audit, infer or report owner-only acceptance unless the owner asks for an acceptance
-checklist or the delivery record falsely claims an automated check performed it.
+A request for a release assessment is downstream of acceptance testing this skill
+does not perform. Do not audit, infer or report human acceptance unless the request
+asks for an acceptance checklist or the delivery record falsely claims an automated
+check performed it.
 
 ## Challenges
 
@@ -51,7 +52,7 @@ checklist or the delivery record falsely claims an automated check performed it.
 6. **Negative states:** were actual missing, stale, empty, invalid, or optional
    states exercised where the contract depends on them?
 7. **Generated and external sources:** can committed output drift from its
-   sources? Are source ownership, licensing, optionality, and build behavior
+   sources? Are source provenance, licensing, optionality, and build behavior
    preserved?
 8. **Migration context:** were relevant legacy element selectors, tests,
    imperative APIs, dynamic inputs, persisted values, and accessibility
@@ -59,7 +60,7 @@ checklist or the delivery record falsely claims an automated check performed it.
 9. **Placement:** does each change sit in the file its spec assigns the concern
    to, or in whichever file currently wins the cascade? A rule added where it
    already loses, or edited where it already wins, passes every visual check and
-   leaves ownership where the spec says it is not.
+   leaves the behaviour in the file the spec excludes.
 10. **Record:** do the spec, PR and reported checks describe the implementation
     accurately enough to operate, revert and extend it? Do not report incidental
     summary-count drift.
@@ -75,7 +76,7 @@ process or architecture candidate to the lessons queue.
 
 A blocker is a defect in the proposed delta that makes its claimed outcome false,
 unsafe, undeployable or incoherent to revert. An unresolved blocker stops
-integration. Stale scaffolding, unrecorded owner state and work authorised for a
-later delta are not blockers. Non-blocking findings are fixed, accepted, deferred,
-or rejected by the human owner. A review finding is evidence, not automatic
-permission to expand the pull request.
+integration. Stale scaffolding, state that exists outside the record, and work
+authorised for a later delta are not blockers. Non-blocking findings are fixed,
+accepted, deferred, or rejected by the merge approver. A review finding is
+evidence, not automatic permission to expand the pull request.
