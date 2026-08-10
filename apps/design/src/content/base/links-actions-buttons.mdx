@@ -7,6 +7,8 @@ order: 5
 import Composition from '@design-system/books/specimens/Composition.astro'
 import LinkStateTable from '@design-system/books/specimens/LinkStateTable.astro'
 import ButtonSpecimens from '@design-system/books/specimens/ButtonSpecimens.astro'
+import FabSpecimens from '@design-system/books/specimens/FabSpecimens.astro'
+import FabTrayDemo from '@design-system/books/specimens/FabTrayDemo.astro'
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import linkSource from '@design-system/styles/links.css?raw'
 import unitsSource from '@design-system/styles/units.css?raw'
@@ -126,3 +128,83 @@ grid without its row growing.
 
 The radius is half the visible block size, the inline padding is one gap, and the gap
 between an icon and its label is one grid unit.
+
+## Floating actions
+
+A floating action button presents a view's prominent contextual action above the
+content, and the FAB tray keeps it reachable at the lower inline-end corner. A FAB is
+the same choice by outcome as any other control: a `button.fab` for a command, an
+`a.fab` or `a.button.fab` with a destination for navigation.
+
+<Composition themes caption="The three variants, in Light and Dark">
+  <FabSpecimens group="variants" />
+</Composition>
+
+| Variant | Reach for it when |
+| :--- | :--- |
+| Default | The view has one prominent contextual action. |
+| `.cta` | That action needs the strongest attention in the view. |
+| `.secondary` | A supporting action sits beside the prominent one. |
+
+### Size and content
+
+A FAB carries an icon, or an icon and a trailing label. There are two sizes: the
+standard seven-unit control, and `.small`, which matches the regular button size. An
+icon-only FAB is square at its size, a labelled one grows in the inline direction, and
+neither stretches to fill a flex or grid track.
+
+<Composition themes caption="Standard and small, as a command and as a destination">
+  <FabSpecimens group="sizes" />
+</Composition>
+
+<Composition themes caption="Icon only, icon with a label, and a command in flight">
+  <FabSpecimens group="compositions" />
+</Composition>
+
+An icon-only FAB takes its accessible name from the control, never from the icon. A
+command in flight is a disabled native button holding an inline `CnLoader` that keeps
+the name of the command it is running.
+
+### States
+
+Hover lifts the FAB from the resting elevation, active settles it between the two, and
+keyboard focus adds the focus ring. Each state keeps the variant's own surface and
+foreground. Only a native FAB has a disabled state; a link FAB is navigable or absent.
+
+<Composition themes caption="Resting, disabled, and a navigable FAB">
+  <FabSpecimens group="states" />
+</Composition>
+
+### The tray
+
+The tray is a `nav class="fab-tray"`, and a composition has one. It pins itself to the
+composition that owns it — an application shell, or the bounded demonstrations below —
+and spans that composition's inline size so its children align to the inline end. A
+page contributes no margins or offsets of its own.
+
+Both demonstrations use the shipped tray. The first is drawn at window size and scaled
+down to fit this column, which is how the same markup behaves on the application
+canvas; the second is handheld-sized, with persistent block-end navigation the tray
+clears through `--cn-block-end-chrome`.
+
+<Composition caption="A window-sized shell, scaled to fit: labels visible, actions stacked upward">
+  <FabTrayDemo shell="app" />
+</Composition>
+
+<Composition themes caption="A handheld-sized shell in Light and Dark: labels omitted, clearing the rail">
+  <FabTrayDemo shell="handheld" />
+</Composition>
+
+Below the small-screen threshold the label is omitted and the icon remains, while the
+control keeps its accessible name. The threshold is read from the tray's own container,
+not from the browser window, so the narrow shell above shows the handheld presentation
+in the same window that shows the wide one with labels.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-fab"
+  caption="FAB geometry, from styles/units.css"
+/>
+
+The tray sits above content and persistent navigation at `--cn-z-fab`, and below
+dialogs, modal surfaces and transient messages.

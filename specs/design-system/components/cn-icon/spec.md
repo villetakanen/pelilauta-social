@@ -77,6 +77,12 @@ intentional artwork across Light and Dark modes.
   meaning to convey (for example a brand mark). This affects ARIA only; the
   artwork title (tooltip) stays the noun. This preserves the intent of v18
   consumers that set an accessible label on the legacy element.
+- A consumer may mark an icon decorative, opt-in per instance. A decorative
+  icon exposes nothing to assistive technology and carries no artwork title; a
+  supplied aria-label does not survive it. The composition that hides the icon
+  owns whatever naming its context needs — the case this serves is the identity
+  mark's anonymous placeholder
+  (`specs/design-system/identity-mark/spec.md`).
 - An icon that is the sole content of a control does not provide the
   control's accessible name; the consuming control supplies one from visible
   text or an explicit label.
@@ -163,7 +169,8 @@ intentional artwork across Light and Dark modes.
 - Initial server-rendered content includes the icon markup before any
   client-side script runs.
 - Assistive technology continues to receive the icon's noun as in v18 through
-  its aria-label; an explicit aria-label, when supplied, overrides the noun.
+  its aria-label; an explicit aria-label, when supplied, overrides the noun; a
+  decorative icon exposes neither a name nor an artwork title.
 - A human review confirms the design-system book's size, color, and fallback
   examples in both modes. Application consumer migrations separately review
   their rendered-in-context size, spacing, and layout in one theme unless the

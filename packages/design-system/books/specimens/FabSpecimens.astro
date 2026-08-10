@@ -1,0 +1,105 @@
+---
+import CnLoader from '../../components/CnLoader.svelte';
+/**
+ * FabSpecimens — real floating action buttons, one group per axis.
+ *
+ * Controls only: placement is the tray's, and FabTrayDemo demonstrates it. The
+ * elements are the ones a consumer writes, and every rule comes from
+ * styles/fab.css.
+ *
+ * Book: apps/design/src/content/base/links-actions-buttons.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+
+interface Props {
+  /** Which axis to render. */
+  group: 'variants' | 'sizes' | 'compositions' | 'states';
+}
+
+const { group } = Astro.props;
+---
+
+<div class="fab-specimens" data-group={group}>
+  {group === 'variants' && (
+    <div class="row">
+      <button type="button" class="fab">
+        <Icon noun="card" />
+        <span>Default</span>
+      </button>
+      <button type="button" class="fab cta">
+        <Icon noun="add" />
+        <span>Call to action</span>
+      </button>
+      <button type="button" class="fab secondary">
+        <Icon noun="search" />
+        <span>Secondary</span>
+      </button>
+    </div>
+  )}
+
+  {group === 'sizes' && (
+    <div class="row">
+      <button type="button" class="fab" aria-label="Add, standard size">
+        <Icon noun="add" />
+      </button>
+      <button type="button" class="fab small" aria-label="Add, small size">
+        <Icon noun="add" />
+      </button>
+      <a class="fab" href="/base/links-actions-buttons" aria-label="Destination">
+        <Icon noun="add" />
+      </a>
+      <a
+        class="button fab small"
+        href="/base/links-actions-buttons"
+        aria-label="Destination, small size"
+      >
+        <Icon noun="add" />
+      </a>
+    </div>
+  )}
+
+  {group === 'compositions' && (
+    <div class="row">
+      <button type="button" class="fab" aria-label="Add a thread">
+        <Icon noun="add" />
+      </button>
+      <button type="button" class="fab">
+        <Icon noun="add" />
+        <span>Add a thread</span>
+      </button>
+      <button type="button" class="fab" disabled aria-label="Sending">
+        <CnLoader inline noun="add" />
+      </button>
+      <button type="button" class="fab" disabled>
+        <CnLoader inline noun="add" />
+        <span>Sending…</span>
+      </button>
+    </div>
+  )}
+
+  {group === 'states' && (
+    <div class="row">
+      <button type="button" class="fab">
+        <Icon noun="add" />
+        <span>Resting</span>
+      </button>
+      <button type="button" class="fab" disabled>
+        <Icon noun="add" />
+        <span>Disabled</span>
+      </button>
+      <a class="fab secondary" href="/base/links-actions-buttons">
+        <Icon noun="add" />
+        <span>Navigable</span>
+      </a>
+    </div>
+  )}
+</div>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>

@@ -17,7 +17,7 @@ import { expect, type Page, test } from '@playwright/test';
  * getComputedStyle, which is the same privacy guarantee the rule exists to keep.
  * A stylesheet check covers it — see packages/design-system/test/links.test.ts.
  *
- * Spec: specs/design-system/links-and-actions/spec.md
+ * Spec: specs/design-system/actions/spec.md
  */
 
 const BOOK = '/base/links-actions-buttons';

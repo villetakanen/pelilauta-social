@@ -1,0 +1,114 @@
+---
+title: Identity Mark
+description: The pictorial and textual marks for a profile, their fallback states, the backdrop derivation, and their behaviour inside a link.
+order: 6
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import IdentitySpecimens from '@design-system/books/specimens/IdentitySpecimens.svelte'
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import colorThemeSource from '@design-system/styles/color-theme.css?raw'
+
+An identity mark stands for one profile. There are two: the pictorial mark, the
+`CnAvatar` component, and the textual mark, the `.cn-nick` class. Both arrive with
+the design system's stylesheet, and `CnAvatar` renders on the server without
+hydrating.
+
+<Composition themes caption="The pictorial mark and the textual mark, in Light and Dark">
+  <IdentitySpecimens group="basic" />
+  <IdentitySpecimens group="nick" />
+</Composition>
+
+## What the pictorial mark shows
+
+The mark shows the profile's image. Where no image renders, it shows the first two
+characters of the nick over a backdrop derived from that nick. Where there is no
+nick either, it shows the generic glyph on `--cn-surface-2`: with no nick there is
+nothing to derive a backdrop from.
+
+The fallback is layered, not scripted. The initials render beneath the image, and
+an image that fails to load paints nothing over them, so the mark recovers without
+hydrating.
+
+<Composition themes caption="Image, initials, the anonymous mark, and an image that failed to load">
+  <IdentitySpecimens group="states" />
+</Composition>
+
+| State | Shown | Backdrop |
+| :--- | :--- | :--- |
+| Image | The profile's picture, cropped to the circle | Covered by the image |
+| Initials | Two characters of the nick | Derived from the nick |
+| Anonymous | The `avatar` glyph | `--cn-surface-2` |
+
+The mark renders the anonymous state without naming it. What a missing nick means —
+a deleted profile, an anonymous one, a redacted one — and the localised word for it
+are decided by the application, which prints the word in its own text.
+
+The mark has two sizes. Small is one and a half lines, for a mark beside a line of
+text; medium, the default, is two lines, for a mark that heads a region.
+
+<Composition themes caption="Small and medium">
+  <IdentitySpecimens group="sizes" />
+</Composition>
+
+## Telling profiles apart
+
+The backdrop exists to separate the profiles that share a view. We derive it from
+the nick, which keeps a profile's colour stable within a page and across the pages
+of one release.
+
+<Composition themes caption="Six nicks, six backdrops">
+  <IdentitySpecimens group="distinct" />
+</Composition>
+
+We do not promise the colour beyond that. The derivation is an implementation
+detail, and both ends of the range it mixes between are token roles, so a palette
+revision recolours every avatar in the community. A consumer that needs a stable
+colour for a profile stores one rather than reading it here.
+
+Every colour the range can produce carries the initials at 4.5:1 and separates from
+the page behind it at 3:1, in both schemes. The range inverts between them: dark
+backdrops on the light page, light backdrops on the dark one.
+
+<TokenTable
+  source={colorThemeSource}
+  names={['--cn-avatar-backdrop-from', '--cn-avatar-backdrop-to', '--cn-on-avatar']}
+  swatch
+  caption="The ends of the backdrop range and the text role over it, from styles/color-theme.css"
+/>
+
+## Inside a link
+
+Both marks are inert on their own: no pointer cursor, no hover response, no click
+handler. Navigation belongs to the anchor that wraps a mark, not to the mark.
+
+Inside an anchor, the circle loses the underline the anchor would otherwise draw
+across it, takes the second elevation on hover, and takes a keyboard focus ring
+that follows the circle rather than the anchor's rectangle. The textual mark keeps
+its weight and colour and takes the link roles on hover and activation.
+
+<Composition themes caption="The linked mark beside the same mark standing alone">
+  <IdentitySpecimens group="linked" />
+</Composition>
+
+[Links, Actions and Buttons](/base/links-actions-buttons) defines the states these
+roles carry.
+
+## Reference
+
+The pictorial mark is the `CnAvatar` component, and [its book](/components/cn-avatar)
+carries the props.
+
+The textual mark takes no props. It is the class `.cn-nick` on whichever element the
+composition calls for, and it presents the same on an anchor and on a span.
+
+## Accessibility
+
+The pictorial mark announces the nick and nothing else. We publish no wording around
+it — no "avatar of", no "profile picture" — because the design system serves three
+languages and translates none of them.
+
+A mark inside a composition that already names the profile takes `aria-hidden`, so
+that a linked avatar beside its nick announces the profile once. The anonymous mark
+is always hidden, and a consumer that must name the anonymous state names it in its
+own text.

@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnAvatar from '@design-system/components/CnAvatar.svelte';
 import type { Profile } from 'src/schemas/ProfileSchema';
 
 type Props = {
@@ -12,7 +13,7 @@ const { profile }: Props = $props();
   class="column-s flex"
   style="flex-direction: column; align-items: center;"
 >
-  <cn-avatar src={profile.avatarURL} alt={profile.nick}></cn-avatar>
+  <CnAvatar src={profile.avatarURL} nick={profile.nick} aria-hidden />
 
   <p class="m-0 text-center">
     <strong>{profile.nick}</strong><br />

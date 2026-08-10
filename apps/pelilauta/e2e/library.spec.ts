@@ -161,7 +161,7 @@ test.describe('Library Page - User Sites Store', () => {
     // The LibrarySitesFabs component should render FAB buttons
     // The FAB tray exists but may not be "visible" in Playwright's sense
     // Just verify it exists in the DOM
-    const fabTray = page.locator('nav#fab-tray');
+    const fabTray = page.locator('nav.fab-tray');
     const fabCount = await fabTray.count();
     expect(fabCount).toBeGreaterThan(0);
   });

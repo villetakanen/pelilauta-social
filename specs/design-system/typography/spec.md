@@ -70,7 +70,7 @@ Finnish compound loses its word shape in capitals.
 Heading wrap and table typography remain undecided here; the table in
 `specs/design-system/preflight/spec.md` lists them under Typography. Link presentation
 and the distinction between navigation and commands are specified in
-`specs/design-system/links-and-actions/spec.md`.
+`specs/design-system/actions/spec.md`.
 
 ## Contract
 

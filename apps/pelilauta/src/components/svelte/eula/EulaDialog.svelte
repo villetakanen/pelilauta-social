@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnAvatar from '@design-system/components/CnAvatar.svelte';
 import { createAccount } from 'src/firebase/client/account/createAccount';
 import { updateAccount } from 'src/firebase/client/account/updateAccount';
 import { createProfile } from 'src/firebase/client/profile/createProfile';
@@ -130,7 +131,7 @@ function handleNickChange(newNick: string, exists: boolean) {
       </p>
     {:else}
       <div class="flex flex-no-wrap">
-        <cn-avatar nick={nick} src={avatarUrl}></cn-avatar>
+        <CnAvatar {nick} src={avatarUrl} aria-hidden />
         <fieldset class="grow">
           <NickNameInput
             {nick}

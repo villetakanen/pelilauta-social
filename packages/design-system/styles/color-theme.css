@@ -82,9 +82,14 @@
   --cn-fab-cta: var(--cn-color-error-60);
   --cn-fab-cta-blend: var(--cn-color-surface-50);
   --cn-on-fab-cta: var(--cn-color-surface-100);
-  --cn-fab-secondary: var(--cn-color-surface-30);
-  --cn-fab-secondary-blend: var(--cn-color-surface-60);
-  --cn-on-fab-secondary: var(--cn-color-surface-100);
+  /* v20 builds the secondary fab from the button grey, blended toward on-surface. */
+  --cn-fab-secondary: var(--cn-button);
+  --cn-fab-secondary-blend: color-mix(
+    in oklch,
+    var(--cn-button),
+    var(--cn-on-surface) 22%
+  );
+  --cn-on-fab-secondary: var(--cn-on-button);
   --cn-hover: light-dark(
     color-mix(in oklch, var(--cn-color-surface-50), transparent 90%),
     color-mix(in oklch, var(--cn-color-surface-50), transparent 80%)
@@ -201,5 +206,22 @@
   --cn-loader-color: light-dark(
     var(--cn-color-primary-60),
     var(--cn-color-surface-60)
+  );
+
+  /* An identity backdrop is any mix of these two, so both ends and everything
+     between them answer to --cn-on-avatar, and to the page behind the mark. The
+     bands invert per mode: dark chips on the light page, light chips on the dark
+     one. */
+  --cn-avatar-backdrop-from: light-dark(
+    var(--cn-color-primary-30),
+    var(--cn-color-primary-60)
+  );
+  --cn-avatar-backdrop-to: light-dark(
+    var(--cn-color-surface-50),
+    var(--cn-color-surface-80)
+  );
+  --cn-on-avatar: light-dark(
+    var(--cn-color-surface-95),
+    var(--cn-color-surface-10)
   );
 }

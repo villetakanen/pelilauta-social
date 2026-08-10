@@ -21,23 +21,18 @@ describe('Cyan Icon migration contract', () => {
   it('keeps the reached contextual rules in the application migration layer', () => {
     const source = compact(readFileSync(migrationPath, 'utf8'));
 
-    expect(source).toContain(
-      ':where(.fab) .cn-icon { --cn-icon-size-xsmall: var(--cn-icon-size-small); --cn-icon-size: var(--cn-icon-size-small); --cn-icon-size-large: var(--cn-icon-size-small); --cn-icon-size-xlarge: var(--cn-icon-size-small); }',
-    );
-    expect(source).toContain(
-      'button.fab .cn-icon:first-child:not(:only-child), a.button.fab .cn-icon:first-child:not(:only-child) { margin-left: 0; }',
-    );
     expect(source).toContain('.flex.items-start > .cn-icon { flex-grow: 0; }');
     expect(source).toContain('h3 .cn-icon { vertical-align: middle; }');
   });
 
-  it('leaves the button context to the design system', () => {
-    // styles/buttons.css sets the icon-size tokens in the button's own scope and
-    // states the leading-icon offset, so a rule here would restate a capability
-    // the package now provides — and would read as a live Cyan dependency.
+  it('leaves the button and fab contexts to the design system', () => {
+    // styles/buttons.css and styles/fab.css set the icon-size tokens in the
+    // control's own scope, so a rule here would restate a capability the package
+    // now provides — and would read as a live Cyan dependency.
     const source = compact(readFileSync(migrationPath, 'utf8'));
 
     expect(source).not.toMatch(/(?<!\.)\bbutton(?![.\w-])[^{]*\.cn-icon/);
+    expect(source).not.toMatch(/\.fab[^{]*\.cn-icon/);
   });
 
   it('loads after stable Icon CSS and before application overrides', () => {

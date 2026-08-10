@@ -20,6 +20,10 @@
   /* Control geometry: the visible pill, and the row it occupies. */
   --cn-button-size: calc(var(--cn-grid) * 4.75); /* 38px */
   --cn-button-physical-size: calc(var(--cn-grid) * 7); /* 56px */
+  --cn-fab-size: calc(
+    var(--cn-grid) *
+    7
+  ); /* 56px, the standard floating action button */
   /*
    * Icon sizes: absolute lengths rather than grid multiples, following v20, which
    * files them beside the grid and marks them absolute. Spec:
@@ -30,6 +34,13 @@
   --cn-icon-size: 2.25rem; /* 36px, the medium default */
   --cn-icon-size-large: 4.5rem; /* 72px */
   --cn-icon-size-xlarge: 8rem; /* 128px */
+
+  /*
+   * Stacking. One value for now: the FAB tray rides above page content and the
+   * persistent navigation, and below the dialog, modal and snackbar layers that
+   * Cyan still provides at 50000 and above.
+   */
+  --cn-z-fab: 40500;
 
   /* Interaction motion, shared by every control that answers a pointer. */
   --cn-duration-ui: 0.22s;

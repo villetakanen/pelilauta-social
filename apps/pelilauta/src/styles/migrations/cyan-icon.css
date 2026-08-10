@@ -7,23 +7,17 @@
  */
 
 /*
- * Source: @11thdeg/cyan-css core/fab.css.
- * Current consumers: migrated fab icons. Future owner: Fab. Remove when the
- * local fab replaces Cyan's control styling.
- *
- * Buttons and link buttons no longer appear here: styles/buttons.css sets the
- * icon-size tokens in the button's own scope and states the leading-icon offset.
+ * Neither buttons nor floating action buttons appear here: styles/buttons.css and
+ * styles/fab.css set the icon-size tokens in the control's own scope, and neither
+ * gives a fab's leading icon an offset to cancel.
  */
-:where(.fab) .cn-icon {
-  --cn-icon-size-xsmall: var(--cn-icon-size-small);
-  --cn-icon-size: var(--cn-icon-size-small);
-  --cn-icon-size-large: var(--cn-icon-size-small);
-  --cn-icon-size-xlarge: var(--cn-icon-size-small);
-}
 
-button.fab .cn-icon:first-child:not(:only-child),
-a.button.fab .cn-icon:first-child:not(:only-child) {
-  margin-left: 0;
+/*
+ * Source: @11thdeg/cyan-css utilities/helpers.css.
+ * Future owner: local heading/inline layout. Keep alignment out of Icon itself.
+ */
+h3 .cn-icon {
+  vertical-align: middle;
 }
 
 /*
@@ -33,12 +27,4 @@ a.button.fab .cn-icon:first-child:not(:only-child) {
  */
 .flex.items-start > .cn-icon {
   flex-grow: 0;
-}
-
-/*
- * Source: @11thdeg/cyan-css utilities/helpers.css.
- * Future owner: local heading/inline layout. Keep alignment out of Icon itself.
- */
-h3 .cn-icon {
-  vertical-align: middle;
 }

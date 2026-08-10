@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnAvatar from '@design-system/components/CnAvatar.svelte';
 import { toMekanismiURI } from '@utils/mekanismiUtils';
 import { toFid } from '@utils/toFid';
 import { t } from 'src/utils/i18n';
@@ -97,7 +98,7 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
 </script>
 
 <div class="flex flex-no-wrap">
-  <cn-avatar {nick} src={avatarUrl}></cn-avatar>
+  <CnAvatar {nick} src={avatarUrl} aria-hidden />
   <fieldset class="grow">
     <label>
       {t("entries:profile.nick")}

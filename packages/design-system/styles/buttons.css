@@ -5,7 +5,7 @@
  * `a.button[href]`. Presentation never changes that choice, so every rule here
  * selects the element the consumer already picked.
  *
- * Spec: specs/design-system/buttons/spec.md
+ * Spec: specs/design-system/actions/spec.md
  */
 :root {
   /*

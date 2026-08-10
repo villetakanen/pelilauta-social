@@ -143,10 +143,12 @@ describe('entry point', () => {
       './compat/cyan-typography.css',
       './links.css',
       './buttons.css',
+      './fab.css',
       './spatial.css',
       './content-containers.css',
       './surface.css',
       './loader.css',
+      './identity.css',
     ]);
   });
 
