@@ -35,16 +35,22 @@
 }
 
 /*
- * Prose — one centred flow at the readable measure.
- *
  * The measure: 67 characters of the base paragraph. Stated in grid steps, not `ch`,
  * which would resolve against whatever font is rendering.
  *
  * Measured: Lato's `0` advance is 0.58em, so 67ch at the 17px base is 41.29rem =
  * 82.58 steps, rounded up. Changing the base face or its size makes this wrong.
+ *
+ * Prose caps its flow with it and Golden gives it to its primary region, so it is
+ * declared once for both: the two are the same width by design, not by coincidence.
  */
-.content-prose {
+.content-prose,
+.content-golden {
   --cn-measure: calc(var(--cn-grid) * 83); /* 41.5rem */
+}
+
+/* Prose — one centred flow at the readable measure. */
+.content-prose {
   display: grid;
   grid-template-columns: 1fr min(var(--cn-measure), 100%) 1fr;
   row-gap: var(--cn-line);
@@ -74,18 +80,27 @@
 }
 
 /*
- * Triad — a medium primary and two small secondaries, stacking below the width
- * their row needs.
+ * Triad — a medium primary and two small secondaries. Golden — a readable primary
+ * and one small secondary. Both stack below the width their row needs, and the two
+ * stacked compositions are the same, so they are written once.
  *
  * The stacked column is `minmax(0, 1fr)` rather than the implicit `auto` track:
  * `justify-content: center` stops an `auto` track from stretching, and the
  * regions would shrink to their content instead of filling the host.
  */
-.content-triad {
+.content-triad,
+.content-golden {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--cn-gap);
   justify-content: center;
+
+  /*
+   * A region is as tall as its own content, and the row is as tall as the tallest
+   * of them. Without this a grid item stretches to the row, so a short aside
+   * beside a long column would paint its surface down the whole page.
+   */
+  align-items: start;
 }
 
 /*
@@ -98,7 +113,9 @@
  * `display: contents`: the island's one rendered element is the grid item.
  */
 .content-triad > *,
-.content-triad > astro-island > * {
+.content-triad > astro-island > *,
+.content-golden > *,
+.content-golden > astro-island > * {
   container: cn-content / inline-size;
   min-inline-size: 0;
 }
@@ -111,7 +128,9 @@
  */
 .content-prose > .surface,
 .content-triad > .surface,
-.content-triad > astro-island > .surface {
+.content-triad > astro-island > .surface,
+.content-golden > .surface,
+.content-golden > astro-island > .surface {
   container: cn-content surface-area / inline-size;
 }
 
@@ -125,6 +144,19 @@
     grid-template-columns:
       calc(var(--cn-grid) * 51)
       calc(var(--cn-grid) * 32)
+      calc(var(--cn-grid) * 32);
+  }
+}
+
+/*
+ * 83 + 2 + 32 = 117 grid units, the measure and a small secondary beside it. The
+ * row is centred in the host, so the primary is not aligned with a prose flow
+ * above it: the pair is one composition rather than a column with a margin.
+ */
+@container (min-width: 58.5rem) {
+  .content-golden {
+    grid-template-columns:
+      var(--cn-measure)
       calc(var(--cn-grid) * 32);
   }
 }

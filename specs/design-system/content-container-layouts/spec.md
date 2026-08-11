@@ -119,6 +119,11 @@ A region island renders exactly one region element in its fallback, empty, error
 resolved states. The region therefore retains its track while deferred content
 changes state.
 
+A Golden or Triad region is as tall as its own content, and the composition is as tall
+as its tallest region. A region does not stretch to the height of its neighbours, so a
+short region that paints — a Surface, a bordered aside — ends where its content ends. A
+region that wants its neighbour's height states that itself.
+
 Golden and Triad region boxes remain within their assigned tracks, including when a
 descendant has an oversized intrinsic width or unbreakable content. Descendant
 overflow is owned by the region content. `.breakout` has no effect inside either mode
@@ -164,6 +169,9 @@ report the post-inset content-box width.
   width for breakouts, and the assigned track width for every unpadded Golden and
   Triad region. A Surface region reports the content-box width remaining after
   Surface inset within its assigned track.
+- Playwright renders Golden and Triad regions of unequal content height in the wide
+  composition. Each region box ends at its own content, and the container is as tall
+  as the tallest region.
 - A fixed-track fixture places oversized intrinsic and unbreakable content in Golden
   and Triad regions. It verifies that each region box retains its assigned track
   width without requiring Content Container Layouts to contain descendant overflow.
@@ -308,6 +316,13 @@ Then the inner breakout spans the width offered to the nested Prose container
 Given a breakout inside a Golden or Triad region
 When the content container renders
 Then the breakout remains within its assigned region
+```
+
+```gherkin
+Given Golden or Triad regions whose content differs in height
+When the content container renders in its wide composition
+Then each region ends at its own content
+And the container is as tall as its tallest region
 ```
 
 ```gherkin

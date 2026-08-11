@@ -21,9 +21,8 @@ interface Props {
    * shell still states no measure, rhythm or type of its own — it opts the page into
    * the container and the design system decides the rest.
    *
-   * The index page is the one page this is off for. It lays out its own full-bleed
-   * sections, and the container's implicit `> section` rule would re-lay-out markup
-   * written to span the page.
+   * The index page is the one page this is off for: it stacks content containers of
+   * its own, and a prose article around them would host them a second time.
    */
   prose?: boolean;
   description: string;
@@ -89,7 +88,7 @@ const context = group ? groupLabel(group) : 'Index';
 
       <DocsNav />
 
-      <main class:list={['book', { 'app-main': prose }]} id="content">
+      <main class="book app-main" id="content">
         {prose ? (
           <article class="content-prose">
             <h1>{title}</h1>

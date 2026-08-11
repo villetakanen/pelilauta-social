@@ -59,7 +59,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **Content Container Layouts capability contract** — write and approve
   `specs/design-system/content-container-layouts/spec.md` for the Prose, Golden, and Triad
   stackable container modes.
-- **Content grids stylesheet & book** — implement triad/golden CSS rules, container queries, defer filters, and the living layout book.
 - **Front page triad migration** — replace `.content-columns` on `apps/pelilauta/src/pages/index.astro` and resolve adjacent stream header typography.
 - **Thread & channel page golden migration** — migrate discussion and channel pages to `.content-golden`, retiring legacy `.content-columns`.
 - **Site & profile page golden migration** — migrate site, wiki, and profile pages to `.content-golden` or prose containers.
@@ -67,6 +66,24 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **Opportunistic sweep** — retire any `.secondary` or `.border-radius` usage encountered on surfaces touched by this work.
 
 ### Done
+
+- **Content grids stylesheet & book** — `.content-triad` and `.content-golden` ship in
+  `styles/content-containers.css` with their container queries, the layout book renders
+  both in live hosts, and `content-container.spec.ts` runs every scenario against each
+  mode. Success criteria 1, 2 and 4 are met.
+
+  Two findings. The planned `:nth-child(N of :not(script, style, template))` rules of
+  criterion 3 are unnecessary: those elements are `display: none`, so they never become
+  grid items and take no track. And region block alignment was unstated, so regions
+  stretched to the row; the spec now says a region is as tall as its own content, and
+  the composition as tall as its tallest region.
+
+- **Design site front page on Golden** — not in the plan when it was written. The
+  design system's own index was the one page opted out of `.app-main`, laying out
+  full-bleed sections with its own display scale. It now stacks a Golden container
+  with a Prose flow nested in its primary, and the editorial vocabulary it needed —
+  `.hero`, `.kicker`, `.lede`, `.facts`, `.section-heading` — left
+  `styles/docs.css` with it. Golden has a real consumer before Pelilauta migrates.
 
 - **Toolchain: Astro 5→7 in one step** — both applications run Astro 7.2 with
   `@astrojs/netlify` 8, `@astrojs/svelte` 9, `@astrojs/mdx` 7 and Vite 8. The planned
