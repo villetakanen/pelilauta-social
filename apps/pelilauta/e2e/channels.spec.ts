@@ -21,9 +21,7 @@ test.describe('Channels Page', () => {
     // Verify specific channels are displayed
     await expect(page.locator('a[href="/channels/yleinen"]')).toBeVisible();
     await expect(page.locator('a[href="/channels/roolipelit"]')).toBeVisible();
-    await expect(
-      page.locator('a[href="/channels/tapahtumat"]'),
-    ).toBeVisible();
+    await expect(page.locator('a[href="/channels/tapahtumat"]')).toBeVisible();
 
     // Verify that channel information is displayed (latest threads)
     await expect(page.locator('text=Uusin ketju').first()).toBeVisible();
