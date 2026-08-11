@@ -67,10 +67,8 @@ duplicate what the engine guarantees. A test earns its place where our own decis
 drift silently and no specimen reveals it: which stylesheet wins a declaration,
 whether a rule is in the entry point, what a parser accepts.
 
-The template is the model. No book in the repo is. Reading a sibling to find the
-register is how bulk spreads: `cn-card.mdx` is the longest book here, and every page
-that has copied it has come out longer than it needed to be. Read one only to see how
-a heading is used, never to judge how much to write.
+Read a sibling book only to see how a heading is used, never to judge how much to
+write.
 
 ## Writing it
 
@@ -85,19 +83,16 @@ nowhere else.
 
 ## Voice
 
-Register follows the kind. A principles book argues a choice — why Lato, how it reads —
-so rationale and warmth belong there. A base or component book is reference: what
-ships, what you pass, what breaks. Dry.
+Follow `docs/DESIGN.md`. A book is written for the people using the design system.
 
-First person plural, declarative, no contractions. A book documents only what ships.
+A principles book argues a choice — why Lato, how it reads — and rationale belongs
+there. A base or component book is reference: what ships, what you pass, what breaks.
+Dry.
 
-One fact per sentence. A `because` or `so that` tail gives the reason for a decision,
-and the reason belongs in the commit message; keep it only where the reason is the
-behaviour. No sentence restates the one before it.
+No contractions. A book documents only what ships.
 
 ## Before the pull request
 
 Cut a paragraph a competent reader could have written without this repository.
 
-Never: "not X, but Y". An aphorism closing a paragraph. A knowing aside.
 `grep -nwE 'easy|simply|quick|just'` returns nothing.
