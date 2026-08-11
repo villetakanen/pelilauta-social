@@ -47,7 +47,7 @@ const channels = channelsData.map((channel: Partial<Channel>) =>
 
 <EditorPage title={title} shortTitle={shortTitle}>
   <ThreadEditorForm
-    topic={channel}
+    channelKey={channel}
     channels={channels}
     client:only="svelte"/>
 </EditorPage>

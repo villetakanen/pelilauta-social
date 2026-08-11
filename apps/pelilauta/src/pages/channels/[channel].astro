@@ -77,7 +77,7 @@ try {
     client:load
   />
 
-  <ChannelFabs client:only="svelte" slot="fab-tray" />
+  <ChannelFabs channel={channelKey} client:only="svelte" slot="fab-tray" />
 
   <CnPoster
     slot="app-background-poster"

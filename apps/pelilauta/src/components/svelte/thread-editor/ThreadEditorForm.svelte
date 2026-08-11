@@ -16,7 +16,8 @@ import { submitThreadUpdate } from './submitThreadUpdate';
 
 interface Props {
   thread?: Thread;
-  channelKey: string;
+  /** Absent when creating a thread without a channel preselected by the URL. */
+  channelKey?: string;
   channels: Channel[];
 }
 

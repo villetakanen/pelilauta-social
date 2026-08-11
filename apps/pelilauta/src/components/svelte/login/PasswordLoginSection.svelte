@@ -8,9 +8,10 @@ import { t } from 'src/utils/i18n'; // For potential future translations
 // Import utilities
 import { logError } from 'src/utils/logHelpers';
 
-// No props needed
-// interface Props {}
-// const {}: Props = $props();
+interface Props {
+  redirect?: string;
+}
+const { redirect = '/' }: Props = $props();
 
 // Component state
 let email = $state('');
@@ -43,7 +44,7 @@ async function loginWithPassword(e: SubmitEvent) {
     );
 
     // Complete the authentication flow (save session + redirect)
-    await completeAuthFlow(userCredential.user);
+    await completeAuthFlow(userCredential.user, redirect);
 
     email = ''; // Clear email after successful login
     password = ''; // Clear password after successful login
