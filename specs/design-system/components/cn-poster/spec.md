@@ -28,7 +28,7 @@ The wash and the 80% ground plane keep body text readable. Over artwork the desi
 
 Elevations 1 through 4 remain opaque over a poster.
 
-Below the spatial system's small-screen breakpoint, under `prefers-reduced-transparency`, under `forced-colors`, and in print, the poster paints nothing and its overrides are inactive.
+Below the spatial system's small-screen breakpoint and in print, the poster paints nothing and its overrides are inactive. Under `prefers-reduced-transparency` and under `forced-colors`, the poster paints nothing, the sticky application bar takes its surface back, and the remaining cessions resolve to the plain surface with nothing painting beneath them. The preferences hide the poster rather than gate it: a browser that cannot parse a preference cannot honour it either, and shows the poster.
 
 The artwork is decorative and has no alternative text. The consuming application decides which pages carry a poster and supplies their artwork.
 
@@ -40,7 +40,7 @@ The artwork is decorative and has no alternative text. The consuming application
 - `pinned` switches between the scrolling and the fixed placement.
 - `poster.css` reaches both applications through the design system's stylesheet entry point.
 - `.elevation-0` is 80% opaque while a poster paints and opaque otherwise.
-- The poster and its overrides are absent below the small-screen breakpoint, under `prefers-reduced-transparency`, under `forced-colors`, and in print.
+- The poster and its overrides are absent below the small-screen breakpoint and in print. Under `prefers-reduced-transparency` and under `forced-colors`, the poster paints nothing, the sticky bar recovers its surface, and the remaining cessions are inert.
 - Body text over the poster meets WCAG 2.2 AA in both schemes on the near-white, near-black and no-artwork cases.
 - The **CnPoster** Component book renders both placements across Light and Dark, over near-white artwork, near-black artwork and none, with content resting on the ground plane.
 
@@ -48,8 +48,9 @@ The artwork is decorative and has no alternative text. The consuming application
 
 - Id `cn-poster` is preserved on the root element so the chrome and ground-plane rules match.
 - The image's computed style carries no `filter` in either colour scheme.
-- The chrome and ground-plane overrides apply only while the poster paints.
-- Nothing but a painting poster makes `.elevation-0` transparent; it is the only override of a level `specs/design-system/surface/spec.md` defines.
+- The chrome and ground-plane overrides apply only on a page that mounts a poster; where a preference stops the poster painting, what they touch renders as the plain surface.
+- Nothing but a mounted poster makes `.elevation-0` transparent; it is the only override of a level `specs/design-system/surface/spec.md` defines.
+- The accessibility preferences appear only in queries that hide the poster, never in the guard that shows it.
 - The poster takes no pointer events and adds no focus stop.
 - Cyan's poster, gradient and `nav#rail` blend rules do not participate.
 
@@ -90,7 +91,21 @@ And the inherited body foreground meets WCAG 2.2 AA
 
 ```gherkin
 Given a page mounting a poster
-When it renders below the small-screen breakpoint, under prefers-reduced-transparency, under forced-colors, or in print
+When it renders below the small-screen breakpoint or in print
 Then the poster paints nothing
 And the application bar, the navigation and the ground plane render as they do without a poster
+```
+
+```gherkin
+Given a page mounting a poster
+When it renders under prefers-reduced-transparency or under forced-colors
+Then the poster paints nothing
+And the sticky application bar recovers its surface
+And the navigation and the ground plane render on the plain surface
+```
+
+```gherkin
+Given a page mounting a poster
+When it renders in a browser that does not recognise prefers-reduced-transparency or forced-colors
+Then the poster paints as it does with no preference expressed
 ```

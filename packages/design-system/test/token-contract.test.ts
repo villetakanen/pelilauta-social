@@ -26,7 +26,30 @@ function declarations(css: string) {
   return [...css.matchAll(/(--[\w-]+)\s*:\s*([^;}]+);/g)].map((match) => ({
     name: match[1],
     value: match[2].trim().replace(/\s+/g, ' '),
+    index: match.index,
   }));
+}
+
+/**
+ * The `@media` prelude enclosing an index, or '' outside any block. A property
+ * declared twice under one prelude is drift; re-declared under another it is a
+ * conditioned override, the shape poster.css uses to withdraw a cession.
+ */
+function mediaContext(css: string, at: number) {
+  let context = '';
+  for (const match of css.matchAll(/@media\s+([^{]+)\{/g)) {
+    let depth = 1;
+    let index = match.index + match[0].length;
+    while (index < css.length && depth > 0) {
+      if (css[index] === '{') depth++;
+      if (css[index] === '}') depth--;
+      index++;
+    }
+    if (at > match.index && at < index) {
+      context = match[1].replace(/\s+/g, ' ').trim();
+    }
+  }
+  return context;
 }
 
 /** Split on commas that sit at depth zero, so nested calls stay intact. */
@@ -117,13 +140,16 @@ describe('layer composition', () => {
     expect(literalColours).toEqual([]);
   });
 
-  test('no stylesheet declares the same property twice', () => {
+  test('no stylesheet declares the same property twice in one media context', () => {
     const duplicates = sheets.flatMap((sheet) => {
-      const names = declarations(read(sheet)).map((d) => d.name);
+      const css = read(sheet);
+      const keys = declarations(css).map(
+        (d) => `${d.name} @ "${mediaContext(css, d.index)}"`,
+      );
       const seen = new Set<string>();
-      return names
-        .filter((name) => seen.size === seen.add(name).size)
-        .map((name) => `${sheet}: ${name}`);
+      return keys
+        .filter((key) => seen.size === seen.add(key).size)
+        .map((key) => `${sheet}: ${key}`);
     });
 
     expect(duplicates).toEqual([]);
