@@ -56,8 +56,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 ### Open
 
 - **Harness enablers** — document DS container prefix & fix bare tray, wire design e2e to verify, extend token collision test, and widen test gate skill.
-- **Toolchain major step 1: Astro 5→6** — update `astro`, `@astrojs/netlify`, `@astrojs/svelte`, `@astrojs/mdx`, and `vite` to Astro 6 across both apps.
-- **Toolchain major step 2: Astro 6→7 & latest Svelte** — update `astro` and integrations to Astro 7 and latest Svelte across both applications.
 - **Content Container Layouts capability contract** — write and approve
   `specs/design-system/content-container-layouts/spec.md` for the Prose, Golden, and Triad
   stackable container modes.
@@ -70,7 +68,10 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Done
 
-None yet.
+- **Toolchain: Astro 5→7 in one step** — both applications run Astro 7.2 with
+  `@astrojs/netlify` 8, `@astrojs/svelte` 9, `@astrojs/mdx` 7 and Vite 8. The planned
+  stop at Astro 6 turned out to buy nothing: the direct jump passed every release gate,
+  so the two steps became one. Success criterion 6 is met.
 
 ## Outscoped
 
