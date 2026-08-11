@@ -21,10 +21,9 @@
   padding-inline: var(--cn-gap);
 
   /*
-   * A host answers its containers' width queries. Unnamed: `cn-content` belongs to
-   * the regions inside a container, and a container asks its nearest host without
-   * naming it. This also makes the host a containing block for absolutely
-   * positioned descendants, which is why a fab tray is mounted outside it.
+   * A host answers its containers' width queries, and a container asks its nearest
+   * host without naming it. This also makes the host a containing block for
+   * absolutely positioned descendants, which is why a fab tray is mounted outside it.
    */
   container-type: inline-size;
 }
@@ -58,7 +57,12 @@
 
 /*
  * The flow sits in the centre track, and each item reports its own width, so a
- * `cn-content` query is answered with the measure rather than the page.
+ * container query inside it is answered with the measure rather than the page.
+ *
+ * The boundary is unnamed. A query with no name resolves against the nearest
+ * container, which is what a component wants: whichever area holds it. Naming this
+ * one would only add a way to ask past a nearer boundary — a card between the
+ * component and the flow — and the card is the thing constraining it.
  *
  * It is a grid so `row-gap` replaces the element margins the preflight removes, and
  * so that spacing survives an `astro-island`, which the preflight sets to
@@ -66,13 +70,12 @@
  */
 .content-prose > * {
   grid-column: 2;
-  container: cn-content / inline-size;
+  container-type: inline-size;
 }
 
 /*
  * A breakout spans the width offered to its Prose container, and reports that width
- * to the components inside it — it keeps the `cn-content` boundary from the rule
- * above. It stretches rather than fitting its content: an inline-size container is
+ * to the components inside it — it keeps the query boundary from the rule above. It stretches rather than fitting its content: an inline-size container is
  * sized independently of what it holds, so a fit-content breakout would measure zero.
  */
 .content-prose > .breakout {
@@ -116,22 +119,8 @@
 .content-triad > astro-island > *,
 .content-golden > *,
 .content-golden > astro-island > * {
-  container: cn-content / inline-size;
+  container-type: inline-size;
   min-inline-size: 0;
-}
-
-/*
- * A region or flow item that is also a Surface answers to both names. Surface
- * declares the `container` shorthand too, which drops whichever name it does not
- * list, and surface.css is imported after this file — so this composes them and
- * wins on specificity rather than on order.
- */
-.content-prose > .surface,
-.content-triad > .surface,
-.content-triad > astro-island > .surface,
-.content-golden > .surface,
-.content-golden > astro-island > .surface {
-  container: cn-content surface-area / inline-size;
 }
 
 /*
