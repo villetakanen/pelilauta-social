@@ -1,8 +1,8 @@
 import { cert, initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
-// Replace with your service account key file path
-import serviceAccount from '../server_principal.json' with { type: 'json' };
+// Credentials live at the repository root, not in the application.
+import serviceAccount from '../../../server_principal.json' with { type: 'json' };
 
 async function fixCreationDates() {
   console.log('Starting to fix creation dates...');

@@ -12,7 +12,12 @@ function getAdminDb() {
   const apps = getApps();
 
   if (apps.length === 0) {
-    const serviceAccountPath = join(__dirname, '../server_principal.json');
+    // Credentials live at the repository root, not in the application.
+    const serviceAccountPath = join(
+      __dirname,
+      '../../..',
+      'server_principal.json',
+    );
     const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
 
     initializeApp({

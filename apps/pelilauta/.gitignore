@@ -24,7 +24,6 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.*
-server_principal.json
 .temp
 
 # macOS-specific files

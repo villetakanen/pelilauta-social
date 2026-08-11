@@ -80,7 +80,12 @@ test('Page update sets author to current user', async ({ page }) => {
   // Verify the author field was set in Firestore
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const serviceAccountPath = join(__dirname, '../server_principal.json');
+  // Credentials live at the repository root, not in the application.
+  const serviceAccountPath = join(
+    __dirname,
+    '../../..',
+    'server_principal.json',
+  );
   const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
 
   const serverApp = initializeApp(

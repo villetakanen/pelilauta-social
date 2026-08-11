@@ -42,7 +42,7 @@ This will create:
 
 ### 2. Admin User Credentials
 
-The admin user credentials are defined in `playwright/.auth/credentials.ts`:
+The admin user credentials are defined in `credentials.ts` at the repository root:
 
 ```typescript
 export const adminUser = {
