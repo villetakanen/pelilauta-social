@@ -55,7 +55,10 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Open
 
-- **Harness enablers** — document DS container prefix & fix bare tray, wire design e2e to verify, extend token collision test, and widen test gate skill.
+- **Harness enablers** — document DS container prefix & fix bare tray, extend token
+  collision test, and widen test gate skill. Wiring the design e2e suite into `verify`
+  left this list: deferred indefinitely during beta, in
+  `plans/debt/browser-tests-run-locally-only.md`.
 - **Content Container Layouts capability contract** — write and approve
   `specs/design-system/content-container-layouts/spec.md` for the Prose, Golden, and Triad
   stackable container modes.
