@@ -1,110 +1,81 @@
 ---
 title: Content containers
-description: The single centred column — the measure, the two modes, the rhythm between blocks, and how a child escapes the column.
+description: The centered single-column layout, measure calculation, fluid margins, and full-bleed breakout containers.
 order: 2
 ---
 
-Content sits in a container. The container decides how wide the content may get,
-how far it stands off the edges, and how much space separates it from the
-container above. This page is inside one: the column you are reading is the
-measure.
+Content containers establish reading measure, fluid gutter margins, and vertical
+separation between stacked layout blocks.
 
-One container exists so far. Two-column, three-column and card layouts are the
-rest of the family and are not built yet.
+## Application opt-in
 
-## Put one class on `<main>`
-
-An application opts in by putting `cn-app-main` on its `<main>` element. Direct
-`section` and `article` children are then containers.
+Adding `cn-app-main` to `<main>` lays its direct children out on the page grid, without
+intermediate wrappers. A `<section>` is one container in the column. An `<article>` spans
+the page and passes the grid to its blocks through subgrid: each block is a container in
+the column.
 
 ```html
 <main class="cn-app-main">
-  <article>A container.</article>
-  <section>Another, one --cn-line below it.</section>
+  <section>A container in the column.</section>
+  <article><p>A block in the column.</p></article>
 </main>
 ```
 
-There is no wrapper element and no component. A page that has not opted in is
-untouched, which is how `apps/pelilauta` still lays out with Cyan while this
-ships.
+Every rule is scoped below the opt-in class, so a page without it is untouched.
 
-## Measure against the column, not the page
+## Container query context
 
-A container is `cn-content`, and it reports the column's width. A card here has
-41.5rem to work with, not the 72rem the page might be.
+A container establishes the `cn-content` container query context, exposing the column's
+inline size to descendant components: the section in one case, each block in an article.
 
 ```css
-/* A card deciding how to lay out inside the column. */
 @container cn-content (max-width: 30rem) { … }
 ```
 
-This only works because the container element *is* the column. A container query
-reports the container's own border box, so declaring one on a full-width wrapper
-whose middle track holds the content would answer every question with the page's
-width. v20 has that shape, and its queries are wrong for that reason.
+The query evaluates the content column directly rather than the full viewport width.
 
-## Two modes, and no threshold
+## Fluid column sizing
 
-Wide enough for the measure and a gap each side: the content is the measure,
-centred, and the leftover width splits evenly. Narrower: the content takes what
-is left after a `--cn-gap` gutter each side. Narrow this window to watch it.
-
-There is no breakpoint between them. Both modes are one track:
+Containers adjust between the reading measure and viewport gutters using a single
+continuous grid track:
 
 ```css
 grid-template-columns: 1fr min(var(--cn-measure), 100% - 2 * var(--cn-gap)) 1fr;
 ```
 
-The two terms are equal exactly where the measure and its gutters fit, so the
-content cannot jump. A stated threshold could drift out of step with the measure;
-this cannot, because there is nothing to keep in step.
+On wide viewports, content centers at `--cn-measure` with equal margins. On viewports
+narrower than the measure plus gutters, the container maintains a `--cn-gap` gutter on
+each side without breakpoint jumps.
 
-## The measure
+## Measure calculation
 
-`--cn-measure` is `calc(var(--cn-grid) * 83)` — 41.5rem.
+`--cn-measure` evaluates to `calc(var(--cn-grid) * 83)` (41.5rem).
 
-67 characters of the base paragraph is the readable line length, and 41.5rem is
-what that measures to: Lato's `0` advance is 0.58em, so at the 17px base
-paragraph 67 characters is 660.6px, or 82.58 grid steps, rounded up to 83.
+This value corresponds to 67 characters of Lato at the 17px body size (0.58em
+advance width, yielding 660.6px or 82.58 grid units, rounded up to 83). Defining
+the measure in grid units rather than `ch` prevents layout shift during font
+loading and prevents size inheritance anomalies in headings. Because the value is
+expressed in `rem`, the column scales proportionally with user browser font settings.
 
-It is written as a grid multiple rather than as `67ch` because `ch` resolves
-against whichever font is rendering. The design system now
-[ships its faces](/base/fonts), so both applications set the same one — but `ch`
-would still shrink the column to the fallback's advance for as long as the face is
-loading, and a heading inheriting the measure would resolve it against its own
-size. A grid multiple is one column at one width, whatever is rendering it.
+For font scaling principles, see [Spatial System](/principles/spatial-system).
 
-Being `rem`, it scales with the reader: a larger default text size gives a
-proportionally wider column. See
-[The reader sets the scale](/principles/spatial-system).
+## Vertical rhythm
 
-Re-measure when the base font or its size changes. Nothing else makes 83 wrong.
+Stacked containers and top-level block elements inside a container are separated by
+`--cn-line` (24px). Vertical rhythm tokens are defined in [Units and grid](/tokens/units).
 
-## Rhythm is `--cn-line`
+## Full-bleed containers
 
-Stacked containers are `--cn-line` apart. So are the blocks inside one — the gap
-between these paragraphs is it.
-
-That inside spacing is temporary in shape, not in existence. The
-[preflight](/base/preflight) removes every element margin and hands the
-replacement to whatever owns the layout, so the container supplies one uniform
-step. The space before a heading and the space between two paragraphs are not
-really the same decision, and typography will separate them.
-
-## Spanning the page
-
-Bleed is a property of a whole container, not of something inside one. A
-container marked `cn-grid-full` takes the full page width instead of the column.
+To span the full viewport width, apply `cn-grid-full` to a top-level container element.
 
 ```html
 <main class="cn-app-main">
-  <article>Prose, at the measure.</article>
-  <section class="cn-grid-full">A wide table, spanning the page.</section>
+  <section>A container in the column.</section>
+  <section class="cn-grid-full">Full-width section spanning the viewport.</section>
 </main>
 ```
 
-A child cannot escape its container, and the reason is structural rather than a
-missing feature: the container is exactly as wide as the column, so there is no
-wider box inside it to reach for. Put what needs the page in its own container.
+In a section, breakout is a property of the container: a child cannot exceed a container
+that is exactly the column's width. In an article, a block marked `cn-breakout` takes the
+width its content wants, centred, up to the page, and is not a container.
 
-This page is a single container, so its own specimens sit at the measure.

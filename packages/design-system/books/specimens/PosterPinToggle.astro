@@ -1,0 +1,31 @@
+---
+/**
+ * PosterPinToggle — switches the book's own poster between the two placements.
+ *
+ * `pinned` is a prop, and a book carries one poster, so demonstrating both
+ * placements on one page means changing the mounted poster after it renders.
+ * The button toggles the class the stylesheet reads, which is the same class
+ * the component stamps from the prop — no rule here restates poster.css.
+ *
+ * The design site builds no hydrated components, so this is a plain script. A
+ * reader without it sees the scrolling placement, which is the default.
+ *
+ * Book: apps/design/src/content/components/cn-poster.mdx
+ */
+---
+
+<button type="button" class="secondary" id="poster-pin" aria-pressed="false">
+  Pin the poster
+</button>
+
+<script>
+  const button = document.getElementById('poster-pin');
+  const poster = document.getElementById('cn-poster');
+
+  button?.addEventListener('click', () => {
+    if (!poster) return;
+    const pinned = poster.classList.toggle('pinned');
+    button.setAttribute('aria-pressed', String(pinned));
+    button.textContent = pinned ? 'Unpin the poster' : 'Pin the poster';
+  });
+</script>

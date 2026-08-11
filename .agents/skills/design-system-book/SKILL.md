@@ -21,6 +21,14 @@ A book states decisions already made. If one is missing, read `docs/DESIGN.md`, 
 
 ## The component model
 
+A component book declares `runtime` in frontmatter — `static`, `progressive` or
+`interactive`, defined in `books/runtimes.json`. The schema requires it, so a book that
+omits it fails the build. The shell renders its label as the book's subtitle.
+
+Never restate the value in prose. Say what an application must do, where that has a
+consequence: the state its script must toggle, the directive without which nothing
+works.
+
 A component book carries these headings, in this order, and no others:
 
 1. *(no heading)* — what it is, plus the one mechanism the invocation does not reveal
@@ -59,8 +67,10 @@ duplicate what the engine guarantees. A test earns its place where our own decis
 drift silently and no specimen reveals it: which stylesheet wins a declaration,
 whether a rule is in the entry point, what a parser accepts.
 
-Worked instances: `apps/design/src/content/components/cn-loader.mdx` for a component
-with two variants, `cn-card.mdx` for four nested axes.
+The template is the model. No book in the repo is. Reading a sibling to find the
+register is how bulk spreads: `cn-card.mdx` is the longest book here, and every page
+that has copied it has come out longer than it needed to be. Read one only to see how
+a heading is used, never to judge how much to write.
 
 ## Writing it
 
@@ -75,10 +85,15 @@ nowhere else.
 
 ## Voice
 
-Read `/principles/typography` before writing: it is the exemplar, set by the owner.
-First person plural, declarative, no contractions. Every choice carries its
-rationale — comparative where alternatives were live, quantified where numbers
-exist. A book documents only what ships.
+Register follows the kind. A principles book argues a choice — why Lato, how it reads —
+so rationale and warmth belong there. A base or component book is reference: what
+ships, what you pass, what breaks. Dry.
+
+First person plural, declarative, no contractions. A book documents only what ships.
+
+One fact per sentence. A `because` or `so that` tail gives the reason for a decision,
+and the reason belongs in the commit message; keep it only where the reason is the
+behaviour. No sentence restates the one before it.
 
 ## Before the pull request
 

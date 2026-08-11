@@ -1,6 +1,6 @@
 ---
 title: Colour
-description: Every colour token v21 declares — the reference palette and the semantic roles — with the value as written.
+description: "Declared color custom properties: semantic theme roles, elevation shadows, and OKLCH reference palette."
 order: 10
 ---
 
@@ -8,34 +8,34 @@ import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import referenceSource from '@design-system/styles/color-reference.css?raw'
 import themeSource from '@design-system/styles/color-theme.css?raw'
 
-Every colour token and its declared value. Which token to use is in the
-[Colour System](/principles/color-system) book.
-
-Each table is read from its stylesheet at build time. Swatches resolve in the theme you are
-reading in, so a `light-dark()` role shows the arm currently in force.
+Declared color custom properties and values. Color selection and contrast rules are
+defined in [Colour System](/principles/color-system). Swatches resolve dynamically
+in the active color scheme.
 
 ## Semantic roles
 
-Components read these. Each states both themes in one declaration.
+Component-facing color tokens. Each role defines light and dark values in a single
+`light-dark()` declaration.
 
 <TokenTable source={themeSource} without="shadow" swatch caption="Semantic roles" />
 
 ## Elevation shadows
 
-Declared in the same stylesheet. They are shadows, so they carry no swatch. They are grid
-multiples and need `--cn-grid`, which `styles/tokens.css` supplies alongside them. See
-[Units and grid](/tokens/units).
+Elevation shadow tokens declared in `styles/color-theme.css`. Shadow geometry scales
+with `--cn-grid` as defined in [Units and grid](/tokens/units).
 
 <TokenTable source={themeSource} prefix="--cn-shadow" caption="Elevation shadows" />
 
 ## Reference palette
 
-The literal colours in OKLCH. Components do not read these.
+Primitive OKLCH color scales. UI components consume semantic roles rather than
+referencing primitive palette tokens directly.
 
 <TokenTable source={referenceSource} prefix="--cn-color-" swatch caption="Reference palette" />
 
-## Cyan 4 aliases are not here
+## Cyan 4 aliases
 
 `styles/compat/cyan-4.css` maps legacy names onto these roles until the surfaces still
 running on Cyan are replaced. It is removed before `v21.0.0-rc.1` and nothing new reads it.
-Read the stylesheet if you are migrating a surface. `docs/MIGRATION.md` owns the sweep.
+`docs/MIGRATION.md` owns the sweep.
+

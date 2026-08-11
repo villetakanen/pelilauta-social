@@ -1,20 +1,18 @@
 ---
 title: Preflight
-description: Pelilauta's modern reset, and its deviations from the Andy Bell and Tailwind Preflight baseline.
+description: Global CSS reset rules, baseline element overrides, and framework wrappers.
 order: 1
 ---
 
-Pelilauta uses a modern reset, based on the work of
-[Andy Bell](https://piccalil.li/blog/a-more-modern-css-reset/) and
-[Tailwind Preflight](https://tailwindcss.com/docs/preflight). Any deviations from their
-baseline are documented here.
+Our preflight reset establishes baseline browser styles across all applications.
+It adapts patterns from Andy Bell's modern reset and Tailwind Preflight to our
+layout and accessibility requirements.
 
 ## List markers
 
-Removed only on `[role="list"]`, following Bell; Tailwind removes them from every list.
-Safari drops a list's semantics from VoiceOver when `list-style` is removed, so a
-navigation or menu asks for both. Margin and padding are zeroed on every list either
-way.
+List markers are removed only from elements declared with `[role="list"]`. Removing
+`list-style` without an explicit role causes Safari VoiceOver to drop list semantics.
+All lists reset to zero margin and padding.
 
 ```css
 ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
@@ -22,37 +20,37 @@ ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
 
 ## Margins and padding
 
-Removed from every element, following Tailwind rather than Bell, who removes only
-`margin-block-end` from an enumerated set. Removal is explicit: there is no
-application-wide paragraph margin, and spacing is stated by whatever owns the layout.
+All elements, pseudo-elements, and backdrops reset to zero margin and padding. We
+declare no default paragraph or heading margins; layout containers control spacing
+between elements.
 
 ```css
 *, ::after, ::before, ::backdrop, ::file-selector-button { margin: 0; padding: 0; }
 ```
 
-## Media
+## Media elements
 
-Not touched, following Bell, whose more modern reset dropped the media rules his earlier
-one had. Tailwind and Radix make images block-level and constrain them to their
-container; here that is the container's decision, because a reset cannot know which
-images are content and which are chrome.
+Media elements (`img`, `video`, `canvas`, `svg`) retain browser-default display and
+sizing in preflight. Containers explicitly control media constraints and aspect
+ratios.
 
 ## Colour scheme
 
-Both schemes are declared, dark first. An application's `<meta name="color-scheme">`
-must state the same order, because the property overrides the tag.
+The root stylesheet declares `color-scheme: dark light`. Application `<meta name="color-scheme">`
+tags must match this order to prevent rendering discrepancies before stylesheet evaluation.
 
 ```css
 :root { color-scheme: dark light; }
 ```
 
-`body` takes the semantic background and text roles rather than literal colours.
+`body` applies `--cn-surface` and `--cn-text` roles rather than raw color values.
 
 ## Hydration wrappers
 
-Astro wraps a hydrated component in an `astro-island` element. It is made transparent,
-so an island lays out as though its markup were written in place.
+Astro island wrappers declare `display: contents`, so an island generates no box and its
+markup lays out as though written in place.
 
 ```css
 astro-island { display: contents; }
 ```
+

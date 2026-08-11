@@ -1,6 +1,6 @@
 ---
 title: Spatial System
-description: The spatial model behind component spacing, vertical rhythm, radii, and shadow geometry.
+description: "The spatial model governing component spacing, vertical rhythm, corner radii, and shadow geometry."
 order: 5
 ---
 
@@ -11,96 +11,80 @@ import SpatialRadii from '@design-system/books/specimens/SpatialRadii.astro'
 import spatialSource from '@design-system/styles/spatial.css?raw'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-Pelilauta's spatial system starts from an 8px base unit. It defines recurring
-spacing, radius, and shadow measurements as well as many component dimensions.
-Icon sizes are an independent `rem` scale documented in
-[Iconography](/principles/iconography).
+Our spatial system is built on an 8px (`0.5rem`) base grid unit. It governs recurring
+layout intervals, component padding, corner radii, and elevation shadow geometry.
+Icon dimensions follow an independent scale documented in [Iconography](/principles/iconography).
 
-## Core Measurements
+## Core measurements
 
-Three named measurements recur throughout the system. `--cn-grid` is the 0.5rem
-base unit and a frequent compact interval. `--cn-gap` doubles it for standard
-component and layout gaps. `--cn-line` triples it for body line height, minimum
-row height, and separation between stacked blocks.
+We define three primary spatial intervals across the system:
+- `--cn-grid` (`0.5rem` / 8px): The base unit every other measurement multiplies.
+- `--cn-gap` (`1rem` / 16px): The standard interval for layout gutters and surface insets.
+- `--cn-line` (`1.5rem` / 24px): The baseline unit for text leading, control row heights, and section rhythm.
 
 <SpatialMeasurements source={unitsSource} />
 
-These are common uses rather than an exhaustive mapping between content
-relationships and measurements. Components use other grid multiples where their
-geometry requires them.
+For complete token declarations, see [Units and grid](/tokens/units).
 
-For the declarations and complete token families, see
-[Units and grid](/tokens/units).
+## Component spatial relationships
 
-## Relationships in a Component
+| Token | Use | Not |
+| :--- | :--- | :--- |
+| `--cn-grid` | The base every other measurement multiplies; a control's geometry, and the space between the symbols inside it | An interval between two pieces of content |
+| `--cn-gap` | Surface inset; the interval between siblings — the avatar and its identity text, one action and the next | |
+| `--cn-line` | The interval between stacked blocks — the identity and the message body | |
 
-In the discussion preview, the default `--cn-gap` interval separates the avatar
-from its identity text. `--cn-grid` separates the title from its metadata.
-`--cn-gap` also provides the surface inset and separates the actions, while
-`--cn-line` separates the identity from the message body. A component can vary
-these measurements where its composition requires a different interval.
+Common uses, not a mapping from content relationship to measurement.
 
 <SpatialComposition source={unitsSource} utilitySource={spatialSource} />
 
-## Grouping and Repetition
+## Grouping and proximity
 
-In the grouping comparison, the smaller interval keeps the label with its heading
-and the larger interval separates the action. Applying one interval throughout
-presents all three as an equivalent group.
+The smaller of two intervals in one composition reads as tighter. Below, the label stays with
+its heading and the action separates; one interval throughout makes all three an equivalent
+group. Repeated rows use the same interval because they are equivalent relationships.
 
 <SpatialComparison source={unitsSource} />
 
-Repeated rows use the same interval because they represent equivalent
-relationships.
+## Composition boundaries
 
-## Composition Boundaries
+Components define their internal padding and dimensions. Parent flex and grid layouts
+control spacing between sibling components using `gap`, enabling fluid reordering and
+wrapping.
 
-Components define their internal spacing. A containing grid or flex layout
-usually sets the interval between sibling components with `gap`, allowing items
-to reorder or wrap. A component can include exterior space when that space forms
-part of its defined physical footprint.
+The [Surface](/base/surface) container applies `--cn-gap` padding on all sides, ensuring
+nested panels align without manual inset adjustments. Page-level column measures and
+breakouts are managed by [Content containers](/base/content-containers).
 
-The [Surface](/base/surface) container includes `--cn-gap` inset on every side, so
-cards and panels do not require inset at the point of use. Page-level measure,
-breakouts, and centred regions are defined by
-[Content containers](/base/content-containers).
+## Vertical rhythm
 
-## Vertical Rhythm
+`--cn-line` establishes the 24px baseline rhythm across typography and interactive controls.
+A control sized to one line unit aligns flush with adjacent single-line body text. Separating
+stacked blocks by `--cn-line` maintains that rhythm.
 
-`--cn-line` provides the 24px body line height, minimum row height, and separation
-between stacked blocks. A control one line unit high aligns with adjacent body
-text. Separating blocks by the same unit places the following text back on that
-rhythm.
+For typographic scale details, see [Typography principles](/principles/typography).
 
-[Typography](/principles/typography) defines the body line height and documents
-how the type scale adapts to its container.
-
-## Scaling
+## User font scaling
 
 <div class="surface elevation-1">
 
-### Browser Font Settings
+### Relative font units
 
-Spatial values and breakpoint thresholds use `rem`. The design system does not
-set `font-size` on `html` or `:root`. Spacing, radii, line rhythm, and layout
-thresholds therefore respond to the reader's browser font setting.
+All spatial intervals, corner radii, and breakpoint thresholds are declared in `rem`.
+Our stylesheets do not override `font-size` on `html` or `:root`, ensuring all layout
+dimensions and spacing scale proportionally with the user's browser font preferences.
 
 </div>
 
-At larger browser font settings, components may wrap or recompose around their
-content.
+## Radius and shadow geometry
 
-## Radius and Shadow Geometry
-
-Radius steps are one-half, one, two, and four grid units. A rounded content
-container includes at least one grid unit of inset between its content and edge.
+Corner radii scale in grid multiples: half-grid (`4px`), 1-grid (`8px`), 2-grid (`16px`),
+and 4-grid (`32px`). Rounded containers maintain at least one grid unit of interior padding
+to prevent content from clipping curved corners.
 
 <SpatialRadii source={unitsSource} utilitySource={spatialSource} />
 
-The unsuffixed `--cn-border-radius` token resolves to the medium step.
-Despite its unsuffixed name, `.border-radius` applies the large step. The complete
-radius family is in [Units and grid](/tokens/units).
+Elevation shadow offsets and blur radii are derived directly from `--cn-grid`. Elevation
+tiers, theme contrast mappings, and nested surface behaviours are defined in
+[Colour & Surface](/principles/color-system).
 
-Shadow offsets and blur also derive from the grid. Elevation meaning, theme
-colours, and nested-surface behaviour are defined in
-[Colour and Surface](/principles/color-system).

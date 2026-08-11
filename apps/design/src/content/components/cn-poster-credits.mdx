@@ -1,0 +1,93 @@
+---
+title: CnPosterCredits
+description: "Copyright and licensing attribution component rendered in document footers for page background poster artwork."
+order: 60
+runtime: static
+---
+
+import CnPosterCredits from '@design-system/components/CnPosterCredits.astro'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+`CnPosterCredits` renders attribution and copyright metadata for background artwork
+displayed by [CnPoster](/components/cn-poster). Attribution text is passed as a string;
+applications format the licensing notice directly.
+
+## When to use it
+
+- Place in the trailing slot of the document footer on pages displaying a `CnPoster`.
+
+Do not embed credits inside `CnPoster` itself; `CnPoster` is an un-focusable background layer.
+
+## Example
+
+<Composition themes caption="Linked artwork attribution notice in Light and Dark">
+  <CnPosterCredits
+    note="Aamunkoin vartijat, Tapani Virtanen, CC BY-SA 4.0"
+    href="https://creativecommons.org/licenses/by-sa/4.0/"
+  />
+</Composition>
+
+```astro
+---
+import CnPosterCredits from '@design-system/components/CnPosterCredits.astro'
+---
+
+<CnPosterCredits
+  note="Aamunkoin vartijat, Tapani Virtanen, CC BY-SA 4.0"
+  href="https://creativecommons.org/licenses/by-sa/4.0/"
+/>
+```
+
+## Variants and states
+
+`CnPosterCredits` supports plain text and linked attribution variants.
+
+### Hyperlink variant
+
+Providing `href` wraps the attribution text in a standard anchor link. Omitting `href`
+renders plain text without focus stops.
+
+<Composition themes caption="Plain text and hyperlinked attribution notices">
+  <CnPosterCredits note="Aamunkoin vartijat, Tapani Virtanen, all rights reserved" />
+  <CnPosterCredits
+    note="Aamunkoin vartijat, Tapani Virtanen, CC BY-SA 4.0"
+    href="https://creativecommons.org/licenses/by-sa/4.0/"
+  />
+</Composition>
+
+### Empty note handling
+
+Passing an empty string (`note=""`) suppresses rendering and produces no DOM elements.
+
+<Composition caption="Empty note rendering suppression">
+  <CnPosterCredits note="" />
+</Composition>
+
+## Composition
+
+`CnPosterCredits` renders within the document footer container, wrapping to match the
+footer's computed column width. Source text casing is preserved.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `note` | `string` | Required copyright and attribution text. Empty strings suppress output. |
+| `href` | `string` | Optional URL linking to the author profile or licence agreement. |
+
+### Tokens
+
+`CnPosterCredits` declares no custom properties. It applies `--cn-font-size-small` from
+[Typography](/tokens/typography) and the `--cn-text-low` colour role from [Colour](/tokens/color).
+
+## Accessibility
+
+`CnPosterCredits` renders semantic text within the natural document reading order. When
+`href` is provided, the anchor derives its accessible name directly from `note`.
+
+## Not shown here
+
+**Integration inside application shell footer.** The design site does not render the full
+application footer shell; specimens render the component in an isolated container.

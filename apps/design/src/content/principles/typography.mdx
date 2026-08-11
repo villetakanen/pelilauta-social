@@ -1,6 +1,6 @@
 ---
 title: Typography
-description: Two complementary typefaces — Lato for human conversation, Roboto Mono for technical clarity — and the scale they render on.
+description: "Typeface selection, modular scale ratios, vertical rhythm, and container-responsive heading adaptation."
 order: 6
 ---
 
@@ -8,75 +8,72 @@ import Composition from '@design-system/books/specimens/Composition.astro'
 import StepTable from '@design-system/books/specimens/StepTable.astro'
 import typographySource from '@design-system/styles/typography.css?raw'
 
-Typography at Pelilauta Social bridges human conversation and technical clarity. We
-rely on two complementary typefaces: Lato provides an approachable, highly readable
-voice for UI elements, headings, and community content, while Roboto Mono brings
-structure, precision, and clarity to code snippets, metadata, and systemic data.
+We rely on two complementary typeface families: **Lato** provides an approachable,
+high-legibility voice for interface controls, headings, and discussion content, while
+**Roboto Mono** provides structure, alignment, and disambiguation for code, technical
+metadata, and tabular figures.
 
 <div class="surface elevation-1">
 
 ### Lato
 
-<p class="text-subtitle">Warmth, Clarity, and Universal Scale</p>
+<p class="text-subtitle">Proportional UI and Editorial Sans-Serif</p>
 
-Lato's semi-rounded details and warm curves ensure legibility on all screens while
-avoiding a clinical feel. Designed by Łukasz Dziedzic, its balanced proportions
-create a friendly presence in community discussions and UI labels. At larger
-weights, Lato's character defines headings, and its high x-height maintains clarity
-in both light and dark modes.
+Lato provides balanced proportions, open apertures, and a high x-height that maintains
+clarity across display sizes and small UI labels in both Light and Dark themes.
 
 ### Roboto Mono
 
-<p class="text-subtitle">Precision, Structure, and Technical Rigor</p>
+<p class="text-subtitle">Monospaced Technical and Systemic Typeface</p>
 
-Designed by Christian Robertson, Roboto Mono forms the backbone for system
-mechanics, data, and developer features. Its monospaced grid ensures code, logs, and
-metadata align predictably. Optimized for screens, Roboto Mono uses clear
-letterforms—like disambiguated zeros and ones—to prevent confusion when reading or
-copying technical content.
+Roboto Mono establishes predictable character widths for code blocks, logs, and form
+inputs. Distinct letterforms disambiguate similar characters in technical data.
 
 </div>
 
-## Type Scale & Vertical Rhythm
+## Type scale and vertical rhythm
 
-Our typographic system starts with a 17px body baseline at regular weight 400,
-ensuring legibility and consistency. All text aligns to the 8px grid, while a
-primary line height of 24px (three times the grid) maintains ideal line length and a
-strong, consistent rhythm for multi-line content.
+Our typographic system anchors on a 17px body baseline (`--cn-font-size-text`) at regular
+weight 400. All text elements align to the 8px spatial grid, and a baseline line height of
+24px (`--cn-line`, 3x grid) establishes vertical rhythm across paragraphs
+and control heights.
 
-<Composition themes caption="Reading text at the 17px baseline on the 24px line, in both themes.">
+<Composition themes caption="Body text rendered at 17px baseline on a 24px line in Light and Dark">
 
-Aloitteen jälkeen jokainen...
+Aloitteen jälkeen jokainen osallistuja valitsee hahmolleen sopivan roolin ja aloitusvarusteet.
+Pelinjohtaja kuvaa tilanteen, ja ensimmäinen vuoro siirtyy aktiiviselle pelaajalle.
 
 </Composition>
 
-### Modular Scale
+### Modular scale
 
-To step above and below our baseline, we apply a modular scale multiplier of 1:1.414 (Augmented Fourth).
+To establish proportional relationships between heading tiers, we apply an Augmented
+Fourth modular multiplier (1:√2, about 1:1.414).
 
-Mathematically derived from the square root of two (√2 ≈ 1.414), an Augmented Fourth is an expressive, medium-high contrast scale. In UI applications, subtle scales (like a 1.25 Major Third) often fail to create enough distinction between section headers and page titles, while steep scales (like a 1.618 Golden Ratio) escalate too rapidly, consuming excess screen real estate on mobile viewports.
+The Augmented Fourth scale delivers clear tier distinction without consuming excessive
+vertical space on compact viewports:
+- **Predictable doubling:** Because 1.414² = 2, font size doubles every two steps: 17px text → 24px h4 → 34px h3 → 48px h2 → 68px h1.
+- **Distinct hierarchy:** Headings achieve clear visual prominence without requiring heavy font weight overrides.
+- **Mathematical harmony:** Heading steps maintain exact proportional alignment with the 24px baseline line height.
 
-The Augmented Fourth strikes the ideal balance for Pelilauta Social:
+For token declarations, see [Typography tokens](/tokens/typography).
 
-* Clear Visual Hierarchy: It provides distinct, intentional jumps between text tiers. Headings naturally dominate the page, guiding the user's eye effortlessly without requiring extra-bold font weights to force emphasis.
-* Balanced Density: It allows display sizes (h1, h2) to feel impactful and authoritative while maintaining a tight, readable footprint that fits dense, community-driven interfaces.
-* Predictable Proportions: Because 1.414² = 2, every two steps up the scale cleanly doubles the font size (17px text → 24px h4 → 34px h3), creating an underlying mathematical harmony across complex layout compositions.
+### Scale steps
 
-For the complete token reference, see [Typography tokens](/tokens/typography).
-
-### The Steps
-
-We provide an eight-step scale, from 12px captions to a 96px display title.
-
-The −1 step (small text) is manually adjusted and sits outside the mathematical
-scale, to keep small text legible with the chosen font.
+We provide an eight-step typographic scale:
 
 <StepTable source={typographySource} />
 
-## Container-Aware Scale Adaptation
+The `small` step sits outside the mathematical scale, manually sized to preserve
+legibility for secondary captions and metadata.
 
-A steep scale comes with a structural trade-off: a 48px H2 that cleanly anchors a full page layout completely overwhelms a compact card component. Because over half of Pelilauta’s headings live within cards, list rows, and preview feeds, our typography scale adapts dynamically to its local layout context.
+## Container-responsive downscaling
 
-Every heading tier from H1 down to H4 automatically renders one step lower on the scale whenever its parent container falls below our small-screen breakpoint:
-* Container-Relative Scaling: We enforce this behavior using CSS Container Queries (@container) rather than viewport queries (@media). Because a narrow card requires card-proportional headings regardless of global page width, measuring the container guarantees correct visual hierarchy inside sidebars, multi-column grids, and nested modules alike.
-* Proportional Layout Harmony: Downscaling by a single modular step preserves the exact same <code>1.414</code> ratio between heading levels while keeping line lengths and padding inside tight components balanced and readable.
+Over half of our heading instances appear within cards, preview feeds, and sidebar panels.
+To prevent large headings from overwhelming compact components, heading tiers automatically
+downscale by one modular step when their parent container is narrower than the small
+breakpoint (`38.75rem`).
+
+- **Container-relative evaluation:** Headings downscale via CSS Container Queries (`@container`), rather than the viewport width.
+- **Proportional consistency:** Downscaling by a single modular step preserves the 1:1.414 ratio between heading levels while reducing line wrapping in narrow containers.
+

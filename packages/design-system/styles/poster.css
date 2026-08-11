@@ -1,0 +1,200 @@
+/*
+ * Poster — the decorative artwork that replaces the ground plane behind one
+ * page's content, and the surfaces that cede to it while it paints.
+ *
+ * Spec: specs/design-system/components/cn-poster/spec.md
+ * Component: components/CnPoster.astro
+ *
+ * The artwork is user material of unknown colour and contrast, so the image is
+ * attenuated, a tint is blended over it, and the ground plane carrying body text
+ * stays 80% opaque.
+ *
+ * Two media blocks divide the file. The stage shows the poster and states only
+ * baseline features: a rule that escaped it would leave the application bar
+ * transparent on a page with no visible poster. The withdrawals hide it, and
+ * they alone may state the accessibility preferences — an unknown media
+ * feature evaluates its whole query false, so a preference in the stage's
+ * guard would erase the poster from every browser that cannot parse it
+ * (Safari knows neither feature; release Firefox flags one), while a
+ * preference in a withdrawal fails toward the plain poster instead, which is
+ * also what a reader who cannot express the preference should get. 38.75rem is
+ * the small-screen breakpoint, repeated here because a media query cannot read
+ * --cn-breakpoint-small.
+ */
+
+/* Outside the guard, so the artwork does not drop into the flow at its
+   intrinsic size wherever the guard excludes it. */
+#cn-poster {
+  display: none;
+}
+
+@media screen and (min-width: 38.75rem) {
+  /*
+   * The poster owns the page background layer while it paints, so the chrome
+   * stops painting one of its own. Stacking a second opaque surface over the
+   * artwork would hide what the page mounted the poster to show.
+   *
+   * The body background is deliberately not overridden. It propagates to the
+   * canvas, which the poster then paints over, and the poster's lower edge
+   * dissolves back into it.
+   */
+  body:has(#cn-poster) {
+    --cn-app-bar-background-sticky: transparent;
+  }
+
+  body:has(#cn-poster) nav#rail,
+  body:has(#cn-poster) nav#tray {
+    background-color: transparent;
+  }
+
+  /*
+   * The ground plane is the one elevation a poster changes: it is the level
+   * that stands for the page itself, and an opaque page over the artwork would
+   * leave nothing to see. Levels 1 through 4 stay opaque, because content that
+   * has risen off the page is content the reader is meant to read.
+   *
+   * 80% is the share that keeps the inherited body foreground at WCAG 2.2 AA
+   * over near-white artwork in Dark — the tightest of the cases the spec tunes
+   * against — while the artwork still reads through.
+   */
+  body:has(#cn-poster) .elevation-0 {
+    background-color: color-mix(in oklch, var(--cn-surface), transparent 20%);
+  }
+
+  /*
+   * Behind everything: a negative z-index paints above the canvas background
+   * and below every in-flow box, which is also why the poster needs no rule to
+   * stay clear of the content it sits under. It takes no pointer events and
+   * holds nothing focusable, so it adds no stop to the reading order either.
+   *
+   * `inset-inline: 0` rather than a viewport width unit, so the poster spans
+   * the containing block and a classic scrollbar cannot push the page sideways.
+   */
+  #cn-poster {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 100dvh;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  #cn-poster.pinned {
+    position: fixed;
+  }
+
+  /*
+   * The lower-edge dissolve, as a mask rather than a gradient over the image.
+   * The poster fades to nothing and reveals the canvas, which paints
+   * --cn-background: the same colour v20 painted on top to reach the same
+   * result, without a third layer competing with the two blended ones below.
+   *
+   * A pinned poster has no lower edge to dissolve — the content scrolls over a
+   * poster that does not move — so it keeps its full height.
+   */
+  #cn-poster:not(.pinned) {
+    mask-image: linear-gradient(180deg, black 0%, transparent 95%);
+  }
+
+  #cn-poster picture,
+  #cn-poster img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /*
+   * No filter in either scheme. The artwork is attenuated by opacity and by the
+   * tint blended over it, both of which leave its hues where the reader
+   * recognises them; a filter would grade the subject into something else.
+   */
+  #cn-poster img {
+    opacity: 0.72;
+  }
+
+  /*
+   * Two tint layers, one per colour scheme, because each scheme attenuates with
+   * its own blend mode and neither `mix-blend-mode` nor `opacity` accepts
+   * light-dark(). The scheme that is not in effect resolves its every stop to
+   * `transparent`, and blending a fully transparent layer leaves the backdrop
+   * exactly as it was, so one layer paints and the other is inert.
+   *
+   * The poster establishes a stacking context, so both layers blend against the
+   * artwork alone and never against the page behind it.
+   *
+   * Dark hard-lights a rising primary ramp at 44%: the low stops multiply the
+   * top of the image down toward the page, the high stops screen its lower
+   * reaches back up, and the ramp is what keeps a near-white photograph from
+   * carrying its own light into the text above it.
+   */
+  #cn-poster::before {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background-image: linear-gradient(
+      180deg,
+      light-dark(transparent, var(--cn-color-primary-10)) 10%,
+      light-dark(transparent, var(--cn-color-primary-20)) 20%,
+      light-dark(transparent, var(--cn-color-primary-30)) 30%,
+      light-dark(transparent, var(--cn-color-primary-40)) 40%,
+      light-dark(transparent, var(--cn-color-primary-50)) 50%,
+      light-dark(transparent, var(--cn-color-primary-60)) 60%,
+      light-dark(transparent, var(--cn-color-primary-70)) 70%,
+      light-dark(transparent, var(--cn-color-primary-80)) 80%
+    );
+    mix-blend-mode: hard-light;
+    opacity: 0.44;
+    content: "";
+  }
+
+  /*
+   * Light overlays three stops at full strength: a page whose text is dark
+   * needs the artwork pushed away from the text's own value rather than merely
+   * dimmed, and overlay preserves the image's own light and shade while it does
+   * it.
+   */
+  #cn-poster::after {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    background-image: linear-gradient(
+      180deg,
+      light-dark(var(--cn-color-surface-90), transparent) 10%,
+      light-dark(var(--cn-color-primary-40), transparent) 40%,
+      light-dark(var(--cn-color-primary-80), transparent) 70%
+    );
+    mix-blend-mode: overlay;
+    content: "";
+  }
+}
+
+/*
+ * The withdrawals. After the stage, so they win on source order at equal
+ * specificity. Only the poster and the sticky bar withdraw: the rail, tray
+ * and ground-plane cessions are inert once nothing paints beneath them,
+ * because the canvas paints --cn-background, which is the surface colour —
+ * withdrawing them would mean restating values Cyan owns, for no visible
+ * change. Under forced-colors the user agent forces the backgrounds anyway.
+ */
+/* biome-ignore lint/correctness/noUnknownMediaFeatureName: Biome 2.2 does not
+   know prefers-reduced-transparency. Safari and release Firefox do not either,
+   which is exactly why it sits in this withdrawal and never in the stage's
+   guard: an unknown feature fails this query false, and false here keeps the
+   poster instead of erasing it. */
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  #cn-poster {
+    display: none;
+  }
+
+  /*
+   * A transparent sticky bar over scrolling content is the one cession that
+   * harms without a poster behind it. `inherit` hands the custom property
+   * back to whatever the page's root declares, restating no value.
+   */
+  body:has(#cn-poster) {
+    --cn-app-bar-background-sticky: inherit;
+  }
+}

@@ -53,7 +53,8 @@ Without a positive-level elevated ancestor, the standalone shadow applies.
 
 ### Constraints
 
-Elevation 0 paints the ground plane; it is not transparent and is not a reset.
+`.elevation-0` paints the page background colour.
+
 Elevation 1 and every one-level rise are shadowless. Their lift is conveyed by
 the change in surface colour where the theme provides one.
 

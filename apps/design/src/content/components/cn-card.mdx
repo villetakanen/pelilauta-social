@@ -1,41 +1,42 @@
 ---
 title: CnCard
-description: A server-rendered preview with a stable title, optional identity and content, and an independent action region.
+description: "Structured preview card container supporting cover images, fallback artwork, elevation tiers, and action regions."
 order: 20
+runtime: progressive
 ---
 
 import CnCard from '@design-system/components/CnCard.svelte'
 import CardSpecimens from '@design-system/books/specimens/CardSpecimens.svelte'
 import Composition from '@design-system/books/specimens/Composition.astro'
 
-CnCard presents one independently meaningful subject. Its required title gives every
-preview a stable identity, while optional cover, noun, supporting content, and actions
-build the amount of context a reader needs before following it. Every CnCard on this page
-is rendered on the server and hydrated by nothing, which is how the listings that use it
-run.
+`CnCard` presents an independently meaningful content entity (such as a discussion thread,
+library article, or game system). It requires a `title` and supports optional cover images,
+contextual noun icons, supporting descriptions, body slots, and trailing action bars.
 
 ## When to use it
 
-- Preview one subject that has a title and a bounded amount of supporting content.
-- Compose independent destinations or controls around one primary subject destination.
+- Entity previews in collections, search results, feeds, and directory listings.
+- Content summaries requiring independent secondary controls alongside a primary destination.
 
-Use [Surface](/base/surface) for untitled boxes and workflow-scale content. The
-containing layout defines CnCard width and spacing between CnCards.
+Do not use `CnCard` for untitled panels, modal dialogs, or transient banners; use base
+[Surface](/base/surface) containers instead. Containing layout grids control card width and gutter spacing.
 
 ## Example
 
-<Composition themes caption="A basic CnCard in Light and Dark">
-  <CnCard title="Aamunkoin vartijat" description="A concise preview with the default elevation.">
+<Composition themes caption="Standard CnCard preview in Light and Dark">
+  <CnCard title="Aamunkoin vartijat" description="A concise preview with default elevation.">
     The next game is on Thursday.
   </CnCard>
 </Composition>
 
-```mdx
-import CnCard from '@design-system/components/CnCard.svelte'
+```svelte
+<script>
+  import CnCard from '@design-system/components/CnCard.svelte'
+</script>
 
 <CnCard
   title="Aamunkoin vartijat"
-  description="A concise preview with the default elevation."
+  description="A concise preview with default elevation."
 >
   The next game is on Thursday.
 </CnCard>
@@ -43,159 +44,110 @@ import CnCard from '@design-system/components/CnCard.svelte'
 
 ## Variants and states
 
-Four axes vary independently: whether the subject has a destination, which elevation and
-attention flags the card carries, whether it shows a noun or a cover, and how narrow its
-container is.
+`CnCard` provides four configurable axes: destination linking, elevation tiers with attention flags, cover artwork with fallback handling, and container-query responsiveness.
 
-### Destinations
+### Destinations and links
 
-The article remains passive when `href` is supplied. The title becomes the keyboard and
-assistive-technology destination; a cover points to the same location for pointer users
-without adding another focus stop. Independent links and controls remain operable in the
-eyebrow, body, and action region.
+When `href` is provided, the card remains passive while the `title` and cover image become
+primary keyboard and pointer navigation targets. Secondary links and buttons within the
+eyebrow, body, or actions slot remain independently operable.
 
-<Composition themes caption="Basic and linked CnCards">
+<Composition themes caption="Passive and linked card variants">
   <CardSpecimens group="basic" />
 </Composition>
 
-### Elevation and indicators
+### Elevation and attention indicators
 
-CnCard composes the shared elevation levels, keeping their background and shadow model in
-one place. Notification and alert are visual flags; the text supplied by a consumer
-still communicates what each state means.
+`CnCard` supports standard surface elevation levels (0 through 4). Attention flags indicate
+notification or alert states:
 
-At elevation 0, CnCard adds the standard one-pixel border so its edge remains visible
-against the application ground plane. Elevation 4 uses the high-contrast text role on
-the primary background.
+- At elevation 0, a 1px border is applied (`var(--cn-border)`).
+- Elevation 4 applies high-contrast foreground text on primary background surfaces.
+- Attention flags (`notify`, `alert`) display visual corner indicators.
 
-<Composition themes caption="Five elevations followed by information and warning states">
+<Composition themes caption="Elevation tiers (0–4) and attention indicator states">
   <CardSpecimens group="elevation" />
 </Composition>
 
-#### Setting a flag on the client
+#### Dynamic client-side flag toggling
 
-Both flags are also a class hook on the card root, for a state that is only known
-after the page arrives — an unread thread, an item that needs attention once a session
-resolves. Toggle `has-notify` or `has-alert` on the `.cn-card` element instead of
-re-rendering the card:
+In server-rendered listings, attention flags can be updated dynamically via DOM class toggles
+without requiring full component re-rendering:
 
 ```ts
 const card = document.querySelector('#thread-card-abc123 .cn-card')
-card?.classList.toggle('has-notify', unread)
+card?.classList.toggle('has-notify', hasUnreadMessages)
 ```
 
-`cn-card`, `has-notify` and `has-alert` are part of the public contract for this
-reason. The flag rules read the classes and nothing else, so a listing that renders
-its cards on the server and hydrates none of them can still raise one triangle. The
-flag fades in, so a late state does not snap into place. Give the card root a handle
-you can query — the surrounding element is usually enough, since CnCard takes no `id`
-prop.
+The classes `.cn-card`, `.has-notify`, and `.has-alert` form part of the public styling contract.
 
-The flag itself belongs to [Surface](/base/surface): a card and a listing row show the
-same signal, so CnCard composes those states rather than drawing its own.
+### Visual identity and cover fallbacks
 
-### Visual identity
+A semantic `noun` renders beside the title in text cards, or in the upper-right corner of cover images.
+Cover images render with a 16:9 aspect ratio and an overlaid primary tint gradient.
 
-A noun identifies the subject without repeating its name to assistive technology. It
-sits beside the title until a cover gives it a larger upper-right field. Covers crop to
-16:9 and carry the primary tint in both colour schemes.
+When a cover image fails to load or resolves to an invalid URL, the card automatically displays
+the SVG fallback artwork beneath the transparent image box without requiring client-side error handlers.
 
-<Composition themes caption="Noun, cover, failed cover, and linked cover with noun">
+<Composition themes caption="Noun icon, loaded cover, missing cover fallback, and linked cover">
   <CardSpecimens group="identity" />
 </Composition>
 
-A cover that cannot load falls back to the system cover artwork, so a deleted or moved
-image leaves the card's proportions, tint and noun intact rather than an empty 16:9
-band. The third specimen above points at a URL that does not resolve, so what it shows
-is the real fallback rather than a picture of one — which is also why it resembles the
-working covers beside it: they are the same artwork. Pass no `cover` at all and CnCard
-renders no cover region, which stays the way to say a subject has no image.
+### Container query behaviour
 
-The artwork sits behind the image rather than replacing it on error, so it needs no
-script and appears in a CnCard that is never hydrated. It also fills the moment before a
-lazily loaded cover arrives. The trade is that a cover with transparency composites over
-the artwork rather than over the card surface.
+`CnCard` declares `container-type: inline-size`. The heading title retains `h4` typography metrics
+across container widths and clamps to a maximum of 2 rendered lines with ellipsis truncation.
 
-<Composition caption="Wide cover specimen for comparison with v20">
-  <CardSpecimens group="wide" />
-</Composition>
-
-### Narrow containers
-
-CnCard establishes inline-size containment, so supplied content adapts to the
-CnCard's width rather than the viewport's. The title is the exception: it keeps
-Typography's h4 size, weight, line height, and tracking at every container width,
-preserving the v20 card hierarchy in a sidebar or compact listing. The heading occupies
-at most two rendered lines.
-
-<Composition themes caption="Long title in a 17rem CnCard">
+<Composition themes caption="Long title in a compact 17rem card container">
   <CardSpecimens group="narrow" />
 </Composition>
 
 ## Composition
 
-Use the eyebrow for a category, channel, edition, or system. Keep body content to one to
-three short paragraphs. Actions accept links and controls in a neutral container and
-stay at the bottom when neighboring CnCards contain more text.
+`CnCard` organizes content across four vertical regions:
+1. **Cover & Eyebrow:** 16:9 hero image and uppercase metadata label.
+2. **Title:** Clamped `h4` heading with optional icon.
+3. **Body:** Secondary description paragraph and arbitrary child slot elements.
+4. **Actions:** Fixed-height bottom bar (7x grid) for action buttons and metadata.
 
-<Composition themes caption="Eyebrow, description, body, and two actions">
+<Composition themes caption="Card composition with eyebrow, description, body, and action buttons">
   <CardSpecimens group="content" />
 </Composition>
-
-The action region is a single row of commands and metadata — buttons, icon buttons,
-reactions, a timestamp — seven grid units high whatever it holds. Content taller than the
-row is clipped by the card, so a control that needs more height belongs in the body.
 
 ## Reference
 
 ### Props
 
-| Prop | Type | Purpose |
-| :--- | :--- | :--- |
-| `title` | `string` | Required CnCard heading. |
-| `description` | `string` | Secondary text after the heading. |
-| `elevation` | `0 \| 1 \| 2 \| 3 \| 4` | Shared surface level. Defaults to `1`. |
-| `href` | `string` | Links the title and, when present, the decorative cover. |
-| `cover` | `string` | Decorative cover image URL. |
-| `srcset` | `string` | Native responsive-image candidates used with `cover`. |
-| `sizes` | `string` | Native responsive-image sizing hints used with `cover`. |
-| `noun` | `string` | Decorative Icon noun, small by the title or large over a cover. |
-| `notify` | `boolean` | Draws the information flag. Defaults to `false`. |
-| `alert` | `boolean` | Draws the warning flag above notification. Defaults to `false`. |
-| `eyebrow` | `Snippet` | Caption content before the title. |
-| `children` | `Snippet` | Concise supporting content after the description. |
-| `actions` | `Snippet` | Links and controls anchored at the bottom edge. |
+| Prop | Type | Default | Purpose |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | — | Required card heading text. |
+| `description` | `string` | `''` | Secondary description text rendered below the heading. |
+| `elevation` | `0 \| 1 \| 2 \| 3 \| 4` | `1` | Surface elevation level. |
+| `href` | `string` | `''` | Navigation destination linking title and cover image. |
+| `cover` | `string` | `''` | Cover image URL. |
+| `srcset` | `string` | `''` | Responsive image `srcset` candidates. |
+| `sizes` | `string` | `''` | Responsive image `sizes` query. |
+| `noun` | `string` | `''` | Semantic icon noun. |
+| `notify` | `boolean` | `false` | Displays informational attention flag. |
+| `alert` | `boolean` | `false` | Displays warning attention flag. |
+| `eyebrow` | `Snippet` | — | Content rendered above the title. |
+| `children` | `Snippet` | — | Supplementary body content. |
+| `actions` | `Snippet` | — | Trailing action bar content. |
 
 ### Tokens
 
-CnCard declares no tokens of its own. Its background, shadow and attention flags come
-from [Surface](/base/surface) and the elevation levels, its type from
-[Typography](/tokens/typography), and its spacing from the
-[grid](/tokens/units) — which is why a change to those systems reaches every card without
-touching this component.
-
-It reads one hook a consumer may declare: `--cn-border-radius-card`. Nothing declares it,
-so corners resolve to `--cn-border-radius-large` (16px) until a container sets it, and the
-cover, its tint and the card itself then round together.
+`CnCard` consumes surface elevation tokens from [Colour & Surface](/principles/color-system)
+and typography tokens from [Typography](/tokens/typography). It supports an optional
+`--cn-border-radius-card` override (defaulting to `--cn-border-radius-large` / 16px).
 
 ## Accessibility
 
-CnCard renders an `article` with an h4 and no implicit whole-CnCard control. Place it where
-h4 is valid in the surrounding heading hierarchy. Covers, nouns, and indicators are
-supplementary visuals; consumers communicate their meaning in text or another
-accessible state.
+`CnCard` renders as a semantic `<article>` element containing an `<h4>` heading. Cover images
+and placeholder artwork emit `aria-hidden="true"` and empty `alt=""` attributes. All critical
+entity information must be conveyed through card text.
 
 ## Not shown here
 
-**A flag raised after render.** The specimens above pass `notify` and `alert` as props.
-The class hook that a listing toggles once its session resolves needs a hydrated page,
-which the design site does not build, so the recipe above stands without a live
-demonstration. The classes themselves are covered by the CnCard tests.
+**Loading card state.** `CnCard` requires an existing title and does not provide an internal
+loading skeleton. Loading states must render `CnLoader` within the parent layout container.
 
-**A transparent cover.** The composite described under Visual identity — artwork behind a
-cover with an alpha channel — has no specimen, because every cover this system ships is
-opaque. Treat the trade as stated rather than as shown.
-
-**A loading card.** There is no loading state, because a CnCard stands for one subject
-that is already known — its title is required. A listing that is still resolving shows a
-loader in place of its cards, which is what `styles/loader.css` centres inside a section.

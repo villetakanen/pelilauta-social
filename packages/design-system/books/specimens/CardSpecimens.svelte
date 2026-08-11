@@ -9,11 +9,11 @@ const BROKEN_COVER = '/card-cover-that-does-not-exist.webp';
 let {
   group,
 }: {
-  group: 'basic' | 'elevation' | 'identity' | 'content' | 'wide' | 'narrow';
+  group: 'basic' | 'elevation' | 'identity' | 'content' | 'narrow';
 } = $props();
 </script>
 
-<div class:narrow={group === 'narrow'} class:wide={group === 'wide'} class="card-specimens" data-card-group={group}>
+<div class:narrow={group === 'narrow'} class="card-specimens" data-card-group={group}>
   {#if group === 'basic'}
     <div data-variant="basic">
       <CnCard title="Aamunkoin vartijat" description="A concise preview with the default elevation." />
@@ -71,12 +71,6 @@ let {
         {/snippet}
       </CnCard>
     </div>
-  {:else if group === 'wide'}
-    <div data-variant="wide-cover">
-      <CnCard title="The iron tower" href="#wide-cover" cover={COVER_PLACEHOLDER_URI} noun="fox">
-        A wide comparison specimen for the v20 cover, headline, and foreground hierarchy.
-      </CnCard>
-    </div>
   {:else}
     <div data-variant="long-narrow">
       <CnCard title="A title long enough to occupy more than two complete rendered lines" noun="fox">
@@ -101,9 +95,5 @@ let {
 
   .narrow {
     inline-size: min(100%, 17rem);
-  }
-
-  .wide {
-    inline-size: min(100%, 36rem);
   }
 </style>

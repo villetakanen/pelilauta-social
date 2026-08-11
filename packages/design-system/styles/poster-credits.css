@@ -1,0 +1,16 @@
+/*
+ * Poster credits — the copyright note for a page poster's artwork.
+ *
+ * Spec: specs/design-system/components/cn-poster-credits/spec.md
+ * Component: components/CnPosterCredits.astro
+ *
+ * The type step is typography's small, composed in the markup. The label step
+ * is monospace by decision, and a note carrying a person's name is not machine
+ * text. Only the metadata colour and the casing are the note's own: it sits in a
+ * footer slot a host may have uppercased, and a name keeps the casing it was
+ * given.
+ */
+.cn-poster-credits {
+  color: var(--cn-text-low);
+  text-transform: none;
+}

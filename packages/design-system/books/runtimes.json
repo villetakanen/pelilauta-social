@@ -1,0 +1,8 @@
+{
+  "$comment": "What an application has to do to make a component work in the browser.",
+  "runtimes": [
+    { "id": "static", "label": "Static" },
+    { "id": "progressive", "label": "Progressive" },
+    { "id": "interactive", "label": "Interactive" }
+  ]
+}

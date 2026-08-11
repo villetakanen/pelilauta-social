@@ -2,19 +2,24 @@
 title: ComponentName
 description: One sentence. It is the navigation subtitle and the page's meta description, so write it for someone deciding whether to open the page.
 order: 10
+runtime: static
 ---
 
 {/*
   COMPONENT BOOK — copy to apps/design/src/content/components/<slug>.mdx, delete
   these comments. Rules are the design-system-book skill's. Link books, never a spec.
 
+  `runtime` is required: `static`, `progressive` or `interactive`, defined in
+  books/runtimes.json. The shell renders its label as the subtitle. Never restate
+  it in prose — say what an application must do, where that has a consequence.
+
   The heading order below is fixed. Delete a section that has nothing that ships;
   never reorder the ones that remain, because a reader scans this page against the
   last component's. Nest to h4 where an axis has sub-cases, and keep every heading
   name unique within the page — the book tests locate headings by name alone.
 
-  Worked instances: apps/design/src/content/components/cn-loader.mdx (small),
-  apps/design/src/content/components/cn-card.mdx (four axes, nested).
+  This template is the model. No existing book is — read one to see how a heading is
+  used, never to judge how much to write.
 */}
 
 What it is, and the one mechanism a reader cannot derive from the invocation below:

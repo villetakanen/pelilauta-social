@@ -1,6 +1,6 @@
 ---
 title: Colour & Surface
-description: Pelilauta's perceptual colour scales, semantic roles, two themes, and surface hierarchy.
+description: "Perceptual OKLCH colour scales, semantic theme roles, contrast guarantees, and surface elevation hierarchy."
 order: 7
 ---
 
@@ -10,59 +10,49 @@ import RoleTable from "@design-system/books/specimens/RoleTable.astro";
 import referenceSource from "@design-system/styles/color-reference.css?raw";
 import themeSource from "@design-system/styles/color-theme.css?raw";
 
-Pelilauta combines a cool cerulean surface palette with a primary palette that
-moves from teal to an acid yellow-green. The surface family carries most of the
-interface; primary colour identifies navigation, focus, and high-emphasis actions.
-Error, warning, information, and love retain distinct hues for functional and
-social signals.
+Our colour system pairs a cool cerulean surface palette with a primary spectrum
+transitioning from teal to yellow-green. Surface tones anchor layout backgrounds
+and panels, while primary tones signify navigation, interactive focus, and key actions.
+Dedicated functional families provide unambiguous feedback for errors, warnings,
+informational notices, and social reactions.
 
-Dark and Light are two expressions of this system. We design in Dark, then review
-Light as a complete theme. Both preserve the same semantic roles and elevation
-hierarchy even where their palette steps differ.
+Light and Dark themes are independent expressions of this unified semantic model.
+Both themes share identical semantic tokens and elevation tiers.
 
-## Layered colour model
+## Layered colour architecture
 
-We separate the system into three layers:
+We structure colour declarations in three decoupled tiers:
+1. **Reference scales:** Primitive OKLCH palette ramps defining available tones.
+2. **Semantic roles:** Theme-aware tokens mapping reference tones to UI intent (`light-dark()`).
+3. **Component mappings:** UI components consume semantic roles exclusively.
 
-1. Reference scales define the colours available to the system.
-2. Semantic roles assign purpose and provide one value for each theme.
-3. Components consume roles according to meaning.
+This separation allows reference palettes to be tuned without breaking component styling.
+Complete token definitions are published in [Colour tokens](/tokens/color).
 
-This direction lets the palette evolve without changing the purpose expressed by
-a component. A link continues to consume `--cn-link`; the semantic layer decides
-which reference colour represents a link in each theme. The complete declarations
-are in [Colour tokens](/tokens/color).
+## Perceptual OKLCH scales
 
-## Perceptual scales
-
-The reference palette is expressed in OKLCH. A step number records perceived
-lightness: step 40 has the same lightness across every family, while chroma and hue
-determine its colour. Steps 0 and 100 are neutral endpoints.
-
-The surface and primary families provide the full tonal range needed for themes,
-text, borders, and interaction states.
+All primitive colour scales are declared in the OKLCH colour space. Step numbers represent
+perceptual lightness: step 40 exhibits identical perceived lightness across all hues.
+Steps 0 and 100 represent neutral absolute endpoints.
 
 <ColorRamp
   source={referenceSource}
   family="surface"
-  intent="Backgrounds, elevation, borders, and most text."
+  intent="Backgrounds, elevation surfaces, borders, and body text."
 />
 <ColorRamp
   source={referenceSource}
   family="primary"
-  intent="Links, focus, and high-emphasis actions."
+  intent="Links, keyboard focus rings, and high-emphasis controls."
 />
 
-Surface holds one hue so changes in its step read primarily as changes in
-lightness. Primary rotates through the scale, moving from teal at the dark end to
-yellow-green at the light end. This rotation gives interactive colour a stronger
-identity than the surfaces supporting it.
+The surface family maintains a constant hue so step transitions read purely as lightness
+changes. The primary family shifts hue across its scale—from teal at dark steps to
+yellow-green at light steps—providing visual vibrancy for interactive elements.
 
-### Functional colour
+### Functional colour families
 
-Functional families provide the four tonal positions used by current semantic
-roles. Their separate hues keep destructive action, caution, system information,
-and social affirmation visually distinct.
+Four functional families provide feedback across system states:
 
 <ColorRamp
   source={referenceSource}
@@ -72,44 +62,41 @@ and social affirmation visually distinct.
 <ColorRamp
   source={referenceSource}
   family="warning"
-  intent="Caution and warning."
+  intent="Cautionary feedback and alerts."
 />
 <ColorRamp
   source={referenceSource}
   family="info"
-  intent="System feedback and neutral state changes."
+  intent="System status notices and neutral updates."
 />
 <ColorRamp
   source={referenceSource}
   family="love"
-  intent="Likes and favourites."
+  intent="Likes, bookmarks, and community appreciation."
 />
 
 ### Contrast by construction
 
-Reference steps are selected when defining a semantic role. Components continue
-to consume the role rather than choosing a palette step directly. Because the step
-records lightness, the distance between two steps provides a tested lower bound
-for their contrast across the palette.
+Because OKLCH step numbers record uniform perceived lightness, the numerical delta
+between two palette steps establishes a verified lower bound for contrast ratio:
 
-| Step difference | Minimum contrast   |
-| :-------------- | :----------------- |
-| 45              | WCAG AA Large, 3:1 |
-| 60              | WCAG AA, 4.5:1     |
-| 70              | WCAG AAA, 7:1      |
+| Step difference | Minimum contrast ratio | WCAG compliance |
+| :--- | :--- | :--- |
+| 45 or more | 3:1 | WCAG AA Large Text |
+| 60 or more | 4.5:1 | WCAG AA Normal Text |
+| 70 or more | 7:1 | WCAG AAA Enhanced |
 
-A difference of 40 provides no WCAG guarantee; the lowest measured ratio among
-those pairs is 2.36:1.
+A step difference of 40 provides no guarantee; the lowest measured ratio among those pairs
+is 2.36:1.
 
 ## Semantic roles and themes
 
-Semantic roles are the component-facing colour vocabulary. Each role resolves to
-one reference colour in Light and another in Dark through `color-scheme`. The
-tables show both expressions together.
+Semantic roles form the component-facing colour API. Each role resolves to theme-specific
+reference tones via CSS `light-dark()`.
 
 <RoleTable
   source={themeSource}
-  caption="Surfaces"
+  caption="Surface roles"
   names={[
     "--cn-surface",
     "--cn-surface-1",
@@ -118,17 +105,17 @@ tables show both expressions together.
     "--cn-surface-4",
   ]}
   intents={{
-    "--cn-surface": "The page",
-    "--cn-surface-1": "Cards and panels on the page",
-    "--cn-surface-2": "Content raised above a resting surface",
+    "--cn-surface": "Application ground plane",
+    "--cn-surface-1": "Resting content cards and panels",
+    "--cn-surface-2": "Raised cards and hover layers",
     "--cn-surface-3": "Menus and popovers",
-    "--cn-surface-4": "Dialogs and the highest chrome",
+    "--cn-surface-4": "Modal dialogs and high-priority chrome",
   }}
 />
 
 <RoleTable
   source={themeSource}
-  caption="Text, action and edges"
+  caption="Text, action, and edge roles"
   names={[
     "--cn-text",
     "--cn-text-low",
@@ -138,64 +125,52 @@ tables show both expressions together.
     "--cn-focus-ring",
   ]}
   intents={{
-    "--cn-text": "Body copy",
-    "--cn-text-low": "Timestamps, captions, metadata",
-    "--cn-text-high": "Maximum contrast",
-    "--cn-link": "Anything that navigates",
-    "--cn-border": "Edges and dividers",
-    "--cn-focus-ring": "Keyboard focus",
+    "--cn-text": "Primary body copy",
+    "--cn-text-low": "Secondary metadata and timestamps",
+    "--cn-text-high": "Maximum contrast headings",
+    "--cn-link": "Navigational links",
+    "--cn-border": "Structural dividers and boundaries",
+    "--cn-focus-ring": "Keyboard focus indicators",
   }}
 />
 
-Theme mappings preserve purpose rather than numerical symmetry. The Light ground
-plane uses surface step 95, while levels 1 to 3 use white. Dark gives levels 1 and
-2 the same background, then increases lightness at level 3. Level 4 uses the
-primary family in both themes. Link colour comes from the primary family in Light
-and the surface family in Dark, while its role remains navigation in both.
+Theme mappings preserve intent rather than raw numeric symmetry. In Light theme,
+the ground plane uses surface step 95 while levels 1–3 use pure white. In Dark theme,
+levels 1 and 2 share surface step 30 while level 3 increases lightness. Level 4
+transitions to the primary family in both themes.
 
 ## Surface and elevation
 
-Elevation establishes the visual order between the page, its content, and elements
-temporarily raised above that content. We express it through five levels:
+Elevation establishes depth across five distinct tiers:
+- **Level 0:** Application ground plane.
+- **Level 1:** Resting content surfaces (cards, panels).
+- **Level 2:** Content raised above resting surfaces.
+- **Level 3:** Floating contextual overlays (menus, popovers).
+- **Level 4:** Highest system layer (modal dialogs).
 
-- Level 0 is the application ground plane.
-- Level 1 holds resting content such as cards and panels.
-- Level 2 raises content above a resting surface.
-- Level 3 holds floating or active content such as menus and popovers.
-- Level 4 is reserved for the highest system layer, including dialogs.
-
-<Composition themes caption="The five levels in Light and Dark">
-  <div class="surface elevation-0">Level 0: ground plane</div>
-  <div class="surface elevation-1">Level 1: resting content</div>
-  <div class="surface elevation-2">Level 2: raised content</div>
-  <div class="surface elevation-3">Level 3: floating content</div>
-  <div class="surface elevation-4">Level 4: system layer</div>
+<Composition themes caption="The five elevation tiers in Light and Dark">
+  <div class="surface elevation-0">Level 0: Ground plane</div>
+  <div class="surface elevation-1">Level 1: Resting content</div>
+  <div class="surface elevation-2">Level 2: Raised content</div>
+  <div class="surface elevation-3">Level 3: Floating content</div>
+  <div class="surface elevation-4">Level 4: System layer</div>
 </Composition>
 
-### Colour and shadow
+### Light and shadow interaction
 
-Colour and shadow work together at every level. Light uses one white background
-for levels 1 to 3, so shadow provides most of their separation. Dark distinguishes
-levels 2 and 3 through both lightness and shadow. The shadows derive from the same
-grid as the surrounding spacing, keeping their scale proportional to the
-composition.
+In Light theme, levels 1 through 3 share a single white background; visual separation
+is achieved through shadow geometry. In Dark theme, levels 2 and 3 separate through both
+lightness differences and ambient shadows.
 
-Levels 0 and 1 are shadowless. A nested surface also remains shadowless when it
-rises by one level; larger rises use a shadow relative to the nearest elevated
-ancestor. This prevents a nested composition from accumulating the full shadow of
-every absolute level.
+Levels 0 and 1 are shadowless. Nested surfaces rising by one level remain shadowless;
+larger level increases render relative shadows scaled to the ancestor delta to prevent
+excessive shadow accumulation.
 
-### The highest layer
+### System layer surfaces
 
-Level 4 uses primary step 99 in Light and primary step 40 in Dark, separating the
-highest system layer from the surface hierarchy. The Dark step is chosen so the
-inherited body foreground stays readable on it: a system-layer surface needs no
-foreground of its own. `--cn-text-high` remains the role for emphasis here.
+Level 4 surfaces use primary step 99 in Light and primary step 40 in Dark. Default body
+text (`--cn-text`) meets WCAG 2.2 AA contrast on level 4 across both themes.
 
-The de-emphasised roles are the exception. `--cn-text-low` and `--cn-link` do not
-reach WCAG 2.2 AA on `--cn-surface-4` in Dark, so metadata and links inside a
-system-layer surface take a stronger role. A component that uses another foreground
-verifies its contrast against `--cn-surface-4` in both themes.
+For shadow measurements, see [Spatial System](/principles/spatial-system). For utility
+class usage, see [Surface reference](/base/surface).
 
-The [Spatial System](/principles/spatial-system) defines the shadow measurements.
-The [Surface reference](/base/surface) documents the classes and their composition.

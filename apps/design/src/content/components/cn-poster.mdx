@@ -1,0 +1,115 @@
+---
+title: CnPoster
+description: "Decorative background artwork layer with automatic tint attenuation and contrast preservation."
+order: 50
+runtime: static
+poster: "https://picsum.photos/1920/1080"
+---
+
+import Composition from "@design-system/books/specimens/Composition.astro";
+import PosterPinToggle from "@design-system/books/specimens/PosterPinToggle.astro";
+
+`CnPoster` replaces the document ground plane with an attenuated background image.
+A multi-stop gradient wash overlays the image; foreground typography and
+surfaces target WCAG 2.2 AA contrast over arbitrary photography, where feasible.
+
+## When to use it
+
+- Landing pages, community hubs, or profile headers featuring hero artwork.
+- Maximum one poster instance per page.
+
+Use standard [Surface](/base/surface) containers for prose and dense data. `CnPoster`
+renders statically and does not provide image error fallbacks.
+
+## Example
+
+```astro
+---
+import CnPoster from '@design-system/components/CnPoster.astro'
+---
+
+<Page>
+  <CnPoster
+    slot="app-background-poster"
+    src="/sites/aamunkoin-vartijat/poster.webp"
+    md="/sites/aamunkoin-vartijat/poster-wide.webp"
+  />
+</Page>
+```
+
+## Variants and states
+
+`CnPoster` supports scrolling and pinned viewport placements, adaptive theme tinting, and media query suppression.
+
+### Placement modes
+
+- **Scrolling (default):** Covers the initial viewport height and dissolves smoothly into the page ground plane at its lower edge.
+- **Pinned (`pinned={true}`):** Fixes the poster relative to the viewport; content scrolls continuously over the background layer.
+
+<PosterPinToggle />
+
+### Theme tint and blending
+
+The artwork renders at 72% opacity under theme-specific colour overlay washes:
+
+| Theme | Overlay Tints | Blend Mode | Strength |
+| :--- | :--- | :--- | :--- |
+| Light | Surface 90, Primary 40 / 80 | `overlay` | 100% |
+| Dark | Primary 10 to 80 | `hard-light` | 44% |
+
+### Viewport and media query suppression
+
+The poster layer is automatically suppressed (rendering pure background surfaces) under:
+- Viewport widths below 620px (`@media (max-width: 620px)`).
+- `prefers-reduced-transparency: reduce`.
+- `forced-colors: active`.
+- Print stylesheets (`@media print`).
+
+## Composition
+
+Mount `CnPoster` in the `app-background-poster` slot as a direct child of `<body>`.
+
+When an element with `id="cn-poster"` exists in the DOM, surrounding application chrome
+adapts transparency:
+
+| Surface Selector | Applied Treatment |
+| :--- | :--- |
+| `--cn-app-bar-background-sticky` | `transparent` |
+| `nav#rail`, `nav#tray` | `transparent` |
+| `.elevation-0` | 80% opacity |
+| `.elevation-1` to `.elevation-4` | Unmodified |
+
+<Composition caption="Elevation 0 (translucent) and elevation 2 (opaque) over background artwork">
+  <div class="surface elevation-0">Elevation 0: Ground plane (80% opacity)</div>
+  <div class="surface elevation-2">Elevation 2: Raised surface (100% opacity)</div>
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `src` | `string` | Required artwork image URL (default and mobile viewports). |
+| `md` | `string` | High-resolution candidate URL loaded on viewports >= 960px. |
+| `pinned` | `boolean` | Fixes poster to the viewport. Defaults to `false`. |
+
+### Tokens
+
+`CnPoster` declares no custom properties. It reads colour ramps from [Colour](/tokens/color),
+ground plane tokens from `--cn-surface`, and overrides `--cn-app-bar-background-sticky` on `body`.
+
+## Accessibility
+
+`CnPoster` renders an `<img>` with an empty `alt=""` attribute and is omitted from the
+accessibility tree. It disables pointer events (`pointer-events: none`) and carries no
+tab stops.
+
+## Not shown here
+
+**Application chrome surface attenuation.** Chrome adaptation rules for `nav#rail` and
+`nav#tray` are declared in `styles/poster.css`.
+
+**High-contrast and reduced-transparency emulation.** Verified in emulated browser environments
+via automated media query tests.
+
