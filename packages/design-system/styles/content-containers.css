@@ -19,6 +19,14 @@
    * container's own width is the width it was offered, with nothing to opt out of.
    */
   padding-inline: var(--cn-gap);
+
+  /*
+   * A host answers its containers' width queries. Unnamed: `cn-content` belongs to
+   * the regions inside a container, and a container asks its nearest host without
+   * naming it. This also makes the host a containing block for absolutely
+   * positioned descendants, which is why a fab tray is mounted outside it.
+   */
+  container-type: inline-size;
 }
 
 /* Vertical rhythm between stacked containers, and below the last one. */
@@ -63,4 +71,60 @@
  */
 .content-prose > .breakout {
   grid-column: 1 / -1;
+}
+
+/*
+ * Triad — a medium primary and two small secondaries, stacking below the width
+ * their row needs.
+ *
+ * The stacked column is `minmax(0, 1fr)` rather than the implicit `auto` track:
+ * `justify-content: center` stops an `auto` track from stretching, and the
+ * regions would shrink to their content instead of filling the host.
+ */
+.content-triad {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cn-gap);
+  justify-content: center;
+}
+
+/*
+ * Each region reports its own track, so a component inside one queries the track
+ * rather than the host. `min-inline-size: 0` overrides a grid item's automatic
+ * minimum, which a wide table or a long word would otherwise push the track past.
+ * Overflow inside a region belongs to the region's content.
+ *
+ * The second selector reaches through `astro-island`, which the preflight sets to
+ * `display: contents`: the island's one rendered element is the grid item.
+ */
+.content-triad > *,
+.content-triad > astro-island > * {
+  container: cn-content / inline-size;
+  min-inline-size: 0;
+}
+
+/*
+ * A region or flow item that is also a Surface answers to both names. Surface
+ * declares the `container` shorthand too, which drops whichever name it does not
+ * list, and surface.css is imported after this file — so this composes them and
+ * wins on specificity rather than on order.
+ */
+.content-prose > .surface,
+.content-triad > .surface,
+.content-triad > astro-island > .surface {
+  container: cn-content surface-area / inline-size;
+}
+
+/*
+ * 51 + 2 + 32 + 2 + 32 = 119 grid units. A container query condition cannot read a
+ * custom property, so the sum is written out; content-containers.test.ts derives it
+ * from the tracks and fails when the two disagree.
+ */
+@container (min-width: 59.5rem) {
+  .content-triad {
+    grid-template-columns:
+      calc(var(--cn-grid) * 51)
+      calc(var(--cn-grid) * 32)
+      calc(var(--cn-grid) * 32);
+  }
 }

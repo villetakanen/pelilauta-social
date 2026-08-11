@@ -66,3 +66,41 @@ that a reading column would crop.
   width to the components inside it.
 </div>
 ```
+
+## Triad
+
+`content-triad` lays its three regions out in one row: a medium primary and two small
+secondaries, in source order.
+
+| Region | Grid units |
+| :--- | :--- |
+| Primary | 51 |
+| Secondary | 32 |
+| Secondary | 32 |
+
+The row appears where the host offers 119 grid units — the three regions and the two
+`--cn-gap` between them — or more. Below that the regions stack and fill the host.
+The row is centred in whatever the host offers beyond it.
+
+The demonstration below sits in a breakout, which is its host. Narrow the window to
+stack it.
+
+<div class="breakout">
+  <div class="content-triad">
+    <div class="surface elevation-2">Primary. The medium region.</div>
+    <div class="surface elevation-2">Secondary.</div>
+    <div class="surface elevation-2">Secondary.</div>
+  </div>
+</div>
+
+```html
+<div class="content-triad">
+  <div class="surface elevation-2">Primary. The medium region.</div>
+  <div class="surface elevation-2">Secondary.</div>
+  <div class="surface elevation-2">Secondary.</div>
+</div>
+```
+
+A triad has exactly three regions. A `script`, `style` or `template` child does not
+count as one, and an `astro-island` counts as the single region it renders — including
+while a deferred island is still showing its fallback.
