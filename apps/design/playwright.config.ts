@@ -14,6 +14,14 @@ export default defineConfig({
     command: 'pnpm run dev --host 127.0.0.1 --port 4398',
     url: 'http://127.0.0.1:4398/tokens/color',
     reuseExistingServer: !process.env.CI,
+    /*
+     * Astro 7 daemonises `astro dev` when it detects an agent environment, and
+     * Playwright then sees its web server exit immediately. Setting this to any
+     * value turns the detection off and keeps the server in the foreground —
+     * the name reads backwards, because the variable's other job is to request
+     * the background explicitly.
+     */
+    env: { ASTRO_DEV_BACKGROUND: '1' },
   },
   projects: [
     {
