@@ -18,8 +18,7 @@ states a change. The anatomy and the writing rules are `specs/TEMPLATE.md`.
    keep working, and the parent specs.
 3. Create or update `specs/<domain>/<capability>/spec.md` from the template. A
    design-system spec's subject is the package both applications consume; do not
-   write a criterion that holds for only one of them. The template is the model;
-   a sibling spec is not. Its length, structure and habits are not evidence.
+   write a criterion that holds for only one of them.
 4. Frontmatter is `status: draft | approved | deprecated`, nothing else. A new
    spec starts `draft`. `approved` means a human has read the spec through and
    agrees with it, and no spec change is committed without that.
@@ -45,19 +44,10 @@ delivery review.
 
 ## Prose
 
-Write in the register of a corporate design specification (Material Design's,
-for example): dry, strict, technical.
+Follow `docs/DESIGN.md`. A spec is dry, strict and technical.
 
-- Declaratives and imperatives. State the fact or the requirement; no setup,
-  no pleasantries, no personal pronouns.
-- No aphorisms, no metaphor, no consequence-drama. A contrast ("X, not Y")
-  appears only when Y is a mistake an implementer would actually make.
 - Complete sentences in the template's sections; values in tables, behaviour
   in Gherkin.
-- One fact per sentence. A `because`, `so that` or `not X` tail states the reason
-  for a requirement, and the reason belongs in the commit message. Keep it only
-  where the reason is itself the requirement.
-- No sentence restates the one before it in other words.
 - Density comes from the template's sentence test, not from fragmenting
   sentences.
 

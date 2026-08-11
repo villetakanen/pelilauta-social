@@ -1,5 +1,6 @@
 import type { ConsoleMessage, Page } from '@playwright/test';
-import { existingUser, newUser } from '../playwright/.auth/credentials.ts';
+// Credentials live at the repository root, not in the application.
+import { existingUser, newUser } from '../../../credentials.ts';
 
 // Use environment variable for base URL or default to localhost
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';

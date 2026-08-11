@@ -117,7 +117,7 @@ npm run test:e2e -- site-asset-upload.spec.ts --debug
    ```
 
 4. **Test User Authenticated**
-   - Tests use credentials from `playwright/.auth/credentials.ts`
+   - Tests use credentials from `credentials.ts` at the repository root
    - Default test user: `existingUser`
 
 ## Test Environment

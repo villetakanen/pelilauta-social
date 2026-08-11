@@ -15,12 +15,15 @@ import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// The service account lives at the repository root, the environment with the app.
+const repoRoot = join(__dirname, '../../../..');
+
 config({
-  path: '.env.development',
+  path: join(__dirname, '../../.env'),
 });
 
 // Use the service account file directly
-const serviceAccountPath = join(__dirname, '../../server_principal.json');
+const serviceAccountPath = join(repoRoot, 'server_principal.json');
 const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
 
 console.log(

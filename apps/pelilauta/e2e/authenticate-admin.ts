@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
-import { adminUser } from '../playwright/.auth/credentials.ts';
+// Credentials live at the repository root, not in the application.
+import { adminUser } from '../../../credentials.ts';
 
 // Use environment variable for base URL or default to localhost
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';

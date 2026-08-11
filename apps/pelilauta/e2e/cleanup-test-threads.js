@@ -1,7 +1,7 @@
 /**
  * This is a command line/node script that will clean up test threads from the test database.
  *
- * We use the Firestore settings in the .env.development file to connect to the Firestore database
+ * We use the Firestore settings in the application's .env file to connect to the Firestore database
  * of the end-to-end test project and remove threads created during testing.
  */
 
@@ -15,12 +15,15 @@ import { getFirestore } from 'firebase-admin/firestore';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// The service account lives at the repository root, the environment with the app.
+const repoRoot = join(__dirname, '../../..');
+
 config({
-  path: '.env.development',
+  path: join(__dirname, '../.env'),
 });
 
 // Use the service account file directly instead of environment variables
-const serviceAccountPath = join(__dirname, '../server_principal.json');
+const serviceAccountPath = join(repoRoot, 'server_principal.json');
 const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
 
 console.log('Using project_id:', serviceAccount.project_id);

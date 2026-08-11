@@ -1,10 +1,10 @@
 /**
  * Test user credentials for E2E tests
- * Re-exports credentials from the gitignored credentials file
- * and defines additional test users for multi-user scenarios
+ * Re-exports credentials from the gitignored credentials file at the repository
+ * root, and defines additional test users for multi-user scenarios
  */
 
-export { existingUser, newUser } from '../playwright/.auth/credentials.ts';
+export { existingUser, newUser } from '../../../credentials.ts';
 
 /**
  * Second test user for multi-user scenarios (e.g., notification testing)

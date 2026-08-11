@@ -20,9 +20,12 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// The service account lives at the repository root, the environment with the app.
+const repoRoot = join(__dirname, '../../../..');
+
 // Load test environment configuration
 config({
-  path: '.env.development',
+  path: join(__dirname, '../../.env'),
 });
 
 let serverApp: App;
@@ -38,7 +41,7 @@ export function initializeTestFirebase() {
   }
 
   try {
-    const serviceAccountPath = join(__dirname, '../../server_principal.json');
+    const serviceAccountPath = join(repoRoot, 'server_principal.json');
     const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
 
     serverApp = initializeApp(

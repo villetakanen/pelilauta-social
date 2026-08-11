@@ -12,6 +12,21 @@
 - `packages/design-system` contains the components, styles, specs and books both use.
 - `specs` contains approved behaviour, one capability per directory.
 - `plans` contains transient epic scope; `plans/debt` contains known unplanned gaps.
+- `docs/DESIGN.md` holds the design intent and the voice; `docs/ARCHITECTURE.md` holds
+  the naming and what each artifact carries.
+
+## ALWAYS
+
+- Base prose on `docs/DESIGN.md` and `docs/ARCHITECTURE.md` when writing a document, a
+  book, a spec or a comment. A skill references those files rather than restating them.
+- Bump the root beta version with `pnpm version prerelease --preid=beta` in every pull
+  request.
+- Stay on the current long-lived `feat/**` branch.
+
+## NEVER
+
+- Create, switch or delete a branch without an explicit order. Asking is not the order;
+  wait for the answer.
 
 ## Delivery Contract
 
@@ -19,8 +34,6 @@
   requires explicit approval.
 - During beta, a release is the merge of the active `feat/**` pull request to **main**;
   that merge is its approval.
-- Every pull request bumps the root beta version with
-  `pnpm version prerelease --preid=beta`.
 - Fix what the work touches, and any defect it uncovers in the same epic.
 - Replace Cyan one surface at a time. Most of Cyan is CSS: resets, element styles,
   utilities and their tokens; the rest is Lit components. Check v20 before writing
@@ -31,9 +44,6 @@
 - Link workspace projects with Vite aliases, mirrored in TypeScript paths. No package-linking or build-orchestration tooling.
 
 ## Judgment Boundaries
-
-Stay on the current long-lived `feat/**` branch. Create, switch or delete a branch only
-when explicitly instructed.
 
 Ask first, and wait, before:
 

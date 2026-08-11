@@ -50,7 +50,7 @@ if (site.useSidebar && site.sidebarKey) {
   {site.description && <p>{site.description}</p>}
   
   {sidebarPage ? (
-    <!-- Custom sidebar page content -->
+    /* Custom sidebar page content */
     <div set:html={sidebarPage.htmlContent} class="border-t"/>
     <div class="mt-2 flex justify-end text-small">
       <a 
@@ -60,7 +60,7 @@ if (site.useSidebar && site.sidebarKey) {
       </a>
     </div>
   ) : (
-    <!-- Default sidebar content -->
+    /* Default sidebar content */
     <SiteTocSection site={site} />
   )}
 </article>

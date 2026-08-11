@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 import { RUNTIME_IDS } from './lib/books';
 
 /**
@@ -34,15 +35,20 @@ const componentSchema = bookSchema.extend({
   runtime: z.enum(RUNTIME_IDS),
 });
 
-const book = (group: string, schema: z.ZodTypeAny = bookSchema) =>
+/*
+ * Generic in the schema, and each group names its own: a widened parameter type
+ * erases which schema a group uses, and `entry.data` degrades to `unknown`
+ * wherever the collection is read.
+ */
+const book = <S extends z.ZodType>(group: string, schema: S) =>
   defineCollection({
     loader: glob({ pattern: '**/*.mdx', base: `./src/content/${group}` }),
     schema,
   });
 
 export const collections = {
-  principles: book('principles'),
-  base: book('base'),
-  tokens: book('tokens'),
+  principles: book('principles', bookSchema),
+  base: book('base', bookSchema),
+  tokens: book('tokens', bookSchema),
   components: book('components', componentSchema),
 };
