@@ -4,7 +4,7 @@
  * An application opts in with `cn-app-main` on its <main>. Its direct children are
  * containers. Nothing matches a page that has not opted in.
  *
- * Spec: specs/design-system/content-containers/spec.md
+ * Spec: specs/design-system/content-container-layouts/spec.md
  */
 
 /*

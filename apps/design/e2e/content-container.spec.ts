@@ -5,7 +5,7 @@ import { expect, type Page, test } from '@playwright/test';
  * measure resolves against the root font size, and what a container query
  * reports cannot be read out of a stylesheet at all.
  *
- * Spec: specs/design-system/content-containers/spec.md
+ * Spec: specs/design-system/content-container-layouts/spec.md
  */
 
 const BOOK = '/base/content-containers';
