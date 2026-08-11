@@ -282,8 +282,8 @@ describe('the downshift', () => {
 });
 
 describe('the reader-preference guarantee', () => {
-  test('no rule states a pixel or touches the document root', () => {
-    expect(stylesheet).not.toMatch(/\d+px/);
+  // Pixel lengths are swept across every stylesheet by lengths.test.ts.
+  test('no rule touches the document root', () => {
     expect(stylesheet).not.toMatch(/(^|[^\w-])html\s*[,{]/);
     expect(stylesheet).not.toMatch(/:root\s*\{[^}]*[^-]font-size/);
   });

@@ -5,6 +5,13 @@
  * The catalog is passed in from the site rather than hand-written, so it cannot
  * drift from the navigation. Grouping and ordering are the site's decision; this
  * component only renders them.
+ *
+ * The page is built from what the design system ships: a golden container puts the
+ * masthead beside a contents card, a prose container carries the index below it,
+ * and the type comes from the typography steps. It states no measure, no rhythm and
+ * no type scale of its own — the front page is the first thing a reader sees, and
+ * a front page that needed its own vocabulary would be an argument against the
+ * books behind it.
  */
 import '@design-system/styles/ds.css';
 
@@ -32,78 +39,75 @@ const numbered = groups.flatMap((group) =>
 );
 ---
 
-<section class="hero index-hero">
-  <p class="kicker">PELILAUTA / V21</p>
-  <h1>{title}</h1>
-  <p class="lede">
-    Living books connect design intent to the exact contracts used by Pelilauta.
-    Each book ships with its specification and its production implementation.
-  </p>
-  <dl class="facts">
-    <div><dt>Books</dt><dd>{numbered.length}</dd></div>
-    <div><dt>Groups</dt><dd>{groups.length}</dd></div>
-  </dl>
-</section>
+<section class="content-golden">
+  <!-- The golden primary is exactly the readable measure, so the prose container
+       nested in it fills the region and gives the column its rhythm. -->
+  <div class="content-prose">
+    <p class="text-caption text-low">Pelilauta / v21</p>
+    <h1 class="text-title">{title}</h1>
+    <p class="text-low">
+      Living books connect design intent to the exact contracts used by Pelilauta.
+      Each book ships with its specification and its production implementation.
+    </p>
 
-<section aria-labelledby="index-title">
-  <div class="section-heading">
-    <p>THE BOOKS</p>
-    <h2 id="index-title">Start anywhere</h2>
+    <h2>Start anywhere</h2>
+    <ol class="index-list">
+      {numbered.map((book, i) => (
+        <li>
+          <p class="text-caption text-low">
+            {String(i + 1).padStart(2, '0')} / {book.group}
+          </p>
+          <h3><a href={book.href}>{book.title}</a></h3>
+          <p class="text-small text-low">{book.description}</p>
+        </li>
+      ))}
+    </ol>
   </div>
-  <ol class="index-list">
-    {numbered.map((book, i) => (
-      <li>
-        <p class="index-number">
-          {String(i + 1).padStart(2, '0')} / {book.group.toUpperCase()}
-        </p>
-        <h3><a href={book.href}>{book.title}</a></h3>
-        <p class="index-blurb">{book.description}</p>
-      </li>
-    ))}
-  </ol>
+
+  <aside class="surface elevation-2">
+    <p class="text-caption text-low">Contents</p>
+    <dl class="counts">
+      {groups.map((group) => (
+        <div>
+          <dt class="text-small text-low">{group.label}</dt>
+          <dd class="text-h4">{group.books.length}</dd>
+        </div>
+      ))}
+    </dl>
+  </aside>
 </section>
 
 <style>
-  /* The index keeps a heavier display treatment than the interior books. */
-  .index-hero {
-    background:
-      radial-gradient(circle at 85% 10%, var(--cn-hover), transparent 35rem),
-      var(--cn-surface);
+  .counts {
+    display: grid;
+    gap: var(--cn-gap);
+    margin: 0;
   }
-  .index-hero h1 {
-    max-inline-size: 10ch;
-    font-size: clamp(3rem, 11vw, 8rem);
-    letter-spacing: -0.06em;
-    line-height: 0.88;
+  .counts div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--cn-gap);
   }
+  .counts dd {
+    margin: 0;
+  }
+
   .index-list {
     margin: 0;
     padding: 0;
     list-style: none;
   }
+  /* A rule between entries, so the spine reads as one numbered sequence rather
+     than as twenty separate blocks. */
   .index-list li {
-    padding-block: 2rem;
+    padding-block: var(--cn-line);
     border-block-start: 1px solid var(--cn-border);
   }
-  .index-number {
-    margin: 0;
-    color: var(--cn-text-low);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
+  .index-list li > * {
+    margin-block: 0;
   }
   .index-list h3 {
-    margin: 0.75rem 0;
-    font-size: clamp(1.6rem, 4vw, 3rem);
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-  .index-list h3 a {
-    text-decoration-thickness: 0.06em;
-  }
-  .index-blurb {
-    max-inline-size: 48rem;
-    margin: 0;
-    color: var(--cn-text-low);
+    margin-block: calc(var(--cn-line) / 2);
   }
 </style>

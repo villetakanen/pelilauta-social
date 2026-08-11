@@ -1,81 +1,152 @@
 ---
 title: Content containers
-description: The centered single-column layout, measure calculation, fluid margins, and full-bleed breakout containers.
+description: Stackable content containers, with a set of predefined layouts.
 order: 2
 ---
 
-Content containers establish reading measure, fluid gutter margins, and vertical
-separation between stacked layout blocks.
+import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import containersSource from '@design-system/styles/content-containers.css?raw'
 
-## Application opt-in
+## The host
 
-Adding `cn-app-main` to `<main>` lays its direct children out on the page grid, without
-intermediate wrappers. A `<section>` is one container in the column. An `<article>` spans
-the page and passes the grid to its blocks through subgrid: each block is a container in
-the column.
+`app-main` on a `<main>` makes it a host. It offers each direct child its full
+content-box width, with no intermediate wrappers.
+
+| Token | Applies to |
+| :--- | :--- |
+| `--cn-gap` | The page-edge inset. |
+| `--cn-line` | Between stacked containers, and between the top-level blocks inside one. |
+
+See [Units and grid](/tokens/units).
+
+`content-prose` fills the width of whatever contains it — usually a `<main
+class="app-main">`, which adds the page-edge inset — and centres its children at the
+readable measure.
 
 ```html
-<main class="cn-app-main">
-  <section>A container in the column.</section>
-  <article><p>A block in the column.</p></article>
+<main class="app-main">
+  <section>As wide as the host offered.</section>
+  <article class="content-prose"><p>Centred at the measure.</p></article>
 </main>
 ```
 
-Every rule is scoped below the opt-in class, so a page without it is untouched.
+## The measure
+
+<TokenTable source={containersSource} prefix="--cn-measure" />
+
+It holds 67 characters of Lato at the reading size, and scales with the reader's
+browser font settings. See [Spatial System](/principles/spatial-system).
+
+The flow centres at the measure where the host offers more, and fills the host where it
+offers less.
 
 ## Container query context
 
-A container establishes the `cn-content` container query context, exposing the column's
-inline size to descendant components: the section in one case, each block in an article.
+Each item in the flow establishes the `cn-content` container query context, so a
+component asks about the column it sits in rather than the window.
 
 ```css
 @container cn-content (max-width: 30rem) { … }
 ```
 
-The query evaluates the content column directly rather than the full viewport width.
+## Breaking out of the measure
 
-## Fluid column sizing
+Inside a prose container, a child marked `breakout` leaves the measure and takes the
+width the container itself was offered. Use it for a table, a diagram, or a specimen
+that a reading column would crop.
 
-Containers adjust between the reading measure and viewport gutters using a single
-continuous grid track:
-
-```css
-grid-template-columns: 1fr min(var(--cn-measure), 100% - 2 * var(--cn-gap)) 1fr;
-```
-
-On wide viewports, content centers at `--cn-measure` with equal margins. On viewports
-narrower than the measure plus gutters, the container maintains a `--cn-gap` gutter on
-each side without breakpoint jumps.
-
-## Measure calculation
-
-`--cn-measure` evaluates to `calc(var(--cn-grid) * 83)` (41.5rem).
-
-This value corresponds to 67 characters of Lato at the 17px body size (0.58em
-advance width, yielding 660.6px or 82.58 grid units, rounded up to 83). Defining
-the measure in grid units rather than `ch` prevents layout shift during font
-loading and prevents size inheritance anomalies in headings. Because the value is
-expressed in `rem`, the column scales proportionally with user browser font settings.
-
-For font scaling principles, see [Spatial System](/principles/spatial-system).
-
-## Vertical rhythm
-
-Stacked containers and top-level block elements inside a container are separated by
-`--cn-line` (24px). Vertical rhythm tokens are defined in [Units and grid](/tokens/units).
-
-## Full-bleed containers
-
-To span the full viewport width, apply `cn-grid-full` to a top-level container element.
+<div class="breakout surface">
+  This block is a breakout. It is as wide as this page was offered, and it reports that
+  width to the components inside it.
+</div>
 
 ```html
-<main class="cn-app-main">
-  <section>A container in the column.</section>
-  <section class="cn-grid-full">Full-width section spanning the viewport.</section>
-</main>
+<div class="breakout surface">
+  This block is a breakout. It is as wide as this page was offered, and it reports that
+  width to the components inside it.
+</div>
 ```
 
-In a section, breakout is a property of the container: a child cannot exceed a container
-that is exactly the column's width. In an article, a block marked `cn-breakout` takes the
-width its content wants, centred, up to the page, and is not a container.
+## Golden
 
+`content-golden` puts a readable primary and one small secondary in one row, in source
+order.
+
+| Region | Grid units |
+| :--- | :--- |
+| Primary | 83, the measure |
+| Secondary | 32 |
+
+The row appears where the host offers 117 grid units — the two regions and the
+`--cn-gap` between them — or more. Below that the regions stack and fill the host.
+The row is centred in whatever the host offers beyond it, so the primary does not line
+up with a prose flow above it.
+
+The demonstration below sits in a breakout, which is its host. Narrow the window to
+stack it.
+
+<div class="breakout">
+  <div class="content-golden">
+    <div class="surface elevation-2">Primary. As wide as a prose flow.</div>
+    <div class="surface elevation-2">Secondary.</div>
+  </div>
+</div>
+
+```html
+<div class="content-golden">
+  <div class="surface elevation-2">Primary. As wide as a prose flow.</div>
+  <div class="surface elevation-2">Secondary.</div>
+</div>
+```
+
+A golden container has exactly two regions.
+
+## Triad
+
+`content-triad` lays its three regions out in one row: a medium primary and two small
+secondaries, in source order.
+
+| Region | Grid units |
+| :--- | :--- |
+| Primary | 51 |
+| Secondary | 32 |
+| Secondary | 32 |
+
+The row appears where the host offers 119 grid units — the three regions and the two
+`--cn-gap` between them — or more. Below that the regions stack and fill the host.
+The row is centred in whatever the host offers beyond it.
+
+The demonstration below sits in a breakout, as the golden one does.
+
+<div class="breakout">
+  <div class="content-triad">
+    <div class="surface elevation-2">Primary. The medium region.</div>
+    <div class="surface elevation-2">Secondary.</div>
+    <div class="surface elevation-2">Secondary.</div>
+  </div>
+</div>
+
+```html
+<div class="content-triad">
+  <div class="surface elevation-2">Primary. The medium region.</div>
+  <div class="surface elevation-2">Secondary.</div>
+  <div class="surface elevation-2">Secondary.</div>
+</div>
+```
+
+A triad has exactly three regions.
+
+## What counts as a region
+
+A `script`, `style` or `template` child of a golden or triad container does not take a
+track. An `astro-island` counts as the single region it renders — including while a
+deferred island is still showing its fallback, which is why a deferred region renders
+one element in every one of its states.
+
+Each region reports its own track to the components inside it, under `cn-content`, and
+under `surface-area` as well where the region is a surface.
+
+A region is as tall as its own content, and the row is as tall as its tallest region.
+A short region that paints — a surface, a bordered aside — therefore ends where its
+content ends. A region that wants the height of the one beside it asks for that
+itself, with `align-self: stretch`.

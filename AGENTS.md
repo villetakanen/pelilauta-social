@@ -19,8 +19,10 @@
 
 - Base prose on `docs/DESIGN.md` and `docs/ARCHITECTURE.md` when writing a document, a
   book, a spec or a comment. A skill references those files rather than restating them.
-- Bump the root beta version with `pnpm version prerelease --preid=beta` in every pull
-  request.
+- Bump the root beta version with `pnpm version prerelease --preid=beta
+  --no-git-tag-version` once per release: on the first commit after a merge to main.
+  Later commits on the same branch do not bump, because the version is already ahead
+  of main. CI tags the merge commit.
 - Stay on the current long-lived `feat/**` branch.
 
 ## NEVER

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Review"
+  short_description: "Adversarially review a spec before approval"
+  default_prompt: "Use $spec-review to challenge this draft spec and report whether it is ready for approval."

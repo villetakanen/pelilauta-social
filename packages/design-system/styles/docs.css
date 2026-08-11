@@ -5,95 +5,14 @@
  * a book is an MDX file, and anything the design system should own belongs in a
  * stylesheet it ships to both applications, not here.
  *
- * The hero, kicker, lede and stat-tile vocabulary serves pages/HomePage.astro, which
- * is package-owned and so cannot read app CSS. It stays until an app shell owns it,
- * and staying visible here is how that work finds it.
- *
- * The leading and table type are typography's, and leave with typography's
- * semantics.
+ * The index page's editorial vocabulary left with the front page: it is built from
+ * the content containers and the typography steps, which the design system now
+ * ships. What remains here is the leading and table type, which are typography's
+ * and leave with typography's semantics.
  */
 
 html {
   scroll-behavior: smooth;
-}
-
-/* The index is a stack of full-bleed sections; a book is a single column. */
-.book {
-  overflow: hidden;
-}
-
-.book > section {
-  padding: clamp(4rem, 9vw, 8rem) clamp(1.25rem, 4vw, 3rem);
-}
-
-.hero {
-  min-block-size: min(48rem, 76vh);
-  display: grid;
-  align-content: center;
-  background:
-    linear-gradient(130deg, transparent 45%, var(--cn-hover)), var(--cn-surface);
-}
-
-.kicker,
-.section-heading > p:first-child {
-  color: var(--cn-text-low);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-}
-
-.hero h1 {
-  margin: 0.3rem 0 1.5rem;
-  max-inline-size: 12ch;
-  color: var(--cn-text-high);
-  font-size: clamp(3.5rem, 12vw, 9rem);
-  font-weight: 600;
-  letter-spacing: -0.075em;
-  line-height: 0.82;
-}
-
-.lede {
-  max-inline-size: 45rem;
-  color: var(--cn-text-low);
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-}
-
-.facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem 5rem;
-  margin-block-start: 4rem;
-}
-
-.facts div {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.facts dt {
-  color: var(--cn-text-low);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.facts dd {
-  margin: 0;
-  color: var(--cn-text-high);
-  font-size: 1.5rem;
-}
-
-.section-heading {
-  max-inline-size: 48rem;
-  margin-block-end: 3rem;
-}
-
-.section-heading h2 {
-  margin: 0.4rem 0 1rem;
-  color: var(--cn-text-high);
-  font-size: clamp(2.3rem, 6vw, 5rem);
-  letter-spacing: -0.05em;
-  line-height: 0.95;
 }
 
 /* A book's tables come from its specimens, and are wide by nature. */

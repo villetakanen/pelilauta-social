@@ -39,6 +39,11 @@ default. Weights are those in the table, plus 700 for emphasis.
 
 Small is not on the scale: the mathematical step is adjusted for legibility.
 
+Text emphasis can be low, [default], or high.
+
+A subtitle is a paragraph belonging to the heading above it: reading size at the
+emphasis weight, with no gap between the two.
+
 Tracking is v20's for the steps v20 states; the steps v20 lacks derive from a
 neighbour — title takes h1's, small takes text's.
 

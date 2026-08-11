@@ -20,90 +20,84 @@ const withoutComments = (source: string) =>
 const css = withoutComments(read('../styles/content-containers.css'));
 const units = withoutComments(read('../styles/units.css'));
 
+/** The measure, in grid units, as the stylesheet declares it. */
+const measureSteps = Number(
+  css.match(/--cn-measure:\s*calc\(var\(--cn-grid\) \* (\d+)\)/)?.[1],
+);
+
 describe('the measure', () => {
-  test('is declared as a whole number of grid steps', () => {
-    const declaration = css.match(/--cn-measure\s*:\s*([^;]+);/);
-    expect(declaration, '--cn-measure is not declared').not.toBeNull();
-
-    const steps = declaration?.[1].match(
-      /calc\(\s*var\(\s*--cn-grid\s*\)\s*\*\s*([\d.]+)\s*\)/,
-    );
-    expect(steps, '--cn-measure is not a --cn-grid multiple').not.toBeNull();
-    expect(Number.isInteger(Number(steps?.[1]))).toBe(true);
-  });
-
   test('is not declared in the unit tokens', () => {
     // styles/units.css is asserted identical to the Cyan 4 file it shadows, and
     // the measure has no Cyan counterpart. Moving it there breaks units.test.ts.
     expect(units).not.toContain('--cn-measure');
   });
+
+  test('is declared once, in grid units', () => {
+    // Golden's primary is the same width as a prose flow by design. Two
+    // declarations would let one of them drift.
+    expect(measureSteps).toBe(83);
+    expect(css.match(/--cn-measure:/g)).toHaveLength(1);
+  });
 });
 
-describe('the two modes', () => {
-  test('are one track expression, so no threshold can drift out of step', () => {
-    // The narrow term and the measure meet exactly where they are equal. Split
-    // into a query and a literal breakpoint, the two could disagree and the
-    // content would jump; as one min() they cannot.
-    const track = css.match(/grid-template-columns:\s*([^;]+);/);
-    expect(track, 'no grid track expression found').not.toBeNull();
+/**
+ * The wide composition of one mode: the condition it appears under, and its fixed
+ * tracks in grid units. A track is either the measure or a count of grid steps.
+ */
+const wideMode = (mode: string) => {
+  const block = [
+    ...css.matchAll(/@container \(min-width: ([\d.]+)rem\) \{([\s\S]*?)\n\}/g),
+  ].find((match) => match[2].includes(`${mode} {`));
+  const template = (block?.[2] ?? '').match(/grid-template-columns:([^;]*);/);
+  const tracks = [
+    ...(template?.[1] ?? '').matchAll(
+      /calc\(var\(--cn-grid\) \* (\d+)\)|var\((--cn-measure)\)/g,
+    ),
+  ].map((match) => (match[2] ? measureSteps : Number(match[1])));
 
-    const expression = track?.[1].replace(/\s+/g, ' ') ?? '';
-    expect(expression).toContain(
-      'min(var(--cn-measure), 100% - 2 * var(--cn-gap))',
-    );
-  });
+  return { condition: Number(block?.[1]), tracks };
+};
 
-  test('need no container query at all', () => {
-    expect(css).not.toContain('@container');
-  });
+describe.each([
+  { mode: '.content-triad', expected: [51, 32, 32] },
+  { mode: '.content-golden', expected: [83, 32] },
+])('the $mode threshold', ({ mode, expected }) => {
+  const { condition, tracks } = wideMode(mode);
 
-  test('state no pixel length', () => {
-    expect(css).not.toMatch(/[\d.]+px/);
+  test('equals the sum of its tracks and the gaps between them', () => {
+    // The condition cannot read --cn-grid, so it is the one place the geometry is
+    // written out. Derive it here rather than reading the literal back.
+    expect(tracks).toEqual(expected);
+    const gaps = 2 * (tracks.length - 1);
+    const units = tracks.reduce((sum, track) => sum + track, 0) + gaps;
+
+    expect(condition).toBe(units * 0.5);
   });
 });
 
 describe('scoping', () => {
-  test('every rule sits below the opt-in class', () => {
-    // A rule that escapes the class reaches apps/pelilauta, which has not
-    // migrated off Cyan's .content-columns.
-    const rules = [...css.matchAll(/(^|[};])\s*([^{}@]+?)\s*\{/g)].map((m) =>
-      m[2].replace(/\s+/g, ' ').trim(),
+  test('every rule sits below an opt-in class', () => {
+    // A rule that escapes them reaches apps/pelilauta, which has not migrated
+    // off Cyan's .content-columns.
+    const optIn = [
+      '.app-main',
+      '.content-prose',
+      '.content-triad',
+      '.content-golden',
+    ];
+    // An at-rule prelude becomes a closing brace, so the selectors nested inside
+    // it are scanned too rather than silently skipped.
+    const flattened = css.replace(/@[\w-]+[^{};]*\{/g, '}');
+    const rules = [...flattened.matchAll(/(^|[};])\s*([^{}@]+?)\s*\{/g)].map(
+      (m) => m[2].replace(/\s+/g, ' ').trim(),
     );
 
     expect(rules.length).toBeGreaterThan(0);
     for (const selector of rules) {
-      expect(selector, `${selector} escapes .cn-app-main`).toContain(
-        '.cn-app-main',
-      );
+      expect(
+        optIn.some((name) => selector.includes(name)),
+        `${selector} escapes ${optIn.join(' and ')}`,
+      ).toBe(true);
     }
-  });
-
-  test('the container element is the column, not the page', () => {
-    // container-type reports the element's own border box. Declaring cn-content
-    // on a full-width element would report the page, and every query written
-    // against it would be answered with 30rem more room than the column has.
-    // A section is the column; an article spans the page for breakouts, so the
-    // container moves to its column-width blocks.
-    const section = css.match(/\.cn-app-main > section\s*\{([^}]*)\}/);
-    expect(section, 'the section container is not declared').not.toBeNull();
-    expect(section?.[1]).toMatch(/container:\s*cn-content\s*\/\s*inline-size/);
-    expect(section?.[1]).not.toMatch(/(inline-size|width)\s*:/);
-
-    const blocks = css.match(/\.cn-app-main > article > \*\s*\{([^}]*)\}/);
-    expect(blocks, "the article's blocks are not containers").not.toBeNull();
-    expect(blocks?.[1]).toMatch(/container:\s*cn-content\s*\/\s*inline-size/);
-    expect(blocks?.[1]).toMatch(/grid-column:\s*2/);
-  });
-
-  test('a breakout block takes its own width, centred, and stops being a container', () => {
-    const breakout = css.match(
-      /\.cn-app-main > article > \.cn-breakout\s*\{([^}]*)\}/,
-    );
-    expect(breakout, 'cn-breakout is not declared').not.toBeNull();
-    expect(breakout?.[1]).toMatch(/grid-column:\s*1 \/ -1/);
-    expect(breakout?.[1]).toMatch(/justify-self:\s*center/);
-    expect(breakout?.[1]).toMatch(/max-inline-size:\s*100%/);
-    // Its width is its content's: a full-span container would report the page.
-    expect(breakout?.[1]).toMatch(/container:\s*none/);
   });
 });

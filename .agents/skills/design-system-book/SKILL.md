@@ -51,11 +51,10 @@ Guidance leads and reference follows, which puts the props table below the speci
 even for a component with thirteen props. That order is the owner's decision
 (2026-08-06), taken with the cost known.
 
-Two rules keep the page honest. **No value is transcribed**: props state types, and
-tokens render through `TokenTable` from the stylesheet, so a token change cannot leave
-the book behind. **Nothing is asserted without a specimen** — the specimen is how a
-book is verified, by the author and again by the reviewer, and it is why a book states
-only what ships.
+Prefer rendering a value from source to writing it into the page.
+
+Show what the book covers: a live example, and the code that produces it, wherever the
+page can carry one.
 
 A behaviour with no specimen goes in `## Not shown here` with the reason it cannot
 have one, and states how it was established: a query the page cannot emulate for one
