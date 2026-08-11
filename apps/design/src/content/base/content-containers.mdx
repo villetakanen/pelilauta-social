@@ -1,24 +1,27 @@
 ---
 title: Content containers
-description: The page host, the prose container and its readable measure, and breaking out of it.
+description: Stackable content containers, with a set of predefined layouts.
 order: 2
 ---
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import containersSource from '@design-system/styles/content-containers.css?raw'
 
-A host offers its width to a stack of content containers, and each container chooses how
-to lay out its own children. This page is one: it renders as an `<article
-class="content-prose">` inside a `<main class="app-main">`.
+## The host
 
-## Application opt-in
+`app-main` on a `<main>` makes it a host. It offers each direct child its full
+content-box width, with no intermediate wrappers.
 
-Adding `app-main` to `<main>` makes its direct children content containers, without
-intermediate wrappers. The host offers each one its full content-box width, inset from
-the page edge by `--cn-gap`, and separates them by `--cn-line`.
+| Token | Applies to |
+| :--- | :--- |
+| `--cn-gap` | The page-edge inset. |
+| `--cn-line` | Between stacked containers, and between the top-level blocks inside one. |
 
-A container takes that width unless it asks for less. `content-prose` is the container
-that asks: it centres its children at the readable measure.
+See [Units and grid](/tokens/units).
+
+`content-prose` fills the width of whatever contains it — usually a `<main
+class="app-main">`, which adds the page-edge inset — and centres its children at the
+readable measure.
 
 ```html
 <main class="app-main">
@@ -27,29 +30,15 @@ that asks: it centres its children at the readable measure.
 </main>
 ```
 
-Every rule is scoped below the opt-in class. Nothing here matches a bare `<main>`, so a
-page without the class keeps the layout it has.
-
 ## The measure
 
 <TokenTable source={containersSource} prefix="--cn-measure" />
 
-The column you are reading is that wide. It holds 67 characters of Lato at the reading
-size, and because the value is expressed in `rem`, it scales with the reader's browser
-font settings. See [Spatial System](/principles/spatial-system).
+It holds 67 characters of Lato at the reading size, and scales with the reader's
+browser font settings. See [Spatial System](/principles/spatial-system).
 
-## Fluid column sizing
-
-Prose moves between the measure and the width it was offered on one continuous grid
-track:
-
-```css
-grid-template-columns: 1fr min(var(--cn-measure), 100%) 1fr;
-```
-
-On wide viewports the flow centres at the measure with equal margins. Where the host
-offers less, the flow fills it, and the `--cn-gap` page-edge inset still holds the
-content off the window. There is no breakpoint between the two.
+The flow centres at the measure where the host offers more, and fills the host where it
+offers less.
 
 ## Container query context
 
@@ -60,28 +49,20 @@ component asks about the column it sits in rather than the window.
 @container cn-content (max-width: 30rem) { … }
 ```
 
-## Vertical rhythm
-
-Stacked containers, and the top-level blocks inside a container, are separated by
-`--cn-line`. Vertical rhythm tokens are defined in [Units and grid](/tokens/units).
-
 ## Breaking out of the measure
 
 Inside a prose container, a child marked `breakout` leaves the measure and takes the
 width the container itself was offered. Use it for a table, a diagram, or a specimen
 that a reading column would crop.
 
-<div class="breakout" style="border: 1px dashed var(--cn-border); padding: var(--cn-gap);">
+<div class="breakout surface">
   This block is a breakout. It is as wide as this page was offered, and it reports that
   width to the components inside it.
 </div>
 
 ```html
-<article class="content-prose">
-  <p>Centred at the measure.</p>
-  <div class="breakout">As wide as the container was offered.</div>
-</article>
+<div class="breakout surface">
+  This block is a breakout. It is as wide as this page was offered, and it reports that
+  width to the components inside it.
+</div>
 ```
-
-A container that is not prose needs nothing: it is already as wide as its host offered.
-Neither reaches past the page-edge inset, which belongs to the host.
