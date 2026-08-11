@@ -28,7 +28,7 @@ const boxes = async (page: Page) => {
   // The article spans the page for breakouts; its blocks are the column, so a
   // block's box is what we measure.
   const column = await page
-    .locator('main#content > article > p')
+    .locator('main#content > .content-prose > p')
     .first()
     .boundingBox();
   if (!main || !column) throw new Error('container not rendered');
@@ -100,7 +100,7 @@ test('a query against cn-content resolves against the column, not the page', asy
   });
   await page.evaluate(() => {
     // A block of the article is the container, so the probes live inside one.
-    const article = document.querySelector('main#content > article');
+    const article = document.querySelector('main#content > .content-prose');
     const host = document.createElement('div');
     for (const id of ['probe-narrow', 'probe-wide']) {
       const probe = document.createElement('p');
@@ -118,30 +118,32 @@ test('a query against cn-content resolves against the column, not the page', asy
   await expect(page.locator('#probe-wide')).toHaveCSS('color', 'rgb(1, 1, 1)');
 });
 
-test('a container marked full width spans the page', async ({ page }) => {
+test('a container that asks for nothing takes the width it is offered', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BOOK);
 
-  // Bleed is a container-level decision, so this is a sibling of the book's
-  // article rather than something inside it.
+  // The host offers its full content box. Only a container that asks for the
+  // measure is narrowed, so a plain one needs no class to stay wide.
   await page.evaluate(() => {
     const section = document.createElement('section');
-    section.id = 'bleed';
-    section.className = 'cn-grid-full';
-    section.textContent = 'full width';
+    section.id = 'wide';
+    section.textContent = 'as wide as it was offered';
     document.querySelector('main#content')?.append(section);
   });
 
   const measure = await steps(page, MEASURE_STEPS);
+  const gap = await steps(page, GAP_STEPS);
   const { main } = await boxes(page);
-  const bleed = await page.locator('#bleed').boundingBox();
-  if (!bleed) throw new Error('the full-width container did not render');
+  const wide = await page.locator('#wide').boundingBox();
+  if (!wide) throw new Error('the container did not render');
 
-  expect(bleed.width).toBeGreaterThan(measure);
-  expect(bleed.width).toBeCloseTo(main.width, 0);
+  expect(wide.width).toBeGreaterThan(measure);
+  expect(wide.width).toBeCloseTo(main.width - 2 * gap, 0);
 });
 
-test('a breakout block takes its content width, centred, capped by the page', async ({
+test('a breakout spans the width its prose container was offered', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -150,19 +152,21 @@ test('a breakout block takes its content width, centred, capped by the page', as
   await page.evaluate(() => {
     const block = document.createElement('div');
     block.id = 'breakout';
-    block.className = 'cn-breakout';
+    block.className = 'breakout';
     block.innerHTML = '<div style="inline-size: 60rem;">wide content</div>';
-    document.querySelector('main#content > article')?.append(block);
+    document.querySelector('main#content > .content-prose')?.append(block);
   });
 
   const measure = await steps(page, MEASURE_STEPS);
+  const gap = await steps(page, GAP_STEPS);
   const { main } = await boxes(page);
   const breakout = await page.locator('#breakout').boundingBox();
   if (!breakout) throw new Error('the breakout did not render');
 
-  // Wider than the column, its own content's width, and centred on the page.
+  // Wider than the flow, and the whole width the host offered its container —
+  // the page-edge inset is the host's, so a breakout does not eat into it.
   expect(breakout.width).toBeGreaterThan(measure);
-  expect(breakout.width).toBeLessThanOrEqual(main.width);
+  expect(breakout.width).toBeCloseTo(main.width - 2 * gap, 0);
   const left = breakout.x - main.x;
   const right = main.x + main.width - (breakout.x + breakout.width);
   expect(left).toBeCloseTo(right, 0);
@@ -196,7 +200,9 @@ test('stacked containers are one --cn-line apart', async ({ page }) => {
   });
 
   const line = await steps(page, 3);
-  const first = await page.locator('main#content > article').boundingBox();
+  const first = await page
+    .locator('main#content > .content-prose')
+    .boundingBox();
   const second = await page.locator('#second').boundingBox();
   if (!first || !second) throw new Error('containers did not render');
 

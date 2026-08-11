@@ -25,9 +25,11 @@ The host owns the container's available width, placement, edge inset, and vertic
 rhythm between sibling containers. The content container owns the inline and block
 arrangement of its regions.
 
-The application main (`.cn-app-main` or `<main>`) is the usual host for a sequence of
-content containers and provides `--cn-gap` page-edge inset at narrow widths. Any
-element that establishes an inline-size containment context may host containers. A
+The application `<main>` bearing `.app-main` is the usual host for a sequence of
+content containers and provides `--cn-gap` page-edge inset at narrow widths. The
+consumer applies that class; Content Container Layouts never matches a bare `<main>`,
+so a page that has not opted in keeps the layout it has. Any element that establishes
+an inline-size containment context may host containers. A
 content container may operate inside a smaller composition, including a card-sized
 host, and may be nested when each container has a distinct host.
 

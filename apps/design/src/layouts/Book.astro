@@ -89,11 +89,12 @@ const context = group ? groupLabel(group) : 'Index';
 
       <DocsNav />
 
-      <main class:list={['book', { 'cn-app-main': prose }]} id="content">
+      <main class:list={['book', { 'app-main': prose }]} id="content">
         {prose ? (
-          <article>
+          <article class="content-prose">
             <h1>{title}</h1>
-            {runtime && <p class="text-caption">{runtimeLabel(runtime)}</p>}
+            {runtime && <p class="text-subtitle">{runtimeLabel(runtime)}</p>}
+            <p class="text-small text-low">{description}</p>
             <slot />
           </article>
         ) : (

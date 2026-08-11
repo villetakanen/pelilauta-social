@@ -1,76 +1,66 @@
 /*
- * Content containers — the single centred column.
+ * Content container layouts.
  *
- * An application opts in with `cn-app-main` on its <main>. Its direct children are
- * containers. Nothing matches a page that has not opted in.
+ * An application opts in with `app-main` on its <main>. Its direct children are
+ * content containers, each choosing its own layout mode. Nothing matches a page that
+ * has not opted in: most of the application is still on Cyan's `.content-columns`,
+ * and a bare `main` selector would put every page on this grid at once.
+ *
+ * The host offers its full content-box width. A container that wants the readable
+ * measure asks for it with `content-prose`; a container that wants the whole width
+ * simply takes it.
  *
  * Spec: specs/design-system/content-container-layouts/spec.md
  */
 
-/*
- * Both modes are one declaration, and they meet exactly where the two terms are
- * equal: no threshold to state, no query to keep in step with it.
- */
-.cn-app-main {
+.app-main {
   /*
-   * The measure: 67 characters of the base paragraph. Stated in grid steps, not
-   * `ch`, which would resolve against whatever font is rendering.
-   *
-   * Measured: Lato's `0` advance is 0.58em, so 67ch at the 17px base is 41.29rem =
-   * 82.58 steps, rounded up. Changing the base face or its size makes this wrong.
+   * The page-edge inset. It is padding rather than a pair of grid tracks, so a
+   * container's own width is the width it was offered, with nothing to opt out of.
    */
+  padding-inline: var(--cn-gap);
+}
+
+/* Vertical rhythm between stacked containers, and below the last one. */
+.app-main > * {
+  margin-block-end: var(--cn-line);
+}
+
+/*
+ * Prose — one centred flow at the readable measure.
+ *
+ * The measure: 67 characters of the base paragraph. Stated in grid steps, not `ch`,
+ * which would resolve against whatever font is rendering.
+ *
+ * Measured: Lato's `0` advance is 0.58em, so 67ch at the 17px base is 41.29rem =
+ * 82.58 steps, rounded up. Changing the base face or its size makes this wrong.
+ */
+.content-prose {
   --cn-measure: calc(var(--cn-grid) * 83); /* 41.5rem */
   display: grid;
-  grid-template-columns:
-    1fr
-    min(var(--cn-measure), 100% - 2 * var(--cn-gap))
-    1fr;
+  grid-template-columns: 1fr min(var(--cn-measure), 100%) 1fr;
   row-gap: var(--cn-line);
 }
 
-.cn-app-main > * {
-  grid-column: 2;
-}
-
 /*
- * A section is the column, so `cn-content` reports the column's width.
+ * The flow sits in the centre track, and each item reports its own width, so a
+ * `cn-content` query is answered with the measure rather than the page.
  *
  * It is a grid so `row-gap` replaces the element margins the preflight removes, and
  * so that spacing survives an `astro-island`, which the preflight sets to
  * `display: contents`.
  */
-.cn-app-main > section {
-  container: cn-content / inline-size;
-  display: grid;
-  row-gap: var(--cn-line);
-}
-
-/*
- * An article spans the page and lays out on the page grid through subgrid: its
- * blocks sit in the column, and a block marked `cn-breakout` may take the width
- * its content wants, centred, up to the page. The container moves with the
- * blocks: each stays column-width, so `cn-content` still reports the column.
- */
-.cn-app-main > article {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-  row-gap: var(--cn-line);
-}
-
-.cn-app-main > article > * {
+.content-prose > * {
   grid-column: 2;
   container: cn-content / inline-size;
 }
 
-.cn-app-main > article > .cn-breakout {
-  grid-column: 1 / -1;
-  justify-self: center;
-  max-inline-size: 100%;
-  container: none;
-}
-
-/* A container that spans the page instead of sitting in the column. */
-.cn-app-main > .cn-grid-full {
+/*
+ * A breakout spans the width offered to its Prose container, and reports that width
+ * to the components inside it — it keeps the `cn-content` boundary from the rule
+ * above. It stretches rather than fitting its content: an inline-size container is
+ * sized independently of what it holds, so a fit-content breakout would measure zero.
+ */
+.content-prose > .breakout {
   grid-column: 1 / -1;
 }
