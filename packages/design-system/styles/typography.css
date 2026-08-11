@@ -148,6 +148,27 @@ h4,
 }
 
 /*
+ * A subtitle belongs to the heading above it, so it closes the line of rhythm its
+ * container puts between them.
+ */
+.text-subtitle {
+  font-size: var(--cn-font-size-text);
+  font-weight: var(--cn-font-weight-emphasis);
+  line-height: var(--cn-line-height-text);
+  letter-spacing: var(--cn-letter-spacing-text);
+  margin-block-start: calc(-1 * var(--cn-line));
+}
+
+/* Emphasis, at any step. Text with neither class is the default emphasis. */
+.text-low {
+  color: var(--cn-text-low);
+}
+
+.text-high {
+  color: var(--cn-text-high);
+}
+
+/*
  * The downshift: every heading renders one step down at small-screen width,
  * measured against its container rather than the window, so a heading in a
  * narrow card steps down whatever the page around it is doing. An element with

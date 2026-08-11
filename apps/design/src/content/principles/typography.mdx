@@ -77,3 +77,18 @@ breakpoint (`38.75rem`).
 - **Container-relative evaluation:** Headings downscale via CSS Container Queries (`@container`), rather than the viewport width.
 - **Proportional consistency:** Downscaling by a single modular step preserves the 1:1.414 ratio between heading levels while reducing line wrapping in narrow containers.
 
+## Emphasis
+
+Text emphasis can be low, default, or high. It is independent of the step: any step
+takes any emphasis.
+
+<p class="text-low">Low emphasis, for supporting text a reader may skip.</p>
+<p>Default emphasis, which needs no class.</p>
+<p class="text-high">High emphasis, for the line that carries the page.</p>
+
+```html
+<p class="text-low">Low emphasis.</p>
+<p>Default emphasis.</p>
+<p class="text-high">High emphasis.</p>
+```
+
