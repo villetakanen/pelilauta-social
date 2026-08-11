@@ -1,8 +1,8 @@
 /**
  * This is a command line/node script that will initialize the test database with the necessary data.
  *
- * We use the Firestore settings in the .env.development file to connect to the Firestore database
- * of the end-to-end test project.
+ * We use the Firestore settings in the application's .env file to connect to the
+ * Firestore database of the end-to-end test project.
  */
 
 import { readFileSync } from 'node:fs';
@@ -16,12 +16,15 @@ import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// The service account lives at the repository root, the environment with the app.
+const repoRoot = join(__dirname, '../../..');
+
 config({
-  path: '.env.development',
+  path: join(__dirname, '../.env'),
 });
 
 // Use the service account file directly instead of environment variables
-const serviceAccountPath = join(__dirname, '../server_principal.json');
+const serviceAccountPath = join(repoRoot, 'server_principal.json');
 const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
 
 console.log('Using project_id:', serviceAccount.project_id);
@@ -216,10 +219,22 @@ const accountRef = serverDB.collection('accounts').doc(testUserUid);
 await accountRef.delete();
 console.log('Account document deleted.');
 
-// 3. Delete profile document
+// 3. Recreate the profile document.
+//
+// This uid plays two parts: it owns the seeded test sites, which profile-page.spec.ts
+// reads through /profiles/<uid>, and it is the account account-registration.spec.ts
+// registers from scratch. The page 404s without a profile document, so deleting it
+// broke every profile spec. Registration is unaffected: AuthManager.svelte redirects
+// to /onboarding on missing EULA acceptance or account creation, both cleared above.
 const profileRef = serverDB.collection('profiles').doc(testUserUid);
-await profileRef.delete();
-console.log('Profile document deleted.');
+await profileRef.set({
+  uid: testUserUid,
+  nick: 'TestUser',
+  avatarURL: '',
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+});
+console.log('Profile document recreated.');
 
 // Create app metadata with admin configuration
 const appMeta = {
@@ -233,6 +248,27 @@ await serverDB.collection('meta').doc('pelilauta').set(appMeta);
 console.log(
   'App metadata created with admin user: vN8RyOYratXr80130A7LqVCLmLn1',
 );
+
+// The channel list lives in meta/threads.topics. channels.spec.ts needs one channel
+// that carries no threads, to cover the empty-channel fallback; the seeded content
+// channels all have some. Added idempotently, leaving the real channels untouched.
+const threadsMetaRef = serverDB.collection('meta').doc('threads');
+const threadsMeta = await threadsMetaRef.get();
+const topics = threadsMeta.data()?.topics ?? [];
+if (!topics.some((topic) => topic.slug === 'test-channel')) {
+  topics.push({
+    name: 'Test Channel',
+    slug: 'test-channel',
+    description: 'Channel for API testing',
+    icon: 'discussion',
+    category: 'Pelilauta',
+    threadCount: 0,
+  });
+  await threadsMetaRef.set({ topics }, { merge: true });
+  console.log('Empty test channel created: test-channel');
+} else {
+  console.log('Empty test channel already present: test-channel');
+}
 
 console.log('User cleanup complete.');
 
