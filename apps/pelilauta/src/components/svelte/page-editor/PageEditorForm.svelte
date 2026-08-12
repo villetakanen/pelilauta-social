@@ -9,7 +9,6 @@ import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
 import { uid } from '../../../stores/session';
-import WithAuth from '../app/WithAuth.svelte';
 import CodeMirrorEditor from '../CodeMirrorEditor/CodeMirrorEditor.svelte';
 import { submitPageUpdate } from './submitPageUpdate';
 
@@ -95,77 +94,75 @@ function handleEditorChange(event: CustomEvent<string>) {
 }
 </script>
 
-<WithAuth allow={true}>
-  <form class="content-editor" onsubmit={handleSubmission}>
-    <section class="toolbar">
-      <label class="grow">
-        {t('entries:page.name')}
-        <input
-          type="text"
-          value={page.name}
-          name="name"
-          required
-          maxlength="42"
-          disabled={saving}
-          data-testid="page-name"
-          oninput={handleChange}
-        />
-      </label>
-
-      {#if site.pageCategories && site.pageCategories.length > 0}
-      <label>
-        {t('entries:page.category')}
-        <select name="category" value={page.category} oninput={handleChange} data-testid="page-category">
-          {#each site.pageCategories as category}
-            <option value={category.slug}>{category.name}</option>
-          {/each}
-        </select>
-      </label>
-      {/if}
-
-    </section>
-
-    {#if contentMigrated}
-      <div class="alert warning flex flex-row items-center px-1">
-        <Icon noun="info" />
-        <p>{t('site:page.editor.contentMigrateWarning')}</p>
-      </div>
-    {/if}
-
-
-      <CodeMirrorEditor
-        bind:value={editorValue}
-        gutter
+<form class="content-editor" onsubmit={handleSubmission}>
+  <section class="toolbar">
+    <label class="grow">
+      {t('entries:page.name')}
+      <input
+        type="text"
+        value={page.name}
+        name="name"
+        required
+        maxlength="42"
         disabled={saving}
-        oninput={handleEditorChange}
-        onchange={handleEditorChange}
-        placeholder={t('entries:page.markdownContent')}
+        data-testid="page-name"
+        oninput={handleChange}
       />
+    </label>
 
-    {#if tags && tags.length > 0}
-    <section class="tags py-1 elevation-1 flex">
-        {#each tags as tag}
-          <span class="cn-tag">{tag}</span>
+    {#if site.pageCategories && site.pageCategories.length > 0}
+    <label>
+      {t('entries:page.category')}
+      <select name="category" value={page.category} oninput={handleChange} data-testid="page-category">
+        {#each site.pageCategories as category}
+          <option value={category.slug}>{category.name}</option>
         {/each}
-    </section>
+      </select>
+    </label>
     {/if}
 
-    <section class="toolbar">
-      <a href={`/sites/${site.key}/${page.key}/delete`} class="button text">
-        {t('actions:delete')}
-      </a>
-      <div class="grow"></div>
-      <a href={`/sites/${site.key}/${page.key}`} class="button text">
-        {t('actions:cancel')}
-      </a>
-      <button type="submit" class="button cta" data-testid="save-button" disabled={!hasChanges || saving}>
-        {#if saving}
-          <CnLoader inline noun="save" />
-        {:else}
-          <Icon noun="save" />
-        {/if}
-        <span>{t('actions:save')}</span>
-      </button>
-    </section>
-  </form>
-</WithAuth>
+  </section>
+
+  {#if contentMigrated}
+    <div class="alert warning flex flex-row items-center px-1">
+      <Icon noun="info" />
+      <p>{t('site:page.editor.contentMigrateWarning')}</p>
+    </div>
+  {/if}
+
+
+    <CodeMirrorEditor
+      bind:value={editorValue}
+      gutter
+      disabled={saving}
+      oninput={handleEditorChange}
+      onchange={handleEditorChange}
+      placeholder={t('entries:page.markdownContent')}
+    />
+
+  {#if tags && tags.length > 0}
+  <section class="tags py-1 elevation-1 flex">
+      {#each tags as tag}
+        <span class="cn-tag">{tag}</span>
+      {/each}
+  </section>
+  {/if}
+
+  <section class="toolbar">
+    <a href={`/sites/${site.key}/${page.key}/delete`} class="button text">
+      {t('actions:delete')}
+    </a>
+    <div class="grow"></div>
+    <a href={`/sites/${site.key}/${page.key}`} class="button text">
+      {t('actions:cancel')}
+    </a>
+    <button type="submit" class="button cta" data-testid="save-button" disabled={!hasChanges || saving}>
+      {#if saving}
+        <CnLoader inline noun="save" />
+      {:else}
+        <Icon noun="save" />
+      {/if}
+      <span>{t('actions:save')}</span>
+    </button>
+  </section>
+</form>

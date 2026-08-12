@@ -16,7 +16,7 @@ const { allow, children, message }: Props = $props();
 {#if allow}
   {@render children?.()}
 {:else}
-  <div class="content-columns">
+  <div class="content-prose">
     <article>
       <div class="flex justify-center p-2">
         <Icon noun="monsters" size="xlarge" />
