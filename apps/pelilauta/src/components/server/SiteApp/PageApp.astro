@@ -11,10 +11,18 @@ interface Props {
 }
 const { site, page } = Astro.props as Props;
 ---
-<div class="content-columns">
+<div class="content-golden">
 
   <PageArticle {page} {site} />
-  <PageSidebar site={site} />
-  <LatestPagesSection site={site} />
-  
+
+  <!--
+    Both asides share the secondary region rather than taking one each:
+    LatestPagesSection renders nothing unless the site enables recent changes, and a
+    grid item that renders nothing still leaves its track reserved.
+  -->
+  <div class="flex flex-col">
+    <PageSidebar site={site} />
+    <LatestPagesSection site={site} />
+  </div>
+
 </div>

@@ -50,7 +50,7 @@ function pushSessionSuccessAndNavigate() {
 </script>
 
 <WithAuth allow={visible}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section>
       <h1 class="downscaled">Snackbar Test Utility</h1>
       <p class="text-caption">

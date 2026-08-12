@@ -21,7 +21,7 @@ async function exportSiteAsDoc() {
 }
 </script>
 
-<section class="elevation-1 p-2 column-s">
+<section class="elevation-1 p-2">
   <h2>{t('site:data.export.title')}</h2>
   <h3>{t('site:data.export.asMarkdown')}</h3>
     

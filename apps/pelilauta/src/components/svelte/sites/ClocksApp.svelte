@@ -15,8 +15,8 @@ const empty = $derived.by(() => {
 });
 </script>
 
-<div class="content-columns">
-  <article class="column-l">
+<div class="content-prose">
+  <article>
     <h2>{t('site:clocks.title')}</h2>
     <ul>
       {#each $clocks as clock, i}

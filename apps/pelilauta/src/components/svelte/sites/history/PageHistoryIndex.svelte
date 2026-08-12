@@ -14,7 +14,7 @@ const { page, revision, diff }: Props = $props();
 const revisionCount = diff.history.length || 0;
 </script>
 
-<section class="column-s surface p-2">
+<section class="surface p-2">
   <h4 class="title is-3">
     {t('site:page.history.title')}
   </h4>

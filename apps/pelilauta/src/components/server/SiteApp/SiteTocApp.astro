@@ -70,8 +70,8 @@ if (pagesWithoutCategory.length > 0) {
 }
 ---
 
-<div class="content-columns">
-  <article class="full-width p-2 toolbar">
+<div class="content-prose">
+  <article class="p-2 toolbar">
     <h1>
       {t("site:toc.title")}
     </h1>
@@ -80,7 +80,7 @@ if (pagesWithoutCategory.length > 0) {
 
   {
     categories.map((category) => (
-      <section class="surface p-2 column-s">
+      <section class="surface p-2">
         <h4 class="downscaled mb-1">{category.name}</h4>
         <ul class="compact">
           {pages.get(category.slug)?.map((page) => (

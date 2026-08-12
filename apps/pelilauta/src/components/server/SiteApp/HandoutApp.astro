@@ -10,12 +10,12 @@ interface Props {
 
 const { handout, site } = Astro.props as Props;
 ---
-<div class="content-columns">
-  <section class="column-l elevation-1 p-2">
+<div class="content-golden">
+  <section class="elevation-1 p-2">
     <h1>{handout.title}</h1>
     <div set:html={handout.htmlContent}></div>
   </section>
-  <div class="column-s">
+  <div>
     <HandoutMeta handout={handout} site={site} client:only="svelte"/>
   </div>
 </div>

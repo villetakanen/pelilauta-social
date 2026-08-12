@@ -36,7 +36,7 @@ const { title, description, image, noun, shortTitle, noSharing } = Astro.props;
       <slot name="app-tray" />
     </nav>
 
-    <main>
+    <main class="app-main">
       <slot />
       <AppFooter>
         <slot name="app-footer-credits" slot="app-footer-credits" />

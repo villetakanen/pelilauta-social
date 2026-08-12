@@ -15,8 +15,8 @@ const assets = $derived.by(() => {
 });
 </script>
 
-<div class="content-columns">
-  <section class="column-l surface p-2">
+<div class="content-prose">
+  <section class="surface p-2">
     <h1>{t('site:assets.title')}</h1>
     <p>{t('site:assets.description')}</p>
 

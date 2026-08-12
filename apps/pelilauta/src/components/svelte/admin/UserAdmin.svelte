@@ -40,8 +40,8 @@ async function purgeUser(uid: string) {
 </style>
 
 <WithAuth {allow}>
-  <div class="content-columns">
-    <article class="column-l">
+  <div class="content-prose">
+    <article>
       <h1>Users</h1>
       {#await getAllAccounts()}
         <CnLoader />
