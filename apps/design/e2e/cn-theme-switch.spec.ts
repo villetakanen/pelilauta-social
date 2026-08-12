@@ -12,6 +12,10 @@ const BOOK = '/components/cn-theme-switch';
 const rootScheme = () =>
   document.documentElement.style.colorScheme || '(unset)';
 
+/** The specimen, not the shell's own switch in the masthead. */
+const specimen = (page: import('@playwright/test').Page) =>
+  page.getByRole('figure').getByRole('button', { name: 'Switch theme' });
+
 async function activate(page: import('@playwright/test').Page) {
   // The control is an island: a click before it hydrates changes nothing.
   await page.waitForLoadState('networkidle');
@@ -20,7 +24,7 @@ async function activate(page: import('@playwright/test').Page) {
       document.body.dataset.themeChanged = 'yes';
     });
   });
-  await page.getByRole('button', { name: 'Switch theme' }).click();
+  await specimen(page).click();
 }
 
 test.describe('with no colour scheme on the root', () => {
@@ -64,7 +68,7 @@ test.describe('with no colour scheme on the root', () => {
 
 test('the control keeps its size through an activation', async ({ page }) => {
   await page.goto(BOOK);
-  const button = page.getByRole('button', { name: 'Switch theme' });
+  const button = specimen(page);
   await button.scrollIntoViewIfNeeded();
   const before = await button.boundingBox();
 
@@ -100,7 +104,7 @@ test.describe('with a colour scheme on the root', () => {
     });
 
     await activate(page);
-    await page.getByRole('button', { name: 'Switch theme' }).click();
+    await specimen(page).click();
 
     await expect(page.evaluate(rootScheme)).resolves.toBe('light');
   });
