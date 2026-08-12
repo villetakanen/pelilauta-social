@@ -99,8 +99,9 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   compatibility boundary in `docs/ARCHITECTURE.md` before changing the schema.
 - **Application bar** — ship and book the local `CnAppBar`, including standard and
   modal compositions, without changing Pelilauta call sites.
-- **Theme switch** — ship and book the controlled `CnThemeSwitch` component and its
-  public state and event contract without reading application stores or persistence.
+- **Theme switch** — ship and book the `CnThemeSwitch` component and its public state
+  and event contract without reading application stores or persistence, and mount it
+  in the temporary application bar so a theme change repaints the current document.
 - **Adaptive navigation** — ship and book the local tray, rail, trigger, primary item
   and subordinate-link components with automated responsive and accessibility checks.
 - **Application chrome geometry** — ship and book the standalone chrome container and
@@ -153,6 +154,10 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **Cyan chrome removal** — delete migrated bridges and remove remaining chrome custom
   elements, selectors, tokens and Lit registration only when no other surface reads
   them.
+- **Media-query theme holdouts** — `NounSelect` and `AlgoliaSearchApp` theme themselves
+  from `prefers-color-scheme`, directly and through Cyan's `.light-only` and
+  `.dark-only`, so they keep the operating system's theme while the rest of the
+  document follows the switch. Move them onto the document's colour scheme.
 - **Navigation verification** — exercise anonymous, authenticated and administrator
   route sets, active hierarchy, theme reload, keyboard traversal and reduced-motion
   behaviour against the approved specifications.

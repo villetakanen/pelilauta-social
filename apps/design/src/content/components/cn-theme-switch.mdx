@@ -1,0 +1,85 @@
+---
+title: CnThemeSwitch
+description: "Icon-only control that flips the document between the light and dark colour schemes and reports the change."
+order: 70
+runtime: interactive
+---
+
+import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+An activation writes `color-scheme` to the document root, so every `light-dark()` value
+on the page resolves against the new scheme, and browser chrome — scrollbars, native
+controls — follows with it. The control keeps no state: the root carries the theme, and
+`cn-theme-change` reports that it changed.
+
+The activation also expands a replica of the glyph out of the control, in primary's high
+step over Dark and its deep green over Light. The replica is anchored to the control
+rather than contained by it, so it grows past the button edge without moving anything.
+
+## When to use it
+
+- Mount it in application chrome, where a reader can reach it from any view.
+- Listen for `cn-theme-change`, read `document.documentElement.style.colorScheme`, and
+  persist the value if the application remembers a preference.
+- Mount it with a client directive. Without one the button renders and does nothing.
+
+The control does not resolve which theme a document opens with. An application that
+remembers a preference writes the root itself, before content paints; this control reads
+what is already there.
+
+## Example
+
+The switch below re-themes this page.
+
+<Composition caption="The control, mounted with a client directive">
+  <CnThemeSwitch client:load />
+</Composition>
+
+```mdx
+import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
+
+<CnThemeSwitch client:load label="Vaihda teema" />
+```
+
+## Composition
+
+The control is an icon-only text button and takes its circle, size and states from
+[Links, Actions and Buttons](/base/links-actions-buttons). A parent supplies its
+placement.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | Accessible name. Defaults to `"Switch theme"`. |
+
+### Tokens
+
+`CnThemeSwitch` declares no custom properties. Its geometry and colour come from the
+button presentation in [Links, Actions and Buttons](/base/links-actions-buttons), and its
+icon from [Icon](/components/icon).
+
+## Accessibility
+
+The button carries `label` as its accessible name and contains a decorative icon, so the
+name is the control's alone. It exposes no pressed state: the theme is visible in the
+document rather than in the control.
+
+## Not shown here
+
+**Both schemes side by side.** The two-panel specimen scopes `color-scheme` to each
+panel, and this control writes the document root, so an activation inside one panel would
+appear to do nothing. The single specimen above re-themes the whole page instead, which
+shows both schemes in turn.
+
+**The replica under reduced motion.** A reader who requests reduced motion gets no
+replica at all, which a page cannot show alongside the animated one — the query applies
+to the whole document, not to one specimen.
+
+**The system-preference fallback.** A document with no `color-scheme` on its root takes
+the first scheme preflight declares, and the control derives that from
+`prefers-color-scheme` — a query this page cannot emulate for one subtree. Verified by
+`apps/design/e2e/cn-theme-switch.spec.ts`.
