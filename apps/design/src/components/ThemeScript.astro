@@ -1,0 +1,35 @@
+---
+/**
+ * ThemeScript.astro — the design site's half of the theme contract.
+ *
+ * Applies the reader's selected mode to the document root before the page paints,
+ * and records the mode CnThemeSwitch lands in. Belongs in <head>: classic and
+ * inline, so it runs before the body renders, and before the switch hydrates.
+ *
+ * Spec: specs/design-system/design-site-theme/spec.md
+ */
+---
+
+<script is:inline>
+  (() => {
+    const KEY = 'cn-design-theme';
+    const root = document.documentElement;
+
+    try {
+      const stored = localStorage.getItem(KEY);
+      if (stored === 'light' || stored === 'dark') root.style.colorScheme = stored;
+    } catch {
+      // Storage denied. The root stays unforced, so the system preference paints.
+    }
+
+    // CnThemeSwitch writes the root and announces it; the mode is read from there.
+    addEventListener('cn-theme-change', () => {
+      try {
+        const mode = root.style.colorScheme;
+        if (mode === 'light' || mode === 'dark') localStorage.setItem(KEY, mode);
+      } catch {
+        // The document already changed. Only the memory of it is lost.
+      }
+    });
+  })();
+</script>

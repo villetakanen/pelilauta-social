@@ -41,8 +41,12 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
    the diff, to avoid committing extra state-changes for compliance.
 8. Large scale, or irreversible decisions require an additional ADR in
   `docs/adrs/`.
-9. After a spec is altered, run the spec-review -skill.
+9. Before presenting a draft, apply the template's sentence tests to your own text.
+  Delete what the code, another spec or a sibling sentence already carries.
+10. Before requesting approval for a new or changed spec, run the spec-review -skill.
 
 ## Prose
 
-Follow `docs/DESIGN.md`. A spec is direct, strict and technical.
+Follow `docs/DESIGN.md` Voice, read before drafting. A spec is direct, strict and
+technical. It carries no rationale: no "because" clause, no "X rather than Y" unless
+Y is a mistake the reader would make, and no sentence restating the one before it.

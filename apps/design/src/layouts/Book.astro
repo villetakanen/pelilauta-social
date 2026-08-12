@@ -11,6 +11,8 @@ import '@design-system/styles/ds.css';
 // and link rules no design-system stylesheet owns yet.
 import '@design-system/styles/docs.css';
 import DocsNav from '../components/DocsNav.astro';
+import ThemeScript from '../components/ThemeScript.astro';
+import ThemeSwitch from '../components/ThemeSwitch.astro';
 import { groupLabel, runtimeLabel } from '../lib/books';
 
 interface Props {
@@ -64,6 +66,7 @@ const context = group ? groupLabel(group) : 'Index';
     <meta name="color-scheme" content="dark light" />
     <meta name="description" content={description} />
     <title>{title} / Pelilauta Design System</title>
+    <ThemeScript />
   </head>
   <body>
     {poster && <CnPoster src={poster} />}
@@ -74,6 +77,7 @@ const context = group ? groupLabel(group) : 'Index';
       <header class="masthead">
         <a class="wordmark" href="/">Pelilauta DS</a>
         <span class="context">{context}</span>
+        <ThemeSwitch />
         <input
           class="nav-toggle"
           id="nav-toggle"
@@ -157,6 +161,11 @@ const context = group ? groupLabel(group) : 'Index';
         flex: none;
         color: inherit;
       }
+      /* Placement is the shell's concern; the switch styles its own contents. */
+      .masthead :global(.cn-theme-switch-scope) {
+        flex: none;
+      }
+
       .context {
         min-inline-size: 0;
         margin-inline-end: auto;
