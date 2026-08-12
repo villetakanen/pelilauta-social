@@ -8,7 +8,7 @@ import ProfileTool from './ProfileTool.svelte';
 import RemoveAccountSection from './RemoveAccountSection.svelte';
 </script>
 
-<div class="content-columns">
+<div class="content-prose">
   {#if $profile}
     <ProfileSection profile={$profile} />
     <ProfileTool />

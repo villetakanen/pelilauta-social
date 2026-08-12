@@ -54,7 +54,7 @@ async function onsubmit(e: Event) {
 }
 </script>
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-prose">
 
     <section>
     

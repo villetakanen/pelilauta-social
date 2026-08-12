@@ -6,18 +6,12 @@ import ModalPage from '../../layouts/ModalPage.astro';
 ---
 
 <ModalPage title="Debug: Session Purge">
-  <main>
-    <div class="content-columns">
-      <div class="column-l">
-        <h1>Session Purge</h1>
-        <p>Debug tool for clearing client-side state.</p>
-      </div>
+  <div class="content-prose">
+    <div>
+      <h1>Session Purge</h1>
+      <p>Debug tool for clearing client-side state.</p>
     </div>
 
-    <div class="content-columns">
-      <div class="column-l">
-        <SessionPurge client:only="svelte" />
-      </div>
-    </div>
-  </main>
+    <SessionPurge client:only="svelte" />
+  </div>
 </ModalPage>

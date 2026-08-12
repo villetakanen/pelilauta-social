@@ -92,6 +92,10 @@ establishes the inline-size containment boundary. Arbitrary content
 may occupy it, and Prose, Golden, and Triad containers may stack inside it. A
 `.breakout` outside a Prose flow root has no layout guarantee.
 
+An `astro-island` flow child delegates its flow box and query boundary to its one
+rendered element, as a region island does. A flow island that renders zero or multiple
+elements is invalid authoring and has no layout guarantee.
+
 A Prose container with zero or multiple flow roots, or a container placed in a host
 that narrows its content box below the host width, has no layout guarantee.
 

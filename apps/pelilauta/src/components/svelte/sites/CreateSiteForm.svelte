@@ -108,7 +108,7 @@ function setUsePlainTextURLs(e: Event) {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section class="column">
       <h1>{t('site:create.title')}</h1>
       <p class="downscaled">

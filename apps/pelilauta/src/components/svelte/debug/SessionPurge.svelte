@@ -144,8 +144,8 @@ async function purgeSession() {
       </div>
     </div>
   {:else}
-    <div class="content-columns">
-      <div class="column-l">
+    <div>
+      <div>
         <p class="text-high">Warning: This action is destructive.</p>
         <p>It will:</p>
         <ul class="list-disc pl-4">

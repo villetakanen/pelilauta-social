@@ -59,7 +59,7 @@ async function setSortOrder(e: Event) {
 </script>
 
 <WithAuth allow={localSite.owners.includes($uid)}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section>
       <h2>
         <Icon noun="tools" />

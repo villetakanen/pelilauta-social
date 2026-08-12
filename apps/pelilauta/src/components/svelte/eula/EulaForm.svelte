@@ -98,8 +98,8 @@ async function handleCancel(event: Event) {
 }
 </script>
 
-<div class="content-columns">
-  <div class="surface column-l">
+<div class="content-prose">
+  <div class="surface">
     <h1>{t('login:eula.title')}</h1>
     <form onsubmit={handleSubmit} class="surface radius-m p-4">
       <article class="prose">

@@ -23,12 +23,12 @@ const allow = $derived.by(() => {
 });
 </script>
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-prose">
     <SiteMetaForm site={$site}/>
     <SiteThemingSection site={$site}/>
     <SiteTocRegenSection site={$site}/>
   </div>
-  <div class="content-columns">
+  <div class="content-prose">
     <SiteDangerZoneSection site={$site}/>
   </div>
 </WithAuth>

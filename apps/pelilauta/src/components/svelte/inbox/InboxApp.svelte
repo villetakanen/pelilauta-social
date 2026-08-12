@@ -10,7 +10,7 @@ import NotificationItem from './NotificationItem.svelte';
  */
 </script>
 
-<div class="content-columns">
+<div class="content-prose">
   <WithAuth allow={!!$uid}>
     <section>
       <h1>{t('social:inbox.title')}</h1>

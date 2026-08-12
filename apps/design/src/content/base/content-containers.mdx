@@ -145,6 +145,10 @@ track. An `astro-island` counts as the single region it renders — including wh
 deferred island is still showing its fallback, which is why a deferred region renders
 one element in every one of its states.
 
+A prose flow child follows the same rule: an island is the one element it renders, so a
+hydrated component may sit directly in a prose container and still take the measure, and
+carry `breakout` and receive breakout layout.
+
 Each region reports its own track to the components inside it, and under `surface-area`
 as well where the region is a surface.
 

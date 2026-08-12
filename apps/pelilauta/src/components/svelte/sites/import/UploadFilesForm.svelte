@@ -172,7 +172,7 @@ function clearUploads() {
 const hasFiles = $derived(uploadedFiles.length > 0);
 </script>
 
-<section class="column-s surface p-2">
+<section class="surface p-2">
   <h2>Upload Markdown Files</h2>
   <p class="text-low">Select one or more .md files to import. Frontmatter will be parsed as page metadata.</p>
   

@@ -67,8 +67,14 @@
  * It is a grid so `row-gap` replaces the element margins the preflight removes, and
  * so that spacing survives an `astro-island`, which the preflight sets to
  * `display: contents`.
+ *
+ * The second selector reaches through that island: an element set to
+ * `display: contents` is not laid out, so a rule placing it moves nothing and the
+ * island's one rendered element is the flow item. Golden and Triad reach through the
+ * same way for their regions.
  */
-.content-prose > * {
+.content-prose > *,
+.content-prose > astro-island > * {
   grid-column: 2;
   container-type: inline-size;
 }
@@ -78,7 +84,8 @@
  * to the components inside it — it keeps the query boundary from the rule above. It stretches rather than fitting its content: an inline-size container is
  * sized independently of what it holds, so a fit-content breakout would measure zero.
  */
-.content-prose > .breakout {
+.content-prose > .breakout,
+.content-prose > astro-island > .breakout {
   grid-column: 1 / -1;
 }
 

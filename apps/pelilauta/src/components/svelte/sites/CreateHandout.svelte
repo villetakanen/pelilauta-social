@@ -47,7 +47,7 @@ async function handleSubmit(event: Event) {
   }
 }
 </script>
-<div class="content-columns">
+<div class="content-prose">
   <article>
     <h1>{t('site:handouts.create.title')}</h1>
     <form onsubmit={handleSubmit}>

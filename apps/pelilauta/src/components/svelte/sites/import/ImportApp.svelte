@@ -5,7 +5,7 @@ import UploadFilesForm from './UploadFilesForm.svelte';
 // The site store is now initialized by the SiteStoreInitializer component
 // on the page level. This component's children will react to the store.
 </script>
-<div class="content-columns">
+<div class="content-prose">
   <UploadFilesForm />
   <PreviewImport />
 </div>

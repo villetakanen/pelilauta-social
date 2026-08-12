@@ -27,7 +27,7 @@ async function handleSubmit(event: Event) {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-prose">
     <div>
       <h1 class="downscaled">{t('actions:confirm.delete')}</h1>
       <div class="border border-radius flex align-center p-1">

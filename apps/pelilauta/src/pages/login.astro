@@ -23,25 +23,22 @@ const showPasswordLoginFlag =
 const redirect = Astro.url.searchParams.get('redirect') || '/';
 ---
 <ModalPage title={t('login:title')}>
-  <main>
-    <div class="content-columns">
-      <div class="column-l">
-        <h1>{t('login:title')}</h1>
-        <p>{t('login:info')}</p>
-      </div>
+  <div class="content-prose">
+    <div>
+      <h1>{t('login:title')}</h1>
+      <p>{t('login:info')}</p>
     </div>
-    <div class="content-columns">
-      { showPasswordLoginFlag &&
-        <div>
-          <PasswordLoginSection client:only="svelte" redirect={redirect} />
-        </div>
-      }
+
+    { showPasswordLoginFlag &&
       <div>
-        <EmailLoginSection client:only="svelte" redirect={redirect} />
+        <PasswordLoginSection client:only="svelte" redirect={redirect} />
       </div>
-      <div>
-        <SyndicatedLoginSection client:only="svelte" redirect={redirect} />
-      </div>
+    }
+    <div>
+      <EmailLoginSection client:only="svelte" redirect={redirect} />
     </div>
-  </main>
+    <div>
+      <SyndicatedLoginSection client:only="svelte" redirect={redirect} />
+    </div>
+  </div>
 </ModalPage>

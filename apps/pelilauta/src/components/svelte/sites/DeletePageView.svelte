@@ -34,7 +34,7 @@ async function handleSubmit(event: SubmitEvent) {
 </script>
   
   {#if visible}
-    <div class="content-columns">
+    <div class="content-prose">
       <div>
         <h1 class="downscaled">{t('actions:confirm.delete')}</h1>
         <p>{t('site:deletePage.info', { name: page.name })}</p>
