@@ -154,8 +154,8 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 </script>
 
-<div class="content-columns">
-  <article class="column-l surface">
+<div class="content-prose">
+  <article class="surface">
     <div class="search-container">
       <div class="toolbar">
         <h1 class="text-h4 m-0 grow">{t("search:title")}</h1>
