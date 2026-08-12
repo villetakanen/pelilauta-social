@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 ---
 
 # Design Site Navigation
@@ -32,7 +32,8 @@ reached through a labelled disclosure that needs no JavaScript.
 
 **The shell.** One layout wraps every page: a skip link as the first focusable
 element, a masthead, the navigation, the book's content in a single main landmark,
-and a footer. The shell owns those landmarks and their styles.
+and a footer. The shell owns those landmarks and their styles. The masthead carries the
+theme switch, specified in `../design-site-theme/spec.md`.
 
 **A book.** One MDX entry in the content collection named for its group. Adding a
 book is that one file; routes and navigation derive from the collections and the
@@ -47,7 +48,7 @@ regenerable from a source belongs to a lexicon book.
 
 - Documentation-site navigation only. No reusable navigation or tray component is
   added to the design system, and `apps/pelilauta` does not consume this.
-- No search, no in-book table of contents, no theme switch.
+- No search and no in-book table of contents.
 - No new token families; the shell states explicit values where a token does not
   yet exist.
 - Does not define how the repository's verification gate is wired.
