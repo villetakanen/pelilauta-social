@@ -35,7 +35,7 @@ async function regenPageRefs() {
 }
 </script>
 {#if visible}
-  <section class="border p-2 border-radius mt-2">
+  <section class="border p-2 mt-2">
     <h2>{t('site:toc.regenerate.title')}</h2>
     <p>{t('site:toc.regenerate.info')}</p>
     <div class="flex justify-center">

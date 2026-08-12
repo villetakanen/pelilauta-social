@@ -123,7 +123,7 @@ async function onsubmit(e: Event) {
       <p class="info-text">{t("site:toc.admin.noCategories")}</p>
     {/if}
 
-    <div class="toolbar border border-radius">
+    <div class="toolbar border">
       <Icon noun="add" />
       <input
         class="grow"

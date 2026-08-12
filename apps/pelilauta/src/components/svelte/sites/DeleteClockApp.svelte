@@ -30,7 +30,7 @@ async function handleSubmit(event: Event) {
   <div class="content-prose">
     <div>
       <h1 class="downscaled">{t('actions:confirm.delete')}</h1>
-      <div class="border border-radius flex align-center p-1">
+      <div class="border flex align-center p-1">
         <cn-story-clock 
           view
           name={clock?.label} 

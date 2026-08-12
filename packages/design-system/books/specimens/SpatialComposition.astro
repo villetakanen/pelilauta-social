@@ -2,8 +2,8 @@
 /**
  * SpatialComposition — one Pelilauta preview using all three core measurements.
  *
- * The specimen validates every token and utility it claims to demonstrate,
- * then lets the live cascade determine the rendered measurements.
+ * The specimen validates every token it claims to demonstrate, then lets the
+ * live cascade determine the rendered measurements.
  *
  * Book: apps/design/src/content/principles/spatial-system.mdx
  */
@@ -12,11 +12,9 @@ import { parseTokens } from './tokenTable';
 interface Props {
   /** styles/units.css, imported by the book with `?raw`. */
   source: string;
-  /** styles/spatial.css, imported by the book with `?raw`. */
-  utilitySource: string;
 }
 
-const { source, utilitySource } = Astro.props;
+const { source } = Astro.props;
 const names = [
   '--cn-grid',
   '--cn-gap',
@@ -34,21 +32,11 @@ if (missing.length > 0) {
     `SpatialComposition asked for tokens the stylesheet does not declare: ${missing.join(', ')}.`,
   );
 }
-
-if (
-  !/\.border-radius\s*\{[^}]*border-radius:\s*var\(--cn-border-radius-large\)/s.test(
-    utilitySource,
-  )
-) {
-  throw new Error(
-    'SpatialComposition expects .border-radius to apply --cn-border-radius-large.',
-  );
-}
 ---
 
 <figure>
   <div class="stage">
-    <article class="preview surface elevation-1 border-radius">
+    <article class="preview surface elevation-1">
       <div class="identity">
         <span class="avatar" aria-hidden="true">P</span>
         <div>
@@ -101,6 +89,7 @@ if (
     gap: var(--cn-line);
     max-inline-size: 34rem;
     margin-inline: auto;
+    border-radius: var(--cn-border-radius-large);
   }
 
   .identity,

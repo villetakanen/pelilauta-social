@@ -36,9 +36,6 @@ Radii and elevation-shadow measurements derive from the grid. Surface defines
 which background and shadow form an elevation and how nested elevation behaves,
 as specified in `specs/design-system/surface/spec.md`.
 
-`.border-radius` applies `--cn-border-radius-large`. The unsuffixed utility name is
-retained from Cyan 4 and does not read the unsuffixed default-radius token.
-
 Icon sizes are independent `rem` values. They form the named exception to
 grid-derived component measurements. Breakpoint thresholds are also independent
 `rem` values because they describe query conditions rather than distances rendered
@@ -77,8 +74,8 @@ measurements according to its structure.
 ### Definition of Done
 
 - The Spatial System principles book demonstrates the three recurring
-  measurements, grouping, vertical rhythm, radius proportionality,
-  `.border-radius`, and `.surface` padding.
+  measurements, grouping, vertical rhythm, radius proportionality, and
+  `.surface` padding.
 - A source-driven lexicon publishes every unit and radius token.
 - Human review accepts the resulting rhythm and proportions at default and enlarged
   browser text sizes.
@@ -91,8 +88,6 @@ measurements according to its structure.
   pixels.
 - The token entry point supplies the grid dependency required by elevation-shadow
   declarations.
-- `.border-radius` remains in agreement with Cyan 4's large-radius utility while
-  legacy and local consumers coexist.
 
 ### Scenarios
 

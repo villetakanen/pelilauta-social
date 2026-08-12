@@ -123,7 +123,7 @@ async function purgeSession() {
 }
 </script>
 
-<section class="elevation-1 border-radius p-2">
+<section class="elevation-1 p-2">
   <h2>Session Purge</h2>
 
   {#if isComplete}

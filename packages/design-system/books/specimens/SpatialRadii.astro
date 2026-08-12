@@ -2,8 +2,7 @@
 /**
  * SpatialRadii — the radius family rendered from its shipped declarations.
  *
- * The specimen also verifies the unsuffixed default and the historical
- * `.border-radius` utility before describing either one.
+ * The specimen also verifies the unsuffixed default before describing it.
  *
  * Book: apps/design/src/content/principles/spatial-system.mdx
  */
@@ -12,11 +11,9 @@ import { parseTokens } from './tokenTable';
 interface Props {
   /** styles/units.css, imported by the book with `?raw`. */
   source: string;
-  /** styles/spatial.css, imported by the book with `?raw`. */
-  utilitySource: string;
 }
 
-const { source, utilitySource } = Astro.props;
+const { source } = Astro.props;
 const STEPS = [
   '--cn-border-radius-small',
   '--cn-border-radius-medium',
@@ -39,16 +36,6 @@ if (
 ) {
   throw new Error(
     'SpatialRadii expects --cn-border-radius to resolve to --cn-border-radius-medium.',
-  );
-}
-
-if (
-  !/\.border-radius\s*\{[^}]*border-radius:\s*var\(--cn-border-radius-large\)/s.test(
-    utilitySource,
-  )
-) {
-  throw new Error(
-    'SpatialRadii expects .border-radius to apply --cn-border-radius-large.',
   );
 }
 ---
@@ -74,10 +61,6 @@ if (
     <div>
       <dt><code>--cn-border-radius</code></dt>
       <dd>medium default</dd>
-    </div>
-    <div>
-      <dt><code>.border-radius</code></dt>
-      <dd>large utility</dd>
     </div>
   </dl>
   <figcaption class="text-label">

@@ -158,7 +158,7 @@ function setUsePlainTextURLs(e: Event) {
         ></cn-toggle-button>
 
         {#if options}
-        <div class="border border-radius p-1">
+        <div class="border p-1">
           <cn-toggle-button
             label={t('entries:site.hidden')}
             pressed={siteData.hidden}

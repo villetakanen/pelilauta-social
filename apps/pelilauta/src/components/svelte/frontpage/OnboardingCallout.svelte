@@ -5,7 +5,7 @@ import { uid } from '../../../stores/session';
 
 {#if !$uid}
   <aside
-    class="onboarding-callout surface elevation-4 border-radius"
+    class="onboarding-callout surface elevation-4"
     aria-labelledby="onboarding-title"
   >
     <div class="layout">
@@ -13,7 +13,7 @@ import { uid } from '../../../stores/session';
         <img
           src="/myrrys-proprietary/public-domain/talk-to-me-by-wootha-620px.webp"
           alt=""
-          class="border-radius"
+          class=""
         />
       </div>
       <div class="content">

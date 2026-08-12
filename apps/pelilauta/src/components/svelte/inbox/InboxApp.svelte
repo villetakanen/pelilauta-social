@@ -15,7 +15,7 @@ import NotificationItem from './NotificationItem.svelte';
     <section>
       <h1>{t('social:inbox.title')}</h1>
       <p>{t('social:inbox.description')}</p>
-      <div class="elevation-1 p-2 border-radius">
+      <div class="elevation-1 p-2">
         {#each $notifications as note}
           <NotificationItem notification={note} />
         {/each}
