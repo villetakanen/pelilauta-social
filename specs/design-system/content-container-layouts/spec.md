@@ -48,10 +48,16 @@ The mode classes are the public selection mechanism. A content container bears
 exactly one. The container answers its responsive composition against its nearest
 host.
 
-Each occupied region and Prose flow establishes the named `cn-content` inline-size
-query boundary for the components it contains. The boundary reports the area's usable
-content-box width rather than the width of the host or the complete content
-container.
+Each occupied region and Prose flow establishes an inline-size query boundary for the
+components it contains. The boundary reports the area's usable content-box width
+rather than the width of the host or the complete content container.
+
+The boundary is unnamed. A container query without a name resolves against the nearest
+ancestor container, so a component inside a region asks about the area holding it
+without naming anything, and a nearer boundary — a Surface between the component and
+the region — is the one that answers, which is the one constraining it. Content
+Container Layouts states no container name, and a component may not ask to skip a
+nearer boundary and reach its region.
 
 ### Constraints
 
@@ -82,9 +88,13 @@ Any number of direct flow children may carry `.breakout`. For each breakout, the
 nearest ancestor `.content-prose` determines its scope. The breakout receives
 breakout layout only when it is a direct child of that Prose container's sole flow
 root. It spans the width offered to that Prose container, after host padding, and
-establishes the named `cn-content` inline-size containment boundary. Arbitrary content
+establishes the inline-size containment boundary. Arbitrary content
 may occupy it, and Prose, Golden, and Triad containers may stack inside it. A
 `.breakout` outside a Prose flow root has no layout guarantee.
+
+An `astro-island` flow child delegates its flow box and query boundary to its one
+rendered element, as a region island does. A flow island that renders zero or multiple
+elements is invalid authoring and has no layout guarantee.
 
 A Prose container with zero or multiple flow roots, or a container placed in a host
 that narrows its content box below the host width, has no layout guarantee.
@@ -111,7 +121,7 @@ resolves at `58.5rem`. The Triad condition resolves at `59.5rem`.
 A valid Golden container has exactly two layout-region elements. A valid Triad
 container has exactly three. Direct `script`, `style`, and `template` children are
 excluded from that count. An `astro-island` child counts as one region and delegates
-the region box and `cn-content` boundary to its one rendered region element. Missing
+the region box and its query boundary to its one rendered region element. Missing
 or additional layout-region elements, including zero or multiple region elements from
 one island, are invalid authoring and have no layout guarantee.
 
@@ -136,9 +146,8 @@ Not owned here: auto-fill card grid listings, standalone canvas editors, button
 action row geometry, and legacy `.content-columns` migration.
 
 Surface continues to own a surface's inset, container type, and `surface-area` query
-boundary. When one occupied region or flow is also a Surface, Content Container Layouts
-composes `cn-content` and `surface-area` as that element's container names. Both names
-report the post-inset content-box width.
+boundary. An occupied region or flow that is also a Surface keeps that one boundary,
+under Surface's name, and it reports the post-inset content-box width.
 
 ## Contract
 
@@ -165,10 +174,10 @@ report the post-inset content-box width.
 - A browser fixture measures 67 Lato zero glyphs and verifies that `--cn-measure` is
   the smallest whole `--cn-grid` width that contains them (83 grid units / `41.5rem`)
   at 16px and 20px root reference sizes.
-- Query probes report Readable for capped ordinary Prose content, the host content-box
-  width for breakouts, and the assigned track width for every unpadded Golden and
-  Triad region. A Surface region reports the content-box width remaining after
-  Surface inset within its assigned track.
+- Unnamed query probes report Readable for capped ordinary Prose content, the host
+  content-box width for breakouts, and the assigned track width for every unpadded
+  Golden and Triad region. A Surface region answers under `surface-area` with the
+  content-box width remaining after Surface inset within its assigned track.
 - Playwright renders Golden and Triad regions of unequal content height in the wide
   composition. Each region box ends at its own content, and the container is as tall
   as the tallest region.
@@ -177,8 +186,9 @@ report the post-inset content-box width.
   width without requiring Content Container Layouts to contain descendant overflow.
 - In the wide Golden and Triad compositions, a Prose container nested in each fixed
   region fills that region without adding inset.
-- A content area bearing `surface` preserves working `cn-content` and `surface-area`
-  named query boundaries at the same time.
+- A content area bearing `surface` answers an unnamed query and a `surface-area` query
+  with the same post-inset width, and Content Container Layouts adds no second boundary
+  that would shadow it.
 - Playwright exercises Golden and Triad with direct `script`, `style`, and `template`
   siblings. A deferred `astro-island` fixture retains one region ordinal while it
   moves through fallback, empty, error, and resolved content states.
@@ -189,8 +199,8 @@ report the post-inset content-box width.
 
 - Each wide-mode condition equals the independently derived sum of its fixed grid
   units and gaps after any measure or spacing change.
-- `cn-content` remains on the individual region or prose flow item rather than the host;
-  queries within a region must not resolve against host width.
+- The query boundary remains on the individual region or prose flow item rather than on
+  the host; a query within a region must not resolve against host width.
 - Stacked Golden and Triad regions fill the host width and do not inherit `--cn-measure`.
 - Breakouts inside Golden and Triad regions remain contained within their track box.
 
@@ -289,13 +299,13 @@ Then each region occupies the track assigned by its ordinal among layout regions
 
 ```gherkin
 Given a component inside an occupied region, Prose flow, or breakout
-When it queries cn-content inline size
+When it queries inline size without naming a container
 Then the query resolves against that area's usable content-box width
 ```
 
 ```gherkin
 Given a content area that is also a Surface
-When a descendant queries cn-content and surface-area
+When a descendant queries inline size unnamed, and queries surface-area
 Then both queries resolve against that area's post-inset content-box width
 ```
 

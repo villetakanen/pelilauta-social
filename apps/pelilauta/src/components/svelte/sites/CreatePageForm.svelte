@@ -89,7 +89,7 @@ function cancel() {
 }
 </script>
 
-<div class="content-columns">
+<div class="content-prose">
   <MembersOnly {site}>
     <section>
       <h2>{t('site:create.page.title')}</h2>

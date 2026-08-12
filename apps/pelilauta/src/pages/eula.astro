@@ -11,9 +11,7 @@ const { Content } = await render(eulaDoc);
 ---
 
 <ModalPage title="End-User License Agreement">
-  <div class="p-4">
-    <EulaForm client:only="svelte">
-      <Content />
-    </EulaForm>
-  </div>
+  <EulaForm client:only="svelte">
+    <Content />
+  </EulaForm>
 </ModalPage>

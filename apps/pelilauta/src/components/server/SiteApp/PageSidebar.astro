@@ -36,7 +36,7 @@ if (site.useSidebar && site.sidebarKey) {
 }
 ---
 {site.useSidebar && (
-<article class={`column-s ${withPosterCSS}`}>
+<article class={withPosterCSS}>
   <h3 class="downscaled">{site.name}</h3>
   {site.posterURL && (
     <img src={site.posterURL} alt={site.name} class="poster" />

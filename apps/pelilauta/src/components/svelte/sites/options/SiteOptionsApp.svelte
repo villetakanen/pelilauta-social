@@ -29,7 +29,7 @@ async function setSidebarKey(key: string) {
 }
 </script>
 
-<div class="content-columns">
+<div class="content-prose">
   <article>
     <h2>{t('site:options.title')}</h2>
 

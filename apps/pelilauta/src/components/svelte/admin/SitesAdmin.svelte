@@ -44,7 +44,7 @@ function getLatesPageRef(site: Site) {
 </script>
 
 <WithAuth allow={visible}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section>
       <h1>SITES</h1>
       <p>

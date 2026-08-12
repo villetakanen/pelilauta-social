@@ -49,6 +49,12 @@ class when its capability migrates; retain it on component hooks.
 
 And known deviations.
 
+### Thread images
+
+v1 through v18 wrote thread pictures several ways and never migrated them. v21 sets the
+canon: `thread.poster` is the primary image, `thread.images` the gallery, reconciled on
+read in `parseThread`.
+
 ### Character sub-app deprecation
 
 v21 removes the character library, the character view, editor and deletion flow, the

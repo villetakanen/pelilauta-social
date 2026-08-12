@@ -55,7 +55,12 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Open
 
-- **Harness enablers** — document DS container prefix & fix bare tray, wire design e2e to verify, extend token collision test, and widen test gate skill.
+- ~~**Harness enablers**~~ — out of this epic, all four. The design e2e suite in
+  `verify` is deferred indefinitely during beta
+  (`plans/debt/browser-tests-run-locally-only.md`). The token parity check, the test
+  gate skill and what remains of the container-name question belong to whatever epic
+  next touches the token layers (`plans/debt/token-parity-covers-units-only.md`). The
+  bare tray leaves with the v20 tray import.
 - **Content Container Layouts capability contract** — write and approve
   `specs/design-system/content-container-layouts/spec.md` for the Prose, Golden, and Triad
   stackable container modes.

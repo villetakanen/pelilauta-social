@@ -164,7 +164,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
 </script>
 
 {#if hasPages}
-<section class="column-l surface p-2">
+<section class="surface p-2">
   <h2>Import Preview</h2>
   <p class="text-low">Review the files to be imported. Pages with matching names will automatically overwrite existing content. Remove any files you don't want to import.</p>
   

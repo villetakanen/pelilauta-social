@@ -30,7 +30,7 @@ const { title, shortTitle, description, image } = Astro.props;
       <slot name="app-bar" />
     </AppBar>
     <AppRail hideOnMobile />
-    <main>
+    <main class="app-main">
       <slot />
     </main>
     {

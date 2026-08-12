@@ -17,14 +17,14 @@ if (!assetData) {
 
 const asset = parseAsset(assetData);
 ---
-<div class="content-columns">
-  <article class="column-l elevation-1 p-2">
+<div class="content-golden">
+  <article class="elevation-1 p-2">
     <figure>
         <img src={asset.url} alt={asset.name} />
         <figcaption>{asset.name}</figcaption>
     </figure>
   </article>
-  <article class="column-s">
+  <article>
     <AssetEditorComp {site} {asset} client:only="svelte" />
   </article>
 </div>

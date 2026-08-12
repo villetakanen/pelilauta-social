@@ -90,7 +90,7 @@ async function loginWithPassword(e: SubmitEvent) {
 }
 </script>
 
-<section class="elevation-1 border-radius p-2 debug">
+<section class="elevation-1 p-2 debug">
   <h2>Test user login form</h2>
   <p>
     This feature is not usable at the production, as the password login option

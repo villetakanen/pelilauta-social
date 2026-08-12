@@ -108,7 +108,7 @@ function setUsePlainTextURLs(e: Event) {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section class="column">
       <h1>{t('site:create.title')}</h1>
       <p class="downscaled">
@@ -158,7 +158,7 @@ function setUsePlainTextURLs(e: Event) {
         ></cn-toggle-button>
 
         {#if options}
-        <div class="border border-radius p-1">
+        <div class="border p-1">
           <cn-toggle-button
             label={t('entries:site.hidden')}
             pressed={siteData.hidden}

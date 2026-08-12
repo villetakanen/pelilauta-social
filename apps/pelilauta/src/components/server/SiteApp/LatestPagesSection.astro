@@ -9,7 +9,7 @@ const { site } = Astro.props as Props;
 const withPosterCSS = site.posterURL ? 'surface p-2' : 'p-1';
 ---
 {site.useRecentChanges && (
-<section class={`column-s ${withPosterCSS}`}>
+<section class={withPosterCSS}>
   <LatestChanges site={site} />
 </section>
 )}

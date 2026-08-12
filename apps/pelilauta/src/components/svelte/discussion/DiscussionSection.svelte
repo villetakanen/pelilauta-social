@@ -90,27 +90,25 @@ onMount(async () => {
 });
 </script>
 
-<div class="content-columns">
-  <section class="column-l">
-    <div class="flex flex-col">
-      {#each discussion as reply}
-        <ReplyArticle {reply} />
-      {/each}
-    </div>
+<section class="content-prose">
+  <div class="flex flex-col">
+    {#each discussion as reply}
+      <ReplyArticle {reply} />
+    {/each}
+  </div>
 
-    {#if isLoading}
-      <div class="toolbar items-center">
-        <CnLoader inline />
-      </div>
-    {:else if isAuthenticated}
-      <ReplyDialog {thread} />
-    {:else}
-      <div class="toolbar items-center">
-        <a href="/login" class="button">
-          <Icon noun="send" />
-          <span>{t("actions:login")}</span>
-        </a>
-      </div>
-    {/if}
-  </section>
-</div>
+  {#if isLoading}
+    <div class="toolbar items-center">
+      <CnLoader inline />
+    </div>
+  {:else if isAuthenticated}
+    <ReplyDialog {thread} />
+  {:else}
+    <div class="toolbar items-center">
+      <a href="/login" class="button">
+        <Icon noun="send" />
+        <span>{t("actions:login")}</span>
+      </a>
+    </div>
+  {/if}
+</section>

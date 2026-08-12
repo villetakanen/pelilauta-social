@@ -19,7 +19,7 @@ $site = initialSite;
 </script>
 
 <WithAuth allow={$site?.owners.includes($uid)}>
-  <div class="content-columns">
+  <div class="content-prose">
     <SiteOwnersTool />
     <SitePlayersTool />
   </div>

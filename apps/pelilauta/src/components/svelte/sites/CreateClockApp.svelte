@@ -48,8 +48,8 @@ const clock = $state(
 );
 </script>
 
-<div class="content-columns">
-  <section class="border border-radius p-2 column-s">
+<div class="content-prose">
+  <section class="border p-2">
     <h4>{t('site:clocks.create.preview')}</h4>
     <div class="flex align-center flex-no-wrap">
       <cn-story-clock name={clock.label} value="0">

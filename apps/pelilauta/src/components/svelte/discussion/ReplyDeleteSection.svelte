@@ -33,7 +33,7 @@ async function onsubmit(e: Event) {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section>
       <h1 class="downscaled">{t('threads:confirmDelete.title')}</h1>
       <p>{t('threads:discussion.confirmDelete.message')}</p>

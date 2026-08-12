@@ -85,7 +85,7 @@ async function deRegister(e: SubmitEvent) {
     </button>
   
     {#if showVerify}
-      <form onsubmit={deRegister} class="elevation-2 p-2 mt-1 border-radius">
+      <form onsubmit={deRegister} class="elevation-2 p-2 mt-1">
         <div class="form-field">
           <label for="deregister-confirm">
             {t('settings:profile.dangerZone.confirm')}

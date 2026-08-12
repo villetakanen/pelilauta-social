@@ -23,7 +23,5 @@ const site = SiteSchema.parse({
 ---
 
 <ModalPage title={t("site:members.title")}>
-  <div class="content-columns">
-    <SiteMembersApp site={site} client:only="svelte" />
-  </div>
+  <SiteMembersApp site={site} client:only="svelte" />
 </ModalPage>

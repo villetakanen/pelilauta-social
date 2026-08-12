@@ -4,5 +4,7 @@ import ModalPage from '@layouts/ModalPage.astro';
 ---
 
 <ModalPage title="Create Your Profile">
-  <CreateProfileForm client:only="svelte" />
+  <div class="content-prose">
+    <CreateProfileForm client:only="svelte" />
+  </div>
 </ModalPage>

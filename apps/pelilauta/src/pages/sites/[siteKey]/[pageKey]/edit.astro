@@ -1,4 +1,6 @@
 ---
+import { verifySession } from '@utils/server/auth/verifySession';
+import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { PageSchema } from 'src/schemas/PageSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
@@ -16,7 +18,14 @@ const { siteKey, pageKey } = Astro.params;
 // the siteKey or pageKey, we should redirect to a 404 page
 if (!siteKey || !pageKey) {
   logError('siteKey or pageKey not found', { siteKey, pageKey });
-  Astro.redirect('/404');
+  return Astro.redirect('/404');
+}
+
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
 }
 
 // Fetch the site and page data from the api
@@ -32,7 +41,16 @@ if (!siteResponse.ok || !pageResponse.ok) {
   } else {
     logError('page not found', { siteKey, pageKey });
   }
-  Astro.redirect('/404');
+  return Astro.redirect('/404');
+}
+
+/*
+ * A page is edited by a site member, owner or player: the same rule PageFabs uses
+ * to offer the edit action, and the one `sites/[siteKey]/settings.astro` gates on.
+ */
+const { isMember } = await verifySiteAccess(siteKey, session.uid);
+if (!isMember) {
+  return Astro.redirect(`/sites/${siteKey}/${pageKey}`);
 }
 // Any client side conversions are already done in the API,
 // so we can just parse the the entities to typed objects

@@ -66,7 +66,7 @@ $effect(() => {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-columns">
+  <div class="content-golden">
     {#if diff }
       <PageHistoryArticle {page} {diff} {revision}/>
       <PageHistoryIndex {page} {diff} {revision}/>

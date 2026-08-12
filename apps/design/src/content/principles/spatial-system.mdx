@@ -8,7 +8,6 @@ import SpatialComparison from '@design-system/books/specimens/SpatialComparison.
 import SpatialComposition from '@design-system/books/specimens/SpatialComposition.astro'
 import SpatialMeasurements from '@design-system/books/specimens/SpatialMeasurements.astro'
 import SpatialRadii from '@design-system/books/specimens/SpatialRadii.astro'
-import spatialSource from '@design-system/styles/spatial.css?raw'
 import unitsSource from '@design-system/styles/units.css?raw'
 
 Our spatial system is built on an 8px (`0.5rem`) base grid unit. It governs recurring
@@ -36,7 +35,7 @@ For complete token declarations, see [Units and grid](/tokens/units).
 
 Common uses, not a mapping from content relationship to measurement.
 
-<SpatialComposition source={unitsSource} utilitySource={spatialSource} />
+<SpatialComposition source={unitsSource} />
 
 ## Grouping and proximity
 
@@ -82,7 +81,7 @@ Corner radii scale in grid multiples: half-grid (`4px`), 1-grid (`8px`), 2-grid 
 and 4-grid (`32px`). Rounded containers maintain at least one grid unit of interior padding
 to prevent content from clipping curved corners.
 
-<SpatialRadii source={unitsSource} utilitySource={spatialSource} />
+<SpatialRadii source={unitsSource} />
 
 Elevation shadow offsets and blur radii are derived directly from `--cn-grid`. Elevation
 tiers, theme contrast mappings, and nested surface behaviours are defined in

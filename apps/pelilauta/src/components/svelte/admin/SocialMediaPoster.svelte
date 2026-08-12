@@ -27,7 +27,7 @@ async function onsubmit(event: Event) {
 </script>
 
 <WithAuth allow={visible}>
-  <div class="content-columns">
+  <div class="content-prose">
     <section>
       <h2>New message</h2>
       <p class="downscaled">This form sends a social media post to supported syndicate accounts (Bluesky for now) as "Pelilauta.social"</p>

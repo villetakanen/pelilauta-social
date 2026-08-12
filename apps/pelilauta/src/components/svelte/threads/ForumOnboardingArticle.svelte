@@ -3,7 +3,7 @@ import { t } from 'src/utils/i18n';
 import { anonymous } from '../../../stores/session';
 </script>
 {#if $anonymous}
-  <article class="mb-2 surface secondary">
+  <article class="surface elevation-4">
     <h3 class="m-0 downscaled header-4 elevation-1 p-1">
       {t('threads:onboarding.title')}
     </h3>

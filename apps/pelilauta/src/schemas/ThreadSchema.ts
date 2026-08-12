@@ -68,10 +68,26 @@ export function parseThread(
     data.author = data.owners[0];
   }
 
+  /*
+   * The two picture fields arrived eight versions apart, so a thread has whichever
+   * existed when it was written: `poster` alone, `images` alone, or both. Each is
+   * filled from the other so that a consumer reads the one it wants.
+   */
+  const storedPoster = (data.poster as string | undefined) || undefined;
+  const firstImageUrl = Array.isArray(images)
+    ? (images[0] as { url?: string } | undefined)?.url
+    : undefined;
+
+  const poster = storedPoster || firstImageUrl;
+  if (!firstImageUrl && storedPoster) {
+    images = [{ url: storedPoster, alt: (data.title as string) || '' }];
+  }
+
   try {
     return ThreadSchema.parse({
       ...data,
       images,
+      poster,
       title: data.title || '',
       channel: data.channel || data.topic || '',
       createdAt: toDate(data.createdAt),

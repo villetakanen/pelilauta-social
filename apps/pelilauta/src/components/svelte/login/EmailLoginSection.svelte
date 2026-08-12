@@ -268,7 +268,7 @@ onMount(async () => {
 });
 </script>
 
-<section class="elevation-1 border-radius p-2" style="position: relative">
+<section class="elevation-1 p-2" style="position: relative">
   <h2>{t("login:withEmail.title")}</h2>
 
   {#if view === "sent"}

@@ -42,11 +42,13 @@ offers less.
 
 ## Container query context
 
-Each item in the flow establishes the `cn-content` container query context, so a
-component asks about the column it sits in rather than the window.
+Each item in the flow is an inline-size container, so a component asks about the column
+it sits in rather than the window. The container is unnamed: an unnamed query resolves
+against the nearest one, which is the area holding the component. Where a card sits
+between the two, the card answers, and the card is what constrains the component.
 
 ```css
-@container cn-content (max-width: 30rem) { … }
+@container (max-width: 30rem) { … }
 ```
 
 ## Breaking out of the measure
@@ -143,8 +145,12 @@ track. An `astro-island` counts as the single region it renders — including wh
 deferred island is still showing its fallback, which is why a deferred region renders
 one element in every one of its states.
 
-Each region reports its own track to the components inside it, under `cn-content`, and
-under `surface-area` as well where the region is a surface.
+A prose flow child follows the same rule: an island is the one element it renders, so a
+hydrated component may sit directly in a prose container and still take the measure, and
+carry `breakout` and receive breakout layout.
+
+Each region reports its own track to the components inside it, and under `surface-area`
+as well where the region is a surface.
 
 A region is as tall as its own content, and the row is as tall as its tallest region.
 A short region that paints — a surface, a bordered aside — therefore ends where its

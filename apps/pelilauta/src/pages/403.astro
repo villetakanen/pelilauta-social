@@ -4,25 +4,23 @@ import Page from '../layouts/Page.astro';
 ---
 
 <Page title="Access Forbidden" noSharing>
-  <main class="content-columns">
-    <section class="column-l">
-      <div class="flex flex-col items-center p-4">
-        <Icon noun="admin" size="large" />
-        <h1>Access Forbidden</h1>
-        <p class="text-center text-low pb-4">
-          You don't have the necessary permissions to access this resource.
-        </p>
-        <div class="toolbar">
-          <a href="/" >
-            <Icon noun="arrow-left" size="small" />
-            Back to Home
-          </a>
-          <a href="/profile" >
-            <Icon noun="avatar" size="small" />
-            My Profile
-          </a>
-        </div>
+  <section class="content-prose">
+    <div class="flex flex-col items-center p-4">
+      <Icon noun="admin" size="large" />
+      <h1>Access Forbidden</h1>
+      <p class="text-center text-low pb-4">
+        You don't have the necessary permissions to access this resource.
+      </p>
+      <div class="toolbar">
+        <a href="/" >
+          <Icon noun="arrow-left" size="small" />
+          Back to Home
+        </a>
+        <a href="/profile" >
+          <Icon noun="avatar" size="small" />
+          My Profile
+        </a>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 </Page>

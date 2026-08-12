@@ -12,14 +12,14 @@ const { site: initialSite }: Props = $props();
 $site = initialSite;
 </script>
 
-<div class="content-columns">
+<div class="content-prose">
   <MembersOnly site={$site}>
-    <section class="column-s">
+    <section>
       <h1>{t('site:data.title')}</h1>
       <p class="downscaled text-low">{t('site:data.description')}</p>
     </section>
     <ExportAsMdSection />
-    <section class="column-s">
+    <section>
       <a href="/sites/{$site.key}/import" class="button">
       {t('site:import.title')} 
       </a>

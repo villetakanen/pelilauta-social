@@ -12,16 +12,16 @@ import HandoutList from './HandoutList.svelte';
 const currentSite = $derived.by(() => $site);
 </script>
 
-<div class="content-columns">
+<div class="content-prose">
   {#if currentSite}
-    <article class="column-l surface">
+    <article class="surface">
       <h2>{t('site:handouts.title')}</h2>
       <p class="text-light">{t('site:handouts.description')}</p>
 
       <HandoutList />
     </article>
   {:else}
-    <div class="column-l p-4">
+    <div class="p-4">
       <p class="text-light">{t('common:loading')}</p>
     </div>
   {/if}

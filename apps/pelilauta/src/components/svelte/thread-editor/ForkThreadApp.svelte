@@ -113,7 +113,7 @@ function handleChange() {
 
   <div class="mb-2">
     <p>{t('threads:fork.quoted')}</p>
-    <div class="elevation-1 border-radius p-1 clip-after-3 secondary">
+    <div class="surface elevation-2 clip-after-3">
       <p class="m-0">
         <ProfileLink uid={reply.owners[0]} />
       </p>

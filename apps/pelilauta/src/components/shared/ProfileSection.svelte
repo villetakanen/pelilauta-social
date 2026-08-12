@@ -10,7 +10,7 @@ const { profile }: Props = $props();
 </script>
 
 <article
-  class="column-s flex"
+  class="flex"
   style="flex-direction: column; align-items: center;"
 >
   <CnAvatar src={profile.avatarURL} nick={profile.nick} size="large" aria-hidden />

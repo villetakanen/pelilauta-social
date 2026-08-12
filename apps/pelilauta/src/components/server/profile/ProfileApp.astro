@@ -18,10 +18,10 @@ interface Props {
 }
 const { profile } = Astro.props;
 ---
-<div class="content-columns">
+<div class="content-triad">
   <ProfileArticle profile={profile} />
+  <ProfileThreads uid={profile.key} />
   <ProfileSiteList uid={profile.key} server:defer>
     <ProfileSiteListPlaceholder slot="fallback" />
   </ProfileSiteList>
-  <ProfileThreads uid={profile.key}/>
 </div>

@@ -120,7 +120,7 @@ function handleNickChange(newNick: string, exists: boolean) {
     {@render children?.()}
   </section>
   <form onsubmit={handleSubmit}>
-    <section class="elevation-3 border-radius p-2 mt-2">
+    <section class="elevation-3 p-2 mt-2">
     {#if $profile?.nick}
       <!-- LEGACY PROFILE UPGRADE -->
       <h3 class="downscaled mt-0">

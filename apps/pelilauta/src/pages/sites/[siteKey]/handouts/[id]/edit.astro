@@ -1,4 +1,6 @@
 ---
+import { verifySession } from '@utils/server/auth/verifySession';
+import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { handoutFrom } from 'src/schemas/HandoutSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
@@ -12,6 +14,13 @@ interface Props {
 const { siteKey, id } = Astro.params;
 const { origin } = new URL(Astro.request.url);
 
+const session = await verifySession(Astro);
+if (!session?.uid) {
+  return Astro.redirect(
+    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
+  );
+}
+
 // Fetch site data from the api
 const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
 if (siteResponse.status === 404) {
@@ -21,6 +30,12 @@ const site = SiteSchema.parse({
   ...toClientEntry(await siteResponse.json()),
   key: siteKey,
 });
+
+// A handout is edited by a site owner, the rule HandoutEditor carried itself.
+const { isOwner } = await verifySiteAccess(site, session.uid);
+if (!isOwner) {
+  return Astro.redirect(`/sites/${siteKey}/handouts/${id}`);
+}
 
 // Fetch handout data from the api
 const handoutResponse = await fetch(

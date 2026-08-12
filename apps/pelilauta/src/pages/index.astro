@@ -19,23 +19,17 @@ const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikk
   {title}
   {description}
   {image}>
-    <div class="content-columns">
-      
-      <section class="column-m">
-        <TopThreadsStream/>
+    <div class="content-triad">
+      <TopThreadsStream />
+
+      <SyndicateStream server:defer>
+        <DeferredSection slot="fallback" />
+      </SyndicateStream>
+
+      <section>
+        <TopSitesStream />
         <FeaturedTags />
       </section>
-
-      
-      
-      
-      <SyndicateStream server:defer>
-        <DeferredSection class="column-s" slot="fallback" />
-      </SyndicateStream>
-      <section class="column-s">
-        <TopSitesStream />
-      </section>
-
     </div>
     <FrontpageFabs client:only="svelte" slot="fab-tray"/>
     <CnPoster

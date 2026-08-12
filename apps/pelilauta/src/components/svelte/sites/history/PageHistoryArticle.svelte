@@ -107,7 +107,7 @@ $effect(() => {
 });
 </script>
 
-<section class="column-l">
+<section>
   <header class="surface mb-1 p-2">
     <span>{t('site:page.history.revision', { index: revision })}</span>
     {#if revisionDetails}

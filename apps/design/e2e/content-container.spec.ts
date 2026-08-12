@@ -88,7 +88,7 @@ test('the content width does not jump across the threshold', async ({
   expect(measure - below).toBeLessThan(2 * gap + 40);
 });
 
-test('a query against cn-content resolves against the column, not the page', async ({
+test('an unnamed query resolves against the column, not the page', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -100,8 +100,8 @@ test('a query against cn-content resolves against the column, not the page', asy
   await page.addStyleTag({
     content: `
       #probe-narrow, #probe-wide { color: rgb(1, 1, 1); }
-      @container cn-content (min-width: 40rem) { #probe-narrow { color: rgb(0, 255, 0); } }
-      @container cn-content (min-width: 50rem) { #probe-wide { color: rgb(0, 255, 0); } }
+      @container (min-width: 40rem) { #probe-narrow { color: rgb(0, 255, 0); } }
+      @container (min-width: 50rem) { #probe-wide { color: rgb(0, 255, 0); } }
     `,
   });
   await page.evaluate(() => {
@@ -405,20 +405,21 @@ for (const { name, mode, tracks, threshold } of MODES) {
     expect(wrapped.y).toBeCloseTo(regions[0].y, 0);
   });
 
-  test(`${name}: a region reports its own track, under both container names`, async ({
+  test(`${name}: a region reports its own track, named and unnamed`, async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1600, height: 900 });
     await page.goto(BOOK);
 
-    // Each region is also a surface, so it answers to cn-content and surface-area
-    // at once. Both report the track after the surface inset, never the host.
+    // Each region is also a surface, so Surface's name is the one it carries. An
+    // unnamed query finds that same nearest boundary. Both report the track after
+    // the surface inset, never the host.
     await page.addStyleTag({
       content: `
         #probe-content, #probe-area, #probe-host { color: rgb(1, 1, 1); }
-        @container cn-content (max-width: 16rem) { #probe-content { color: rgb(0, 255, 0); } }
+        @container (max-width: 16rem) { #probe-content { color: rgb(0, 255, 0); } }
         @container surface-area (max-width: 16rem) { #probe-area { color: rgb(0, 255, 0); } }
-        @container cn-content (min-width: 40rem) { #probe-host { color: rgb(0, 255, 0); } }
+        @container (min-width: 40rem) { #probe-host { color: rgb(0, 255, 0); } }
       `,
     });
     await build(page, await steps(page, threshold));

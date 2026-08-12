@@ -17,10 +17,13 @@ on things that are not system-layer content:
 - `svelte/characters/library/CharacterLibraryApp.svelte:26` — a listing section
 - `svelte/keepers/CharacterKeeperApp.svelte:111,125,134` — three panels
 - `server/app/EntryTagsWithLabelsSection.astro:24` — `cn-chip.secondary`, a chip
-- `svelte/threads/ForumOnboardingArticle.svelte:6` and
-  `pages/sites/[siteKey]/characters.astro:93` — both combine `.surface .secondary`,
-  where `surface.css` wins the background by load order and only the foreground
-  changes
+- ~~`svelte/threads/ForumOnboardingArticle.svelte:6`~~ — retired 2026-08-12 to
+  `.surface .elevation-4`, the level the compat mapping already painted it, so the
+  callout keeps its appearance without the class. `svelte/thread-editor/ForkThreadApp`
+  went the same way, to `.elevation-2`.
+- `pages/sites/[siteKey]/characters.astro:93` — combines `.surface .secondary`, where
+  `surface.css` wins the background by load order and only the foreground changes.
+  Leaves with the characters sub-app (ADR 0003)
 
 Nothing here is broken: the paired foreground keeps every one of them legible in
 both themes. But each is a surface whose level was chosen by v18's vocabulary

@@ -123,7 +123,7 @@ async function purgeSession() {
 }
 </script>
 
-<section class="elevation-1 border-radius p-2">
+<section class="elevation-1 p-2">
   <h2>Session Purge</h2>
 
   {#if isComplete}
@@ -144,8 +144,8 @@ async function purgeSession() {
       </div>
     </div>
   {:else}
-    <div class="content-columns">
-      <div class="column-l">
+    <div>
+      <div>
         <p class="text-high">Warning: This action is destructive.</p>
         <p>It will:</p>
         <ul class="list-disc pl-4">

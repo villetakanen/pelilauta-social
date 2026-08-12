@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { authenticateProgrammatic } from './authenticate-programmatic';
-import { existingUser } from './test-users';
+import { authenticate } from './authenticate-e2e';
 
 // Use environment variable for base URL or default to localhost
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
@@ -9,8 +8,7 @@ test.describe('Inbox E2E Tests', () => {
   test.setTimeout(60000);
 
   test('Inbox page loads and displays notifications', async ({ page }) => {
-    // Authenticate programmatically
-    await authenticateProgrammatic(page, existingUser);
+    await authenticate(page);
 
     // Navigate to inbox
     await page.goto(`${BASE_URL}/inbox`);
@@ -30,8 +28,7 @@ test.describe('Inbox E2E Tests', () => {
   });
 
   test('PBI-066: Inbox shows relative timestamps', async ({ page }) => {
-    // Authenticate programmatically
-    await authenticateProgrammatic(page, existingUser);
+    await authenticate(page);
 
     // Navigate to inbox
     await page.goto(`${BASE_URL}/inbox`);
