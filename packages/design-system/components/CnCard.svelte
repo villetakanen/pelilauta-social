@@ -5,8 +5,6 @@
  * The article remains passive when `href` is present: only the title and the
  * decorative cover link to the destination, leaving supplied controls independent.
  * CnCard composes the shared elevation utilities and defines no background or shadow.
- *
- * Spec: specs/design-system/components/cn-card/spec.md
  */
 import type { Snippet } from 'svelte';
 import { COVER_PLACEHOLDER_URI } from './cover-placeholder';

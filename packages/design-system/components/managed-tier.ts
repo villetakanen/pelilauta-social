@@ -22,9 +22,7 @@ type GetIcon = (noun: string) => IconEntry | undefined;
 type GetNouns = () => string[];
 
 let getManagedIcon: GetIcon = () => undefined;
-// Enumerating the managed tier lets the design-system book list every managed
-// icon when the submodule is present (iconography spec). It degrades to an
-// empty list when the tier is unavailable, exactly like getManagedIcon.
+// Enumerating the managed tier lets the design-system book list every managed icon when the submodule is present.
 let getManagedNouns: GetNouns = () => [];
 
 try {

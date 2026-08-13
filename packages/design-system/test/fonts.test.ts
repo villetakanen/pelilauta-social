@@ -11,8 +11,6 @@
  * So each check holds two artefacts against each other — the stylesheet against the
  * typography spec, against the installed packages, against the served notices — rather
  * than reading the stylesheet and asserting its own contents.
- *
- * Spec: specs/design-system/fonts/spec.md
  */
 
 import { readFileSync } from 'node:fs';
@@ -42,7 +40,7 @@ type Declared = {
   range: string;
 };
 
-/** Every @font-face rule in the stylesheet, as the properties this spec constrains. */
+/** Every @font-face rule in the stylesheet, as the properties a face declares. */
 function declaredFaces(source: string): Declared[] {
   return [...source.matchAll(/@font-face\s*\{([^}]*)\}/g)].map(([, body]) => {
     const value = (property: string) =>

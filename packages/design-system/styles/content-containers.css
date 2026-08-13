@@ -9,8 +9,6 @@
  * The host offers its full content-box width. A container that wants the readable
  * measure asks for it with `content-prose`; a container that wants the whole width
  * simply takes it.
- *
- * Spec: specs/design-system/content-container-layouts/spec.md
  */
 
 .app-main {

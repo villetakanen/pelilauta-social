@@ -1,8 +1,6 @@
 <script lang="ts">
 /**
  * CnThemeSwitch — flips the document's colour scheme between light and dark.
- *
- * Spec: specs/design-system/components/cn-theme-switch/spec.md
  */
 import Icon from './Icon.svelte';
 

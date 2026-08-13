@@ -5,8 +5,6 @@
  * `optgroup` or a WebKit search pseudo-element is inside it — so the literal
  * selector list lives here. A rule added to the stylesheet fails this test until
  * the spec has been changed and the list follows it.
- *
- * Spec: specs/design-system/preflight/spec.md
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

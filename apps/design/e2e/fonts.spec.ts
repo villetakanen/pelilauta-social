@@ -12,8 +12,6 @@ import { expect, test } from '@playwright/test';
  * rendered, which an installed copy of the family satisfies, so it passes with
  * every face blocked. The FontFaceSet's own entries are the CSS-declared faces, and
  * loading each one is what proves the file behind it exists.
- *
- * Spec: specs/design-system/fonts/spec.md
  */
 
 const BOOK = '/base/fonts';

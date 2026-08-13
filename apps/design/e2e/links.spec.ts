@@ -16,8 +16,6 @@ import { expect, type Page, test } from '@playwright/test';
  * `:visited` is absent by construction: browsers report the unvisited style to
  * getComputedStyle, which is the same privacy guarantee the rule exists to keep.
  * A stylesheet check covers it — see packages/design-system/test/links.test.ts.
- *
- * Spec: specs/design-system/actions/spec.md
  */
 
 const BOOK = '/base/links-actions-buttons';

@@ -1,7 +1,6 @@
 /*
  * typography.css — the scale, and the rules that read it.
  *
- * Spec: specs/design-system/typography/spec.md
  *
  * An Augmented Fourth (1.414) from the reading size. Every size is a rem
  * proportion of the reader's default text size and every line derives from the

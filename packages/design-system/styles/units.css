@@ -1,7 +1,5 @@
 /*
  * Unit and radius tokens.
- *
- * Spec: specs/design-system/design-tokens/spec.md
  */
 :root {
   /* Base grid. Every spacing and radius decision derives from this. */
@@ -28,7 +26,7 @@
    * The identity mark's three diameters, in lines rather than grid units: a mark
    * sits beside text, so it measures in the text's leading. Both the mark and a
    * list's overflow count read them, which is why they are named here rather
-   * than restated in each. Spec: specs/design-system/identity-mark/spec.md
+   * than restated in each.
    */
   --cn-avatar-size-small: calc(
     var(--cn-line) *
@@ -45,8 +43,7 @@
 
   /*
    * Icon sizes: absolute lengths rather than grid multiples, following v20, which
-   * files them beside the grid and marks them absolute. Spec:
-   * specs/design-system/components/cn-icon/spec.md
+   * files them beside the grid and marks them absolute.
    */
   --cn-icon-size-xsmall: 1rem; /* 16px at the default root font size */
   --cn-icon-size-small: 1.5rem; /* 24px */

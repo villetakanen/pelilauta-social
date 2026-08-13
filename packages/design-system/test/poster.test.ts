@@ -8,8 +8,6 @@
  * browser that cannot parse it — Safari knows neither feature — while a
  * preference in a withdrawal fails toward the plain poster. The split is
  * invisible in a supporting browser, which is why it needs a pin.
- *
- * Spec: specs/design-system/components/cn-poster/spec.md
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

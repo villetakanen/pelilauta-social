@@ -10,7 +10,6 @@
  *
  * Books: apps/design/src/content/tokens/color.mdx
  *        apps/design/src/content/principles/color-system.mdx
- * Spec:  specs/design-system/design-tokens/spec.md
  */
 import { parseTokens } from './tokenTable';
 

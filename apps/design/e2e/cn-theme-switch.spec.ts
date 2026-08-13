@@ -3,8 +3,6 @@ import { expect, test } from '@playwright/test';
 /**
  * What needs a browser is the derivation: which theme the root carries when the
  * document has no override, and that the write and the event follow from it.
- *
- * Spec: specs/design-system/components/cn-theme-switch/spec.md
  */
 
 const BOOK = '/components/cn-theme-switch';

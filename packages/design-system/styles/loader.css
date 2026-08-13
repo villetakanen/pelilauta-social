@@ -1,7 +1,5 @@
 /*
  * Loader tokens and auto-centering rules.
- *
- * Spec: specs/design-system/components/cn-loader/spec.md
  */
 :root {
   --cn-loader-size: calc(var(--cn-line) * 3); /* 72px */

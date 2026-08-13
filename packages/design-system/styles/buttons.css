@@ -4,8 +4,6 @@
  * A command is a `button`; navigation that looks like a button is an
  * `a.button[href]`. Presentation never changes that choice, so every rule here
  * selects the element the consumer already picked.
- *
- * Spec: specs/design-system/actions/spec.md
  */
 :root {
   /*
@@ -70,7 +68,7 @@ a.button[href]:not(.fab) {
   /*
    * The button is a context that requires one icon size, so it sets the size
    * tokens in its own scope and every icon inside resolves to the small step
-   * without reading its own selection (cn-icon spec). The small token itself is
+   * without reading its own selection. The small token itself is
    * left alone, which is what keeps the substitution from cycling.
    */
   --cn-icon-size-xsmall: var(--cn-icon-size-small);

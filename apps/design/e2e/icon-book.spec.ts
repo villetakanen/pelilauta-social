@@ -6,9 +6,6 @@ import { expect, type Page, test } from '@playwright/test';
  * a `light-dark()` role resolving differently in the two scoped cells. Tier
  * precedence and the registries are asserted without a browser in
  * packages/design-system/test/icon-registry.test.ts.
- *
- * Specs: specs/design-system/components/cn-icon/spec.md,
- *        specs/design-system/iconography/spec.md
  */
 
 const COMPONENT_BOOK = '/components/icon';

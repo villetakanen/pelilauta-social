@@ -2,7 +2,6 @@
  * Poster — the decorative artwork that replaces the ground plane behind one
  * page's content, and the surfaces that cede to it while it paints.
  *
- * Spec: specs/design-system/components/cn-poster/spec.md
  * Component: components/CnPoster.astro
  *
  * The artwork is user material of unknown colour and contrast, so the image is
@@ -54,8 +53,8 @@
    * has risen off the page is content the reader is meant to read.
    *
    * 80% is the share that keeps the inherited body foreground at WCAG 2.2 AA
-   * over near-white artwork in Dark — the tightest of the cases the spec tunes
-   * against — while the artwork still reads through.
+   * over near-white artwork in Dark — the tightest of the theme combinations —
+   * while the artwork still reads through.
    */
   body:has(#cn-poster) .elevation-0 {
     background-color: color-mix(in oklch, var(--cn-surface), transparent 20%);

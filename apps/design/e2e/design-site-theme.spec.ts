@@ -8,8 +8,6 @@ import { expect, test } from '@playwright/test';
  * A denied read is exercised against the extracted script rather than a loaded page:
  * revoking `localStorage` on the window also breaks the dev-server client, whose
  * uncaught error is not this capability's.
- *
- * Spec: specs/design-system/design-site-theme/spec.md
  */
 
 const BOOK = '/components/cn-theme-switch';

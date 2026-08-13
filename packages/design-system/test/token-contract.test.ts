@@ -6,8 +6,6 @@
  * text, so none of it needs a browser. What genuinely needs a cascade — whether
  * a resolved token differs between light and dark — belongs in the design-site
  * browser checks.
- *
- * Spec: specs/design-system/design-tokens/spec.md
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
