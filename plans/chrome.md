@@ -7,7 +7,7 @@ deletion is not a closeout requirement.
 ## Goal
 
 Pelilauta replaces Cyan's v18 application bar, rail and contextual tray with local
-v20 chrome. One chrome container owns the application controls without taking over
+v20 chrome. One chrome container holds the application controls without taking over
 document scrolling, and every page's main region cedes the space occupied by the
 responsive chrome. The chrome also provides a theme switch whose authenticated value
 persists on the Pelilauta account.
@@ -40,8 +40,8 @@ adaptive leading navigation surface. Primary destinations are tray buttons. A
 destination's subordinate routes form labeled link groups that are present in the
 full tray and absent from its rail form.
 
-Pelilauta owns the destination set, order, active-route rules, authorization and
-contextual groups. The design system owns the rail, tray, trigger, scrim, responsive
+Pelilauta states the destination set, order, active-route rules, authorization and
+contextual groups. The design system provides the rail, tray, trigger, scrim, responsive
 presentation, focus handling and navigation-item presentation.
 
 The responsive model is:
@@ -64,7 +64,7 @@ indicators and interaction states without redefining their geometry.
 These specifications are approved before the implementation slice that consumes
 them.
 
-- `specs/design-system/application-chrome/spec.md` — chrome container ownership,
+- `specs/design-system/application-chrome/spec.md` — what the chrome container holds,
   occupied-edge contract, responsive shell geometry, document scroll, pointer input,
   stacking and poster interaction.
 - `specs/design-system/components/cn-app-bar/spec.md` — local application bar regions,
@@ -90,7 +90,7 @@ Before changing the account schema, add a Theme preference subsection to
 `docs/ARCHITECTURE.md`. It names the canonical field and values, default and read
 precedence, write path, legacy `lightMode` compatibility and why the additive field
 remains compatible with v18. Optional fields that select user-facing presentation are
-UX state owned by Pelilauta chrome: they do not change business logic or make the
+UX state Pelilauta chrome keeps: they do not change business logic or make the
 shared account document incompatible with live v18. The note also records whether any
 Firestore rule change is needed; no destructive data migration is implied.
 
@@ -106,6 +106,11 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   the application bar, adaptive navigation or application chrome geometry.
 - **Chrome specifications** — approve the required contracts above before their
   implementation slices begin.
+- **Icon alt text** — an Icon announces and titles its noun, an untranslated internal
+  name, wherever a consumer does not pass `decorative`. Chrome is icon-dense and its
+  glyphs stand for actions, destinations and the brand, so the noun stops standing in for
+  alt text before the bar, rail and tray ship.
+  `plans/debt/loader-icon-announces-its-noun.md` records the same defect in the loader.
 - **Account theme compatibility note** — record the additive account field and v18
   compatibility boundary in `docs/ARCHITECTURE.md` before changing the schema.
 - **Application bar** — ship and book the local `CnAppBar`, including standard and

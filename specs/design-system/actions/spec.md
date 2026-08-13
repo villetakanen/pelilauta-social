@@ -22,7 +22,7 @@ default link to anchors with destinations, button presentation to `button` and
 `a.button.fab[href]`. No component or client-side behaviour mediates the contract, so
 both applications receive the same presentation from `packages/design-system`.
 
-Each presentation's base selector owns its geometry, type, surface, foreground and
+Each presentation's base selector states its geometry, type, surface, foreground and
 interaction states; variant classes modify that base directly. A component with its
 own action language may replace a presentation within its scope; toggle buttons,
 reaction buttons and tray buttons remain separate capabilities. Placement of floating

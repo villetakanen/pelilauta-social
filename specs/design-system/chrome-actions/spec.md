@@ -50,7 +50,7 @@ A chrome action composes with no Actions button variant. Measurements consume
 | State surface | A centred circle `6 × --cn-grid` in diameter. | A centred pill, `6 × --cn-grid` in block size, filling the target's inline size. |
 | Content | The Icon alone, centred. | The Icon, `--cn-gap`, then the label, from a `--cn-grid` inline inset at the start edge. |
 
-The target owns hit testing and layout; the state surface owns the resting and
+The target takes hit testing and layout; the state surface carries the resting and
 transient surfaces. The Icon changes neither measurement, and a label truncates rather
 than wrapping.
 
