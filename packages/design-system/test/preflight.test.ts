@@ -142,6 +142,7 @@ describe('entry point', () => {
       './links.css',
       './buttons.css',
       './fab.css',
+      './chrome-actions.css',
       './content-containers.css',
       './surface.css',
       './loader.css',

@@ -1,0 +1,112 @@
+---
+title: Chrome Actions
+description: The command and destination control for application bars, rails and trays, collapsing between an icon and a labelled control.
+order: 5.5
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import ChromeActionSpecimens from '@design-system/books/specimens/ChromeActionSpecimens.astro'
+
+`.chrome-action` ships as one class, applying to `button.chrome-action` and to
+`a.chrome-action[href]`. It takes its foreground from the container that places
+it and outranks the default Actions link and button presentations: no link
+underline, no button surface, no button elevation.
+
+## Markup
+
+<Composition themes caption="A command and a destination, compact, in Light and Dark">
+  <ChromeActionSpecimens group="pair" presentation="compact" />
+</Composition>
+
+```html
+<button type="button" class="chrome-action">
+  <Icon noun="send" decorative />
+  <span>Send</span>
+</button>
+
+<a class="chrome-action" href="/somewhere">
+  <Icon noun="home" decorative />
+  <span>Home</span>
+</a>
+```
+
+The Icon is the first child, the label `span` the second. The label is present
+in both presentations and is the control's accessible name in both; neither
+element takes or needs an `aria-label`. The Icon must be passed `decorative`:
+the label already names the control, and without it the Icon's own noun
+pollutes the accessible name.
+
+`.chrome-action` composes with no Actions button variant. `.button`, `.cta`,
+`.text`, `.secondary` and `.fab` are never combined with it, and the class
+publishes no variants of its own.
+
+## Presentation
+
+A container declares which presentation its chrome actions take by setting the
+inherited custom property `--cn-chrome-presentation` on the action's parent, or
+any ancestor above it. An action carrying its own `--cn-chrome-presentation`
+has no effect: a style container query evaluates against the queried
+element's parent, so the action would be reading past its own declaration.
+
+| Value | Presentation |
+| :--- | :--- |
+| `compact` | The Icon alone, centred in a square target. |
+| `labelled` | The Icon and the label, filling the container's inline size. |
+| Absent, empty, or any other value | `compact`. |
+
+The mechanism is a CSS style container query, `@container style(--cn-chrome-presentation: labelled)`.
+Every element is a style container, so a chrome action reads the value
+inherited onto its own parent and never selects on an ancestor by name.
+
+<div class="breakout">
+  <Composition themes caption="Labelled, on a command and a destination, in Light and Dark">
+    <ChromeActionSpecimens group="pair" presentation="labelled" />
+  </Composition>
+</div>
+
+Changing the declared presentation does not replace the element, its
+destination or command, or its accessible name; only the label's visibility
+and the target's inline size change.
+
+## Geometry
+
+| Part | Compact | Labelled |
+| :--- | :--- | :--- |
+| Target | `7 × --cn-grid` square. | Container's inline size, `7 × --cn-grid` block size. |
+| State surface | Centred circle, `6 × --cn-grid` diameter. | Centred pill, `6 × --cn-grid` block size, full target inline size. |
+| Content | Icon alone, centred. | Icon, `--cn-gap`, label, from a `--cn-grid` inline inset at the start edge. |
+
+The target is the element and owns hit testing and layout. The state surface
+is a `::before` pseudo-element behind the Icon and label, and owns the resting
+and transient surfaces. The label truncates rather than wrapping; the Icon
+keeps its square in both presentations. A chrome action is an icon-size
+context resolving to the medium step.
+
+A label too long for the tray truncates with an ellipsis rather than wrapping or overflowing.
+
+<div class="breakout">
+  <Composition themes caption="A labelled chrome action whose label overruns the tray, in Light and Dark">
+    <ChromeActionSpecimens group="truncation" presentation="labelled" />
+  </Composition>
+</div>
+
+## States
+
+<Composition themes caption="Compact chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
+  <ChromeActionSpecimens group="states" presentation="compact" />
+</Composition>
+
+<div class="breakout">
+  <Composition themes caption="Labelled chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
+    <ChromeActionSpecimens group="states" presentation="labelled" />
+  </Composition>
+</div>
+
+The state surface is transparent at rest, takes `--cn-hover` on hover and
+`--cn-active` on activation, replacing hover rather than compounding it. A
+keyboard focus outline follows the target, using `--cn-focus-ring`. Only the
+native button takes a disabled state, at half opacity, not activatable and not
+focusable; no disabled presentation exists for the anchor, so none renders.
+
+Transitions use `--cn-duration-ui` and `--cn-easing-ui`, and do not run under
+`prefers-reduced-motion: reduce`.

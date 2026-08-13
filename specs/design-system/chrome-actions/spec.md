@@ -21,9 +21,8 @@ button.
 
 A chrome action is an Actions presentation. `specs/design-system/actions/spec.md`
 governs its elements, semantics, accessible naming, disabled contract, focus
-treatment, colour-role rules, Icon scale and transitions; those apply unchanged and
-are not restated here. This capability states only what application chrome changes:
-the target, the state surface, the foreground source and the two presentations.
+treatment, colour-role rules and transitions; those apply unchanged and are not
+restated here.
 
 Compact and labelled are presentations of one control, not two controls. The element,
 its destination or command, and its accessible name are the same in both.
@@ -51,6 +50,8 @@ The target owns hit testing and layout; the state surface owns the resting and
 transient surfaces. The Icon changes neither measurement, and a label truncates rather
 than wrapping.
 
+A chrome action is an icon-size context resolving to the medium step.
+
 The label is present in both presentations and names the control in both. Compact
 hides it from view without hiding it from assistive technology, so a chrome action
 needs no separate accessible name. v20 hides the same label from both, and this
@@ -75,7 +76,8 @@ target. A chrome action has no persistent state.
   size and asserts the native element, the computed target and state-surface geometry
   in each presentation, the compact result for an absent and an unrecognised value, an
   identical foreground on both elements, an unchanged accessible name across
-  presentations, and an unchanged block size and bounding box across states.
+  presentations, the Icon's resolved size, and an unchanged block size and bounding
+  box across states.
 - Human review accepts that a chrome action reads as chrome rather than as a content
   button, and that a label truncates legibly, at default and enlarged browser text
   sizes.

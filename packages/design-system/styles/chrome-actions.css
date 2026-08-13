@@ -1,0 +1,219 @@
+/*
+ * Chrome actions: the command and destination control for application bars,
+ * rails and trays.
+ *
+ * A chrome action is an Actions presentation (specs/design-system/actions/spec.md):
+ * it keeps that capability's element semantics, disabled contract, focus
+ * treatment, colour-role rules and transitions unchanged. This file states only
+ * what application chrome changes — the target, the state surface, the
+ * foreground source, and the two presentations a container declares through
+ * the inherited `--cn-chrome-presentation` custom property.
+ *
+ * `.chrome-action` applies to `button.chrome-action` and `a.chrome-action[href]`
+ * and to no other element; it composes with no Actions button variant, so it
+ * is excluded from `.fab` and the default button surface in buttons.css
+ * (see that file's header) rather than restated here.
+ */
+
+button.chrome-action,
+a.chrome-action[href] {
+  /*
+   * The state surface below is an absolutely positioned `::before` with a
+   * negative z-index, so it paints behind the Icon and label — both in-flow,
+   * non-positioned content that would otherwise win the paint order over any
+   * positioned descendant regardless of z-index. `isolation: isolate` gives
+   * the target its own stacking context, so the negative z-index resolves
+   * within it (behind the target's own children) instead of escaping to the
+   * nearest ancestor stacking context, where it could slip behind unrelated
+   * chrome the target sits on top of.
+   */
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: calc(var(--cn-grid) * 7);
+  block-size: calc(var(--cn-grid) * 7);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  text-decoration: none;
+  vertical-align: middle;
+  font-family: inherit;
+  font-size: var(--cn-font-size-button);
+  font-weight: var(--cn-font-weight-button);
+  line-height: var(--cn-line-height-button);
+  letter-spacing: var(--cn-letter-spacing-button);
+  white-space: nowrap;
+  cursor: pointer;
+
+  /*
+   * The class is an icon-size context, but — unlike buttons.css and fab.css,
+   * which resolve every step to the small step — a chrome action resolves to
+   * the medium step: the owner judged the small step too small against the
+   * six-grid state surface. This departs from the Actions spec on purpose;
+   * `specs/design-system/chrome-actions/spec.md` carries the departure, and
+   * `--cn-icon-size` itself is left alone, since it is the token every other
+   * step substitutes toward.
+   */
+  --cn-icon-size-xsmall: var(--cn-icon-size);
+  --cn-icon-size-small: var(--cn-icon-size);
+  --cn-icon-size-large: var(--cn-icon-size);
+  --cn-icon-size-xlarge: var(--cn-icon-size);
+
+  /*
+   * The state surface's and the label's geometry, resolved once here rather
+   * than queried again on a descendant or on `::before`. A style container
+   * query matching the target itself excludes the target's own declaration
+   * and reads an ancestor; the identical query matching one of the target's
+   * descendants — the label `span`, or the generated `::before` box, whose
+   * originating element is the target — does not exclude the target, and can
+   * read the property directly off it. `--cn-chrome-presentation` is meant to
+   * come from a container, one level further out than the target, so a query
+   * repeated on a descendant selector can resolve a different branch than the
+   * one the target itself just resolved — a labelled target with a compact
+   * surface or a hidden label, or the reverse, whenever the declaration also
+   * happens to sit on the target. Resolving the branch once, here, into
+   * inherited `--_*` scope tokens, and letting every descendant rule only
+   * read them, keeps the whole control on one branch, because only the
+   * target itself ever evaluates the query.
+   *
+   * Each token is declared exactly once below and once inside the labelled
+   * query further down; the two never share a name. The compact value lives
+   * in the fallback of a `var()` that names the labelled-only token, so
+   * "declared twice" never happens — a labelled context sets the
+   * `--_labelled-*` token, which the fallback then loses to, and a compact
+   * context leaves it unset, which is why the fallback wins there instead.
+   */
+  --_surface-inline: var(--_labelled-surface-inline, calc(var(--cn-grid) * 6));
+  --_surface-inset: var(--_labelled-surface-inset, 50%);
+  --_surface-shift: var(--_labelled-surface-shift, -50%);
+  --_label-position: var(--_labelled-label-position, absolute);
+  --_label-inline: var(--_labelled-label-inline, calc(var(--cn-grid) / 8));
+  --_label-block: var(--_labelled-label-block, calc(var(--cn-grid) / 8));
+  --_label-clip: var(--_labelled-label-clip, inset(50%));
+}
+
+button.chrome-action > :is(.cn-icon, .cn-loader),
+a.chrome-action[href] > :is(.cn-icon, .cn-loader) {
+  /* The Icon or loader keeps its square; the label gives way. */
+  flex: none;
+}
+
+/*
+ * The label: out of flow in compact so the Icon stays centred, but never
+ * `display: none` — that would remove it from the accessibility tree too,
+ * which the spec forbids explicitly. The clip technique matches the one
+ * `apps/design/src/layouts/Book.astro` already uses for its visually-hidden
+ * toggle label. Excluded from the Icon and the loader, which also render as a
+ * `span` (`Icon.svelte`, `CnLoader.svelte`) and must stay visible and in
+ * flow. It reads the `--_label-*` scope tokens the target resolved above and
+ * contains no style query of its own — see the comment on those tokens for
+ * why.
+ */
+button.chrome-action > span:not(.cn-icon, .cn-loader),
+a.chrome-action[href] > span:not(.cn-icon, .cn-loader) {
+  position: var(--_label-position);
+  /* Compact: a near-zero box, grid-derived rather than a pixel literal, so it
+     still scales with the reader's text size — it only has to survive as
+     non-empty content, since the clip-path removes it from view. Labelled:
+     `auto`, sized by its own text. */
+  inline-size: var(--_label-inline);
+  block-size: var(--_label-block);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: var(--_label-clip);
+  min-inline-size: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*
+ * The state surface: transparent at rest, centred within the target. It
+ * reads the `--_surface-*` scope tokens the target resolved above and
+ * contains no style query of its own — see the comment on those tokens for
+ * why.
+ */
+button.chrome-action::before,
+a.chrome-action[href]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: 50%;
+  inset-inline-start: var(--_surface-inset);
+  transform: translate(var(--_surface-shift), -50%);
+  inline-size: var(--_surface-inline);
+  block-size: calc(var(--cn-grid) * 6);
+  border-radius: calc(var(--cn-grid) * 3);
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * Labelled: the container has declared its chrome actions show their label.
+ * The target fills the container's inline size, the content starts from a
+ * grid inset at the start edge, and the `--_surface-*` and `--_label-*`
+ * tokens above resolve the state surface to a pill filling that same inline
+ * size and the label to a normal, visible, truncating flex child — no other
+ * rule in this file re-evaluates the query.
+ */
+@container style(--cn-chrome-presentation: labelled) {
+  button.chrome-action,
+  a.chrome-action[href] {
+    inline-size: 100%;
+    justify-content: flex-start;
+    gap: var(--cn-gap);
+    padding-inline-start: var(--cn-grid);
+
+    --_labelled-surface-inline: 100%;
+    --_labelled-surface-inset: 0;
+    --_labelled-surface-shift: 0%;
+    --_labelled-label-position: static;
+    --_labelled-label-inline: auto;
+    --_labelled-label-block: auto;
+    --_labelled-label-clip: none;
+  }
+}
+
+/*
+ * States: the surface is transparent at rest and carries the transient
+ * feedback; active replaces hover rather than compounding it because this
+ * rule follows the hover rule in source order at equal specificity.
+ */
+button.chrome-action:hover::before,
+a.chrome-action[href]:hover::before {
+  background-color: var(--cn-hover);
+}
+
+button.chrome-action:active::before,
+a.chrome-action[href]:active::before {
+  background-color: var(--cn-active);
+}
+
+button.chrome-action:focus-visible,
+a.chrome-action[href]:focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Only a native button has a disabled state; an anchor is navigable or
+ * absent, as the Actions spec requires throughout.
+ */
+button.chrome-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.chrome-action::before,
+  a.chrome-action[href]::before {
+    transition: none;
+  }
+}
