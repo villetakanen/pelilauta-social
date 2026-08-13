@@ -1,7 +1,8 @@
 ---
-import AppBar from '../components/server/AppBar.astro';
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import { t } from 'src/utils/i18n';
 import AppRail from '../components/server/AppRail.astro';
-import AppChrome from '../components/server/app/AppChrome.astro';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 import BaseTail from '../components/server/BaseTail.astro';
 
@@ -18,30 +19,55 @@ export interface Props {
   shortTitle?: string;
   description?: string;
   image?: string;
+  /**
+   * Where the bar's back action leads. A route that states none returns
+   * through the session instead, as this layout did before the local bar.
+   */
+  backHref?: string;
 }
 
-const { title, shortTitle, description, image } = Astro.props;
+const { title, shortTitle, description, image, backHref } = Astro.props;
 ---
 
 <html lang="fi">
   <BaseHead {title} {description} {image} noSharing={true} />
   <body>
-    <AppBar title={title} shortTitle={shortTitle} modal noSharing={true}>
-      <slot name="app-bar" />
-    </AppBar>
+    <CnAppChrome>
+      <CnAppBar
+        title={title ?? ''}
+        shortTitle={shortTitle}
+        modal
+        backLabel={t('actions:back')}
+      />
+      <slot name="fab-tray" />
+    </CnAppChrome>
+
     <AppRail hideOnMobile />
+
     <main class="app-main">
       <slot />
     </main>
-    {
-      /* No `rail` prop: this layout hides the rail on handheld screens, so there
-         is no block-end chrome for the tray to clear. */
-      Astro.slots.has('fab-tray') && (
-        <AppChrome>
-          <slot name="fab-tray" />
-        </AppChrome>
-      )
-    }
+
+    {/*
+      The design system's back action reports the reader's intent and navigates
+      nothing, so where they land is decided here. Without a stated destination
+      this is v18's behaviour: back through the session, and the front page when
+      the session holds nothing to go back to.
+    */}
+    <script is:inline define:vars={{ backHref }}>
+      document.addEventListener('cn-back', () => {
+        if (backHref) {
+          window.location.href = backHref;
+          return;
+        }
+        if (window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+        window.location.href = '/';
+      });
+    </script>
+
     <BaseTail />
   </body>
 </html>

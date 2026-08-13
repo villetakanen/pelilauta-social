@@ -70,10 +70,13 @@ describe('Cyan element migration contract', () => {
       // An identifier beats a class whatever the import order, so a layout that
       // reintroduced the id would silently take Cyan's fixed placement back and
       // strand the chrome layer.
+      //
+      // Either layer counts: CnAppChrome is the design system's, and the local
+      // AppChrome is what a layout still on Cyan's bar keeps until it migrates.
       const source = readFileSync(join(appRoot, 'src/layouts', layout), 'utf8');
 
       expect(source).not.toMatch(/id="fab-tray"/);
-      expect(source).toContain('<AppChrome');
+      expect(source).toMatch(/<(Cn)?AppChrome/);
     },
   );
 

@@ -45,7 +45,7 @@ The bar paints nothing while the page is at its top, so a poster or the page its
 through it. A veil fades in as content passes beneath: `16 × --cn-grid` deep, twice the
 bar, so text dissolves before it reaches the title. Scroll position drives it, without
 script. Firefox ships no scroll timeline and shows the veil at rest, losing the fade and
-nothing else. A modal bar rests at elevation 2 on an opaque surface and carries no veil.
+nothing else. A modal bar rests at elevation 4 and carries no veil.
 
 The bar is `8 × --cn-grid` in block size, which admits a chrome action's target.
 
