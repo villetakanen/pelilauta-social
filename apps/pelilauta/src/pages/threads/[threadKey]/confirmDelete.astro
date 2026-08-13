@@ -1,6 +1,7 @@
 ---
 import { parseThread } from 'src/schemas/ThreadSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
 import ConfirmDeleteThread from '../../../components/svelte/threads/ConfirmDeleteThread.svelte';
 import ModalPage from '../../../layouts/ModalPage.astro';
 
@@ -21,6 +22,9 @@ if (!threadKey) {
   throw new Error('threadKey is required');
 }
 ---
-<ModalPage>
+<ModalPage title={thread.title}>
+  <div class="content-prose">
+    <h1>{t('threads:confirmDelete.title')}</h1>
+  </div>
   <ConfirmDeleteThread {thread} client:only="svelte" />
 </ModalPage>

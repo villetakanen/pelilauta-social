@@ -2,6 +2,7 @@
 import { getSiteData } from '@firebase/server/sites';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
+import { t } from 'src/utils/i18n';
 import SettingsApp from '../../../components/svelte/sites/settings/SettingsApp.svelte';
 import ModalPage from '../../../layouts/ModalPage.astro';
 
@@ -33,6 +34,9 @@ if (!siteAccess.isMember) {
 }
 ---
 
-<ModalPage>
+<ModalPage title={site.name}>
+  <div class="content-prose">
+    <h1>{t('site:settings.title')}</h1>
+  </div>
   <SettingsApp {site} client:only="svelte" />
 </ModalPage>

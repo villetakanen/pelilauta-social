@@ -35,6 +35,9 @@ const thread = ThreadSchema.parse(await threadResponse.json());
 const reply = ReplySchema.parse(await replyResponse.json());
 const channels = ChannelsSchema.parse(await channelsResponse.json());
 ---
-<ModalPage title={t('threads:fork.title')}>
+<ModalPage title={thread.title}>
+  <div class="content-prose">
+    <h1>{t('threads:fork.title')}</h1>
+  </div>
   <ForkThreadApp {thread} {reply} {channels} client:only="svelte"/>
 </ModalPage>

@@ -1,11 +1,12 @@
 ---
 import SessionPurge from '../../components/svelte/debug/SessionPurge.svelte';
 import ModalPage from '../../layouts/ModalPage.astro';
+import { t } from '../../utils/i18n';
 
 // No server-side session check needed as this page is for clearing session
 ---
 
-<ModalPage title="Debug: Session Purge">
+<ModalPage title={t('app:docs.title')}>
   <div class="content-prose">
     <div>
       <h1>Session Purge</h1>

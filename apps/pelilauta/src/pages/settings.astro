@@ -14,11 +14,14 @@ if (!session?.uid) {
   );
 }
 
-const title = `${t('app:shortname')} - ${t('app:settings.title')}`;
+const title = t('app:docs.title');
 const description = t('settings:description');
 const debug = import.meta.env.SECRET_FEATURE_FLAG_DEBUG === 'true';
 ---
 <ModalPage title={title} description={description}>
+  <div class="content-prose">
+    <h1>{t('app:settings.title')}</h1>
+  </div>
   <SettingsAppT client:only="svelte"/>
   <div>{debug && <span>DEBUG MODE ACTIVE</span>}</div>
 </ModalPage>

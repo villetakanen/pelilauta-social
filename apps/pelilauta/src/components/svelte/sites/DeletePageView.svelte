@@ -36,7 +36,6 @@ async function handleSubmit(event: SubmitEvent) {
   {#if visible}
     <div class="content-prose">
       <div>
-        <h1 class="downscaled">{t('actions:confirm.delete')}</h1>
         <p>{t('site:deletePage.info', { name: page.name })}</p>
         <form onsubmit={handleSubmit}>
           <div class="toolbar justify-end">

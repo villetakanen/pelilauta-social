@@ -1,7 +1,8 @@
 ---
 import InboxApp from '../../components/svelte/inbox/InboxApp.svelte';
 import ModalPage from '../../layouts/ModalPage.astro';
+import { t } from '../../utils/i18n';
 ---
-<ModalPage>
+<ModalPage title={t('app:docs.title')}>
   <InboxApp client:only="svelte" />
 </ModalPage>

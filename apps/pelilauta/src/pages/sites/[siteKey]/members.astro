@@ -22,6 +22,9 @@ const site = SiteSchema.parse({
 });
 ---
 
-<ModalPage title={t("site:members.title")}>
+<ModalPage title={site.name}>
+  <div class="content-prose">
+    <h1>{t('site:members.title')}</h1>
+  </div>
   <SiteMembersApp site={site} client:only="svelte" />
 </ModalPage>

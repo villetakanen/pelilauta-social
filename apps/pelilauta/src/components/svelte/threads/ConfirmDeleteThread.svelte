@@ -58,8 +58,6 @@ async function onsubmit(e: Event) {
 
     <section>
     
-      <h1 class="downscaled">{t('threads:confirmDelete.title')}</h1>
-      
       <p>{t('threads:confirmDelete.message')}</p>
     
       <form class="toolbar" {onsubmit}>

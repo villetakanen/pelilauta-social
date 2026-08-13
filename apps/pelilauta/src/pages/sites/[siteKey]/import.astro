@@ -25,13 +25,14 @@ const site = SiteSchema.parse({
   ...toClientEntry(siteData),
   key: siteKey,
 });
-const title = `${site.name} – ${t('site:import.title')}`;
-
 if (!site) {
   return Astro.redirect('/404');
 }
 ---
 
-<ModalPage title={title} description={site.description}>
+<ModalPage title={site.name} description={site.description}>
+  <div class="content-prose">
+    <h1>{t('site:import.title')}</h1>
+  </div>
   <ImportApp client:only="svelte" />
 </ModalPage>

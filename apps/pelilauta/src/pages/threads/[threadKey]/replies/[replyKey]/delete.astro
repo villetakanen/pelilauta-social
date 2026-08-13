@@ -31,7 +31,10 @@ const reply = ReplySchema.parse(
   }),
 );
 ---
-<ModalPage title={t('threads:discussion.delete.reply')}>
+<ModalPage title={t('threads:discussion.title')}>
+  <div class="content-prose">
+    <h1>{t('threads:confirmDelete.title')}</h1>
+  </div>
   <ReplyDeleteSection
     threadKey={threadKey}
     {reply}

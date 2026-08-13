@@ -1,6 +1,7 @@
 ---
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
 import SiteTocTool from '../../../../components/svelte/sites/toc/SiteTocTool.svelte';
 import ModalPage from '../../../../layouts/ModalPage.astro';
 
@@ -19,6 +20,9 @@ const site = SiteSchema.parse({
 });
 ---
 
-<ModalPage>
+<ModalPage title={site.name}>
+  <div class="content-prose">
+    <h1>{t('site:toc.title')}</h1>
+  </div>
   <SiteTocTool {site} client:only="svelte" />
 </ModalPage>
