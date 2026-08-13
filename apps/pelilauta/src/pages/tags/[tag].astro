@@ -110,7 +110,7 @@ function parseUrl(tag: Tag) {
 }
 ---
 
-<Page {title} {description}>
+<Page {title} barTitle={`#${displayName}`} {description} noun="label-tag">
   <div class="content-prose">
     <article>
       <TagHeader {displayName} {tagInfo} />

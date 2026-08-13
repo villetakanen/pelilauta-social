@@ -1,13 +1,14 @@
 ---
 import Icon from '@design-system/components/Icon.svelte';
+import { t } from 'src/utils/i18n';
 import Page from '../layouts/Page.astro';
 ---
 
-<Page title="Access Forbidden" noSharing>
+<Page title={t('seo:error403.title')} noun="admin" noSharing>
   <section class="content-prose">
     <div class="flex flex-col items-center p-4">
       <Icon noun="admin" size="large" />
-      <h1>Access Forbidden</h1>
+      <h1>{t('seo:error403.title')}</h1>
       <p class="text-center text-low pb-4">
         You don't have the necessary permissions to access this resource.
       </p>

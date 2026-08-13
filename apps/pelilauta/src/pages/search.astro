@@ -15,6 +15,12 @@ if (!session?.uid) {
   );
 }
 ---
-<Page title={t('search:title')} search>
+<Page title={t('search:title')} noun="search">
+  {/*
+    The search app is client:only, so a heading inside it does not exist until
+    it hydrates. The document's outline states the page here instead, and the
+    app's own visible heading names its card.
+  */}
+  <h1 class="sr-only">{t('search:title')}</h1>
   <AlgoliaSearchApp client:only="svelte" />
 </Page>

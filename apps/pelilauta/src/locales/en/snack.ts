@@ -1,6 +1,10 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const snack: Locale = {
+  share: {
+    copied: 'Link copied to the clipboard',
+    failed: 'Sharing failed',
+  },
   site: {
     sortOrderUpdated: 'Page order updated',
     sortOrderUpdateFailed: 'Failed to update page order',

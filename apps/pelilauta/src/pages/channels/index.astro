@@ -10,7 +10,13 @@ const title = t('seo:channels.title');
 const description = t('seo:channels.description');
 const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp`;
 ---
-<Page title={title} description={description} image={image}>
+<Page
+  title={title}
+  shortTitle={t('navigation:threads')}
+  description={description}
+  image={image}
+  noun="discussion"
+>
   <!-- Direct SSR rendering - no defer needed with aggregated endpoint -->
   <ChannelsApp />
 

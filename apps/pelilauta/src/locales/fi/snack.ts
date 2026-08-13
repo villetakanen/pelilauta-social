@@ -1,6 +1,10 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const snack: Locale = {
+  share: {
+    copied: 'Linkki kopioitu leikepöydälle',
+    failed: 'Jakaminen epäonnistui',
+  },
   site: {
     sortOrderUpdated: 'Sivujen järjestys päivitetty',
     sortOrderUpdateFailed: 'Sivujen järjestyksen päivitys epäonnistui',

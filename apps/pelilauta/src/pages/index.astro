@@ -15,10 +15,11 @@ const description = t('seo:frontPage.description');
 const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-1.webp`;
 ---
 <Page
-  search 
+  search
   {title}
   {description}
   {image}>
+    <h1 class="sr-only">{title}</h1>
     <div class="content-triad">
       <TopThreadsStream />
 

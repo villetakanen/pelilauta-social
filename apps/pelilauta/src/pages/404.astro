@@ -3,7 +3,7 @@ import Icon from '@design-system/components/Icon.svelte';
 import { t } from 'src/utils/i18n';
 import Page from '../layouts/Page.astro';
 ---
-<Page>
+<Page title={t('seo:error404.title')} noun="warning" noSharing>
   <article class="content-prose">
     <div class="flex justify-center">
       <Icon noun="monsters" size="xlarge" />

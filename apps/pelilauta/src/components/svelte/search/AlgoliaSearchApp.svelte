@@ -158,7 +158,7 @@ function handleKeyDown(event: KeyboardEvent) {
   <article class="surface">
     <div class="search-container">
       <div class="toolbar">
-        <h1 class="text-h4 m-0 grow">{t("search:title")}</h1>
+        <h2 class="text-h4 m-0 grow">{t("search:title")}</h2>
         <div>
         <img src=/Algolia-logo-blue.svg alt="Algolia Logo" class="light-only" 
             style="max-height: var(--cn-line)"/>

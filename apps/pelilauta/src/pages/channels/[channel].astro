@@ -67,7 +67,12 @@ try {
 }
 ---
 
-<Page title={title} description={description}>
+<Page
+  title={title}
+  barTitle={channel.name}
+  description={description}
+  noun="discussion"
+>
   <!-- Single Svelte component handles everything -->
   <ChannelThreadList
     channel={channel}

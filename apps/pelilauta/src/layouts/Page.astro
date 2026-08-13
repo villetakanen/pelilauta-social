@@ -1,8 +1,11 @@
 ---
 import AuthManager from '@components/svelte/AuthManager.svelte';
-import AppBar from '../components/server/AppBar.astro';
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import CnShareAction from '@design-system/components/CnShareAction.svelte';
+import Icon from '@design-system/components/Icon.svelte';
+import { t } from 'src/utils/i18n';
 import AppRail from '../components/server/AppRail.astro';
-import AppChrome from '../components/server/app/AppChrome.astro';
 import AppFooter from '../components/server/app/AppFooter.astro';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 import BaseTail from '../components/server/BaseTail.astro';
@@ -12,46 +15,108 @@ import BaseTail from '../components/server/BaseTail.astro';
 // and handle onboarding flows (EULA acceptance, account creation).
 
 type Props = {
+  /** The document's title, as a search result shows it. */
   title?: string;
+  /**
+   * What the bar calls this page, where that differs from the document's
+   * title: a route composing an SEO title from a name and a suffix passes the
+   * name alone.
+   */
+  barTitle?: string;
   shortTitle?: string;
   description?: string;
   image?: string;
+  /** The page's context noun. A page stating none shows the site's mark. */
+  noun?: string;
   noSharing?: boolean;
   search?: boolean;
 };
 
-const { title, description, image, shortTitle, noSharing, search } =
-  Astro.props;
+const {
+  title,
+  barTitle,
+  description,
+  image,
+  shortTitle,
+  noun,
+  noSharing,
+  search,
+} = Astro.props;
 ---
 
 <html lang="fi">
   <BaseHead {title} {description} {image} {noSharing} />
   <body>
-    <AppBar
-      title={title}
-      shortTitle={shortTitle}
-      description={description}
-      search={search}
-      noSharing={noSharing}
-    >
-      <slot name="app-bar" />
-    </AppBar>
+    <CnAppChrome>
+      <CnAppBar title={barTitle ?? title ?? ''} {shortTitle} {noun}>
+        <slot name="app-bar" />
+        {
+          search && (
+            <a href="/search" class="chrome-action">
+              <Icon noun="search" decorative />
+              <span>{t("actions:search")}</span>
+            </a>
+          )
+        }
+        {
+          !noSharing && (
+            <CnShareAction
+              client:load
+              label={t("actions:share")}
+              text={description}
+            />
+          )
+        }
+      </CnAppBar>
+      {
+        Astro.slots.has('fab-tray') && (
+          <nav class="fab-tray" aria-label={t("navigation:quickActions")}>
+            <slot name="fab-tray" />
+          </nav>
+        )
+      }
+    </CnAppChrome>
+
     <AppRail />
+
     <main class="app-main">
       <slot />
       <AppFooter>
         <slot name="app-footer-credits" slot="app-footer-credits" />
       </AppFooter>
     </main>
-    {
-      Astro.slots.has('fab-tray') && (
-        <AppChrome rail>
-          <slot name="fab-tray" />
-        </AppChrome>
-      )
-    }
+
     <slot name="app-background-poster" />
     <AuthManager client:only="svelte" />
+
+    {/*
+      The share action reports what it did and shows nothing, so telling the
+      reader is the application's. A native share needs no word — the browser
+      showed its own sheet — and a dismissal reports nothing at all.
+    */}
+    <script>
+      import { pushSnack } from 'src/utils/client/snackUtils';
+
+      document.addEventListener('cn-share', (event) => {
+        const outcome = (event as CustomEvent<{ outcome: string }>).detail
+          .outcome;
+        if (outcome === 'copied') pushSnack('snack:share.copied');
+        if (outcome === 'failed') pushSnack('snack:share.failed');
+      });
+    </script>
+
     <BaseTail />
   </body>
 </html>
+
+<style>
+  /*
+   * Cyan's rail takes the block end on a handheld screen, so the tray clears
+   * it. The height is Cyan's, and this rule leaves with core/rail.css.
+   */
+  @media (max-width: 38.75rem) {
+    nav.fab-tray {
+      --cn-block-end-chrome: var(--cn-height-rail);
+    }
+  }
+</style>

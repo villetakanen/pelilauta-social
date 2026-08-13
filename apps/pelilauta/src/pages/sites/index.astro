@@ -18,6 +18,12 @@ Astro.response.headers.set(
 // Add Netlify cache tag for targeted cache purging when sites are added/removed
 Astro.response.headers.set('Cache-Tag', 'sites-index,public-sites');
 ---
-<Page {title} {description}>
+<Page
+  {title}
+  barTitle={t('site:siteList.title')}
+  shortTitle={t('site:siteList.shortTitle')}
+  {description}
+  noun="books"
+>
   <PublicSiteListing />
 </Page>
