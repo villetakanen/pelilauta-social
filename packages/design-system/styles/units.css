@@ -74,9 +74,11 @@
    * A media or container query cannot read a custom property: a rule that
    * needs a threshold states the literal, and a test pins the literal here.
    *
-   * Each names the width where its band ends: small below the first, tablet
-   * between them, desktop above the second. The second is where a tray fits
-   * beside content rather than over it.
+   * Each names the width where its band ends, and belongs to the band it ends:
+   * small is the first and narrower, tablet is wider and narrower than the
+   * second, desktop is the second and wider. `CnAppBar`'s `max-width: 38.75rem`
+   * is that convention. The second is where a tray stands beside content
+   * rather than over it.
    */
   --cn-breakpoint-small: 38.75rem; /* 620px; small-screen width */
   --cn-breakpoint-tablet: 64rem; /* 1024px; widest tablet width */
