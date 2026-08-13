@@ -46,11 +46,10 @@ test('the navigation is reachable on a small viewport through the disclosure', a
     nav(page).getByRole('link', { name: 'Icon', exact: true }),
   ).not.toBeVisible();
 
-  // The trigger is the app bar's other action: icon-only, so its label text
-  // ("Browse"/"Close", toggled by CSS alone) is clipped from view on purpose
-  // — the same treatment CnAppBar's own theme switch action gets — and is not
-  // what a reader clicks. The label element itself is.
-  const disclosure = page.locator('.nav-toggle-label');
+  // The tray's trigger stands in the leading slot CnAppBar reserves for it at
+  // this width. It draws the checkbox beside it, which is the named control a
+  // reader's assistive technology reports; the trigger is what a pointer hits.
+  const disclosure = page.locator('.cn-tray-trigger.narrow');
   await expect(disclosure).toBeVisible();
   await disclosure.click();
 

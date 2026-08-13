@@ -64,10 +64,20 @@
    */
   --cn-z-chrome: 40500;
   --cn-z-fab: 40500;
+  /* A covering tray stands above the bar and the FAB; its scrim just below it. */
+  --cn-z-scrim: 40600;
+  --cn-z-tray: 40700;
 
   /* Interaction motion, shared by every control that answers a pointer. */
   --cn-duration-ui: 0.22s;
   --cn-easing-ui: ease-in-out;
+
+  /*
+   * The tray's two sizes. v20's values: a rail holds a compact chrome action's
+   * seven-grid target with a one-and-a-half grid inset either side.
+   */
+  --cn-width-rail: calc(var(--cn-grid) * 10);
+  --cn-width-tray: calc(var(--cn-grid) * 42);
 
   /*
    * Breakpoints, in rem so a query follows a reader's enlarged default text.

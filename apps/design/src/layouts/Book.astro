@@ -9,7 +9,7 @@ import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnShareAction from '@design-system/components/CnShareAction.svelte';
-import Icon from '@design-system/components/Icon.svelte';
+import CnTray from '@design-system/components/CnTray.astro';
 import '@design-system/styles/ds.css';
 // Prototype-age scaffolding: the index page's editorial vocabulary, and the table
 // and link rules no design-system stylesheet owns yet.
@@ -77,34 +77,16 @@ const context = group ? groupLabel(group) : 'Index';
 
     <a class="skip-link" href="#content">Skip to content</a>
 
-    <div class="shell">
+    <div class="shell" data-cn-tray-scope>
       <CnAppChrome>
         <CnAppBar title={context} shortTitle={context}>
         <ThemeSwitch />
-        <!--
-          No JavaScript: the drawer is a CSS-only disclosure, so its trigger
-          stays a checkbox and a bound label rather than a button. `.chrome-action`
-          marks it as one in intent — it stands beside the theme switch as the
-          bar's other action — even though the design system's chrome-actions.css
-          only styles a native button or anchor; the compact, icon-only look
-          below is this shell's own replica of that geometry.
-        -->
-        <input
-          class="nav-toggle"
-          id="nav-toggle"
-          type="checkbox"
-          aria-label="Show the book index"
-        />
-        <label class="chrome-action nav-toggle-label" for="nav-toggle">
-          <Icon noun="dots" decorative />
-          <span class="nav-toggle-open">Browse</span>
-          <span class="nav-toggle-close">Close</span>
-        </label>
         <CnShareAction client:load label="Share this page" />
         </CnAppBar>
+        <CnTray label="Design system books">
+          <DocsNav />
+        </CnTray>
       </CnAppChrome>
-
-      <DocsNav />
 
       <main class="book app-main" id="content">
         {prose ? (
@@ -146,121 +128,25 @@ const context = group ? groupLabel(group) : 'Index';
         outline-offset: -4px;
       }
 
-      /* Editorial index column beside the book, collapsing under 60rem. */
-      .shell {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas: 'bar' 'nav' 'book';
-      }
-      .book { grid-area: book; }
 
       /* Placement is the shell's concern; the switch styles its own contents. */
       :global(.cn-app-bar .actions) > :global(.cn-theme-switch-scope) {
         flex: none;
       }
 
-      /* Visually hidden but focusable: `hidden` would remove the only
-         keyboard route into the drawer. */
-      .nav-toggle {
-        position: absolute;
-        inline-size: 1px;
-        block-size: 1px;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        clip-path: inset(50%);
-        overflow: hidden;
-        white-space: nowrap;
-      }
       /*
-       * The bar shows icons only, so its other action — the drawer trigger —
-       * matches: a compact target the same size as a chrome action's,
-       * centred icon, transparent state surface. Not `.chrome-action` itself
-       * (chrome-actions.css styles only a native button or anchor), but a
-       * label bound to a checkbox needs no script to keep working, so this
-       * is a local replica of that geometry rather than the real class.
+       * The tray paints its own surface and states its own placement. While a
+       * poster paints, it cedes that surface, as the rail does in
+       * apps/pelilauta: without this the poster would show only in the gutters
+       * and the page would misrepresent what mounting one looks like.
        */
-      .nav-toggle-label {
-        position: relative;
-        isolation: isolate;
-        display: inline-flex;
-        flex: none;
-        align-items: center;
-        justify-content: center;
-        inline-size: calc(var(--cn-grid) * 7);
-        block-size: calc(var(--cn-grid) * 7);
-        color: inherit;
-        cursor: pointer;
-      }
-      .nav-toggle-label::before {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        inset-block-start: 50%;
-        inset-inline-start: 50%;
-        translate: -50% -50%;
-        inline-size: calc(var(--cn-grid) * 6);
-        block-size: calc(var(--cn-grid) * 6);
-        border-radius: calc(var(--cn-grid) * 3);
-        background-color: transparent;
-        transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
-      }
-      .nav-toggle-label:hover::before { background-color: var(--cn-hover); }
-      .nav-toggle-label:active::before { background-color: var(--cn-active); }
-      .shell:has(.nav-toggle:focus-visible) .nav-toggle-label {
-        outline: 2px solid var(--cn-focus-ring);
-        outline-offset: 2px;
-      }
-      /* The label names the control visually only for a sighted pointer user;
-         the checkbox's own aria-label is what assistive technology reports,
-         so both spans are clipped from view rather than shown as a pill. */
-      .nav-toggle-open,
-      .nav-toggle-close {
-        position: absolute;
-        inline-size: 1px;
-        block-size: 1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-      }
-      .nav-toggle-close { display: none; }
-      .shell:has(.nav-toggle:checked) .nav-toggle-open { display: none; }
-      .shell:has(.nav-toggle:checked) .nav-toggle-close { display: inline; }
-
-      /*
-       * Below --cn-breakpoint-small the bar hides its own leading glyph and
-       * reserves eight grid units at its start edge for exactly this trigger
-       * (CnAppBar.astro) — there is no rail to hold it instead. Lifting it out
-       * of the actions flow and into that reserved slot is what fills it;
-       * left in place at the bar's end, the slot would just be empty space.
-       */
-      @media (max-width: 38.75rem) {
-        :global(.cn-app-bar .actions .nav-toggle-label) {
-          position: absolute;
-          inset-block: 0;
-          inset-inline-start: 0;
-          inline-size: calc(var(--cn-grid) * 8);
-        }
+      body:has(#cn-poster) .shell :global(.cn-tray) {
+        background-color: color-mix(in oklch, var(--cn-surface), transparent 66%);
       }
 
-      /* Nav placement and disclosure are the shell's concern: it owns the
-         toggle. DocsNav styles only its own contents. */
+      /* The index states only its own contents; the tray places it. */
       .shell :global(.docs-nav) {
-        grid-area: nav;
-        padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 2rem);
-        background: var(--cn-surface-1);
-        border-block-end: 1px solid var(--cn-border);
-      }
-
-      /* While a poster paints, the index cedes its surface, as the rail does in
-         apps/pelilauta. Without this the poster would show only in the gutters
-         and the page would misrepresent what mounting one looks like.
-
-         The bar keeps its own surface: it is sticky, so ceding it would
-         scroll the book's own prose through it. Its veil is that legibility
-         halo, fading in as the poster passes beneath. */
-      body:has(#cn-poster) .shell :global(.docs-nav) {
-        background: color-mix(in oklch, var(--cn-surface-1), transparent 66%);
+        padding-inline: var(--cn-gap);
       }
 
       .site-footer {
@@ -280,42 +166,6 @@ const context = group ? groupLabel(group) : 'Index';
         .site-footer {
           align-items: flex-start;
           flex-direction: column;
-        }
-      }
-
-      /* Mobile: drawer closed until the disclosure is checked. visibility, not
-         transform alone, keeps closed links out of the tab order. */
-      @media (max-width: 59.99rem) {
-        .shell :global(.docs-nav) {
-          visibility: hidden;
-          block-size: 0;
-          padding-block: 0;
-          border-block-end: 0;
-          overflow: hidden;
-        }
-        .shell:has(.nav-toggle:checked) :global(.docs-nav) {
-          visibility: visible;
-          block-size: auto;
-          padding-block: clamp(1.5rem, 4vw, 2.5rem);
-          border-block-end: 1px solid var(--cn-border);
-        }
-      }
-
-      @media (min-width: 60rem) {
-        .shell {
-          grid-template-columns: 18rem minmax(0, 1fr);
-          grid-template-areas:
-            'bar bar'
-            'nav book';
-        }
-        .nav-toggle-label { display: none; }
-        .shell :global(.docs-nav) {
-          position: sticky;
-          inset-block-start: 0;
-          align-self: start;
-          min-block-size: 100vh;
-          border-block-end: 0;
-          border-inline-end: 1px solid var(--cn-border);
         }
       }
     </style>

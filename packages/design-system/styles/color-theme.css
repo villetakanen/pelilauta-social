@@ -98,6 +98,15 @@
     color-mix(in oklch, var(--cn-color-surface-50), transparent 80%),
     color-mix(in oklch, var(--cn-color-surface-50), transparent 70%)
   );
+  /*
+   * The scrim dims the page beneath a covering tray. It is a veil over
+   * whatever is there, so it darkens in both schemes rather than taking a
+   * surface role, and it is stated here so no component hardcodes an rgba.
+   */
+  --cn-scrim: light-dark(
+    color-mix(in oklch, var(--cn-color-surface-10), transparent 45%),
+    color-mix(in oklch, var(--cn-color-surface-10), transparent 30%)
+  );
   --cn-focus-ring: light-dark(
     var(--cn-color-primary-60),
     var(--cn-color-primary-40)
