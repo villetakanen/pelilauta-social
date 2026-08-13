@@ -37,6 +37,8 @@
    * canvas, which the poster then paints over, and the poster's lower edge
    * dissolves back into it.
    */
+  /* Deprecated with the Cyan bar that reads it: the local bar paints its own
+     veil and cedes nothing. This rule goes when cn-app-bar does. */
   body:has(#cn-poster) {
     --cn-app-bar-background-sticky: transparent;
   }

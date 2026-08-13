@@ -1,0 +1,172 @@
+---
+/**
+ * CnAppBar — the application's block-start chrome: context, title, actions.
+ */
+import CnBackAction from './CnBackAction.svelte';
+import Icon from './Icon.svelte';
+
+interface Props {
+  title: string;
+  /** Shown in place of `title` below the small breakpoint. */
+  shortTitle?: string;
+  /** Context glyph. Absent renders no leading region at all. */
+  noun?: string;
+  /** A modal bar: the back control replaces the noun, and actions are dropped. */
+  modal?: boolean;
+  /** Accessible name for the back control, localised by the consumer. */
+  backLabel?: string;
+}
+
+const {
+  title,
+  shortTitle,
+  noun,
+  modal = false,
+  backLabel,
+}: Props = Astro.props;
+---
+
+<header class:list={['cn-app-bar', { modal }]}>
+  {
+    modal ? (
+      <CnBackAction client:load label={backLabel} />
+    ) : noun ? (
+      <Icon noun={noun} decorative />
+    ) : (
+      /* No context glyph, so the bar stands for the site itself. */
+      <Icon noun="fox" aria-label="Pelilauta.social" />
+    )
+  }
+
+  <p class="title">
+    <span class="full-title">{title}</span>
+    {shortTitle && <span class="short-title">{shortTitle}</span>}
+  </p>
+
+  {!modal && (
+    <div class="actions">
+      <slot />
+    </div>
+  )}
+</header>
+
+<style>
+  .cn-app-bar {
+    /* The chrome container places the bar. */
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+    block-size: var(--cn-app-bar-height);
+    padding-inline: var(--cn-gap);
+    background-color: transparent;
+    color: var(--cn-on-surface);
+
+    /* A bar shows its actions as icons. */
+    --cn-chrome-presentation: compact;
+  }
+
+  /*
+   * The bar covers nothing while the page is at its top — a poster, or the page
+   * itself, reads through it — and a veil fades in once content is moving
+   * beneath. The veil is twice the bar's depth, so text dissolves before it
+   * reaches the title rather than at it.
+   *
+   * Firefox ships no scroll timeline, drops the timeline declaration, and runs
+   * this on the document timeline instead: no duration, so it lands on its last
+   * frame and the veil stays. Firefox loses the fade, not the legibility.
+   */
+  .cn-app-bar::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: calc(var(--cn-grid) * 16);
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--cn-surface), transparent 10%) 0%,
+      color-mix(in oklch, var(--cn-surface), transparent 30%) 33%,
+      color-mix(in oklch, var(--cn-surface), transparent 70%) 67%,
+      color-mix(in oklch, var(--cn-surface), transparent 90%) 100%
+    );
+    opacity: 0;
+    animation: cn-app-bar-veil both linear;
+    animation-timeline: scroll();
+    /* Nothing at the top; full once the bar's own depth has passed beneath. */
+    animation-range: calc(var(--cn-grid) * 2) calc(var(--cn-grid) * 12);
+  }
+
+  @keyframes cn-app-bar-veil {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* A modal bar rises off the page and paints it, so it needs no veil. */
+  .cn-app-bar.modal {
+    background-color: var(--cn-surface);
+    box-shadow: var(--cn-shadow-elevation-2);
+  }
+
+  .cn-app-bar.modal::before {
+    content: none;
+  }
+
+  /*
+   * Not a heading: the bar is chrome, and the document's outline is the page's.
+   * The type step is the h3 one, without the element that would join the outline.
+   */
+  .title {
+    flex-grow: 1;
+    font-size: var(--cn-font-size-h3);
+    font-weight: var(--cn-font-weight-h3);
+    line-height: var(--cn-line-height-h3);
+    letter-spacing: var(--cn-letter-spacing-h3);
+    min-inline-size: 0;
+    margin: 0;
+    color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .short-title {
+    display: none;
+  }
+
+  /* 38.75rem is --cn-breakpoint-small, which a media query cannot read. */
+  @media (max-width: 38.75rem) {
+    .full-title {
+      display: none;
+    }
+    .short-title {
+      display: inline;
+    }
+
+    /*
+     * A small screen carries no rail, so the navigation trigger sits at the
+     * bar's start edge. The bar reserves that slot rather than the chrome
+     * insetting the bar, so the trigger sits among the bar's own items.
+     */
+    .cn-app-bar:not(.modal) {
+      padding-inline-start: calc(var(--cn-grid) * 8);
+    }
+
+    /* The reserved slot is the leading region, so the glyph gives way. */
+    .cn-app-bar > :global(.cn-icon) {
+      display: none;
+    }
+  }
+</style>
