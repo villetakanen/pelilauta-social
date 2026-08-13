@@ -21,26 +21,41 @@ it changed.
 A Svelte 5 component. Chrome mounts it inside its Svelte components, so it cannot be an
 Astro component.
 
+The control is a chrome action, per `../../chrome-actions/spec.md`, and states no
+geometry, colour or state feedback of its own. It is icon-only in every container: it
+declares the compact presentation itself, so no container labels it.
+
 ### Constraints
 
 The theme is a `color-scheme` property on the document root. On `body`, browser chrome
 keeps the operating-system scheme and a seam appears; as a class, the switch would
 depend on a stylesheet the design system does not publish.
 
-An activation carries a micro-interaction in the theme it lands in.
+The `label` property supplies the chrome action's label, and with it the control's
+accessible name.
+
+An activation carries a micro-interaction expanding from the glyph, in the theme it lands
+in, and changes no measurement of the control.
 
 ## Contract
 
 ### Definition of Done
 
-A **CnThemeSwitch** Component book renders the control, and a browser check exercises
-one activation.
+A **CnThemeSwitch** Component book renders the control, and a browser check exercises one
+activation.
 
 ### Regression Guardrails
 
-(implicit)
+- The control carries no accessible state.
 
 ### Scenarios
+
+```gherkin
+Given a container declaring the labelled presentation
+When the switch renders inside it
+Then it stays compact, with no label in view
+And its accessible name is the label
+```
 
 ```gherkin
 Given the document root carries no color-scheme
