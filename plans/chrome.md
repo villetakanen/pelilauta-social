@@ -130,10 +130,11 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   login destination.
 - **Standard page shell** — migrate `Page.astro` to the local bar and chrome container;
   remove the mobile bottom bar and make `.app-main` cede only persistent chrome space.
-- **Modal and editor shells** — migrate their bars and explicit navigation variants
-  while preserving authentication, indexing and focused-editor behaviour. Handling the
-  back action's event belongs here, including where a route reached from a shared link
-  returns to, and what an editor does with unsaved work.
+- **Modal and editor shells** — the modal shell is migrated. The editor shell waits for
+  the editor's content layout to state where a fixed bar's clearance sits, and for a
+  decision on leaving with unsaved work:
+  `plans/debt/editor-page-keeps-the-cyan-bar.md`. Where a route reached from a shared
+  link returns to is still open; none states a destination yet.
 - **Poster and FAB integration** — keep poster attenuation and FAB placement scoped to
   the new chrome container without moving document scroll or intercepting empty space.
 
