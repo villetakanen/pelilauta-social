@@ -32,19 +32,21 @@ function toggle() {
 </script>
 
 <!--
-  The replica is a sibling anchored to the button, not a child of it: a second
-  child would take the control out of the icon-only button presentation and
-  resize it mid-interaction.
+  The replica stays a sibling of the button, never a child: `.chrome-action`'s
+  label rule (chrome-actions.css) selects any `> span:not(.cn-icon, .cn-loader)`
+  of the button, so a second span nested inside it would be read as the label —
+  clipped out of view in compact, laid into the flow in labelled — instead of
+  rendering as the burst.
 -->
 <span class="cn-theme-switch-scope">
   <button
     bind:this={button}
     type="button"
-    class="button text cn-theme-switch"
-    aria-label={label}
+    class="chrome-action cn-theme-switch"
     onclick={toggle}
   >
     <Icon noun="moon" decorative />
+    <span>{label}</span>
   </button>
   {#key activations}
     {#if activations}
@@ -58,6 +60,15 @@ function toggle() {
   .cn-theme-switch-scope {
     display: inline-flex;
     anchor-scope: --cn-theme-switch;
+
+    /*
+     * The switch is icon-only wherever it is mounted, so it declares its own
+     * presentation rather than taking the one around it: the label names the
+     * control and never shows. This element is the button's parent, which is
+     * the element a chrome action's style query reads, so a container further
+     * out — an open tray, say — cannot label it.
+     */
+    --cn-chrome-presentation: compact;
   }
 
   .cn-theme-switch {
@@ -74,14 +85,21 @@ function toggle() {
   .burst {
     position: fixed;
     position-anchor: --cn-theme-switch;
-    position-area: center;
+    inset-block-start: anchor(--cn-theme-switch center);
+    inset-inline-start: anchor(--cn-theme-switch start);
     pointer-events: none;
     color: light-dark(var(--cn-color-primary-40), var(--cn-color-primary-90));
     animation: cn-theme-switch-burst calc(var(--cn-duration-ui) * 2)
       var(--cn-easing-ui) forwards;
-    transform: translateY(
-      calc(var(--cn-grid) / 4)
-    ); /* 2px */
+    /*
+     * Centred on the glyph, which sits at the centre of the compact target,
+     * `3.5 × --cn-grid` from its inline-start edge. `translate`, not
+     * `transform`: the individual transform properties compose outside
+     * `scale`, so this offset holds while the keyframes grow the replica about
+     * its own centre. From inside `transform`, the ×8 would multiply it too.
+     */
+    translate: calc(var(--cn-grid) * 3.5 - 50%)
+      calc(var(--cn-grid) / 4 - 50%);
   }
 
   @keyframes cn-theme-switch-burst {
