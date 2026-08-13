@@ -92,6 +92,8 @@ const {
       color-mix(in oklch, var(--cn-surface), transparent 90%) 100%
     );
     opacity: 0;
+    /* Decorative paint, and it overhangs the bar by its own depth again. */
+    pointer-events: none;
     animation: cn-app-bar-veil both linear;
     animation-timeline: scroll();
     /* Nothing at the top; full once the bar's own depth has passed beneath. */

@@ -58,10 +58,11 @@
   --cn-app-bar-height: calc(var(--cn-grid) * 8);
 
   /*
-   * Stacking. One value for now: the FAB tray rides above page content and the
-   * persistent navigation, and below the dialog, modal and snackbar layers that
-   * Cyan still provides at 50000 and above.
+   * Stacking. Chrome rides above page content and Cyan's own fixed navigation,
+   * and below the dialog, modal and snackbar layers Cyan still provides at 50000
+   * and above. The tray's value resolves among chrome's parts, inside the box.
    */
+  --cn-z-chrome: 40500;
   --cn-z-fab: 40500;
 
   /* Interaction motion, shared by every control that answers a pointer. */

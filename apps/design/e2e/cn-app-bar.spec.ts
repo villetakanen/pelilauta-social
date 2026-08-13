@@ -37,9 +37,9 @@ const BOOK = '/components/cn-app-bar';
  * on the page that sits outside `<main id="content">` — the one instance
  * the browser can expose as the `banner` landmark at all.
  */
-// The shell places the bar in its own fixed chrome layer, which stands in for
-// the application chrome container until that capability is specified.
-const shellBar = (page: Page) => page.locator('.chrome > header.cn-app-bar');
+// The shell places the bar in the design system's chrome layer.
+const shellBar = (page: Page) =>
+  page.locator('.app-chrome > header.cn-app-bar');
 
 /**
  * The `figure` a `<Composition>` wraps one of this book's own specimens in,

@@ -6,6 +6,7 @@
  * and the footer, and a book's <h1> from its frontmatter title.
  */
 import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import Icon from '@design-system/components/Icon.svelte';
 import '@design-system/styles/ds.css';
@@ -76,7 +77,7 @@ const context = group ? groupLabel(group) : 'Index';
     <a class="skip-link" href="#content">Skip to content</a>
 
     <div class="shell">
-      <div class="chrome">
+      <CnAppChrome>
         <CnAppBar title={context} shortTitle={context}>
         <ThemeSwitch />
         <!--
@@ -99,7 +100,7 @@ const context = group ? groupLabel(group) : 'Index';
           <span class="nav-toggle-close">Close</span>
         </label>
         </CnAppBar>
-      </div>
+      </CnAppChrome>
 
       <DocsNav />
 
@@ -151,28 +152,6 @@ const context = group ? groupLabel(group) : 'Index';
       }
       .book { grid-area: book; }
 
-      /*
-       * A stand-in for the application chrome container, which has no spec
-       * yet: one fixed layer holding the bar, with the book ceding its depth.
-       * The bar states no placement, so nothing here fights it.
-       */
-      .chrome {
-        position: fixed;
-        z-index: 2;
-        inset-block-start: 0;
-        inset-inline: 0;
-      }
-      /*
-       * The veil (CnAppBar.astro's `::before`) is invisible at rest, but nothing
-       * in the component clears its pointer events — and it stands twice the
-       * bar's own depth, so it reaches over whatever content starts right below
-       * the bar. Decorative chrome should never steal a click or a hover from
-       * the content it fades over; the shell states that here because the veil
-       * is the component's own paint, not a target it exposes.
-       */
-      :global(.cn-app-bar)::before {
-        pointer-events: none;
-      }
       /* Placement is the shell's concern; the switch styles its own contents. */
       :global(.cn-app-bar .actions) > :global(.cn-theme-switch-scope) {
         flex: none;
