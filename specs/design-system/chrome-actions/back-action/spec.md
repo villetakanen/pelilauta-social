@@ -2,21 +2,19 @@
 status: approved
 ---
 
-# CnBackAction
+# Back Action
 
 ## Blueprint
 
 ### Context
 
-Pelilauta presents modals both as dialogs and as pages standing in for them. CnBackAction
-provides the default button for exiting the modal.
+Pelilauta presents modals both as dialogs and as pages standing in for them. The back
+action is the default button for exiting the modal.
 
 ### Architecture
 
-A Svelte 5 component, `packages/design-system/components/CnBackAction.svelte`.
-
-The control is a chrome action per `../../chrome-actions/spec.md`. It is a command: it
-navigates nothing, and is never a destination.
+A Svelte 5 component, `packages/design-system/components/CnBackAction.svelte`. It is a
+command: it navigates nothing, and is never a destination.
 
 ### Constraints
 
@@ -32,8 +30,8 @@ The glyph is the `arrow-left` Icon.
 
 ### Definition of Done
 
-- A **CnBackAction** Component book renders the control, in Light and Dark, beside a
-  specimen that shows each activation's `cn-back` event.
+- The chrome actions book renders the control, in Light and Dark, beside a specimen that
+  shows each activation's `cn-back` event.
 - A browser check asserts that pointer and keyboard activation each dispatch `cn-back`,
   that the event reaches a listener above the control, that the accessible name is the
   label, and that an activation changes neither the document nor the session history.

@@ -6,6 +6,9 @@ order: 5.5
 
 import Composition from '@design-system/books/specimens/Composition.astro'
 import ChromeActionSpecimens from '@design-system/books/specimens/ChromeActionSpecimens.astro'
+import BackActionSpecimen from '@design-system/books/specimens/BackActionSpecimen.svelte'
+import CnBackAction from '@design-system/components/CnBackAction.svelte'
+import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
 
 `.chrome-action` ships as one class, applying to `button.chrome-action` and to
 `a.chrome-action[href]`. It takes its foreground from the container that places
@@ -110,3 +113,39 @@ focusable; no disabled presentation exists for the anchor, so none renders.
 
 Transitions use `--cn-duration-ui` and `--cn-easing-ui`, and do not run under
 `prefers-reduced-motion: reduce`.
+
+## Helpers
+
+A helper fixes one chrome action's glyph, semantics and report, so an application composes
+it rather than rebuilding it. Each is a Svelte component; each takes a `label` that is its
+accessible name.
+
+### Back action
+
+The default button for exiting a modal, whether that modal is a dialog or a page standing
+in for one. Activation dispatches `cn-back`, a bubbling `CustomEvent`, and does nothing
+else — the consuming application listens for it and decides where the reader goes.
+
+<Composition themes caption="CnBackAction, in Light and Dark">
+  <CnBackAction client:load label="Takaisin" />
+</Composition>
+
+`label` defaults to `<`, a placeholder rather than a name: replace it with a localised one.
+
+The control has no visible effect of its own. The specimen below mounts it beside a
+listener bound above it, counting each `cn-back` that arrives.
+
+<Composition caption="CnBackAction beside a listener mounted above it, counting each cn-back event">
+  <BackActionSpecimen client:load />
+</Composition>
+
+### Theme switch
+
+Flips the document between the light and dark colour schemes and reports the change. It
+declares the compact presentation on itself, so it stays icon-only in every container — an
+open tray cannot put its label in view. Its theme behaviour and its event are documented in
+[CnThemeSwitch](/components/cn-theme-switch).
+
+<Composition caption="CnThemeSwitch, which re-themes this page">
+  <CnThemeSwitch client:load />
+</Composition>

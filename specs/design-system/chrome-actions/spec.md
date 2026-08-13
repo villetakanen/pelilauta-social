@@ -27,6 +27,10 @@ restated here.
 Compact and labelled are presentations of one control, not two controls. The element,
 its destination or command, and its accessible name are the same in both.
 
+A helper fixes one chrome action's glyph, semantics and report so an application composes
+it rather than rebuilding it. Each carries a sub-spec, and states only what this one does
+not: `back-action/spec.md`.
+
 A container declares which presentation its chrome actions take by setting the
 inherited `--cn-chrome-presentation` to `compact` or `labelled`; how the container
 decides — its own width, a reader's action, or a fixed choice — is the container's
