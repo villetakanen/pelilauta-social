@@ -8,6 +8,7 @@
 import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
+import CnShareAction from '@design-system/components/CnShareAction.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import '@design-system/styles/ds.css';
 // Prototype-age scaffolding: the index page's editorial vocabulary, and the table
@@ -99,6 +100,7 @@ const context = group ? groupLabel(group) : 'Index';
           <span class="nav-toggle-open">Browse</span>
           <span class="nav-toggle-close">Close</span>
         </label>
+        <CnShareAction client:load label="Share this page" />
         </CnAppBar>
       </CnAppChrome>
 

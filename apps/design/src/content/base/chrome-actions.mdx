@@ -7,7 +7,9 @@ order: 5.5
 import Composition from '@design-system/books/specimens/Composition.astro'
 import ChromeActionSpecimens from '@design-system/books/specimens/ChromeActionSpecimens.astro'
 import BackActionSpecimen from '@design-system/books/specimens/BackActionSpecimen.svelte'
+import ShareActionSpecimen from '@design-system/books/specimens/ShareActionSpecimen.svelte'
 import CnBackAction from '@design-system/components/CnBackAction.svelte'
+import CnShareAction from '@design-system/components/CnShareAction.svelte'
 import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
 
 `.chrome-action` ships as one class, applying to `button.chrome-action` and to
@@ -138,6 +140,31 @@ listener bound above it, counting each `cn-back` that arrives.
 <Composition caption="CnBackAction beside a listener mounted above it, counting each cn-back event">
   <BackActionSpecimen client:load />
 </Composition>
+
+### Share action
+
+Passes the current page on. Where the browser has the Web Share API, activation opens its
+share sheet; where it has none, the page's URL goes to the clipboard instead.
+
+<Composition themes caption="CnShareAction, in Light and Dark">
+  <CnShareAction client:load label="Jaa" />
+</Composition>
+
+`label` has no default: a share button without one is an unnamed icon, which is what v18
+shipped.
+
+The control shows nothing either way, so the consuming application decides whether the
+reader is told. Activation dispatches `cn-share`, a bubbling `CustomEvent` whose
+`detail.outcome` is `shared`, `copied` or `failed`; a reader who dismisses the browser's
+sheet gets no event at all. The specimen below prints the outcome that arrived, which
+depends on the browser reading this page.
+
+<Composition caption="CnShareAction beside a listener mounted above it, printing each cn-share outcome">
+  <ShareActionSpecimen client:load />
+</Composition>
+
+By default it shares the document's own URL and title; `url`, `title` and `text` state
+otherwise. An unstated `text` is not shared.
 
 ### Theme switch
 

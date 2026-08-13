@@ -41,8 +41,6 @@ The glyph is the `arrow-left` Icon.
 ### Regression Guardrails
 
 - One activation dispatches one event.
-- The control publishes no variants. A consumer does not choose its glyph, its element or
-  its event.
 
 ### Scenarios
 
