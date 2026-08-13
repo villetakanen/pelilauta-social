@@ -19,38 +19,39 @@ persists on the Pelilauta account.
 2. The application bar and navigation occupy one viewport-sized chrome container;
    document scrolling remains on the document and chrome does not intercept pointer
    input outside its controls and open pop-overs.
-3. Mobile has no block-end navigation bar. Its navigation control opens the full tray
-   as a pop-over, as it does on tablet.
+3. Mobile has no block-end navigation bar. Its navigation control opens the drawer over
+   a scrim, as it does on tablet.
 4. The collapsed tablet and desktop navigation is a rail. An open desktop tray takes
    an inline layout track; pop-over trays do not change the document's available
    inline size.
 5. Main and document spacing follows the chrome's occupied block and inline edges at
    every responsive mode, including app-bar, rail, tray and footer clearance.
-6. Primary and contextual navigation follow the v20 hierarchy, preserve v18 route and
-   authorization behaviour, expose the current destination, and remain keyboard and
-   screen-reader operable.
+6. Navigation follows the page's own entries, preserves v18 route and authorization
+   behaviour, exposes the current entry, and remains keyboard and screen-reader
+   operable.
 7. An authenticated theme change updates the document immediately and persists the
    canonical account theme field; a later document renders the stored theme without
    a wrong-theme paint.
 
 ## Navigation model
 
-v20 replaces v18's independent global rail and right-side contextual tray with one
-adaptive leading navigation surface. Primary destinations are tray buttons. A
-destination's subordinate routes form labeled link groups that are present in the
-full tray and absent from its rail form.
+The tray is local navigation. It holds the places a reader reaches from where they
+are, and the page supplies them, so what is in it changes as the reader moves. v18's
+global rail does not survive: Pelilauta's areas are isolated, a reader leaves one by
+going up, and where that stands is not the tray's. A region at the tray's block end
+holds what the application keeps for the reader.
 
-Pelilauta states the destination set, order, active-route rules, authorization and
-contextual groups. The design system provides the rail, tray, trigger, scrim, responsive
-presentation, focus handling and navigation-item presentation.
+Pelilauta states the entries, their nesting, active-route rules and authorization. The
+design system provides the drawer, rail, trigger, scrim, responsive presentation, focus
+handling and entry presentation.
 
 The responsive model is:
 
-- mobile: no persistent navigation surface; the trigger opens the full tray as a
-  pop-over over a scrim;
-- tablet: a persistent rail opens the full tray as a pop-over over a scrim;
-- desktop: a persistent rail expands into a tray that takes an inline layout track
-  and moves the main region; no scrim is shown.
+- narrower than `--cn-breakpoint-small`: no navigation beside the page; the trigger
+  opens the drawer over a scrim;
+- to `--cn-breakpoint-tablet`: a rail, which opens the drawer over a scrim;
+- wider: the tray stands open and the main region cedes its inline size; asking
+  collapses it to the rail, and no scrim is shown.
 
 ## Blocking sub-epic
 
@@ -77,9 +78,9 @@ them.
 - `specs/design-system/tray/spec.md` — one component: the trigger, the drawer, the
   scrim and the rail it collapses to. Its three widths, what each does to the main
   region, and its focus, escape and state behaviour.
-- `specs/pelilauta/navigation/spec.md` — destination order, route matching,
-  contextual hierarchy, authenticated and administrator visibility, inbox status and
-  layout variants.
+- `specs/pelilauta/navigation/spec.md` — each area's entries and their order, route
+  matching, authenticated and administrator visibility, and what the tray's block end
+  holds for the reader.
 - `specs/pelilauta/theme-preference/spec.md` — initial theme resolution, anonymous
   fallback, handling the design-system change event, account persistence, legacy
   `lightMode` compatibility, failure handling and view-transition behaviour.
@@ -118,16 +119,16 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **Theme switch** — ship and book the `CnThemeSwitch` component and its public state
   and event contract without reading application stores or persistence, and mount it
   in the temporary application bar so a theme change repaints the current document.
-- **Adaptive navigation** — ship and book the local tray, rail, trigger, primary item
-  and subordinate-link components with automated responsive and accessibility checks.
+- **Adaptive navigation** — ship and book the tray: its trigger, drawer, scrim, rail and
+  entries, with automated responsive and accessibility checks.
 - **Application chrome geometry** — ship and book the standalone chrome container and
   its occupied-edge interface with bounded and viewport-sized specimens.
 
 #### Phase 2 — Shell and simple-page migration
 
-- **Pelilauta navigation composition** — assemble the shared v20 hierarchy from v18's
-  routes and authorization rules, including active states, inbox count and profile or
-  login destination.
+- **Pelilauta navigation composition** — state each area's own entries from v18's routes
+  and authorization rules, including active states, and what the tray's block end holds
+  for the reader.
 - **Standard page shell** — migrate `Page.astro` to the local bar and chrome container;
   remove the mobile bottom bar and make `.app-main` cede only persistent chrome space.
 - **Modal and editor shells** — the modal shell is migrated. The editor shell waits for
@@ -140,12 +141,12 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 #### Phase 3 — Contextual navigation migration
 
-- **Library and docs hierarchy** — move their contextual links beneath the matching
-  primary destinations in the full tray and retire their legacy tray markup.
-- **Site hierarchy** — move site, page, asset and authorized management links into the
-  full tray while preserving anonymous rendering and client authorization islands.
-- **Administration hierarchy** — move administrator destinations and tools into the
-  full tray while retaining server authorization and client visibility rules.
+- **Library and docs hierarchy** — make their contextual links the entries their own
+  pages supply, and retire their legacy tray markup.
+- **Site hierarchy** — make site, page, asset and authorized management links the site's
+  own entries, preserving anonymous rendering and client authorization islands.
+- **Administration hierarchy** — make administrator destinations and tools entries of
+  the pages that carry them, retaining server authorization and client visibility rules.
 - **PageWithTray retirement** — move every remaining consumer to the common page shell
   and remove the independent right-side tray layout.
 
