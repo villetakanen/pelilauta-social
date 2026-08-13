@@ -52,6 +52,13 @@ The responsive model is:
 - desktop: a persistent rail expands into a tray that takes an inline layout track
   and moves the main region; no scrim is shown.
 
+## Blocking sub-epic
+
+[Chrome Actions](chrome-actions.md) specifies and ships the clickable items used by
+the application bar, rail and tray. Its composition UAT completes before container
+specifications or implementations proceed, so containers compose settled targets,
+indicators and interaction states without redefining their geometry.
+
 ## Required specifications
 
 These specifications are approved before the implementation slice that consumes
@@ -62,6 +69,8 @@ them.
   stacking and poster interaction.
 - `specs/design-system/components/cn-app-bar/spec.md` — local application bar regions,
   view and modal modes, title behaviour, actions and responsive geometry.
+- `specs/design-system/chrome-actions/spec.md` — the shared chrome target, state
+  surface and foreground for a native button and anchor, extending Actions.
 - `specs/design-system/components/cn-theme-switch/spec.md` — controlled theme state,
   accessible label and indication, public component API and the change event emitted
   for a host application to handle.
@@ -93,7 +102,9 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 #### Phase 1 — Contracts and design-system chrome
 
-- **Chrome specifications** — approve the six contracts above before their
+- **Chrome actions** — complete `plans/chrome-actions.md` before specifying or shipping
+  the application bar, adaptive navigation or application chrome geometry.
+- **Chrome specifications** — approve the required contracts above before their
   implementation slices begin.
 - **Account theme compatibility note** — record the additive account field and v18
   compatibility boundary in `docs/ARCHITECTURE.md` before changing the schema.

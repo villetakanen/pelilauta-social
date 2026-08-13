@@ -35,6 +35,10 @@ lands. One paragraph.
 What would a reader of the code get backwards? State which way the dependencies
 run, and any structural choice that reading one file would not reveal.
 
+When a capability extends another, name the spec it extends and state only what
+differs. The extended spec governs wherever this one is silent. Do not restate an
+inherited rule to make this spec read completely.
+
 ### Constraints
 
 What would someone guess wrong if it were not written here?

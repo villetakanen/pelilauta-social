@@ -63,7 +63,7 @@ button.
 
 #### Shared grammar
 
-Every state preserves the selected variant's surface and foreground identity; hover
+Every state preserves the chosen variant's surface and foreground identity; hover
 and active feedback composes over the surface without a brightness filter. State
 transitions use the shared UI duration and easing roles and resolve without motion
 when the reader requests reduced motion. Keyboard focus adds `--cn-focus-ring`
@@ -170,7 +170,7 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
 - Hover, active, keyboard-focus, disabled, loading and reduced-motion states are
   observable in the applicable native elements.
 - The **Links, Actions and Buttons** Base book explains element and variant
-  selection and renders every presentation, variant, composition and applicable
+  choice and renders every presentation, variant, composition and applicable
   state from shipped source in Light and Dark.
 - Action presentation no longer comes from the design site's editorial stylesheet,
   Cyan, or an application migration bridge.
@@ -250,7 +250,7 @@ Then their geometry, typography, surface, foreground and interaction feedback ma
 Given each variant of the button and FAB presentations
 When each renders at rest, on hover, while active, and with keyboard focus
 Then each state is visibly distinct where applicable
-And each state preserves the selected variant's surface and foreground identity
+And each state preserves the chosen variant's surface and foreground identity
 And keyboard focus includes a visible focus ring
 ```
 
@@ -265,7 +265,7 @@ And the control's accessible name describes its action or destination
 ```gherkin
 Given a button and a FAB containing only an Icon
 When they render in a flex or grid composition
-Then each retains equal inline and block sizes for its selected presentation and size
+Then each retains equal inline and block sizes for its chosen presentation and size
 And neither stretches into the available space
 And each has an accessible name describing its action or destination
 ```
