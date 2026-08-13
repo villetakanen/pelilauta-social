@@ -55,6 +55,8 @@ an identity action.
   in both presentations and independent of its container. It is the first consumer of
   persistent state, so it declares `--cn-indicator` and `--cn-on-indicator` under the
   names `docs/ARCHITECTURE.md` reserves.
+- **Back action** — the modal bar's leading control carries its own spec: it composes the
+  chrome action and reports its activation. Where back leads is the application's.
 - **Tray toggle** — the two-bar menu control carries its own spec and does not extend
   this capability. It is fixed to one corner at every size, owns its spacing and its
   expanded state, and only resembles a chrome action.

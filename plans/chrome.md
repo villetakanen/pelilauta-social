@@ -126,7 +126,9 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **Standard page shell** — migrate `Page.astro` to the local bar and chrome container;
   remove the mobile bottom bar and make `.app-main` cede only persistent chrome space.
 - **Modal and editor shells** — migrate their bars and explicit navigation variants
-  while preserving authentication, indexing and focused-editor behaviour.
+  while preserving authentication, indexing and focused-editor behaviour. Handling the
+  back action's event belongs here, including where a route reached from a shared link
+  returns to, and what an editor does with unsaved work.
 - **Poster and FAB integration** — keep poster attenuation and FAB placement scoped to
   the new chrome container without moving document scroll or intercepting empty space.
 
