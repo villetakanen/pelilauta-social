@@ -128,7 +128,8 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 - **Pelilauta navigation composition** — state each area's own entries from v18's routes
   and authorization rules, including active states, and what the tray's block end holds
-  for the reader.
+  for the reader. A page v18 gives no tray takes the default one, which carries the front
+  page's entries. A modal page carries none.
 - **Standard page shell** — migrate `Page.astro` to the local bar and chrome container;
   remove the mobile bottom bar and make `.app-main` cede only persistent chrome space.
 - **Modal and editor shells** — the modal shell is migrated. The editor shell waits for
