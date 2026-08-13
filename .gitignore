@@ -155,3 +155,5 @@ vite.config.ts.timestamp-*
 
 # Local scratch: batch plans and working notes that are not delivery artifacts
 /tmp/
+
+test-results/
