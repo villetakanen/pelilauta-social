@@ -57,9 +57,8 @@ an identity action.
   names `docs/ARCHITECTURE.md` reserves.
 - **Back action** — the modal bar's leading control carries its own spec: it composes the
   chrome action and reports its activation. Where back leads is the application's.
-- **Tray toggle** — the two-bar menu control carries its own spec and does not extend
-  this capability. It is fixed to one corner at every size, states its spacing and its
-  expanded state, and only resembles a chrome action.
+- **Tray toggle** — not this capability's. v20 renders the two-bar control, the drawer
+  and the scrim as one component sharing one checkbox, so it is specified with the tray.
 - **Identity action** — specify and ship anonymous, loading and avatar states in both
   chrome presentations, without importing authentication state into the design system.
 - **Status adjunct** — settle and ship count or status indication for chrome items

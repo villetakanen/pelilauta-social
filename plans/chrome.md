@@ -74,9 +74,9 @@ them.
 - `specs/design-system/components/cn-theme-switch/spec.md` — controlled theme state,
   accessible label and indication, public component API and the change event emitted
   for a host application to handle.
-- `specs/design-system/application-navigation/spec.md` — tray, rail, trigger, scrim,
-  primary item and subordinate group semantics; pop-over and push modes; focus,
-  escape and state behaviour.
+- `specs/design-system/tray/spec.md` — one component: the trigger, the drawer, the
+  scrim and the rail it collapses to. Its three widths, what each does to the main
+  region, and its focus, escape and state behaviour.
 - `specs/pelilauta/navigation/spec.md` — destination order, route matching,
   contextual hierarchy, authenticated and administrator visibility, inbox status and
   layout variants.
