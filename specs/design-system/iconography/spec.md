@@ -23,16 +23,15 @@ and the assistive-technology announcement.
 - Use an icon only when it aids understanding or visually anchors an
   interaction. If an icon makes an element ambiguous, omit it or pair it with a
   visible label.
-- Icon-only controls are reserved for near-universal actions (close, search,
-  menu, settings). Complex or domain-specific actions (*Publish campaign*,
-  *Archive thread*) always carry a visible text label.
+- An icon stands alone only where its meaning is near-universal — close, search,
+  menu, settings. A complex or domain-specific meaning (*Publish campaign*,
+  *Archive thread*) accompanies a visible label rather than replacing it.
 
 ### Accessibility in use
 
-- An icon-only control always has an accessible name that states its action, not
-  its picture. A consumer supplies that name; the mechanism is the Icon contract.
-- An icon is never the only signal of a state; colour or shape change is paired
-  with text or another structural indication.
+- A state is available programmatically, never only in view. Colour, an icon or a
+  shape may signal it visually, and assistive technology reads it from the element
+  itself.
 
 ### Consistency of size and alignment
 
