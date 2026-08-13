@@ -26,7 +26,8 @@ rhythm between sibling containers. The content container owns the inline and blo
 arrangement of its regions.
 
 The application `<main>` bearing `.app-main` is the usual host for a sequence of
-content containers and provides `--cn-gap` page-edge inset at narrow widths. The
+content containers, and provides `--cn-gap` page-edge inset at narrow widths. Chrome is
+fixed and paints over the document, so the host also clears the application bar. The
 consumer applies that class; Content Container Layouts never matches a bare `<main>`,
 so a page that has not opted in keeps the layout it has. Any element that establishes
 an inline-size containment context may host containers. A

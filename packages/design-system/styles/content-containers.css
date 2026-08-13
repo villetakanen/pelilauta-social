@@ -19,6 +19,12 @@
   padding-inline: var(--cn-gap);
 
   /*
+   * Chrome is fixed and paints over the document, so the first container clears
+   * the application bar here rather than in every application's shell.
+   */
+  padding-block-start: var(--cn-app-bar-height);
+
+  /*
    * A host answers its containers' width queries, and a container asks its nearest
    * host without naming it. This also makes the host a containing block for
    * absolutely positioned descendants, which is why a fab tray is mounted outside it.

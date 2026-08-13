@@ -52,6 +52,12 @@
   --cn-icon-size-xlarge: 8rem; /* 128px */
 
   /*
+   * Chrome is fixed and paints over the document, so a page insets its own
+   * first line by the bar's depth rather than measuring it.
+   */
+  --cn-app-bar-height: calc(var(--cn-grid) * 8);
+
+  /*
    * Stacking. One value for now: the FAB tray rides above page content and the
    * persistent navigation, and below the dialog, modal and snackbar layers that
    * Cyan still provides at 50000 and above.
@@ -66,6 +72,11 @@
    * Breakpoints, in rem so a query follows a reader's enlarged default text.
    * A media or container query cannot read a custom property: a rule that
    * needs a threshold states the literal, and a test pins the literal here.
+   *
+   * Each names the width where its band ends: small below the first, tablet
+   * between them, desktop above the second. The second is where a tray fits
+   * beside content rather than over it.
    */
   --cn-breakpoint-small: 38.75rem; /* 620px; small-screen width */
+  --cn-breakpoint-tablet: 64rem; /* 1024px; widest tablet width */
 }
