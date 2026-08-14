@@ -182,7 +182,10 @@
     var(--cn-color-error-40),
     var(--cn-color-error-60)
   );
-  --cn-color-info: light-dark(var(--cn-color-info-20), var(--cn-color-info-60));
+  --cn-color-info: light-dark(
+    var(--cn-color-primary-50),
+    var(--cn-color-primary-90)
+  );
   --cn-color-love: light-dark(var(--cn-color-love-40), var(--cn-color-love-60));
 
   --cn-bubble: light-dark(
