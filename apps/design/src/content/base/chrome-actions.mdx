@@ -11,6 +11,7 @@ import ShareActionSpecimen from '@design-system/books/specimens/ShareActionSpeci
 import CnBackAction from '@design-system/components/CnBackAction.svelte'
 import CnShareAction from '@design-system/components/CnShareAction.svelte'
 import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
+import CnNotificationAction from '@design-system/components/CnNotificationAction.svelte'
 
 `.chrome-action` ships as one class, applying to `button.chrome-action` and to
 `a.chrome-action[href]`. It takes its foreground from the container that places
@@ -207,4 +208,15 @@ open tray cannot put its label in view. Its theme behaviour and its event are do
 
 <Composition caption="CnThemeSwitch, which re-themes this page">
   <CnThemeSwitch client:load />
+</Composition>
+
+## Notification action
+
+A notification action is a chrome action subtype, `CnNotificationAction`, that adds a
+badge reporting a count. Every measurement, state and rule stated above applies to it
+unchanged. Its props, its counting rules and its accessible name are documented in
+[CnNotificationAction](/components/cn-notification-action).
+
+<Composition themes caption="CnNotificationAction, in Light and Dark">
+  <CnNotificationAction href="/base/chrome-actions" noun="info" label="Ilmoitukset" count={3} />
 </Composition>

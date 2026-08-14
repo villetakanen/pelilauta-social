@@ -94,6 +94,17 @@ a.chrome-action[href] {
   --_label-inline: var(--_labelled-label-inline, calc(var(--cn-grid) / 8));
   --_label-block: var(--_labelled-label-block, calc(var(--cn-grid) / 8));
   --_label-clip: var(--_labelled-label-clip, inset(50%));
+  /*
+   * The notification badge's inline-start, resolved the same way. Both
+   * branches place the badge's centre on the Icon's inline-end edge: compact
+   * measures that edge from the target's centre, labelled from the inline
+   * inset the content starts at.
+   */
+  --_badge-size: calc(var(--cn-grid) * 2.5);
+  --_badge-inline-start: var(
+    --_labelled-badge-inline-start,
+    calc(50% + var(--cn-icon-size) / 2 - var(--_badge-size) / 2)
+  );
 }
 
 button.chrome-action > :is(.cn-icon, .cn-loader),
@@ -111,10 +122,11 @@ a.chrome-action[href] > :is(.cn-icon, .cn-loader) {
  * `span` (`Icon.svelte`, `CnLoader.svelte`) and must stay visible and in
  * flow. It reads the `--_label-*` scope tokens the target resolved above and
  * contains no style query of its own — see the comment on those tokens for
- * why.
+ * why. Excluded also from the notification badge, which renders as a `span`
+ * of its own and carries the count rather than the label.
  */
-button.chrome-action > span:not(.cn-icon, .cn-loader),
-a.chrome-action[href] > span:not(.cn-icon, .cn-loader) {
+button.chrome-action > span:not(.cn-icon, .cn-loader, .cn-notification-badge),
+a.chrome-action[href] > span:not(.cn-icon, .cn-loader, .cn-notification-badge) {
   position: var(--_label-position);
   /* Compact: a near-zero box, grid-derived rather than a pixel literal, so it
      still scales with the reader's text size — it only has to survive as
@@ -177,6 +189,9 @@ a.chrome-action[href]::before {
     --_labelled-label-inline: auto;
     --_labelled-label-block: auto;
     --_labelled-label-clip: none;
+    --_labelled-badge-inline-start: calc(
+      var(--cn-grid) + var(--cn-icon-size) - var(--_badge-size) / 2
+    );
   }
 }
 
@@ -234,6 +249,43 @@ a.chrome-action[href][aria-current]:not([aria-current='false'])::after {
   block-size: calc(var(--cn-grid) * 6);
   border-radius: calc(var(--cn-grid) * 3);
   background-color: var(--cn-indicator);
+  pointer-events: none;
+}
+
+/*
+ * The notification badge stands at the block-start, inline-end corner of the
+ * Icon in both presentations, and takes no space in the target's flow.
+ * Its own fill and foreground are why it survives every state the chrome
+ * action has, including the current destination, whose foreground the
+ * anchor sets and the badge overrides for itself. It carries no z-index of
+ * its own, so it paints above `::before` and `::after`, which sit at
+ * negative z-indexes inside the target's own stacking context.
+ */
+.chrome-action > .cn-notification-badge {
+  position: absolute;
+  inset-block-start: calc(
+    50% - var(--cn-icon-size) / 2 - var(--_badge-size) / 2
+  );
+  inset-inline-start: var(--_badge-inline-start);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: var(--_badge-size);
+  block-size: var(--_badge-size);
+  padding-inline: calc(var(--cn-grid) / 2);
+  border-radius: calc(var(--_badge-size) / 2);
+  background-color: var(--cn-color-info);
+  /*
+   * A decorative pick, taken from the palette rather than a foreground role.
+   * The badge is hidden from assistive technology and carries no text contrast
+   * ratio, and no semantic foreground answers a fill that is dark in one scheme
+   * and bright in the other: a single role would leave the characters unread in
+   * whichever scheme it was not chosen for.
+   */
+  color: light-dark(var(--cn-color-primary-95), var(--cn-color-primary-40));
+  font-size: var(--cn-font-size-small);
+  line-height: 1;
   pointer-events: none;
 }
 
