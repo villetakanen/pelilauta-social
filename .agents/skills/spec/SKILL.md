@@ -50,3 +50,10 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
 Follow `docs/DESIGN.md` Voice, read before drafting. A spec is direct, strict and
 technical. It carries no rationale: no "because" clause, no "X rather than Y" unless
 Y is a mistake the reader would make, and no sentence restating the one before it.
+
+## Recording the intent
+
+The specs contect and architecture describe how, and why the feature exits. The goal is to capture the user or system need, and purpose
+for the feature. Reasons why it exits.
+
+Where these are not derivable from the sources, ask questions.
