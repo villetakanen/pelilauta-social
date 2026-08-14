@@ -2,7 +2,9 @@
 
 Rules for every sentence in this repository: documents, specs, books, plans, comments,
 commit messages. Templates own structure; skills own process; this file owns
-sentences.
+sentences. The style derives from the
+[Google developer documentation style guide](https://developers.google.com/style);
+rules in this file take precedence.
 
 ## Principles
 
@@ -15,11 +17,11 @@ sentences.
    otherwise do the wrong thing; state none the reader can derive. The why lives in
    the artifact that owns it: a capability's purpose in its spec, a decision's
    narrative in the commit message, an irreversible choice in an ADR.
-3. **Write to the reader's next action, in their register.** A document for agents or
-   developers instructs and avoids pronouns. A document for people using the product
-   says "we". A principles book argues, and the argument is its content.
-4. **A statement lives once**, in the file that owns it. Elsewhere, a pointer or
-   nothing.
+3. **Audience register.** A document for agents or developers instructs and avoids
+   pronouns. A document for people using the product says "we". A principles book
+   argues, and the argument is its content.
+4. **Canonical source.** A fact is defined once, in the file that owns it. Elsewhere,
+   a reference or nothing.
 
 Failures of principle 1: a rationale the sentence itself implies; a platform fact
 readable from the technology's documentation; a restated sentence; an aphorism; a
@@ -28,14 +30,14 @@ mistake the reader would likely make.
 
 ## Mechanics
 
-Adapted from the Google developer documentation style guide. Where the register above
-disagrees with the guide, the register wins.
+Follow the Google guide by default. Where the principles above disagree with it, the
+principles win.
 
 - Second person, imperative, for instructions.
-- Present tense; no future tense for product behaviour.
-- Active voice.
+- Active voice, present tense; no future tense for product behaviour.
 - One idea per sentence.
 - No anthropomorphism: code does not want, know or care.
+- Plain language; no colloquialisms or figurative metaphors.
 - No contractions in a book.
 
 ## Word list
@@ -58,3 +60,10 @@ Extend the list when a correction recurs; an entry must stay grep-able.
 | ADR | `docs/adrs/` | — |
 | Comment | the code around it | — |
 | Commit message | — | carries the implementation why |
+
+---
+
+Portions of this guide adapt work created and shared by the
+[Google developer documentation style guide](https://developers.google.com/style),
+used according to the
+[Creative Commons 4.0 Attribution License](https://creativecommons.org/licenses/by/4.0/).
