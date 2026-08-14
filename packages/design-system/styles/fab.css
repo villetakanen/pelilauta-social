@@ -95,7 +95,7 @@ a.button.fab[href] {
 
 /* Only a native FAB has a disabled state; an anchor is navigable or absent. */
 button.fab:disabled {
-  opacity: 0.5;
+  opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }

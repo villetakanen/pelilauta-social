@@ -100,7 +100,7 @@ accessible name while the loader indicates progress. Link buttons do not support
 - **Hover:** Elevates the control and overlays a subtle tint.
 - **Active:** Deepens the tint while maintaining text contrast.
 - **Keyboard focus:** Draws `--cn-focus-ring` around the control.
-- **Disabled:** Native `<button>` elements render at half opacity. Links do not support disabled states; unavailable destinations must be omitted from markup.
+- **Disabled:** Native `<button>` elements render at `--cn-disabled-opacity`. This capability publishes no disabled presentation for a link: a destination is navigable, or the control is not rendered.
 
 <Composition themes caption="Resting, disabled, and text link buttons">
   <ButtonSpecimens group="states" />

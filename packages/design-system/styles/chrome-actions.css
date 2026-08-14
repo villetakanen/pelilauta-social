@@ -73,7 +73,7 @@ a.chrome-action[href] {
    * read the property directly off it. `--cn-chrome-presentation` is meant to
    * come from a container, one level further out than the target, so a query
    * repeated on a descendant selector can resolve a different branch than the
-   * one the target itself just resolved — a labelled target with a compact
+   * one the target itself resolved — a labelled target with a compact
    * surface or a hidden label, or the reverse, whenever the declaration also
    * happens to sit on the target. Resolving the branch once, here, into
    * inherited `--_*` scope tokens, and letting every descendant rule only
@@ -295,12 +295,9 @@ a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
   pointer-events: none;
 }
 
-/*
- * Only a native button has a disabled state; an anchor is navigable or
- * absent, as the Actions spec requires throughout.
- */
+/* The disabled destination has no rule yet. */
 button.chrome-action:disabled {
-  opacity: 0.5;
+  opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }

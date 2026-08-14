@@ -168,7 +168,7 @@ a.button[href]:not(.fab, .chrome-action):focus-visible {
  * published for an anchor.
  */
 button:not(.fab, .chrome-action):disabled {
-  opacity: 0.5;
+  opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }

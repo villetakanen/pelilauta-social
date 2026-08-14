@@ -151,9 +151,7 @@ describe('parseTokens', () => {
 
 describe('against the production units.css', () => {
   test('the book cannot miss a token the stylesheet declares', () => {
-    // The lexicon shows spacing, radii, control geometry and breakpoints, which
-    // is every declaration in the file. If a family is added, this fails until
-    // the book accounts for it.
+    // If a family is added, this fails until the book accounts for it.
     const all = parseTokens(unitsSource).map((token) => token.name);
     const shown = [
       ...parseTokens(unitsSource, {
@@ -170,6 +168,7 @@ describe('against the production units.css', () => {
       ...parseTokens(unitsSource, { prefix: '--cn-duration' }),
       ...parseTokens(unitsSource, { prefix: '--cn-easing' }),
       ...parseTokens(unitsSource, { prefix: '--cn-breakpoint' }),
+      ...parseTokens(unitsSource, { prefix: '--cn-disabled' }),
     ].map((token) => token.name);
 
     expect(new Set(shown)).toEqual(new Set(all));

@@ -110,9 +110,10 @@ A label too long for the tray truncates with an ellipsis rather than wrapping or
 
 The state surface is transparent at rest, takes `--cn-hover` on hover and
 `--cn-active` on activation, replacing hover rather than compounding it. A
-keyboard focus outline follows the target, using `--cn-focus-ring`. Only the
-native button takes a disabled state, at half opacity, not activatable and not
-focusable; no disabled presentation exists for the anchor, so none renders.
+keyboard focus outline follows the target, using `--cn-focus-ring`. A disabled
+chrome action renders at `--cn-disabled-opacity` and takes no hover or active
+feedback. A command carries `disabled`; a destination keeps its `href` and carries
+`aria-disabled="true"` and `tabindex="-1"`. Both stay in the accessibility tree.
 
 Transitions use `--cn-duration-ui` and `--cn-easing-ui`, and do not run under
 `prefers-reduced-motion: reduce`.

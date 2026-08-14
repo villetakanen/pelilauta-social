@@ -21,8 +21,8 @@ button.
 
 A chrome action is an Actions presentation. `specs/design-system/actions/spec.md`
 governs its elements, semantics, accessible naming, disabled contract, focus
-treatment, colour-role rules and transitions; those apply unchanged and are not
-restated here.
+treatment, colour-role rules and transitions; those apply wherever this spec states
+nothing else.
 
 Compact and labelled are presentations of one control, not two controls. The element,
 its destination or command, and its accessible name are the same in both.
@@ -43,6 +43,10 @@ business. Any other value, and no value at all, is compact. A chrome action read
 declaration and never inspects its ancestors. Bars, rails and trays place chrome
 actions and allocate the inline size a labelled action fills. They do not resize the
 target's block size, the state surface or the Icon.
+
+### Documentation
+
+- `apps/design/src/content/base/chrome-actions.mdx`
 
 ### Constraints
 
@@ -73,6 +77,11 @@ The state surface is transparent at rest and carries the transient feedback;
 activation replaces hover rather than compounding it. The focus outline follows the
 target.
 
+A disabled chrome action is announced as disabled, and does not act. A command carries
+`disabled`. A destination keeps its `href` and carries `aria-disabled="true"` and
+`tabindex="-1"`, and the class suppresses its pointer events. Neither takes hover or
+active feedback.
+
 `[aria-current]` displaces that transparent rest with `--cn-indicator`, and the
 foreground becomes `--cn-on-indicator` in every state. The indicator and the transient
 wash occupy separate paint channels on the one surface, so neither suppresses the
@@ -95,8 +104,8 @@ therefore not asked to carry identification on its own. Both are declared in
   a native anchor, outranking the default Actions button and link presentations.
 - `--cn-indicator` and `--cn-on-indicator` resolve in both schemes.
 - A book specimen renders both presentations and both elements, forcing rest, hover,
-  active, keyboard focus and the disabled button, and a current destination beside a
-  non-current one, in Light and Dark.
+  active, keyboard focus, a disabled button beside a disabled anchor, and a current
+  destination beside a non-current one, in Light and Dark.
 - Human review accepts that a chrome action reads as chrome rather than as a content
   button, and that a label truncates legibly, at default and enlarged browser text
   sizes.
@@ -117,6 +126,8 @@ therefore not asked to carry identification on its own. Both are declared in
 - Hover and active feedback never replaces the indicator, and the indicator never
   suppresses hover or active feedback.
 - `--cn-indicator` remains distinct from `--cn-hover` and `--cn-active` in both schemes.
+- A disabled command and a disabled destination present the same, and each stays in
+  the accessibility tree.
 
 ### Scenarios
 
@@ -158,6 +169,14 @@ When the pointer rests on each in turn, and each is then activated
 Then the current destination carries --cn-indicator and --cn-on-indicator throughout
 And its resting, hovered and active surface paints are three distinct values
 And its target, state surface and bounding box match the other's
+```
+
+```gherkin
+Given a disabled anchor chrome action beside a disabled button chrome action
+When the pointer rests on each in turn, and each is then activated
+Then the two present the same, at rest and under the pointer
+And each is announced as disabled
+And neither navigates nor runs a command
 ```
 
 ```gherkin
