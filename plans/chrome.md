@@ -4,6 +4,22 @@ A plan coordinates an active epic. Its entries exist to make the work and what
 remains legible, not as a delivery record. It may be deleted after the epic closes;
 deletion is not a closeout requirement.
 
+## Parked
+
+Parked on 2026-08-14 for [Pelilauta UX Spike](pelilauta-ux-spike.md).
+
+Phases 2 to 5 name outcomes that assume a navigation model no shipped release has
+ever carried. v19 and v20 intended that overhaul and delivered none of it, so this
+plan guessed at it from v20's surface. The spike settles the model against Pelilauta
+itself before the phases are worth keeping.
+
+Phase 1's design-system outcomes stand and are largely delivered. The spike draws
+what it needs from them and from `chrome-actions.md`, rather than working either as
+an epic.
+
+This plan unparks when the spike records the navigation model, and its Phase 2 to 5
+entries are rewritten against that record. Until then, read them as history.
+
 ## Goal
 
 Pelilauta replaces Cyan's v18 application bar, rail and contextual tray with local

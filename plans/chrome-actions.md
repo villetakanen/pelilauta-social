@@ -4,6 +4,16 @@ A plan coordinates an active epic. Its entries exist to make the work and what
 remains legible, not as a delivery record. It may be deleted after the epic closes;
 deletion is not a closeout requirement.
 
+## Parked
+
+Parked on 2026-08-14 with [Chrome](chrome.md), for
+[Pelilauta UX Spike](pelilauta-ux-spike.md).
+
+This plan is no longer worked as an epic. Its vocabulary is sound and its Open list
+is stale — the chrome action, the navigation destination and the tray toggle shipped
+without being struck. The spike draws the remaining items, identity and status
+foremost, as the front page asks for them, and each ships against its own spec.
+
 ## Goal
 
 The design system provides one coherent interactive vocabulary for application
