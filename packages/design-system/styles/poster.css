@@ -50,16 +50,13 @@
 
   /*
    * The ground plane is the one elevation a poster changes: it is the level
-   * that stands for the page itself, and an opaque page over the artwork would
-   * leave nothing to see. Levels 1 through 4 stay opaque, because content that
-   * has risen off the page is content the reader is meant to read.
+   * that stands for the page itself. Levels 1 through 4 stay opaque, because
+   * content that has risen off the page is content the reader is meant to read.
    *
-   * 80% is the share that keeps the inherited body foreground at WCAG 2.2 AA
-   * over near-white artwork in Dark — the tightest of the theme combinations —
-   * while the artwork still reads through.
+   * The share, and why it is that share, belong to the role.
    */
   body:has(#cn-poster) .elevation-0 {
-    background-color: color-mix(in oklch, var(--cn-surface), transparent 20%);
+    background-color: var(--cn-surface-over-poster);
   }
 
   /*

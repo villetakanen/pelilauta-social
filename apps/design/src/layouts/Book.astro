@@ -134,21 +134,6 @@ const context = group ? groupLabel(group) : 'Index';
         flex: none;
       }
 
-      /*
-       * The tray paints its own surface and states its own placement. While a
-       * poster paints, it cedes that surface, as the rail does in
-       * apps/pelilauta: without this the poster would show only in the gutters
-       * and the page would misrepresent what mounting one looks like.
-       */
-      body:has(#cn-poster) .shell :global(.cn-tray) {
-        background-color: color-mix(in oklch, var(--cn-surface), transparent 66%);
-      }
-
-      /* The index states only its own contents; the tray places it. */
-      .shell :global(.docs-nav) {
-        padding-inline: var(--cn-gap);
-      }
-
       .site-footer {
         display: flex;
         justify-content: space-between;

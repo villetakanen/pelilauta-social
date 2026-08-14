@@ -55,9 +55,6 @@ readable contrast in Light and Dark. A consumer uses a semantic role where the
 system has named that purpose; it does not select a reference colour as a local
 substitute.
 
-Transparency may be mixed with a reference colour to derive an overlay. It does
-not introduce another palette colour into the semantic layer.
-
 Compatibility aliases receive no lexicon and no new consumer. They are migration
 scaffolding, not an alternative public vocabulary or a completeness contract.
 They receive no dedicated compatibility test.

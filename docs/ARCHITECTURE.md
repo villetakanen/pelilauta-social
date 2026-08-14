@@ -21,7 +21,7 @@ ported. `App*` is reserved pending a separate ownership decision.
 | Scope | Pattern | Example |
 | :--- | :--- | :--- |
 | Public design-system token | `--cn-*` | `--cn-grid` |
-| Theme palette | `--chroma-*` | `--chroma-primary-50` |
+| Reference palette | `--cn-color-*` | `--cn-color-primary-50` |
 | Private to a scope | `--_*` | `--_elevation-duration` |
 | Component private | local | `--icon-dim` |
 
@@ -31,7 +31,9 @@ a `--cn-*` token; a `--_*` token may change or disappear with its scope. A value
 one consumer is private. Renaming it to `--cn-*` requires a second capability that
 needs it.
 
-Do not introduce `--cyan-*` or undocumented `--color-*` tokens.
+Do not introduce `--cyan-*`, `--chroma-*` or undocumented `--color-*` tokens.
+`--chroma-*` predates Cyan and carried into it unrenamed; it names nothing here.
+`styles/compat/cyan-4.css` declares the aliases Cyan itself reads, and leaves with it.
 
 ### CSS Classes
 

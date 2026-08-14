@@ -109,7 +109,7 @@ a.button[href]:not(.fab, .chrome-action) {
 
 :is(button, a.button[href]).text:not(.fab, .chrome-action) {
   background-image: none;
-  background-color: color-mix(in oklab, var(--cn-button) 33%, transparent);
+  background-color: var(--cn-button-text);
   color: var(--cn-on-surface);
   box-shadow: none;
 }
