@@ -68,7 +68,21 @@ displaces the default link colour and underline and the default button surface.
 
 The state surface is transparent at rest and carries the transient feedback;
 activation replaces hover rather than compounding it. The focus outline follows the
-target. A chrome action has no persistent state.
+target.
+
+`[aria-current]` displaces that transparent rest with `--cn-indicator`, and the
+foreground becomes `--cn-on-indicator` in every state. The indicator and the transient
+wash occupy separate paint channels on the one surface, so neither suppresses the
+other. `aria-current="false"` is not a current destination; every other value presents
+the same. A `button` carries a command and takes no indicator, whatever `aria-current`
+it declares. The state adds no class, attribute or accessible state of its own.
+
+The foreground identifies the state and the surface reinforces it. `--cn-on-indicator`
+is opaque and meets AA against the surfaces a chrome action stands on, and is
+distinguishable from a non-current action's foreground. `--cn-indicator` is a tint of
+the same family, quiet enough that chrome does not read as a slab of brand colour, and
+therefore not asked to carry identification on its own. Both are declared in
+`packages/design-system/styles/color-theme.css`.
 
 ## Contract
 
@@ -76,14 +90,22 @@ target. A chrome action has no persistent state.
 
 - One public design-system class renders both presentations on a native button and on
   a native anchor, outranking the default Actions button and link presentations.
+- `--cn-indicator` and `--cn-on-indicator` resolve in both schemes.
+  `packages/design-system/test/color-contrast.test.ts` measures `--cn-on-indicator` at
+  AA against `--cn-surface` and against `--cn-surface-4`, and asserts it differs from
+  the foreground a non-current action inherits.
 - A book specimen renders both presentations and both elements, forcing rest, hover,
-  active, keyboard focus and the disabled button, in Light and Dark.
+  active, keyboard focus and the disabled button, and a current destination beside a
+  non-current one, in Light and Dark.
 - A browser check sets `--cn-chrome-presentation` on a plain wrapper of known inline
   size and asserts the native element, the computed target and state-surface geometry
   in each presentation, the compact result for an absent and an unrecognised value, an
   identical foreground on both elements, an unchanged accessible name across
   presentations, the Icon's resolved size, and an unchanged block size and bounding
-  box across states.
+  box across states. It also asserts that an anchor with `aria-current` paints
+  `--cn-indicator` at rest and carries `--cn-on-indicator`; that `aria-current="false"`
+  and a `button` with `aria-current` paint neither; and that a current destination's
+  resting, hovered and active paints are three distinct values.
 - Human review accepts that a chrome action reads as chrome rather than as a content
   button, and that a label truncates legibly, at default and enlarged browser text
   sizes.
@@ -99,8 +121,11 @@ target. A chrome action has no persistent state.
   state.
 - Hover, active and focus presentation does not change the action's footprint or move
   neighbouring content.
-- A chrome action acquires no persistent state; a toggle, a disclosure control and a
-  current destination belong to their own capabilities.
+- A toggle and a disclosure control keep their own persistent states; the current
+  destination is the only one this capability carries.
+- Hover and active feedback never replaces the indicator, and the indicator never
+  suppresses hover or active feedback.
+- `--cn-indicator` remains distinct from `--cn-hover` and `--cn-active` in both schemes.
 
 ### Scenarios
 
@@ -134,4 +159,20 @@ Given a chrome action in either presentation
 When it receives hover, then activation, then keyboard focus
 Then the focus outline follows the target
 And its footprint does not change
+```
+
+```gherkin
+Given an anchor chrome action with aria-current, beside one without
+When the pointer rests on each in turn, and each is then activated
+Then the current destination carries --cn-indicator and --cn-on-indicator throughout
+And its resting, hovered and active surface paints are three distinct values
+And its target, state surface and bounding box match the other's
+```
+
+```gherkin
+Given an anchor chrome action with aria-current="false"
+And a button chrome action with aria-current
+When each renders at rest
+Then neither carries the indicator
+And the button remains a command
 ```

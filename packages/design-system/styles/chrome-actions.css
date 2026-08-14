@@ -202,6 +202,42 @@ a.chrome-action[href]:focus-visible {
 }
 
 /*
+ * The current destination.
+ *
+ * The indicator is persistent and the hover and active washes are transient, and
+ * the spec has them compose rather than replace each other. So they are two
+ * layers of one surface, not one property fought over: the wash keeps `::before`
+ * and its `background-color` transition exactly as above, and the indicator
+ * takes `::after` at `z-index: -2` — directly beneath it. A translucent wash then
+ * mixes over an opaque indicator, which is why `--cn-indicator` is opaque.
+ *
+ * `::after` is generated only here, so a non-current action carries no second
+ * box, and the geometry reads the same `--_surface-*` scope tokens the target
+ * already resolved for `::before` — one presentation branch, evaluated once.
+ *
+ * `aria-current="false"` is the one value that is not a current destination, and
+ * a `button` is a command whatever it declares; both fall outside this selector
+ * rather than being undone by a later override.
+ */
+a.chrome-action[href][aria-current]:not([aria-current='false']) {
+  color: var(--cn-on-indicator);
+}
+
+a.chrome-action[href][aria-current]:not([aria-current='false'])::after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset-block-start: 50%;
+  inset-inline-start: var(--_surface-inset);
+  transform: translate(var(--_surface-shift), -50%);
+  inline-size: var(--_surface-inline);
+  block-size: calc(var(--cn-grid) * 6);
+  border-radius: calc(var(--cn-grid) * 3);
+  background-color: var(--cn-indicator);
+  pointer-events: none;
+}
+
+/*
  * Only a native button has a disabled state; an anchor is navigable or
  * absent, as the Actions spec requires throughout.
  */

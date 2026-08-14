@@ -20,9 +20,8 @@ nests them where it needs to, and states which is current.
 A second slot holds what an application keeps for the reader themselves, flush to the
 tray's block end, in every mode and however few entries the page supplies.
 
-An entry is a navigation destination per
-`specs/design-system/navigation-destination/spec.md`, and the trigger follows the target,
-state surface and focus treatment of a chrome action per
+An entry, and the trigger, follow the target, state surface, focus treatment and
+current-destination state of a chrome action per
 `specs/design-system/chrome-actions/spec.md`.
 
 The tray stands in the box `specs/design-system/application-chrome/spec.md` fixes over
@@ -103,9 +102,8 @@ trigger; both need script, and the mode they act on is the pair the window displ
   tray's block end; that a tray in the page's own content moves nothing around it; that
   the tray takes its size without travelling where the reader asks for no motion; and
   that the landmark carries its name.
-- `packages/design-system/test/color-contrast.test.ts` measures the indicator
-  `specs/design-system/navigation-destination/spec.md` defers against the surfaces an
-  entry stands on here.
+- `packages/design-system/test/color-contrast.test.ts` measures the indicator against
+  the surfaces an entry stands on here.
 - Human review accepts that the tray reads as one surface at every window, that a reader
   who opens the tray on a phone can dismiss it without hunting, that an open tray beside
   the page reads as separate from the page, and that the block-end slot reads as the

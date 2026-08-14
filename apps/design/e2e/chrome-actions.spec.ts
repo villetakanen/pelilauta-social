@@ -156,6 +156,22 @@ const surfaceStyle = (locator: ReturnType<typeof button>) =>
   });
 
 /**
+ * The indicator layer's (`::after`) computed geometry and background. It is a
+ * second layer of the one state surface, beneath `::before`, so persistent
+ * state and a transient wash compose instead of overwriting one property.
+ */
+const indicatorStyle = (locator: ReturnType<typeof button>) =>
+  locator.evaluate((node) => {
+    const style = getComputedStyle(node, '::after');
+    return {
+      content: style.content,
+      inline: style.width,
+      block: style.height,
+      background: style.backgroundColor,
+    };
+  });
+
+/**
  * Resolve a length expression exactly as the stylesheet would, on a
  * throwaway element on this same page — never a hardcoded pixel value.
  */
@@ -588,5 +604,85 @@ for (const scheme of ['light', 'dark'] as const) {
         });
       }
     }
+
+    for (const presentation of ['compact', 'labelled'] as const) {
+      test(`a ${presentation} current destination carries the indicator and its foreground, and matches a non-current action's geometry`, async ({
+        page,
+      }) => {
+        const indicator = await resolveColor(page, 'var(--cn-indicator)');
+        const onIndicator = await resolveColor(page, 'var(--cn-on-indicator)');
+        const markup = `
+          <div class="wrapper" style="--cn-chrome-presentation: ${presentation}; inline-size: ${WRAPPER_INLINE_SIZE};">
+            ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="page"')}
+            ${action('button')}
+          </div>
+        `;
+        await mount(page, markup);
+        const current = anchor(page);
+
+        const layer = await indicatorStyle(current);
+        expect(layer.content).not.toBe('none');
+        expect(layer.background).toBe(indicator);
+
+        const foreground = await current.evaluate(
+          (node) => getComputedStyle(node).color,
+        );
+        expect(foreground).toBe(onIndicator);
+
+        // The indicator changes no measurement: the layer matches the
+        // transient surface it sits under, and the target matches the
+        // non-current action beside it.
+        const surface = await surfaceStyle(current);
+        expect(layer.inline).toBe(surface.inline);
+        expect(layer.block).toBe(surface.block);
+        expect(await targetBox(current)).toEqual(await targetBox(button(page)));
+      });
+    }
+
+    test('the transient washes compose over the indicator rather than replacing it', async ({
+      page,
+    }) => {
+      const transparent = await resolveColor(page, 'transparent');
+      const hoverColor = await resolveColor(page, 'var(--cn-hover)');
+      const activeColor = await resolveColor(page, 'var(--cn-active)');
+      const indicator = await resolveColor(page, 'var(--cn-indicator)');
+      const markup = `
+        <div class="wrapper" style="--cn-chrome-presentation: compact; inline-size: ${WRAPPER_INLINE_SIZE};">
+          ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="page"')}
+        </div>
+      `;
+      await mount(page, markup);
+      const target = anchor(page);
+
+      // Three distinct paints on the wash layer, while the indicator layer
+      // beneath it never moves off --cn-indicator.
+      const seen: string[] = [];
+      for (const step of ['rest', 'hover', 'active'] as const) {
+        if (step === 'hover') await target.hover();
+        if (step === 'active') await page.mouse.down();
+        await waitPastTransition(page, target);
+        seen.push((await surfaceStyle(target)).background);
+        expect((await indicatorStyle(target)).background).toBe(indicator);
+      }
+      await page.mouse.up();
+
+      expect(seen).toEqual([transparent, hoverColor, activeColor]);
+    });
+
+    test('aria-current="false" and a button declaring aria-current carry no indicator', async ({
+      page,
+    }) => {
+      const markup = `
+        <div class="wrapper" style="--cn-chrome-presentation: labelled; inline-size: ${WRAPPER_INLINE_SIZE};">
+          ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="false"')}
+          ${action('button', '').replace('data-role="button"', 'data-role="button" aria-current="page"')}
+        </div>
+      `;
+      await mount(page, markup);
+
+      for (const locator of [anchor(page), button(page)]) {
+        expect((await indicatorStyle(locator)).content).toBe('none');
+      }
+    });
   });
 }

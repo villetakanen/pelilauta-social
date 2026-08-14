@@ -116,6 +116,38 @@ focusable; no disabled presentation exists for the anchor, so none renders.
 Transitions use `--cn-duration-ui` and `--cn-easing-ui`, and do not run under
 `prefers-reduced-motion: reduce`.
 
+## The current destination
+
+Those four states are transient — they say what the pointer or the keyboard is
+doing right now. One state is persistent: an action leading to the page the
+reader is already on says so at rest, so navigation shows where they are without
+being pointed at.
+
+`[aria-current]` carries it, because that is what the platform calls it. The
+state surface takes `--cn-indicator` and the target's foreground becomes
+`--cn-on-indicator`, so the icon and the label follow.
+
+<Composition themes caption="Compact chrome action, current and not current, through every transient state, in Light and Dark">
+  <ChromeActionSpecimens group="current" presentation="compact" />
+</Composition>
+
+<div class="breakout">
+  <Composition themes caption="Labelled chrome action, current and not current, through every transient state, in Light and Dark">
+    <ChromeActionSpecimens group="current" presentation="labelled" />
+  </Composition>
+</div>
+
+The indicator is persistent and the washes are transient, so they compose: hover
+and active paint *over* the indicator rather than replacing it, and a current
+destination still answers a pointer. That is why `--cn-indicator` is an opaque
+role rather than a wash — a translucent layer under a translucent layer reads as
+neither.
+
+Two cases indicate nothing, and the last row shows both. `aria-current="false"`
+is the one value that is not a current destination. And a `button` is a command,
+not a place, so it takes no indicator whatever `aria-current` it declares — a
+toggle that stays on is `[aria-pressed]`, its own state.
+
 ## Helpers
 
 A helper fixes one chrome action's glyph, semantics and report, so an application composes
