@@ -7,17 +7,13 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * really folds the count into the name exactly once while `aria-hidden`
  * truly drops the badge from the accessibility tree, whether an absolutely
  * positioned badge really adds no width or height to the target's own flow,
- * and whether `light-dark()` still resolves `--cn-color-info` and
- * `--cn-on-button` the same way for a current destination as for a plain
- * one. None of that is visible from reading chrome-actions.css or the
- * component's markup — it depends on the cascade, the accessibility tree
- * and real layout actually running.
+ * and whether `light-dark()` still resolves the badge's fill the same way
+ * for a current destination as for a plain one. None of that is visible from
+ * reading chrome-actions.css or the component's markup — it depends on the
+ * cascade, the accessibility tree and real layout actually running.
  *
- * Every expected length and colour is resolved from a token on this same
- * page, exactly as chrome-actions.spec.ts resolves its own — a token whose
- * value moves both sides of the assertion. Locators read the design-system
- * book's own rendered `NotificationActionSpecimens`, not a hand-written
- * fixture, per
+ * Locators read the design-system book's own rendered
+ * `NotificationActionSpecimens`, not a hand-written fixture, per
  * docs/lessons/a-hand-written-fixture-hid-a-live-accessibility-defect.md — a
  * mismatch between the real component's markup and a hand-copied stand-in
  * is exactly the class of defect that lesson exists to prevent.
@@ -26,9 +22,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * inside a `.themed` panel whose inline style forces `color-scheme: light`,
  * once forcing `color-scheme: dark`. That is a *local* override, independent
  * of the page's own `prefers-color-scheme`, so both panels exist on the page
- * at once. Geometry and accessible names resolve identically in either
- * panel, so those checks run once, reading a single named panel. Colour
- * resolves per scheme, so that check alone runs under both, with
+ * at once. Colour resolves per scheme, so that check runs under both, with
  * `page.emulateMedia` set to match the panel it reads.
  */
 
@@ -37,7 +31,7 @@ const BOOK = '/components/cn-notification-action';
 const specimenRoot = (
   page: Page,
   scheme: 'light' | 'dark',
-  group: 'counts' | 'no-badge',
+  group: 'counts',
   presentation: 'compact' | 'labelled',
 ) =>
   page.locator(
@@ -51,21 +45,6 @@ const control = (rigLocator: Locator) =>
 const icon = (controlLocator: Locator) => controlLocator.locator('.cn-icon');
 const badge = (controlLocator: Locator) =>
   controlLocator.locator('span.cn-notification-badge');
-
-/**
- * Resolve a colour reference — a custom-property token — on a throwaway
- * element on this same page, exactly as chrome-actions.spec.ts resolves
- * `--cn-indicator` and `--cn-on-indicator`.
- */
-const resolveColor = (page: Page, colorExpr: string) =>
-  page.evaluate((colorExpr) => {
-    const node = document.createElement('div');
-    node.setAttribute('style', `color: ${colorExpr};`);
-    document.body.append(node);
-    const value = getComputedStyle(node).color;
-    node.remove();
-    return value;
-  }, colorExpr);
 
 const box = async (locator: Locator) => {
   const bounds = await locator.boundingBox();

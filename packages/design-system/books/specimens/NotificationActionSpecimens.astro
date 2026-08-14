@@ -9,9 +9,8 @@
  *
  * Nothing here styles the target, the state surface, the Icon, the label or
  * the badge; every rule comes from the component's own stylesheet. The
- * The `.surface` and `.elevation-0` classes come from styles/surface.css,
- * wrapped around each rig so the badge is seen against the surface a
- * consumer stands a chrome action on.
+ * `.surface` and `.elevation-0` classes come from styles/surface.css, wrapped
+ * around each rig.
  *
  * Book: apps/design/src/content/components/cn-notification-action.mdx
  */
@@ -54,7 +53,6 @@ const ROWS = [
 const SURFACES = [
   { key: 'surface', label: 'Surface', class: 'surface elevation-0' },
 ] as const;
-
 ---
 
 <div

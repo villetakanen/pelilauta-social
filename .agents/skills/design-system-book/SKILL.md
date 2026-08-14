@@ -50,9 +50,7 @@ geometry, no token table and no internal mechanism.
 
 Guidance leads and reference follows, which puts the props table below the specimens
 even for a component with thirteen props. That order is the owner's decision
-(2026-08-06), taken with the cost known.
-
-Prefer rendering a value from source to writing it into the page.
+(2026-08-06).
 
 Show what the book covers: a live example, and the code that produces it, wherever the
 page can carry one.
@@ -78,8 +76,6 @@ Follow `docs/WRITING.md`. A book is written for the people using the design syst
 A principles book argues a choice — why Lato, how it reads — and rationale belongs
 there. A base or component book is reference: what ships, what you pass, what breaks.
 Dry.
-
-A book documents only what ships.
 
 ## Before the pull request
 

@@ -15,6 +15,6 @@ intervening releases changed about CSS plugins is unread.
 
 ## What done looks like
 
-Biome runs at a version chosen deliberately rather than by inertia, with the
-schema in `biome.json` and the dependency in `package.json` agreeing. The CSS
+Biome runs at a version chosen deliberately, with the schema in `biome.json`
+and the dependency in `package.json` agreeing. The CSS
 plugin behaviour the sweeps rely on is confirmed on that version.

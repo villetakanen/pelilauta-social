@@ -1,8 +1,7 @@
 <script lang="ts">
 /**
  * CnNotificationAction — a chrome action that is a destination, carrying a
- * count. The badge renders a whole number of one or more; anything else
- * renders no badge. Above 9 the badge reads `9+`, and so does the name.
+ * count.
  */
 import Icon from './Icon.svelte';
 

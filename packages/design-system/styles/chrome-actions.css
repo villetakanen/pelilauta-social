@@ -190,7 +190,10 @@ a.chrome-action[href]::before {
     --_labelled-label-block: auto;
     --_labelled-label-clip: none;
     --_labelled-badge-inline-start: calc(
-      var(--cn-grid) + var(--cn-icon-size) - var(--_badge-size) / 2
+      var(--cn-grid) +
+      var(--cn-icon-size) -
+      var(--_badge-size) /
+      2
     );
   }
 }
@@ -234,11 +237,11 @@ a.chrome-action[href]:focus-visible {
  * a `button` is a command whatever it declares; both fall outside this selector
  * rather than being undone by a later override.
  */
-a.chrome-action[href][aria-current]:not([aria-current='false']) {
+a.chrome-action[href][aria-current]:not([aria-current="false"]) {
   color: var(--cn-on-indicator);
 }
 
-a.chrome-action[href][aria-current]:not([aria-current='false'])::after {
+a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
   content: "";
   position: absolute;
   z-index: -2;
@@ -254,17 +257,20 @@ a.chrome-action[href][aria-current]:not([aria-current='false'])::after {
 
 /*
  * The notification badge stands at the block-start, inline-end corner of the
- * Icon in both presentations, and takes no space in the target's flow.
- * Its own fill and foreground are why it survives every state the chrome
- * action has, including the current destination, whose foreground the
- * anchor sets and the badge overrides for itself. It carries no z-index of
- * its own, so it paints above `::before` and `::after`, which sit at
- * negative z-indexes inside the target's own stacking context.
+ * Icon in both presentations, and takes no space in the target's flow. Its
+ * own fill and foreground survive every state, including the current
+ * destination's anchor foreground, which the badge overrides for itself. It
+ * carries no z-index of its own, so it paints above `::before` and `::after`,
+ * which sit at negative z-indexes inside the target's own stacking context.
  */
 .chrome-action > .cn-notification-badge {
   position: absolute;
   inset-block-start: calc(
-    50% - var(--cn-icon-size) / 2 - var(--_badge-size) / 2
+    50% -
+    var(--cn-icon-size) /
+    2 -
+    var(--_badge-size) /
+    2
   );
   inset-inline-start: var(--_badge-inline-start);
   display: flex;
@@ -277,10 +283,10 @@ a.chrome-action[href][aria-current]:not([aria-current='false'])::after {
   border-radius: calc(var(--_badge-size) / 2);
   background-color: var(--cn-color-info);
   /*
-   * A decorative pick, taken from the palette rather than a foreground role.
-   * The badge is hidden from assistive technology and carries no text contrast
-   * ratio, and no semantic foreground answers a fill that is dark in one scheme
-   * and bright in the other: a single role would leave the characters unread in
+   * A decorative pick from the palette, not a foreground role: the badge is
+   * hidden from assistive technology and carries no text-contrast ratio, and
+   * no semantic foreground answers a fill that is dark in one scheme and
+   * bright in the other — a single role would leave the characters unread in
    * whichever scheme it was not chosen for.
    */
   color: light-dark(var(--cn-color-primary-95), var(--cn-color-primary-40));

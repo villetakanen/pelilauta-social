@@ -18,4 +18,4 @@ and it leaves both copies writable.
 
 One artifact holds each token's value, and the stylesheet and the book are both
 produced from it. The checks that hold the copies in agreement are deleted rather
-than reduced, because there is one copy.
+than reduced.
