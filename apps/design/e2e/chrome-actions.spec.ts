@@ -17,18 +17,21 @@ import { expect, type Page, test } from '@playwright/test';
  * running.
  *
  * Every expected length and colour is resolved from a token on this same
- * page, under the same scheme, exactly as `links.spec.ts` resolves its
- * colour references — a token whose value moves moves both sides of the
- * assertion. Mounted on the book page for `/base/chrome-actions`, so any
- * rule that would reach a chrome action there reaches this probe too — and
- * outside `.chrome-action-specimen`, the book's own selector-rewritten copy
- * of the stylesheet, so these tests read the shipped rules and not the
- * specimen's copy of itself.
+ * page, exactly as `links.spec.ts` resolves its colour references — a token
+ * whose value moves both sides of the assertion. A body that compares a
+ * colour runs once under the light scheme and once under the dark scheme,
+ * because a `--cn-*` colour token can resolve to a different value in each;
+ * a body that compares only geometry or an accessible name runs once,
+ * because neither depends on colour scheme. Mounted on the book page for
+ * `/base/chrome-actions`, so any rule that would reach a chrome action there
+ * reaches this probe too — and outside `.chrome-action-specimen`, the book's
+ * own selector-rewritten copy of the stylesheet, so these tests read the
+ * shipped rules and not the specimen's copy of itself.
  *
  * Not covered here: the label losing visibility in compact. That failure is
  * purely visual — it shows up as an icon crowded by a visible label — and
  * `ChromeActionSpecimens.astro` renders both presentations for human review,
- * so the book page is the detector for it, per the design-system-tests gate.
+ * so the book page is the detector for it.
  */
 
 const BOOK = '/base/chrome-actions';
@@ -279,6 +282,204 @@ test("the book page's own rendered specimens name a chrome action exactly by its
   ).toHaveCount(2);
 });
 
+// Geometry and the accessible name resolve the same way regardless of colour
+// scheme, so each of these runs once. A single `beforeEach` mounts the book
+// page with no scheme forced.
+test.describe('geometry and the accessible name', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(BOOK);
+  });
+
+  test('a labelled target fills its container inline size, at 7-grid block size, with a full-width pill surface', async ({
+    page,
+  }) => {
+    const targetBlock = await resolveLength(
+      page,
+      'height',
+      'calc(var(--cn-grid) * 7)',
+    );
+    const surfaceBlock = await resolveLength(
+      page,
+      'height',
+      'calc(var(--cn-grid) * 6)',
+    );
+    const medium = await resolveLength(page, 'width', 'var(--cn-icon-size)');
+    const small = await resolveLength(
+      page,
+      'width',
+      'var(--cn-icon-size-small)',
+    );
+    await mount(page, pair('labelled'));
+    const containerWidth = await wrapper(page).evaluate(
+      (node) => getComputedStyle(node).width,
+    );
+
+    for (const locator of [button(page), anchor(page)]) {
+      const box = await targetBox(locator);
+      expect(box.inline).toBe(containerWidth);
+      expect(box.block).toBe(targetBlock);
+
+      const surface = await surfaceStyle(locator);
+      expect(surface.inline).toBe(containerWidth);
+      expect(surface.block).toBe(surfaceBlock);
+
+      const icon = await iconBox(locator);
+      expect(icon.inline).toBe(medium);
+      expect(icon.block).toBe(medium);
+      expect(icon.inline).not.toBe(small);
+    }
+  });
+
+  test('a labelled action too narrow for its label keeps the Icon at the full medium step, square, while the label truncates instead', async ({
+    page,
+  }) => {
+    const medium = await resolveLength(page, 'width', 'var(--cn-icon-size)');
+    const targetBlock = await resolveLength(
+      page,
+      'height',
+      'calc(var(--cn-grid) * 7)',
+    );
+    // Narrow enough to force truncation rather than icon compression — the
+    // real risk the guardrail exists for: a flex child (the Icon) giving
+    // way under pressure instead of the label truncating as designed.
+    const NARROW_INLINE_SIZE = '82px';
+    const markup = `
+      <div class="wrapper" style="--cn-chrome-presentation: labelled; inline-size: ${NARROW_INLINE_SIZE};">
+        ${action('button')}
+        ${action('anchor')}
+      </div>
+    `;
+    await mount(page, markup);
+
+    for (const locator of [button(page), anchor(page)]) {
+      const icon = await iconBox(locator);
+      expect(icon.inline).toBe(medium);
+      expect(icon.block).toBe(medium);
+      expect(icon.inline).toBe(icon.block); // still square, not compressed
+
+      const box = await targetBox(locator);
+      expect(box.block).toBe(targetBlock); // unchanged by the narrow width
+
+      // Confirms the container really is narrow enough to force the crunch
+      // this test exists for — the label, not the Icon, gives way.
+      const labelTruncates = await locator
+        .locator('span:not(.cn-icon)')
+        .evaluate((node) => node.scrollWidth > node.clientWidth);
+      expect(labelTruncates).toBe(true);
+    }
+  });
+
+  for (const [name, presentation] of [
+    ['an absent declaration', undefined],
+    ['an unrecognised value', 'bogus'],
+  ] as const) {
+    test(`${name} on the container resolves to the compact 7-grid square and its 6-grid surface, on both elements`, async ({
+      page,
+    }) => {
+      const target = await resolveLength(
+        page,
+        'width',
+        'calc(var(--cn-grid) * 7)',
+      );
+      const diameter = await resolveLength(
+        page,
+        'width',
+        'calc(var(--cn-grid) * 6)',
+      );
+      await mount(page, pair(presentation));
+
+      for (const locator of [button(page), anchor(page)]) {
+        const box = await targetBox(locator);
+        expect(box.inline).toBe(target);
+        expect(box.block).toBe(target);
+
+        const surface = await surfaceStyle(locator);
+        expect(surface.inline).toBe(diameter);
+        expect(surface.block).toBe(diameter);
+      }
+    });
+  }
+
+  test('a declaration on the action itself, rather than on its container, still resolves compact — target and surface together', async ({
+    page,
+  }) => {
+    // The style-container query on the target excludes the target's own
+    // declaration and reads its ancestor only. A wrapper that declares
+    // nothing, paired with the action declaring `labelled` on itself,
+    // exercises exactly the case chrome-actions.css:62-85 restructured
+    // the token flow to prevent: a hybrid with one geometry resolved from
+    // one branch and the other from the other.
+    const target = await resolveLength(
+      page,
+      'width',
+      'calc(var(--cn-grid) * 7)',
+    );
+    const diameter = await resolveLength(
+      page,
+      'width',
+      'calc(var(--cn-grid) * 6)',
+    );
+    const markup = `
+      <div class="wrapper" style="inline-size: ${WRAPPER_INLINE_SIZE};">
+        ${action('button', '--cn-chrome-presentation: labelled;')}
+        ${action('anchor', '--cn-chrome-presentation: labelled;')}
+      </div>
+    `;
+    await mount(page, markup);
+
+    for (const locator of [button(page), anchor(page)]) {
+      const box = await targetBox(locator);
+      expect(box.inline).toBe(target);
+      expect(box.block).toBe(target);
+
+      const surface = await surfaceStyle(locator);
+      expect(surface.inline).toBe(diameter);
+      expect(surface.block).toBe(diameter);
+    }
+  });
+
+  test('the accessible name is unchanged between compact and labelled, on both elements', async ({
+    page,
+  }) => {
+    await mount(page, pair('compact') + pair('labelled'));
+    const [compactWrapper, labelledWrapper] = await page
+      .locator(`#${PROBE} .wrapper`)
+      .all();
+
+    await expect(
+      compactWrapper.getByRole('button', { name: 'Send', exact: true }),
+    ).toHaveCount(1);
+    await expect(
+      compactWrapper.getByRole('link', { name: 'Home', exact: true }),
+    ).toHaveCount(1);
+    await expect(
+      labelledWrapper.getByRole('button', { name: 'Send', exact: true }),
+    ).toHaveCount(1);
+    await expect(
+      labelledWrapper.getByRole('link', { name: 'Home', exact: true }),
+    ).toHaveCount(1);
+  });
+
+  test('aria-current="false" and a button declaring aria-current carry no indicator', async ({
+    page,
+  }) => {
+    const markup = `
+      <div class="wrapper" style="--cn-chrome-presentation: labelled; inline-size: ${WRAPPER_INLINE_SIZE};">
+        ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="false"')}
+        ${action('button', '').replace('data-role="button"', 'data-role="button" aria-current="page"')}
+      </div>
+    `;
+    await mount(page, markup);
+
+    for (const locator of [anchor(page), button(page)]) {
+      expect((await indicatorStyle(locator)).content).toBe('none');
+    }
+  });
+});
+
+// Every test below resolves or compares a colour, so each runs once per
+// colour scheme: a `--cn-*` colour token can resolve to a different value
+// under light and under dark.
 for (const scheme of ['light', 'dark'] as const) {
   test.describe(`under the ${scheme} scheme`, () => {
     test.beforeEach(async ({ page }) => {
@@ -331,154 +532,6 @@ for (const scheme of ['light', 'dark'] as const) {
       }
     });
 
-    test('a labelled target fills its container inline size, at 7-grid block size, with a full-width pill surface', async ({
-      page,
-    }) => {
-      const targetBlock = await resolveLength(
-        page,
-        'height',
-        'calc(var(--cn-grid) * 7)',
-      );
-      const surfaceBlock = await resolveLength(
-        page,
-        'height',
-        'calc(var(--cn-grid) * 6)',
-      );
-      const medium = await resolveLength(page, 'width', 'var(--cn-icon-size)');
-      const small = await resolveLength(
-        page,
-        'width',
-        'var(--cn-icon-size-small)',
-      );
-      await mount(page, pair('labelled'));
-      const containerWidth = await wrapper(page).evaluate(
-        (node) => getComputedStyle(node).width,
-      );
-
-      for (const locator of [button(page), anchor(page)]) {
-        const box = await targetBox(locator);
-        expect(box.inline).toBe(containerWidth);
-        expect(box.block).toBe(targetBlock);
-
-        const surface = await surfaceStyle(locator);
-        expect(surface.inline).toBe(containerWidth);
-        expect(surface.block).toBe(surfaceBlock);
-
-        const icon = await iconBox(locator);
-        expect(icon.inline).toBe(medium);
-        expect(icon.block).toBe(medium);
-        expect(icon.inline).not.toBe(small);
-      }
-    });
-
-    test('a labelled action too narrow for its label keeps the Icon at the full medium step, square, while the label truncates instead', async ({
-      page,
-    }) => {
-      const medium = await resolveLength(page, 'width', 'var(--cn-icon-size)');
-      const targetBlock = await resolveLength(
-        page,
-        'height',
-        'calc(var(--cn-grid) * 7)',
-      );
-      // Narrow enough to force truncation rather than icon compression — the
-      // real risk the guardrail exists for: a flex child (the Icon) giving
-      // way under pressure instead of the label truncating as designed.
-      const NARROW_INLINE_SIZE = '82px';
-      const markup = `
-        <div class="wrapper" style="--cn-chrome-presentation: labelled; inline-size: ${NARROW_INLINE_SIZE};">
-          ${action('button')}
-          ${action('anchor')}
-        </div>
-      `;
-      await mount(page, markup);
-
-      for (const locator of [button(page), anchor(page)]) {
-        const icon = await iconBox(locator);
-        expect(icon.inline).toBe(medium);
-        expect(icon.block).toBe(medium);
-        expect(icon.inline).toBe(icon.block); // still square, not compressed
-
-        const box = await targetBox(locator);
-        expect(box.block).toBe(targetBlock); // unchanged by the narrow width
-
-        // Confirms the container really is narrow enough to force the crunch
-        // this test exists for — the label, not the Icon, gives way.
-        const labelTruncates = await locator
-          .locator('span:not(.cn-icon)')
-          .evaluate((node) => node.scrollWidth > node.clientWidth);
-        expect(labelTruncates).toBe(true);
-      }
-    });
-
-    for (const [name, presentation] of [
-      ['an absent declaration', undefined],
-      ['an unrecognised value', 'bogus'],
-    ] as const) {
-      test(`${name} on the container resolves to the compact 7-grid square and its 6-grid surface, on both elements`, async ({
-        page,
-      }) => {
-        const target = await resolveLength(
-          page,
-          'width',
-          'calc(var(--cn-grid) * 7)',
-        );
-        const diameter = await resolveLength(
-          page,
-          'width',
-          'calc(var(--cn-grid) * 6)',
-        );
-        await mount(page, pair(presentation));
-
-        for (const locator of [button(page), anchor(page)]) {
-          const box = await targetBox(locator);
-          expect(box.inline).toBe(target);
-          expect(box.block).toBe(target);
-
-          const surface = await surfaceStyle(locator);
-          expect(surface.inline).toBe(diameter);
-          expect(surface.block).toBe(diameter);
-        }
-      });
-    }
-
-    test('a declaration on the action itself, rather than on its container, still resolves compact — target and surface together', async ({
-      page,
-    }) => {
-      // The style-container query on the target excludes the target's own
-      // declaration and reads its ancestor only. A wrapper that declares
-      // nothing, paired with the action declaring `labelled` on itself,
-      // exercises exactly the case chrome-actions.css:62-85 restructured
-      // the token flow to prevent: a hybrid with one geometry resolved from
-      // one branch and the other from the other.
-      const target = await resolveLength(
-        page,
-        'width',
-        'calc(var(--cn-grid) * 7)',
-      );
-      const diameter = await resolveLength(
-        page,
-        'width',
-        'calc(var(--cn-grid) * 6)',
-      );
-      const markup = `
-        <div class="wrapper" style="inline-size: ${WRAPPER_INLINE_SIZE};">
-          ${action('button', '--cn-chrome-presentation: labelled;')}
-          ${action('anchor', '--cn-chrome-presentation: labelled;')}
-        </div>
-      `;
-      await mount(page, markup);
-
-      for (const locator of [button(page), anchor(page)]) {
-        const box = await targetBox(locator);
-        expect(box.inline).toBe(target);
-        expect(box.block).toBe(target);
-
-        const surface = await surfaceStyle(locator);
-        expect(surface.inline).toBe(diameter);
-        expect(surface.block).toBe(diameter);
-      }
-    });
-
     test('the class displaces the default link and button presentations, and the button and anchor foregrounds are identical', async ({
       page,
     }) => {
@@ -516,28 +569,6 @@ for (const scheme of ['light', 'dark'] as const) {
         expect(style.backgroundColor).toBe(transparent);
         expect(style.boxShadow).toBe('none');
       }
-    });
-
-    test('the accessible name is unchanged between compact and labelled, on both elements', async ({
-      page,
-    }) => {
-      await mount(page, pair('compact') + pair('labelled'));
-      const [compactWrapper, labelledWrapper] = await page
-        .locator(`#${PROBE} .wrapper`)
-        .all();
-
-      await expect(
-        compactWrapper.getByRole('button', { name: 'Send', exact: true }),
-      ).toHaveCount(1);
-      await expect(
-        compactWrapper.getByRole('link', { name: 'Home', exact: true }),
-      ).toHaveCount(1);
-      await expect(
-        labelledWrapper.getByRole('button', { name: 'Send', exact: true }),
-      ).toHaveCount(1);
-      await expect(
-        labelledWrapper.getByRole('link', { name: 'Home', exact: true }),
-      ).toHaveCount(1);
     });
 
     for (const presentation of ['compact', 'labelled'] as const) {
@@ -667,22 +698,6 @@ for (const scheme of ['light', 'dark'] as const) {
       await page.mouse.up();
 
       expect(seen).toEqual([transparent, hoverColor, activeColor]);
-    });
-
-    test('aria-current="false" and a button declaring aria-current carry no indicator', async ({
-      page,
-    }) => {
-      const markup = `
-        <div class="wrapper" style="--cn-chrome-presentation: labelled; inline-size: ${WRAPPER_INLINE_SIZE};">
-          ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="false"')}
-          ${action('button', '').replace('data-role="button"', 'data-role="button" aria-current="page"')}
-        </div>
-      `;
-      await mount(page, markup);
-
-      for (const locator of [anchor(page), button(page)]) {
-        expect((await indicatorStyle(locator)).content).toBe('none');
-      }
     });
   });
 }
