@@ -33,6 +33,9 @@ glyph, its element nor its event. Each carries a sub-spec, and states only what 
 does not: `back-action/spec.md`, `share-action/spec.md`,
 `../components/cn-theme-switch/spec.md`.
 
+A subtype states what it adds to a chrome action, and no measurement this one gives:
+`notification-action/spec.md`.
+
 A container declares which presentation its chrome actions take by setting the
 inherited `--cn-chrome-presentation` to `compact` or `labelled`; how the container
 decides — its own width, a reader's action, or a fixed choice — is the container's
