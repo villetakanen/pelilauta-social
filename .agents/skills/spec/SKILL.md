@@ -53,7 +53,7 @@ Y is a mistake the reader would make, and no sentence restating the one before i
 
 ## Recording the intent
 
-The specs contect and architecture describe how, and why the feature exits. The goal is to capture the user or system need, and purpose
-for the feature. Reasons why it exits.
+The spec's context and architecture describe how, and why, the feature exists. The goal is to capture the user or system need, and purpose
+for the feature. Reasons why it exists.
 
 Where these are not derivable from the sources, ask questions.
