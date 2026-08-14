@@ -9,37 +9,41 @@ runtime: static
   COMPONENT BOOK — copy to apps/design/src/content/components/<slug>.mdx, delete
   these comments. Rules are the design-system-book skill's. Link books, never a spec.
 
+  A component book says what the component is for, where to use it, and what its API
+  is. A reader takes every other technical fact from the code, so this page carries
+  no geometry, no token table and no internal mechanism.
+
   `runtime` is required: `static`, `progressive` or `interactive`, defined in
   books/runtimes.json. The shell renders its label as the subtitle. Never restate
   it in prose — say what an application must do, where that has a consequence.
 
   The heading order below is fixed. Delete a section that has nothing that ships;
   never reorder the ones that remain, because a reader scans this page against the
-  last component's. Nest to h4 where an axis has sub-cases, and keep every heading
-  name unique within the page — the book tests locate headings by name alone.
+  last component's. Keep every heading name unique within the page — the book tests
+  locate headings by name alone.
 
   This template is the model. No existing book is — read one to see how a heading is
   used, never to judge how much to write.
 */}
 
-What it is, and the one mechanism a reader cannot derive from the invocation below:
-what resolves when, what a value inherits, what it costs at build or render time.
-Two or three sentences. Do not restate the component's name.
+What the component is for, as an instruction: "Use a <thing> to <do something for a
+reader>". One or two sentences. The `description` above already states what it is, so
+a definition here is a restatement — write the purpose instead.
 
 ## When to use it
 
-- The case it is for, as an instruction rather than a description.
-- The case it is for.
+Where a component is one presentation of a capability, say so and link that
+capability's book. Its placement, its container rules and its states live there, and
+a reader follows one link rather than reading them twice.
 
-Close on the case it is not for, naming the alternative and linking its book, so a
-reader who came to the wrong page leaves knowing where to go. State what the
-component does not do when a reader would otherwise assume it — a progress
-indicator that cannot report progress says so here.
+State only what this component adds: the case it is for, as an instruction, and the
+case it is not for, naming the alternative and linking its book.
 
 ## Example
 
 The canonical invocation rendered, then the code that produced it, in that order.
-One example. Variants belong in the next section.
+Then a specimen per axis that varies, each rendered in both colour schemes. A reader
+sees what varies rather than reading a description of it.
 
 <Composition themes caption="Names what the reader is looking at">
   <TheSpecimen group="basic" />
@@ -51,54 +55,19 @@ import TheComponent from '@design-system/components/TheComponent.svelte'
 <TheComponent />
 ```
 
-## Variants and states
-
-Open with a sentence naming the axes, so a reader scanning the h2s knows what varies
-without opening the section. Then one h3 per axis, each with its own specimen
-rendered in both colour schemes. Cover every combination that ships — a state with
-no specimen is a state the book does not document.
-
-### An axis
-
-What varies along it, and what a consumer chooses between.
-
-#### A sub-case of that axis
-
-Only when the axis has one: a client-side recipe, a fallback, a failure. Do not
-promote it to an axis of its own.
-
-## Composition
-
-Where the component may sit and what the parent must provide for it to behave: the
-container rules that apply to it, the region it belongs in, the constraint that
-clips or stretches it. Delete when nothing outside the component matters.
-
 ## Reference
 
 ### Props
+
+The whole API, and the only technical detail this page carries. A rule a consumer
+must follow belongs in the row it governs — a label that must be localised, a value
+whose out-of-range cases render nothing.
 
 | Prop | Type | Purpose |
 | :--- | :--- | :--- |
 | `someProp` | `string` | What it controls. Say "Required" here rather than in prose. |
 
-### Tokens
-
-Rendered by `TokenTable` from the stylesheet, imported with `?raw`. Never retype a
-value into this page. When the component declares no tokens of its own, say so and
-name the systems it composes; when it reads a hook a consumer may declare, name the
-hook and what the value resolves to until one does.
-
-<TokenTable source={componentSource} prefix="--cn-thing" caption="From styles/thing.css" />
-
 ## Accessibility
 
 The semantics it emits and what a consumer still owes — a label, a landmark, a
 focus target. Delete if it renders nothing with semantics of its own.
-
-## Not shown here
-
-Every behaviour this book states and does not demonstrate, each with the reason it
-has no specimen and how it was established instead: a query a page cannot emulate for
-one subtree, a state that needs hydration the design site does not build, a gap
-recorded as debt. Name a test only where one already exists — do not write one to
-fill this section.

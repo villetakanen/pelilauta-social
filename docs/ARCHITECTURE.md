@@ -16,6 +16,9 @@ Reusable files use PascalCase; default import identifiers match filenames. Porte
 components keep conforming v20 names. Unprefixed public v20 names gain `Cn` when
 ported. `App*` is reserved pending a separate ownership decision.
 
+A `Cn{Name}` or `Ds{Name}` component ships a component book. Its spec lists any
+base or principles book that also carries it.
+
 ### Tokens
 
 | Scope | Pattern | Example |

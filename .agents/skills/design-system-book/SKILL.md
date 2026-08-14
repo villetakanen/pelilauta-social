@@ -31,21 +31,22 @@ works.
 
 A component book carries these headings, in this order, and no others:
 
-1. *(no heading)* — what it is, plus the one mechanism the invocation does not reveal
-2. `## When to use it` — instructions, closing on the case it is not for and the book
-   of the alternative, and on what the component does not do
-3. `## Example` — the canonical invocation rendered, then its code
-4. `## Variants and states` — a sentence naming the axes, then one `h3` per axis
-5. `## Composition` — where it may sit and what the parent must provide
-6. `## Reference` — `### Props`, then `### Tokens`
-7. `## Accessibility` — what it emits, and what the consumer still owes
-8. `## Not shown here` — each stated behaviour without a specimen, its reason, and
-   how it was established instead
+1. *(no heading)* — what the component is for, as an instruction. The `description`
+   states what it is, so a definition here restates it
+2. `## When to use it` — the capability it presents and that capability's book, then
+   the case it is for and the case it is not for, with the alternative's book
+3. `## Example` — the canonical invocation rendered, then its code, then a specimen
+   per axis that varies
+4. `## Reference` — `### Props`, carrying the whole API and the rules a consumer must
+   follow, each in the row it governs
+5. `## Accessibility` — what it emits, and what the consumer still owes
 
-Delete a section with nothing that ships; never reorder the rest. Nest to `h4` for a
-sub-case of an axis. Keep every heading name unique within the page — the book tests
-locate headings by accessible name without a level filter, so a repeated name creates
-an ambiguous locator.
+Delete a section with nothing that ships; never reorder the rest. Keep every heading
+name unique within the page — the book tests locate headings by accessible name
+without a level filter, so a repeated name creates an ambiguous locator.
+
+A reader takes every other technical fact from the code. The page carries no
+geometry, no token table and no internal mechanism.
 
 Guidance leads and reference follows, which puts the props table below the specimens
 even for a component with thirteen props. That order is the owner's decision
@@ -55,16 +56,6 @@ Prefer rendering a value from source to writing it into the page.
 
 Show what the book covers: a live example, and the code that produces it, wherever the
 page can carry one.
-
-A behaviour with no specimen goes in `## Not shown here` with the reason it cannot
-have one, and states how it was established: a query the page cannot emulate for one
-subtree, a state needing hydration the design site does not build, a gap recorded as
-debt. Name a test there only where one already exists. Do not add one to satisfy this
-section: the design system is verified by looking, and a test that re-asserts browser
-behaviour — that a block centres, that a border paints — costs maintenance to
-duplicate what the engine guarantees. A test earns its place where our own decisions
-drift silently and no specimen reveals it: which stylesheet wins a declaration,
-whether a rule is in the entry point, what a parser accepts.
 
 Read a sibling book only to see how a heading is used, never to judge how much to
 write.
