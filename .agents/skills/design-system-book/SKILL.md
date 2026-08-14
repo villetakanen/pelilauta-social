@@ -82,16 +82,15 @@ nowhere else.
 
 ## Voice
 
-Follow `docs/DESIGN.md`. A book is written for the people using the design system.
+Follow `docs/WRITING.md`. A book is written for the people using the design system.
 
 A principles book argues a choice — why Lato, how it reads — and rationale belongs
 there. A base or component book is reference: what ships, what you pass, what breaks.
 Dry.
 
-No contractions. A book documents only what ships.
+A book documents only what ships.
 
 ## Before the pull request
 
-Cut a paragraph a competent reader could have written without this repository.
-
-`grep -nwE 'easy|simply|quick|just'` returns nothing.
+Run the `docs/WRITING.md` checks over the book: the deletion test on every sentence,
+then the word-list greps.

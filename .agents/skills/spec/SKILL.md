@@ -47,13 +47,12 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
 
 ## Prose
 
-Follow `docs/DESIGN.md` Voice, read before drafting. A spec is direct, strict and
-technical. It carries no rationale: no "because" clause, no "X rather than Y" unless
-Y is a mistake the reader would make, and no sentence restating the one before it.
+Follow `docs/WRITING.md`, read before drafting. A spec is direct, strict and
+technical.
 
 ## Recording the intent
 
-The spec's context and architecture describe how, and why, the feature exists. The goal is to capture the user or system need, and purpose
-for the feature. Reasons why it exists.
+The spec's context and architecture carry the why nothing else holds: the user or
+system need the capability exists for. State no why the reader can derive.
 
-Where these are not derivable from the sources, ask questions.
+Where the intent is not derivable from the sources, ask questions.

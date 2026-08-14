@@ -115,9 +115,9 @@ failure this repository has actually produced, not because the guide contains it
 Consolidation with an audit, not a move:
 
 - Each rule in `docs/DESIGN.md` § Technical writing, the two skills' prose sections,
-  and the book-writing-harness bans is re-derived from a principle, rewritten to its
-  intent, or dropped. The audit's disposition table (kept / rewritten / dropped, one
-  line each) goes in the changeset's commit message, not the file.
+  `specs/TEMPLATE.md` and the book-writing-harness bans is re-derived from a
+  principle, rewritten to its intent, or dropped. The disposition table is § Rule
+  audit below.
 - `docs/DESIGN.md` keeps the design vision and a pointer; the skills keep only their
   genuine deltas.
 - `AGENTS.md`'s "Base prose on…" line adds `docs/WRITING.md`. Constitution edit;
@@ -153,24 +153,91 @@ invocations get skipped in practice, escalate then.
 
 ## Actions, in order
 
-1. Distill the aspiration: audit every existing prose rule (`DESIGN.md`, two skills,
-   book-writing-harness bans, relevant lessons) into kept / rewritten-to-intent /
-   dropped, with the owner settling contested rows.
-2. Draft `docs/WRITING.md` from the surviving principles (≤450 words of rules).
-3. Same changeset: cut `docs/DESIGN.md` § Technical writing and the two skills' prose
-   sections to pointers plus deltas; propose the one-line `AGENTS.md` edit for
-   approval.
-4. Draft `.claude/skills/technical-writer/SKILL.md` with the scope rules above.
+1. ~~Distill the aspiration~~ — done 2026-08-14, § Rule audit below.
+2. ~~Draft `docs/WRITING.md`~~ — done 2026-08-14.
+3. ~~Cut the old copies; edit `AGENTS.md`~~ — done 2026-08-14: `DESIGN.md`, the
+   `spec` and `design-system-book` skills, `specs/TEMPLATE.md`, and the two
+   `AGENTS.md` lines.
+4. ~~Draft the `technical-writer` skill~~ — done 2026-08-14, authored in
+   `.agents/skills/` and exposed.
 5. Pilot: run the skill on one known-bloated document; the owner reviews the diff and
    the word-count delta before the skill is trusted on changesets.
 6. After two or three real uses, `lesson`/`retro` decide whether the wiring escalates.
 
-## Decisions needed from the owner
+## Rule audit
 
-1. The rule audit's remaining contested rows — which patches carried intent worth
-   keeping. (Carriership over "no rationale" is settled above.)
-2. Approve `WRITING.md` superseding `docs/DESIGN.md` § Technical writing (move, not
-   duplicate).
-3. Approve the `AGENTS.md` "Base prose on…" edit.
-4. Manual invocation before review, or a mandatory gate from day one. Recommendation:
-   manual first.
+Step 1, performed 2026-08-14. Every prose rule in the harness, one row each.
+Verdicts: **keep** (survives, possibly relocated), **rewrite** (the intent survives,
+the wording does not), **drop** (subsumed by a principle or tied to one past
+incident), **contested** (the owner decides).
+
+A finding first: principle 1 already exists in three narrow forms — the book skill's
+"cut a paragraph a competent reader could have written without this repository", its
+rule against tests that re-assert browser behaviour, and `specs/TEMPLATE.md`'s "a
+spec records only what nothing else holds". The aspiration was never missing; it was
+never stated once at full width.
+
+### `docs/DESIGN.md` § Technical writing
+
+| Rule | Verdict | Disposition |
+| :--- | :--- | :--- |
+| Keep sentences focused | rewrite | Becomes Google's "one idea per sentence" in the mechanics section. |
+| Follow the template for the document kind | keep | Moves under principle 4's artifact table. |
+| Match breadth and depth to the domain | keep | Principle 3. |
+| No reasoning traces, historical details or rationales | rewrite | Settled: carriership. The derivable why and the decision narrative go (git carries the narrative); the why nothing else carries stays. |
+| No aphorisms or metaphors | keep | Example under principle 1; merges with the harness ban on paragraph-closing aphorisms. |
+| No restating the sentence after itself | drop | Subsumed by principle 1; kept only as an example. |
+| No "X, not Y" unless Y is a likely mistake | keep | Settled 2026-08-14: the conditional form wins over the absolute ban (2026-08-01) — the same rule with its test attached. |
+| No sibling file as register source | keep | Process rule; stays in the skills. |
+| Agent/developer docs avoid pronouns and carry no rationale; the reason goes in the commit message | rewrite | Pronoun rule keeps (principle 3). The rationale clause follows the settled decision: the why lives where carriership puts it — spec context, ADR, or commit. |
+| Product docs say "we"; a principles book argues | keep | Principle 3, unchanged. |
+
+### `.claude/skills/spec/SKILL.md`
+
+| Rule | Verdict | Disposition |
+| :--- | :--- | :--- |
+| § Prose: direct, strict, technical; no "because"; no restating | rewrite | Becomes a pointer to `WRITING.md` plus the spec delta. The "no because" clause follows the settled decision. |
+| § Recording the intent: capture why the feature exists | keep | Carriership's best case. Currently contradicts § Prose in the same file — the contradiction is itself audit evidence. |
+
+### `.claude/skills/design-system-book/SKILL.md`
+
+| Rule | Verdict | Disposition |
+| :--- | :--- | :--- |
+| Follow `docs/DESIGN.md`; written for design-system users | keep | Pointer retargets to `WRITING.md`. |
+| Principles argues; base and component are dry reference | keep | Principle 3 delta. |
+| No contractions | keep | Local register; overrides the Google default. Stated in `WRITING.md` so nobody "fixes" it. |
+| A book documents only what ships | keep | Structural; stays in the skill. |
+| Cut a paragraph a competent reader could have written without this repository | rewrite | Generalized into principle 1; the narrow copy is deleted. |
+| `grep -nwE 'easy\|simply\|quick\|just'` returns nothing | keep | Moves to the `WRITING.md` word-list appendix, extended. |
+| Read a sibling book only for heading use, never for length | keep | Stays in the skill. |
+
+### `docs/book-writing-harness.md` bans (books, specs, comments, harness files)
+
+| Rule | Verdict | Disposition |
+| :--- | :--- | :--- |
+| "not X, but Y" | rewrite | Settled 2026-08-14: absorbed into the conditional form above. |
+| An aphorism closing a paragraph | keep | Merges with the aphorism example under principle 1. |
+| A knowing aside | keep | Example under principle 1. |
+
+### `specs/TEMPLATE.md` comment block
+
+| Rule | Verdict | Disposition |
+| :--- | :--- | :--- |
+| A spec records only what nothing else holds; derivable from code → delete | rewrite | Is principle 1 in spec form; shortens to a pointer plus the spec-specific derivability test. |
+| Name the mistake a sentence prevents; prevents none → delete | keep | Principle 2 in test form. |
+| No datelines, provenance or decision narrative; git carries those | keep | Carriership with git as the carrier. |
+| Do not announce the spec's own authority | keep | Example under principle 1. |
+
+Every row is settled; the one contested row went to the conditional form on
+2026-08-14.
+
+## Decisions taken
+
+All settled by the owner on 2026-08-14:
+
+1. Carriership over "no rationale".
+2. Conditional "X, not Y" over the absolute ban.
+3. `WRITING.md` supersedes `docs/DESIGN.md` § Technical writing.
+4. The `AGENTS.md` prose line points at `docs/WRITING.md`.
+5. The `technical-writer` skill is invoked manually before review; a gate only if
+   invocations get skipped.

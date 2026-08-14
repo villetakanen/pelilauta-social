@@ -9,9 +9,8 @@ Spec template. Copy to specs/<domain>/<capability>/spec.md.
 
 When there is nothing left to add, stop.
 
-A spec records only what nothing else holds: intent the code cannot state and no
-compiler or test guards. Test every line: can an agent derive this from the
-code? If yes, delete it. Test every sentence: name the mistake it prevents; if
+Prose rules: docs/WRITING.md. The spec-specific tests: can an agent derive this
+line from the code? If yes, delete it. Name the mistake a sentence prevents; if
 it prevents none, or something else already prevents it, delete it. A section
 the code fully expresses states `(implicit)`.
 
@@ -38,6 +37,11 @@ run, and any structural choice that reading one file would not reveal.
 When a capability extends another, name the spec it extends and state only what
 differs. The extended spec governs wherever this one is silent. Do not restate an
 inherited rule to make this spec read completely.
+
+### Documentation
+
+The books that carry this capability. A change here has to reach every page
+listed.
 
 ### Constraints
 
