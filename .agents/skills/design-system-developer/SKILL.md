@@ -6,8 +6,9 @@ description: Building or changing a design-system component or token.
 # Design System Developer
 
 A design-system change ships three artifacts: its spec (`spec` skill), its
-implementation, and its book (`design-system-book` skill). Whether it also needs
-a test, and which kind, is the `design-system-tests` skill's gate.
+implementation, and its book (`design-system-book` skill). What it has to verify is
+its spec's Contract; where each level checks that, and how the check is written, is
+the `design-system-tests` skill. Load it with this one whenever a test file is open.
 
 ## What the change has to be for
 

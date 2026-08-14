@@ -52,6 +52,11 @@ two copies can disagree.
 
 How do we know we are finished? Observable success criteria.
 
+State the outcome, not the instrument. Naming a check here, or listing what it
+asserts, writes the test plan before the behaviour is settled. What such a check
+would assert is already a Constraint, a Guardrail or a Scenario; where it is not,
+write it there.
+
 ### Regression Guardrails
 
 What breaks silently, and when? Invariants that must survive changes to this and
@@ -61,6 +66,11 @@ neighbouring capabilities.
 
 What behaviour must not change? Gherkin, without dictating implementation. Name
 the check that runs each one, where one exists.
+
+One scenario is one behaviour. The same behaviour holding across a scheme, a size
+or a presentation is still one scenario; write a second one only where the
+behaviour itself differs. Where a rendered specimen is the detector rather than a
+check, name the specimen.
 
 ```gherkin
 Given <state>

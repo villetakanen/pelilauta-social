@@ -41,10 +41,6 @@ The badge is decorative, and hidden from assistive technology.
 - The chrome actions book renders the control in both presentations, at a single count and
   at the ceiling, on `--cn-surface` and on `--cn-surface-4`, and as the current
   destination, in Light and Dark.
-- A browser check asserts the badge's corner in each presentation; that 10 and above read
-  the ceiling in the badge and in the name; that an absent, empty, zero, negative and
-  fractional count each render no badge; and that the name announces the count once, with
-  the badge absent from assistive technology.
 - Human review accepts that the badge is seen at a glance, and its characters read, on both
   surfaces and in both schemes.
 

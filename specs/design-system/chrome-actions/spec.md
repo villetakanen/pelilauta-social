@@ -94,21 +94,9 @@ therefore not asked to carry identification on its own. Both are declared in
 - One public design-system class renders both presentations on a native button and on
   a native anchor, outranking the default Actions button and link presentations.
 - `--cn-indicator` and `--cn-on-indicator` resolve in both schemes.
-  `packages/design-system/test/color-contrast.test.ts` measures `--cn-on-indicator` at
-  AA against `--cn-surface` and against `--cn-surface-4`, and asserts it differs from
-  the foreground a non-current action inherits.
 - A book specimen renders both presentations and both elements, forcing rest, hover,
   active, keyboard focus and the disabled button, and a current destination beside a
   non-current one, in Light and Dark.
-- A browser check sets `--cn-chrome-presentation` on a plain wrapper of known inline
-  size and asserts the native element, the computed target and state-surface geometry
-  in each presentation, the compact result for an absent and an unrecognised value, an
-  identical foreground on both elements, an unchanged accessible name across
-  presentations, the Icon's resolved size, and an unchanged block size and bounding
-  box across states. It also asserts that an anchor with `aria-current` paints
-  `--cn-indicator` at rest and carries `--cn-on-indicator`; that `aria-current="false"`
-  and a `button` with `aria-current` paint neither; and that a current destination's
-  resting, hovered and active paints are three distinct values.
 - Human review accepts that a chrome action reads as chrome rather than as a content
   button, and that a label truncates legibly, at default and enlarged browser text
   sizes.
