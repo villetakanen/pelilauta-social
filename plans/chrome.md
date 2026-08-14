@@ -123,11 +123,11 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   the application bar, adaptive navigation or application chrome geometry.
 - **Chrome specifications** — approve the required contracts above before their
   implementation slices begin.
-- **Icon alt text** — an Icon announces and titles its noun, an untranslated internal
-  name, wherever a consumer does not pass `decorative`. Chrome is icon-dense and its
-  glyphs stand for actions, destinations and the brand, so the noun stops standing in for
-  alt text before the bar, rail and tray ship.
-  `plans/debt/loader-icon-announces-its-noun.md` records the same defect in the loader.
+- **Icon alt text** — withdrawn 2026-08-14. An icon is a noun, and the noun reaching
+  assistive technology is `specs/design-system/components/cn-icon/spec.md`'s approved
+  intent, not a defect. A chrome call site that needs another word passes `aria-label`,
+  and one whose glyph carries no meaning passes `decorative`; both already exist.
+  `plans/debt/loader-icon-announces-its-noun.md` is a call site doing exactly that.
 - **Account theme compatibility note** — record the additive account field and v18
   compatibility boundary in `docs/ARCHITECTURE.md` before changing the schema.
 - **Application bar** — ship and book the local `CnAppBar`, including standard and

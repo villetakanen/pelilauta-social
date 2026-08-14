@@ -6,6 +6,11 @@ status: approved
 
 ## Intent
 
+An icon is a noun standing in an expression. A reader who sees it receives
+artwork; a reader using assistive technology receives the noun itself. Both
+receive the same word, which is why the noun is the icon's label wherever a
+consumer supplies no other.
+
 Icons give familiar actions, objects, systems, and identities a compact visual
 form within Pelilauta. They support surrounding content and controls; they do
 not replace understandable labels where a label is needed.
