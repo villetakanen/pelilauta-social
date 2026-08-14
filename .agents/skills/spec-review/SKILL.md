@@ -26,8 +26,10 @@ current code does not settle intent ambiguity.
 Identify materially different outcomes the text permits and construct a verification
 plan from its Contract. Challenge:
 
-- **Premise:** Context states settled purpose without unsupported assumptions or an
-  unapproved solution.
+- **Premise:** Context carries the need the capability serves — who is served and
+  what they get — settled, without unsupported assumptions or an unapproved
+  solution. A Context that could be pasted onto a sibling capability without
+  becoming false carries nothing.
 - **Ambiguity:** subjects, states, ranges, precedence and terms permit one observable
   interpretation.
 - **Testability:** Contract outcomes and required checking methods are explicit.
@@ -47,8 +49,8 @@ plan from its Contract. Challenge:
 
 Order findings as blockers, risks and record corrections, with exact references.
 State the wrong outcome or failed verification, evidence, and smallest question or
-correction needed. A blocker leaves intent ambiguous, contradictory, unsupported or
-unverifiable.
+correction needed. A blocker leaves intent missing, ambiguous, contradictory,
+unsupported or unverifiable.
 
 End with `ready for approval`, `not ready for approval`, or `review incomplete`, the
 Subtraction outcome, and unresolved approver questions. Say when no findings exist.

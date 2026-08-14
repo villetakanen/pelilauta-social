@@ -55,4 +55,5 @@ technical.
 The spec's context and architecture carry the why nothing else holds: the user or
 system need the capability exists for. State no why the reader can derive.
 
-Where the intent is not derivable from the sources, ask questions.
+A why comes from v18, v20, an ADR or a human decision. A why with no source is a
+question to the human, not a sentence in the spec.

@@ -25,9 +25,9 @@ Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.
 
 ### Context
 
-The standing capability: its goal, and what wins when its goals collide. Do not
-describe the world before the work; that description is false once the work
-lands. One paragraph.
+The user or system need this capability serves: who is served, and what they
+get. Then what wins when its goals collide. Do not describe the world before
+the work; that description is false once the work lands. One paragraph.
 
 ### Architecture
 
