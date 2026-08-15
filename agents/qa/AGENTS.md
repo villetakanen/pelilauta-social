@@ -14,10 +14,10 @@ harness-agnostic tooling, not a coding-harness skill; those live in `.agents/`.
 ## Commands
 
 ```sh
-node agents/qa/run.mjs all            # every persona
-node agents/qa/run.mjs game-master    # one persona; names match personas/*.md
-node apps/pelilauta/scripts/cleanup-test-db.mjs           # dry run: list QA leftovers
-node apps/pelilauta/scripts/cleanup-test-db.mjs --apply   # delete them
+agents/qa/run.sh all              # every persona
+agents/qa/run.sh game-master      # one persona; names match personas/*.md
+agents/qa/cleanup.sh              # dry run: list QA leftovers
+agents/qa/cleanup.sh --apply      # delete them
 ```
 
 Reports land in `docs/reports/YYYY-MM-DD-qa-<persona>.md`.

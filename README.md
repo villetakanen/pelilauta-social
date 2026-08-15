@@ -81,3 +81,9 @@ icon sizing (`beta.3`), and the initial local Icon capability (`beta.2`).
 - `pnpm verify` runs the pull-request verification gate.
 - `pnpm --filter design build` verifies the design-system application build.
 - `pnpm --filter design test:e2e` runs the design-system browser checks.
+
+## Persona QA
+
+Three personas visit the dev site through a headless Antigravity CLI agent and
+report first-person into `docs/reports/`. `agents/qa/AGENTS.md` holds the
+commands, prerequisites and rules.
