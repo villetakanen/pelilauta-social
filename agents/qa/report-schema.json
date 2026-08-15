@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "persona",
+    "narrative",
+    "impression",
+    "findings",
+    "created_content",
+    "gave_up_on"
+  ],
+  "properties": {
+    "persona": {
+      "type": "string",
+      "description": "The persona slug this run simulated."
+    },
+    "narrative": {
+      "type": "string",
+      "description": "First-person account of the visit: where the persona went, what they did, what happened."
+    },
+    "impression": {
+      "type": "string",
+      "description": "How the visit felt to the persona, in a few sentences."
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "route", "description"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["blocker", "major", "minor"]
+          },
+          "route": {
+            "type": "string",
+            "description": "The path where the finding lives, e.g. /channels."
+          },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "created_content": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Titles of everything the persona created. Each must start with 'QA:'."
+    },
+    "gave_up_on": {
+      "type": "string",
+      "description": "What the persona wanted but could not do. Empty string if nothing."
+    }
+  }
+}
