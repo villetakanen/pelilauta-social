@@ -9,7 +9,7 @@ import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnShareAction from '@design-system/components/CnShareAction.svelte';
-import CnTray from '@design-system/components/CnTray.astro';
+import CnRail from '@design-system/components/CnRail.astro';
 import '@design-system/styles/ds.css';
 // Prototype-age scaffolding: the index page's editorial vocabulary, and the table
 // and link rules no design-system stylesheet owns yet.
@@ -77,15 +77,15 @@ const context = group ? groupLabel(group) : 'Index';
 
     <a class="skip-link" href="#content">Skip to content</a>
 
-    <div class="shell" data-cn-tray-scope>
+    <div class="shell" data-cn-rail-scope>
       <CnAppChrome>
         <CnAppBar title={context} shortTitle={context}>
         <ThemeSwitch />
         <CnShareAction client:load label="Share this page" />
         </CnAppBar>
-        <CnTray label="Design system books">
+        <CnRail label="Design system books">
           <DocsNav />
-        </CnTray>
+        </CnRail>
       </CnAppChrome>
 
       <main class="book app-main" id="content">

@@ -49,12 +49,12 @@
   }
 
   /*
-   * The local tray, in the two states that stand beside the page: the rail, and
-   * the tray open beside it. A tray covering the page is not here — it has
-   * risen off the page to elevation 4, and what has risen stays opaque, as the
-   * levels below say.
+   * The local rail, in the two states that stand beside the page: collapsed,
+   * and expanded beside it. A rail covering the page is not here — it has risen
+   * off the page to elevation 4, and what has risen stays opaque, as the levels
+   * below say.
    */
-  body:has(#cn-poster) .cn-tray {
+  body:has(#cn-poster) .cn-rail {
     background-color: transparent;
   }
 

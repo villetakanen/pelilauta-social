@@ -1,0 +1,351 @@
+---
+/**
+ * CnRail — the trigger, the drawer, the scrim, and the three boxes an
+ * application fills.
+ *
+ * The rail holds the places a reader reaches from the page they are on. What
+ * those are is the page's; this states the boxes they stand in.
+ *
+ * A box is spacing, not a surface: it paints nothing, and it takes no room
+ * while it is empty. A header or a footer with nothing in it does not render,
+ * so the arrangement stays legible while an application moves content between
+ * them.
+ *
+ * Two checkboxes carry the request, one pair per side of the tablet
+ * breakpoint, because HTML gives a checkbox one default and the two sides want
+ * different ones: a phone rests closed, a desktop rests open. The window
+ * displays one pair and removes the other, so `:checked` always means expanded
+ * and expanding never needs script.
+ */
+export interface Props {
+  /** Names the control and the landmark. Both are the reader's only clue. */
+  label: string;
+  /**
+   * Distinguishes this rail's controls from another document's. A page holds
+   * one rail; a book page rendering a specimen states its own.
+   */
+  id?: string;
+}
+
+const { label, id = 'cn-rail' } = Astro.props;
+const narrow = `${id}-narrow`;
+const wide = `${id}-wide`;
+const hasHeader = Astro.slots.has('header');
+const hasFooter = Astro.slots.has('footer');
+---
+
+<div class="cn-rail" data-cn-rail>
+  {/*
+    The checkbox is the control: focusable, named, and reporting its own
+    checked state. It is hidden from view and from nothing else — `display:
+    none` would take the only keyboard route into the rail with it.
+  */}
+  <input class="cn-rail-request narrow" type="checkbox" id={narrow} aria-label={label} />
+  <input class="cn-rail-request wide" type="checkbox" id={wide} aria-label={label} checked />
+
+  <label class="cn-rail-trigger narrow" for={narrow} aria-hidden="true">
+    <span class="cn-rail-bars"></span>
+  </label>
+  <label class="cn-rail-trigger wide" for={wide} aria-hidden="true">
+    <span class="cn-rail-bars"></span>
+  </label>
+
+  <nav class="cn-rail-drawer" aria-label={label}>
+    {hasHeader && (
+      <div class="cn-rail-header">
+        <slot name="header" />
+      </div>
+    )}
+
+    <div class="cn-rail-body">
+      <slot />
+    </div>
+
+    {hasFooter && (
+      <div class="cn-rail-footer">
+        <slot name="footer" />
+      </div>
+    )}
+  </nav>
+
+  {/* Only a covering rail has a scrim, and only the narrow pair ever covers. */}
+  <label class="cn-rail-scrim" for={narrow} aria-hidden="true"></label>
+</div>
+
+<style>
+  /*
+   * A column, because the trigger stands above the drawer and takes its own
+   * depth from it. The drawer taking the block size it is left with — rather
+   * than the whole rail's — is what keeps the footer flush to the rail's end
+   * rather than that far below it.
+   */
+  .cn-rail {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: var(--cn-z-rail);
+    display: flex;
+    flex-direction: column;
+
+    /* The rail declares its own presentation for the entries it holds. */
+    --cn-chrome-presentation: labelled;
+  }
+
+  /*
+   * Visually hidden but focusable, named and reporting its state. The trigger
+   * beside it is decorative: it draws what the checkbox already says.
+   */
+  .cn-rail-request {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* The trigger follows a chrome action's target, state surface and focus. */
+  .cn-rail-trigger {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: calc(var(--cn-grid) * 7);
+    block-size: calc(var(--cn-grid) * 7);
+    margin: calc(var(--cn-grid) * 0.5);
+    color: inherit;
+    cursor: pointer;
+  }
+  .cn-rail-trigger::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+    inline-size: calc(var(--cn-grid) * 6);
+    block-size: calc(var(--cn-grid) * 6);
+    border-radius: calc(var(--cn-grid) * 3);
+    background-color: transparent;
+    transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+  .cn-rail-trigger:hover::before { background-color: var(--cn-hover); }
+  .cn-rail-trigger:active::before { background-color: var(--cn-active); }
+
+  /* The focus lands on the checkbox; the trigger is what shows it. */
+  .cn-rail:has(.cn-rail-request.narrow:focus-visible) .cn-rail-trigger.narrow,
+  .cn-rail:has(.cn-rail-request.wide:focus-visible) .cn-rail-trigger.wide {
+    outline: 2px solid var(--cn-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Two bars, crossing while the rail is expanded. */
+  .cn-rail-bars,
+  .cn-rail-bars::before,
+  .cn-rail-bars::after {
+    display: block;
+    inline-size: calc(var(--cn-grid) * 3);
+    block-size: calc(var(--cn-grid) * 0.5);
+    border-radius: calc(var(--cn-grid) * 0.25);
+    background-color: currentColor;
+  }
+  .cn-rail-bars {
+    position: relative;
+    background-color: transparent;
+  }
+  .cn-rail-bars::before,
+  .cn-rail-bars::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    transition:
+      translate var(--cn-duration-ui) var(--cn-easing-ui),
+      rotate var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+  .cn-rail-bars::before { translate: 0 calc(var(--cn-grid) * -0.625); }
+  .cn-rail-bars::after { translate: 0 calc(var(--cn-grid) * 0.625); }
+
+  .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-trigger.narrow .cn-rail-bars::before,
+  .cn-rail:has(.cn-rail-request.wide:checked) .cn-rail-trigger.wide .cn-rail-bars::before {
+    translate: 0 0;
+    rotate: 45deg;
+  }
+  .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-trigger.narrow .cn-rail-bars::after,
+  .cn-rail:has(.cn-rail-request.wide:checked) .cn-rail-trigger.wide .cn-rail-bars::after {
+    translate: 0 0;
+    rotate: -45deg;
+  }
+
+  .cn-rail-drawer {
+    display: flex;
+    flex-direction: column;
+    /* `min-block-size: 0` so a long entry list scrolls rather than growing. */
+    flex: 1;
+    min-block-size: 0;
+    inline-size: var(--cn-width-rail-expanded);
+    max-inline-size: 100dvw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: var(--cn-surface);
+    transition:
+      translate var(--cn-duration-ui) var(--cn-easing-ui),
+      inline-size var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+
+  /*
+   * The three boxes. Each stacks what it holds on one axis: an entry is an
+   * inline-level box, so a block container would let the entries flow and wrap
+   * — packing a collapsed rail's entries into rows, and rewrapping them while
+   * the rail travels between its two widths.
+   */
+  .cn-rail-header,
+  .cn-rail-body,
+  .cn-rail-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: none;
+    /*
+     * The box's inset, on every side, and the air the active background stands
+     * in. It is what the collapsed rail leaves around a chrome action's target,
+     * rather than `--cn-gap`: at the gap the target would not fit the rail's
+     * width, and widening the rail to admit it would move the icons off the
+     * line the application bar and the collapsed rail share.
+     */
+    padding: calc(
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2
+    );
+  }
+
+  /* The body takes what the other two leave, so the footer sits at the end. */
+  .cn-rail-body { flex: 1; }
+
+  /*
+   * The footer's line. A footer renders only when it holds something, so the
+   * line marks a boundary that exists — and where the body is short, the line
+   * lands where the reader is already looking rather than where the content
+   * happened to stop.
+   */
+  .cn-rail-footer {
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+  .cn-rail-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: var(--cn-z-scrim);
+    background-color: var(--cn-scrim);
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: opacity var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+
+  /*
+   * A reader who asks for no motion gets the two states and nothing between.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .cn-rail-drawer,
+    .cn-rail-scrim,
+    .cn-rail-bars::before,
+    .cn-rail-bars::after {
+      transition: none;
+    }
+  }
+
+  /*
+   * The small band holds no rail: it is absent, and its box is the trigger
+   * alone, standing in the leading slot CnAppBar reserves for it.
+   */
+  @media (max-width: 38.75rem) {
+    .cn-rail {
+      inset-block-end: auto;
+      inline-size: calc(var(--cn-grid) * 8);
+    }
+  }
+
+  /* Narrower than the tablet breakpoint, the narrow pair is the control. */
+  @media (max-width: 63.99rem) {
+    .cn-rail-request.wide,
+    .cn-rail-trigger.wide {
+      display: none;
+    }
+
+    /* Asked for, the drawer leaves the strip and covers the page. */
+    .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-drawer {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: var(--cn-z-rail);
+      inline-size: var(--cn-width-rail-expanded);
+      background-color: var(--cn-surface-4);
+      box-shadow: var(--cn-shadow-elevation-4);
+    }
+    .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-scrim {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* The small band's resting rail is absent, in the tree as well as in view. */
+  @media (max-width: 38.75rem) {
+    .cn-rail:not(:has(.cn-rail-request.narrow:checked)) .cn-rail-drawer {
+      display: none;
+    }
+  }
+
+  /* The tablet band rests collapsed: the entries themselves, compact. */
+  @media (min-width: 38.7501rem) and (max-width: 63.99rem) {
+    .cn-rail {
+      inline-size: var(--cn-width-rail-collapsed);
+      background-color: var(--cn-surface);
+    }
+    .cn-rail-drawer {
+      inline-size: 100%;
+      background-color: transparent;
+    }
+    .cn-rail:not(:has(.cn-rail-request.narrow:checked)) {
+      --cn-chrome-presentation: compact;
+    }
+  }
+
+  /*
+   * The tablet breakpoint and wider: the wide pair is the control, the rail
+   * stands beside the page in both states, and nothing covers anything.
+   */
+  @media (min-width: 64rem) {
+    .cn-rail-request.narrow,
+    .cn-rail-trigger.narrow,
+    .cn-rail-scrim {
+      display: none;
+    }
+
+    .cn-rail {
+      inline-size: var(--cn-width-rail-collapsed);
+      background-color: var(--cn-surface);
+      transition: inline-size var(--cn-duration-ui) var(--cn-easing-ui);
+      --cn-chrome-presentation: compact;
+    }
+    /* The wide control rests checked, so a desktop page loads expanded. */
+    .cn-rail:has(.cn-rail-request.wide:checked) {
+      inline-size: var(--cn-width-rail-expanded);
+      --cn-chrome-presentation: labelled;
+    }
+
+    .cn-rail-drawer {
+      inline-size: 100%;
+      background-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cn-rail {
+      transition: none;
+    }
+  }
+</style>

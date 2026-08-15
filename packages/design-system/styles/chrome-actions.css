@@ -190,7 +190,15 @@ a.chrome-action[href]::before {
     inline-size: 100%;
     justify-content: flex-start;
     gap: var(--cn-gap);
-    padding-inline-start: var(--cn-grid);
+    /*
+     * The Icon stands where the compact presentation centres it in the target,
+     * so a container changing presentation moves the label in and the Icon not
+     * at all. A rail and a bar inset their own contents equally, which is what
+     * puts every glyph in the application's chrome on one line.
+     */
+    padding-inline-start: calc(
+      (var(--cn-grid) * 7 - var(--cn-icon-size)) / 2
+    );
 
     --_labelled-surface-inline: 100%;
     --_labelled-surface-inset: 0;
@@ -200,7 +208,7 @@ a.chrome-action[href]::before {
     --_labelled-label-block: auto;
     --_labelled-label-clip: none;
     --_labelled-badge-inline-start: calc(
-      var(--cn-grid) +
+      (var(--cn-grid) * 7 - var(--cn-icon-size)) / 2 +
       var(--cn-icon-size) -
       var(--_badge-size) /
       2

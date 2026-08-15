@@ -49,7 +49,7 @@ test('the navigation is reachable on a small viewport through the disclosure', a
   // The tray's trigger stands in the leading slot CnAppBar reserves for it at
   // this width. It draws the checkbox beside it, which is the named control a
   // reader's assistive technology reports; the trigger is what a pointer hits.
-  const disclosure = page.locator('.cn-tray-trigger.narrow');
+  const disclosure = page.locator('.cn-rail-trigger.narrow');
   await expect(disclosure).toBeVisible();
   await disclosure.click();
 
