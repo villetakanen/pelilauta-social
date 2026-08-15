@@ -49,6 +49,16 @@
   }
 
   /*
+   * The local tray, in the two states that stand beside the page: the rail, and
+   * the tray open beside it. A tray covering the page is not here — it has
+   * risen off the page to elevation 4, and what has risen stays opaque, as the
+   * levels below say.
+   */
+  body:has(#cn-poster) .cn-tray {
+    background-color: transparent;
+  }
+
+  /*
    * The ground plane is the one elevation a poster changes: it is the level
    * that stands for the page itself. Levels 1 through 4 stay opaque, because
    * content that has risen off the page is content the reader is meant to read.

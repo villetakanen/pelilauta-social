@@ -55,10 +55,19 @@ a.chrome-action[href] {
    * which resolve every step to the small step — a chrome action resolves to
    * the medium step: the owner judged the small step too small against the
    * six-grid state surface. This departs from the Actions spec on purpose;
-   * `specs/design-system/chrome-actions/spec.md` carries the departure, and
-   * `--cn-icon-size` itself is left alone, since it is the token every other
-   * step substitutes toward.
+   * `specs/design-system/chrome-actions/spec.md` carries the departure.
+   *
+   * `--cn-icon-size` is taken from the parent rather than left alone. Left
+   * alone, any rule reaching this element with a medium step of its own — Cyan
+   * still ships `button { --cn-icon-size: var(--cn-icon-size-small) }`, which
+   * matches a chrome action rendered as a button — would name the small step
+   * while the line below names the medium one. Each would then reference the
+   * other, and a cyclic custom property is invalid at computed-value time: both
+   * resolve to nothing, and every Icon in the control falls back to the `svg`
+   * element's intrinsic size. `inherit` takes the value the container already
+   * carries, so it restates no measurement and joins no cycle.
    */
+  --cn-icon-size: inherit;
   --cn-icon-size-xsmall: var(--cn-icon-size);
   --cn-icon-size-small: var(--cn-icon-size);
   --cn-icon-size-large: var(--cn-icon-size);

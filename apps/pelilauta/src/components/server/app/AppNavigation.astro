@@ -1,0 +1,73 @@
+---
+/**
+ * Pelilauta's application navigation: the tray's surface from the design
+ * system, the entries from here.
+ *
+ * The tray spec makes entries the consumer's, so each is an ordinary chrome
+ * action — an anchor, an Icon and a label — and this component states which one
+ * the reader is on. Three entries read the session on the client and stay
+ * islands.
+ *
+ * The entries are v18's global rail, restated. `plans/pelilauta-ux-spike.md`
+ * asks what a front page's navigation should actually hold; this component is
+ * what that question is asked against, not the answer to it.
+ */
+import CnTray from '@design-system/components/CnTray.astro';
+import Icon from '@design-system/components/Icon.svelte';
+import { t } from 'src/utils/i18n';
+import AdminNavigationButton from '../../svelte/admin/AdminNavigationButton.svelte';
+import SettingNavigationButton from '../../svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '../../svelte/inbox/InboxNavigationButton.svelte';
+
+const path = Astro.url.pathname;
+
+/** The front page is the one entry an ancestor match would claim every page for. */
+const home = path === '/';
+/** v18's rail treats a thread and its channel index as one destination. */
+const threads = path.startsWith('/channels') || path.startsWith('/threads/');
+const library = path.startsWith('/library');
+const docs = path.startsWith('/docs');
+
+/** What a chrome action carries when it is where the reader is, and when it is not. */
+function current(here: boolean) {
+  return here ? 'page' : undefined;
+}
+---
+
+<CnTray label={t('navigation:main')}>
+  <a class="chrome-action" href="/" aria-current={current(home)}>
+    <Icon noun="fox" decorative />
+    <span>{t("navigation:home")}</span>
+  </a>
+
+  <a class="chrome-action" href="/channels" aria-current={current(threads)}>
+    <Icon noun="discussion" decorative />
+    <span>{t("navigation:threads")}</span>
+  </a>
+
+  <a class="chrome-action" href="/library" aria-current={current(library)}>
+    <Icon noun="books" decorative />
+    <span>{t("navigation:library")}</span>
+  </a>
+
+  <InboxNavigationButton
+    client:only="svelte"
+    ariaCurrent={current(path.startsWith("/inbox"))}
+  />
+
+  <AdminNavigationButton
+    client:only="svelte"
+    ariaCurrent={current(path.startsWith("/admin"))}
+  />
+
+  <a class="chrome-action" href="/docs/01-index" aria-current={current(docs)}>
+    <Icon noun="design" decorative />
+    <span>{t("navigation:docs")}</span>
+  </a>
+
+  <SettingNavigationButton
+    client:only="svelte"
+    slot="reader"
+    ariaCurrent={current(path.startsWith("/settings"))}
+  />
+</CnTray>

@@ -57,11 +57,19 @@ const wide = `${id}-wide`;
 </div>
 
 <style>
+  /*
+   * A column, because the trigger stands above the drawer and takes its own
+   * depth from it. The drawer taking the block size it is left with — rather
+   * than the whole tray's — is what keeps the block-end slot flush to the
+   * tray's end rather than that far below it.
+   */
   .cn-tray {
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
     z-index: var(--cn-z-tray);
+    display: flex;
+    flex-direction: column;
 
     /* The tray declares its own presentation for the entries it holds. */
     --cn-chrome-presentation: labelled;
@@ -160,7 +168,9 @@ const wide = `${id}-wide`;
   .cn-tray-drawer {
     display: flex;
     flex-direction: column;
-    block-size: 100%;
+    /* `min-block-size: 0` so a long entry list scrolls rather than growing. */
+    flex: 1;
+    min-block-size: 0;
     inline-size: var(--cn-width-tray);
     max-inline-size: 100dvw;
     padding-block: calc(var(--cn-grid) * 0.5);

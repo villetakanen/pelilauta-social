@@ -38,7 +38,12 @@ const {
     )
   }
 
-  <p class="title">
+  {/*
+    A shorter form replaces the title on a small screen, so the swap is stated
+    only where there is one to swap to: a page giving none keeps its title at
+    every window rather than losing it below the breakpoint.
+  */}
+  <p class:list={['title', { swaps: shortTitle }]}>
     <span class="full-title">{title}</span>
     {shortTitle && <span class="short-title">{shortTitle}</span>}
   </p>
@@ -150,10 +155,10 @@ const {
 
   /* 38.75rem is --cn-breakpoint-small, which a media query cannot read. */
   @media (max-width: 38.75rem) {
-    .full-title {
+    .title.swaps .full-title {
       display: none;
     }
-    .short-title {
+    .title.swaps .short-title {
       display: inline;
     }
 

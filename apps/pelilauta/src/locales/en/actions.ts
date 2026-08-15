@@ -26,6 +26,7 @@ export const actions: Locale = {
   logout: 'Sign out',
   send: 'Send',
   save: 'Save',
+  search: 'Search',
   share: 'Share',
   showMore: 'Show more',
   show: {
