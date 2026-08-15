@@ -20,7 +20,7 @@
  * resting surface, the label, the container query — to the shipped
  * stylesheet already loaded by the design site, so a forced row still shows
  * its state and a real pointer still works. The disabled row needs no such
- * mapping — it renders the native `disabled` attribute, which is real.
+ * mapping — its attributes are real.
  *
  * Book: apps/design/src/content/base/chrome-actions.mdx
  */
@@ -372,7 +372,22 @@ for (const pseudo of STATE_PSEUDOS) {
               </button>
             </div>
           </td>
-          <td>No disabled anchor.</td>
+          <td>
+            <div
+              class="slot"
+              style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+            >
+              <a
+                class="chrome-action"
+                href="/base/chrome-actions"
+                aria-disabled="true"
+                tabindex="-1"
+              >
+                <Icon noun="arrow-left" decorative />
+                <span>Back</span>
+              </a>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -451,6 +466,23 @@ for (const pseudo of STATE_PSEUDOS) {
             </dd>
           </>
         ))}
+        <dt>Disabled</dt>
+        <dd>
+          <div
+            class="slot"
+            style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+          >
+            <a
+              class="chrome-action"
+              href="/base/chrome-actions"
+              aria-disabled="true"
+              tabindex="-1"
+            >
+              <Icon noun="arrow-left" decorative />
+              <span>Back</span>
+            </a>
+          </div>
+        </dd>
       </dl>
     </>
   )}

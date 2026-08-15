@@ -475,6 +475,107 @@ test.describe('geometry and the accessible name', () => {
       expect((await indicatorStyle(locator)).content).toBe('none');
     }
   });
+
+  /**
+   * The book's own compact "states" specimen — not a mounted stand-in —
+   * because the disabled row there already puts a real disabled button
+   * beside a real `aria-disabled` anchor. `themes` renders that specimen
+   * once per colour scheme, one `[data-mode]` panel apiece; opacity, cursor
+   * and hit-testing do not depend on colour scheme, so this test scopes to
+   * the `light` panel.
+   *
+   * Deliberately not checked here: that the CSS sets a particular opacity,
+   * cursor or `pointer-events` value, and that the `disabled`,
+   * `aria-disabled` and `tabindex` attributes are present — all readable
+   * from `chrome-actions.css` and the specimen markup without a browser.
+   */
+  test('a disabled anchor chrome action beside a disabled button chrome action present the same, are each announced as disabled, and neither navigates nor runs a command', async ({
+    page,
+  }) => {
+    const panel = specimenFigure(
+      page,
+      'Compact chrome action, rest, hover, active, keyboard focus and disabled',
+    ).locator('[data-mode="light"]');
+    const disabledButton = panel.locator('button.chrome-action[disabled]');
+    const disabledAnchor = panel.locator(
+      'a.chrome-action[href][aria-disabled="true"][tabindex="-1"]',
+    );
+
+    await expect(
+      panel.getByRole('button', { name: 'Send', disabled: true }),
+    ).toHaveCount(1);
+    await expect(
+      panel.getByRole('link', { name: 'Back', disabled: true }),
+    ).toHaveCount(1);
+
+    const buttonOpacity = await disabledButton.evaluate(
+      (node) => getComputedStyle(node).opacity,
+    );
+    const anchorOpacity = await disabledAnchor.evaluate(
+      (node) => getComputedStyle(node).opacity,
+    );
+    const buttonCursor = await disabledButton.evaluate(
+      (node) => getComputedStyle(node).cursor,
+    );
+    const anchorCursor = await disabledAnchor.evaluate(
+      (node) => getComputedStyle(node).cursor,
+    );
+    expect(anchorOpacity).toBe(buttonOpacity);
+    expect(anchorCursor).toBe(buttonCursor);
+
+    for (const locator of [disabledButton, disabledAnchor]) {
+      const rest = await surfaceStyle(locator);
+
+      await locator.hover({ force: true });
+      await waitPastTransition(page, locator);
+      expect((await surfaceStyle(locator)).background).toBe(rest.background);
+
+      await page.mouse.down();
+      await waitPastTransition(page, locator);
+      expect((await surfaceStyle(locator)).background).toBe(rest.background);
+      await page.mouse.up();
+    }
+    const anchorRest = (await surfaceStyle(disabledAnchor)).background;
+    const buttonRest = (await surfaceStyle(disabledButton)).background;
+    expect(anchorRest).toBe(buttonRest);
+
+    // A window flag — not the URL — catches the anchor case, because its own
+    // `href` targets this same book page: a same-URL navigation would
+    // otherwise look like no navigation happened at all.
+    type Probe = { chromeActionClicked?: boolean; chromeActionNoNav?: boolean };
+
+    await disabledButton.evaluate((node) => {
+      const probe = window as unknown as Probe;
+      probe.chromeActionClicked = false;
+      node.addEventListener('click', () => {
+        probe.chromeActionClicked = true;
+      });
+    });
+    const buttonBox = await disabledButton.boundingBox();
+    if (!buttonBox) throw new Error('expected the disabled button a box');
+    await page.mouse.click(
+      buttonBox.x + buttonBox.width / 2,
+      buttonBox.y + buttonBox.height / 2,
+    );
+    const clicked = await page.evaluate(
+      () => (window as unknown as Probe).chromeActionClicked,
+    );
+    expect(clicked).toBe(false);
+
+    await page.evaluate(() => {
+      (window as unknown as Probe).chromeActionNoNav = true;
+    });
+    const anchorBox = await disabledAnchor.boundingBox();
+    if (!anchorBox) throw new Error('expected the disabled anchor a box');
+    await page.mouse.click(
+      anchorBox.x + anchorBox.width / 2,
+      anchorBox.y + anchorBox.height / 2,
+    );
+    const stillOnThisPage = await page.evaluate(
+      () => (window as unknown as Probe).chromeActionNoNav,
+    );
+    expect(stillOnThisPage).toBe(true);
+  });
 });
 
 // Every test below resolves or compares a colour, so each runs once per

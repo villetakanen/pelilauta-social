@@ -3,11 +3,12 @@
  * rails and trays.
  *
  * A chrome action is an Actions presentation (specs/design-system/actions/spec.md):
- * it keeps that capability's element semantics, disabled contract, focus
- * treatment, colour-role rules and transitions unchanged. This file states only
- * what application chrome changes — the target, the state surface, the
- * foreground source, and the two presentations a container declares through
- * the inherited `--cn-chrome-presentation` custom property.
+ * it keeps that capability's element semantics, disabled command, focus
+ * treatment, colour-role rules and transitions unchanged. This file states
+ * only what application chrome changes — the target, the state surface, the
+ * foreground source, the two presentations a container declares through the
+ * inherited `--cn-chrome-presentation` custom property, and a disabled
+ * destination, which Actions does not publish for an anchor.
  *
  * `.chrome-action` applies to `button.chrome-action` and `a.chrome-action[href]`
  * and to no other element; it composes with no Actions button variant, so it
@@ -204,17 +205,17 @@ a.chrome-action[href]::before {
  * rule follows the hover rule in source order at equal specificity.
  */
 button.chrome-action:hover::before,
-a.chrome-action[href]:hover::before {
+a.chrome-action[href]:not([aria-disabled="true"]):hover::before {
   background-color: var(--cn-hover);
 }
 
 button.chrome-action:active::before,
-a.chrome-action[href]:active::before {
+a.chrome-action[href]:not([aria-disabled="true"]):active::before {
   background-color: var(--cn-active);
 }
 
 button.chrome-action:focus-visible,
-a.chrome-action[href]:focus-visible {
+a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
   outline: 2px solid var(--cn-focus-ring);
   outline-offset: 2px;
 }
@@ -295,8 +296,9 @@ a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
   pointer-events: none;
 }
 
-/* The disabled destination has no rule yet. */
-button.chrome-action:disabled {
+/* A disabled anchor's `aria-disabled="true"` and `tabindex="-1"` are the consumer's. */
+button.chrome-action:disabled,
+a.chrome-action[href][aria-disabled="true"] {
   opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
