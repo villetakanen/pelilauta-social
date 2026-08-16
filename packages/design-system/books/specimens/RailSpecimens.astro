@@ -25,14 +25,20 @@
  * whichever element the browser meets first, so the two panes' triggers could
  * end up driving one checkbox between them.
  *
+ * `alignment` mounts a `CnAppBar` above the rail, in the same frame, so the
+ * bar's mark and the rail's trigger and entries render on the one axis and
+ * the one 56px rhythm the two components share — a fact no single component
+ * demonstrates on its own.
+ *
  * Book: apps/design/src/content/components/cn-rail.mdx
  */
+import CnAppBar from '../../components/CnAppBar.astro';
 import CnRail from '../../components/CnRail.astro';
 import Icon from '../../components/Icon.svelte';
 
 interface Props {
   /** Which axis to render. */
-  group: 'canonical' | 'boxes';
+  group: 'canonical' | 'boxes' | 'alignment';
 }
 
 const { group } = Astro.props;
@@ -113,6 +119,22 @@ const MODES = ['light', 'dark'] as const;
           </div>
         </div>
       )}
+
+      {group === 'alignment' && (
+        <div class="frame alignment">
+          <CnAppBar title="Kirjaston sivut" noun="fox" />
+          <CnRail id={`rail-alignment-${mode}`} label="Kirjaston sivut">
+            <a class="chrome-action" href="/haku" slot="header">
+              <Icon noun="search" decorative />
+              <span>Haku</span>
+            </a>
+            <a class="chrome-action" href="/" aria-current="page">
+              <Icon noun="fox" decorative />
+              <span>Etusivu</span>
+            </a>
+          </CnRail>
+        </div>
+      )}
     </div>
   ))}
 </div>
@@ -137,10 +159,10 @@ const MODES = ['light', 'dark'] as const;
   }
 
   /*
-   * Test rig, not a design-system value: tall enough to hold what every
-   * specimen on this page mounts — a trigger, a header of one entry, a body
-   * of two, and a footer of one — with the footer flush to the frame's own
-   * end, and named for the band its width selects.
+   * Test rig, not a design-system value: tall enough to hold what the
+   * `canonical` and `boxes` specimens mount — a trigger, a header of one
+   * entry, a body of two, and a footer of one — with the footer flush to the
+   * frame's own end, and named for the band its width selects.
    *
    * The rail spans the frame's block size and its drawer scrolls what does
    * not fit, so a frame shorter than this hides the footer rather than
@@ -149,15 +171,20 @@ const MODES = ['light', 'dark'] as const;
    * `packages/design-system/components/CnRail.astro`, not a measurement of
    * this specimen's rendered output:
    *
-   * - The trigger's own block size plus its margin on both sides:
-   *   `--cn-grid * 8`.
-   * - A box holding one compact entry: padding plus the entry's block size,
-   *   which is `--cn-width-rail-collapsed` exactly — the rail sizes that
-   *   padding from the same token. A header and a footer of one entry each
-   *   are one of these.
-   * - The body's second entry adds one more entry's block size,
-   *   `--cn-grid * 7`, on top of a one-entry box.
-   * - The footer's own line, `1px`.
+   * - The rail begins where the application bar's target ends, not where the
+   *   frame does: `--cn-app-bar-height − (--cn-app-bar-height − 7 ×
+   *   --cn-grid) / 2`.
+   * - The trigger's own block size, `--cn-grid * 7`, carrying no margin of
+   *   its own.
+   * - The header, and the body that follows it, add no padding at their own
+   *   start — the trigger already separates them from what is above — so a
+   *   box holding one compact entry there is padding on one side plus the
+   *   entry's block size: `(--cn-width-rail-collapsed − 7 × --cn-grid) / 2 +
+   *   7 × --cn-grid`. The body's second entry adds one more entry's block
+   *   size, `7 × --cn-grid`, on top of that, with no further padding between
+   *   them.
+   * - The footer keeps padding on both sides, so it is
+   *   `--cn-width-rail-collapsed` exactly, plus its own line, `1px`.
    *
    * `--cn-gap` on top is headroom, not part of the sum: it keeps the fit
    * short of exact, where a rounding difference between browsers could
@@ -176,14 +203,38 @@ const MODES = ['light', 'dark'] as const;
     overflow: hidden;
     max-inline-size: 100%;
     block-size: calc(
-      var(--cn-grid) * 8 +
-      var(--cn-width-rail-collapsed) * 3 +
+      var(--cn-app-bar-height) -
+        (var(--cn-app-bar-height) - var(--cn-grid) * 7) / 2 +
       var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 * 2 +
+      var(--cn-width-rail-collapsed) +
       1px +
       var(--cn-gap)
     );
     background: var(--cn-surface);
     border: 1px solid var(--cn-border);
+  }
+
+  /*
+   * `alignment` mounts a header of one entry and a body of one, above which
+   * an application bar stands — shorter than the two specimens above, so it
+   * takes its own, smaller height rather than share theirs.
+   */
+  .frame.alignment {
+    inline-size: calc(var(--cn-breakpoint-tablet) + var(--cn-gap) * 4);
+    block-size: calc(
+      var(--cn-app-bar-height) -
+        (var(--cn-app-bar-height) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      var(--cn-gap)
+    );
   }
 
   /*

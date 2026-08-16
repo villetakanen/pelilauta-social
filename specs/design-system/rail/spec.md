@@ -32,6 +32,11 @@ The rail stands in the box `specs/design-system/application-chrome/spec.md` fixe
 the document, and spans its block size. It renders a navigation landmark, which the
 consumer names. The host marks its scope with `data-cn-rail-scope`.
 
+Beside the page, the rail begins where the application bar's target ends rather than
+where its box does; `specs/design-system/components/cn-app-bar/spec.md` states why the
+two differ. Starting at the box would carry that difference twice and leave the trigger
+off the rhythm the entries below it keep.
+
 The rail works in that box and nowhere else. Its widths and its two states answer the
 `app-chrome` container, not the window, so a rail mounted outside one keeps none of them:
 both of its controls stand at once, and it holds one width at every window. A composition
@@ -66,26 +71,33 @@ when the control holding it goes.
 
 The checkbox is the control: it takes the focus, carries the name, and reports whether it
 is checked, which is this capability's disclosure. It is hidden from view and from
-nothing else. Its trigger draws it as two bars, which cross while it is checked, and
-shows the focus the checkbox takes. The trigger is compact in every mode, and stands
-at the rail's block start — and in the application bar's reserved leading slot at the
-inline size where the rail is absent at rest.
+nothing else. Its trigger draws `=` collapsed and `|<` expanded, turning
+counter-clockwise in both directions, and shows the focus the checkbox takes. A
+transition has only two ends, so the resting pose cannot read `0deg` going out and
+`-180deg` coming back; the glyph is therefore drawn twice, one copy per direction, and
+only the copy in motion shows. The turn is a transition, not a keyframed animation: an
+animation runs when its selector first matches, which includes the page arriving, so a
+keyframed glyph would turn on every load. The trigger is compact in every mode, and
+stands at the rail's block start — and in the application bar's reserved leading slot at
+the inline size where the rail is absent at rest. Beside the page, it takes the boxes'
+own inset rather than centring in the rail's width, which would move it as the rail
+widens and break the axis it shares with the entries below.
 
 An absent rail is out of the tab order and out of assistive technology.
 
-Each box insets its contents on all four sides by what the collapsed rail leaves around a
-chrome action's target, `(--cn-width-rail-collapsed − 7 × --cn-grid) / 2`, and holds that
-inset in every state. `--cn-gap` is too wide to be that inset: at the gap the target does
-not fit the rail's width.
+Each box insets its contents on all four sides by half of what the collapsed rail leaves
+around a compact chrome action's target, and holds that inset in every state. `--cn-gap`
+is too wide to be it: at the gap the target does not fit the rail's width.
 
-The application bar and the main region cede the inline size of a collapsed or expanded
-rail standing beside the page, and cede nothing to one covering the page. The main region
-reads the request from a scope the application marks, so a rail a book renders moves
-nothing around it.
+The main region cedes the inline size of a collapsed or expanded rail standing beside the
+page, and cedes nothing to one covering the page. It reads the request from a scope the
+application marks, so a rail a book renders moves nothing around it.
 
-A rail covering the page rests at elevation 4, above its scrim, and both stand above the
-application bar and above a floating action. A collapsed or expanded rail beside the page
-paints at elevation 0 and carries no border. The scrim takes a published colour role,
+Covering the page and standing beside it are what decide the rail's surface, rather than
+the inline size it rests at. A rail covering the page has one, at elevation 4, above its
+scrim, and both stand above the application bar and above a floating action. A rail beside
+the page has none: it paints nothing and carries no border, and whatever is behind it — a
+poster, or the page's own ground — is what shows. The scrim takes a published colour role,
 covers the page beneath a covering rail, and closes it.
 
 A rail travels between its two widths, and takes them without travelling where the reader
@@ -108,10 +120,10 @@ trigger; both need script, and the mode they act on is the pair the container di
   the focus and the landmark above, at each breakpoint.
 - `packages/design-system/test/color-contrast.test.ts` measures the indicator against
   the surfaces an entry stands on here.
-- Human review accepts that the rail reads as one surface at every breakpoint, that a reader
-  who opens it on a phone can dismiss it without hunting, that a rail open beside the
-  page reads as separate from the page, and that the footer reads as the reader's own
-  rather than as another entry.
+- Human review accepts that a reader who opens the rail on a phone can dismiss it without
+  hunting, that a rail beside the page reads as navigation and not as the page's own
+  content while painting nothing, and that the footer reads as the reader's own rather
+  than as another entry.
 
 ### Regression Guardrails
 
@@ -124,17 +136,17 @@ trigger; both need script, and the mode they act on is the pair the container di
 ### Scenarios
 
 ```gherkin
-Given the container's inline size at the small breakpoint
+Given the container's inline size at `--cn-breakpoint-small` or narrower
 When the page renders
 Then no navigation stands beside the page
 And the trigger stands in the application bar
 ```
 
 ```gherkin
-Given the container's inline size at the tablet breakpoint
+Given the container's inline size at `--cn-breakpoint-tablet` or wider
 When the page renders
 Then the rail is expanded beside the page
-And the application bar and the main region cede its inline size
+And the main region cedes its inline size
 And no scrim renders
 ```
 

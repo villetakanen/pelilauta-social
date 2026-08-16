@@ -1,5 +1,5 @@
 ---
-status: approved
+status: draft
 ---
 
 # CnAppBar
@@ -24,6 +24,11 @@ target, state surface or Icon size of its own.
 The bar does not place itself. Where it sits, and what cedes space to it, are the
 application chrome container's.
 
+The bar spans the whole inline size and cedes nothing to a rail standing beside the
+page; only the main region does, per `../../rail/spec.md`. So the bar keeps the corner
+for the page's identity: the leading region's mark, or the context noun, begins where a
+reader's eye does.
+
 ### Constraints
 
 Three regions in inline order: a leading region, the title, then the actions a consumer
@@ -34,6 +39,9 @@ stands for the site where a page states none. A small screen carries neither: no
 the navigation trigger there, so the bar reserves `8 × --cn-grid` at its start edge and the
 trigger stands among the bar's own items rather than over them.
 
+Wider than the small band, the mark stands on the rail's own axis, so it, the rail's
+trigger and every entry beneath fall on one vertical line.
+
 A modal bar replaces the leading region with the back action and renders no actions. It is
 the bar's only variant.
 
@@ -43,7 +51,8 @@ step and truncates rather than wrapping, and a shorter form replaces it below
 
 The bar paints nothing while the page is at its top, so a poster or the page itself reads
 through it. A veil fades in as content passes beneath: `16 × --cn-grid` deep, twice the
-bar, so text dissolves before it reaches the title. Scroll position drives it, without
+bar, so text dissolves before it reaches the title, and ends fully transparent, so
+nothing of it remains once that depth has passed. Scroll position drives it, without
 script. Firefox ships no scroll timeline and shows the veil at rest, losing the fade and
 nothing else. A modal bar rests at elevation 4 and carries no veil.
 
@@ -57,9 +66,10 @@ The bar is `8 × --cn-grid` in block size, which admits a chrome action's target
 - A **CnAppBar** Component book renders the default and modal bars, with and without a
   context noun, in Light and Dark.
 - A browser check asserts the landmark; the reserved slot and absent glyph below
-  `--cn-breakpoint-small`, and neither above it; the shorter title across that threshold;
-  the modal bar's back action and absent actions; the veil absent at rest and present once
-  scrolled; and a block size unchanged by either.
+  `--cn-breakpoint-small`, and neither above it; the mark standing on the rail's axis
+  above it; the shorter title across that threshold; the modal bar's back action and
+  absent actions; the veil absent at rest and present once scrolled; and a block size
+  unchanged by either.
 - Human review accepts that the bar reads as the application's frame at every band, over a
   poster and over plain content, and that a truncated title stays legible at enlarged
   browser text sizes.

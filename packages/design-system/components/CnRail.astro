@@ -328,7 +328,6 @@ const hasFooter = Astro.slots.has('footer');
     max-inline-size: 100dvw;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: var(--cn-surface);
     transition:
       translate var(--cn-duration-ui) var(--cn-easing-ui),
       inline-size var(--cn-duration-ui) var(--cn-easing-ui);
@@ -481,11 +480,9 @@ const hasFooter = Astro.slots.has('footer');
   @container app-chrome (min-width: 38.7501rem) and (max-width: 63.99rem) {
     .cn-rail {
       inline-size: var(--cn-width-rail-collapsed);
-      background-color: var(--cn-surface);
     }
     .cn-rail-drawer {
       inline-size: 100%;
-      background-color: transparent;
     }
     .cn-rail:not(:has(.cn-rail-request.narrow:checked)) {
       --cn-chrome-presentation: compact;
@@ -505,7 +502,6 @@ const hasFooter = Astro.slots.has('footer');
 
     .cn-rail {
       inline-size: var(--cn-width-rail-collapsed);
-      background-color: var(--cn-surface);
       transition: inline-size var(--cn-duration-ui) var(--cn-easing-ui);
       --cn-chrome-presentation: compact;
     }
@@ -517,7 +513,6 @@ const hasFooter = Astro.slots.has('footer');
 
     .cn-rail-drawer {
       inline-size: 100%;
-      background-color: transparent;
     }
   }
 

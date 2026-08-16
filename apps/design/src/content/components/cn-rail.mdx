@@ -29,7 +29,9 @@ it looks like where an application mounts one. The frame below holds a second
 one, at the same width band, so you do not have to leave this paragraph to try its
 trigger — click it and watch the rail move between its two widths, named after Material
 3's own vocabulary for the same control: expanded, showing every entry's label, and
-collapsed, its icons alone.
+collapsed, its icons alone. The trigger's own glyph turns with it, drawing `=` collapsed
+and `|<` expanded, and turning the same way — counter-clockwise — whichever state it is
+leaving.
 
 <div class="breakout">
   <Composition caption="CnRail, expanded, with a header, two destinations and a footer, in Light and Dark">
@@ -64,6 +66,17 @@ import Icon from '@design-system/components/Icon.svelte'
   </a>
 </CnRail>
 ```
+
+Beside a page, the rail begins where the application bar's own target ends: the bar
+spans the whole inline size and keeps its corner for the page's identity, so only the
+main region cedes the rail's width. The bar's mark, the trigger and every entry then
+share one vertical axis and one 56px rhythm.
+
+<div class="breakout">
+  <Composition caption="CnAppBar over CnRail, sharing one axis and one 56px rhythm, in Light and Dark">
+    <RailSpecimens group="alignment" />
+  </Composition>
+</div>
 
 A box is spacing, not a surface, and a header or a footer holding nothing does not
 render — neither the space it would take nor, for the footer, its line. The comparison

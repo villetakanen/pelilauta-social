@@ -243,8 +243,9 @@ a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
  * the spec has them compose rather than replace each other. So they are two
  * layers of one surface, not one property fought over: the wash keeps `::before`
  * and its `background-color` transition exactly as above, and the indicator
- * takes `::after` at `z-index: -2` — directly beneath it. A translucent wash then
- * mixes over an opaque indicator, which is why `--cn-indicator` is opaque.
+ * takes `::after` at `z-index: -2` — directly beneath it. That composition is why the
+ * wash still reads over `--cn-indicator` where it too is translucent, letting artwork
+ * show through the current destination as it already does through the washes beside it.
  *
  * `::after` is generated only here, so a non-current action carries no second
  * box, and the geometry reads the same `--_surface-*` scope tokens the target
