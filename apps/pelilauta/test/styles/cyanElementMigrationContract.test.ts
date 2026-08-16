@@ -63,7 +63,7 @@ describe('Cyan element migration contract', () => {
     expect(migration).not.toMatch(/fab-tray/);
   });
 
-  it.each(['Page.astro', 'PageWithTray.astro', 'ModalPage.astro'])(
+  it.each(['Base.astro', 'PageWithTray.astro', 'ModalPage.astro'])(
     'leaves tray placement to the design system in %s',
     (layout) => {
       // Cyan styles `nav#fab-tray` and the design system styles `nav.fab-tray`.
