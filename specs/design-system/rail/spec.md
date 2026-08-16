@@ -1,8 +1,8 @@
 ---
-status: approved
+status: draft
 ---
 
-# Tray
+# Rail
 
 ## Blueprint
 
@@ -13,150 +13,159 @@ places those are belongs to the page, and changes as the reader moves.
 
 ### Architecture
 
-An Astro component, `packages/design-system/components/CnTray.astro`: the trigger, the
-drawer, the scrim and the rail the drawer collapses to. A consumer supplies the entries,
-nests them where it needs to, and states which is current.
+An Astro component, `packages/design-system/components/CnRail.astro`: the trigger, the
+drawer, the scrim and three boxes an application fills — `header`, the default slot and
+`footer`. A box is spacing, not a surface: it paints nothing, and one holding no content
+does not render, so an empty header or footer leaves neither space nor a line behind it.
+The footer draws a line above itself, so that line only ever marks a boundary that
+exists.
 
-A second slot holds what an application keeps for the reader themselves, flush to the
-tray's block end, in every mode and however few entries the page supplies.
+Each box stacks what it holds in a column. A chrome action is an inline-level box, so a
+block container would let a collapsed rail's entries pack into rows and rewrap while the
+rail travels between its widths.
 
 An entry, and the trigger, follow the target, state surface, focus treatment and
 current-destination state of a chrome action per
 `specs/design-system/chrome-actions/spec.md`.
 
-The tray stands in the box `specs/design-system/application-chrome/spec.md` fixes over
+The rail stands in the box `specs/design-system/application-chrome/spec.md` fixes over
 the document, and spans its block size. It renders a navigation landmark, which the
-consumer names.
+consumer names. The host marks its scope with `data-cn-rail-scope`.
 
-A modal page carries no tray.
+The rail works in that box and nowhere else. Its widths and its two states answer the
+`app-chrome` container, not the window, so a rail mounted outside one keeps none of them:
+both of its controls stand at once, and it holds one width at every window. A composition
+that wants a rail — a book specimen as much as an application — establishes the container
+first, and its inline size then decides which state the rail rests in.
+
+A modal page carries no rail.
 
 ### Constraints
 
-The tray rests at a size that depends on the window, and one control asks for the other
-size. The tray is open where its entries show their names, whether it covers the page or
-stands beside it.
+The rail rests at a size that depends on the container's inline size, and one control asks
+for the other size. The rail is open where its entries show their names, whether it covers
+the page or stands beside it.
 
-| Window | Resting | Asked for |
+| Inline size | Resting | Asked for |
 | :--- | :--- | :--- |
 | `--cn-breakpoint-small` and narrower | Absent | Open, covering the page over a scrim |
-| Wider, and narrower than `--cn-breakpoint-tablet` | A rail | Open, covering the page over a scrim |
-| `--cn-breakpoint-tablet` and wider | Open beside the page | A rail |
+| Wider, and narrower than `--cn-breakpoint-tablet` | Collapsed | Open, covering the page over a scrim |
+| `--cn-breakpoint-tablet` and wider | Expanded beside the page | Collapsed |
 
-Two checkboxes carry that request, each with its own trigger: one pair for the windows
-narrower than `--cn-breakpoint-tablet`, one for the rest. The window displays one pair
+`--cn-width-rail-collapsed` and `--cn-width-rail-expanded` name the two widths, taking
+Material 3's words for the collapsed and expanded rail. `--cn-z-rail` fixes the rail's
+stacking.
+
+Two checkboxes carry that request, each with its own trigger: one pair for inline sizes
+narrower than `--cn-breakpoint-tablet`, one for the rest. The container displays one pair
 and removes the other from view, from the tab order and from assistive technology, so one
-trigger stands at each window. The narrower checkbox rests unchecked and the wider
+trigger stands at each inline size. The narrower checkbox rests unchecked and the wider
 checked, and a document states either in the markup it serves. Crossing between them
 leaves each checkbox at the state it held, and leaves focus where the document puts it
 when the control holding it goes.
 
 The checkbox is the control: it takes the focus, carries the name, and reports whether it
 is checked, which is this capability's disclosure. It is hidden from view and from
-nothing else. Its trigger draws it as two bars, which cross while the tray is open, and
-shows the focus the checkbox takes. The trigger is compact in every mode, and stands at
-the tray's block start — and in the application bar's reserved leading slot at the window
-where the tray is absent at rest.
+nothing else. Its trigger draws it as two bars, which cross while it is checked, and
+shows the focus the checkbox takes. The trigger is compact in every mode, and stands
+at the rail's block start — and in the application bar's reserved leading slot at the
+inline size where the rail is absent at rest.
 
-An absent tray, and the nested entries a rail does not show, are out of the tab order and
-out of assistive technology.
+An absent rail is out of the tab order and out of assistive technology.
 
-The application bar and the main region cede the inline size of a rail and of a tray open
-beside the page, and cede nothing to one covering the page. The main region reads the
-request from a scope the application marks, so a tray a book renders moves nothing around
-it.
+Each box insets its contents on all four sides by what the collapsed rail leaves around a
+chrome action's target, `(--cn-width-rail-collapsed − 7 × --cn-grid) / 2`, and holds that
+inset in every state. `--cn-gap` is too wide to be that inset: at the gap the target does
+not fit the rail's width.
 
-A tray covering the page rests at elevation 4, above its scrim, and both stand above the
-application bar and above a floating action. A rail, and a tray open beside the page,
-paint at elevation 0 and carry no border. The scrim takes a published colour role, covers
-the page beneath a covering tray, and closes it.
+The application bar and the main region cede the inline size of a collapsed or expanded
+rail standing beside the page, and cede nothing to one covering the page. The main region
+reads the request from a scope the application marks, so a rail a book renders moves
+nothing around it.
 
-A tray travels between its two sizes, and takes them without travelling where the reader
+A rail covering the page rests at elevation 4, above its scrim, and both stand above the
+application bar and above a floating action. A collapsed or expanded rail beside the page
+paints at elevation 0 and carries no border. The scrim takes a published colour role,
+covers the page beneath a covering rail, and closes it.
+
+A rail travels between its two widths, and takes them without travelling where the reader
 asks for no motion.
 
 Opening and closing need no script, by pointer or by keyboard. `Escape` closes a covering
-tray and returns focus to the trigger, and focus stays within a covering tray and its
-trigger; both need script, and the mode they act on is the pair the window displays.
+rail and returns focus to the trigger, and focus stays within a covering rail and its
+trigger; both need script, and the mode they act on is the pair the container displays.
 
 ## Contract
 
 ### Definition of Done
 
-- `packages/design-system/styles/units.css` publishes the rail's and the open tray's
-  inline sizes, and the tray's and the scrim's stacking. The rail admits a compact
-  entry's target and its inset. The scrim's colour role is published where the design
-  tokens state the others.
-- A **Tray** book renders each window in a frame of that window's width, resting and
-  asked-for, with a nested entry and a block-end slot, in Light and Dark.
-- A browser check asserts, at each window: the resting and the asked-for size; that one
-  trigger stands, that its checkbox is focusable, named and reports its state, that the
-  trigger shows that focus, and that the other pair is absent from view, from the tab
-  order and from assistive technology; that the keyboard opens and closes the tray with
-  scripting blocked; that an absent tray and a rail's nested entries are out of the tab
-  order and out of assistive technology; that a covering tray renders a scrim which
-  closes it, and that a tray open beside the page renders none; that the application bar
-  and the main region cede a rail's and a beside-the-page tray's inline size and cede
-  nothing to a covering one; that a covering tray and its scrim stand above the
-  application bar and a floating action; that a covering tray holds focus and closes on
-  `Escape`, returning focus to the trigger; that an open tray shows its names and its
-  nested entries and a rail shows neither; that the block-end slot sits flush to the
-  tray's block end; that a tray in the page's own content moves nothing around it; that
-  the tray takes its size without travelling where the reader asks for no motion; and
-  that the landmark carries its name.
+- `packages/design-system/styles/units.css` publishes the rail's two widths and its
+  stacking, and the scrim's stacking and colour role are published where the other design
+  tokens are.
+- A **Rail** book renders the rail at each breakpoint, resting and asked-for, with header,
+  body and footer entries, in Light and Dark.
+- A browser check confirms the widths, the boxes, the checkbox contract, the keyboard,
+  the focus and the landmark above, at each breakpoint.
 - `packages/design-system/test/color-contrast.test.ts` measures the indicator against
   the surfaces an entry stands on here.
-- Human review accepts that the tray reads as one surface at every window, that a reader
-  who opens the tray on a phone can dismiss it without hunting, that an open tray beside
-  the page reads as separate from the page, and that the block-end slot reads as the
-  reader's own rather than as another entry.
+- Human review accepts that the rail reads as one surface at every breakpoint, that a reader
+  who opens it on a phone can dismiss it without hunting, that a rail open beside the
+  page reads as separate from the page, and that the footer reads as the reader's own
+  rather than as another entry.
 
 ### Regression Guardrails
 
-- The tray states no entry of its own, and no measurement an entry or a chrome action
+- The rail states no entry of its own, and no measurement an entry or a chrome action
   carries.
-- The tray reads nothing from storage, and no window size from script.
-- A covering tray never moves the main region, and a tray the main region cedes to never
+- The rail reads nothing from storage, and no window size from script.
+- A covering rail never moves the main region, and a rail the main region cedes to never
   covers it.
 
 ### Scenarios
 
 ```gherkin
-Given a window at the small breakpoint
+Given the container's inline size at the small breakpoint
 When the page renders
 Then no navigation stands beside the page
 And the trigger stands in the application bar
 ```
 
 ```gherkin
-Given a window at the tablet breakpoint
+Given the container's inline size at the tablet breakpoint
 When the page renders
-Then the tray is open beside the page
+Then the rail is expanded beside the page
 And the application bar and the main region cede its inline size
 And no scrim renders
 ```
 
 ```gherkin
-Given a window between the two breakpoints
+Given the container's inline size between the two breakpoints
 When the reader asks for the other size
-Then the tray covers the page over a scrim
-And the main region cedes only the rail's inline size
+Then the rail covers the page over a scrim
+And the main region cedes only the collapsed rail's inline size
 ```
 
 ```gherkin
-Given a covering tray
+Given a covering rail
 When the reader presses the scrim, and then reopens it and presses Escape
-Then the tray closes each time
+Then the rail closes each time
 And focus is on the trigger
 ```
 
 ```gherkin
-Given a tray resting as a rail
+Given a rail resting collapsed
 When it renders
 Then its entries show their icons alone
-And its nested entries are out of the tab order
 ```
 
 ```gherkin
-Given a book page rendering a tray in its own content
-When the reader opens that tray
+Given a header or a footer holding no content
+When the rail renders
+Then it takes no space and draws no line
+```
+
+```gherkin
+Given a book page rendering a rail in its own content
+When the reader opens that rail
 Then nothing around it moves
 ```

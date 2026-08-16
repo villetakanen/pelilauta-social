@@ -19,7 +19,7 @@ who has entered nothing stands.
 
 ### Architecture
 
-`specs/design-system/tray/spec.md` and `specs/design-system/chrome-actions/spec.md` own
+`specs/design-system/rail/spec.md` and `specs/design-system/chrome-actions/spec.md` own
 the navigation's surface, its entries' presentation, its responsive behaviour and its
 interaction. This spec states none of them.
 

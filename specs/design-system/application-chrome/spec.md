@@ -28,7 +28,11 @@ application mounts one rather than building its own.
 
 ### Constraints
 
-The box is `100dvw` by `100dvh`, fixed, and establishes an inline-size container.
+The box is `100dvw` by `100dvh`, fixed, and establishes an inline-size container named
+`app-chrome`. A part inside the box answers that container rather than the window, so it
+renders whole wherever a composition establishes one — a book specimen bounding a part at
+a few hundred pixels gets the presentation that size calls for, and not the one the
+reader's window happens to call for.
 
 The box states its own stacking above the document with a published token, and each part
 that must sit above or below its siblings states its own the same way. Where a part sits
@@ -65,6 +69,10 @@ behind it cedes nothing to it.
 - The box paints no background, border or shadow.
 - Every stacking value in chrome is a published token; no part states a literal.
 - Chrome states what it occupies; a page never measures it.
+- No part inside the box asks the window its size. A part that does renders one
+  presentation in an application and another in a composition that bounds it.
+- The container's name is the contract each part queries; renaming it silently drops
+  every rule those parts state, because a query naming no container never applies.
 
 ### Scenarios
 

@@ -79,7 +79,7 @@
    * seven-grid target with a one-and-a-half grid inset either side.
    */
   --cn-width-rail-collapsed: calc(var(--cn-grid) * 10);
-  --cn-width-rail-expanded: calc(var(--cn-grid) * 42);
+  --cn-width-rail-expanded: calc(var(--cn-grid) * 32);
 
   /*
    * Breakpoints, in rem so a query follows a reader's enlarged default text.

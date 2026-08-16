@@ -13,9 +13,9 @@
  *
  * Two checkboxes carry the request, one pair per side of the tablet
  * breakpoint, because HTML gives a checkbox one default and the two sides want
- * different ones: a phone rests closed, a desktop rests open. The window
- * displays one pair and removes the other, so `:checked` always means expanded
- * and expanding never needs script.
+ * different ones: a phone rests closed, a desktop rests open. The chrome
+ * container displays one pair and removes the other, so `:checked` always means
+ * expanded and expanding never needs script.
  */
 export interface Props {
   /** Names the control and the landmark. Both are the reader's only clue. */
@@ -71,6 +71,74 @@ const hasFooter = Astro.slots.has('footer');
   {/* Only a covering rail has a scrim, and only the narrow pair ever covers. */}
   <label class="cn-rail-scrim" for={narrow} aria-hidden="true"></label>
 </div>
+
+{/*
+  The only script the rail has. Opening and closing are a checkbox and CSS, and
+  stay that way; a key press and a focus boundary are the two things CSS cannot
+  express, and they are needed for exactly one state — the rail covering the
+  page, over its scrim, with the document behind it out of sight.
+
+  The narrow pair is that state's control. Where the chrome container displays
+  the wide pair instead, nothing covers anything, so both behaviours stand down.
+  The narrow trigger's own `display` reports which pair stands, rather than this
+  script measuring anything and restating a breakpoint the stylesheet owns.
+*/}
+<script>
+  const FOCUSABLE =
+    'a[href], button:not(:disabled), input:not(:disabled), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+  for (const rail of document.querySelectorAll<HTMLElement>('[data-cn-rail]')) {
+    const request = rail.querySelector<HTMLInputElement>('.cn-rail-request.narrow');
+    const trigger = rail.querySelector<HTMLElement>('.cn-rail-trigger.narrow');
+    const drawer = rail.querySelector<HTMLElement>('.cn-rail-drawer');
+    if (!request || !trigger || !drawer) continue;
+
+    const covering = () =>
+      request.checked && getComputedStyle(trigger).display !== 'none';
+
+    /*
+     * The checkbox first: it is the control, it takes the focus the trigger
+     * draws, and it is the boundary's own first stop, so `Escape` returns
+     * there and a wrap from the end lands there.
+     */
+    const stops = () =>
+      [request, ...drawer.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (node) => node.offsetParent !== null || node === request,
+      );
+
+    document.addEventListener('keydown', (event) => {
+      if (!covering()) return;
+
+      if (event.key === 'Escape') {
+        request.checked = false;
+        request.focus();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const within = stops();
+      if (!within.length) return;
+
+      const first = within[0];
+      const last = within[within.length - 1];
+      const here = document.activeElement;
+
+      if (!rail.contains(here)) {
+        first.focus();
+        event.preventDefault();
+        return;
+      }
+      if (event.shiftKey && here === first) {
+        last.focus();
+        event.preventDefault();
+      } else if (!event.shiftKey && here === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    });
+  }
+</script>
 
 <style>
   /*
@@ -262,7 +330,7 @@ const hasFooter = Astro.slots.has('footer');
    * The small band holds no rail: it is absent, and its box is the trigger
    * alone, standing in the leading slot CnAppBar reserves for it.
    */
-  @media (max-width: 38.75rem) {
+  @container app-chrome (max-width: 38.75rem) {
     .cn-rail {
       inset-block-end: auto;
       inline-size: calc(var(--cn-grid) * 8);
@@ -270,7 +338,7 @@ const hasFooter = Astro.slots.has('footer');
   }
 
   /* Narrower than the tablet breakpoint, the narrow pair is the control. */
-  @media (max-width: 63.99rem) {
+  @container app-chrome (max-width: 63.99rem) {
     .cn-rail-request.wide,
     .cn-rail-trigger.wide {
       display: none;
@@ -293,14 +361,14 @@ const hasFooter = Astro.slots.has('footer');
   }
 
   /* The small band's resting rail is absent, in the tree as well as in view. */
-  @media (max-width: 38.75rem) {
+  @container app-chrome (max-width: 38.75rem) {
     .cn-rail:not(:has(.cn-rail-request.narrow:checked)) .cn-rail-drawer {
       display: none;
     }
   }
 
   /* The tablet band rests collapsed: the entries themselves, compact. */
-  @media (min-width: 38.7501rem) and (max-width: 63.99rem) {
+  @container app-chrome (min-width: 38.7501rem) and (max-width: 63.99rem) {
     .cn-rail {
       inline-size: var(--cn-width-rail-collapsed);
       background-color: var(--cn-surface);
@@ -318,7 +386,7 @@ const hasFooter = Astro.slots.has('footer');
    * The tablet breakpoint and wider: the wide pair is the control, the rail
    * stands beside the page in both states, and nothing covers anything.
    */
-  @media (min-width: 64rem) {
+  @container app-chrome (min-width: 64rem) {
     .cn-rail-request.narrow,
     .cn-rail-trigger.narrow,
     .cn-rail-scrim {

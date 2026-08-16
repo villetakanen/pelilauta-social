@@ -57,7 +57,7 @@ A chrome action composes with no Actions button variant. Measurements consume
 | :--- | :--- | :--- |
 | Target | A `7 × --cn-grid` square. | Its container's inline size, `7 × --cn-grid` in block size. |
 | State surface | A centred circle `6 × --cn-grid` in diameter. | A centred pill, `6 × --cn-grid` in block size, filling the target's inline size. |
-| Content | The Icon alone, centred. | The Icon, `--cn-gap`, then the label, from a `--cn-grid` inline inset at the start edge. |
+| Content | The Icon alone, centred. | The Icon, `--cn-gap`, then the label, from the inset that centres the Icon in the compact target. |
 
 The target takes hit testing and layout; the state surface carries the resting and
 transient surfaces. The Icon changes neither measurement, and a label truncates rather
@@ -116,7 +116,7 @@ therefore not asked to carry identification on its own. Both are declared in
 - A container does not resize the compact target, and does not redefine the labelled
   target's block size, the state surface or the Icon.
 - Changing presentation does not replace the element, its destination or command, or
-  its accessible name.
+  its accessible name, and does not move the Icon.
 - The compact target remains square, and the state surface centred within it, in every
   state.
 - Hover, active and focus presentation does not change the action's footprint or move
