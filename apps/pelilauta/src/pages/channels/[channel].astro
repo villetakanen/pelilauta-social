@@ -1,6 +1,7 @@
 ---
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
+import Base from '@layouts/Base.astro';
 import { parseChannel } from 'src/schemas/ChannelSchema';
 import { parseThread, type Thread } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
@@ -8,7 +9,6 @@ import { logDebug, logError } from 'src/utils/logHelpers';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
 import ChannelFabs from '../../components/svelte/threads/ChannelFabs.svelte';
 import ChannelThreadList from '../../components/svelte/threads/ChannelThreadList.svelte';
-import Page from '../../layouts/Page.astro';
 
 const channelKey = Astro.params.channel || 'pelilauta';
 
@@ -67,11 +67,9 @@ try {
 }
 ---
 
-<Page
+<Base
   title={title}
-  barTitle={channel.name}
   description={description}
-  noun="discussion"
 >
   <!-- Single Svelte component handles everything -->
   <ChannelThreadList
@@ -95,4 +93,4 @@ try {
     href="https://linktr.ee/junowski"
     slot="app-footer-credits"
   />
-</Page>
+</Base>

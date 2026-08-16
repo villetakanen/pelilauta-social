@@ -4,50 +4,26 @@ import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import CnShareAction from '@design-system/components/CnShareAction.svelte';
 import Icon from '@design-system/components/Icon.svelte';
+import BaseRail from '@pelilauta/base/chrome/BaseRail.astro';
+import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
+import BaseTail from '@pelilauta/components/server/BaseTail.astro';
 import { t } from 'src/utils/i18n';
-import AppFooter from '../components/server/app/AppFooter.astro';
-import AppNavigation from '../components/server/app/AppNavigation.astro';
-import BaseHead from '../components/server/BaseHead/BaseHead.astro';
-import BaseTail from '../components/server/BaseTail.astro';
 
-// NOTE: Page layout includes AuthManager for client-side authentication.
-// This layout is used for public pages that need to detect user auth state
-// and handle onboarding flows (EULA acceptance, account creation).
+// This layout includes AuthManager for client-side authentication. It
+// serves public pages that need to detect user auth state and handle
+// onboarding flows (EULA acceptance, account creation).
 
 type Props = {
   /** The document's title, as a search result shows it. */
   title?: string;
-  /**
-   * What the bar calls this page, where that differs from the document's
-   * title: a route composing an SEO title from a name and a suffix passes the
-   * name alone.
-   */
-  barTitle?: string;
-  shortTitle?: string;
   description?: string;
   image?: string;
-  /** The page's context noun. A page stating none shows the product's logomark. */
-  noun?: string;
-  /**
-   * Where the bar's identity leads. Pelilauta's own pages lead to the front
-   * page; a site names its own root instead.
-   */
-  barHref?: string;
   noSharing?: boolean;
   search?: boolean;
 };
 
-const {
-  title,
-  barTitle,
-  description,
-  image,
-  shortTitle,
-  noun,
-  noSharing,
-  search,
-  barHref = '/',
-} = Astro.props;
+const { title, description, image, noSharing, search } = Astro.props;
 ---
 
 <html lang="fi">
@@ -62,7 +38,16 @@ const {
   */}
   <body data-cn-rail-scope>
     <CnAppChrome>
-      <CnAppBar title={barTitle ?? title ?? ''} {shortTitle} {noun} href={barHref}>
+      {/*
+        Every page in the base application carries the same identity: the
+        product's logomark and wordmark, leading to its root. A page names
+        itself in the document's title and in its own first heading — the bar
+        names the application the reader is inside, which is what tells them
+        which of Pelilauta's applications they are in. v18 put the page's own
+        noun and title here instead, and a reader could not tell the base
+        application from a site by looking at the bar.
+      */}
+      <CnAppBar title={t('app:wordmark')} href="/">
         <slot name="app-bar" />
         {
           search && (
@@ -83,10 +68,10 @@ const {
         }
       </CnAppBar>
 
-      <AppNavigation />
+      <BaseRail />
       {
         Astro.slots.has('fab-tray') && (
-          <nav class="fab-tray" aria-label={t("navigation:quickActions")}>
+          <nav class="fab-tray" aria-label={t("base:quickActions")}>
             <slot name="fab-tray" />
           </nav>
         )

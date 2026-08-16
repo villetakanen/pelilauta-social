@@ -1,5 +1,5 @@
 ---
-import Page from '@layouts/Page.astro';
+import Base from '@layouts/Base.astro';
 import AlgoliaSearchApp from '@svelte/search/AlgoliaSearchApp.svelte';
 import { t } from '@utils/i18n';
 import { verifySession } from '@utils/server/auth/verifySession';
@@ -15,7 +15,7 @@ if (!session?.uid) {
   );
 }
 ---
-<Page title={t('search:title')} noun="search">
+<Base title={t('search:title')}>
   {/*
     The search app is client:only, so a heading inside it does not exist until
     it hydrates. The document's outline states the page here instead, and the
@@ -23,4 +23,4 @@ if (!session?.uid) {
   */}
   <h1 class="sr-only">{t('search:title')}</h1>
   <AlgoliaSearchApp client:only="svelte" />
-</Page>
+</Base>

@@ -258,7 +258,9 @@ test.describe('below and above --cn-breakpoint-small', () => {
 
     // Chrome, not running text.
     expect(
-      await identity.evaluate((node) => getComputedStyle(node).textDecorationLine),
+      await identity.evaluate(
+        (node) => getComputedStyle(node).textDecorationLine,
+      ),
     ).toBe('none');
   });
 

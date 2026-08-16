@@ -1,11 +1,11 @@
 ---
 import Icon from '@design-system/components/Icon.svelte';
+import Base from '@layouts/Base.astro';
 import { logError } from '@utils/logHelpers';
 import type { Tag } from 'src/schemas/TagSchema';
 import { t } from 'src/utils/i18n';
 import TagHeader from '../../components/server/TagHeader.astro';
 import ProfileLink from '../../components/svelte/app/ProfileLink.svelte';
-import Page from '../../layouts/Page.astro';
 import {
   getTagDisplayInfo,
   resolveTagSynonym,
@@ -110,7 +110,7 @@ function parseUrl(tag: Tag) {
 }
 ---
 
-<Page {title} barTitle={`#${displayName}`} {description} noun="label-tag">
+<Base {title} {description}>
   <div class="content-prose">
     <article>
       <TagHeader {displayName} {tagInfo} />
@@ -160,4 +160,4 @@ function parseUrl(tag: Tag) {
       {entries.length === 0 && <p class="text-caption">{t("tag:noEntries")}</p>}
     </article>
   </div>
-</Page>
+</Base>

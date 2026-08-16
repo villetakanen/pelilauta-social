@@ -327,3 +327,23 @@ a.chrome-action[href][aria-disabled="true"] {
     transition: none;
   }
 }
+
+/*
+ * `.only-on-small` — a part of the chrome that stands only where the chrome
+ * container is at its narrowest, and nowhere else.
+ *
+ * The design system otherwise holds that what chrome carries does not depend on
+ * how wide it is; this is the exception, for the one case where the narrow band
+ * takes something away and the part it took has to reappear elsewhere. Reach for
+ * it there and nowhere else.
+ *
+ * The query names `app-chrome`, so outside that container the class does
+ * nothing at all and whatever carries it stays visible. Misuse shows itself
+ * at once rather than quietly hiding something.
+ */
+@container app-chrome (min-width: 38.7501rem) {
+  button.chrome-action.only-on-small,
+  a.chrome-action[href].only-on-small {
+    display: none;
+  }
+}

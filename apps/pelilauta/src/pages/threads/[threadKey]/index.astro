@@ -1,11 +1,11 @@
 ---
+import Base from '@layouts/Base.astro';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
 import DiscussionApp from '../../../components/server/DiscussionApp/DiscussionApp.astro';
 import ThreadArticle from '../../../components/server/ThreadsApp/ThreadArticle.astro';
 import ThreadInfoSection from '../../../components/server/ThreadsApp/ThreadInfoSection.astro';
-import Page from '../../../layouts/Page.astro';
 
 const { threadKey } = Astro.params;
 
@@ -33,15 +33,13 @@ const title = thread.title
 const snippet = createPlainSnippet(thread.markdownContent || '', 160);
 ---
 
-<Page
+<Base
   title={title}
-  barTitle={thread.title}
   description={snippet}
-  noun="discussion"
 >
   <div class="content-golden">
     <ThreadArticle thread={thread} />
     <ThreadInfoSection thread={thread} />
   </div>
   <DiscussionApp thread={thread} />
-</Page>
+</Base>

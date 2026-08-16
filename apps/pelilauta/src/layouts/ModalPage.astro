@@ -2,7 +2,6 @@
 import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import { t } from 'src/utils/i18n';
-import AppRail from '../components/server/AppRail.astro';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 import BaseTail from '../components/server/BaseTail.astro';
 
@@ -42,7 +41,6 @@ const { title, shortTitle, description, image, backHref } = Astro.props;
       <slot name="fab-tray" />
     </CnAppChrome>
 
-    <AppRail hideOnMobile />
 
     <main class="app-main">
       <slot />

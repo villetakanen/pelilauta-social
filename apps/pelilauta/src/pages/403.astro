@@ -1,10 +1,10 @@
 ---
 import Icon from '@design-system/components/Icon.svelte';
+import Base from '@layouts/Base.astro';
 import { t } from 'src/utils/i18n';
-import Page from '../layouts/Page.astro';
 ---
 
-<Page title={t('seo:error403.title')} noun="admin" noSharing>
+<Base title={t('seo:error403.title')} noSharing>
   <section class="content-prose">
     <div class="flex flex-col items-center p-4">
       <Icon noun="admin" size="large" />
@@ -24,4 +24,4 @@ import Page from '../layouts/Page.astro';
       </div>
     </div>
   </section>
-</Page>
+</Base>

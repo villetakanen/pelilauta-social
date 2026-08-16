@@ -3,8 +3,6 @@ import CnNotificationAction from '@design-system/components/CnNotificationAction
 import { t } from 'src/utils/i18n';
 import { newCount } from '../../../stores/inbox';
 import { isActive } from '../../../stores/session/computed';
-
-let { ariaCurrent }: { ariaCurrent?: string } = $props();
 </script>
 
 {#if $isActive}
@@ -13,6 +11,5 @@ let { ariaCurrent }: { ariaCurrent?: string } = $props();
     noun="send"
     label={t("navigation:inbox")}
     count={$newCount}
-    aria-current={ariaCurrent}
   />
 {/if}

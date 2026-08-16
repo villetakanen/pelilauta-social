@@ -1,6 +1,7 @@
 import type { Locale } from '../../utils/i18n';
 import { actions } from './actions';
 import { admin } from './admin';
+import { base } from './base';
 import { common } from './common';
 import { entries } from './entries';
 import { frontPage } from './frontPage';
@@ -23,6 +24,7 @@ export const en: Locale = {
         'Failed to load threads. Please try refreshing the page.',
     },
   },
+  base,
   common,
   entries,
   frontPage,

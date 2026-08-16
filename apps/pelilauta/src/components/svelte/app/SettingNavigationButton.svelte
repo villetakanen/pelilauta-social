@@ -3,8 +3,6 @@ import CnIdentityAction from '@design-system/components/CnIdentityAction.svelte'
 import { isActive, isRehydrating } from 'src/stores/session/computed';
 import { profile } from 'src/stores/session/profile';
 import { t } from 'src/utils/i18n';
-
-let { ariaCurrent }: { ariaCurrent?: string } = $props();
 </script>
 
 {#if $isRehydrating}
@@ -23,7 +21,6 @@ let { ariaCurrent }: { ariaCurrent?: string } = $props();
     signedIn
     nick={$profile?.nick}
     src={$profile?.avatarURL}
-    aria-current={ariaCurrent}
   />
 {:else}
   <CnIdentityAction href="/login" label={t("navigation:login")} />
