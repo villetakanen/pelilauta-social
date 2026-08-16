@@ -98,10 +98,10 @@
   --cn-on-fab-secondary: var(--cn-on-button);
   --cn-hover: light-dark(
     color-mix(in oklch, var(--cn-color-surface-50), transparent 90%),
-    color-mix(in oklch, var(--cn-color-surface-50), transparent 80%)
+    color-mix(in oklch, var(--cn-color-surface-50), transparent 33%)
   );
   --cn-active: light-dark(
-    color-mix(in oklch, var(--cn-color-surface-50), transparent 80%),
+    color-mix(in oklch, var(--cn-color-surface-50), transparent 33%),
     color-mix(in oklch, var(--cn-color-surface-50), transparent 70%)
   );
   /*
@@ -127,9 +127,15 @@
    * `--cn-surface-4`, which is what a covering tray paints.
    * `test/color-contrast.test.ts` holds those ratios.
    */
+  /*
+   * The same share the ground plane keeps over a poster, and for the same
+   * reason: an opaque indicator over artwork is a slab that hides what the page
+   * mounted the poster to show, while the transient washes beside it read
+   * through. The foreground carries identification either way.
+   */
   --cn-indicator: light-dark(
-    var(--cn-color-surface-100),
-    var(--cn-color-surface-30)
+    color-mix(in oklch, var(--cn-color-surface-100), transparent 33%),
+    color-mix(in oklch, var(--cn-color-surface-30), transparent 33%)
   );
   --cn-on-indicator: var(--cn-text-high);
   /*

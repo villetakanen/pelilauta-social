@@ -182,10 +182,13 @@ test.describe('below and above --cn-breakpoint-small', () => {
       'paddingInlineStart',
       'calc(var(--cn-grid) * 8)',
     );
-    const gap = await resolveLength(
+    // Above the breakpoint a rail stands beneath the bar, and the bar's mark
+    // stands on the rail's axis: the rail's box inset plus the inset that
+    // centres an Icon in a compact chrome action's target.
+    const railAxis = await resolveLength(
       page,
       'paddingInlineStart',
-      'var(--cn-gap)',
+      'calc((var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 + (var(--cn-grid) * 7 - var(--cn-icon-size)) / 2)',
     );
     const figure = specimenFigure(page, 'with a context noun');
     const bar = barIn(figure);
@@ -194,7 +197,7 @@ test.describe('below and above --cn-breakpoint-small', () => {
     await page.setViewportSize({ width: largeWidth, height: 900 });
     expect(
       await bar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
-    ).toBe(gap);
+    ).toBe(railAxis);
     await expect(glyph).toBeVisible();
 
     await page.setViewportSize({ width: smallWidth, height: 900 });

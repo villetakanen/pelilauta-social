@@ -94,7 +94,7 @@ const {
       color-mix(in oklch, var(--cn-surface), transparent 10%) 0%,
       color-mix(in oklch, var(--cn-surface), transparent 30%) 33%,
       color-mix(in oklch, var(--cn-surface), transparent 70%) 67%,
-      color-mix(in oklch, var(--cn-surface), transparent 90%) 100%
+      transparent 100%
     );
     opacity: 0;
     /* Decorative paint, and it overhangs the bar by its own depth again. */
@@ -151,6 +151,21 @@ const {
 
   .short-title {
     display: none;
+  }
+
+  /*
+   * Wider than the small band a rail stands beneath the bar, and the bar's mark
+   * stands on the rail's own axis: the rail's box inset, plus the inset that
+   * centres an Icon in a compact chrome action's target. The mark, the trigger
+   * below it and every entry below that then share one vertical line.
+   */
+  @media (min-width: 38.7501rem) {
+    .cn-app-bar {
+      padding-inline-start: calc(
+        (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+        (var(--cn-grid) * 7 - var(--cn-icon-size)) / 2
+      );
+    }
   }
 
   /* 38.75rem is --cn-breakpoint-small, which a media query cannot read. */

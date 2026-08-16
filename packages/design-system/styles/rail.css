@@ -29,16 +29,21 @@
   }
 }
 
-/* Margin, not padding: the host already states its own inline padding. */
-[data-cn-rail-scope] .app-main,
-[data-cn-rail-scope] .cn-app-bar {
+/*
+ * Margin, not padding: the host already states its own inline padding.
+ *
+ * The main region cedes; the application bar does not. The bar spans the whole
+ * inline size and stands over the rail's head, so a page's identity — its mark
+ * and its name — begins at the corner, and the rail's own trigger stands under
+ * it rather than beside it.
+ */
+[data-cn-rail-scope] .app-main {
   margin-inline-start: var(--cn-rail-occupies);
   transition: margin-inline-start var(--cn-duration-ui) var(--cn-easing-ui);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-cn-rail-scope] .app-main,
-  [data-cn-rail-scope] .cn-app-bar {
+  [data-cn-rail-scope] .app-main {
     transition: none;
   }
 }
