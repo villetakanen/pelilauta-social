@@ -218,13 +218,13 @@ test.describe('below and above --cn-breakpoint-small', () => {
     expect(
       await wideBar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
     ).toBe(railAxis);
-    await expect(wideBar.locator('> .cn-icon')).toBeVisible();
+    await expect(wideBar.locator('.identity > .cn-icon')).toBeVisible();
 
     const smallBar = barInFrame(bandFrame(page, 'small'));
     expect(
       await smallBar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
     ).toBe(eightGrid);
-    await expect(smallBar.locator('> .cn-icon')).toBeHidden();
+    await expect(smallBar.locator('.identity > .cn-icon')).toBeHidden();
   });
 
   test('the shorter title displays below the breakpoint, and the full title above it', async ({
@@ -240,6 +240,26 @@ test.describe('below and above --cn-breakpoint-small', () => {
     await expect(smallBar.locator('.full-title')).toBeHidden();
     await expect(smallBar.locator('.short-title')).toBeVisible();
     await expect(smallBar.locator('.short-title')).toHaveText('Vartijat');
+  });
+
+  test('a bar given a destination carries one link, named by its wordmark', async ({
+    page,
+  }) => {
+    await page.goto(BOOK);
+    const bar = barIn(specimenFigure(page, 'with a context noun'));
+
+    // The glyph and the wordmark are one region and one destination, so a
+    // reader pressing either half reaches the same place and hears one link.
+    const identity = bar.locator('a.identity');
+    await expect(identity).toHaveCount(1);
+    await expect(identity).toHaveAttribute('href', '#cn-app-bar');
+    await expect(identity).toHaveAccessibleName('Aamunkoin vartijat');
+    await expect(identity.locator('.cn-icon')).toHaveCount(1);
+
+    // Chrome, not running text.
+    expect(
+      await identity.evaluate((node) => getComputedStyle(node).textDecorationLine),
+    ).toBe('none');
   });
 
   test("the bar's block size is unchanged across both bands, on the default and the modal bar alike", async ({
@@ -284,7 +304,7 @@ test.describe('the container decides the band, not the window', () => {
     expect(
       await bar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
     ).toBe(eightGrid);
-    await expect(bar.locator('> .cn-icon')).toBeHidden();
+    await expect(bar.locator('.identity > .cn-icon')).toBeHidden();
     await expect(bar.locator('.short-title')).toBeVisible();
   });
 });

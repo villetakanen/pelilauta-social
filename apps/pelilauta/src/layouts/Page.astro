@@ -26,8 +26,13 @@ type Props = {
   shortTitle?: string;
   description?: string;
   image?: string;
-  /** The page's context noun. A page stating none shows the site's mark. */
+  /** The page's context noun. A page stating none shows the product's logomark. */
   noun?: string;
+  /**
+   * Where the bar's identity leads. Pelilauta's own pages lead to the front
+   * page; a site names its own root instead.
+   */
+  barHref?: string;
   noSharing?: boolean;
   search?: boolean;
 };
@@ -41,6 +46,7 @@ const {
   noun,
   noSharing,
   search,
+  barHref = '/',
 } = Astro.props;
 ---
 
@@ -56,7 +62,7 @@ const {
   */}
   <body data-cn-rail-scope>
     <CnAppChrome>
-      <CnAppBar title={barTitle ?? title ?? ''} {shortTitle} {noun}>
+      <CnAppBar title={barTitle ?? title ?? ''} {shortTitle} {noun} href={barHref}>
         <slot name="app-bar" />
         {
           search && (

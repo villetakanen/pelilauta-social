@@ -26,8 +26,8 @@ application chrome container's.
 
 The bar spans the whole inline size and cedes nothing to a rail standing beside the
 page; only the main region does, per `../../rail/spec.md`. So the bar keeps the corner
-for the page's identity: the leading region's mark, or the context noun, begins where a
-reader's eye does.
+for the page's identity: the logomark, or the context noun, begins where a reader's eye
+does.
 
 The leading region's reserved slot and the title's short form answer the `app-chrome`
 container's inline size, not the window, so a bar mounted outside one keeps neither.
@@ -37,13 +37,19 @@ container's inline size, not the window, so a bar mounted outside one keeps neit
 Three regions in inline order: a leading region, the title, then the actions a consumer
 supplies.
 
-The leading region carries the page's context noun as a decorative Icon, and the mark that
-stands for the site where a page states none. A small screen carries neither: no rail holds
+The leading region carries the page's context noun as a decorative Icon, and the product's
+logomark where a page states none. That glyph and the wordmark beside it are one region,
+and given a destination they are one link to the root of whatever the bar names — one
+link, because a reader pressing either half wants the same place, and two would be
+announced twice. The link takes the bar's foreground and never underlines: the bar is
+chrome, not running text. Where the region leads somewhere, the wordmark names the link,
+so the logomark names nothing of its own. A small screen carries neither: no rail holds
 the navigation trigger there, so the bar reserves `8 × --cn-grid` at its start edge and the
 trigger stands among the bar's own items rather than over them.
 
-Wider than the small band, the mark stands on the rail's own axis, so it, the rail's
-trigger and every entry beneath fall on one vertical line.
+Wider than the small band, whichever glyph the leading region carries stands on the
+rail's own axis, so it, the rail's trigger and every entry beneath fall on one vertical
+line.
 
 A modal bar replaces the leading region with the back action and renders no actions. It is
 the bar's only variant.
@@ -72,12 +78,13 @@ bar's box does, per `../../rail/spec.md`.
 - A **CnAppBar** Component book renders the default and modal bars, with and without a
   context noun, in Light and Dark.
 - A browser check asserts the landmark; the reserved slot and absent glyph below
-  `--cn-breakpoint-small`, and neither above it; the mark standing on the rail's axis
-  above it; the shorter title across that threshold; the modal bar's back action and
+  `--cn-breakpoint-small`, and neither above it; the leading glyph standing on the rail's
+  axis above it; the shorter title across that threshold; the modal bar's back action and
   absent actions; the veil absent at rest and present once scrolled; and a block size
   unchanged by either.
 - A bar bounded in a composition takes the form that composition's inline size calls for,
   whatever size the window is.
+- A bar given a destination carries one link, named by its wordmark.
 - Human review accepts that the bar reads as the application's frame at every band, over a
   poster and over plain content, and that a truncated title stays legible at enlarged
   browser text sizes.
@@ -118,7 +125,14 @@ And the bar's block size is unchanged
 ```gherkin
 Given a bar on a page stating no context noun
 When it renders
-Then its leading region carries the mark standing for the site
+Then its leading region carries the product's logomark
+```
+
+```gherkin
+Given a bar stating where its identity leads
+When it renders
+Then its logomark and its wordmark are one link
+And that link is named by the wordmark
 ```
 
 ```gherkin

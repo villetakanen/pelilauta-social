@@ -9,12 +9,17 @@ interface Props {
   title: string;
   /** Shown in place of `title` below the small breakpoint. */
   shortTitle?: string;
-  /** Context glyph. A page stating none shows the site's mark instead. */
+  /** Context glyph. A page stating none shows the product's logomark instead. */
   noun?: string;
   /** A modal bar: the back control replaces the noun, and actions are dropped. */
   modal?: boolean;
   /** Accessible name for the back control, localised by the consumer. */
   backLabel?: string;
+  /**
+   * Where the identity leads: the root of whatever the bar names. A page
+   * stating none carries the same identity, leading nowhere.
+   */
+  href?: string;
 }
 
 const {
@@ -23,30 +28,45 @@ const {
   noun,
   modal = false,
   backLabel,
+  href,
 }: Props = Astro.props;
+
+/*
+ * The identity is one region: the glyph and the name it belongs to. Given a
+ * destination it becomes one link, so a reader reaches the root of what the bar
+ * names by pressing either half, and assistive technology announces one link
+ * rather than two to the same place. Given none it is the same region, inert.
+ */
+const Identity = href ? 'a' : 'div';
 ---
 
 <header class:list={['cn-app-bar', { modal }]}>
-  {
-    modal ? (
-      <CnBackAction client:load label={backLabel} />
-    ) : noun ? (
-      <Icon noun={noun} decorative />
-    ) : (
-      /* No context glyph, so the bar stands for the site itself. */
-      <Icon noun="fox" aria-label="Pelilauta.social" />
-    )
-  }
+  {modal && <CnBackAction client:load label={backLabel} />}
 
-  {/*
-    A shorter form replaces the title on a small screen, so the swap is stated
-    only where there is one to swap to: a page giving none keeps its title at
-    every window rather than losing it below the breakpoint.
-  */}
-  <p class:list={['title', { swaps: shortTitle }]}>
-    <span class="full-title">{title}</span>
-    {shortTitle && <span class="short-title">{shortTitle}</span>}
-  </p>
+  <Identity class="identity" href={href}>
+    {
+      modal ? null : noun ? (
+        <Icon noun={noun} decorative />
+      ) : (
+        /*
+         * The product's logomark. It names itself only where nothing else does:
+         * inside the link the wordmark beside it is the name, and a second one
+         * would be announced twice.
+         */
+        <Icon noun="fox" decorative={Boolean(href)} aria-label={href ? undefined : 'Pelilauta.social'} />
+      )
+    }
+
+    {/*
+      A shorter form replaces the wordmark on a small screen, so the swap is
+      stated only where there is one to swap to: a page giving none keeps its
+      wordmark at every band rather than losing it below the breakpoint.
+    */}
+    <p class:list={['title', { swaps: shortTitle }]}>
+      <span class="full-title">{title}</span>
+      {shortTitle && <span class="short-title">{shortTitle}</span>}
+    </p>
+  </Identity>
 
   {!modal && (
     <div class="actions">
@@ -125,11 +145,29 @@ const {
   }
 
   /*
+   * The identity takes the row the glyph and the wordmark used to take between
+   * them, so wrapping them changes no measurement. As a link it keeps the bar's
+   * own foreground and never underlines: it is chrome, not running text.
+   */
+  .identity {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--cn-gap);
+    min-inline-size: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  a.identity:focus-visible {
+    outline: 2px solid var(--cn-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /*
    * Not a heading: the bar is chrome, and the document's outline is the page's.
    * The type step is the h3 one, without the element that would join the outline.
    */
   .title {
-    flex-grow: 1;
     font-size: var(--cn-font-size-h3);
     font-weight: var(--cn-font-weight-h3);
     line-height: var(--cn-line-height-h3);
@@ -187,7 +225,7 @@ const {
     }
 
     /* The reserved slot is the leading region, so the glyph gives way. */
-    .cn-app-bar > :global(.cn-icon) {
+    .identity > :global(.cn-icon) {
       display: none;
     }
   }

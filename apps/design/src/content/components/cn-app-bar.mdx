@@ -17,8 +17,10 @@ by declaration. [Chrome Actions](/base/chrome-actions) specifies that geometry.
 
 - Mount it at the block start of application chrome. The chrome container decides where
   it sits and what cedes space to it; the bar does not place itself.
-- Pass `noun` naming the page's context. Omit it, and the leading region carries the mark
-  that stands for the site instead.
+- Pass `noun` naming the page's context. Omit it, and the leading region carries the
+  product's logomark instead.
+- Pass `href` naming where the identity leads — the root of whatever the bar names. The
+  logomark and the wordmark become one link to it.
 - Pass `modal` when the bar fronts a dialog, or a page standing in for one.
 
 It carries no navigation of its own beyond the back action a modal bar places, and
@@ -55,8 +57,7 @@ along with the actions.
   <CnAppBarSpecimens group="no-noun" />
 </Composition>
 
-Passing no `noun` renders the mark that stands for the site itself, rather than no
-leading region at all.
+Passing no `noun` renders the product's logomark, rather than no leading region at all.
 
 #### Below the small breakpoint
 
@@ -92,9 +93,10 @@ the compact presentation for them; a labelled action inside it still renders com
 | :--- | :--- | :--- |
 | `title` | `string` | Required. The page's title, truncated rather than wrapped. |
 | `shortTitle` | `string` | Shown in place of `title` below `--cn-breakpoint-small`. |
-| `noun` | `string` | Context glyph. Absent renders the mark that stands for the site. |
+| `noun` | `string` | Context glyph. Absent renders the product's logomark. |
 | `modal` | `boolean` | A modal bar: the back action replaces the leading region, and actions are dropped. Defaults to `false`. |
 | `backLabel` | `string` | Accessible name for the back control. Localise it; passed through to `CnBackAction`. |
+| `href` | `string` | Where the identity leads. Absent leaves the identity inert. |
 
 ### Tokens
 
@@ -110,8 +112,8 @@ chrome does not nest it inside sectioning content — an application places it d
 never inside `<main>`, `<article>`, `<aside>`, `<nav>` or `<section>`.
 
 The title renders as a `<p>`, not a heading: the document's outline is the page's, and
-the bar is chrome. A context noun's Icon is decorative and exposes nothing; the mark
-standing for the site instead carries `role="img"` and `aria-label="Pelilauta.social"`.
+the bar is chrome. A context noun's Icon is decorative and exposes nothing; the
+logomark instead carries `role="img"` and `aria-label="Pelilauta.social"`.
 A modal bar's back action takes its accessible name from `backLabel`, which a consumer
 must localise — its own default is a placeholder, not a name.
 
