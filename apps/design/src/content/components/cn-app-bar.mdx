@@ -5,9 +5,8 @@ order: 80
 runtime: static
 ---
 
-import CnAppBar from '@design-system/components/CnAppBar.astro'
-import Icon from '@design-system/components/Icon.svelte'
 import Composition from '@design-system/books/specimens/Composition.astro'
+import CnAppBarSpecimens from '@design-system/books/specimens/CnAppBarSpecimens.astro'
 
 `CnAppBar` renders the application's `banner` landmark: a leading region, a title, then
 the actions a consumer supplies through its default slot. It states no target, state
@@ -28,13 +27,8 @@ helpers, or your own actions built to that same contract, in its slot.
 
 ## Example
 
-<Composition themes caption="The default bar, with a context noun, in Light and Dark">
-  <CnAppBar title="Aamunkoin vartijat" shortTitle="Vartijat" noun="card">
-    <button type="button" class="chrome-action">
-      <Icon noun="search" decorative />
-      <span>Hae</span>
-    </button>
-  </CnAppBar>
+<Composition caption="The default bar, with a context noun, in Light and Dark">
+  <CnAppBarSpecimens group="context" />
 </Composition>
 
 ```astro
@@ -57,8 +51,8 @@ along with the actions.
 
 ### Leading region
 
-<Composition themes caption="The default bar, with no context noun, standing for the site, in Light and Dark">
-  <CnAppBar title="Etusivu" />
+<Composition caption="The default bar, with no context noun, standing for the site, in Light and Dark">
+  <CnAppBarSpecimens group="no-noun" />
 </Composition>
 
 Passing no `noun` renders the mark that stands for the site itself, rather than no
@@ -70,10 +64,14 @@ No rail holds a navigation trigger there, so the bar reserves `8 × --cn-grid` a
 start edge for it and shows no context glyph in that space. The title falls back to
 `shortTitle`, where one is passed.
 
+<Composition caption="The same bar above and below --cn-breakpoint-small">
+  <CnAppBarSpecimens group="bands" />
+</Composition>
+
 ### Modal
 
-<Composition themes caption="The modal bar, in Light and Dark">
-  <CnAppBar title="Muokkaa hahmoa" modal backLabel="Takaisin" />
+<Composition caption="The modal bar, in Light and Dark">
+  <CnAppBarSpecimens group="modal" />
 </Composition>
 
 The leading region carries the back action in place of a context glyph or the site
@@ -118,11 +116,6 @@ A modal bar's back action takes its accessible name from `backLabel`, which a co
 must localise — its own default is a placeholder, not a name.
 
 ## Not shown here
-
-**The reserved slot below `--cn-breakpoint-small`.** The bar's small-screen rule is a
-media query reading the viewport, and `Composition`'s `narrow` prop narrows a container,
-not the viewport, so no specimen on this page can trigger it. Verified by
-`apps/design/e2e/cn-app-bar.spec.ts`.
 
 **The veil.** The bar paints nothing while the page is at its top; a veil fades in,
 replacing that absent background rather than accompanying it, as content passes beneath

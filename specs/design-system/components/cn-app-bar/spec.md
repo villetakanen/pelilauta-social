@@ -29,6 +29,9 @@ page; only the main region does, per `../../rail/spec.md`. So the bar keeps the 
 for the page's identity: the leading region's mark, or the context noun, begins where a
 reader's eye does.
 
+The leading region's reserved slot and the title's short form answer the `app-chrome`
+container's inline size, not the window, so a bar mounted outside one keeps neither.
+
 ### Constraints
 
 Three regions in inline order: a leading region, the title, then the actions a consumer
@@ -51,12 +54,15 @@ step and truncates rather than wrapping, and a shorter form replaces it below
 
 The bar paints nothing while the page is at its top, so a poster or the page itself reads
 through it. A veil fades in as content passes beneath: `16 × --cn-grid` deep, twice the
-bar, so text dissolves before it reaches the title, and ends fully transparent, so
-nothing of it remains once that depth has passed. Scroll position drives it, without
+bar, so text dissolves before it reaches the title, and its own lower edge ends fully
+transparent, so it leaves no seam across the page. Scroll position drives it, without
 script. Firefox ships no scroll timeline and shows the veil at rest, losing the fade and
 nothing else. A modal bar rests at elevation 4 and carries no veil.
 
-The bar is `8 × --cn-grid` in block size, which admits a chrome action's target.
+The bar is `8 × --cn-grid` in block size, which admits a chrome action's target and
+centres it, so half of what the bar is deeper than that target stands as padding at each
+of its edges. A rail beneath the bar begins where that padding ends rather than where the
+bar's box does, per `../../rail/spec.md`.
 
 ## Contract
 
@@ -70,6 +76,8 @@ The bar is `8 × --cn-grid` in block size, which admits a chrome action's target
   above it; the shorter title across that threshold; the modal bar's back action and
   absent actions; the veil absent at rest and present once scrolled; and a block size
   unchanged by either.
+- A bar bounded in a composition takes the form that composition's inline size calls for,
+  whatever size the window is.
 - Human review accepts that the bar reads as the application's frame at every band, over a
   poster and over plain content, and that a truncated title stays legible at enlarged
   browser text sizes.
@@ -111,4 +119,11 @@ And the bar's block size is unchanged
 Given a bar on a page stating no context noun
 When it renders
 Then its leading region carries the mark standing for the site
+```
+
+```gherkin
+Given a bar bounded below the small breakpoint
+And a window wider than it
+When it renders
+Then it takes the form its own container calls for
 ```

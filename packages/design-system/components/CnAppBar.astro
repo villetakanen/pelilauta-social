@@ -9,7 +9,7 @@ interface Props {
   title: string;
   /** Shown in place of `title` below the small breakpoint. */
   shortTitle?: string;
-  /** Context glyph. Absent renders no leading region at all. */
+  /** Context glyph. A page stating none shows the site's mark instead. */
   noun?: string;
   /** A modal bar: the back control replaces the noun, and actions are dropped. */
   modal?: boolean;
@@ -159,7 +159,7 @@ const {
    * centres an Icon in a compact chrome action's target. The mark, the trigger
    * below it and every entry below that then share one vertical line.
    */
-  @media (min-width: 38.7501rem) {
+  @container app-chrome (min-width: 38.7501rem) {
     .cn-app-bar {
       padding-inline-start: calc(
         (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
@@ -168,8 +168,8 @@ const {
     }
   }
 
-  /* 38.75rem is --cn-breakpoint-small, which a media query cannot read. */
-  @media (max-width: 38.75rem) {
+  /* 38.75rem is --cn-breakpoint-small, which a container query cannot read. */
+  @container app-chrome (max-width: 38.75rem) {
     .title.swaps .full-title {
       display: none;
     }

@@ -4,11 +4,30 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * What only a browser knows about `CnAppBar`: whether its `<header>` actually
  * resolves to the `banner` landmark role, which depends on whether an
  * ancestor is sectioning content — not something a parser can see; whether a
- * `max-width` media query, not a container query, actually flips the
- * leading-region glyph and the title at the real viewport threshold; and
- * whether a scroll-driven `animation-timeline: scroll()` actually reaches
- * full opacity as the document moves, none of which the stylesheet or the
- * component source states on its own.
+ * real `@container` query, matched against a real `app-chrome` container,
+ * actually flips the leading-region glyph and the title at the real width
+ * threshold; and whether a scroll-driven `animation-timeline: scroll()`
+ * actually reaches full opacity as the document moves, none of which the
+ * stylesheet or the component source states on its own.
+ *
+ * `CnAppBar` answers the `app-chrome` container's own inline size, never the
+ * window (`specs/design-system/application-chrome/spec.md`). Two kinds of
+ * subject appear below, and only one of them may legitimately drive a bar by
+ * resizing the Playwright viewport:
+ *
+ * - The design site's own shell mounts the bar inside `CnAppChrome`
+ *   (`apps/design/src/layouts/Book.astro`), whose `.app-chrome` establishes
+ *   `container: app-chrome / inline-size` at `100dvw`
+ *   (`packages/design-system/components/CnAppChrome.astro`). There, and only
+ *   there, the window and the container are the same box, so setting the
+ *   viewport does select the bar's band — legitimately, because the two
+ *   coincide, not because the bar answers the window.
+ * - `CnAppBarSpecimens.astro`'s bounded `.frame`s establish that same
+ *   container themselves, independent of the window
+ *   (`packages/design-system/books/specimens/CnAppBarSpecimens.astro`). The
+ *   test under "the container decides the band" below holds the window at a
+ *   width from the opposite band and proves the frame's own width still wins
+ *   — the contract nothing else in this file would otherwise cover.
  *
  * Once `apps/design/src/layouts/Book.astro` mounts the bar as the design
  * site's own shell, every page — including this one — carries two kinds of
@@ -51,6 +70,24 @@ const specimenFigure = (page: Page, captionSubstring: string) =>
 
 /** The rendered bar inside a specimen figure — Light and Dark render one each; the first is enough for geometry, which does not vary by scheme. */
 const barIn = (figure: Locator) => figure.locator('header.cn-app-bar').first();
+
+/**
+ * `CnAppBarSpecimens` group="bands": one frame bounded above
+ * `--cn-breakpoint-small`, one below, each establishing the `app-chrome`
+ * container itself — independent of the window. `mode` defaults to the
+ * first (Light) pane, which is enough for geometry that does not vary by
+ * scheme.
+ */
+const bandFrame = (
+  page: Page,
+  band: 'wide' | 'small',
+  mode: 'light' | 'dark' = 'light',
+) =>
+  specimenFigure(page, 'above and below')
+    .locator(`[data-mode="${mode}"]`)
+    .locator(`.frame.${band}`);
+
+const barInFrame = (frame: Locator) => frame.locator('header.cn-app-bar');
 
 /**
  * Resolve a length expression exactly as the stylesheet would, on a
@@ -159,20 +196,6 @@ test.describe('the veil', () => {
 });
 
 test.describe('below and above --cn-breakpoint-small', () => {
-  let smallWidth: number;
-  let largeWidth: number;
-
-  test.beforeAll(async ({ browser }) => {
-    const page = await browser.newPage();
-    await page.goto(BOOK);
-    const breakpoint = Number.parseFloat(
-      await resolveLength(page, 'width', 'var(--cn-breakpoint-small)'),
-    );
-    smallWidth = Math.round(breakpoint) - 60;
-    largeWidth = Math.round(breakpoint) + 240;
-    await page.close();
-  });
-
   test('the start edge reserves eight grid units and the glyph is absent below the breakpoint, and neither above it', async ({
     page,
   }) => {
@@ -190,40 +213,33 @@ test.describe('below and above --cn-breakpoint-small', () => {
       'paddingInlineStart',
       'calc((var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 + (var(--cn-grid) * 7 - var(--cn-icon-size)) / 2)',
     );
-    const figure = specimenFigure(page, 'with a context noun');
-    const bar = barIn(figure);
-    const glyph = bar.locator('> .cn-icon');
 
-    await page.setViewportSize({ width: largeWidth, height: 900 });
+    const wideBar = barInFrame(bandFrame(page, 'wide'));
     expect(
-      await bar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
+      await wideBar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
     ).toBe(railAxis);
-    await expect(glyph).toBeVisible();
+    await expect(wideBar.locator('> .cn-icon')).toBeVisible();
 
-    await page.setViewportSize({ width: smallWidth, height: 900 });
+    const smallBar = barInFrame(bandFrame(page, 'small'));
     expect(
-      await bar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
+      await smallBar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
     ).toBe(eightGrid);
-    await expect(glyph).toBeHidden();
+    await expect(smallBar.locator('> .cn-icon')).toBeHidden();
   });
 
   test('the shorter title displays below the breakpoint, and the full title above it', async ({
     page,
   }) => {
     await page.goto(BOOK);
-    const figure = specimenFigure(page, 'with a context noun');
-    const bar = barIn(figure);
-    const full = bar.locator('.full-title');
-    const short = bar.locator('.short-title');
 
-    await page.setViewportSize({ width: largeWidth, height: 900 });
-    await expect(full).toBeVisible();
-    await expect(short).toBeHidden();
+    const wideBar = barInFrame(bandFrame(page, 'wide'));
+    await expect(wideBar.locator('.full-title')).toBeVisible();
+    await expect(wideBar.locator('.short-title')).toBeHidden();
 
-    await page.setViewportSize({ width: smallWidth, height: 900 });
-    await expect(full).toBeHidden();
-    await expect(short).toBeVisible();
-    await expect(short).toHaveText('Vartijat');
+    const smallBar = barInFrame(bandFrame(page, 'small'));
+    await expect(smallBar.locator('.full-title')).toBeHidden();
+    await expect(smallBar.locator('.short-title')).toBeVisible();
+    await expect(smallBar.locator('.short-title')).toHaveText('Vartijat');
   });
 
   test("the bar's block size is unchanged across both bands, on the default and the modal bar alike", async ({
@@ -235,18 +251,41 @@ test.describe('below and above --cn-breakpoint-small', () => {
       'height',
       'calc(var(--cn-grid) * 8)',
     );
-    const defaultBar = barIn(specimenFigure(page, 'with a context noun'));
     const modalBar = barIn(specimenFigure(page, 'modal bar'));
 
-    for (const width of [largeWidth, smallWidth]) {
-      await page.setViewportSize({ width, height: 900 });
-      expect(await defaultBar.evaluate((n) => getComputedStyle(n).height)).toBe(
-        eightGridBlock,
-      );
-      expect(await modalBar.evaluate((n) => getComputedStyle(n).height)).toBe(
+    for (const band of ['wide', 'small'] as const) {
+      const bar = barInFrame(bandFrame(page, band));
+      expect(await bar.evaluate((n) => getComputedStyle(n).height)).toBe(
         eightGridBlock,
       );
     }
+    expect(await modalBar.evaluate((n) => getComputedStyle(n).height)).toBe(
+      eightGridBlock,
+    );
+  });
+});
+
+test.describe('the container decides the band, not the window', () => {
+  test('a bar bounded below the breakpoint keeps its small-band rules while the window sits above it', async ({
+    page,
+  }) => {
+    await page.goto(BOOK);
+    // Larger than --cn-breakpoint-small by a wide margin, so a
+    // window-driven bar would rest in the wide band here — the opposite of
+    // what this asserts.
+    await page.setViewportSize({ width: 1920, height: 1080 });
+
+    const eightGrid = await resolveLength(
+      page,
+      'paddingInlineStart',
+      'calc(var(--cn-grid) * 8)',
+    );
+    const bar = barInFrame(bandFrame(page, 'small'));
+    expect(
+      await bar.evaluate((n) => getComputedStyle(n).paddingInlineStart),
+    ).toBe(eightGrid);
+    await expect(bar.locator('> .cn-icon')).toBeHidden();
+    await expect(bar.locator('.short-title')).toBeVisible();
   });
 });
 
