@@ -3,14 +3,82 @@
 This report reads every route under `apps/pelilauta/src/pages`, except the four that use
 `layouts/EditorPage.astro` (out of scope by instruction: `create/thread`, `threads/[threadKey]/edit`,
 `sites/[siteKey]/[pageKey]/edit`, `sites/[siteKey]/handouts/[id]/edit`). It also sets aside
-routes that render no page for a reader — the `api/*` handlers, `sitemap.xml`, `rss/threads.xml`,
-and `logout` (a redirect with no rendered content). That leaves **52 routes**, grouped below by
-what a reader does on them, not by URL.
+routes that render no page for a reader — the `api/*` handlers, `sitemap.xml`, and
+`rss/threads.xml`. That leaves **52 routes**, grouped below by what a reader does on them, not
+by URL.
 
 The question this report answers: which of these pages belong to the "pelilauta" group — the
 base site, sharing one main navigation rail with the front page, the error pages, the forum
 home, and a channel home. For each group, the layout is reported as evidence only. v18's
 navigation model carries no authority here.
+
+## All 52 routes
+
+Every route in scope, with a best assumption of its group. Four values cover the set:
+
+- **pelilauta** — belongs to the base site's shared rail.
+- **own application** — has its own internal navigation; a reader enters and works inside it.
+- **interruption** — a short detour a reader clears or completes, then returns from.
+- **unsettled** — the evidence points more than one way; see Open questions.
+
+Rows are grouped by assumed group, base "pelilauta" rows first, since that group is the
+judgement being made. Use the Notes column to find the awkward cases; an empty cell means the
+row is not in question.
+
+| Page | Route | Assumed group | Notes |
+| :--- | :--- | :--- | :--- |
+| Front page | `/` | pelilauta | Known member. |
+| Error: not found | `/404` | pelilauta | Known member. |
+| Error: forbidden | `/403` | pelilauta | Known member. |
+| Forum home | `/channels` | pelilauta | Known member. |
+| Channel home | `/channels/[channel]` | pelilauta | Known member. |
+| A discussion thread | `/threads/[threadKey]` | pelilauta | |
+| A tag's contents | `/tags/[tag]` | pelilauta | |
+| A member's profile | `/profiles/[uid]` | pelilauta | |
+| Sites directory | `/sites` | pelilauta | |
+| Search | `/search` | pelilauta | |
+| A documentation article | `/docs/[id]` | unsettled | Has its own tray navigation like sites/library/admin, but nothing to do beyond reading. Open question 1. |
+| Account settings | `/settings` | unsettled | Built as a modal, but a reader settles in rather than passing through. Open question 2. |
+| Notification inbox | `/inbox` | unsettled | Built as a modal, but reads as a destination with no task to return to. Open question 2. |
+| Offline fallback | `/offline.html` | unsettled | Shown automatically by the service worker when disconnected; not a page a reader chooses to visit. Open question 5. |
+| Site home | `/sites/[siteKey]` | own application | |
+| A site page | `/sites/[siteKey]/[pageKey]` | own application | |
+| A site page's history | `/sites/[siteKey]/[pageKey]/history` | own application | |
+| Site table of contents | `/sites/[siteKey]/toc` | own application | |
+| Site assets list | `/sites/[siteKey]/assets` | own application | |
+| A site asset | `/sites/[siteKey]/assets/[assetName]` | own application | Mounts a bare editor with no visible app; whether a reader views or edits here could not be confirmed. Open question 4. |
+| Site clocks | `/sites/[siteKey]/clocks` | own application | |
+| Site handouts list | `/sites/[siteKey]/handouts` | own application | |
+| A site handout | `/sites/[siteKey]/handouts/[id]` | own application | |
+| Site data view | `/sites/[siteKey]/data` | own application | |
+| Site members | `/sites/[siteKey]/members` | own application | Built as a modal, unlike its sibling sub-pages. Open question 3. |
+| Site options | `/sites/[siteKey]/options` | own application | Built as a modal, unlike its sibling sub-pages. Open question 3. |
+| Site settings | `/sites/[siteKey]/settings` | own application | Built as a modal, unlike its sibling sub-pages. Open question 3. |
+| Site content import | `/sites/[siteKey]/import` | own application | Built as a modal, unlike its sibling sub-pages. Open question 3. |
+| Table of contents ordering | `/sites/[siteKey]/toc/settings` | own application | Built as a modal, unlike its sibling sub-pages. Open question 3. |
+| Library (my sites) | `/library` | own application | |
+| Admin home | `/admin` | own application | |
+| Forum administration | `/admin/channels` | own application | |
+| User management | `/admin/users` | own application | |
+| Site activity | `/admin/sites` | own application | |
+| Social media poster | `/admin/messaging` | own application | |
+| Snackbar test utility | `/admin/snackbar-test` | own application | Internal test tool, not reader-facing. |
+| Log in | `/login` | interruption | Gate before reaching an intended destination. |
+| Create a profile | `/create-profile` | interruption | Onboarding gate before reaching an intended destination. |
+| Accept terms | `/eula` | interruption | Gate before reaching an intended destination. |
+| Onboarding | `/onboarding` | interruption | Gate before reaching an intended destination. |
+| Sign out | `/logout` | interruption | Clears the session and redirects immediately; barely a page. |
+| Create a site | `/create/site` | interruption | Leads into the new site once complete. |
+| Confirm thread deletion | `/threads/[threadKey]/confirmDelete` | interruption | |
+| Delete a reply | `/threads/[threadKey]/replies/[replyKey]/delete` | interruption | |
+| Fork a reply into a new thread | `/threads/[threadKey]/replies/[replyKey]/fork` | interruption | |
+| Create a site page | `/sites/[siteKey]/create/page` | interruption | |
+| Create a handout | `/sites/[siteKey]/create/handout` | interruption | |
+| Create a clock | `/sites/[siteKey]/create/clock` | interruption | |
+| Delete a clock | `/sites/[siteKey]/delete/clock/[id]` | interruption | |
+| Delete a site page | `/sites/[siteKey]/[pageKey]/delete` | interruption | |
+| Add a channel | `/admin/channels/add` | interruption | Reached from Forum administration. |
+| Clear local session (debug) | `/debug/purge` | interruption | Utility popup, not a reader destination. |
 
 ## The base site: places a reader browses
 
@@ -63,8 +131,8 @@ the base group or its own small library of articles is for the reader of this re
 The owner has already placed sites, library and admin outside the base group. The pages confirm
 it: each mounts a tray component that is explicitly its own navigation, not the rail.
 
-**Sites** (`/sites/[siteKey]/*` — home, table of contents, assets list and single asset,
-clocks, handouts list and single handout, page history, data view: 11 routes) share one
+**Sites** (`/sites/[siteKey]/*` — home, a page and its history, table of contents, assets list
+and single asset, clocks, handouts list and single handout, data view: 10 routes) share one
 `SiteTray`, whose own comment calls it "the Tray used in the SiteApp -microfrontend." A reader
 enters one site and works inside it — reading its pages, browsing its handouts, checking its
 clock, reviewing a page's history — all without leaving the site's own frame. Layout:
@@ -143,3 +211,6 @@ than passing through:**
   Svelte app visible in the page file; what a reader actually does on the asset detail view (view
   metadata, edit an asset's markdown, or both) could not be confirmed without reading that
   component's internals, which sit outside this report's page-level scope.
+- **`/offline.html`** renders automatically when the service worker detects no connection; a
+  reader never chooses to open it. Whether a page nobody navigates to belongs in a classification
+  of what a reader does is itself unsettled.
