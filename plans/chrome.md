@@ -150,11 +150,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **PageWithTray retirement** — move every remaining consumer to the common page shell
   and remove the independent right-side tray layout.
 
-#### Phase 4 — Account theme
-
-- **Theme failure states** — keep the last confirmed theme and expose persistence
-  failure through the established feedback path without corrupting account state.
-
 #### Phase 5 — Terminal chrome sweep
 
 - **Layout and spacing sweep** — verify chrome clearance, document padding, footer
@@ -175,6 +170,7 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - Chrome actions delivered in full; the sub-epic's plan is deleted.
 - The modal shell is migrated.
 - The account theme shipped, on v18's `lightMode` field.
+- A failed theme write reverts to the confirmed theme and reports.
 
 ## Outscoped
 

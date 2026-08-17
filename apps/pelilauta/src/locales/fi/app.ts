@@ -19,6 +19,7 @@ export const app = {
   errors: {
     fetchingThreads:
       'Keskustelujen lataaminen epäonnistui. Yritä päivittää sivu.',
+    themeNotSaved: 'Teeman tallennus epäonnistui.',
   },
   meta: {
     title: 'Pelilauta 2',

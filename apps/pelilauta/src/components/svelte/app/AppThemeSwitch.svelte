@@ -3,6 +3,8 @@ import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte';
 import { uid } from '@stores/session';
 import { account } from '@stores/session/account';
 import { updateAccount } from 'src/firebase/client/account/updateAccount';
+import { pushSnack } from 'src/utils/client/snackUtils';
+import { t } from 'src/utils/i18n';
 
 /**
  * The theme switch as Pelilauta mounts it: signed-in readers only, because the
@@ -23,13 +25,32 @@ const { label }: Props = $props();
 
 let host: HTMLElement | undefined = $state();
 
-const persist = () => {
+/*
+ * A failed write reverts to the last confirmed theme — the account as it stood
+ * before the flip — on the document and in the atom, and reports through the
+ * snackbar. A reader who flips again while a write is in flight owns the
+ * state: only the latest flip may revert, which is what the sequence guards.
+ */
+let flips = 0;
+
+const persist = async () => {
   const mode = document.documentElement.style.colorScheme;
   if (mode !== 'light' && mode !== 'dark') return;
-  const current = account.get();
-  if (!current || !uid.get()) return;
-  account.set({ ...current, lightMode: mode });
-  updateAccount({ lightMode: mode }, uid.get());
+  const confirmed = account.get();
+  if (!confirmed || !uid.get()) return;
+  const flip = ++flips;
+  account.set({ ...confirmed, lightMode: mode });
+  try {
+    await updateAccount({ lightMode: mode }, uid.get());
+  } catch {
+    if (flip !== flips) return;
+    account.set(confirmed);
+    document.documentElement.style.colorScheme =
+      confirmed.lightMode === 'light' || confirmed.lightMode === 'dark'
+        ? confirmed.lightMode
+        : '';
+    pushSnack(t('app:errors.themeNotSaved'));
+  }
 };
 
 $effect(() => {

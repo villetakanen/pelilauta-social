@@ -25,6 +25,7 @@ export const en: Locale = {
     errors: {
       fetchingThreads:
         'Failed to load threads. Please try refreshing the page.',
+      themeNotSaved: 'Saving the theme failed.',
     },
   },
   base,
