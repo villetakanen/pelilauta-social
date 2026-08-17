@@ -1,0 +1,101 @@
+/*
+ * Toggle — the row a boolean setting occupies, and the switch at its end.
+ *
+ * CnToggle renders the markup; every measurement and colour is here, so both
+ * applications receive the presentation from the stylesheet entry.
+ *
+ * The switch is drawn on the checkbox itself: the track is the input's box
+ * and the thumb its `::before`. Nothing here reaches for a sibling or a state
+ * class, so `:checked` and `:disabled` are the only things the presentation
+ * reads, and they are the ones the platform maintains.
+ */
+
+/*
+ * The row spans its container, so the switches in a settings pane align on one
+ * edge whatever their labels say. The label leads and takes the space left over;
+ * a long one wraps rather than truncating, because a setting's name is what the
+ * reader is deciding about.
+ *
+ * The block size is the touch row, not the switch: the switch is 24px tall and a
+ * pointer needs the 48 around it.
+ */
+.cn-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cn-gap);
+  inline-size: 100%;
+  min-block-size: calc(var(--cn-grid) * 6);
+  cursor: pointer;
+  user-select: none;
+}
+
+/*
+ * The whole row fades, because the label is as inert as the switch. The
+ * input's `:disabled` stops the interaction, so nothing here withdraws pointer
+ * events — a rule that did would also hide the cursor the row is showing.
+ */
+.cn-toggle:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: var(--cn-disabled-opacity);
+}
+
+/* The track. Twice the thumb's width, so the thumb travels its own width. */
+.cn-toggle input {
+  position: relative;
+  flex: none;
+  appearance: none;
+  inline-size: calc(var(--cn-grid) * 6);
+  block-size: calc(var(--cn-grid) * 3);
+  margin: 0;
+  border: none;
+  /* Half the block size, so the track is a pill at either state. */
+  border-radius: calc(var(--cn-grid) * 1.5);
+  background-color: var(--cn-button-text);
+  cursor: inherit;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * The thumb, seated flush in the track and travelling on the inline axis, so a
+ * right-to-left document moves it toward its own end.
+ */
+.cn-toggle input::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: calc(var(--cn-grid) * 3);
+  border-radius: 50%;
+  background-color: var(--cn-on-surface-secondary);
+  transition:
+    inset-inline-start var(--cn-duration-ui) var(--cn-easing-ui),
+    background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * Checked is the primary accent, and the knob is what carries it: the track
+ * takes the deep primary step and the knob the high one, so the knob reads as
+ * the lit part of the control against the grey it rests at. Position is what
+ * states the value — the colour repeats it.
+ */
+.cn-toggle input:checked {
+  background-color: var(--cn-button-light);
+}
+
+.cn-toggle input:checked::before {
+  inset-inline-start: calc(var(--cn-grid) * 3);
+  background-color: var(--cn-color-primary-70);
+}
+
+.cn-toggle input:focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-toggle input,
+  .cn-toggle input::before {
+    transition: none;
+  }
+}
