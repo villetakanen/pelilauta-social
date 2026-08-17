@@ -4,16 +4,6 @@ A plan coordinates an active epic. Its entries exist to make the work and what
 remains legible, not as a delivery record. It may be deleted after the epic closes;
 deletion is not a closeout requirement.
 
-## Parked
-
-Parked on 2026-08-14 with [Chrome](chrome.md), for the Pelilauta UX spike, which closed on
-2026-08-17.
-
-This plan is no longer worked as an epic. Its vocabulary is sound and its Open list
-is stale — the chrome action, the navigation destination and the tray toggle shipped
-without being struck. The spike shipped the remaining items, identity and status foremost, each against its own
-spec. What it found waits in `debt/chrome-action-presentation-has-one-consumer.md`.
-
 ## Goal
 
 The design system provides one coherent interactive vocabulary for application
@@ -55,24 +45,6 @@ an identity action.
 
 ### Open
 
-- **Chrome action** — approve `specs/design-system/chrome-actions/spec.md` and ship the
-  class: compact and labelled presentations of one control, on a native button and
-  anchor, with the container-declared presentation property and a book specimen.
-  Semantics, Icon scale, transient states, disabled and motion come from Actions.
-- **Theme action adoption** — make `CnThemeSwitch` compose the chrome action without
-  moving theme state or persistence into the presentation.
-- **Navigation destination** — extend the chrome action with current-route indication,
-  in both presentations and independent of its container. It is the first consumer of
-  persistent state, so it declares `--cn-indicator` and `--cn-on-indicator` under the
-  names `docs/ARCHITECTURE.md` reserves.
-- **Back action** — the modal bar's leading control carries its own spec: it composes the
-  chrome action and reports its activation. Where back leads is the application's.
-- **Tray toggle** — not this capability's. v20 renders the two-bar control, the drawer
-  and the scrim as one component sharing one checkbox, so it is specified with the tray.
-- **Identity action** — specify and ship anonymous, loading and avatar states in both
-  chrome presentations, without importing authentication state into the design system.
-- **Status adjunct** — settle and ship count or status indication for chrome items
-  without changing their target size or relying on colour alone.
 - **Composition UAT** — publish bounded bar, compact-rail and labelled-tray specimens;
   accept alignment, density, affordance and every interaction state in both themes.
 - **Container handoff** — amend `plans/chrome.md` with the approved item measurements
@@ -80,7 +52,12 @@ an identity action.
 
 ### Done
 
-- `CnThemeSwitch` supplies theme behavior and its change event.
+- The chrome action class shipped: both presentations, on button and anchor.
+- `CnThemeSwitch` composes the chrome action and supplies its change event.
+- Navigation destination: the `aria-current` indicator shipped in the class.
+- Back, share, identity and notification actions shipped, specs approved.
+- The tray toggle shipped as `CnRailAction`, governed by the rail spec.
+- `CnRailAction`'s trigger composes the chrome action instead of restating it.
 - `docs/ARCHITECTURE.md` names interaction states after the platform selector that
   switches them on, and reserves `--cn-indicator` for persistent state.
 - `specs/TEMPLATE.md` defines how one capability extends another.

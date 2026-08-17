@@ -27,9 +27,10 @@ Each box stacks what it holds in a column. A chrome action is an inline-level bo
 block container would let a collapsed rail's entries pack into rows and rewrap while the
 rail travels between its widths.
 
-An entry, and the trigger, follow the target, state surface, focus treatment and
-current-destination state of a chrome action per
-`specs/design-system/chrome-actions/spec.md`.
+An entry follows the target, state surface, focus treatment and current-destination
+state of a chrome action per `specs/design-system/chrome-actions/spec.md`. The trigger
+composes that class for its target, state surface and transient states, stays compact
+in every presentation, and shows on itself the focus its toggle takes.
 
 The rail stands in the box `specs/design-system/application-chrome/spec.md` fixes over
 the document, and spans its block size. It renders a navigation landmark, which the
@@ -89,7 +90,7 @@ animation runs when its selector first matches, which includes the page arriving
 keyframed glyph would turn on every load. The trigger is compact in every mode, and
 stands at the rail's block start — and in the application bar's reserved leading slot at
 the inline size where the rail is absent at rest. Beside the page, it takes the boxes'
-own inset rather than centring in the rail's width, which would move it as the rail
+inset rather than centring in the rail's width, which would move it as the rail
 widens and break the axis it shares with the entries below.
 
 An absent rail is out of the tab order and out of assistive technology.
@@ -106,7 +107,7 @@ Covering the page and standing beside it are what decide the rail's surface, rat
 the inline size it rests at. A rail covering the page has one, at elevation 4, above its
 scrim, and both stand above the application bar and above a floating action. A rail beside
 the page has none: it paints nothing and carries no border, and whatever is behind it — a
-poster, or the page's own ground — is what shows. The scrim takes a published colour role,
+poster, or the page's ground — is what shows. The scrim takes a published colour role,
 covers the page beneath a covering rail, and closes it.
 
 A rail travels between its two widths, and takes them without travelling where the reader
@@ -135,9 +136,9 @@ toggle; both need script, and the mode they act on is the pair the container dis
 - `packages/design-system/test/color-contrast.test.ts` measures the indicator against
   the surfaces an entry stands on here.
 - Human review accepts that a reader who opens the rail on a phone can dismiss it without
-  hunting, that a rail beside the page reads as navigation and not as the page's own
-  content while painting nothing, and that the footer reads as the reader's own rather
-  than as another entry.
+  hunting, that a rail beside the page reads as navigation and not as the page's
+  content while painting nothing, and that the footer reads as the reader's identity
+  and inbox rather than as another entry.
 
 ### Regression Guardrails
 

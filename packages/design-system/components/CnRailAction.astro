@@ -37,13 +37,13 @@ const wide = `${id}-wide`;
   <input class="cn-rail-toggle narrow" type="checkbox" id={narrow} aria-label={label} />
   <input class="cn-rail-toggle wide" type="checkbox" id={wide} aria-label={label} checked />
 
-  <label class="cn-rail-trigger narrow" for={narrow} aria-hidden="true">
+  <label class="chrome-action cn-rail-trigger narrow" for={narrow} aria-hidden="true">
     <span class="cn-rail-bars">
       <span class="cn-rail-phase leaving"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
       <span class="cn-rail-phase returning"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
     </span>
   </label>
-  <label class="cn-rail-trigger wide" for={wide} aria-hidden="true">
+  <label class="chrome-action cn-rail-trigger wide" for={wide} aria-hidden="true">
     <span class="cn-rail-bars">
       <span class="cn-rail-phase leaving"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
       <span class="cn-rail-phase returning"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
@@ -72,37 +72,15 @@ const wide = `${id}-wide`;
     white-space: nowrap;
   }
 
-  /* The trigger follows a chrome action's target, state surface and focus. */
-  .cn-rail-trigger {
-    position: relative;
-    isolation: isolate;
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    inline-size: calc(var(--cn-grid) * 7);
-    block-size: calc(var(--cn-grid) * 7);
-    margin: 0;
-    color: inherit;
-    cursor: pointer;
-  }
-  .cn-rail-trigger::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    translate: -50% -50%;
-    inline-size: calc(var(--cn-grid) * 6);
-    block-size: calc(var(--cn-grid) * 6);
-    border-radius: calc(var(--cn-grid) * 3);
-    background-color: transparent;
-    transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
-  }
-  .cn-rail-trigger:hover::before { background-color: var(--cn-hover); }
-  .cn-rail-trigger:active::before { background-color: var(--cn-active); }
-
-  /* The focus lands on the toggle; the trigger is what shows it. */
+  /*
+   * The trigger's target, state surface and transient states are the
+   * `chrome-action` class it carries — `label.chrome-action[for]` in
+   * `../styles/chrome-actions.css` — and nothing here.
+   *
+   * The focus outline is the one part the class cannot give it: the class
+   * outlines the element that holds focus, and here that is the toggle. This
+   * restates the class's outline on the trigger the focused toggle points at.
+   */
   .cn-rail-action:has(.cn-rail-toggle.narrow:focus-visible) .cn-rail-trigger.narrow,
   .cn-rail-action:has(.cn-rail-toggle.wide:focus-visible) .cn-rail-trigger.wide {
     outline: 2px solid var(--cn-focus-ring);

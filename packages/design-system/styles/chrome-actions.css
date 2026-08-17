@@ -10,14 +10,21 @@
  * inherited `--cn-chrome-presentation` custom property, and a disabled
  * destination, which Actions does not publish for an anchor.
  *
- * `.chrome-action` applies to `button.chrome-action` and `a.chrome-action[href]`
- * and to no other element; it composes with no Actions button variant, so it
- * is excluded from `.fab` and the default button surface in buttons.css
- * (see that file's header) rather than restated here.
+ * `.chrome-action` applies to `button.chrome-action` and `a.chrome-action[href]`,
+ * and to one more element: `label.chrome-action[for]`, a trigger whose control —
+ * and therefore whose focus, disabled state and semantics — is the form element
+ * it points at. The label takes the target, the state surface and the transient
+ * states, and nothing that follows the real control: no focus outline, no
+ * current destination, no disabled presentation, and no labelled presentation —
+ * a trigger is compact whatever its container declares. The class composes with
+ * no Actions button variant, so it is excluded from `.fab` and the default
+ * button surface in buttons.css (see that file's header) rather than restated
+ * here.
  */
 
 button.chrome-action,
-a.chrome-action[href] {
+a.chrome-action[href],
+label.chrome-action[for] {
   /*
    * The state surface below is an absolutely positioned `::before` with a
    * negative z-index, so it paints behind the Icon and label — both in-flow,
@@ -161,7 +168,8 @@ a.chrome-action[href] > span:not(.cn-icon, .cn-loader, .cn-notification-badge) {
  * why.
  */
 button.chrome-action::before,
-a.chrome-action[href]::before {
+a.chrome-action[href]::before,
+label.chrome-action[for]::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -221,12 +229,14 @@ a.chrome-action[href]::before {
  * rule follows the hover rule in source order at equal specificity.
  */
 button.chrome-action:hover::before,
-a.chrome-action[href]:not([aria-disabled="true"]):hover::before {
+a.chrome-action[href]:not([aria-disabled="true"]):hover::before,
+label.chrome-action[for]:hover::before {
   background-color: var(--cn-hover);
 }
 
 button.chrome-action:active::before,
-a.chrome-action[href]:not([aria-disabled="true"]):active::before {
+a.chrome-action[href]:not([aria-disabled="true"]):active::before,
+label.chrome-action[for]:active::before {
   background-color: var(--cn-active);
 }
 
@@ -323,7 +333,8 @@ a.chrome-action[href][aria-disabled="true"] {
 
 @media (prefers-reduced-motion: reduce) {
   button.chrome-action::before,
-  a.chrome-action[href]::before {
+  a.chrome-action[href]::before,
+  label.chrome-action[for]::before {
     transition: none;
   }
 }
