@@ -1,8 +1,8 @@
 ---
+import Library from '@layouts/Library.astro';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { t } from 'src/utils/i18n';
 import SettingsAppT from '../components/svelte/settings/SettingsApp.svelte';
-import ModalPage from '../layouts/ModalPage.astro';
 
 /* A server side rendered settings page: requires authentication */
 const session = await verifySession(Astro);
@@ -14,14 +14,14 @@ if (!session?.uid) {
   );
 }
 
-const title = t('app:docs.title');
+const title = `${t('app:shortname')} – ${t('app:settings.title')}`;
 const description = t('settings:description');
 const debug = import.meta.env.SECRET_FEATURE_FLAG_DEBUG === 'true';
 ---
-<ModalPage title={title} description={description}>
+<Library title={title} description={description}>
   <div class="content-prose">
     <h1>{t('app:settings.title')}</h1>
   </div>
   <SettingsAppT client:only="svelte"/>
   <div>{debug && <span>DEBUG MODE ACTIVE</span>}</div>
-</ModalPage>
+</Library>

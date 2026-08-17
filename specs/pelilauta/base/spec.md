@@ -9,14 +9,14 @@ status: approved
 ### Context
 
 Pelilauta serves people who play tabletop roleplaying games. It hosts several
-applications — the sites, a reader's own material, the documentation, administration —
-because a page its owner has made their own carries their identity, not the service's,
-and can only do that where the service does not surround it. The base application is
-what stays shared: what every reader of every application uses, and the front doors of
-the others. An application added later takes its shared parts from here.
+applications — the sites, a reader's material, the documentation, administration —
+because a page its author has made distinct carries that page's identity, not the
+service's, and can only do that where the service does not surround it. The base
+application is what stays shared: what every reader of every application uses, and the
+front doors of the others. An application added later takes its shared parts from here.
 
 The base application therefore holds a feature only when every application needs it.
-Anything an owner shapes for themselves belongs to their own application.
+Anything an author shapes belongs to the application they shaped it in.
 
 ### Architecture
 
@@ -39,8 +39,8 @@ reader does not infer that from the chrome the page happens to render.
 
 ### Constraints
 
-Every page of the base application carries the same identity: the product's logomark and
-wordmark, leading to the base application's root.
+Every page of the base application carries the same identity, and what that identity is
+belongs to `base-bar/spec.md` — the library carries the same bar.
 
 ## Contract
 

@@ -5,6 +5,7 @@ import { base } from './base';
 import { common } from './common';
 import { entries } from './entries';
 import { frontPage } from './frontPage';
+import { library } from './library';
 import { login } from './login';
 import { search } from './search';
 import { seo } from './seo';
@@ -28,6 +29,7 @@ export const en: Locale = {
   common,
   entries,
   frontPage,
+  library,
   login,
   search,
   seo,

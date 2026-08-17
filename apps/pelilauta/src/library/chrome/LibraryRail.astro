@@ -1,0 +1,51 @@
+---
+/**
+ * The library application's rail: the design system's boxes, what stands in
+ * them here.
+ *
+ * Every entry is a place of this application's own, so every one of them can be
+ * the one the reader is on. The rail offers no way back to the base
+ * application, which is what keeps the two separate.
+ */
+import CnRail from '@design-system/components/CnRail.astro';
+import Icon from '@design-system/components/Icon.svelte';
+import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
+import { t } from 'src/utils/i18n';
+
+const path = Astro.url.pathname;
+
+/** What a chrome action carries when it is where the reader is, and when it is not. */
+function current(here: boolean) {
+  return here ? 'page' : undefined;
+}
+---
+
+<CnRail label={t('library:rail.label')}>
+  <a
+    class="chrome-action"
+    href="/library"
+    aria-current={current(path === "/library")}
+  >
+    <Icon noun="d20" decorative />
+    <span>{t("library:rail.sites")}</span>
+  </a>
+
+  {/*
+    The reader's own stand in the footer, where the base application keeps them
+    too. Here they are places of this application rather than doors out of it,
+    so each states whether it is the one the reader is on. Both read the session
+    on the client and stay islands.
+  */}
+  <InboxNavigationButton
+    client:only="svelte"
+    slot="footer"
+    ariaCurrent={current(path.startsWith("/inbox"))}
+  />
+
+  <SettingNavigationButton
+    client:only="svelte"
+    slot="footer"
+    ariaCurrent={current(path.startsWith("/settings"))}
+  />
+</CnRail>

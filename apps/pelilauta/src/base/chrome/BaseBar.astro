@@ -1,0 +1,16 @@
+---
+/**
+ * The bar every application carries: the product's logomark and wordmark,
+ * leading to the base application's root.
+ *
+ * It belongs to the base application because every application needs it. An
+ * application states its own actions through the slot; the identity is not
+ * one of them.
+ */
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import { t } from 'src/utils/i18n';
+---
+
+<CnAppBar title={t('app:wordmark')} href="/">
+  <slot />
+</CnAppBar>
