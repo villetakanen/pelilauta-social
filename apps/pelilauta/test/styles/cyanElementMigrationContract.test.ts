@@ -22,7 +22,6 @@ describe('Cyan element migration contract', () => {
       'cn-d20-ability-score',
       'cn-dice',
       'cn-navigation-icon',
-      'cn-tray-button',
       'cn-app-bar',
     ];
 
@@ -43,9 +42,6 @@ describe('Cyan element migration contract', () => {
     // Cyan declares --cn-line-height-ui nowhere, so restating its read here would
     // change a text input's leading the moment anything declares it.
     expect(migration).not.toContain('--cn-line-height-ui');
-    expect(compact).toContain(
-      'body:has(cn-tray-button[aria-expanded="false"]) nav#tray { transform: translateX(100%); }',
-    );
   });
 
   it('keeps no bridge for an element the application no longer renders', () => {
@@ -61,6 +57,10 @@ describe('Cyan element migration contract', () => {
 
     // The design system places the tray, so no bridge restates its geometry.
     expect(migration).not.toMatch(/fab-tray/);
+
+    // Nothing renders cn-tray-button since the layouts moved to CnRail, so a
+    // rule keyed on it would match nothing on any page.
+    expect(migration).not.toMatch(/\bcn-tray-button\b/);
   });
 
   it.each([
