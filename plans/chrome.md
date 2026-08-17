@@ -134,8 +134,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   page's entries. A modal page carries none.
 - **Standard page shell** — migrate `Page.astro` to the local bar and chrome container;
   remove the mobile bottom bar and make `.app-main` cede only persistent chrome space.
-- **Modal return** — where a route reached from a shared link returns to is still
-  open; none states a destination yet.
 - **Poster and FAB integration** — keep poster attenuation and FAB placement scoped to
   the new chrome container without moving document scroll or intercepting empty space.
 
@@ -171,6 +169,7 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - The modal shell is migrated.
 - The account theme shipped, on v18's `lightMode` field.
 - A failed theme write reverts to the confirmed theme and reports.
+- Every modal states its backHref.
 
 ## Outscoped
 
