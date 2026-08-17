@@ -1,0 +1,75 @@
+---
+/**
+ * CnRailActionSpecimens — CnRailAction alone, in a frame per width band.
+ *
+ * The action answers a container named `app-chrome`, so each frame declares
+ * one: `container: app-chrome / inline-size`. The frame's width then decides
+ * which toggle stands, exactly as the chrome container's does in an
+ * application — the narrow one inside the tablet band, resting unchecked, and
+ * the wide one past it, resting checked.
+ *
+ * Each pane renders its own light or dark scheme directly rather than through
+ * `Composition`'s `themes` mode, and every mount states its own id: a cloned
+ * or defaulted id would leave two toggles behind one `label for`.
+ *
+ * Band widths come from `packages/design-system/styles/units.css`'s breakpoint
+ * tokens, not literals, and sit well inside each band rather than at its edge.
+ *
+ * Book: apps/design/src/content/components/cn-rail-action.mdx
+ */
+import CnRailAction from '../../components/CnRailAction.astro';
+
+const MODES = ['light', 'dark'] as const;
+---
+
+<div class="rail-action-specimen">
+  {MODES.map((mode) => (
+    <div class="pane" data-mode={mode} style={`color-scheme: ${mode};`}>
+      <div>
+        <p class="text-label">Narrow band, resting collapsed</p>
+        <div class="frame narrow">
+          <CnRailAction id={`rail-action-narrow-${mode}`} label="Näytä valikko" />
+        </div>
+      </div>
+      <div>
+        <p class="text-label">Wide band, resting expanded</p>
+        <div class="frame wide">
+          <CnRailAction id={`rail-action-wide-${mode}`} label="Näytä valikko" />
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .rail-action-specimen {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .pane {
+    display: grid;
+    row-gap: var(--cn-gap);
+    padding: var(--cn-gap);
+    color: var(--cn-text);
+    background: var(--cn-background);
+  }
+
+  .frame {
+    container: app-chrome / inline-size;
+    max-inline-size: 100%;
+    padding: var(--cn-gap);
+    background: var(--cn-surface);
+    border: 1px solid var(--cn-border);
+  }
+
+  /* Well inside the tablet band: the narrow toggle is the control. */
+  .frame.narrow {
+    inline-size: calc(var(--cn-breakpoint-small) + var(--cn-gap) * 8);
+  }
+
+  /* Past --cn-breakpoint-tablet: the wide toggle is, checked by default. */
+  .frame.wide {
+    inline-size: calc(var(--cn-breakpoint-tablet) + var(--cn-gap) * 4);
+  }
+</style>

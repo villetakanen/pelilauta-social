@@ -1,7 +1,6 @@
 ---
 /**
- * CnRail — the trigger, the drawer, the scrim, and the three boxes an
- * application fills.
+ * CnRail — the drawer, the scrim, and the three boxes an application fills.
  *
  * The rail holds the places a reader reaches from the page they are on. What
  * those are is the page's; this states the boxes they stand in.
@@ -11,12 +10,12 @@
  * so the arrangement stays legible while an application moves content between
  * them.
  *
- * Two checkboxes carry the request, one pair per side of the tablet
- * breakpoint, because HTML gives a checkbox one default and the two sides want
- * different ones: a phone rests closed, a desktop rests open. The chrome
- * container displays one pair and removes the other, so `:checked` always means
- * expanded and expanding never needs script.
+ * CnRailAction carries the toggles that open and close the rail. This
+ * component reads their checked state through the classes and ids the action
+ * publishes — its width, its scrim's `for`, and the script below all do.
  */
+import CnRailAction from './CnRailAction.astro';
+
 export interface Props {
   /** Names the control and the landmark. Both are the reader's only clue. */
   label: string;
@@ -29,32 +28,12 @@ export interface Props {
 
 const { label, id = 'cn-rail' } = Astro.props;
 const narrow = `${id}-narrow`;
-const wide = `${id}-wide`;
 const hasHeader = Astro.slots.has('header');
 const hasFooter = Astro.slots.has('footer');
 ---
 
 <div class="cn-rail" data-cn-rail>
-  {/*
-    The checkbox is the control: focusable, named, and reporting its own
-    checked state. It is hidden from view and from nothing else — `display:
-    none` would take the only keyboard route into the rail with it.
-  */}
-  <input class="cn-rail-request narrow" type="checkbox" id={narrow} aria-label={label} />
-  <input class="cn-rail-request wide" type="checkbox" id={wide} aria-label={label} checked />
-
-  <label class="cn-rail-trigger narrow" for={narrow} aria-hidden="true">
-    <span class="cn-rail-bars">
-      <span class="cn-rail-phase leaving"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
-      <span class="cn-rail-phase returning"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
-    </span>
-  </label>
-  <label class="cn-rail-trigger wide" for={wide} aria-hidden="true">
-    <span class="cn-rail-bars">
-      <span class="cn-rail-phase leaving"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
-      <span class="cn-rail-phase returning"><span class="cn-rail-bar one"></span><span class="cn-rail-bar two"></span></span>
-    </span>
-  </label>
+  <CnRailAction id={id} label={label} />
 
   <nav class="cn-rail-drawer" aria-label={label}>
     {hasHeader && (
@@ -79,7 +58,7 @@ const hasFooter = Astro.slots.has('footer');
 </div>
 
 {/*
-  The only script the rail has. Opening and closing are a checkbox and CSS, and
+  The only script the rail has. Opening and closing are a toggle and CSS, and
   stay that way; a key press and a focus boundary are the two things CSS cannot
   express, and they are needed for exactly one state — the rail covering the
   page, over its scrim, with the document behind it out of sight.
@@ -94,30 +73,30 @@ const hasFooter = Astro.slots.has('footer');
     'a[href], button:not(:disabled), input:not(:disabled), select, textarea, [tabindex]:not([tabindex="-1"])';
 
   for (const rail of document.querySelectorAll<HTMLElement>('[data-cn-rail]')) {
-    const request = rail.querySelector<HTMLInputElement>('.cn-rail-request.narrow');
+    const toggle = rail.querySelector<HTMLInputElement>('.cn-rail-toggle.narrow');
     const trigger = rail.querySelector<HTMLElement>('.cn-rail-trigger.narrow');
     const drawer = rail.querySelector<HTMLElement>('.cn-rail-drawer');
-    if (!request || !trigger || !drawer) continue;
+    if (!toggle || !trigger || !drawer) continue;
 
     const covering = () =>
-      request.checked && getComputedStyle(trigger).display !== 'none';
+      toggle.checked && getComputedStyle(trigger).display !== 'none';
 
     /*
-     * The checkbox first: it is the control, it takes the focus the trigger
+     * The toggle first: it is the control, it takes the focus the trigger
      * draws, and it is the boundary's own first stop, so `Escape` returns
      * there and a wrap from the end lands there.
      */
     const stops = () =>
-      [request, ...drawer.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
-        (node) => node.offsetParent !== null || node === request,
+      [toggle, ...drawer.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (node) => node.offsetParent !== null || node === toggle,
       );
 
     document.addEventListener('keydown', (event) => {
       if (!covering()) return;
 
       if (event.key === 'Escape') {
-        request.checked = false;
-        request.focus();
+        toggle.checked = false;
+        toggle.focus();
         return;
       }
 
@@ -160,162 +139,13 @@ const hasFooter = Astro.slots.has('footer');
     z-index: var(--cn-z-rail);
     display: flex;
     flex-direction: column;
-    /* The trigger stands outside the boxes, so it takes their inset itself
+    /* The action stands outside the boxes, so it takes their inset itself
        rather than being centred — centring would move it as the rail widens,
        and it shares one axis with the entries below it. */
     align-items: flex-start;
 
     /* The rail declares its own presentation for the entries it holds. */
     --cn-chrome-presentation: labelled;
-  }
-
-  /*
-   * Visually hidden but focusable, named and reporting its state. The trigger
-   * beside it is decorative: it draws what the checkbox already says.
-   */
-  .cn-rail-request {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    clip-path: inset(50%);
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  /* The trigger follows a chrome action's target, state surface and focus. */
-  .cn-rail-trigger {
-    position: relative;
-    isolation: isolate;
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    inline-size: calc(var(--cn-grid) * 7);
-    block-size: calc(var(--cn-grid) * 7);
-    margin: 0;
-    color: inherit;
-    cursor: pointer;
-  }
-  .cn-rail-trigger::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    translate: -50% -50%;
-    inline-size: calc(var(--cn-grid) * 6);
-    block-size: calc(var(--cn-grid) * 6);
-    border-radius: calc(var(--cn-grid) * 3);
-    background-color: transparent;
-    transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
-  }
-  .cn-rail-trigger:hover::before { background-color: var(--cn-hover); }
-  .cn-rail-trigger:active::before { background-color: var(--cn-active); }
-
-  /* The focus lands on the checkbox; the trigger is what shows it. */
-  .cn-rail:has(.cn-rail-request.narrow:focus-visible) .cn-rail-trigger.narrow,
-  .cn-rail:has(.cn-rail-request.wide:focus-visible) .cn-rail-trigger.wide {
-    outline: 2px solid var(--cn-focus-ring);
-    outline-offset: 2px;
-  }
-
-  /*
-   * The glyph: `=` while the rail is collapsed, `|<` while it is expanded.
-   *
-   * A quarter turn counter-clockwise carries the upper stroke to the start edge,
-   * where it stands as the line, and the lower stroke to the end edge, where the
-   * shape it has become — a V opening upward — reads as the chevron. Each stroke
-   * is one clip path, so the chevron is one shape rather than two meeting.
-   *
-   * Turning the same way both times needs the resting pose to be `0deg` on the
-   * way out and `-180deg` on the way back, and a transition has only two ends.
-   * So the glyph is drawn twice: one copy turns `0deg` to `-90deg`, the other
-   * `-90deg` to `-180deg`, and each is shown only while it is the one turning.
-   * Every visible angle decreases, so every visible turn goes counter-clockwise.
-   *
-   * The copy that is not turning is not merely hidden — it takes the pose it
-   * will start from next, at no duration, while nobody can see it. Nothing
-   * shows, because a resting glyph is two identical strokes, so `-180deg` and
-   * `0deg` are the same picture.
-   *
-   * Transitions, not animations, and that is what keeps this free of script: an
-   * animation runs when its selector first matches, which includes the page
-   * arriving, so a keyframed glyph turns once on every load. A transition runs
-   * only when a value changes, and at load nothing has changed yet.
-   */
-  .cn-rail-bars {
-    position: relative;
-    inline-size: calc(var(--cn-grid) * 4);
-    block-size: calc(var(--cn-grid) * 4);
-  }
-  .cn-rail-phase {
-    position: absolute;
-    inset: 0;
-    transition: rotate var(--_motion) var(--cn-easing-ui);
-  }
-  .cn-rail-bar {
-    position: absolute;
-    inset: 0;
-    background-color: currentColor;
-    transition: clip-path var(--_motion) var(--cn-easing-ui);
-  }
-  .cn-rail-bar.one {
-    clip-path: polygon(
-      12.5% 28.125%, 50% 28.125%, 87.5% 28.125%,
-      87.5% 40.625%, 50% 40.625%, 12.5% 40.625%
-    );
-  }
-  .cn-rail-bar.two {
-    clip-path: polygon(
-      12.5% 59.375%, 50% 59.375%, 87.5% 59.375%,
-      87.5% 71.875%, 50% 71.875%, 12.5% 71.875%
-    );
-  }
-
-  /*
-   * Collapsed. The returning copy holds the pose and the outgoing copy waits at
-   * the one it will leave from.
-   */
-  .cn-rail-phase.leaving {
-    opacity: 0;
-    rotate: 0deg;
-    --_motion: 0ms;
-  }
-  .cn-rail-phase.returning {
-    opacity: 1;
-    rotate: -180deg;
-    --_motion: var(--cn-duration-ui);
-  }
-
-  /* Expanded. The two trade places, and the chevron is folded in both. */
-  .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-trigger.narrow .cn-rail-phase.leaving,
-  .cn-rail:has(.cn-rail-request.wide:checked) .cn-rail-trigger.wide .cn-rail-phase.leaving {
-    opacity: 1;
-    rotate: -90deg;
-    --_motion: var(--cn-duration-ui);
-  }
-  .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-trigger.narrow .cn-rail-phase.returning,
-  .cn-rail:has(.cn-rail-request.wide:checked) .cn-rail-trigger.wide .cn-rail-phase.returning {
-    opacity: 0;
-    rotate: -90deg;
-    --_motion: 0ms;
-  }
-  .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-trigger.narrow .cn-rail-bar.two,
-  .cn-rail:has(.cn-rail-request.wide:checked) .cn-rail-trigger.wide .cn-rail-bar.two {
-    clip-path: polygon(
-      23.48% 79.64%, 50% 53.12%, 76.52% 79.64%,
-      76.52% 97.32%, 50% 70.80%, 23.48% 97.32%
-    );
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cn-rail-phase,
-    .cn-rail-bar {
-      --_motion: 0ms;
-    }
   }
 
   .cn-rail-drawer {
@@ -399,15 +229,13 @@ const hasFooter = Astro.slots.has('footer');
    */
   @media (prefers-reduced-motion: reduce) {
     .cn-rail-drawer,
-    .cn-rail-scrim,
-    .cn-rail-bars::before,
-    .cn-rail-bars::after {
+    .cn-rail-scrim {
       transition: none;
     }
   }
 
   /*
-   * The small band holds no rail: it is absent, and its box is the trigger
+   * The small band holds no rail: it is absent, and its box is the action
    * alone, standing in the leading slot CnAppBar reserves for it.
    */
   @container app-chrome (max-width: 38.75rem) {
@@ -417,15 +245,10 @@ const hasFooter = Astro.slots.has('footer');
     }
   }
 
-  /* Narrower than the tablet breakpoint, the narrow pair is the control. */
+  /* Narrower than the tablet breakpoint, the narrow toggle is the control. */
   @container app-chrome (max-width: 63.99rem) {
-    .cn-rail-request.wide,
-    .cn-rail-trigger.wide {
-      display: none;
-    }
-
     /* Asked for, the drawer leaves the strip and covers the page. */
-    .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-drawer {
+    .cn-rail:has(.cn-rail-toggle.narrow:checked) .cn-rail-drawer {
       position: fixed;
       inset-block: 0;
       inset-inline-start: 0;
@@ -434,7 +257,7 @@ const hasFooter = Astro.slots.has('footer');
       background-color: var(--cn-surface-4);
       box-shadow: var(--cn-shadow-elevation-4);
     }
-    .cn-rail:has(.cn-rail-request.narrow:checked) .cn-rail-scrim {
+    .cn-rail:has(.cn-rail-toggle.narrow:checked) .cn-rail-scrim {
       opacity: 1;
       pointer-events: auto;
     }
@@ -442,7 +265,7 @@ const hasFooter = Astro.slots.has('footer');
 
   /* The small band's resting rail is absent, in the tree as well as in view. */
   @container app-chrome (max-width: 38.75rem) {
-    .cn-rail:not(:has(.cn-rail-request.narrow:checked)) .cn-rail-drawer {
+    .cn-rail:not(:has(.cn-rail-toggle.narrow:checked)) .cn-rail-drawer {
       display: none;
     }
   }
@@ -468,8 +291,8 @@ const hasFooter = Astro.slots.has('footer');
       );
     }
 
-    /* The boxes' inset, so the trigger keeps the entries' axis at both widths. */
-    .cn-rail-trigger {
+    /* The boxes' inset, so the action keeps the entries' axis at both widths. */
+    .cn-rail > :global(.cn-rail-action) {
       margin-inline-start: calc(
         (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2
       );
@@ -484,18 +307,16 @@ const hasFooter = Astro.slots.has('footer');
     .cn-rail-drawer {
       inline-size: 100%;
     }
-    .cn-rail:not(:has(.cn-rail-request.narrow:checked)) {
+    .cn-rail:not(:has(.cn-rail-toggle.narrow:checked)) {
       --cn-chrome-presentation: compact;
     }
   }
 
   /*
-   * The tablet breakpoint and wider: the wide pair is the control, the rail
+   * The tablet breakpoint and wider: the wide toggle is the control, the rail
    * stands beside the page in both states, and nothing covers anything.
    */
   @container app-chrome (min-width: 64rem) {
-    .cn-rail-request.narrow,
-    .cn-rail-trigger.narrow,
     .cn-rail-scrim {
       display: none;
     }
@@ -505,8 +326,8 @@ const hasFooter = Astro.slots.has('footer');
       transition: inline-size var(--cn-duration-ui) var(--cn-easing-ui);
       --cn-chrome-presentation: compact;
     }
-    /* The wide control rests checked, so a desktop page loads expanded. */
-    .cn-rail:has(.cn-rail-request.wide:checked) {
+    /* The wide toggle rests checked, so a desktop page loads expanded. */
+    .cn-rail:has(.cn-rail-toggle.wide:checked) {
       inline-size: var(--cn-width-rail-expanded);
       --cn-chrome-presentation: labelled;
     }

@@ -2,7 +2,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
 
 /**
  * What only a browser knows about `CnRail`: which of its two widths and two
- * presentations a real `@container` query resolves; whether the checkbox
+ * presentations a real `@container` query resolves; whether the toggle
  * pair the container displays is actually gone from the tab order and from
  * assistive technology, and the other pair actually stands; whether `Escape`,
  * the focus boundary and the scrim actually work, which needs the page's own
@@ -49,7 +49,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * content, inside the very `[data-cn-rail-scope]` the shell's cede rule
  * reads (`packages/design-system/styles/rail.css`); that specimen's wide
  * control rests checked by markup and never changes, so its presence alone
- * satisfies `:has(.cn-rail-request.wide:checked)` regardless of what the
+ * satisfies `:has(.cn-rail-toggle.wide:checked)` regardless of what the
  * shell's own rail does, pinning `--cn-rail-occupies` to the expanded width
  * on this one page. `cn-app-bar`'s book carries no rail specimen of its own,
  * so it is the page where the shell's cede mechanism is actually being
@@ -346,13 +346,13 @@ test.describe('exactly one trigger stands, in the tab order and to assistive tec
       const rail = shellRail(page);
       const narrowTrigger = rail.locator('.cn-rail-trigger.narrow');
       const wideTrigger = rail.locator('.cn-rail-trigger.wide');
-      const narrowCheckbox = rail.locator('.cn-rail-request.narrow');
-      const wideCheckbox = rail.locator('.cn-rail-request.wide');
+      const narrowToggle = rail.locator('.cn-rail-toggle.narrow');
+      const wideToggle = rail.locator('.cn-rail-toggle.wide');
 
-      const [standingTrigger, absentTrigger, standingCheckbox, absentCheckbox] =
+      const [standingTrigger, absentTrigger, standingToggle, absentToggle] =
         band === 'desktop'
-          ? [wideTrigger, narrowTrigger, wideCheckbox, narrowCheckbox]
-          : [narrowTrigger, wideTrigger, narrowCheckbox, wideCheckbox];
+          ? [wideTrigger, narrowTrigger, wideToggle, narrowToggle]
+          : [narrowTrigger, wideTrigger, narrowToggle, wideToggle];
 
       await expect(standingTrigger).toBeVisible();
       await expect(absentTrigger).toBeHidden();
@@ -362,12 +362,12 @@ test.describe('exactly one trigger stands, in the tab order and to assistive tec
       // null`) to decide what stands in the tab order, so this proves the
       // same fact the script depends on.
       expect(
-        await standingCheckbox.evaluate(
+        await standingToggle.evaluate(
           (n) => (n as HTMLElement).offsetParent !== null,
         ),
       ).toBe(true);
       expect(
-        await absentCheckbox.evaluate(
+        await absentToggle.evaluate(
           (n) => (n as HTMLElement).offsetParent !== null,
         ),
       ).toBe(false);
@@ -385,8 +385,8 @@ test('the narrow control rests unchecked and the wide rests checked, as the docu
 }) => {
   await page.goto(NEUTRAL_BOOK);
   const rail = shellRail(page);
-  const narrow = rail.locator('.cn-rail-request.narrow');
-  const wide = rail.locator('.cn-rail-request.wide');
+  const narrow = rail.locator('.cn-rail-toggle.narrow');
+  const wide = rail.locator('.cn-rail-toggle.wide');
 
   // `defaultChecked` reflects the `checked` attribute the markup itself
   // carries, unaffected by any interaction a prior assertion may have run.
@@ -398,7 +398,7 @@ test('the narrow control rests unchecked and the wide rests checked, as the docu
   ).toBe(true);
 });
 
-test('crossing between bands leaves each checkbox at the state it held', async ({
+test('crossing between bands leaves each toggle at the state it held', async ({
   page,
 }) => {
   await page.goto(NEUTRAL_BOOK);
@@ -406,21 +406,21 @@ test('crossing between bands leaves each checkbox at the state it held', async (
 
   await page.setViewportSize({ width: widths.tablet, height: 900 });
   const rail = shellRail(page);
-  const narrowCheckbox = rail.locator('.cn-rail-request.narrow');
+  const narrowToggle = rail.locator('.cn-rail-toggle.narrow');
   await rail.locator('.cn-rail-trigger.narrow').click();
-  await expect(narrowCheckbox).toBeChecked();
+  await expect(narrowToggle).toBeChecked();
 
   // Cross into the desktop band, where the narrow pair is out of view.
   await page.setViewportSize({ width: widths.desktop, height: 900 });
   expect(
-    await narrowCheckbox.evaluate((n) => (n as HTMLInputElement).checked),
+    await narrowToggle.evaluate((n) => (n as HTMLInputElement).checked),
   ).toBe(true);
 
   // Cross back: the narrow pair still covers, exactly as left.
   await page.setViewportSize({ width: widths.tablet, height: 900 });
   await waitPastTransition(page);
   await expect(rail.locator('.cn-rail-drawer')).toBeVisible();
-  await expect(narrowCheckbox).toBeChecked();
+  await expect(narrowToggle).toBeChecked();
 });
 
 test.describe("keyboard and focus, on the design site's own rail", () => {
@@ -434,18 +434,18 @@ test.describe("keyboard and focus, on the design site's own rail", () => {
     await page.close();
   });
 
-  test('the scrim closes a covering rail, and Escape closes it again after reopening, each time returning focus to the trigger', async ({
+  test('the scrim closes a covering rail, and Escape closes it again after reopening, each time returning focus to the toggle', async ({
     page,
   }) => {
     await page.goto(NEUTRAL_BOOK);
     await page.setViewportSize({ width: widths.tablet, height: 900 });
     const rail = shellRail(page);
     const trigger = rail.locator('.cn-rail-trigger.narrow');
-    const checkbox = rail.locator('.cn-rail-request.narrow');
+    const toggle = rail.locator('.cn-rail-toggle.narrow');
     const scrim = rail.locator('.cn-rail-scrim');
 
     await trigger.click();
-    await expect(checkbox).toBeChecked();
+    await expect(toggle).toBeChecked();
 
     // Clicking a <label> natively moves focus to the control it labels —
     // the scrim needs no script of its own for this. A plain click, not a
@@ -453,14 +453,14 @@ test.describe("keyboard and focus, on the design site's own rail", () => {
     // element here once covering, and `force` skips a step Chromium's own
     // label-focusing needs.
     await scrim.click();
-    await expect(checkbox).not.toBeChecked();
-    await expect(checkbox).toBeFocused();
+    await expect(toggle).not.toBeChecked();
+    await expect(toggle).toBeFocused();
 
     await trigger.click();
-    await expect(checkbox).toBeChecked();
+    await expect(toggle).toBeChecked();
     await page.keyboard.press('Escape');
-    await expect(checkbox).not.toBeChecked();
-    await expect(checkbox).toBeFocused();
+    await expect(toggle).not.toBeChecked();
+    await expect(toggle).toBeFocused();
   });
 
   test('Escape does nothing where nothing covers', async ({ page }) => {
@@ -468,13 +468,13 @@ test.describe("keyboard and focus, on the design site's own rail", () => {
     await page.setViewportSize({ width: widths.desktop, height: 900 });
     // Beside the page, at rest, nothing covers anything.
     const rail = shellRail(page);
-    const checkbox = rail.locator('.cn-rail-request.wide');
-    await checkbox.focus();
-    await expect(checkbox).toBeChecked();
+    const toggle = rail.locator('.cn-rail-toggle.wide');
+    await toggle.focus();
+    await expect(toggle).toBeChecked();
 
     await page.keyboard.press('Escape');
-    await expect(checkbox).toBeChecked();
-    await expect(checkbox).toBeFocused();
+    await expect(toggle).toBeChecked();
+    await expect(toggle).toBeFocused();
   });
 
   test('focus stays within a covering rail, wrapping at both ends', async ({
@@ -483,9 +483,9 @@ test.describe("keyboard and focus, on the design site's own rail", () => {
     await page.goto(NEUTRAL_BOOK);
     await page.setViewportSize({ width: widths.tablet, height: 900 });
     const rail = shellRail(page);
-    const checkbox = rail.locator('.cn-rail-request.narrow');
+    const toggle = rail.locator('.cn-rail-toggle.narrow');
     await rail.locator('.cn-rail-trigger.narrow').click();
-    await expect(checkbox).toBeChecked();
+    await expect(toggle).toBeChecked();
 
     const stopCount = await rail
       .locator('.cn-rail-drawer')
@@ -496,7 +496,7 @@ test.describe("keyboard and focus, on the design site's own rail", () => {
       });
     expect(stopCount).toBeGreaterThan(0);
 
-    await checkbox.focus();
+    await toggle.focus();
     for (let i = 0; i < stopCount; i++) {
       await page.keyboard.press('Tab');
       const stillWithin = await rail.evaluate((r) =>
@@ -504,13 +504,13 @@ test.describe("keyboard and focus, on the design site's own rail", () => {
       );
       expect(stillWithin).toBe(true);
     }
-    // One stop past the last, Tab wraps back to the checkbox.
+    // One stop past the last, Tab wraps back to the toggle.
     await page.keyboard.press('Tab');
-    await expect(checkbox).toBeFocused();
+    await expect(toggle).toBeFocused();
 
-    // Shift+Tab from the checkbox wraps to the last stop, still inside.
+    // Shift+Tab from the toggle wraps to the last stop, still inside.
     await page.keyboard.press('Shift+Tab');
-    await expect(checkbox).not.toBeFocused();
+    await expect(toggle).not.toBeFocused();
     const stillWithinAfterWrap = await rail.evaluate((r) =>
       r.contains(document.activeElement),
     );
@@ -607,7 +607,7 @@ test('opening a rail a book renders in its own content moves nothing around it',
 
   const rail = boxesFullRail(page);
   await rail.locator('.cn-rail-trigger.narrow').click();
-  await expect(rail.locator('.cn-rail-request.narrow')).toBeChecked();
+  await expect(rail.locator('.cn-rail-toggle.narrow')).toBeChecked();
 
   // A book's specimen carries no `data-cn-rail-scope`, so nothing reads its
   // state — unlike the shell's own rail, whose scope this same margin

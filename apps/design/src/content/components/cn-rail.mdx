@@ -27,7 +27,8 @@ button](/base/links-actions-buttons#floating-action-buttons-fab) instead.
 This site's own navigation, beside this page, is a `CnRail`, at real scale: this is what
 it looks like where an application mounts one. The frame below holds a second
 one, at the same width band, so you do not have to leave this paragraph to try its
-trigger — click it and watch the rail move between its two widths, named after Material
+trigger, a mounted [CnRailAction](/components/cn-rail-action) — click it and watch the
+rail move between its two widths, named after Material
 3's own vocabulary for the same control: expanded, showing every entry's label, and
 collapsed, its icons alone. The trigger's own glyph turns with it, drawing `=` collapsed
 and `|<` expanded, and turning the same way — counter-clockwise — whichever state it is
@@ -108,8 +109,8 @@ covering state, at real scale.
 ## Accessibility
 
 The rail renders a `nav` landmark named by `label`. Its trigger is `aria-hidden`; the
-checkbox beside it carries that name, reports its own checked state, and is the sole
+toggle beside it carries that name, reports its own checked state, and is the sole
 focusable path into the rail. While the rail covers the page, `Escape` closes it and
-returns focus to that checkbox, and `Tab` cannot move focus outside the rail. An entry
+returns focus to that toggle, and `Tab` cannot move focus outside the rail. An entry
 inside a box is an ordinary chrome action, so its accessibility is that capability's,
 documented at [Chrome Actions](/base/chrome-actions).

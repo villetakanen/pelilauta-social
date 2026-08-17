@@ -24,7 +24,7 @@
 
 /* Only the wider window expands beside the page rather than over it. */
 @media (min-width: 64rem) {
-  [data-cn-rail-scope]:has(.cn-rail-request.wide:checked) {
+  [data-cn-rail-scope]:has(.cn-rail-toggle.wide:checked) {
     --cn-rail-occupies: var(--cn-width-rail-expanded);
   }
 }

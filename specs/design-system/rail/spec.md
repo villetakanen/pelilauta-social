@@ -13,9 +13,12 @@ places those are belongs to the page, and changes as the reader moves.
 
 ### Architecture
 
-An Astro component, `packages/design-system/components/CnRail.astro`: the trigger, the
-drawer, the scrim and three boxes an application fills — `header`, the default slot and
-`footer`. A box is spacing, not a surface: it paints nothing, and one holding no content
+Two Astro components. `packages/design-system/components/CnRailAction.astro` is the
+chrome action that opens and closes the rail: the toggles and their triggers, working
+the same alone in a book as mounted in the rail.
+`packages/design-system/components/CnRail.astro` mounts it, and adds the drawer, the
+scrim and three boxes an application fills — `header`, the default slot and `footer`.
+A box is spacing, not a surface: it paints nothing, and one holding no content
 does not render, so an empty header or footer leaves neither space nor a line behind it.
 The footer draws a line above itself, so that line only ever marks a boundary that
 exists.
@@ -45,6 +48,11 @@ first, and its inline size then decides which state the rail rests in.
 
 A modal page carries no rail.
 
+### Documentation
+
+- `apps/design/src/content/components/cn-rail.mdx`
+- `apps/design/src/content/components/cn-rail-action.mdx`
+
 ### Constraints
 
 The rail rests at a size that depends on the container's inline size, and one control asks
@@ -61,18 +69,19 @@ the page or stands beside it.
 Material 3's words for the collapsed and expanded rail. `--cn-z-rail` fixes the rail's
 stacking.
 
-Two checkboxes carry that request, each with its own trigger: one pair for inline sizes
-narrower than `--cn-breakpoint-tablet`, one for the rest. The container displays one pair
-and removes the other from view, from the tab order and from assistive technology, so one
-trigger stands at each inline size. The narrower checkbox rests unchecked and the wider
-checked, and a document states either in the markup it serves. Crossing between them
-leaves each checkbox at the state it held, and leaves focus where the document puts it
-when the control holding it goes.
+Two toggles carry that ask, each with its own trigger: one pair for inline
+sizes narrower than `--cn-breakpoint-tablet`, one for the rest. The container displays one
+pair and removes the other from view, from the tab order and from assistive technology,
+so one trigger stands at each inline size. The narrower toggle rests unchecked and the
+wider checked, and a document states either in the markup it serves. Crossing between
+them leaves each toggle at the state it held, and leaves focus where the document puts it
+when the control holding it goes. The toggles' classes and ids are the action's published
+contract: they are what the rail, the scrim and the main region read.
 
-The checkbox is the control: it takes the focus, carries the name, and reports whether it
+The toggle is the control: it takes the focus, carries the name, and reports whether it
 is checked, which is this capability's disclosure. It is hidden from view and from
 nothing else. Its trigger draws `=` collapsed and `|<` expanded, turning
-counter-clockwise in both directions, and shows the focus the checkbox takes. A
+counter-clockwise in both directions, and shows the focus the toggle takes. A
 transition has only two ends, so the resting pose cannot read `0deg` going out and
 `-180deg` coming back; the glyph is therefore drawn twice, one copy per direction, and
 only the copy in motion shows. The turn is a transition, not a keyframed animation: an
@@ -90,8 +99,8 @@ around a compact chrome action's target, and holds that inset in every state. `-
 is too wide to be it: at the gap the target does not fit the rail's width.
 
 The main region cedes the inline size of a collapsed or expanded rail standing beside the
-page, and cedes nothing to one covering the page. It reads the request from a scope the
-application marks, so a rail a book renders moves nothing around it.
+page, and cedes nothing to one covering the page. It reads the rail, and its disclosure,
+from a scope the application marks, so a rail a book renders moves nothing around it.
 
 Covering the page and standing beside it are what decide the rail's surface, rather than
 the inline size it rests at. A rail covering the page has one, at elevation 4, above its
@@ -104,8 +113,8 @@ A rail travels between its two widths, and takes them without travelling where t
 asks for no motion.
 
 Opening and closing need no script, by pointer or by keyboard. `Escape` closes a covering
-rail and returns focus to the trigger, and focus stays within a covering rail and its
-trigger; both need script, and the mode they act on is the pair the container displays.
+rail and returns focus to the toggle, and focus stays within a covering rail and its
+toggle; both need script, and the mode they act on is the pair the container displays.
 
 ## Contract
 
@@ -116,7 +125,12 @@ trigger; both need script, and the mode they act on is the pair the container di
   tokens are.
 - A **Rail** book renders the rail at each breakpoint, resting and asked-for, with header,
   body and footer entries, in Light and Dark.
-- A browser check confirms the widths, the boxes, the checkbox contract, the keyboard,
+- A **Rail Action** book renders the action alone, in an `app-chrome` frame per band,
+  in Light and Dark.
+- A browser check confirms the action alone: one toggle per band, named and driven by
+  pointer and keyboard, the other out of view, of the tab order and of assistive
+  technology.
+- A browser check confirms the widths, the boxes, the toggle contract, the keyboard,
   the focus and the landmark above, at each breakpoint.
 - `packages/design-system/test/color-contrast.test.ts` measures the indicator against
   the surfaces an entry stands on here.
@@ -161,7 +175,7 @@ And the main region cedes only the collapsed rail's inline size
 Given a covering rail
 When the reader presses the scrim, and then reopens it and presses Escape
 Then the rail closes each time
-And focus is on the trigger
+And focus is on the toggle
 ```
 
 ```gherkin
