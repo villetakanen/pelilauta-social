@@ -160,3 +160,4 @@ test-results/
 
 # Machine-local agent instructions; CLAUDE.md holds what the repository shares
 CLAUDE.local.md
+.astro/
