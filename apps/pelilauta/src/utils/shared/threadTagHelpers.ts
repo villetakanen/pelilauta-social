@@ -7,7 +7,7 @@
  * - **tags**: Extracted from content fields (title, markdownContent), user-controlled, regenerated on edits
  * - **labels**: Manually assigned by moderators/admins, persistent through edits
  *
- * For full documentation, see: src/docs/76-01-entry-labels-and-tags.md
+ * For full documentation, see: src/content/docs/76-01-entry-labels-and-tags.md
  */
 
 import type { Thread } from '@schemas/ThreadSchema';

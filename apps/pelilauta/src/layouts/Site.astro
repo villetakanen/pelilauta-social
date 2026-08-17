@@ -41,7 +41,7 @@ const { site, title, description, image, noSharing } = Astro.props;
       <SiteRail {site} />
       {
         Astro.slots.has('fab-tray') && (
-          <nav class="fab-tray" aria-label={t("base:quickActions")}>
+          <nav class="fab-tray" aria-label={t("app:quickActions")}>
             <slot name="fab-tray" />
           </nav>
         )

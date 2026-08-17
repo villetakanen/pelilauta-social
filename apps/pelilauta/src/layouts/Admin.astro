@@ -1,15 +1,14 @@
 ---
 import AuthManager from '@components/svelte/AuthManager.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
-import BaseBar from '@pelilauta/base/chrome/BaseBar.astro';
+import AdminBar from '@pelilauta/admin/chrome/AdminBar.astro';
+import AdminRail from '@pelilauta/admin/chrome/AdminRail.astro';
 import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 import BaseTail from '@pelilauta/components/server/BaseTail.astro';
-import LibraryRail from '@pelilauta/library/chrome/LibraryRail.astro';
-import { t } from 'src/utils/i18n';
 
-// Every page taking this layout is the reader's own, and every one of them
-// verifies the session itself before rendering.
+// Every page taking this layout states the guard itself, and renders for a
+// reader holding the tools alone.
 
 type Props = {
   /** The document's title, as a search result shows it. */
@@ -25,28 +24,18 @@ const { title, description } = Astro.props;
   {/* The scope the tray's stylesheet reads; see Base.astro for why it sits here. */}
   <body data-cn-rail-scope>
     <CnAppChrome>
-      <BaseBar>
+      <AdminBar>
         <slot name="app-bar" />
-      </BaseBar>
+      </AdminBar>
 
-      <LibraryRail />
-      {
-        Astro.slots.has('fab-tray') && (
-          <nav class="fab-tray" aria-label={t("app:quickActions")}>
-            <slot name="fab-tray" />
-          </nav>
-        )
-      }
+      <AdminRail />
     </CnAppChrome>
 
     <main class="app-main">
       <slot />
-      <AppFooter>
-        <slot name="app-footer-credits" slot="app-footer-credits" />
-      </AppFooter>
+      <AppFooter />
     </main>
 
-    <slot name="app-background-poster" />
     <AuthManager client:only="svelte" />
 
     <BaseTail />

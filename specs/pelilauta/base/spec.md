@@ -27,8 +27,9 @@ sub-application that follows takes the same shape under its own directory.
 
 Its layouts are the exception: every layout sits in `apps/pelilauta/src/layouts`,
 whichever application it belongs to. `Base.astro` is the base application's. `ModalPage.astro`
-beside it belongs to no application; every application takes it for a page that
-interrupts a reader instead of being somewhere they are — signing in, or creating a game.
+beside it belongs to no application, and is there for any application to take for a page
+that interrupts a reader instead of being somewhere they are — signing in, or creating a
+game.
 
 Its strings are the `base` locale namespace, `locales/<language>/base.ts`. A string
 another application would need is not one of them.
@@ -40,7 +41,7 @@ reader does not infer that from the chrome the page happens to render.
 ### Constraints
 
 Every page of the base application carries the same identity, and what that identity is
-belongs to `base-bar/spec.md` — the library carries the same bar.
+belongs to `base-bar/spec.md`.
 
 ## Contract
 

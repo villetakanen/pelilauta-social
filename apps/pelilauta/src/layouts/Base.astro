@@ -62,7 +62,7 @@ const { title, description, image, noSharing, search } = Astro.props;
       <BaseRail />
       {
         Astro.slots.has('fab-tray') && (
-          <nav class="fab-tray" aria-label={t("base:quickActions")}>
+          <nav class="fab-tray" aria-label={t("app:quickActions")}>
             <slot name="fab-tray" />
           </nav>
         )

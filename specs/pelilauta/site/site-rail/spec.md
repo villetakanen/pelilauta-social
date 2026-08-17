@@ -46,8 +46,8 @@ Kellot stands for every reader the site shows it to, as v18 serves it.
 
 A site owner tool is absent for a reader who is not an owner, rather than disabled.
 
-The rail's footer carries Pelilauta, the reader's inbox and their identity. The first
-stands here and in no other rail.
+The rail's footer carries Pelilauta, the reader's inbox and their identity. The way to
+Pelilauta stands there because this application's bar names the site.
 
 ## Contract
 

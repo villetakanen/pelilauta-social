@@ -8,14 +8,12 @@ status: draft
 
 ### Context
 
-The bar the base application and the library carry. It states one thing and states it
-everywhere it stands: this is Pelilauta, and this leads to its front. A reader deep inside
-an application they entered from a link has that one fixed point, whatever else the chrome
-around them holds.
+The bar that names Pelilauta. It states one thing and states it everywhere it stands: this
+is the service, and this leads to its front. A reader deep inside an application they
+entered from a link has that one fixed point, whatever else the chrome around them holds.
 
-It belongs to the base application because more than one application needs it. Whether
-every application does is what the spike is still buying: an application whose pages an
-author has made distinct may well carry something else.
+An application takes it where its pages carry the service's identity rather than an
+identity of their own. It belongs to the base application because more than one needs it.
 
 ### Architecture
 
@@ -48,7 +46,7 @@ and in its first heading.
 ### Scenarios
 
 ```gherkin
-Given a page of the base application and a page of the library
+Given two pages, in different applications, that take this bar
 When each renders
 Then both bars carry the same logomark and wordmark
 And both lead to the base application's root

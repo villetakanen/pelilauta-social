@@ -7,7 +7,5 @@ export const base: Locale = {
     home: 'Home',
     channels: 'Discussions',
     sites: 'Games',
-    docs: 'Info',
   },
-  quickActions: 'Quick actions',
 };

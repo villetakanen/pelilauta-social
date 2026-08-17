@@ -3,6 +3,7 @@ import { actions } from './actions';
 import { admin } from './admin';
 import { base } from './base';
 import { common } from './common';
+import { docs } from './docs';
 import { entries } from './entries';
 import { frontPage } from './frontPage';
 import { library } from './library';
@@ -20,6 +21,7 @@ export const en: Locale = {
   app: {
     title: 'Pelilauta 2 -  Version 16 – Alpha release',
     shortname: 'Pelilauta',
+    quickActions: 'Quick actions',
     errors: {
       fetchingThreads:
         'Failed to load threads. Please try refreshing the page.',
@@ -27,6 +29,7 @@ export const en: Locale = {
   },
   base,
   common,
+  docs,
   entries,
   frontPage,
   library,

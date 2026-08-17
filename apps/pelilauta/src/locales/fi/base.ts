@@ -7,7 +7,5 @@ export const base: Locale = {
     home: 'Etusivu',
     channels: 'Keskustelut',
     sites: 'Pelit',
-    docs: 'Info',
   },
-  quickActions: 'Pikatoiminnot',
 };

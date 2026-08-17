@@ -33,8 +33,9 @@ the layout what it read. The layout reads nothing.
 ### Constraints
 
 The bar carries the site's name and the glyph of the game system it runs, leading to the
-site's root. This is the one application that does not carry
-`../base/base-bar/spec.md`, and the reason the applications are separate at all.
+site's root. This application states its identity rather than carrying
+`../base/base-bar/spec.md`, and a site being what its authors made of it is the reason
+Pelilauta hosts applications at all.
 
 A reader reaches Pelilauta from the rail's footer, because the bar names the site here.
 

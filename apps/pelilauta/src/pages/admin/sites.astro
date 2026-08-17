@@ -1,9 +1,11 @@
 ---
-import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import Admin from '@layouts/Admin.astro';
+import { requireAdmin } from '@pelilauta/admin/utils/requireAdmin';
 import SiteAdmin from '../../components/svelte/admin/SitesAdmin.svelte';
-import PageWithTray from '../../layouts/PageWithTray.astro';
+
+const denied = await requireAdmin(Astro);
+if (denied) return denied;
 ---
-<PageWithTray title="Admin" description="Admin tools for pelilauta">
-  <AdminTray client:only="svelte" slot="app-tray" />
+<Admin title="Admin" description="Admin tools for pelilauta">
   <SiteAdmin client:only="svelte" />
-</PageWithTray>
+</Admin>

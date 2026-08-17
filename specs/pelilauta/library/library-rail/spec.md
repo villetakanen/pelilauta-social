@@ -8,10 +8,9 @@ status: draft
 
 ### Context
 
-The navigation a reader reaches from anywhere inside the library. Every entry a reader
-with a session sees is a place of the library, so unlike `../../base/base-rail/spec.md`
-this rail carries no door onward. The identity offers a reader without a session the way
-to sign in, which is the one entry leading out.
+The navigation a reader reaches from anywhere inside the library. Every entry is a place
+of the library, and nothing in it leads out. Every page that mounts it guards, so a reader
+without a session never sees it.
 
 ### Architecture
 
@@ -50,7 +49,7 @@ from the base.
 
 - The rail states no measurement, responsive rule or interaction of its own; those are the
   design system's.
-- For a reader with a session, no entry leads out of the library.
+- No entry leads out of the library.
 
 ### Scenarios
 

@@ -6,7 +6,7 @@ import ThreadEditorForm from '../../components/svelte/thread-editor/ThreadEditor
 import EditorPage from '../../layouts/EditorPage.astro';
 
 // Ensure we have a logged-in user before proceeding
-const { uid, denied } = await requireSession(Astro);
+const { denied } = await requireSession(Astro);
 if (denied) return denied;
 
 const title = `${t('app:shortname')} – ${t('actions:create.thread')}`;

@@ -47,8 +47,7 @@ that interrupts the reader:
 | Ylläpito | administration | a reader holding the admin tools |
 
 A door is never the current entry, and states nothing about being one. A reader who took
-it is looking at the other application's rail, or at a modal page carrying none, so the
-condition can never hold.
+it is no longer looking at this rail, so the condition can never hold.
 
 The rail's footer carries the reader's inbox and their identity. Both lead into the
 library, so both are doors, and the footer holds none of the base application's places.

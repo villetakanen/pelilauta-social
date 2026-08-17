@@ -140,7 +140,7 @@ p cn-dice {
 
 /*
  * Sources: core/navigation.css, core/main.css, core/rail.css and core/tray.css.
- * Consumer: PageWithTray. Future owner: App Shell; remove when local navigation
+ * Consumer: EditorPage. Future owner: App Shell; remove when local navigation
  * owns tray state and placement.
  */
 a:has(cn-navigation-icon) {

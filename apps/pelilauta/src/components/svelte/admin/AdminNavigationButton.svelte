@@ -7,6 +7,6 @@ import { showAdminTools } from '../../../stores/session';
 {#if $showAdminTools}
   <a class="chrome-action" href="/admin">
     <Icon noun="admin" decorative />
-    <span>{t('navigation:admin')}</span>
+    <span>{t('admin:app.title')}</span>
   </a>
 {/if}

@@ -1,12 +1,13 @@
 ---
-import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import Admin from '@layouts/Admin.astro';
+import { requireDeveloperTools } from '@pelilauta/admin/utils/requireDeveloperTools';
 import SnackbarTestApp from '../../components/svelte/admin/SnackbarTestApp.svelte';
-import PageWithTray from '../../layouts/PageWithTray.astro';
+
+const denied = await requireDeveloperTools(Astro);
+if (denied) return denied;
 ---
-<PageWithTray 
+<Admin 
   title="Snackbar Test Utility" 
-  description="Test snackbar notifications" 
-  noSharing>
-  <AdminTray client:only="svelte" slot="app-tray"/>
+  description="Test snackbar notifications">
   <SnackbarTestApp client:only="svelte" />
-</PageWithTray>
+</Admin>

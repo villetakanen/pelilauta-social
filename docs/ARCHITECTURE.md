@@ -109,12 +109,23 @@ finds there.
 ### One session guard
 
 v18 hand-rolls the same session check on every page that needs one, and skips it where the
-client app refuses instead — the notification inbox served a reader's own chrome to
+client app refuses instead — the notification inbox served a reader's chrome to
 anybody holding the address. v21 states the check once, in
 `@pelilauta/base/utils/requireSession`, and every page that needs a reader takes it.
 
 The base application holds the guard because every application needs it. A page states it
 and returns what it answers with, so the check cannot be half-applied.
+
+### Administrative tools
+
+v18 guards the forum's channels alone and leaves the rest of administration to the client,
+so the user management, the social media poster, the sites' activity and the snackbar
+utility rendered for anybody holding the address. v21 guards every one of them, through
+`requireAdmin`.
+
+A developer tool takes more: `requireDeveloperTools` also asks whether this environment
+shows the tools at all, and no deployed environment does. Where it does not, the tool
+answers as a page that does not exist, and its entry is absent from the rail.
 
 ### Character sub-app deprecation
 

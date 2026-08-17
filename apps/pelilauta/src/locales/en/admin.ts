@@ -1,6 +1,18 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const admin: Locale = {
+  app: {
+    title: 'Administration',
+    description: "Pelilauta's administrative tools",
+  },
+  rail: {
+    label: 'Administration',
+    channels: 'Forum Administration',
+    messaging: 'Social Media Poster',
+    users: 'User Management',
+    sites: 'Site Activity',
+    snackbarTest: 'Snackbar Test',
+  },
   title: 'Forum Administration',
   description:
     'Manage forum channels and topics. Create new channels, refresh statistics, and organize forum structure.',

@@ -6,7 +6,7 @@ import { t } from '@utils/i18n';
 
 /* The search page: can be accessed by anyone, but requires a session to use Algolia
  * for cost-optimization */
-const { uid, denied } = await requireSession(Astro);
+const { denied } = await requireSession(Astro);
 if (denied) return denied;
 ---
 <Base title={t('search:title')}>

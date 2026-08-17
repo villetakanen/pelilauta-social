@@ -1,0 +1,11 @@
+---
+/**
+ * Administration's bar: its own identity, leading to its front page.
+ */
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import { t } from 'src/utils/i18n';
+---
+
+<CnAppBar title={t('admin:app.title')} noun="admin" href="/admin">
+  <slot />
+</CnAppBar>

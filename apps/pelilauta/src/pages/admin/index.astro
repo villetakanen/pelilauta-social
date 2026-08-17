@@ -1,22 +1,22 @@
 ---
 import Icon from '@design-system/components/Icon.svelte';
-import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
-import PageWithTray from '../../layouts/PageWithTray.astro';
+import Admin from '@layouts/Admin.astro';
+import AdminDebugTools from '@pelilauta/admin/client/AdminDebugTools.svelte';
+import { requireAdmin } from '@pelilauta/admin/utils/requireAdmin';
 
-// This feature is hidden in the production env with a feature flag
-// SECRET_FEATURE_FLAG_Admin_tools
+import { showDeveloperTools } from '@pelilauta/admin/utils/requireDeveloperTools';
 
-const showLocalTools =
-  import.meta.env.SECRET_FEATURE_FLAG_Admin_tools === 'true';
+const denied = await requireAdmin(Astro);
+if (denied) return denied;
 ---
-<PageWithTray title="Admin" description="Admin tools for pelilauta">
-  <AdminTray client:only="svelte" slot="app-tray"/>
+<Admin title="Admin" description="Admin tools for pelilauta">
   <div class="content-prose">
     <div class="flex align-center items-center justify-center flex-col">
       <Icon noun="admin" size="xlarge" />
-    { showLocalTools ? (
+    { showDeveloperTools ? (
       <p class="text-center">ADMIN TOOLS ACTIVE</p>
     ) : <p class="text-center">MOD TOOLS ACTIVE</p> }
+      { showDeveloperTools && <AdminDebugTools client:only="svelte" /> }
     </div>
   </div>
-</PageWithTray>
+</Admin>

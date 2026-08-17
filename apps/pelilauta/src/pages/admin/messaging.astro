@@ -1,9 +1,11 @@
 ---
-import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
+import Admin from '@layouts/Admin.astro';
+import { requireAdmin } from '@pelilauta/admin/utils/requireAdmin';
 import SocialMediaPoster from '../../components/svelte/admin/SocialMediaPoster.svelte';
-import PageWithTray from '../../layouts/PageWithTray.astro';
+
+const denied = await requireAdmin(Astro);
+if (denied) return denied;
 ---
-<PageWithTray title="Social media poster" description="Tool for sending messages to social media">
-  <AdminTray client:only="svelte" slot="app-tray"/>
+<Admin title="Social media poster" description="Tool for sending messages to social media">
   <SocialMediaPoster client:only="svelte"/>
-</PageWithTray>
+</Admin>
