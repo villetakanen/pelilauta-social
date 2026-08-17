@@ -9,18 +9,15 @@ status: approved
 ### Context
 
 `CnToggle` flips one boolean setting and applies it the moment it is flipped,
-with no submit step. The model is Material 3's switch. The settings surfaces —
-site options, site settings, the player tool, the create form and the admin
-user pane — are the consumers, replacing Cyan's `cn-toggle-button`.
+with no submit step. The model is Material 3's switch.
 
 ### Architecture
 
 `CnToggle.svelte` is a Svelte 5 component with no custom element or Shadow DOM.
 It renders a label and a native checkbox announcing as a switch. Toggling,
-keyboard operation, focus, the disabled state and the `change` event come from
-the input; the component adds no listeners. Cyan's element rebuilt all of these
-on its host — a button role, a tabindex, a keydown handler — and the rebuild is
-what the migration retires, not the tag alone.
+keyboard operation, focus, the disabled state, and the `change` event come from
+the input; the component adds no listeners, roles, or tabindexes to rebuild
+what the input already carries.
 
 The component holds no state of its own: the consumer supplies the current
 value through the `checked` prop, the input carries it, and the consumer reads
@@ -33,8 +30,7 @@ The CnToggle Component book, `apps/design/src/content/components/cn-toggle.mdx`.
 ### Constraints
 
 - Every toggle takes its accessible name from the `label` prop; there is no
-  unlabelled variant. The v18 admin freeze toggle rendered nameless, and its
-  migration adds the name.
+  unlabelled variant.
 - The control is a row spanning its container: the label leads and the switch
   trails at the row's end, so the switches in a settings pane align on one
   edge.
@@ -52,7 +48,7 @@ The CnToggle Component book, `apps/design/src/content/components/cn-toggle.mdx`.
 ### Regression Guardrails
 
 - The switch stays a native checkbox; a host that re-implements its state,
-  keyboard or focus behaviour is the Cyan element back under a new name.
+  keyboard, or focus behaviour has defeated the component's purpose.
 - The state reaches assistive technology as a switch carrying the label's
   name.
 - Checked and unchecked stay distinguishable by thumb position, not by colour

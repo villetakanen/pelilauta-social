@@ -11,8 +11,7 @@ status: approved
 `CnMenu` holds a surface's secondary commands on a temporary surface behind
 Material's more-options trigger, so a toolbar shows its primary actions and
 nothing else. The model is Material 3's menu, stripped to its container and its
-items: no dividers, submenus, selection states or trailing elements. The reply
-toolbar is the first consumer: fork, edit and delete live in its menu. The items
+items: no dividers, submenus, selection states, or trailing elements. The items
 stay the consumer's native elements, so when presentation and semantics compete,
 the element wins.
 
@@ -24,7 +23,7 @@ carries the consumer's items.
 
 The container is a native popover and the trigger is its invoker. Light
 dismissal, the Escape key and focus return come from the platform; the component
-adds no document click listener. The trigger states its expanded state, because
+adds no document click listener. The trigger declares its expanded state, because
 an invoker's implicit one is not exposed by every engine. The container composes
 the floating surface that `specs/design-system/surface/spec.md` defines.
 
@@ -72,7 +71,7 @@ The CnMenu Component book, `apps/design/src/content/components/cn-menu.mdx`.
 
 ### Regression Guardrails
 
-- The items keep their element semantics; the component adds no role, tabindex
+- The items keep their element semantics; the component adds no role, tabindex,
   or pointer behaviour to them.
 - Closing the menu from the keyboard returns focus to the trigger.
 - The trigger stays the system text icon button; a bespoke trigger surface
