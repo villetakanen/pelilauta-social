@@ -64,7 +64,8 @@ async function handleChannelChange(event: Event) {
 </script>
 
 {#if $showAdminTools && thread}
-  <cn-accordion class="border radius-m" title="ADMIN" noun="admin">
+  <details class="surface">
+    <summary>{t("admin:thread.tools")}</summary>
     <a
       href={`/threads/${thread?.key}/confirmDelete`}
       class="button text-center text"
@@ -101,5 +102,11 @@ async function handleChannelChange(event: Event) {
     <div class="mt-3 pt-3 border-t">
       <LabelManager {thread} />
     </div>
-  </cn-accordion>
+  </details>
 {/if}
+
+<style>
+  summary {
+    cursor: pointer;
+  }
+</style>

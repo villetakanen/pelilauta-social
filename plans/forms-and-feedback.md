@@ -15,8 +15,9 @@ migrated bridge rules leave with their last consumer.
 
 1. No Pelilauta surface renders `cn-toggle-button`, `cn-snackbar`, `cn-menu` or
    `cn-accordion`, or styles a tag with Cyan's `cn-chip`.
-2. Each replacement is an approved design-system capability, booked and checked in
-   `apps/design`, before its Pelilauta migration lands.
+2. Where a replacement needs a design-system capability, that capability is approved,
+   booked and checked in `apps/design` before its Pelilauta migration lands. A
+   replacement the platform already supplies needs none.
 3. A form control keeps its control semantics: its state, label and keyboard
    operation reach assistive technology.
 4. Application feedback keeps one producer contract: any surface reports through it,
@@ -34,10 +35,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - **Snackbar** — spec, ship and book local feedback; migrate `Snackbar.astro`,
   `BaseTail.astro` and the `snackUtils` producer contract behind them.
 - **Menu** — spec, ship and book the local menu; migrate `ReplyArticle`'s menu.
-- **Accordion** — spec, ship and book the local disclosure; migrate
-  `SiteDangerZoneSection` and `ThreadAdminActions`.
-- **Chip** — spec, ship and book the local chip class; migrate the tag surfaces
-  (`TagHeader`, `FeaturedTags`, `EntryTagsSection` and kin, `LabelManager`).
 - **Bridge prune** — drop each migrated element's rules from
   `apps/pelilauta/src/styles/migrations/cyan-elements.css` when its last consumer
   leaves.
@@ -46,6 +43,14 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   `semantic-token-cycles.md` and `tokens-are-asserted-not-generated.md`.
 
 ### Done
+
+- **Chip** — `.chip`, `.chip.promoted` and `.chip-list` ship in
+  `packages/design-system/styles/chip.css`, booked at `/base/chip`. Cyan's prefix went
+  with the port, so the tag surfaces apply `.chip`.
+- **Accordion** — no design-system capability. `SiteDangerZoneSection` and
+  `ThreadAdminActions` render `details.surface`, which is where the keyboard and the
+  expanded state come from; `docs/ARCHITECTURE.md` already reads that state as a glyph
+  and no surface, and `cn-accordion` carried no bridge rules to prune.
 
 ## Outscoped
 

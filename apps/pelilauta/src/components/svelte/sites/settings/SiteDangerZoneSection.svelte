@@ -3,7 +3,6 @@ import { deleteSite } from 'src/firebase/client/site/deleteSite';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
-import type { P } from 'vitest/dist/chunks/environment.LoooBwUu.js';
 
 interface Props {
   site: Site;
@@ -33,32 +32,36 @@ async function onSubmit(e: Event) {
 }
 </script>
 
-<cn-accordion 
-    class="border radius-m"
-    label={t('app:meta.dangerZone')} 
-    noun="monsters">
+<details class="surface">
+  <summary>{t('app:meta.dangerZone')}</summary>
 
-    <section class="surface radius-m warning">
+  <section class="surface radius-m warning">
     <h3>{t('site:dangerZone.title')}</h3>
-  <p class="italic">{t('site:dangerZone.description')}</p>
-  <form onsubmit={onSubmit}>
-    <input
-      type="text"
-      name="deleteConfirm"
-      placeholder={deleteConfirmPhrase}
-      oninput={(e: Event) => {
-        setDeleteConfirm((e.target as HTMLInputElement).value);
-      }}
-    />
-    <div class="toolbar justify-center">
-      <button
-        class="cta notify"
-        type="submit"
-        disabled={deleteConfirm !== deleteConfirmPhrase}
-      >
-        {t('site:dangerZone.deleteSiteAction')}
-      </button>
-    </div>
-  </form>
+    <p class="italic">{t('site:dangerZone.description')}</p>
+    <form onsubmit={onSubmit}>
+      <input
+        type="text"
+        name="deleteConfirm"
+        placeholder={deleteConfirmPhrase}
+        oninput={(e: Event) => {
+          setDeleteConfirm((e.target as HTMLInputElement).value);
+        }}
+      />
+      <div class="toolbar justify-center">
+        <button
+          class="cta notify"
+          type="submit"
+          disabled={deleteConfirm !== deleteConfirmPhrase}
+        >
+          {t('site:dangerZone.deleteSiteAction')}
+        </button>
+      </div>
+    </form>
   </section>
-</cn-accordion>
+</details>
+
+<style>
+  summary {
+    cursor: pointer;
+  }
+</style>
