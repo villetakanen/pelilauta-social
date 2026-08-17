@@ -1,11 +1,10 @@
 ---
 import CnPoster from '@design-system/components/CnPoster.astro';
+import Site from '@layouts/Site.astro';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
 import SiteTocApp from '../../../../components/server/SiteApp/SiteTocApp.astro';
-import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
-import PageWithTray from '../../../../layouts/PageWithTray.astro';
 
 const { siteKey } = Astro.params;
 
@@ -27,17 +26,16 @@ const title = `${site.name} – ${t('site:toc.title')}`;
 const image = site.avatarURL || site.posterURL || site.backgroundURL;
 ---
 
-<PageWithTray
+<Site {site}
   title={title}
   description={site.description}
   image={image}
   noSharing={site.hidden}
 >
-  <SiteTray slot="app-tray" site={site} />
   <SiteTocApp site={site} />
   {
     site.backgroundURL && (
       <CnPoster src={site.backgroundURL} slot="app-background-poster" />
     )
   }
-</PageWithTray>
+</Site>

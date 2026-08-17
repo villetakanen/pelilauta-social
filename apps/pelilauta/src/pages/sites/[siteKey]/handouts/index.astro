@@ -1,15 +1,14 @@
 ---
 import CnPoster from '@design-system/components/CnPoster.astro';
 import { getSiteData } from '@firebase/server/sites';
+import Site from '@layouts/Site.astro';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
-import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
 import HandoutsApp from '../../../../components/svelte/sites/handouts/HandoutsApp.svelte';
 import HandoutsFabs from '../../../../components/svelte/sites/handouts/HandoutsFabs.svelte';
 import SiteStoreInitializer from '../../../../components/svelte/sites/SiteStoreInitializer.svelte';
-import PageWithTray from '../../../../layouts/PageWithTray.astro';
 
 const { siteKey } = Astro.params;
 
@@ -44,20 +43,17 @@ const description = site.description || t('site:handouts.description');
 const image = site.avatarURL || site.posterURL || site.backgroundURL;
 ---
 
-<PageWithTray
+<Site {site}
   title={title}
   description={description}
   image={image}
-  noun="books"
-  shortTitle={site.name}
   noSharing={true}
 >
   <SiteStoreInitializer site={site} client:only="svelte" />
   <HandoutsApp client:only="svelte"/>
   <HandoutsFabs site={site} client:only="svelte" slot="fab-tray"/>
-  <SiteTray site={site} slot="app-tray"/>
   { site.backgroundURL && 
     <CnPoster src={site.backgroundURL} slot="app-background-poster"/>
   }
 
-</PageWithTray>
+</Site>

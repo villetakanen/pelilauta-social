@@ -1,9 +1,8 @@
 ---
+import Site from '@layouts/Site.astro';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import AssetEditor from '../../../../components/server/SiteApp/AssetEditor.astro';
-import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
-import PageWithTray from '../../../../layouts/PageWithTray.astro';
 
 const { siteKey, assetName } = Astro.params;
 
@@ -27,13 +26,12 @@ const site = SiteSchema.parse({
 const title = `${site.name} – ${assetName}`;
 ---
 
-<PageWithTray
+<Site {site}
   title={title}
   description={site.description}
   image={site.backgroundURL}
   noSharing={true}
 >
-  <SiteTray slot="app-tray" site={site} />
 
   <AssetEditor site={site} assetName={`${assetName}`} />
-</PageWithTray>
+</Site>

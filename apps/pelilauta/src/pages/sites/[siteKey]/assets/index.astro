@@ -1,12 +1,11 @@
 ---
 import CnPoster from '@design-system/components/CnPoster.astro';
+import Site from '@layouts/Site.astro';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
-import SiteTray from '../../../../components/server/SiteApp/SiteTray.astro';
 import AssetList from '../../../../components/svelte/sites/AssetList.svelte';
 import UploadAssetFab from '../../../../components/svelte/sites/assets/UploadAssetFab.svelte';
-import PageWithTray from '../../../../layouts/PageWithTray.astro';
 
 const { siteKey } = Astro.params;
 
@@ -30,13 +29,12 @@ const site = SiteSchema.parse({
 const title = `${site.name} – ${t('site:assets.title')}`;
 ---
 
-<PageWithTray
+<Site {site}
   title={title}
   description={site.description}
   image={site.backgroundURL}
   noSharing={true}
 >
-  <SiteTray slot="app-tray" site={site} />
   <AssetList site={site} client:only="svelte" />
   <UploadAssetFab site={site} client:only="svelte" slot="fab-tray" />
   {
@@ -44,4 +42,4 @@ const title = `${site.name} – ${t('site:assets.title')}`;
       <CnPoster src={site.backgroundURL} slot="app-background-poster" />
     )
   }
-</PageWithTray>
+</Site>

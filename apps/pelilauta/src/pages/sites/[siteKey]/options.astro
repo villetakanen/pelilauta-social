@@ -1,5 +1,5 @@
 ---
-import ModalPage from '@layouts/ModalPage.astro';
+import Site from '@layouts/Site.astro';
 import SiteOptionsApp from '@svelte/sites/options/SiteOptionsApp.svelte';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
@@ -18,9 +18,9 @@ const site = SiteSchema.parse({
 });
 ---
 
-<ModalPage title={site.name}>
+<Site {site} title={site.name}>
   <div class="content-prose">
     <h1>{t('site:options.title')}</h1>
   </div>
   <SiteOptionsApp site={site} client:only="svelte" />
-</ModalPage>
+</Site>

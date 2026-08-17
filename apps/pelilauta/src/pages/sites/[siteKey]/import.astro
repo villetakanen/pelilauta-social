@@ -1,9 +1,9 @@
 ---
+import Site from '@layouts/Site.astro';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
 import ImportApp from '../../../components/svelte/sites/import/ImportApp.svelte';
-import ModalPage from '../../../layouts/ModalPage.astro';
 
 interface Props {
   siteKey: string;
@@ -30,9 +30,9 @@ if (!site) {
 }
 ---
 
-<ModalPage title={site.name} description={site.description}>
+<Site {site} title={site.name} description={site.description}>
   <div class="content-prose">
     <h1>{t('site:import.title')}</h1>
   </div>
   <ImportApp client:only="svelte" />
-</ModalPage>
+</Site>

@@ -21,9 +21,9 @@ it is not a gate, and it reaches approval only once the part it describes stops 
 
 ## Settled
 
-- Pelilauta's contexts are isolated, and no control leads between them from anywhere
-  always visible. A page declaring no context of its own is in the root context, whose
-  entries are the pre-v19 global navigation. `specs/pelilauta/navigation/spec.md`.
+- Pelilauta consists of several applications. Each states its own chrome. How a reader
+  moves from one application to another is undecided, and this work does not decide it.
+  `specs/pelilauta/base/spec.md`.
 - The navigation component is the rail, its two states named after Material 3's
   collapsed and expanded. It offers a header, a body and a footer; a box is spacing, and
   one holding nothing renders nothing. `specs/design-system/rail/spec.md`.

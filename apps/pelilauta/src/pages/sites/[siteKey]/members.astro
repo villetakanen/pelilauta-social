@@ -1,9 +1,9 @@
 ---
+import Site from '@layouts/Site.astro';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
 import SiteMembersApp from '../../../components/svelte/sites/SiteMembersApp.svelte';
-import ModalPage from '../../../layouts/ModalPage.astro';
 
 const { siteKey: siteKeyParam } = Astro.params;
 const siteKey = siteKeyParam || 'mekanismi'; // This should not happen, but just in case
@@ -22,9 +22,9 @@ const site = SiteSchema.parse({
 });
 ---
 
-<ModalPage title={site.name}>
+<Site {site} title={site.name}>
   <div class="content-prose">
     <h1>{t('site:members.title')}</h1>
   </div>
   <SiteMembersApp site={site} client:only="svelte" />
-</ModalPage>
+</Site>
