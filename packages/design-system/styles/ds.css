@@ -8,6 +8,7 @@
 @import "./compat/cyan-typography.css";
 @import "./links.css";
 @import "./buttons.css";
+@import "./chip.css";
 @import "./fab.css";
 @import "./chrome-actions.css";
 @import "./rail.css";

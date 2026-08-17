@@ -78,7 +78,7 @@ test.describe('Thread Labels (PBI-041)', () => {
     await page.waitForTimeout(2000);
 
     // Check if the "featured" label appears using chip selector
-    const featuredLabelChip = page.locator('.cn-chip.secondary', {
+    const featuredLabelChip = page.locator('.chip.promoted', {
       hasText: 'featured',
     });
     await expect(featuredLabelChip).toBeVisible({ timeout: 10000 });
@@ -107,7 +107,7 @@ test.describe('Thread Labels (PBI-041)', () => {
     await page.waitForTimeout(2000);
 
     // Verify label exists using chip selector
-    const labelChipBefore = page.locator('.cn-chip.secondary', {
+    const labelChipBefore = page.locator('.chip.promoted', {
       hasText: 'persistent',
     });
     await expect(labelChipBefore).toBeVisible({
@@ -158,7 +158,7 @@ test.describe('Thread Labels (PBI-041)', () => {
     await page.waitForTimeout(2000);
 
     // Verify the admin label still exists after edit using chip selector
-    const labelChipAfter = page.locator('.cn-chip.secondary', {
+    const labelChipAfter = page.locator('.chip.promoted', {
       hasText: 'persistent',
     });
     await expect(labelChipAfter).toBeVisible({
@@ -247,7 +247,7 @@ test.describe('Thread Labels (PBI-041)', () => {
     await page.waitForTimeout(2000);
 
     // Verify label exists using the chip selector
-    const labelChip = page.locator('.cn-chip.secondary', {
+    const labelChip = page.locator('.chip.promoted', {
       hasText: 'removeme',
     });
     await expect(labelChip).toBeVisible({
@@ -278,8 +278,8 @@ test.describe('Thread Labels (PBI-041)', () => {
     await waitForAuthState(page, 15000);
     await page.waitForTimeout(2000);
 
-    // Verify label is gone - check that no .secondary chip with "removeme" exists
-    const removedLabel = page.locator('.cn-chip.secondary', {
+    // Verify label is gone - check that no .promoted chip with "removeme" exists
+    const removedLabel = page.locator('.chip.promoted', {
       hasText: 'removeme',
     });
     await expect(removedLabel).not.toBeVisible();
@@ -307,11 +307,11 @@ test.describe('Thread Labels (PBI-041)', () => {
     await page.waitForTimeout(2000);
 
     // Check if there's visual distinction based on actual implementation
-    // Labels have .cn-chip.secondary class and cn-icon with noun="label-tag"
-    // User tags have .cn-chip class without .secondary
+    // Labels have .chip.promoted class and cn-icon with noun="label-tag"
+    // User tags have .chip class without .promoted
 
-    // Find label chip (should have .secondary class and contain "official")
-    const labelChip = page.locator('.cn-chip.secondary', {
+    // Find label chip (should have .promoted class and contain "official")
+    const labelChip = page.locator('.chip.promoted', {
       hasText: 'official',
     });
     await expect(labelChip).toBeVisible({ timeout: 10000 });
@@ -320,8 +320,8 @@ test.describe('Thread Labels (PBI-041)', () => {
     const labelIcon = labelChip.locator('cn-icon[noun="label-tag"]');
     await expect(labelIcon).toBeVisible();
 
-    // Find a user tag chip (should be .cn-chip without .secondary, e.g., "test", "automation", or "e2e")
-    const userTagChips = page.locator('.cn-chip:not(.secondary)');
+    // Find a user tag chip (should be .chip without .promoted, e.g., "test", "automation", or "e2e")
+    const userTagChips = page.locator('.chip:not(.promoted)');
     const userTagCount = await userTagChips.count();
     expect(userTagCount).toBeGreaterThan(0);
 
@@ -333,8 +333,8 @@ test.describe('Thread Labels (PBI-041)', () => {
     console.log(
       'Successfully verified visual distinction between labels and tags',
     );
-    console.log('- Labels have .secondary class and label-tag icon');
-    console.log('- User tags are plain .cn-chip without .secondary class');
+    console.log('- Labels have .promoted class and label-tag icon');
+    console.log('- User tags are plain .chip without .promoted class');
   });
 
   test('can add labels to threads without any user tags', async ({ page }) => {
@@ -383,7 +383,7 @@ test.describe('Thread Labels (PBI-041)', () => {
     await page.waitForTimeout(2000);
 
     // Verify no user tags are present (tags section should not show user tags)
-    const hasUserTags = await page.locator('.cn-chip:not(.secondary)').count();
+    const hasUserTags = await page.locator('.chip:not(.promoted)').count();
     console.log('User tag count:', hasUserTags);
 
     // Now try to add an admin label (this is where the bug occurred)

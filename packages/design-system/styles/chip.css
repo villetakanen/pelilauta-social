@@ -1,0 +1,173 @@
+/*
+ * Chips — the compact pill for a tag, a label or a status.
+ *
+ * A chip is a utility class on the element the consumer already picked: an `a` to
+ * navigate, a `button` to act, a `span` or a `div` to read. The class carries
+ * presentation and nothing else, so it adds no role and never makes an inert host
+ * interactive: only `a.chip` and `button.chip` answer the pointer and the
+ * focus ring.
+ *
+ * The chip is a button presentation. It consumes the button type role that
+ * buttons.css aliases onto `:root`, and buttons.css excludes a chip — and anything
+ * nested inside one — from the button geometry, so a chip on a `button` is a
+ * chip rather than a pill-shaped button.
+ */
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--cn-grid) * 0.5);
+  margin: 0;
+  padding: calc(var(--cn-grid) * 0.5) calc(var(--cn-grid) * 2);
+  border: none;
+  /* Past the block size of any chip, so the pill stays a pill at every type step. */
+  border-radius: 9999px;
+  vertical-align: middle;
+  background-color: var(--cn-button-text);
+  background-image: none;
+  color: var(--cn-on-surface);
+  font-family: inherit;
+  font-size: var(--cn-font-size-button);
+  font-weight: var(--cn-font-weight-button);
+  line-height: var(--cn-line-height-button);
+  letter-spacing: var(--cn-letter-spacing-button);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: default;
+  user-select: none;
+
+  /*
+   * The chip is a context that requires one icon size, so it sets the size tokens
+   * in its own scope and every icon inside resolves to the extra-small step without
+   * reading its own selection. The extra-small token itself is left alone, which is
+   * what keeps the substitution from cycling.
+   */
+  --cn-icon-size-small: var(--cn-icon-size-xsmall);
+  --cn-icon-size: var(--cn-icon-size-xsmall);
+  --cn-icon-size-large: var(--cn-icon-size-xsmall);
+  --cn-icon-size-xlarge: var(--cn-icon-size-xsmall);
+}
+
+/*
+ * `.promoted` marks the chip a curator placed, against the free tags beside it. The
+ * surface fades from the chip surface to the primary ramp, at the weight the chip
+ * surface carries, so the promotion reads as a shift in hue and the foreground stays
+ * the on-surface role the plain chip resolves.
+ *
+ * The primary step sits one ramp step above the luminance `--cn-button` carries, in
+ * both schemes. The gradient replaces the flat surface rather than covering it, which
+ * is why the background colour goes transparent.
+ */
+.chip.promoted {
+  background-color: transparent;
+  background-image: linear-gradient(
+    in oklab 137deg,
+    var(--cn-button-text),
+    color-mix(
+      in oklab,
+      light-dark(var(--cn-color-primary-60), var(--cn-color-primary-50)) 33%,
+      transparent
+    )
+  );
+}
+
+a.chip,
+button.chip {
+  cursor: pointer;
+}
+
+/*
+ * Hover and active wash over the resting surface, so the foreground keeps its
+ * identity and the promoted gradient survives the state. The overlay inherits the
+ * radius rather than clipping to it: an ancestor `overflow` would cut the focus ring
+ * off a nested control.
+ */
+a.chip::after,
+button.chip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+a.chip:hover::after,
+button.chip:hover::after {
+  background-color: var(--cn-hover);
+}
+
+a.chip:active::after,
+button.chip:active::after {
+  background-color: var(--cn-active);
+}
+
+a.chip:focus-visible,
+button.chip:focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Only a native button has a disabled state. A chip link is navigable or absent, so
+ * no disabled presentation is published for an anchor.
+ */
+button.chip:disabled {
+  opacity: var(--cn-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/*
+ * A label chip's remove control. It stays a native button, and takes the chip's
+ * scale: an icon-sized control on the chip surface, seated by the chip's gap.
+ */
+.chip > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--cn-icon-size-xsmall);
+  block-size: var(--cn-icon-size-xsmall);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chip > button:focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+.chip > button:disabled {
+  opacity: var(--cn-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/*
+ * The chip row. Layout and gap only: a chip carries its own type, colour and
+ * padding, and a list that restated any of them would fork the chip.
+ */
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cn-grid);
+}
+
+/* A chip is intrinsically sized; the row wraps rather than squeezing one. */
+.chip-list > * {
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.chip::after,
+  button.chip::after {
+    transition: none;
+  }
+}

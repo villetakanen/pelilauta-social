@@ -41,7 +41,7 @@ if (steps.length === 0) {
   <ol>
     {steps.map(({ step, name }) => (
       <li>
-        <span class="chip" style={`background: var(${name});`} title={name}></span>
+        <span class="swatch" style={`background: var(${name});`} title={name}></span>
         <span class="step">{step}</span>
       </li>
     ))}
@@ -61,7 +61,7 @@ if (steps.length === 0) {
     flex: 1 1 3rem;
     text-align: center;
   }
-  .chip {
+  .swatch {
     display: block;
     block-size: 3rem;
     border: 1px solid var(--cn-border);

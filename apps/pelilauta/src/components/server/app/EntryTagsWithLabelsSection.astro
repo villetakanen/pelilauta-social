@@ -15,14 +15,13 @@ const allTags = getAllThreadTags(thread);
 
 {
   allTags && allTags.length > 0 && (
-    <div class="flex flex-wrap items-start mt-2">
+    <div class="chip-list mt-2">
       {allTags.map((tag) => {
         const label = isLabel(thread, tag);
         return (
           <a
             href={`/tags/${tag}`}
-            class={`cn-chip ${label ? "secondary" : ""}`}
-            style="flex:none"
+            class={`chip ${label ? "promoted" : ""}`}
             title={label ? "label" : undefined}
           >
             {label && <Icon noun="label-tag" size="small" />}

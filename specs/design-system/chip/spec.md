@@ -16,24 +16,28 @@ announces nothing.
 
 ### Architecture
 
-`.cn-chip`, its `.secondary` variant and `.cn-chip-list` live in
+`.chip`, its `.promoted` variant and `.chip-list` live in
 `packages/design-system/styles/chip.css` and reach both applications through the
 stylesheet entry point. The chip is a button presentation: it consumes the button
 type role that `buttons.css` aliases onto `:root` and rests on the text-button
 surface `--cn-button-text`.
 
 v20 deferred coloured chips to composition with the button colour modifiers.
-`.secondary` is that composition: it paints the secondary button surface with the
-on-button foreground, the pairing the button's `.secondary` already makes, and the
-labelled-tag surfaces use it to tell a curated label from a free tag.
+`.promoted` replaces that deferral, and names the purpose rather than a button
+variant: a chip someone curated, against the free tags beside it. Its surface fades
+from the chip surface to the primary ramp at the weight the chip surface carries, so a
+promotion is a shift in hue and the foreground stays the on-surface role the plain chip
+resolves. The primary step sits one ramp step above the luminance `--cn-button`
+carries, in both schemes.
 
-`.cn-chip-list` is the row wrapper — wrapping flex with `--cn-grid` gap for its
+`.chip-list` is the row wrapper — wrapping flex with `--cn-grid` gap for its
 direct children — so a consumer lays out a chip row without app-local layout
 atomics.
 
-`.cn-chip` keeps Cyan's class name. Every call site receives the local chip the
-moment the stylesheet ships; until Cyan's stylesheet leaves, the import order in
-`docs/MIGRATION.md` decides which rules win.
+The class drops Cyan's prefix. `docs/ARCHITECTURE.md` reserves `.cn-{name}` for a
+component hook, and a chip is a public class a consumer applies. Cyan's `.cn-chip`
+therefore reaches nothing once the rename lands, so every call site moves to `.chip`
+with the stylesheet and no import order decides the outcome.
 
 ### Documentation
 
@@ -46,7 +50,7 @@ The Chip book, `apps/design/src/content/base/chip.mdx`.
   to read. A label chip's host stays inert and nests its remove button.
 - Only `<a>` and `<button>` hosts answer hover and show the focus ring; every other
   host renders inert.
-- A chip never wraps its text; a row of chips wraps through `.cn-chip-list`.
+- A chip never wraps its text; a row of chips wraps through `.chip-list`.
 - The chip's gap seats a leading icon or a trailing control without an extra class.
   A nested control keeps its semantics.
 - A disabled button chip dims and ignores the pointer; it stays visible and in the
@@ -58,16 +62,17 @@ The Chip book, `apps/design/src/content/base/chip.mdx`.
 
 ### Definition of Done
 
-- Both applications receive `.cn-chip`, `.cn-chip.secondary` and `.cn-chip-list`
-  through the design system's stylesheet entry point.
-- The Chip book renders link, read-only, button, disabled, secondary, icon-leading
+- Both applications receive `.chip`, `.chip.promoted` and `.chip-list` through the
+  design system's stylesheet entry point.
+- No source file in either application applies `.cn-chip`.
+- The Chip book renders link, read-only, button, disabled, promoted, icon-leading
   and label chips inside a chip list, from the shipped classes.
 - Every scenario below runs as a check in `apps/design`.
 - Human review accepts the chip surfaces in both themes.
 
 ### Regression Guardrails
 
-- `.cn-chip-list` stays layout-only: layout and gap, never typography, colour or
+- `.chip-list` stays layout-only: layout and gap, never typography, colour or
   padding.
 - The chip acquires no role, tabindex or pointer behaviour beyond the host
   element's.
@@ -91,10 +96,10 @@ Then its background does not change
 ```
 
 ```gherkin
-Given a chip with the secondary variant beside a base chip
+Given a chip with the promoted variant beside a base chip
 When both render
-Then the secondary chip paints the secondary button surface, distinct from the base surface, in both themes
-And its foreground resolves to the on-button role
+Then the promoted chip fades from the chip surface to the primary ramp one step above the chip's own luminance, distinct from the base surface, in both themes
+And its foreground resolves to the same role as the base chip's
 ```
 
 ```gherkin

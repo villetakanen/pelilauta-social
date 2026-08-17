@@ -1,0 +1,93 @@
+---
+title: Chip
+description: The compact pill for a tag, a label or a status, applied as a utility class to the element the interaction requires.
+order: 5.6
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import ChipSpecimens from '@design-system/books/specimens/ChipSpecimens.astro'
+
+`.chip` and `.chip-list` ship in the design system stylesheet, which every
+application imports. The class carries presentation only: it adds no role, and it
+leaves the accessibility tree of the element it is applied to untouched.
+
+## Choosing the host element
+
+The chip is a utility class, so the element decides the behaviour.
+
+| Host | Use it for | Presentation |
+| :--- | :--- | :--- |
+| `<a class="chip" href>` | Navigation to a tag page or a filtered view. | Pointer cursor, hover wash, focus ring, no underline. |
+| `<button class="chip" type="button">` | A command, such as toggling a filter. | Pointer cursor, hover wash, focus ring; `disabled` dims it and stops the pointer. |
+| `<span class="chip">` | A tag or a status that is read, not activated. | Inert: no cursor change, no hover, no focus ring. |
+| `<div class="chip">` | A label chip whose remove control is nested inside it. | Inert host; the nested control answers instead. |
+
+<Composition themes caption="Link, read-only, command and disabled chips in Light and Dark">
+  <ChipSpecimens group="hosts" />
+</Composition>
+
+```html
+<div class="chip-list">
+  <a class="chip" href="/tags/fantasy">Destination</a>
+  <span class="chip">Read-only</span>
+  <button class="chip" type="button">Command</button>
+  <button class="chip" type="button" disabled>Disabled</button>
+</div>
+```
+
+## The promoted variant
+
+Add `.promoted` to mark a chip someone curated, against the free tags beside it. The
+surface shifts from the chip hue toward the primary ramp one step lighter, so a
+promoted chip carries the same weight and the same foreground as a plain one.
+
+<Composition themes caption="A free tag and a promoted label in Light and Dark">
+  <ChipSpecimens group="variants" />
+</Composition>
+
+```html
+<div class="chip-list">
+  <a class="chip" href="/tags/fantasy">Free tag</a>
+  <a class="chip promoted" href="/tags/official">Promoted label</a>
+</div>
+```
+
+## Content
+
+A chip holds a text label. Its gap seats a leading icon or a trailing control, so
+neither takes a class of its own. A chip sets one icon size in scope: an `Icon` inside
+one renders at the extra-small step whatever size it requests.
+
+A nested control stays the element it is: a remove control is a `<button>` carrying its
+own `aria-label`, and the chip scales it to the icon step. Give the host no `tabindex`
+and no click handler — a chip that nests a control is inert.
+
+<Composition themes caption="Leading icon, removable label, and removal in flight">
+  <ChipSpecimens group="content" />
+</Composition>
+
+```html
+<div class="chip promoted">
+  <span>Removable label</span>
+  <button type="button" aria-label="Remove Removable label">
+    <Icon noun="close" />
+  </button>
+</div>
+```
+
+## The chip row
+
+Wrap a row of chips in `.chip-list`. It is layout only — a wrapping flex row with a
+`--cn-grid` gap — so no application-local layout class is needed. A chip never wraps its
+own text; the row wraps instead, and each chip keeps its intrinsic width.
+
+<Composition narrow caption="A chip row wrapping in its container">
+  <ChipSpecimens group="wrapping" />
+</Composition>
+
+```html
+<div class="chip-list">
+  <a class="chip" href="/tags/fantasy">Fantasy</a>
+  <a class="chip" href="/tags/science-fiction">Science fiction</a>
+</div>
+```

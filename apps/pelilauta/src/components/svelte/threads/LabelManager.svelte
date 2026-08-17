@@ -117,13 +117,12 @@ function handleKeydown(event: KeyboardEvent) {
   <p class="text-small text-low mb-2">{t("admin:labels.legend")}</p>
 
   {#if thread.labels && thread.labels.length > 0}
-    <div class="flex flex-wrap items-center mb-2">
+    <div class="chip-list mb-2">
       {#each thread.labels as label (label)}
-        <div class="flex items-center cn-chip border mr-1 mb-1">
+        <div class="chip">
           <span>{label}</span>
           <button
             type="button"
-            class="ml-1"
             onclick={() => removeLabel(label)}
             disabled={isRemoving === label}
             aria-label={t("admin:labels.removeLabel")}

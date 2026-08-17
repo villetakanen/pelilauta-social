@@ -141,6 +141,7 @@ describe('entry point', () => {
       './compat/cyan-typography.css',
       './links.css',
       './buttons.css',
+      './chip.css',
       './fab.css',
       './chrome-actions.css',
       './rail.css',
