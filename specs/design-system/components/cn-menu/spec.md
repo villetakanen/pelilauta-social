@@ -23,10 +23,15 @@ hooked as `.cn-menu`. It renders an icon-only text button and a container that
 carries the consumer's items.
 
 The container is a native popover and the trigger is its invoker. Light
-dismissal, the Escape key, focus return and the trigger's expanded state come
-from the platform; the component adds no document click listener. The container
-composes the floating surface that `specs/design-system/surface/spec.md`
-defines.
+dismissal, the Escape key and focus return come from the platform; the component
+adds no document click listener. The trigger states its expanded state, because
+an invoker's implicit one is not exposed by every engine. The container composes
+the floating surface that `specs/design-system/surface/spec.md` defines.
+
+The container's identifier is assigned in the browser. A server render generates
+it once, and a page mounting several menus as separate islands ships the same one
+in each, which points every trigger at whichever container the document reached
+first.
 
 Despite the name, the component announces as a disclosure, not an ARIA menu: the
 trigger carries the expanded state and the items keep their element semantics. A

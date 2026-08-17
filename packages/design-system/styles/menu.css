@@ -1,0 +1,151 @@
+/*
+ * Menu — the temporary surface behind the more-options trigger, and the rows on it.
+ *
+ * CnMenu renders the markup; every measurement and colour is here, so both
+ * applications receive the presentation from the stylesheet entry and an item the
+ * consumer wrote is styled without the component reaching into it.
+ *
+ * The trigger's appearance is not stated here. It is the text icon button that
+ * styles/buttons.css publishes, and a surface rule of ours would fork it from the
+ * buttons it sits beside. All this file gives it is the anchor the container reads.
+ */
+
+/*
+ * The wrapper scopes the anchor, so every menu on a page uses one anchor name and
+ * each container still finds the trigger beside it. Its box wraps the trigger
+ * alone: the container is out of flow whether it is closed or in the top layer.
+ */
+.cn-menu {
+  display: inline-flex;
+  anchor-scope: --cn-menu;
+}
+
+.cn-menu-trigger {
+  anchor-name: --cn-menu;
+}
+
+/*
+ * The container. Its background and shadow are the floating surface's, composed
+ * through `.elevation-3` on the element, so this block states neither.
+ *
+ * The popover UA stylesheet centres the element in the viewport with `inset: 0`
+ * and automatic margins, and frames it with a border and padding. All four are
+ * released here, because the anchor decides the position and the surface decides
+ * the frame.
+ */
+.cn-menu-container {
+  position-anchor: --cn-menu;
+  inset: auto;
+  margin: 0;
+  padding-block: calc(var(--cn-grid) * 0.5);
+  padding-inline: 0;
+  border: none;
+  border-radius: var(--cn-border-radius);
+  /*
+   * Below the trigger and back toward its inline start, which is where a kebab at
+   * the end of a toolbar has room. The fallbacks flip the block axis, the inline
+   * axis, or both, so a trigger against any edge opens toward the viewport centre
+   * instead of past the edge.
+   */
+  position-area: block-end span-inline-start;
+  position-try-fallbacks:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
+  /* Past the rows it holds, so a one-word command still reads as a menu. */
+  min-inline-size: calc(var(--cn-grid) * 20);
+}
+
+/* Rows, in the order the consumer authored them. */
+.cn-menu-container:popover-open {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * An item row. The item is the anchor or button the consumer wrote, so this states
+ * everything a control needs and inherits nothing from the button presentation —
+ * styles/buttons.css excludes a menu item, which is what keeps a command in here
+ * from arriving as a pill.
+ *
+ * A link's underline is replaced rather than removed: the row's hover wash and
+ * focus ring are the feedback the actions capability requires in its place.
+ */
+.cn-menu-container :is(a[href], button) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--cn-grid);
+  block-size: calc(var(--cn-grid) * 5);
+  margin: 0;
+  padding-inline: var(--cn-grid);
+  border: none;
+  background: none;
+  color: var(--cn-on-surface);
+  font-family: inherit;
+  font-size: var(--cn-font-size-button);
+  font-weight: var(--cn-font-weight-button);
+  line-height: var(--cn-line-height-button);
+  letter-spacing: var(--cn-letter-spacing-button);
+  white-space: nowrap;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+
+  /*
+   * A row is a context that requires one icon size, so it sets the size tokens in
+   * its own scope and every icon inside resolves to the small step without reading
+   * its own selection. The small token itself is left alone, which is what keeps
+   * the substitution from cycling.
+   */
+  --cn-icon-size-xsmall: var(--cn-icon-size-small);
+  --cn-icon-size: var(--cn-icon-size-small);
+  --cn-icon-size-large: var(--cn-icon-size-small);
+  --cn-icon-size-xlarge: var(--cn-icon-size-small);
+}
+
+/* The leading icon keeps its square while a long label gives way. */
+.cn-menu-container :is(a[href], button) > :is(.cn-icon, .cn-loader) {
+  flex: none;
+}
+
+.cn-menu-container :is(a[href], button) > :is(span, .label) {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * The wash paints the row rather than an overlay over it: a row has no
+ * gradient to preserve.
+ */
+.cn-menu-container :is(a[href], button):hover {
+  background-color: var(--cn-hover);
+}
+
+.cn-menu-container :is(a[href], button):active {
+  background-color: var(--cn-active);
+}
+
+/*
+ * The ring turns inward. A row runs edge to edge, so an outset ring would sit
+ * outside the container's rounded corner instead of around the row.
+ */
+.cn-menu-container :is(a[href], button):focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: -2px;
+}
+
+/* Only a native button has a disabled state; a link is navigable or absent. */
+.cn-menu-container button:disabled {
+  opacity: var(--cn-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-menu-container :is(a[href], button) {
+    transition: none;
+  }
+}

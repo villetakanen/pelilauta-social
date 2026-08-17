@@ -14,6 +14,8 @@
 @import "./rail.css";
 @import "./content-containers.css";
 @import "./surface.css";
+/* After surface.css: a menu container composes the floating elevation. */
+@import "./menu.css";
 @import "./loader.css";
 @import "./identity.css";
 @import "./poster-credits.css";
