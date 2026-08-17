@@ -1,12 +1,11 @@
 ---
 import CnPoster from '@design-system/components/CnPoster.astro';
+import Site from '@layouts/Site.astro';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
-import SiteTray from '../../../components/server/SiteApp/SiteTray.astro';
 import ClocksApp from '../../../components/svelte/sites/ClocksApp.svelte';
 import ClocksFabs from '../../../components/svelte/sites/ClocksFabs.svelte';
-import PageWithTray from '../../../layouts/PageWithTray.astro';
 
 interface Props {
   siteKey: string;
@@ -36,13 +35,12 @@ if (!site) {
 }
 ---
 
-<PageWithTray
+<Site {site}
   title={title}
   description={site.description}
   image={image}
   noSharing={true}
 >
-  <SiteTray slot="app-tray" site={site} />
   <ClocksApp site={site} client:only="svelte" />
   <ClocksFabs site={site} client:only="svelte" slot="fab-tray" />
   {
@@ -50,7 +48,7 @@ if (!site) {
       <CnPoster src={site.backgroundURL} slot="app-background-poster" />
     )
   }
-</PageWithTray>
+</Site>
 
 <script>
   import "@11thdeg/cn-story-clock";

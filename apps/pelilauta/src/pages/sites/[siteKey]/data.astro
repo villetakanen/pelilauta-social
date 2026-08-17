@@ -1,9 +1,9 @@
 ---
+import Site from '@layouts/Site.astro';
+import { requireSiteOwner } from '@pelilauta/site/utils/requireSiteOwner';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
-import SiteTray from '../../../components/server/SiteApp/SiteTray.astro';
 import SiteDataApp from '../../../components/svelte/sites/data/SiteDataApp.svelte';
-import PageWithTray from '../../../layouts/PageWithTray.astro';
 
 const { siteKey } = Astro.params;
 
@@ -16,9 +16,11 @@ const site = SiteSchema.parse({
   ...toClientEntry(await siteResponse.json()),
   key: siteKey,
 });
+
+const denied = await requireSiteOwner(Astro, site);
+if (denied) return denied;
 ---
 
-<PageWithTray noSharing={true}>
-  <SiteTray slot="app-tray" site={site} />
+<Site {site} noSharing={true}>
   <SiteDataApp site={site} client:only="svelte" />
-</PageWithTray>
+</Site>

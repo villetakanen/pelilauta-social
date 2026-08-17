@@ -1,0 +1,256 @@
+---
+/**
+ * RailSpecimens — CnRail bounded in a frame the book can render inline.
+ *
+ * CnRail answers a container named `app-chrome`, per
+ * `specs/design-system/application-chrome/spec.md`: `@container app-chrome
+ * (...)`, matched against the nearest ancestor that establishes one. `.frame`
+ * below is that ancestor — `container: app-chrome / inline-size` — so a
+ * mounted rail reads the frame's own width for its band, rather than the
+ * window's, and a frame sized into a band renders that band live. The same
+ * declaration also makes the frame a containing block for a fixed-position
+ * descendant, alongside the `position: relative` it already carries for an
+ * absolutely positioned one: the rail's covering drawer stays inside the
+ * frame it is asked to open in, rather than escaping to the page.
+ *
+ * Band widths come from `packages/design-system/styles/units.css`'s
+ * breakpoint and rail-width tokens, not literals, and sit well inside each
+ * band rather than at its edge — a frame at exactly a boundary would read
+ * either side of it depending on rounding.
+ *
+ * Each pane renders its own light or dark scheme directly, rather than
+ * through `Composition`'s `themes` mode: that mode clones one server-rendered
+ * string for both schemes, which would duplicate the id CnRail puts on its
+ * checkboxes. A duplicate id is not idle here — `label for` would resolve to
+ * whichever element the browser meets first, so the two panes' triggers could
+ * end up driving one checkbox between them.
+ *
+ * `alignment` mounts a `CnAppBar` above the rail, in the same frame, so the
+ * bar's mark and the rail's trigger and entries render on the one axis and
+ * the one 56px rhythm the two components share — a fact no single component
+ * demonstrates on its own.
+ *
+ * Book: apps/design/src/content/components/cn-rail.mdx
+ */
+import CnAppBar from '../../components/CnAppBar.astro';
+import CnRail from '../../components/CnRail.astro';
+import Icon from '../../components/Icon.svelte';
+
+interface Props {
+  /** Which axis to render. */
+  group: 'canonical' | 'boxes' | 'alignment';
+}
+
+const { group } = Astro.props;
+
+const MODES = ['light', 'dark'] as const;
+---
+
+<div class="rail-specimen" data-group={group}>
+  {MODES.map((mode) => (
+    <div class="pane" data-mode={mode} style={`color-scheme: ${mode};`}>
+      {group === 'canonical' && (
+        <div class="frame expanded">
+          <CnRail id={`rail-canonical-${mode}`} label="Kirjaston sivut">
+            <a class="chrome-action" href="/haku" slot="header">
+              <Icon noun="search" decorative />
+              <span>Haku</span>
+            </a>
+
+            <a class="chrome-action" href="/" aria-current="page">
+              <Icon noun="fox" decorative />
+              <span>Etusivu</span>
+            </a>
+            <a class="chrome-action" href="/kirjasto">
+              <Icon noun="books" decorative />
+              <span>Kirjasto</span>
+            </a>
+
+            <a class="chrome-action" href="/ilmoitukset" slot="footer">
+              <Icon noun="send" decorative />
+              <span>Ilmoitukset</span>
+            </a>
+          </CnRail>
+        </div>
+      )}
+
+      {group === 'boxes' && (
+        <div class="comparison">
+          <div>
+            <p class="text-label">Header, body and footer</p>
+            <div class="frame collapsed">
+              <CnRail id={`rail-boxes-full-${mode}`} label="Kirjaston sivut">
+                <a class="chrome-action" href="/haku" slot="header">
+                  <Icon noun="search" decorative />
+                  <span>Haku</span>
+                </a>
+
+                <a class="chrome-action" href="/" aria-current="page">
+                  <Icon noun="fox" decorative />
+                  <span>Etusivu</span>
+                </a>
+                <a class="chrome-action" href="/kirjasto">
+                  <Icon noun="books" decorative />
+                  <span>Kirjasto</span>
+                </a>
+
+                <a class="chrome-action" href="/ilmoitukset" slot="footer">
+                  <Icon noun="send" decorative />
+                  <span>Ilmoitukset</span>
+                </a>
+              </CnRail>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-label">Body only</p>
+            <div class="frame collapsed">
+              <CnRail id={`rail-boxes-body-${mode}`} label="Kirjaston sivut">
+                <a class="chrome-action" href="/" aria-current="page">
+                  <Icon noun="fox" decorative />
+                  <span>Etusivu</span>
+                </a>
+                <a class="chrome-action" href="/kirjasto">
+                  <Icon noun="books" decorative />
+                  <span>Kirjasto</span>
+                </a>
+              </CnRail>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {group === 'alignment' && (
+        <div class="frame alignment">
+          <CnAppBar title="Kirjaston sivut" noun="fox" />
+          <CnRail id={`rail-alignment-${mode}`} label="Kirjaston sivut">
+            <a class="chrome-action" href="/haku" slot="header">
+              <Icon noun="search" decorative />
+              <span>Haku</span>
+            </a>
+            <a class="chrome-action" href="/" aria-current="page">
+              <Icon noun="fox" decorative />
+              <span>Etusivu</span>
+            </a>
+          </CnRail>
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .rail-specimen {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .pane {
+    display: grid;
+    row-gap: var(--cn-line);
+    padding: var(--cn-gap);
+    color: var(--cn-text);
+    background: var(--cn-background);
+  }
+
+  .comparison {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  /*
+   * Test rig, not a design-system value: tall enough to hold what the
+   * `canonical` and `boxes` specimens mount — a trigger, a header of one
+   * entry, a body of two, and a footer of one — with the footer flush to the
+   * frame's own end, and named for the band its width selects.
+   *
+   * The rail spans the frame's block size and its drawer scrolls what does
+   * not fit, so a frame shorter than this hides the footer rather than
+   * shrinking anything: a guessed height could clear it on one machine and
+   * clip it on another. Each term below is the rail's own formula, read from
+   * `packages/design-system/components/CnRail.astro`, not a measurement of
+   * this specimen's rendered output:
+   *
+   * - The rail begins where the application bar's target ends, not where the
+   *   frame does: `--cn-app-bar-height − (--cn-app-bar-height − 7 ×
+   *   --cn-grid) / 2`.
+   * - The trigger's own block size, `--cn-grid * 7`, carrying no margin of
+   *   its own.
+   * - The header, and the body that follows it, add no padding at their own
+   *   start — the trigger already separates them from what is above — so a
+   *   box holding one compact entry there is padding on one side plus the
+   *   entry's block size: `(--cn-width-rail-collapsed − 7 × --cn-grid) / 2 +
+   *   7 × --cn-grid`. The body's second entry adds one more entry's block
+   *   size, `7 × --cn-grid`, on top of that, with no further padding between
+   *   them.
+   * - The footer keeps padding on both sides, so it is
+   *   `--cn-width-rail-collapsed` exactly, plus its own line, `1px`.
+   *
+   * `--cn-gap` on top is headroom, not part of the sum: it keeps the fit
+   * short of exact, where a rounding difference between browsers could
+   * reintroduce the clip this is fixing.
+   */
+  .frame {
+    position: relative;
+    /*
+     * `container-type` (via the shorthand below) contains the rail's absolutely
+     * positioned box, but measured against a real covering drawer it does not
+     * also contain a fixed-positioned one — the transform does: it is its own,
+     * independent trigger for a fixed-position containing block.
+     */
+    transform: translateZ(0);
+    container: app-chrome / inline-size;
+    overflow: hidden;
+    max-inline-size: 100%;
+    block-size: calc(
+      var(--cn-app-bar-height) -
+        (var(--cn-app-bar-height) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 * 2 +
+      var(--cn-width-rail-collapsed) +
+      1px +
+      var(--cn-gap)
+    );
+    background: var(--cn-surface);
+    border: 1px solid var(--cn-border);
+  }
+
+  /*
+   * `alignment` mounts a header of one entry and a body of one, above which
+   * an application bar stands — shorter than the two specimens above, so it
+   * takes its own, smaller height rather than share theirs.
+   */
+  .frame.alignment {
+    inline-size: calc(var(--cn-breakpoint-tablet) + var(--cn-gap) * 4);
+    block-size: calc(
+      var(--cn-app-bar-height) -
+        (var(--cn-app-bar-height) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+      var(--cn-grid) * 7 +
+      var(--cn-gap)
+    );
+  }
+
+  /*
+   * Well inside the tablet band (--cn-breakpoint-small, exclusive, to
+   * --cn-breakpoint-tablet): the rail rests collapsed, entries compact.
+   */
+  .frame.collapsed {
+    inline-size: calc(var(--cn-breakpoint-small) + var(--cn-gap) * 8);
+  }
+
+  /*
+   * Past --cn-breakpoint-tablet, with room to spare: the rail rests
+   * expanded, its wide control checked by default, and its trigger toggles
+   * between the two widths without leaving this frame.
+   */
+  .frame.expanded {
+    inline-size: calc(var(--cn-breakpoint-tablet) + var(--cn-gap) * 4);
+  }
+</style>

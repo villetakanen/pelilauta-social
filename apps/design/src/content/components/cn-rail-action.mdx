@@ -1,0 +1,54 @@
+---
+title: CnRailAction
+description: "The chrome action that opens and closes the rail: a checkbox toggle per width band."
+order: 86
+runtime: static
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import CnRailActionSpecimens from '@design-system/books/specimens/CnRailActionSpecimens.astro'
+
+Use CnRailAction to give a reader the control that opens and closes a rail.
+
+## When to use it
+
+It is a [Chrome Action](/base/chrome-actions), and [CnRail](/components/cn-rail) mounts
+one, so an application never mounts it on its own. Mount it directly only where a
+composition needs the toggle without the drawer — a specimen, a test rig.
+
+Wherever it mounts, the ancestor chrome must establish the `app-chrome` container:
+that container's width decides which of the two toggles stands. Outside one, both
+stand at once.
+
+## Example
+
+The action in each band, at rest. Inside the tablet band the control rests unchecked
+and draws `=`; past the tablet breakpoint it rests checked and draws `|<`. Click
+either and watch the glyph turn — counter-clockwise whichever state it is leaving.
+
+<Composition caption="CnRailAction in the narrow and the wide band, in Light and Dark">
+  <CnRailActionSpecimens />
+</Composition>
+
+```mdx
+import CnRailAction from '@design-system/components/CnRailAction.astro'
+
+<CnRailAction id="docs-rail" label="Näytä valikko" />
+```
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | Required. Names both toggles, and is the reader's only clue — localise it. |
+| `id` | `string` | Distinguishes this action's toggles from another document's; the two render as `{id}-narrow` and `{id}-wide`, which is what a scrim's `for` reads. Defaults to `cn-rail`, so a page mounting more than one states its own. |
+
+## Accessibility
+
+It emits two checkbox toggles, each named by `label` and reporting its checked state;
+the container shows one per band and removes the other from view, from the tab order
+and from assistive technology. The triggers beside them are decorative and hidden from
+assistive technology — the toggle is the control. The consumer owes the localised
+label and the `app-chrome` container.

@@ -1,0 +1,63 @@
+---
+import AuthManager from '@components/svelte/AuthManager.svelte';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
+import BaseTail from '@pelilauta/components/server/BaseTail.astro';
+import SiteBar from '@pelilauta/site/chrome/SiteBar.astro';
+import SiteRail from '@pelilauta/site/chrome/SiteRail.astro';
+import type { Site } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+
+// A page taking this layout establishes the site itself, and states which
+// reader may see it.
+
+type Props = {
+  site: Site;
+  /** The document's title, as a search result shows it. Defaults to the site's name. */
+  title?: string;
+  description?: string;
+  image?: string;
+  noSharing?: boolean;
+};
+
+const { site, title, description, image, noSharing } = Astro.props;
+---
+
+<html lang="fi">
+  <BaseHead
+    title={title ?? site.name}
+    description={description ?? site.description}
+    {image}
+    {noSharing}
+  />
+  {/* The scope the tray's stylesheet reads; see Base.astro for why it sits here. */}
+  <body data-cn-rail-scope>
+    <CnAppChrome>
+      <SiteBar {site}>
+        <slot name="app-bar" />
+      </SiteBar>
+
+      <SiteRail {site} />
+      {
+        Astro.slots.has('fab-tray') && (
+          <nav class="fab-tray" aria-label={t("app:quickActions")}>
+            <slot name="fab-tray" />
+          </nav>
+        )
+      }
+    </CnAppChrome>
+
+    <main class="app-main">
+      <slot />
+      <AppFooter>
+        <slot name="app-footer-credits" slot="app-footer-credits" />
+      </AppFooter>
+    </main>
+
+    <slot name="app-background-poster" />
+    <AuthManager client:only="svelte" />
+
+    <BaseTail />
+  </body>
+</html>

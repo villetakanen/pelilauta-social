@@ -9,8 +9,6 @@
  * The host offers its full content-box width. A container that wants the readable
  * measure asks for it with `content-prose`; a container that wants the whole width
  * simply takes it.
- *
- * Spec: specs/design-system/content-container-layouts/spec.md
  */
 
 .app-main {
@@ -19,6 +17,12 @@
    * container's own width is the width it was offered, with nothing to opt out of.
    */
   padding-inline: var(--cn-gap);
+
+  /*
+   * Chrome is fixed and paints over the document, so the first container clears
+   * the application bar here rather than in every application's shell.
+   */
+  padding-block-start: var(--cn-app-bar-height);
 
   /*
    * A host answers its containers' width queries, and a container asks its nearest

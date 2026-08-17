@@ -4,14 +4,11 @@
  * A FAB is a native `button.fab`, an `a.fab[href]` or an `a.button.fab[href]`; the
  * tray is a `nav.fab-tray`, of which a composition has one. The tray places, the FAB
  * does not: a control carries its geometry and states and never its own offsets.
- *
- * Specs: specs/design-system/actions/spec.md (the control),
- * specs/design-system/fab-tray/spec.md (the tray).
  */
 
 /*
  * The control. `flex: 0 0 auto` is stated because a FAB commonly sits in a flex row
- * that would otherwise stretch it, and the spec fixes its geometry against growth.
+ * that would otherwise stretch it.
  */
 button.fab,
 a.fab[href],
@@ -50,7 +47,7 @@ a.button.fab[href] {
     box-shadow var(--_elevation-duration) var(--cn-easing-ui),
     opacity var(--cn-duration-ui) var(--cn-easing-ui);
 
-  /* The FAB is an icon-size context, set the way the cn-icon spec names it. */
+  /* The FAB is an icon-size context: every icon inside resolves to the small step. */
   --cn-icon-size-xsmall: var(--cn-icon-size-small);
   --cn-icon-size: var(--cn-icon-size-small);
   --cn-icon-size-large: var(--cn-icon-size-small);
@@ -98,7 +95,7 @@ a.button.fab[href] {
 
 /* Only a native FAB has a disabled state; an anchor is navigable or absent. */
 button.fab:disabled {
-  opacity: 0.5;
+  opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }

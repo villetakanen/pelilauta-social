@@ -16,7 +16,7 @@ import { z } from 'astro/zod';
  *});
  */
 const docs = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/docs' }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/docs' }),
   schema: z.object({
     name: z.string(),
     shortname: z.string().optional(),

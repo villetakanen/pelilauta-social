@@ -2,10 +2,14 @@
 /**
  * Book.astro — the shared document shell for every design-system book.
  *
- * Owns <html>, <head>, the skip link, the masthead, the navigation and the
- * footer, and renders a book's <h1> from its frontmatter title.
+ * Renders <html>, <head>, the skip link, the application bar, the navigation
+ * and the footer, and a book's <h1> from its frontmatter title.
  */
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
+import CnRail from '@design-system/components/CnRail.astro';
+import CnShareAction from '@design-system/components/CnShareAction.svelte';
 import '@design-system/styles/ds.css';
 // Prototype-age scaffolding: the index page's editorial vocabulary, and the table
 // and link rules no design-system stylesheet owns yet.
@@ -73,24 +77,16 @@ const context = group ? groupLabel(group) : 'Index';
 
     <a class="skip-link" href="#content">Skip to content</a>
 
-    <div class="shell">
-      <header class="masthead">
-        <a class="wordmark" href="/">Pelilauta DS</a>
-        <span class="context">{context}</span>
+    <div class="shell" data-cn-rail-scope>
+      <CnAppChrome>
+        <CnAppBar title={context} shortTitle={context}>
         <ThemeSwitch />
-        <input
-          class="nav-toggle"
-          id="nav-toggle"
-          type="checkbox"
-          aria-label="Show the book index"
-        />
-        <label class="nav-toggle-label" for="nav-toggle">
-          <span class="nav-toggle-open">Browse</span>
-          <span class="nav-toggle-close">Close</span>
-        </label>
-      </header>
-
-      <DocsNav />
+        <CnShareAction client:load label="Share this page" />
+        </CnAppBar>
+        <CnRail label="Design system books">
+          <DocsNav />
+        </CnRail>
+      </CnAppChrome>
 
       <main class="book app-main" id="content">
         {prose ? (
@@ -132,98 +128,10 @@ const context = group ? groupLabel(group) : 'Index';
         outline-offset: -4px;
       }
 
-      /* Editorial index column beside the book, collapsing under 60rem. */
-      .shell {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas: 'masthead' 'nav' 'book';
-      }
-      .masthead { grid-area: masthead; }
-      .book { grid-area: book; }
 
-      .masthead {
-        position: sticky;
-        z-index: 2;
-        inset-block-start: 0;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem clamp(1.25rem, 4vw, 3rem);
-        color: var(--cn-text-low);
-        background: var(--cn-surface);
-        border-block-end: 1px solid var(--cn-border);
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-      .wordmark {
-        flex: none;
-        color: inherit;
-      }
       /* Placement is the shell's concern; the switch styles its own contents. */
-      .masthead :global(.cn-theme-switch-scope) {
+      :global(.cn-app-bar .actions) > :global(.cn-theme-switch-scope) {
         flex: none;
-      }
-
-      .context {
-        min-inline-size: 0;
-        margin-inline-end: auto;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      /* Visually hidden but focusable: `hidden` would remove the only
-         keyboard route into the drawer. */
-      .nav-toggle {
-        position: absolute;
-        inline-size: 1px;
-        block-size: 1px;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        clip-path: inset(50%);
-        overflow: hidden;
-        white-space: nowrap;
-      }
-      .nav-toggle-label {
-        flex: none;
-        padding: 0.4rem 0.8rem;
-        color: var(--cn-text-high);
-        border: 1px solid var(--cn-border);
-        border-radius: 999px;
-        cursor: pointer;
-        font: inherit;
-        letter-spacing: inherit;
-        text-transform: inherit;
-      }
-      .shell:has(.nav-toggle:focus-visible) .nav-toggle-label {
-        outline: 2px solid var(--cn-focus-ring);
-        outline-offset: 2px;
-      }
-      .nav-toggle-close { display: none; }
-      .shell:has(.nav-toggle:checked) .nav-toggle-open { display: none; }
-      .shell:has(.nav-toggle:checked) .nav-toggle-close { display: inline; }
-
-      /* Nav placement and disclosure are the shell's concern: it owns the
-         toggle. DocsNav styles only its own contents. */
-      .shell :global(.docs-nav) {
-        grid-area: nav;
-        padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 2rem);
-        background: var(--cn-surface-1);
-        border-block-end: 1px solid var(--cn-border);
-      }
-
-      /* While a poster paints, the index cedes its surface, as the rail does in
-         apps/pelilauta. Without this the poster would show only in the gutters
-         and the page would misrepresent what mounting one looks like.
-
-         The masthead keeps its own surface: it is sticky, so ceding it would
-         scroll the book's own prose through it. An application bar solves that
-         with a legibility halo this shell does not have. */
-      body:has(#cn-poster) .shell :global(.docs-nav) {
-        background: color-mix(in oklch, var(--cn-surface-1), transparent 66%);
       }
 
       .site-footer {
@@ -243,42 +151,6 @@ const context = group ? groupLabel(group) : 'Index';
         .site-footer {
           align-items: flex-start;
           flex-direction: column;
-        }
-      }
-
-      /* Mobile: drawer closed until the disclosure is checked. visibility, not
-         transform alone, keeps closed links out of the tab order. */
-      @media (max-width: 59.99rem) {
-        .shell :global(.docs-nav) {
-          visibility: hidden;
-          block-size: 0;
-          padding-block: 0;
-          border-block-end: 0;
-          overflow: hidden;
-        }
-        .shell:has(.nav-toggle:checked) :global(.docs-nav) {
-          visibility: visible;
-          block-size: auto;
-          padding-block: clamp(1.5rem, 4vw, 2.5rem);
-          border-block-end: 1px solid var(--cn-border);
-        }
-      }
-
-      @media (min-width: 60rem) {
-        .shell {
-          grid-template-columns: 18rem minmax(0, 1fr);
-          grid-template-areas:
-            'masthead masthead'
-            'nav      book';
-        }
-        .nav-toggle-label { display: none; }
-        .shell :global(.docs-nav) {
-          position: sticky;
-          inset-block-start: 0;
-          align-self: start;
-          min-block-size: 100vh;
-          border-block-end: 0;
-          border-inline-end: 1px solid var(--cn-border);
         }
       }
     </style>

@@ -35,7 +35,6 @@ async function onsubmit(e: Event) {
 <WithAuth {allow}>
   <div class="content-prose">
     <section>
-      <h1 class="downscaled">{t('threads:confirmDelete.title')}</h1>
       <p>{t('threads:discussion.confirmDelete.message')}</p>
 
       <form class="toolbar" {onsubmit}>

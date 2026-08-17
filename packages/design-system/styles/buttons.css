@@ -4,8 +4,6 @@
  * A command is a `button`; navigation that looks like a button is an
  * `a.button[href]`. Presentation never changes that choice, so every rule here
  * selects the element the consumer already picked.
- *
- * Spec: specs/design-system/actions/spec.md
  */
 :root {
   /*
@@ -21,11 +19,13 @@
 }
 
 /*
- * Geometry, type and the interaction frame. `.fab` is excluded throughout: a
- * floating action button is its own capability and still takes Cyan's rules.
+ * Geometry, type and the interaction frame. `.fab` and `.chrome-action` are
+ * excluded throughout: a floating action button and a chrome action are each
+ * their own capability with their own geometry and surface, so neither
+ * inherits the button's gradient, elevation or hover wash.
  */
-button:not(.fab),
-a.button[href]:not(.fab) {
+button:not(.fab, .chrome-action),
+a.button[href]:not(.fab, .chrome-action) {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -70,7 +70,7 @@ a.button[href]:not(.fab) {
   /*
    * The button is a context that requires one icon size, so it sets the size
    * tokens in its own scope and every icon inside resolves to the small step
-   * without reading its own selection (cn-icon spec). The small token itself is
+   * without reading its own selection. The small token itself is
    * left alone, which is what keeps the substitution from cycling.
    */
   --cn-icon-size-xsmall: var(--cn-icon-size-small);
@@ -85,7 +85,9 @@ a.button[href]:not(.fab) {
  * load order, so a legacy ancestor cannot recolour a button that did not ask
  * for the alternate treatment.
  */
-:is(button, a.button[href]):not(.fab):not(.cta):not(.text):not(.secondary) {
+:is(button, a.button[href]):not(.fab, .chrome-action):not(.cta):not(.text):not(
+    .secondary
+  ) {
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
@@ -95,7 +97,7 @@ a.button[href]:not(.fab) {
   color: var(--cn-on-button);
 }
 
-:is(button, a.button[href]).cta:not(.fab) {
+:is(button, a.button[href]).cta:not(.fab, .chrome-action) {
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
@@ -105,15 +107,15 @@ a.button[href]:not(.fab) {
   color: var(--cn-on-button-cta);
 }
 
-:is(button, a.button[href]).text:not(.fab) {
+:is(button, a.button[href]).text:not(.fab, .chrome-action) {
   background-image: none;
-  background-color: color-mix(in oklab, var(--cn-button) 33%, transparent);
+  background-color: var(--cn-button-text);
   color: var(--cn-on-surface);
   box-shadow: none;
 }
 
 /* v20's alternate chroma treatment, and only where the button itself asks. */
-:is(button, a.button[href]).secondary:not(.fab) {
+:is(button, a.button[href]).secondary:not(.fab, .chrome-action) {
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
@@ -127,8 +129,8 @@ a.button[href]:not(.fab) {
  * Hover and active wash over the variant's own surface, so the foreground keeps
  * its identity: an overlay rather than a brightness filter.
  */
-button:not(.fab)::after,
-a.button[href]:not(.fab)::after {
+button:not(.fab, .chrome-action)::after,
+a.button[href]:not(.fab, .chrome-action)::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -137,25 +139,25 @@ a.button[href]:not(.fab)::after {
   transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
 }
 
-button:not(.fab):hover::after,
-a.button[href]:not(.fab):hover::after {
+button:not(.fab, .chrome-action):hover::after,
+a.button[href]:not(.fab, .chrome-action):hover::after {
   background-color: var(--cn-hover);
   transition-timing-function: var(--_enter-easing);
 }
 
-button:not(.fab):active::after,
-a.button[href]:not(.fab):active::after {
+button:not(.fab, .chrome-action):active::after,
+a.button[href]:not(.fab, .chrome-action):active::after {
   background-color: var(--cn-active);
 }
 
-button:not(.fab):hover,
-a.button[href]:not(.fab):hover {
+button:not(.fab, .chrome-action):hover,
+a.button[href]:not(.fab, .chrome-action):hover {
   box-shadow: var(--cn-shadow-button-hover);
   transition-timing-function: var(--_enter-easing);
 }
 
-button:not(.fab):focus-visible,
-a.button[href]:not(.fab):focus-visible {
+button:not(.fab, .chrome-action):focus-visible,
+a.button[href]:not(.fab, .chrome-action):focus-visible {
   outline: 2px solid var(--cn-focus-ring);
   outline-offset: 2px;
 }
@@ -165,8 +167,8 @@ a.button[href]:not(.fab):focus-visible {
  * or absent, so no `disabled`, `aria-disabled` or `.disabled` presentation is
  * published for an anchor.
  */
-button:not(.fab):disabled {
-  opacity: 0.5;
+button:not(.fab, .chrome-action):disabled {
+  opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -175,7 +177,7 @@ button:not(.fab):disabled {
  * An icon or an inline loader on its own makes the control a circle: equal
  * inline and block size, and a radius already half of it.
  */
-:is(button, a.button[href]):not(.fab):has(
+:is(button, a.button[href]):not(.fab, .chrome-action):has(
     > :is(.cn-icon, .cn-loader):only-child
   ) {
   inline-size: var(--cn-button-size);
@@ -183,7 +185,7 @@ button:not(.fab):disabled {
 }
 
 /* A leading icon or loader sits closer to the edge than the label does. */
-:is(button, a.button[href]):not(.fab)
+:is(button, a.button[href]):not(.fab, .chrome-action)
   > :is(.cn-icon, .cn-loader):first-child:not(:only-child) {
   margin-inline-start: calc(-1 * var(--cn-grid));
 }
@@ -192,11 +194,12 @@ button:not(.fab):disabled {
  * Truncation belongs to the label, not to the button: an icon or loader keeps
  * its square while the text gives way.
  */
-:is(button, a.button[href]):not(.fab) > :is(.cn-icon, .cn-loader) {
+:is(button, a.button[href]):not(.fab, .chrome-action)
+  > :is(.cn-icon, .cn-loader) {
   flex: none;
 }
 
-:is(button, a.button[href]):not(.fab) > :is(span, .label) {
+:is(button, a.button[href]):not(.fab, .chrome-action) > :is(span, .label) {
   min-inline-size: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -204,10 +207,10 @@ button:not(.fab):disabled {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  button:not(.fab),
-  a.button[href]:not(.fab),
-  button:not(.fab)::after,
-  a.button[href]:not(.fab)::after {
+  button:not(.fab, .chrome-action),
+  a.button[href]:not(.fab, .chrome-action),
+  button:not(.fab, .chrome-action)::after,
+  a.button[href]:not(.fab, .chrome-action)::after {
     transition: none;
   }
 }

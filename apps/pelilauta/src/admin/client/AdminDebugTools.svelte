@@ -1,0 +1,49 @@
+<script lang="ts">
+/**
+ * The checks an administrator runs against the running service: whether an
+ * authenticated server call reaches the API, whether an unauthenticated one is
+ * refused, and whether an error reaches Sentry.
+ *
+ * v18 kept these in the administration tray, beside its navigation. They are
+ * tools rather than places, so they stand on administration's front page.
+ */
+import Icon from '@design-system/components/Icon.svelte';
+import SentryTestButton from '@pelilauta/components/svelte/admin/SentryTestButton.svelte';
+import { authedPost } from 'src/firebase/client/apiClient';
+import { logDebug } from 'src/utils/logHelpers';
+
+async function testSSRAuth() {
+  const response = await authedPost('/api/bsky/skeet', {
+    text: 'Hello world',
+  });
+  logDebug(`SSR Auth response: ${response.status}`);
+}
+
+async function testSSRNoAuth() {
+  const response = await fetch('/api/bsky/skeet', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: 'Hello world!',
+      linkUrl: 'https://pelilauta.social',
+      linkTitle: 'Pelilauta',
+      linkDescription: 'Pelilauta test post',
+    }),
+  });
+  logDebug(`SSR Auth response: ${response.status}`);
+}
+</script>
+
+<div class="flex flex-wrap">
+  <button type="button" class="text" onclick={testSSRAuth}>
+    <Icon noun="adventurer" decorative />
+    <span>Test SSR Auth</span>
+  </button>
+  <button type="button" class="text" onclick={testSSRNoAuth}>
+    <Icon noun="adventurer" decorative />
+    <span>Test SSR No Auth</span>
+  </button>
+  <SentryTestButton />
+</div>

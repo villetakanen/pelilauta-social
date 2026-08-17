@@ -24,10 +24,18 @@ Both themes share identical semantic tokens and elevation tiers.
 We structure colour declarations in three decoupled tiers:
 1. **Reference scales:** Primitive OKLCH palette ramps defining available tones.
 2. **Semantic roles:** Theme-aware tokens mapping reference tones to UI intent (`light-dark()`).
-3. **Component mappings:** UI components consume semantic roles exclusively.
+3. **Component mappings:** UI components consume semantic roles, and reach the palette
+   only for decoration.
 
 This separation allows reference palettes to be tuned without breaking component styling.
 Complete token definitions are published in [Colour tokens](/tokens/color).
+
+Overlays are roles as much as opaque surfaces are. A translucent surface, a wash and a
+scrim each say something about the page, so each is named and themed with the rest.
+
+Decoration is the exception. Where a colour states nothing — a gradient's stops, the
+flourish the theme switch throws — a component takes a palette step and needs no role for
+it.
 
 ## Perceptual OKLCH scales
 

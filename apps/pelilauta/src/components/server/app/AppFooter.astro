@@ -1,6 +1,8 @@
 ---
 import Icon from '@design-system/components/Icon.svelte';
-import { version } from 'package.json';
+// The release the reader is on is the repository's, which the beta version
+// carries and CI tags. This app's own package version is v18's and stands still.
+import { version } from '@root/package.json';
 import { t } from 'src/utils/i18n';
 import ActiveUsersWidget from './ActiveUsersWidget.astro';
 ---

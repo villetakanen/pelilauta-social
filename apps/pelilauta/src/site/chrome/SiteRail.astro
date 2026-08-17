@@ -1,0 +1,90 @@
+---
+/**
+ * The site application's rail: the design system's boxes, what stands in them
+ * here.
+ *
+ * What the site itself carries is known to the server and renders with the
+ * page. What depends on who is reading — the site player tools and the site
+ * owner tools — arrives as an island.
+ */
+import CnRail from '@design-system/components/CnRail.astro';
+import Icon from '@design-system/components/Icon.svelte';
+import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
+import SiteToolEntries from '@pelilauta/site/client/SiteToolEntries.svelte';
+import type { Site } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { systemToNoun } from 'src/utils/schemaHelpers';
+
+interface Props {
+  site: Site;
+}
+
+const { site } = Astro.props;
+const path = Astro.url.pathname;
+const root = `/sites/${site.key}`;
+
+/** What a chrome action carries when it is where the reader is, and when it is not. */
+function current(here: boolean) {
+  return here ? 'page' : undefined;
+}
+---
+
+<CnRail label={site.name}>
+  {/* The bar carries the site's identity above the small breakpoint; below it, this does. */}
+  <a
+    class="chrome-action only-on-small"
+    href={root}
+    aria-current={current(path === root)}
+  >
+    <Icon noun={systemToNoun(site.system)} decorative />
+    <span>{site.name}</span>
+  </a>
+
+  <a
+    class="chrome-action"
+    href={`${root}/toc`}
+    aria-current={current(path.startsWith(`${root}/toc`))}
+  >
+    <Icon noun="books" decorative />
+    <span>{t("site:toc.title")}</span>
+  </a>
+
+  <a
+    class="chrome-action"
+    href={`${root}/assets`}
+    aria-current={current(path.startsWith(`${root}/assets`))}
+  >
+    <Icon noun="assets" decorative />
+    <span>{t("site:assets.title")}</span>
+  </a>
+
+  {
+    site.useClocks && (
+      <a
+        class="chrome-action"
+        href={`${root}/clocks`}
+        aria-current={current(path === `${root}/clocks`)}
+      >
+        <Icon noun="clock" decorative />
+        <span>{t("site:clocks.title")}</span>
+      </a>
+    )
+  }
+
+  <SiteToolEntries client:only="svelte" {site} {path} />
+
+  {/*
+    The way to Pelilauta stands here because this application's bar names the
+    site instead. The reader's inbox and identity stand beside it, as they do
+    in every rail.
+  */}
+  <a class="chrome-action" href="/" slot="footer">
+    <Icon noun="fox" decorative />
+    <span>{t("app:shortname")}</span>
+  </a>
+
+  <InboxNavigationButton client:only="svelte" slot="footer" />
+
+  <SettingNavigationButton client:only="svelte" slot="footer" />
+</CnRail>

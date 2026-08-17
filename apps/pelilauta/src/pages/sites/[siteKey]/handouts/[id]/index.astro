@@ -1,12 +1,11 @@
 ---
 import CnPoster from '@design-system/components/CnPoster.astro';
+import Site from '@layouts/Site.astro';
 import { handoutFrom } from 'src/schemas/HandoutSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import HandoutApp from '../../../../../components/server/SiteApp/HandoutApp.astro';
-import SiteTray from '../../../../../components/server/SiteApp/SiteTray.astro';
 import HandoutFabs from '../../../../../components/svelte/sites/handouts/HandoutFabs.svelte';
-import PageWithTray from '../../../../../layouts/PageWithTray.astro';
 
 interface Props {
   siteKey: string;
@@ -39,10 +38,9 @@ const handout = handoutFrom(
 );
 ---
 
-<PageWithTray
+<Site {site}
   title={handout.title}
   description={site.description}
-  noun="books"
   image={site.avatarURL}
 >
   <HandoutApp handout={handout} site={site} />
@@ -52,10 +50,9 @@ const handout = handoutFrom(
     slot="fab-tray"
     client:only="svelte"
   />
-  <SiteTray slot="app-tray" site={site} />
   {
     site.backgroundURL && (
       <CnPoster src={site.backgroundURL} slot="app-background-poster" />
     )
   }
-</PageWithTray>
+</Site>

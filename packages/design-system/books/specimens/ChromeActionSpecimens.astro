@@ -1,0 +1,580 @@
+---
+/**
+ * ChromeActionSpecimens — real chrome actions, one group per axis.
+ *
+ * The elements are the ones a consumer writes: a native `button` for a
+ * command, an `a.chrome-action[href]` for a destination. Nothing here styles
+ * the target, the state surface, the icon or the label; every rule comes from
+ * styles/chrome-actions.css.
+ *
+ * Hover, active and keyboard focus cannot be held at once by a pointer, so
+ * this specimen extracts, from the shipped stylesheet, only the rules whose
+ * selector names one of those pseudo-classes, scopes and remaps just those
+ * to a documentation-only `data-chrome-state` attribute — the technique
+ * `LinkStateTable.astro` uses too, but on a copy of the whole file. Copying
+ * the whole file would also re-inject the resting rule
+ * (`button.chrome-action::before { background-color: transparent }`), which
+ * ties the shipped hover and active rules at specificity; source order would
+ * then let the copy's resting rule beat a real hover or active every time.
+ * Extracting only the state rules leaves every other rule — geometry, the
+ * resting surface, the label, the container query — to the shipped
+ * stylesheet already loaded by the design site, so a forced row still shows
+ * its state and a real pointer still works. The disabled row needs no such
+ * mapping — its attributes are real.
+ *
+ * Book: apps/design/src/content/base/chrome-actions.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+import chromeActionsSource from '../../styles/chrome-actions.css?raw';
+
+interface Props {
+  /** Which axis to render. */
+  group: 'pair' | 'states' | 'truncation' | 'current';
+  /** The presentation the wrapper declares via --cn-chrome-presentation. */
+  presentation: 'compact' | 'labelled';
+}
+
+const { group, presentation } = Astro.props;
+
+const BUTTON_SELECTOR = 'button.chrome-action';
+const ANCHOR_SELECTOR = 'a.chrome-action[href]';
+
+if (
+  !chromeActionsSource.includes(BUTTON_SELECTOR) ||
+  !chromeActionsSource.includes(ANCHOR_SELECTOR)
+) {
+  throw new Error(
+    'ChromeActionSpecimens could not find the chrome-action selectors.',
+  );
+}
+
+const STATES = [
+  { name: 'Rest', attribute: undefined },
+  { name: 'Hover', attribute: 'hover' },
+  { name: 'Active', attribute: 'active' },
+  { name: 'Keyboard focus', attribute: 'focus-visible' },
+] as const;
+
+/**
+ * The real width each presentation's container offers in the shipped
+ * application chrome — a rail for compact, a tray for labelled — so the
+ * labelled specimen is shown at the width it will actually have, not an
+ * arbitrary one that happens to fit the page. Test rig values, not
+ * design-system values: v20 states both, in grid steps, at
+ * `../pelilauta-20/packages/cyan/src/tokens/units.css:27` (`--cn-width-rail`,
+ * 10 × grid) and `:29` (`--cn-width-tray`, 42 × grid).
+ *
+ * Deliberately not clamped to the panel's own width: shrinking a labelled
+ * target below its content's min-content reproduces the defect this book is
+ * fixing, just from a different cause — the label and Icon stop fitting the
+ * rig, rather than the rig being the wrong size to begin with. A narrower
+ * rig would show a compressed, unrealistic tray, which is the dishonesty
+ * this fix was asked to remove, not a variant of it to keep. Below a tray's
+ * width, `.chrome-action-specimen`'s `overflow-x: auto` further down lets
+ * the rig scroll into view at its real size instead.
+ */
+const RIG_INLINE_SIZE = {
+  compact: 'calc(var(--cn-grid) * 10)', // rail: 80px
+  labelled: 'calc(var(--cn-grid) * 42)', // tray: 336px
+} as const;
+
+const STATE_PSEUDOS = STATES.filter((state) => state.attribute).map(
+  (state) => `:${state.attribute}`,
+);
+
+// Extract only the top-level rules whose selector names one of the mapped
+// pseudo-classes — see the header comment for why the whole file cannot be
+// copied. Comments are stripped first: a comment's prose sits outside any
+// rule, so left in place it would be swept into the selector text of
+// whichever rule follows it. A simple "non-brace text, then a brace pair"
+// matcher is then enough: it also surfaces the container-query and
+// reduced-motion rules nested one level deeper, but none of those name a
+// mapped pseudo-class, so the filter below drops them.
+const sourceWithoutComments = chromeActionsSource.replace(
+  /\/\*[\s\S]*?\*\//g,
+  '',
+);
+const ruleBlocks = sourceWithoutComments.match(/[^{}]+\{[^{}]*\}/g) ?? [];
+const stateBlocks = ruleBlocks.filter((block) => {
+  const selector = block.slice(0, block.indexOf('{'));
+  return STATE_PSEUDOS.some((pseudo) => selector.includes(pseudo));
+});
+
+for (const pseudo of STATE_PSEUDOS) {
+  const hasRule = stateBlocks.some((block) =>
+    block.slice(0, block.indexOf('{')).includes(pseudo),
+  );
+  if (!hasRule) {
+    throw new Error(
+      `ChromeActionSpecimens could not find a rule for ${pseudo}.`,
+    );
+  }
+}
+
+// Scope the extracted rules to this specimen, so they never double up on
+// the shipped stylesheet already loaded by the design site.
+let specimenSource = stateBlocks
+  .join('\n')
+  .replaceAll(BUTTON_SELECTOR, `.chrome-action-specimen ${BUTTON_SELECTOR}`)
+  .replaceAll(ANCHOR_SELECTOR, `.chrome-action-specimen ${ANCHOR_SELECTOR}`);
+
+for (const pseudo of STATE_PSEUDOS) {
+  specimenSource = specimenSource.replaceAll(
+    pseudo,
+    `[data-chrome-state="${pseudo.slice(1)}"]`,
+  );
+}
+---
+
+<div class="chrome-action-specimen" data-group={group}>
+  {group === 'pair' && (
+    <div class="row">
+      <div
+        class="slot"
+        style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+      >
+        <button type="button" class="chrome-action">
+          <Icon noun="send" decorative />
+          <span>Send</span>
+        </button>
+      </div>
+      <div
+        class="slot"
+        style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+      >
+        <a class="chrome-action" href="/base/chrome-actions">
+          <Icon noun="arrow-left" decorative />
+          <span>Back</span>
+        </a>
+      </div>
+    </div>
+  )}
+
+  {group === 'truncation' && presentation === 'labelled' && (
+    // A destination label plausible for a tabletop community's tray, long
+    // enough to overrun the tray rig at any root font size, so the ellipsis
+    // it produces is real rather than staged.
+    <div class="row">
+      <div
+        class="slot"
+        style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+      >
+        <a class="chrome-action" href="/base/chrome-actions">
+          <Icon noun="clock" decorative />
+          <span>Pelinjohtajan ilmoitukset, tapahtumat ja aikataulumuutokset</span>
+        </a>
+      </div>
+    </div>
+  )}
+
+  {group === 'current' && (
+    /*
+     * The current destination against a non-current neighbour, through every
+     * transient state, then the two cases that indicate nothing.
+     *
+     * `aria-current` needs no forcing — it is a real attribute, set here as a
+     * consumer sets it, and the indicator rule that answers it names no
+     * pseudo-class, so it is not among the rules extracted above and comes
+     * from the shipped stylesheet like the geometry does. The transient states
+     * are still forced, so each row shows the wash composing over the
+     * indicator rather than replacing it.
+     *
+     * The current and non-current rigs stand side by side in compact, where two
+     * rail widths fit a themed panel, and stack as one list per column in
+     * labelled, where two tray widths do not — the same constraint, and the
+     * same answer, as the states axis above.
+     *
+     * The two exclusions sit outside the state grid rather than as a last row
+     * in it. They are not a state, and their labels are long enough that a row
+     * header holding them widens the first column until the grid's own rigs are
+     * pushed out of the panel.
+     */
+    <>
+      {presentation === 'compact' ? (
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">State</th>
+              <th scope="col">Current</th>
+              <th scope="col">Not current</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STATES.map((state) => (
+              <tr>
+                <th scope="row">{state.name}</th>
+                <td>
+                  <div
+                    class="slot"
+                    style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+                  >
+                    <a
+                      class="chrome-action"
+                      href="/base/chrome-actions"
+                      aria-current="page"
+                      data-chrome-state={state.attribute}
+                    >
+                      <Icon noun="discussion" decorative />
+                      <span>Keskustelut</span>
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="slot"
+                    style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+                  >
+                    <a
+                      class="chrome-action"
+                      href="/base/chrome-actions"
+                      data-chrome-state={state.attribute}
+                    >
+                      <Icon noun="books" decorative />
+                      <span>Kirjasto</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        [
+          { heading: 'Current', current: true },
+          { heading: 'Not current', current: false },
+        ].map((column) => (
+          <>
+            <p class="text-label">{column.heading}</p>
+            <dl class="state-list">
+              {STATES.map((state) => (
+                <>
+                  <dt>{state.name}</dt>
+                  <dd>
+                    <div
+                      class="slot"
+                      style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+                    >
+                      <a
+                        class="chrome-action"
+                        href="/base/chrome-actions"
+                        aria-current={column.current ? 'page' : undefined}
+                        data-chrome-state={state.attribute}
+                      >
+                        <Icon
+                          noun={column.current ? 'discussion' : 'books'}
+                          decorative
+                        />
+                        <span>{column.current ? 'Keskustelut' : 'Kirjasto'}</span>
+                      </a>
+                    </div>
+                  </dd>
+                </>
+              ))}
+            </dl>
+          </>
+        ))
+      )}
+
+      <p class="text-label">Indicating nothing</p>
+      <dl class="state-list">
+        {/* Row labels stay short: `.state-list`'s first track is `max-content`,
+            so a sentence here widens it until the rig leaves the panel. */}
+        <dt><code>"false"</code></dt>
+        <dd>
+          <div
+            class="slot"
+            style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+          >
+            <a
+              class="chrome-action"
+              href="/base/chrome-actions"
+              aria-current="false"
+            >
+              <Icon noun="books" decorative />
+              <span>Kirjasto</span>
+            </a>
+          </div>
+        </dd>
+        <dt>Button</dt>
+        <dd>
+          <div
+            class="slot"
+            style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+          >
+            <button type="button" class="chrome-action" aria-current="page">
+              <Icon noun="send" decorative />
+              <span>Send</span>
+            </button>
+          </div>
+        </dd>
+      </dl>
+    </>
+  )}
+
+  {group === 'states' && presentation === 'compact' && (
+    // A rail-width rig fits a button cell and an anchor cell side by side,
+    // so the table stays the compact axis's natural shape: one row per
+    // state, one column per role.
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">State</th>
+          <th scope="col">Button</th>
+          <th scope="col">Anchor</th>
+        </tr>
+      </thead>
+      <tbody>
+        {STATES.map((state) => (
+          <tr>
+            <th scope="row">{state.name}</th>
+            <td>
+              <div
+                class="slot"
+                style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+              >
+                <button
+                  type="button"
+                  class="chrome-action"
+                  data-chrome-state={state.attribute}
+                >
+                  <Icon noun="send" decorative />
+                  <span>Send</span>
+                </button>
+              </div>
+            </td>
+            <td>
+              <div
+                class="slot"
+                style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+              >
+                <a
+                  class="chrome-action"
+                  href="/base/chrome-actions"
+                  data-chrome-state={state.attribute}
+                >
+                  <Icon noun="arrow-left" decorative />
+                  <span>Back</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+        ))}
+        <tr>
+          <th scope="row">Disabled</th>
+          <td>
+            <div
+              class="slot"
+              style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+            >
+              <button type="button" class="chrome-action" disabled>
+                <Icon noun="send" decorative />
+                <span>Send</span>
+              </button>
+            </div>
+          </td>
+          <td>
+            <div
+              class="slot"
+              style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+            >
+              <a
+                class="chrome-action"
+                href="/base/chrome-actions"
+                aria-disabled="true"
+                tabindex="-1"
+              >
+                <Icon noun="arrow-left" decorative />
+                <span>Back</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  )}
+
+  {group === 'states' && presentation === 'labelled' && (
+    // A tray-width rig is too wide for a button cell and an anchor cell
+    // side by side: two of them, plus a state header, overruns the themed
+    // panel the compact table already fits inside. One column per state
+    // would misrepresent the tray at a width it never has (the defect this
+    // book is fixing), so the role moves out of the column — first tried in
+    // the row label itself ("Keyboard focus — Anchor"), but that label is
+    // still wide enough, next to a tray-width rig, to overrun the panel on
+    // its own. The role moves one level further out instead: one list per
+    // role, so each row's label is just the state name. A `<dl>` rather than
+    // a table, because a table cell's width is resolved through the auto
+    // table-layout algorithm together with its content — circular for a
+    // cell holding the very rig `.slot` below holds at a fixed size. A grid
+    // track has no such circularity.
+    <>
+      <p class="text-label">Button</p>
+      <dl class="state-list">
+        {STATES.map((state) => (
+          <>
+            <dt>{state.name}</dt>
+            <dd>
+              <div
+                class="slot"
+                style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+              >
+                <button
+                  type="button"
+                  class="chrome-action"
+                  data-chrome-state={state.attribute}
+                >
+                  <Icon noun="send" decorative />
+                  <span>Send</span>
+                </button>
+              </div>
+            </dd>
+          </>
+        ))}
+        <dt>Disabled</dt>
+        <dd>
+          <div
+            class="slot"
+            style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+          >
+            <button type="button" class="chrome-action" disabled>
+              <Icon noun="send" decorative />
+              <span>Send</span>
+            </button>
+          </div>
+        </dd>
+      </dl>
+
+      <p class="text-label">Anchor</p>
+      <dl class="state-list">
+        {STATES.map((state) => (
+          <>
+            <dt>{state.name}</dt>
+            <dd>
+              <div
+                class="slot"
+                style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+              >
+                <a
+                  class="chrome-action"
+                  href="/base/chrome-actions"
+                  data-chrome-state={state.attribute}
+                >
+                  <Icon noun="arrow-left" decorative />
+                  <span>Back</span>
+                </a>
+              </div>
+            </dd>
+          </>
+        ))}
+        <dt>Disabled</dt>
+        <dd>
+          <div
+            class="slot"
+            style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+          >
+            <a
+              class="chrome-action"
+              href="/base/chrome-actions"
+              aria-disabled="true"
+              tabindex="-1"
+            >
+              <Icon noun="arrow-left" decorative />
+              <span>Back</span>
+            </a>
+          </div>
+        </dd>
+      </dl>
+    </>
+  )}
+</div>
+
+<style is:inline set:html={specimenSource} />
+
+<style>
+  /*
+   * The Composition panel this specimen sits in spans the breakout's full
+   * width (packages/design-system/styles/content-containers.css:85-87), and
+   * a rig never fills that width by design — it is shown at its own real
+   * size instead. Centring the rig within the panel is this specimen's job,
+   * not the breakout's: a `.breakout` stretches by definition.
+   *
+   * A tray-width rig does not fit every viewport this book itself renders
+   * on. `overflow-x: auto` keeps that mismatch local — the specimen scrolls
+   * within itself rather than forcing the panel, the figure, the breakout
+   * or the page to widen past its own container. `.slot` below holds the
+   * rig at its real, undiminished width so this is the only place the
+   * mismatch is absorbed.
+   */
+  .chrome-action-specimen {
+    overflow-x: auto;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--cn-gap);
+  }
+
+  table,
+  .state-list {
+    margin-inline: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  /*
+   * The state axis, labelled presentation: one definition list per role
+   * rather than the compact axis's single table, one grid row per state —
+   * a tray-width cell for each role, side by side or combined into one row
+   * label, both overrun the themed panel (see the markup above).
+   */
+  .state-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+    column-gap: var(--cn-gap);
+    row-gap: var(--cn-grid);
+    margin-block-end: var(--cn-line);
+  }
+
+  .state-list dt {
+    text-align: end;
+  }
+
+  .state-list dd {
+    margin: 0;
+  }
+
+  /*
+   * The rig's own inline size is set inline, per presentation, from
+   * RIG_INLINE_SIZE above — a fixed rail or tray width, not a percentage, so
+   * a labelled target's own `inline-size: 100%` (chrome-actions.css) always
+   * resolves against that real number. The rig is a flex column because a
+   * tray is one, so the rig demonstrates the container shape a consumer
+   * actually builds rather than a shape only this book uses.
+   *
+   * `flex-shrink: 0`: a flex item's automatic minimum width would otherwise
+   * let `.row` compress the rig below its real width whenever the panel
+   * offers less than that, silently trading the true-width fix above for a
+   * shrunken one — the same defect this book is fixing, from a different
+   * cause. `.state-list`'s grid track has no equivalent shrink to guard
+   * against: a grid item's automatic minimum width already defaults to its
+   * content's, which here is the rig's own declared, unshrinkable size.
+   */
+  .slot {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  th,
+  td {
+    padding: var(--cn-grid) var(--cn-gap);
+    text-align: start;
+    vertical-align: middle;
+  }
+</style>

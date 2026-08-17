@@ -19,7 +19,7 @@ replaces live v18. Only the owner makes it, and only on an explicit request nami
 the version.
 
 Set the root version and the project's release-facing status together, in the pull
-request that carries the work. Nested application versions keep their own meaning and
+request that carries the work. Nested application versions keep their meaning and
 are not touched as release bookkeeping.
 
 ## Rolling back

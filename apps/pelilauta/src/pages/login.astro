@@ -22,7 +22,7 @@ const showPasswordLoginFlag =
 
 const redirect = Astro.url.searchParams.get('redirect') || '/';
 ---
-<ModalPage title={t('login:title')}>
+<ModalPage title={t('login:title')} backHref="/">
   <div class="content-prose">
     <div>
       <h1>{t('login:title')}</h1>

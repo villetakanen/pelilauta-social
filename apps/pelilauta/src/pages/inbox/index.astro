@@ -1,7 +1,12 @@
 ---
+import Library from '@layouts/Library.astro';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import InboxApp from '../../components/svelte/inbox/InboxApp.svelte';
-import ModalPage from '../../layouts/ModalPage.astro';
+import { t } from '../../utils/i18n';
+
+const { denied } = await requireSession(Astro);
+if (denied) return denied;
 ---
-<ModalPage>
+<Library title={`${t('app:shortname')} – ${t('library:rail.inbox')}`}>
   <InboxApp client:only="svelte" />
-</ModalPage>
+</Library>

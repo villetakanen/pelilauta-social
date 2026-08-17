@@ -1,0 +1,54 @@
+---
+title: CnIdentityAction
+description: "A chrome action that invites a signed-out reader to sign in, and carries a signed-in reader to their own part of the application."
+order: 100
+runtime: static
+---
+
+import CnIdentityAction from '@design-system/components/CnIdentityAction.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+import IdentityActionSpecimens from '@design-system/books/specimens/IdentityActionSpecimens.astro'
+
+Use the identity action to give the reader one destination for their own identity.
+
+## When to use it
+
+CnIdentityAction is a [Chrome Action](/base/chrome-actions) that takes one of two
+modes: signing in, or the reader's own.
+
+## Example
+
+<Composition themes caption="CnIdentityAction, signed in, in Light and Dark">
+  <CnIdentityAction href="/profiili" label="Oma profiili" signedIn nick="Aino Virtanen" src="https://picsum.photos/seed/aino/128" />
+</Composition>
+
+```mdx
+<CnIdentityAction href="/profiili" label="Oma profiili" signedIn nick="Aino Virtanen" src="https://picsum.photos/seed/aino/128" />
+```
+
+<Composition themes caption="Signed out, signed in with and without an image, without a nick, and as the current destination, compact, in Light and Dark">
+  <IdentityActionSpecimens group="modes" presentation="compact" />
+</Composition>
+
+<Composition themes caption="Signed out, signed in with and without an image, without a nick, and as the current destination, labelled, in Light and Dark">
+  <IdentityActionSpecimens group="modes" presentation="labelled" />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `href` | `string` | Required. The destination for the stated mode. |
+| `label` | `string` | Required, and localised. The accessible name, and the visible label where the container declares labelled. |
+| `signedIn` | `boolean` | The mode. Never derived from `nick` or `src`. |
+| `nick` | `string` | The reader's nick, passed to the identity mark. Ignored where `signedIn` is false. |
+| `src` | `string` | The reader's image, passed to the identity mark. Ignored where `signedIn` is false. |
+| `disabled` | `boolean` | Removes the control from tab order and marks it `aria-disabled`. |
+| `aria-current` | `string` | Marks the current destination. |
+
+## Accessibility
+
+The label is the accessible name in both modes. Signed in, the identity mark renders
+`aria-hidden`.

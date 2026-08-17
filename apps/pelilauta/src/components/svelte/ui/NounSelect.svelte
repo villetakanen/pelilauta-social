@@ -289,7 +289,9 @@ function handleKeydown(event: KeyboardEvent) {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-s);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* light-dark, not a media query: the document's scheme decides, and the
+     account's stored theme may force it against the OS preference. */
+  box-shadow: 0 4px 12px light-dark(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.4));
   margin-top: 0.25rem;
   max-height: 300px;
   overflow: hidden;
@@ -382,13 +384,6 @@ function handleKeydown(event: KeyboardEvent) {
 
 .noun-select.disabled {
   pointer-events: none;
-}
-
-/* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-  .noun-select-dropdown {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
 }
 
 /* Responsive adjustments */

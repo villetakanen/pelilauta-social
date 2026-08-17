@@ -185,3 +185,41 @@ describe('the elevation-4 guardrail', () => {
     }
   });
 });
+
+describe('the indicator marks persistent state legibly', () => {
+  // The foreground identifies the current destination and the tint reinforces
+  // it, so the foreground is what has to hold: opaque, and readable on every
+  // surface a chrome action stands on. `--cn-surface` is the resting chrome and
+  // `--cn-surface-4` is what a covering tray paints, which is the tighter of the
+  // two in Dark.
+  //
+  // The indicator surface is one neutral step off the surface it sits on, so it
+  // is a reinforcement rather than the carrier and is not measured against a 3:1
+  // threshold it was never asked to meet. A brand tint would not meet one
+  // either: composited over the dark `--cn-surface-4`, primary at 20% reaches
+  // 1.3:1 and at 60% only 2.4:1, against a hover wash at 1.2:1 — and what
+  // separates those is hue, which this luminance-only maths cannot see and a
+  // reader with a colour-vision deficiency may not either.
+
+  for (const mode of ['light', 'dark'] as const) {
+    for (const surface of ['--cn-surface', '--cn-surface-4']) {
+      test(`--cn-on-indicator reaches AA on ${surface}, ${mode}`, () => {
+        const { ratio } = measure('--cn-on-indicator', surface, mode, tokens);
+        expect(ratio, `${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      });
+    }
+
+    test(`--cn-on-indicator is not the foreground a non-current action inherits, ${mode}`, () => {
+      // Identification cannot rest on the tint alone, so the foreground has to
+      // actually change. Resolved colours, not declaration text, so two
+      // spellings of one colour cannot pass.
+      const indicated = resolve('var(--cn-on-indicator)', mode, tokens);
+      expect(indicated).toBeDefined();
+      for (const inherited of ['--cn-on-surface', '--cn-text']) {
+        expect(indicated).not.toEqual(
+          resolve(`var(${inherited})`, mode, tokens),
+        );
+      }
+    });
+  }
+});

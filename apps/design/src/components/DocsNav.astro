@@ -2,10 +2,9 @@
 /**
  * DocsNav — the one navigation for the design-system site.
  *
- * Rendered exactly once per page by Book.astro. A second copy for mobile would
- * duplicate every nav link and every aria-current="page" into Playwright
- * strict-mode failures, so the desktop column and the mobile drawer are the same
- * markup in different CSS modes.
+ * Rendered exactly once per page by Book.astro, inside the tray, which carries
+ * the navigation landmark and its name. This states the links alone: a second
+ * nav here would nest one landmark inside another under the same name.
  *
  * Group labels are deliberately NOT headings: color-book.spec.ts locates its
  * page heading by accessible name without a level filter, so a heading here
@@ -21,7 +20,7 @@ const pathname = Astro.url.pathname;
 const onIndex = samePath(pathname, '/');
 ---
 
-<nav class="docs-nav" aria-label="Design system books">
+<div class="docs-nav">
   <a class="index-link" href="/" aria-current={onIndex ? 'page' : undefined}>
     Index
   </a>
@@ -45,7 +44,7 @@ const onIndex = samePath(pathname, '/');
       </section>
     ))
   }
-</nav>
+</div>
 
 <style>
   /* Placement, padding, borders and the open/close behavior of this nav belong

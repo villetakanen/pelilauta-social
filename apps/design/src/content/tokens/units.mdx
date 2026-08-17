@@ -65,6 +65,24 @@ and [Icon component](/components/icon).
   prefix="--cn-icon-size"
 />
 
+## Chrome
+
+The application bar's depth. Chrome is fixed and paints over the document, so the first
+content container clears the bar by this much.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-app-bar"
+/>
+
+The tray's two inline sizes: the rail it rests at, and the tray it opens to. The
+application bar and the main region cede whichever the tray currently stands in.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-width"
+/>
+
 ## Stacking layers
 
 Global z-index scale for pinned and elevated UI layers.
@@ -86,6 +104,15 @@ Standard transition durations and easing curves for interactive UI feedback.
 <TokenTable
   source={unitsSource}
   prefix="--cn-easing"
+/>
+
+## The disabled state
+
+The opacity a disabled control renders at.
+
+<TokenTable
+  source={unitsSource}
+  prefix="--cn-disabled"
 />
 
 ## Layout breakpoints

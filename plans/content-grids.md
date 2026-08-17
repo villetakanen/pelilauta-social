@@ -8,7 +8,7 @@ deletion is not a closeout requirement.
 
 **This epic deliberately pivots the durable capability from Content Containers to
 Content Container Layouts.** The previous name described the box but not the behavior
-it owns. The new name records the product model: a host contains a vertical sequence
+it governs. The new name records the product model: a host contains a vertical sequence
 of stackable **content containers**, and each container selects a **layout mode** for
 its own children. The application `main` is the usual host, not the capability
 boundary; card-sized and nested containment hosts use the same model.
@@ -84,7 +84,7 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   the composition as tall as its tallest region.
 
 - **Design site front page on Golden** — not in the plan when it was written. The
-  design system's own index was the one page opted out of `.app-main`, laying out
+  design system's index was the one page opted out of `.app-main`, laying out
   full-bleed sections with its own display scale. It now stacks a Golden container
   with a Prose flow nested in its primary, and the editorial vocabulary it needed —
   `.hero`, `.kicker`, `.lede`, `.facts`, `.section-heading` — left

@@ -1,0 +1,127 @@
+---
+/**
+ * CnAppBarSpecimens — CnAppBar bounded in a frame the book can render inline.
+ *
+ * CnAppBar answers a container named `app-chrome`, per
+ * `specs/design-system/application-chrome/spec.md`. `Composition`'s own
+ * wrapper establishes no container at all, so `.frame` below establishes one
+ * itself, and a frame sized into a band renders that band live.
+ *
+ * `group="bands"` bounds the same bar in both bands side by side, so the
+ * reader sees the small-screen swap without resizing anything.
+ *
+ * Band widths come from `packages/design-system/styles/units.css`'s
+ * breakpoint token, not a literal, and sit well inside each band rather than
+ * at its edge — a frame at exactly the boundary would read either side of it
+ * depending on rounding.
+ *
+ * Book: apps/design/src/content/components/cn-app-bar.mdx
+ */
+import CnAppBar from '../../components/CnAppBar.astro';
+import Icon from '../../components/Icon.svelte';
+
+interface Props {
+  /** Which specimen to render. */
+  group: 'context' | 'no-noun' | 'modal' | 'bands';
+}
+
+const { group } = Astro.props;
+
+const MODES = ['light', 'dark'] as const;
+---
+
+<div class="app-bar-specimen" data-group={group}>
+  {MODES.map((mode) => (
+    <div class="pane" data-mode={mode} style={`color-scheme: ${mode};`}>
+      {group === 'context' && (
+        <div class="frame wide">
+          <CnAppBar title="Aamunkoin vartijat" shortTitle="Vartijat" noun="card" href="#cn-app-bar">
+            <button type="button" class="chrome-action">
+              <Icon noun="search" decorative />
+              <span>Hae</span>
+            </button>
+          </CnAppBar>
+        </div>
+      )}
+
+      {group === 'no-noun' && (
+        <div class="frame wide">
+          <CnAppBar title="Etusivu" />
+        </div>
+      )}
+
+      {group === 'modal' && (
+        <div class="frame wide">
+          <CnAppBar title="Muokkaa hahmoa" modal backLabel="Takaisin" />
+        </div>
+      )}
+
+      {group === 'bands' && (
+        <div class="comparison">
+          <div>
+            <p class="text-label">Above --cn-breakpoint-small</p>
+            <div class="frame wide">
+              <CnAppBar title="Aamunkoin vartijat" shortTitle="Vartijat" noun="card">
+                <button type="button" class="chrome-action">
+                  <Icon noun="search" decorative />
+                  <span>Hae</span>
+                </button>
+              </CnAppBar>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-label">Below --cn-breakpoint-small</p>
+            <div class="frame small">
+              <CnAppBar title="Aamunkoin vartijat" shortTitle="Vartijat" noun="card">
+                <button type="button" class="chrome-action">
+                  <Icon noun="search" decorative />
+                  <span>Hae</span>
+                </button>
+              </CnAppBar>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .app-bar-specimen {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .pane {
+    display: grid;
+    row-gap: var(--cn-line);
+    padding: var(--cn-gap);
+    color: var(--cn-text);
+    background: var(--cn-background);
+  }
+
+  .comparison {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .frame {
+    container: app-chrome / inline-size;
+    max-inline-size: 100%;
+    overflow: hidden;
+    background: var(--cn-surface);
+    border: 1px solid var(--cn-border);
+  }
+
+  /* Well above --cn-breakpoint-small: a rail would stand beneath the bar. */
+  .frame.wide {
+    inline-size: calc(var(--cn-breakpoint-small) + var(--cn-gap) * 4);
+  }
+
+  /* Well below --cn-breakpoint-small: no rail stands, so the bar reserves
+     its own leading slot instead. */
+  .frame.small {
+    inline-size: calc(var(--cn-breakpoint-small) - var(--cn-gap) * 8);
+  }
+</style>

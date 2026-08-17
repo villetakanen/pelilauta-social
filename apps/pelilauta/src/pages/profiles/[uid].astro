@@ -1,10 +1,10 @@
 ---
+import Base from '@layouts/Base.astro';
 import { t } from '@utils/i18n';
 import { createPlainSnippet } from '@utils/snippetHelpers';
 import { parseProfile } from 'src/schemas/ProfileSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import ProfileApp from '../../components/server/profile/ProfileApp.astro';
-import Page from '../../layouts/Page.astro';
 
 const { uid } = Astro.params;
 
@@ -34,6 +34,7 @@ Astro.response.headers.set(
   's-maxage=3600, stale-while-revalidate',
 );
 ---
-<Page title={profile.nick} description={description}>
+<Base title={profile.nick} description={description}>
+  <h1 class="sr-only">{profile.nick}</h1>
   <ProfileApp profile={profile} />
-</Page>
+</Base>

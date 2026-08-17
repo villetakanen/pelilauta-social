@@ -1,0 +1,78 @@
+---
+/**
+ * The base application's rail: the design system's boxes, what stands in
+ * them here.
+ *
+ * Entries are the consumer's, so each is an ordinary chrome action — an anchor,
+ * an Icon and a label — and this component states which of the base application's
+ * own places the reader is on. Three entries read the session on the client and
+ * stay islands.
+ *
+ * What it holds, who sees each entry and which route makes one current are
+ * `specs/pelilauta/base/base-rail/spec.md`'s; this component states none of them.
+ */
+import CnRail from '@design-system/components/CnRail.astro';
+import Icon from '@design-system/components/Icon.svelte';
+import AdminNavigationButton from '@pelilauta/components/svelte/admin/AdminNavigationButton.svelte';
+import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
+import { t } from 'src/utils/i18n';
+
+const path = Astro.url.pathname;
+
+/** The front page is the one entry an ancestor match would claim every page for. */
+const home = path === '/';
+/** v18's rail treats a thread and its channel index as one destination. */
+const threads = path.startsWith('/channels') || path.startsWith('/threads/');
+const sites = path.startsWith('/sites');
+
+/** What a chrome action carries when it is where the reader is, and when it is not. */
+function current(here: boolean) {
+  return here ? 'page' : undefined;
+}
+---
+
+<CnRail label={t('base:rail.label')}>
+  {/*
+    The base application's own root. It stands only where the application bar
+    cannot carry it: below the small breakpoint the bar reserves its leading slot
+    for this rail's trigger, so the logomark gives way and nothing else leads
+    home. Above that breakpoint the logomark carries it and this entry is absent.
+  */}
+  <a class="chrome-action only-on-small" href="/" aria-current={current(home)}>
+    <Icon noun="fox" decorative />
+    <span>{t("base:rail.home")}</span>
+  </a>
+
+  <a class="chrome-action" href="/channels" aria-current={current(threads)}>
+    <Icon noun="discussion" decorative />
+    <span>{t("base:rail.channels")}</span>
+  </a>
+
+  <a class="chrome-action" href="/sites" aria-current={current(sites)}>
+    <Icon noun="d20" decorative />
+    <span>{t("base:rail.sites")}</span>
+  </a>
+
+  {/*
+    The doors, leading out of the base application. A reader who takes one is
+    looking at another application's rail, or at a modal page carrying none, so
+    none of them states a current entry.
+  */}
+  {/* A door carries the name of what it opens, in that application's own words. */}
+  <a class="chrome-action" href="/library">
+    <Icon noun="books" decorative />
+    <span>{t("library:title")}</span>
+  </a>
+
+  <a class="chrome-action" href="/docs/01-index">
+    <Icon noun="design" decorative />
+    <span>{t("docs:title")}</span>
+  </a>
+
+  <AdminNavigationButton client:only="svelte" />
+
+  <InboxNavigationButton client:only="svelte" slot="footer" />
+
+  <SettingNavigationButton client:only="svelte" slot="footer" />
+</CnRail>

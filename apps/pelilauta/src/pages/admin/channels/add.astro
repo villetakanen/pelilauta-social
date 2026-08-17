@@ -1,27 +1,20 @@
 ---
-import { isAdmin } from '@firebase/server/admin';
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireAdmin } from '@pelilauta/admin/utils/requireAdmin';
 import AddChannelForm from '../../../components/svelte/admin/channels/AddChannelForm.svelte';
 import ModalPage from '../../../layouts/ModalPage.astro';
 import { t } from '../../../utils/i18n';
 
 // Server-side authentication check
-const session = await verifySession(Astro);
-if (!session?.uid) {
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
-
-// Verify admin privileges
-const userIsAdmin = await isAdmin(session.uid);
-if (!userIsAdmin) {
-  return Astro.redirect('/403');
-}
+const denied = await requireAdmin(Astro);
+if (denied) return denied;
 ---
 
 ---
-<ModalPage title={t('admin:channels.add.title')} shortTitle={t('admin:channels.add.shortTitle')}>
+<ModalPage
+  title={t('admin:title')}
+  shortTitle={t('admin:channels.add.shortTitle')}
+  backHref="/admin/channels"
+>
   <section class="content-prose">
     <article>
 

@@ -1,0 +1,232 @@
+---
+/**
+ * CnAppBar — the application's block-start chrome: context, title, actions.
+ */
+import CnBackAction from './CnBackAction.svelte';
+import Icon from './Icon.svelte';
+
+interface Props {
+  title: string;
+  /** Shown in place of `title` below the small breakpoint. */
+  shortTitle?: string;
+  /** Context glyph. A page stating none shows the product's logomark instead. */
+  noun?: string;
+  /** A modal bar: the back control replaces the noun, and actions are dropped. */
+  modal?: boolean;
+  /** Accessible name for the back control, localised by the consumer. */
+  backLabel?: string;
+  /**
+   * Where the identity leads: the root of whatever the bar names. A page
+   * stating none carries the same identity, leading nowhere.
+   */
+  href?: string;
+}
+
+const {
+  title,
+  shortTitle,
+  noun,
+  modal = false,
+  backLabel,
+  href,
+}: Props = Astro.props;
+
+/*
+ * The identity is one region: the glyph and the name it belongs to. Given a
+ * destination it becomes one link, so a reader reaches the root of what the bar
+ * names by pressing either half, and assistive technology announces one link
+ * rather than two to the same place. Given none it is the same region, inert.
+ */
+const Identity = href ? 'a' : 'div';
+---
+
+<header class:list={['cn-app-bar', { modal }]}>
+  {modal && <CnBackAction client:load label={backLabel} />}
+
+  <Identity class="identity" href={href}>
+    {
+      modal ? null : noun ? (
+        <Icon noun={noun} decorative />
+      ) : (
+        /*
+         * The product's logomark. It names itself only where nothing else does:
+         * inside the link the wordmark beside it is the name, and a second one
+         * would be announced twice.
+         */
+        <Icon noun="fox" decorative={Boolean(href)} aria-label={href ? undefined : 'Pelilauta.social'} />
+      )
+    }
+
+    {/*
+      A shorter form replaces the wordmark on a small screen, so the swap is
+      stated only where there is one to swap to: a page giving none keeps its
+      wordmark at every band rather than losing it below the breakpoint.
+    */}
+    <p class:list={['title', { swaps: shortTitle }]}>
+      <span class="full-title">{title}</span>
+      {shortTitle && <span class="short-title">{shortTitle}</span>}
+    </p>
+  </Identity>
+
+  {!modal && (
+    <div class="actions">
+      <slot />
+    </div>
+  )}
+</header>
+
+<style>
+  .cn-app-bar {
+    /* The chrome container places the bar. */
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+    block-size: var(--cn-app-bar-height);
+    padding-inline: var(--cn-gap);
+    background-color: transparent;
+    color: var(--cn-on-surface);
+
+    /* A bar shows its actions as icons. */
+    --cn-chrome-presentation: compact;
+  }
+
+  /*
+   * The bar covers nothing while the page is at its top — a poster, or the page
+   * itself, reads through it — and a veil fades in once content is moving
+   * beneath. The veil is twice the bar's depth, so text dissolves before it
+   * reaches the title rather than at it.
+   *
+   * Firefox ships no scroll timeline, drops the timeline declaration, and runs
+   * this on the document timeline instead: no duration, so it lands on its last
+   * frame and the veil stays. Firefox loses the fade, not the legibility.
+   */
+  .cn-app-bar::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: calc(var(--cn-grid) * 16);
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--cn-surface), transparent 10%) 0%,
+      color-mix(in oklch, var(--cn-surface), transparent 30%) 33%,
+      color-mix(in oklch, var(--cn-surface), transparent 70%) 67%,
+      transparent 100%
+    );
+    opacity: 0;
+    /* Decorative paint, and it overhangs the bar by its own depth again. */
+    pointer-events: none;
+    animation: cn-app-bar-veil both linear;
+    animation-timeline: scroll();
+    /* Nothing at the top; full once the bar's own depth has passed beneath. */
+    animation-range: calc(var(--cn-grid) * 2) calc(var(--cn-grid) * 12);
+  }
+
+  @keyframes cn-app-bar-veil {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* A modal bar rises off the page and paints it, so it needs no veil. */
+  .cn-app-bar.modal {
+    background-color: var(--cn-surface-4);
+    box-shadow: var(--cn-shadow-elevation-4);
+  }
+
+  .cn-app-bar.modal::before {
+    content: none;
+  }
+
+  /*
+   * The identity takes the row the glyph and the wordmark used to take between
+   * them, so wrapping them changes no measurement. As a link it keeps the bar's
+   * own foreground and never underlines: it is chrome, not running text.
+   */
+  .identity {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--cn-gap);
+    min-inline-size: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  a.identity:focus-visible {
+    outline: 2px solid var(--cn-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /*
+   * Not a heading: the bar is chrome, and the document's outline is the page's.
+   * The type step is the h3 one, without the element that would join the outline.
+   */
+  .title {
+    font-size: var(--cn-font-size-h3);
+    font-weight: var(--cn-font-weight-h3);
+    line-height: var(--cn-line-height-h3);
+    letter-spacing: var(--cn-letter-spacing-h3);
+    min-inline-size: 0;
+    margin: 0;
+    color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .short-title {
+    display: none;
+  }
+
+  /*
+   * Wider than the small band a rail stands beneath the bar, and the bar's mark
+   * stands on the rail's own axis: the rail's box inset, plus the inset that
+   * centres an Icon in a compact chrome action's target. The mark, the trigger
+   * below it and every entry below that then share one vertical line.
+   */
+  @container app-chrome (min-width: 38.7501rem) {
+    .cn-app-bar {
+      padding-inline-start: calc(
+        (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2 +
+        (var(--cn-grid) * 7 - var(--cn-icon-size)) / 2
+      );
+    }
+  }
+
+  /* 38.75rem is --cn-breakpoint-small, which a container query cannot read. */
+  @container app-chrome (max-width: 38.75rem) {
+    .title.swaps .full-title {
+      display: none;
+    }
+    .title.swaps .short-title {
+      display: inline;
+    }
+
+    /*
+     * A small screen carries no rail, so the navigation trigger sits at the
+     * bar's start edge. The bar reserves that slot rather than the chrome
+     * insetting the bar, so the trigger sits among the bar's own items.
+     */
+    .cn-app-bar:not(.modal) {
+      padding-inline-start: calc(var(--cn-grid) * 8);
+    }
+
+    /* The reserved slot is the leading region, so the glyph gives way. */
+    .identity > :global(.cn-icon) {
+      display: none;
+    }
+  }
+</style>

@@ -12,8 +12,6 @@ import { expect, type Page, test } from '@playwright/test';
  * second element styled from the token the level is built on, resolved by the
  * same page under the same scheme — so a token whose value moves moves both sides,
  * and only a broken utility separates them.
- *
- * Spec: specs/design-system/surface/spec.md
  */
 
 const BOOK = '/base/surface';
@@ -177,7 +175,7 @@ for (const scheme of ['light', 'dark'] as const) {
     }) => {
       const tokens = await references(page);
       const [none, one, two] = ['none', tokens.shadow[0], tokens.shadow[1]];
-      // The spec's relative table, ancestor to child.
+      // The relative-elevation table, ancestor to child.
       const transitions: Array<[string, string, string]> = [
         ['elevation-1', 'elevation-2', none],
         ['elevation-1', 'elevation-3', one],

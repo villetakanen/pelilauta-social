@@ -3,6 +3,15 @@ import type { Locale } from 'src/utils/i18n';
 export const site: Locale = {
   clocks: {
     title: 'Clocks',
+    create: {
+      title: 'Create clock',
+    },
+    delete: {
+      title: 'Delete clock',
+    },
+  },
+  deletePage: {
+    title: 'Delete page',
   },
   handouts: {
     title: 'Secrets',

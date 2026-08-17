@@ -1,0 +1,46 @@
+---
+/**
+ * The documentation's rail: every article it holds, in the order their
+ * filenames give.
+ *
+ * Unlike the other rails, the entries are the content. An article added to the
+ * collection stands here without anything else changing.
+ */
+import { getCollection } from 'astro:content';
+import CnRail from '@design-system/components/CnRail.astro';
+import Icon from '@design-system/components/Icon.svelte';
+import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
+import { t } from 'src/utils/i18n';
+
+const articles = (await getCollection('docs')).sort((a, b) =>
+  a.id.localeCompare(b.id),
+);
+const path = Astro.url.pathname;
+---
+
+<CnRail label={t('docs:rail.label')}>
+  {
+    articles.map((article) => (
+      <a
+        class="chrome-action"
+        href={`/docs/${article.id}`}
+        aria-current={path === `/docs/${article.id}` ? 'page' : undefined}
+      >
+        <Icon noun={article.data.noun ?? "info"} decorative />
+        <span>{article.data.shortname ?? article.data.name}</span>
+      </a>
+    ))
+  }
+
+  {/* The way to Pelilauta stands here because this application's bar names the
+      documentation instead. */}
+  <a class="chrome-action" href="/" slot="footer">
+    <Icon noun="fox" decorative />
+    <span>{t("app:shortname")}</span>
+  </a>
+
+  <InboxNavigationButton client:only="svelte" slot="footer" />
+
+  <SettingNavigationButton client:only="svelte" slot="footer" />
+</CnRail>

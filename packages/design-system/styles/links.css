@@ -4,8 +4,6 @@
  * The low-specificity selectors let a specified component treatment, and the
  * later button and FAB capabilities, replace presentation without changing an
  * anchor's navigation behaviour.
- *
- * Spec: specs/design-system/actions/spec.md
  */
 
 a:where([href]:not(.button, .fab)),

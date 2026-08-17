@@ -85,10 +85,7 @@ const expectedReferences = {
 const declarationPattern = /(--[\w-]+)\s*:\s*([^;]+);/g;
 const usagePattern = /var\((--[\w-]+)/g;
 
-// --color-on is intentionally left undefined. Legacy Cyan cn-icon consumes it
-// as `var(--color-on, currentColor)`, so leaving it undefined lets icons
-// inherit their contextual foreground. Defining it globally breaks the
-// component contract in specs/design-system/components/cn-icon/spec.md.
+// --color-on is intentionally left undefined. Legacy Cyan cn-icon consumes it as var(--color-on, currentColor), so leaving it undefined lets icons inherit their contextual foreground. Defining it globally breaks that inheritance.
 const intentionallyUndefined = new Set(['--color-on']);
 const sourceExtensions = new Set(['.astro', '.css', '.js', '.svelte', '.ts']);
 const colorPrefixes = [

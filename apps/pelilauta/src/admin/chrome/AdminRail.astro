@@ -1,0 +1,81 @@
+---
+/**
+ * Administration's rail: the tools, one entry each.
+ *
+ * Every reader who reaches a page of this application holds the tools, so no
+ * entry depends on who is reading and none of them is an island.
+ */
+import CnRail from '@design-system/components/CnRail.astro';
+import Icon from '@design-system/components/Icon.svelte';
+import { showDeveloperTools } from '@pelilauta/admin/utils/requireDeveloperTools';
+import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
+import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
+import { t } from 'src/utils/i18n';
+
+const path = Astro.url.pathname;
+
+/*
+ * A developer tool stands where the environment shows the tools, and nowhere
+ * else: its page answers as one that does not exist there, so an entry leading
+ * to it would lead nowhere.
+ */
+const tools = [
+  {
+    href: '/admin/channels',
+    noun: 'discussion',
+    label: t('admin:rail.channels'),
+  },
+  { href: '/admin/messaging', noun: 'send', label: t('admin:rail.messaging') },
+  { href: '/admin/sites', noun: 'mekanismi', label: t('admin:rail.sites') },
+  ...(showDeveloperTools
+    ? [
+        {
+          href: '/admin/users',
+          noun: 'adventurer',
+          label: t('admin:rail.users'),
+        },
+        {
+          href: '/admin/snackbar-test',
+          noun: 'info',
+          label: t('admin:rail.snackbarTest'),
+        },
+      ]
+    : []),
+];
+---
+
+<CnRail label={t('admin:rail.label')}>
+  {/* The bar carries this application's identity above the small breakpoint; below it, this does. */}
+  <a
+    class="chrome-action only-on-small"
+    href="/admin"
+    aria-current={path === "/admin" ? 'page' : undefined}
+  >
+    <Icon noun="admin" decorative />
+    <span>{t("admin:app.title")}</span>
+  </a>
+
+  {
+    tools.map((tool) => (
+      <a
+        class="chrome-action"
+        href={tool.href}
+        aria-current={path.startsWith(tool.href) ? 'page' : undefined}
+      >
+        <Icon noun={tool.noun} decorative />
+        <span>{tool.label}</span>
+      </a>
+    ))
+  }
+
+  {/* The way to Pelilauta stands here because this application's bar names
+      administration instead. */}
+  <a class="chrome-action" href="/" slot="footer">
+    <Icon noun="fox" decorative />
+    <span>{t("app:shortname")}</span>
+  </a>
+
+  <InboxNavigationButton client:only="svelte" slot="footer" />
+
+  <SettingNavigationButton client:only="svelte" slot="footer" />
+</CnRail>

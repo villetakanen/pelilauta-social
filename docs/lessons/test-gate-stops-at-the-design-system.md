@@ -11,7 +11,7 @@ itself is deleted, not fixed. Its description scopes it to "a design-system
 change", so nothing routes an application test through it.
 
 **What happened:** `apps/pelilauta/e2e/color-theme.spec.ts:23` asserted
-`expect(light.themeLink).toBe(light.references.primary40)`, where the probe's own
+`expect(light.themeLink).toBe(light.references.primary40)`, where the probe's
 inline style was `border-color: var(--cn-link)` and `--cn-link` names
 `--cn-color-primary-40`. Twenty-five of the file's thirty-four assertions had that
 shape, spread across five synthetic probes, and the pattern grew during beta.19

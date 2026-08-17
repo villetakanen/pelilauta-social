@@ -22,7 +22,7 @@ no colour, and the approved spec's guardrail — "visual colors depend strictly 
 The book's token table publishes the value that lost.
 
 **Suspected why:** nothing enumerates who declares a `--cn-*` role. A component
-author greps for the component's own name, finds no owner, and writes the
+author greps for the component's name, finds no declaration, and writes the
 declaration into the file where colour roles belong — which is the file the compat
 layer overrides. The compat layer is a migration bridge, so its declarations read
 as legacy and not as current owners.

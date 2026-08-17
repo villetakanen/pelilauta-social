@@ -5,8 +5,6 @@
  * spec's table and prose, the unit tokens, the colour roles — rather than
  * reading the stylesheet and asserting its own contents. The values live in
  * the spec; a divergence between the two is the failure these exist to catch.
- *
- * Spec: specs/design-system/typography/spec.md
  */
 
 import { readFileSync } from 'node:fs';

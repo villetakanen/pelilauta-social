@@ -1,0 +1,16 @@
+---
+/**
+ * The documentation's bar: its own identity, leading to its front page.
+ *
+ * The documentation is a place a reader arrives at and reads through, so it
+ * names itself here. The way to Pelilauta stands in the rail's footer.
+ */
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import AppThemeSwitch from 'src/components/svelte/app/AppThemeSwitch.svelte';
+import { t } from 'src/utils/i18n';
+---
+
+<CnAppBar title={t('docs:title')} noun="info" href="/docs/01-index">
+  <AppThemeSwitch client:load label={t('actions:theme')} />
+  <slot />
+</CnAppBar>

@@ -12,12 +12,12 @@
 - `packages/design-system` contains the components, styles, specs and books both use.
 - `specs` contains approved behaviour, one capability per directory.
 - `plans` contains transient epic scope; `plans/debt` contains known unplanned gaps.
-- `docs/DESIGN.md` holds the design intent and the voice; `docs/ARCHITECTURE.md` holds
-  the naming and what each artifact carries.
+- `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;
+  `docs/ARCHITECTURE.md` holds the naming and what each artifact carries.
 
 ## ALWAYS
 
-- Base prose on `docs/DESIGN.md` and `docs/ARCHITECTURE.md` when writing a document, a
+- Base prose on `docs/WRITING.md` and `docs/ARCHITECTURE.md` when writing a document, a
   book, a spec or a comment. A skill references those files rather than restating them.
 - Bump the root beta version with `pnpm version prerelease --preid=beta
   --no-git-tag-version` once per release: on the first commit after a merge to main.
@@ -29,6 +29,13 @@
 
 - Create, switch or delete a branch without an explicit order. Asking is not the order;
   wait for the answer.
+- Run `apps/pelilauta`'s e2e suite. `test:e2e` seeds Firestore before it starts, and a
+  full run takes tens of minutes. It is not acceptance either — `docs/MIGRATION.md` says
+  why. Read a spec where the change relies on it, and run `apps/design`'s suite instead.
+- Write any detail of the Firestore security rules into the repository. The repository is
+  public and the rules guard the live service, so what they permit, forbid or fail to
+  cover stays out of every file here, code and prose alike. Reason about them where you
+  are given them, and state a conclusion without the rule behind it.
 
 ## Delivery Contract
 

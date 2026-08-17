@@ -47,6 +47,13 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
 
 ## Prose
 
-Follow `docs/DESIGN.md` Voice, read before drafting. A spec is direct, strict and
-technical. It carries no rationale: no "because" clause, no "X rather than Y" unless
-Y is a mistake the reader would make, and no sentence restating the one before it.
+Follow `docs/WRITING.md`, read before drafting. A spec is direct, strict and
+technical.
+
+## Recording the intent
+
+The spec's context and architecture carry the why nothing else holds: the user or
+system need the capability exists for. State no why the reader can derive.
+
+A why comes from v18, v20, an ADR or a human decision. A why with no source is a
+question to the human, not a sentence in the spec.

@@ -60,7 +60,11 @@ Radius steps derive from the grid at one-half, one, two, and four grid units. A
 rounded content container is a box that applies a radius and directly lays out
 textual or interactive children. It includes at least one grid unit of padding. A
 consumer that requires a rounded corner without selecting a size uses
-the default medium radius token. The small-screen breakpoint is `38.75rem`.
+the default medium radius token.
+
+Three bands: small, tablet and desktop. Small ends at `38.75rem`, tablet at `64rem` —
+the width where a tray fits beside content rather than over it. Each token names the
+width where its band ends.
 
 The grid, icon sizes, and breakpoint thresholds use `rem`. The design system does
 not set the root text size, so these measurements follow the reader's default.

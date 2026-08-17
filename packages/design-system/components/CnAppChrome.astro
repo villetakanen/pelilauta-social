@@ -1,0 +1,38 @@
+---
+/**
+ * CnAppChrome — the fixed layer an application's chrome stands in.
+ */
+---
+
+<div class="app-chrome">
+  <slot />
+</div>
+
+<style>
+  .app-chrome {
+    position: fixed;
+    z-index: var(--cn-z-chrome);
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 100dvw;
+    block-size: 100dvh;
+
+    /*
+     * The tray pins against this box rather than the browser viewport, and the
+     * containment that makes it a query container also makes it the stacking
+     * context its parts resolve inside.
+     */
+    container: app-chrome / inline-size;
+
+    /*
+     * The box covers the document, so it takes no pointer input and hands it
+     * back to each part. A part that must stay transparent in places — the
+     * quick-action tray, between its buttons — takes it away again for itself.
+     */
+    pointer-events: none;
+  }
+
+  .app-chrome > :global(*) {
+    pointer-events: auto;
+  }
+</style>

@@ -7,7 +7,6 @@
  * a shorter table and reports no error, so the parse is covered by tests.
  *
  * Book: apps/design/src/content/components/token-table.mdx
- * Spec: specs/design-system/design-tokens/spec.md
  */
 
 export interface TokenDeclaration {

@@ -1,24 +1,20 @@
 ---
-import { verifySession } from '@utils/server/auth/verifySession';
+import Library from '@layouts/Library.astro';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { t } from 'src/utils/i18n';
 import SettingsAppT from '../components/svelte/settings/SettingsApp.svelte';
-import ModalPage from '../layouts/ModalPage.astro';
 
-/* A server side rendered settings page: requires authentication */
-const session = await verifySession(Astro);
+const { denied } = await requireSession(Astro);
+if (denied) return denied;
 
-if (!session?.uid) {
-  // Redirect unauthenticated users to login
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
-
-const title = `${t('app:shortname')} - ${t('app:settings.title')}`;
+const title = `${t('app:shortname')} – ${t('app:settings.title')}`;
 const description = t('settings:description');
 const debug = import.meta.env.SECRET_FEATURE_FLAG_DEBUG === 'true';
 ---
-<ModalPage title={title} description={description}>
+<Library title={title} description={description}>
+  <div class="content-prose">
+    <h1>{t('app:settings.title')}</h1>
+  </div>
   <SettingsAppT client:only="svelte"/>
   <div>{debug && <span>DEBUG MODE ACTIVE</span>}</div>
-</ModalPage>
+</Library>

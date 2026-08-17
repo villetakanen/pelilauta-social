@@ -9,9 +9,9 @@ status: approved
 ### Context
 
 The tray keeps a view's floating actions reachable at the lower inline-end corner of
-the composition that owns it. On the application canvas that composition is the full
+the composition that governs it. On the application canvas that composition is the full
 dynamic viewport; in a book specimen it is the specimen's bounded container. The
-owning composition, rather than the browser viewport, determines both placement and
+governing composition, rather than the browser viewport, determines both placement and
 responsive presentation. The tray places; the controls inside it are FABs under
 `specs/design-system/actions/spec.md` and never position themselves.
 
@@ -22,10 +22,10 @@ composition has one. Selection is by class rather than by identifier: a book pag
 renders the same tray once per colour scheme. No component or client-side behaviour
 mediates the contract.
 
-The owning composition establishes an inline-size CSS container, which is also the
+The governing composition establishes an inline-size CSS container, which is also the
 tray's containing block. The application shell provides one whose border box is
 `100dvw` by `100dvh`; a design-book specimen provides a bounded container of its own.
-The tray resolves its pinned position against that nearest owning container. It
+The tray resolves its pinned position against that nearest governing container. It
 neither escapes to the browser viewport nor depends on page-specific offsets, so the
 same tray markup renders in an application shell and inside a demonstration without a
 second placement mode.
@@ -38,7 +38,7 @@ what the responsive label omission resolves against; pointer events pass through
 spanned area and resume on the FABs.
 
 The tray is inset from its container's block end and inline end by `--cn-gap`. When
-its owning application container also has persistent block-end navigation, that
+its governing application container also has persistent block-end navigation, that
 navigation's occupied block size is added to the tray's block-end inset through
 `--cn-block-end-chrome`. Multiple FABs form an inline-end-aligned vertical stack with
 `--cn-grid` between their occupied boxes.
@@ -71,10 +71,10 @@ the actions capability's, and this specification does not restate it.
 
 ### Regression Guardrails
 
-- The tray resolves against its nearest owning container. Changing the window size
+- The tray resolves against its nearest governing container. Changing the window size
   does not move a tray inside an unchanged bounded specimen, and containment does
   not strand an application tray against an inner content column.
-- Responsive label visibility resolves against the owning container rather than the
+- Responsive label visibility resolves against the governing container rather than the
   browser window.
 - Page-specific FAB margins and positioning do not compete with tray placement.
 - The tray does not cover persistent block-end navigation and does not rise above a

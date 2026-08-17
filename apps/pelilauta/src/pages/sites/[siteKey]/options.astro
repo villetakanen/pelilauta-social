@@ -1,8 +1,10 @@
 ---
-import ModalPage from '@layouts/ModalPage.astro';
+import Site from '@layouts/Site.astro';
+import { requireSiteOwner } from '@pelilauta/site/utils/requireSiteOwner';
 import SiteOptionsApp from '@svelte/sites/options/SiteOptionsApp.svelte';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
 
 const { siteKey } = Astro.params;
 
@@ -15,8 +17,14 @@ const site = SiteSchema.parse({
   ...toClientEntry(await siteResponse.json()),
   key: siteKey,
 });
+
+const denied = await requireSiteOwner(Astro, site);
+if (denied) return denied;
 ---
 
-<ModalPage>
+<Site {site} title={site.name}>
+  <div class="content-prose">
+    <h1>{t('site:options.title')}</h1>
+  </div>
   <SiteOptionsApp site={site} client:only="svelte" />
-</ModalPage>
+</Site>

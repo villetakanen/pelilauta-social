@@ -1,9 +1,9 @@
 ---
 import Icon from '@design-system/components/Icon.svelte';
+import Base from '@layouts/Base.astro';
 import { t } from 'src/utils/i18n';
-import Page from '../layouts/Page.astro';
 ---
-<Page>
+<Base title={t('seo:error404.title')} noSharing>
   <article class="content-prose">
     <div class="flex justify-center">
       <Icon noun="monsters" size="xlarge" />
@@ -23,4 +23,4 @@ import Page from '../layouts/Page.astro';
       </li>
     </ul>
   </article>
-</Page>
+</Base>

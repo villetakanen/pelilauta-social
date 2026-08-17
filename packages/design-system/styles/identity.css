@@ -5,8 +5,6 @@
  * either mark. The pictorial mark styles itself; what lives here is what its
  * scoped styles cannot reach — the anchor that wraps it, and the list that
  * arranges it beside its neighbours.
- *
- * Spec: specs/design-system/identity-mark/spec.md
  */
 
 .cn-nick {

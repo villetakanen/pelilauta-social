@@ -1,0 +1,345 @@
+---
+/**
+ * CnRail — the drawer, the scrim, and the three boxes an application fills.
+ *
+ * The rail holds the places a reader reaches from the page they are on. What
+ * those are is the page's; this states the boxes they stand in.
+ *
+ * A box is spacing, not a surface: it paints nothing, and it takes no room
+ * while it is empty. A header or a footer with nothing in it does not render,
+ * so the arrangement stays legible while an application moves content between
+ * them.
+ *
+ * CnRailAction carries the toggles that open and close the rail. This
+ * component reads their checked state through the classes and ids the action
+ * publishes — its width, its scrim's `for`, and the script below all do.
+ */
+import CnRailAction from './CnRailAction.astro';
+
+export interface Props {
+  /** Names the control and the landmark. Both are the reader's only clue. */
+  label: string;
+  /**
+   * Distinguishes this rail's controls from another document's. A page holds
+   * one rail; a book page rendering a specimen states its own.
+   */
+  id?: string;
+}
+
+const { label, id = 'cn-rail' } = Astro.props;
+const narrow = `${id}-narrow`;
+const hasHeader = Astro.slots.has('header');
+const hasFooter = Astro.slots.has('footer');
+---
+
+<div class="cn-rail" data-cn-rail>
+  <CnRailAction id={id} label={label} />
+
+  <nav class="cn-rail-drawer" aria-label={label}>
+    {hasHeader && (
+      <div class="cn-rail-header">
+        <slot name="header" />
+      </div>
+    )}
+
+    <div class="cn-rail-body">
+      <slot />
+    </div>
+
+    {hasFooter && (
+      <div class="cn-rail-footer">
+        <slot name="footer" />
+      </div>
+    )}
+  </nav>
+
+  {/* Only a covering rail has a scrim, and only the narrow pair ever covers. */}
+  <label class="cn-rail-scrim" for={narrow} aria-hidden="true"></label>
+</div>
+
+{/*
+  The only script the rail has. Opening and closing are a toggle and CSS, and
+  stay that way; a key press and a focus boundary are the two things CSS cannot
+  express, and they are needed for exactly one state — the rail covering the
+  page, over its scrim, with the document behind it out of sight.
+
+  The narrow pair is that state's control. Where the chrome container displays
+  the wide pair instead, nothing covers anything, so both behaviours stand down.
+  The narrow trigger's own `display` reports which pair stands, rather than this
+  script measuring anything and restating a breakpoint the stylesheet owns.
+*/}
+<script>
+  const FOCUSABLE =
+    'a[href], button:not(:disabled), input:not(:disabled), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+  for (const rail of document.querySelectorAll<HTMLElement>('[data-cn-rail]')) {
+    const toggle = rail.querySelector<HTMLInputElement>('.cn-rail-toggle.narrow');
+    const trigger = rail.querySelector<HTMLElement>('.cn-rail-trigger.narrow');
+    const drawer = rail.querySelector<HTMLElement>('.cn-rail-drawer');
+    if (!toggle || !trigger || !drawer) continue;
+
+    const covering = () =>
+      toggle.checked && getComputedStyle(trigger).display !== 'none';
+
+    /*
+     * The toggle first: it is the control, it takes the focus the trigger
+     * draws, and it is the boundary's own first stop, so `Escape` returns
+     * there and a wrap from the end lands there.
+     */
+    const stops = () =>
+      [toggle, ...drawer.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (node) => node.offsetParent !== null || node === toggle,
+      );
+
+    document.addEventListener('keydown', (event) => {
+      if (!covering()) return;
+
+      if (event.key === 'Escape') {
+        toggle.checked = false;
+        toggle.focus();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const within = stops();
+      if (!within.length) return;
+
+      const first = within[0];
+      const last = within[within.length - 1];
+      const here = document.activeElement;
+
+      if (!rail.contains(here)) {
+        first.focus();
+        event.preventDefault();
+        return;
+      }
+      if (event.shiftKey && here === first) {
+        last.focus();
+        event.preventDefault();
+      } else if (!event.shiftKey && here === last) {
+        first.focus();
+        event.preventDefault();
+      }
+    });
+  }
+</script>
+
+<style>
+  /*
+   * A column, because the trigger stands above the drawer and takes its own
+   * depth from it. The drawer taking the block size it is left with — rather
+   * than the whole rail's — is what keeps the footer flush to the rail's end
+   * rather than that far below it.
+   */
+  .cn-rail {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: var(--cn-z-rail);
+    display: flex;
+    flex-direction: column;
+    /* The action stands outside the boxes, so it takes their inset itself
+       rather than being centred — centring would move it as the rail widens,
+       and it shares one axis with the entries below it. */
+    align-items: flex-start;
+
+    /* The rail declares its own presentation for the entries it holds. */
+    --cn-chrome-presentation: labelled;
+  }
+
+  .cn-rail-drawer {
+    display: flex;
+    flex-direction: column;
+    /* `min-block-size: 0` so a long entry list scrolls rather than growing. */
+    flex: 1;
+    min-block-size: 0;
+    inline-size: var(--cn-width-rail-expanded);
+    max-inline-size: 100dvw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition:
+      translate var(--cn-duration-ui) var(--cn-easing-ui),
+      inline-size var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+
+  /*
+   * The three boxes. Each stacks what it holds on one axis: an entry is an
+   * inline-level box, so a block container would let the entries flow and wrap
+   * — packing a collapsed rail's entries into rows, and rewrapping them while
+   * the rail travels between its two widths.
+   */
+  .cn-rail-header,
+  .cn-rail-body,
+  .cn-rail-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: none;
+    /*
+     * The box's inset, on every side, and the air the active background stands
+     * in. It is what the collapsed rail leaves around a chrome action's target,
+     * rather than `--cn-gap`: at the gap the target would not fit the rail's
+     * width, and widening the rail to admit it would move the icons off the
+     * line the application bar and the collapsed rail share.
+     */
+    padding: calc(
+      (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2
+    );
+  }
+
+  /* The body takes what the other two leave, so the footer sits at the end. */
+  .cn-rail-body { flex: 1; }
+
+  /*
+   * The trigger stands directly above the first box and already separates it
+   * from what is above the rail, so that box adds no inset of its own there.
+   * Two adjacent insets would stack, and one item in the column would sit at a
+   * different pitch from every other.
+   */
+  .cn-rail-header,
+  .cn-rail-header + .cn-rail-body,
+  .cn-rail-body:first-child {
+    padding-block-start: 0;
+  }
+
+  /*
+   * The footer's line. A footer renders only when it holds something, so the
+   * line marks a boundary that exists — and where the body is short, the line
+   * lands where the reader is already looking rather than where the content
+   * happened to stop.
+   */
+  .cn-rail-footer {
+    border-block-start: 1px solid var(--cn-border);
+  }
+
+  .cn-rail-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: var(--cn-z-scrim);
+    background-color: var(--cn-scrim);
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: opacity var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+
+  /*
+   * A reader who asks for no motion gets the two states and nothing between.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .cn-rail-drawer,
+    .cn-rail-scrim {
+      transition: none;
+    }
+  }
+
+  /*
+   * The small band holds no rail: it is absent, and its box is the action
+   * alone, standing in the leading slot CnAppBar reserves for it.
+   */
+  @container app-chrome (max-width: 38.75rem) {
+    .cn-rail {
+      inset-block-end: auto;
+      inline-size: calc(var(--cn-grid) * 8);
+    }
+  }
+
+  /* Narrower than the tablet breakpoint, the narrow toggle is the control. */
+  @container app-chrome (max-width: 63.99rem) {
+    /* Asked for, the drawer leaves the strip and covers the page. */
+    .cn-rail:has(.cn-rail-toggle.narrow:checked) .cn-rail-drawer {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: var(--cn-z-rail);
+      inline-size: var(--cn-width-rail-expanded);
+      background-color: var(--cn-surface-4);
+      box-shadow: var(--cn-shadow-elevation-4);
+    }
+    .cn-rail:has(.cn-rail-toggle.narrow:checked) .cn-rail-scrim {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* The small band's resting rail is absent, in the tree as well as in view. */
+  @container app-chrome (max-width: 38.75rem) {
+    .cn-rail:not(:has(.cn-rail-toggle.narrow:checked)) .cn-rail-drawer {
+      display: none;
+    }
+  }
+
+  /*
+   * Where the rail stands beside the page, it begins where the application bar
+   * ends. The bar spans the whole inline size and keeps the corner for the
+   * page's identity, so the rail's trigger stands under that identity rather
+   * than beside it, and the rail's own surface never reaches up behind it.
+   */
+  @container app-chrome (min-width: 38.7501rem) {
+    /*
+     * The rail begins where the bar's own target ends, not where its box does.
+     * The bar is deeper than a chrome action's target, so a mark centred in it
+     * carries half that difference as padding; starting the rail at the box
+     * would count that padding twice and leave the trigger off the rhythm every
+     * entry below it keeps.
+     */
+    .cn-rail {
+      inset-block-start: calc(
+        var(--cn-app-bar-height) -
+        (var(--cn-app-bar-height) - var(--cn-grid) * 7) / 2
+      );
+    }
+
+    /* The boxes' inset, so the action keeps the entries' axis at both widths. */
+    .cn-rail > :global(.cn-rail-action) {
+      margin-inline-start: calc(
+        (var(--cn-width-rail-collapsed) - var(--cn-grid) * 7) / 2
+      );
+    }
+  }
+
+  /* The tablet band rests collapsed: the entries themselves, compact. */
+  @container app-chrome (min-width: 38.7501rem) and (max-width: 63.99rem) {
+    .cn-rail {
+      inline-size: var(--cn-width-rail-collapsed);
+    }
+    .cn-rail-drawer {
+      inline-size: 100%;
+    }
+    .cn-rail:not(:has(.cn-rail-toggle.narrow:checked)) {
+      --cn-chrome-presentation: compact;
+    }
+  }
+
+  /*
+   * The tablet breakpoint and wider: the wide toggle is the control, the rail
+   * stands beside the page in both states, and nothing covers anything.
+   */
+  @container app-chrome (min-width: 64rem) {
+    .cn-rail-scrim {
+      display: none;
+    }
+
+    .cn-rail {
+      inline-size: var(--cn-width-rail-collapsed);
+      transition: inline-size var(--cn-duration-ui) var(--cn-easing-ui);
+      --cn-chrome-presentation: compact;
+    }
+    /* The wide toggle rests checked, so a desktop page loads expanded. */
+    .cn-rail:has(.cn-rail-toggle.wide:checked) {
+      inline-size: var(--cn-width-rail-expanded);
+      --cn-chrome-presentation: labelled;
+    }
+
+    .cn-rail-drawer {
+      inline-size: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cn-rail {
+      transition: none;
+    }
+  }
+</style>

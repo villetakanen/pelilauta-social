@@ -209,7 +209,6 @@ test.describe('Thread Labels - Tag Index Race Condition Fix (PBI-042)', () => {
     console.log(`Total API call time (including tag index): ${totalTime}ms`);
     expect(response.ok).toBe(true);
 
-    // Per PBI-042 spec, API response time should be < 500ms
     // This includes the synchronous tag index update
     // Allow some margin for network latency in test environment (2000ms)
     expect(totalTime).toBeLessThan(2000);

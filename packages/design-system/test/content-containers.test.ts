@@ -3,8 +3,6 @@
  *
  * These cover the guardrails a stylesheet can be read for. The behavioural
  * scenarios need a rendered page and live in apps/design/e2e.
- *
- * Spec: specs/design-system/content-container-layouts/spec.md
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

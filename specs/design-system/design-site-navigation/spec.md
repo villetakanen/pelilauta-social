@@ -31,9 +31,10 @@ reached through a labelled disclosure that needs no JavaScript.
 ## Blueprint
 
 **The shell.** One layout wraps every page: a skip link as the first focusable
-element, a masthead, the navigation, the book's content in a single main landmark,
-and a footer. The shell owns those landmarks and their styles. The masthead carries the
-theme switch, specified in `../design-site-theme/spec.md`.
+element, the application bar, the navigation, the book's content in a single main
+landmark, and a footer. The design system provides the bar; the shell places it, and
+states the navigation's and the footer's styles. The bar carries the navigation trigger
+and the theme switch, specified in `../design-site-theme/spec.md`.
 
 **A book.** One MDX entry in the content collection named for its group. Adding a
 book is that one file; routes and navigation derive from the collections and the
@@ -54,9 +55,9 @@ regenerable from a source belongs to a lexicon book.
 - Does not define how the repository's verification gate is wired.
 - Book presentation is not specified here. Reading measure, prose rhythm and editorial
   chrome are not decided, and get no stand-in: books render plain until the design system
-  owns typography and content grids. What styling exists is disposable —
+  states typography and content grids. What styling exists is disposable —
   `packages/design-system/styles/docs.css` predates this spec, and what remains of it
-  is the index page's editorial vocabulary plus the table rules nothing else owns. It
+  is the index page's editorial vocabulary plus the table rules nothing else states. It
   is replaced opportunistically, and never gates or sequences other work.
 
 ## Contract
@@ -71,8 +72,8 @@ regenerable from a source belongs to a lexicon book.
 
 ### Regression Guardrails
 
-- Book styles use no selector rooted at `main`, `body` or `footer` — the shell
-  owns those, so such rules match nothing, silently.
+- Book styles use no selector rooted at `main`, `body` or `footer` — the shell renders
+  those, so such rules match nothing, silently.
 
 ## Acceptance
 

@@ -25,7 +25,7 @@ than as a row of separate pictures.
 
 The design system ships the marks and nothing around them. Linking to a profile,
 uploading an avatar, and placing either mark in navigation are consumer
-compositions; the marks impose no interactivity of their own. A mark placed inside
+compositions; the marks impose no interactivity. A mark placed inside
 an anchor presents the link interaction states the actions capability defines
 (`specs/design-system/actions`); standalone, it presents none — no pointer cursor,
 no hover response.
@@ -73,7 +73,7 @@ list neither sizes its marks nor mixes sizes within itself.
 Overlap costs the marks the separation that standing apart gave them, and a mark
 takes it back from its own backdrop: inside a list the image draws within the
 circle rather than filling it, leaving a rim of the colour the nick derived. The
-separation is the profile's own identity, so a list needs to know nothing about
+separation is the profile's identity, so a list needs to know nothing about
 what it sits on, and a mark outside a list is unchanged.
 
 A list may close with a count standing for the marks it does not show. The count

@@ -1,6 +1,18 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const admin: Locale = {
+  app: {
+    title: 'Ylläpito',
+    description: 'Pelilaudan ylläpidon työkalut',
+  },
+  rail: {
+    label: 'Ylläpito',
+    channels: 'Forum Administration',
+    messaging: 'Social Media Poster',
+    users: 'User Management',
+    sites: 'Site Activity',
+    snackbarTest: 'Snackbar Test',
+  },
   title: 'Foorumin hallinta',
   description:
     'Hallitse foorumin kanavia ja aiheita. Luo uusia kanavia, päivitä tilastoja ja järjestä foorumin rakennetta.',

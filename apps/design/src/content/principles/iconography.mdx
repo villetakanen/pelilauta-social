@@ -25,14 +25,16 @@ Reserve icon-only controls for universal interface conventions: `close`, `search
 `menu`, and `settings`.
 
 All domain-specific actions (such as archiving threads, publishing articles, or rolling
-dice) require a visible text label beside the icon. Every icon-only interactive control
-must declare an accessible name on its parent button (for example, `aria-label="Close"`).
+dice) require a visible text label beside the icon. Every icon-only control carries an
+accessible name of its own, and the icon inside it is decorative — an icon that announces
+its noun becomes part of the name the control is announced by.
 
 ## Reinforcing state
 
-Never rely on an icon or colour alone to communicate system state. Status changes must
-be expressed in text or structural change; icons and semantic colours reinforce that
-state for visual scanning.
+A state is available programmatically, never only in view. Colour, an icon or a shape
+carries it for a reader scanning the page; the element itself carries it for assistive
+technology — `aria-current` on the destination a reader is at, for example, rather than
+the indicator painted behind it.
 
 ## Sizing and visual consistency
 
@@ -45,7 +47,7 @@ rails, and button groups, all icons share a single tokenized size step.
 | :--- | :--- |
 | Pair unfamiliar or domain-specific icons with visible text labels | Display ambiguous icons without text labels |
 | Maintain a single icon size within a list or navigation bar | Mix icon sizes within a single control group |
-| Communicate state with text and reinforce with icon and colour | Communicate state changes through colour alone |
+| Declare state on the element and paint it with icon or colour | Paint state without declaring it on the element |
 
 ## Icon catalogue by semantic domain
 

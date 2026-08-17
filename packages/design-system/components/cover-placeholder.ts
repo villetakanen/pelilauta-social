@@ -11,8 +11,6 @@
  * happens to serve. A data URI also cannot itself fail to load, which is what
  * makes it safe as an error fallback: swapping to it can never re-enter the
  * error path.
- *
- * Spec: specs/design-system/components/cn-card/spec.md
  */
 
 /**

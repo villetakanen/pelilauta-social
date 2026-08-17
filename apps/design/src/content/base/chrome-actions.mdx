@@ -1,0 +1,223 @@
+---
+title: Chrome Actions
+description: The command and destination control for application bars and rails, collapsing between an icon and a labelled control.
+order: 5.5
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import ChromeActionSpecimens from '@design-system/books/specimens/ChromeActionSpecimens.astro'
+import BackActionSpecimen from '@design-system/books/specimens/BackActionSpecimen.svelte'
+import ShareActionSpecimen from '@design-system/books/specimens/ShareActionSpecimen.svelte'
+import CnBackAction from '@design-system/components/CnBackAction.svelte'
+import CnShareAction from '@design-system/components/CnShareAction.svelte'
+import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
+import CnNotificationAction from '@design-system/components/CnNotificationAction.svelte'
+
+`.chrome-action` ships as one class, applying to `button.chrome-action`, to
+`a.chrome-action[href]`, and to `label.chrome-action[for]`, the trigger
+[CnRailAction](/components/cn-rail-action) composes. It takes its foreground from
+the container that places it and outranks the default Actions link and button
+presentations: no link underline, no button surface, no button elevation.
+
+## Markup
+
+<Composition themes caption="A command and a destination, compact, in Light and Dark">
+  <ChromeActionSpecimens group="pair" presentation="compact" />
+</Composition>
+
+```html
+<button type="button" class="chrome-action">
+  <Icon noun="send" decorative />
+  <span>Send</span>
+</button>
+
+<a class="chrome-action" href="/somewhere">
+  <Icon noun="home" decorative />
+  <span>Home</span>
+</a>
+```
+
+The Icon is the first child, the label `span` the second. The label is present
+in both presentations and is the control's accessible name in both; neither
+element takes or needs an `aria-label`. The Icon must be passed `decorative`:
+the label already names the control, and without it the Icon's own noun
+pollutes the accessible name.
+
+`.chrome-action` composes with no Actions button variant. `.button`, `.cta`,
+`.text`, `.secondary` and `.fab` are never combined with it, and the class
+publishes no variants of its own.
+
+## Presentation
+
+[CnRail](/components/cn-rail) declares the inherited custom property
+`--cn-chrome-presentation`. An action carrying its own `--cn-chrome-presentation`
+has no effect: a style container query evaluates against the queried
+element's parent, so the action would be reading past its own declaration.
+
+| Value | Presentation |
+| :--- | :--- |
+| `compact` | The Icon alone, centred in a square target. |
+| `labelled` | The Icon and the label, filling the container's inline size. |
+| Absent, empty, or any other value | `compact`. |
+
+The mechanism is a CSS style container query, `@container style(--cn-chrome-presentation: labelled)`.
+Every element is a style container, so a chrome action reads the value
+inherited onto its own parent and never selects on an ancestor by name.
+
+<div class="breakout">
+  <Composition themes caption="Labelled, on a command and a destination, in Light and Dark">
+    <ChromeActionSpecimens group="pair" presentation="labelled" />
+  </Composition>
+</div>
+
+Changing the declared presentation does not replace the element, its
+destination or command, or its accessible name; only the label's visibility
+and the target's inline size change.
+
+## Geometry
+
+| Part | Compact | Labelled |
+| :--- | :--- | :--- |
+| Target | `7 × --cn-grid` square. | Container's inline size, `7 × --cn-grid` block size. |
+| State surface | Centred circle, `6 × --cn-grid` diameter. | Centred pill, `6 × --cn-grid` block size, full target inline size. |
+| Content | Icon alone, centred. | Icon, `--cn-gap`, label, from a `--cn-grid` inline inset at the start edge. |
+
+The target is the element and owns hit testing and layout. The state surface
+is a `::before` pseudo-element behind the Icon and label, and owns the resting
+and transient surfaces. The label truncates rather than wrapping; the Icon
+keeps its square in both presentations. A chrome action is an icon-size
+context resolving to the medium step.
+
+A label too long for the rail truncates with an ellipsis rather than wrapping or overflowing.
+
+<div class="breakout">
+  <Composition themes caption="A labelled chrome action whose label overruns the rail, in Light and Dark">
+    <ChromeActionSpecimens group="truncation" presentation="labelled" />
+  </Composition>
+</div>
+
+## States
+
+<Composition themes caption="Compact chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
+  <ChromeActionSpecimens group="states" presentation="compact" />
+</Composition>
+
+<div class="breakout">
+  <Composition themes caption="Labelled chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
+    <ChromeActionSpecimens group="states" presentation="labelled" />
+  </Composition>
+</div>
+
+The state surface is transparent at rest, takes `--cn-hover` on hover and
+`--cn-active` on activation, replacing hover rather than compounding it. A
+keyboard focus outline follows the target, using `--cn-focus-ring`. A disabled
+chrome action renders at `--cn-disabled-opacity` and takes no hover or active
+feedback. A command carries `disabled`; a destination keeps its `href` and carries
+`aria-disabled="true"` and `tabindex="-1"`. Both stay in the accessibility tree.
+
+Transitions use `--cn-duration-ui` and `--cn-easing-ui`, and do not run under
+`prefers-reduced-motion: reduce`.
+
+## The current destination
+
+Those four states are transient — they say what the pointer or the keyboard is
+doing right now. One state is persistent: an action leading to the page the
+reader is already on says so at rest, so navigation shows where they are without
+being pointed at.
+
+`[aria-current]` carries it, because that is what the platform calls it. The
+state surface takes `--cn-indicator` and the target's foreground becomes
+`--cn-on-indicator`, so the icon and the label follow.
+
+<Composition themes caption="Compact chrome action, current and not current, through every transient state, in Light and Dark">
+  <ChromeActionSpecimens group="current" presentation="compact" />
+</Composition>
+
+<div class="breakout">
+  <Composition themes caption="Labelled chrome action, current and not current, through every transient state, in Light and Dark">
+    <ChromeActionSpecimens group="current" presentation="labelled" />
+  </Composition>
+</div>
+
+The indicator is persistent and the washes are transient, so they compose: hover
+and active paint *over* the indicator rather than replacing it, and a current
+destination still answers a pointer. That is why `--cn-indicator` is an opaque
+role rather than a wash — a translucent layer under a translucent layer reads as
+neither.
+
+Two cases indicate nothing, and the last row shows both. `aria-current="false"`
+is the one value that is not a current destination. And a `button` is a command,
+not a place, so it takes no indicator whatever `aria-current` it declares — a
+toggle that stays on is `[aria-pressed]`, its own state.
+
+## Helpers
+
+A helper fixes one chrome action's glyph, semantics and report, so an application composes
+it rather than rebuilding it. Each is a Svelte component; each takes a `label` that is its
+accessible name.
+
+### Back action
+
+The default button for exiting a modal, whether that modal is a dialog or a page standing
+in for one. Activation dispatches `cn-back`, a bubbling `CustomEvent`, and does nothing
+else — the consuming application listens for it and decides where the reader goes.
+
+<Composition themes caption="CnBackAction, in Light and Dark">
+  <CnBackAction client:load label="Takaisin" />
+</Composition>
+
+`label` defaults to `<`, a placeholder rather than a name: replace it with a localised one.
+
+The control has no visible effect of its own. The specimen below mounts it beside a
+listener bound above it, counting each `cn-back` that arrives.
+
+<Composition caption="CnBackAction beside a listener mounted above it, counting each cn-back event">
+  <BackActionSpecimen client:load />
+</Composition>
+
+### Share action
+
+Passes the current page on. Where the browser has the Web Share API, activation opens its
+share sheet; where it has none, the page's URL goes to the clipboard instead.
+
+<Composition themes caption="CnShareAction, in Light and Dark">
+  <CnShareAction client:load label="Jaa" />
+</Composition>
+
+`label` has no default: a share button without one is an unnamed icon, which is what v18
+shipped.
+
+The control shows nothing either way, so the consuming application decides whether the
+reader is told. Activation dispatches `cn-share`, a bubbling `CustomEvent` whose
+`detail.outcome` is `shared`, `copied` or `failed`; a reader who dismisses the browser's
+sheet gets no event at all. The specimen below prints the outcome that arrived, which
+depends on the browser reading this page.
+
+<Composition caption="CnShareAction beside a listener mounted above it, printing each cn-share outcome">
+  <ShareActionSpecimen client:load />
+</Composition>
+
+By default it shares the document's own URL and title; `url`, `title` and `text` state
+otherwise. An unstated `text` is not shared.
+
+### Theme switch
+
+Flips the document between the light and dark colour schemes and reports the change. It
+declares the compact presentation on itself, so it stays icon-only in every container — an
+expanded rail cannot put its label in view. Its theme behaviour and its event are documented in
+[CnThemeSwitch](/components/cn-theme-switch).
+
+<Composition caption="CnThemeSwitch, which re-themes this page">
+  <CnThemeSwitch client:load />
+</Composition>
+
+## Notification action
+
+A notification action is a chrome action subtype, `CnNotificationAction`, that adds a
+badge reporting a count. Every measurement, state and rule stated above applies to it
+unchanged. Its props, its counting rules and its accessible name are documented in
+[CnNotificationAction](/components/cn-notification-action).
+
+<Composition themes caption="CnNotificationAction, in Light and Dark">
+  <CnNotificationAction href="/base/chrome-actions" noun="info" label="Ilmoitukset" count={3} />
+</Composition>

@@ -1,0 +1,46 @@
+---
+import AuthManager from '@components/svelte/AuthManager.svelte';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
+import BaseTail from '@pelilauta/components/server/BaseTail.astro';
+import DocsBar from '@pelilauta/docs/chrome/DocsBar.astro';
+import DocsRail from '@pelilauta/docs/chrome/DocsRail.astro';
+import { t } from 'src/utils/i18n';
+
+// The documentation is public, and every reader sees the same of it.
+
+type Props = {
+  /** The document's title, as a search result shows it. */
+  title?: string;
+  description?: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<html lang="fi">
+  <BaseHead
+    title={title ?? t('docs:title')}
+    description={description ?? t('docs:description')}
+  />
+  {/* The scope the tray's stylesheet reads; see Base.astro for why it sits here. */}
+  <body data-cn-rail-scope>
+    <CnAppChrome>
+      <DocsBar>
+        <slot name="app-bar" />
+      </DocsBar>
+
+      <DocsRail />
+    </CnAppChrome>
+
+    <main class="app-main">
+      <slot />
+      <AppFooter />
+    </main>
+
+    <AuthManager client:only="svelte" />
+
+    <BaseTail />
+  </body>
+</html>

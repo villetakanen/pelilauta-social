@@ -2,23 +2,24 @@
 import FeaturedTags from '@components/server/FrontPage/FeaturedTags.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
+import Base from '@layouts/Base.astro';
 import DeferredSection from '../components/server/app/DeferredSection.astro';
 import SyndicateStream from '../components/server/FrontPage/SyndicateStream/SyndicateStream.astro';
 import TopSitesStream from '../components/server/FrontPage/TopSitesStream.astro';
 import TopThreadsStream from '../components/server/FrontPage/TopThreadsStream.astro';
 import FrontpageFabs from '../components/svelte/frontpage/FrontpageFabs.svelte';
-import Page from '../layouts/Page.astro';
 import { t } from '../utils/i18n';
 
 const title = t('seo:frontPage.title');
 const description = t('seo:frontPage.description');
 const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-1.webp`;
 ---
-<Page
-  search 
+<Base
+  search
   {title}
   {description}
   {image}>
+    <h1 class="sr-only">{title}</h1>
     <div class="content-triad">
       <TopThreadsStream />
 
@@ -42,4 +43,4 @@ const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikk
       href="https://linktr.ee/junowski"
       slot="app-footer-credits"
     />
-</Page>
+</Base>

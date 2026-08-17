@@ -4,8 +4,6 @@ import { expect, type Page, test } from '@playwright/test';
  * The content container's behavioural scenarios. These need a browser: the
  * measure resolves against the root font size, and what a container query
  * reports cannot be read out of a stylesheet at all.
- *
- * Spec: specs/design-system/content-container-layouts/spec.md
  */
 
 const BOOK = '/base/content-containers';
@@ -28,6 +26,35 @@ const steps = (page: Page, count: number) =>
       Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
     [count, GRID_REM] as const,
   );
+
+/**
+ * What the tray takes from the page. The design site mounts one, so the window
+ * is wider than the container by the tray's inline size — and a threshold is
+ * about the container. Every viewport below adds this back.
+ */
+const trayInset = (page: Page) =>
+  page.evaluate(() => {
+    const main = document.querySelector('main#content');
+    if (!main) return 0;
+    return Number.parseFloat(getComputedStyle(main).marginInlineStart) || 0;
+  });
+
+/*
+ * This file measures where things land, not how they travel. Since the tray
+ * arrived, a resize animates the main region's inline margin as the tray's own
+ * width follows, so a measurement taken straight after one catches it in
+ * flight.
+ */
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const style = document.createElement('style');
+      style.textContent =
+        '*, *::before, *::after { transition: none !important }';
+      document.head.append(style);
+    });
+  });
+});
 
 const boxes = async (page: Page) => {
   const main = await page.locator('main#content').boundingBox();
@@ -75,10 +102,11 @@ test('the content width does not jump across the threshold', async ({
   const gap = await steps(page, GAP_STEPS);
   const threshold = Math.round(measure + 2 * gap);
 
-  await page.setViewportSize({ width: threshold - 12, height: 720 });
+  const inset = await trayInset(page);
+  await page.setViewportSize({ width: threshold - 12 + inset, height: 720 });
   const below = (await boxes(page)).column.width;
 
-  await page.setViewportSize({ width: threshold + 60, height: 720 });
+  await page.setViewportSize({ width: threshold + 60 + inset, height: 720 });
   const above = (await boxes(page)).column.width;
 
   expect(above).toBeCloseTo(measure, 0);
@@ -313,6 +341,11 @@ for (const { name, mode, tracks, threshold } of MODES) {
       await page.setViewportSize({ width: 1600, height: 900 });
       await page.goto(BOOK);
       await page.addStyleTag({ content: `html { font-size: ${root}px; }` });
+      // The tray scales with the root, so the window has to grow with it.
+      await page.setViewportSize({
+        width: 1600 + (await trayInset(page)),
+        height: 900,
+      });
 
       const width = (await steps(page, threshold)) - 1;
       const { host, regions } = await build(page, width);

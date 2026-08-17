@@ -12,8 +12,6 @@ const { thread }: Props = $props();
  * Unread signalling for a thread card. The card is rendered on the server and never
  * hydrated, so this island cannot give CnCard a new `notify` value; it toggles the
  * component's published `has-notify` state class on the card root instead.
- *
- * See specs/design-system/components/cn-card/spec.md.
  */
 $effect(() => {
   const card = document

@@ -1,0 +1,28 @@
+---
+/**
+ * The site application's bar: this site's identity, leading to its root.
+ *
+ * A site is what its authors have made of it, so the bar names the site rather
+ * than the service. The way to Pelilauta stands in the rail's footer instead.
+ */
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import AppThemeSwitch from 'src/components/svelte/app/AppThemeSwitch.svelte';
+import type { Site } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
+import { systemToNoun } from 'src/utils/schemaHelpers';
+
+interface Props {
+  site: Site;
+}
+
+const { site } = Astro.props;
+---
+
+<CnAppBar
+  title={site.name}
+  noun={systemToNoun(site.system)}
+  href={`/sites/${site.key}`}
+>
+  <AppThemeSwitch client:load label={t('actions:theme')} />
+  <slot />
+</CnAppBar>

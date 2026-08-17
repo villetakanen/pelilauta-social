@@ -1,0 +1,53 @@
+---
+title: CnNotificationAction
+description: "A navigation destination that carries a count."
+order: 90
+runtime: static
+---
+
+import CnNotificationAction from '@design-system/components/CnNotificationAction.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+import NotificationActionSpecimens from '@design-system/books/specimens/NotificationActionSpecimens.astro'
+
+Use a notification action to invite a reader back to something they are part of: someone
+answered them, someone wants to join their game.
+
+## When to use it
+
+CnNotificationAction is a [Chrome Action](/base/chrome-actions), that allows a
+notification to be set.
+
+## Example
+
+<Composition themes caption="CnNotificationAction, in Light and Dark">
+  <CnNotificationAction href="/base/chrome-actions" noun="send" label="Ilmoitukset" count={3} />
+</Composition>
+
+```mdx
+<CnNotificationAction href="/notifications" noun="send" label="Ilmoitukset" count={3} />
+```
+
+<Composition themes caption="Compact, at a single count, at the ceiling, and as the current destination, in Light and Dark">
+  <NotificationActionSpecimens group="counts" presentation="compact" />
+</Composition>
+
+<Composition themes caption="Labelled, at a single count, at the ceiling, and as the current destination, in Light and Dark">
+  <NotificationActionSpecimens group="counts" presentation="labelled" />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `href` | `string` | Required. The destination. |
+| `noun` | `string` | Required. The Icon's glyph. |
+| `label` | `string` | Required, and localised. The accessible name, and the visible label where the container declares labelled. |
+| `count` | `number \| string` | A whole number of one or more renders a badge, and above 9 the badge reads `9+`. Anything else renders no badge, so an application value reaches it unguarded. |
+| `aria-current` | `string` | Marks the current destination. |
+
+## Accessibility
+
+The label is the accessible name. Where a badge renders, the count joins the label, so a
+screen reader announces the count once. The badge is hidden.

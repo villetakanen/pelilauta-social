@@ -12,10 +12,14 @@ export const app = {
   },
   title: 'Pelilauta 2 - Versio 16',
   shortname: 'Pelilauta 2',
+  quickActions: 'Pikatoiminnot',
+  /** The product's wordmark, as chrome shows it. */
+  wordmark: 'Pelilauta',
   mekanismi: 'Mekanismi',
   errors: {
     fetchingThreads:
       'Keskustelujen lataaminen epäonnistui. Yritä päivittää sivu.',
+    themeNotSaved: 'Teeman tallennus epäonnistui.',
   },
   meta: {
     title: 'Pelilauta 2',

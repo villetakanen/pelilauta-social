@@ -5,9 +5,9 @@ ring `aria-hidden="true"`, and the centre `Icon` with no `decorative`. `Icon` is
 decorative by default: it takes `role="img"`, `aria-label={noun}` and an SVG `<title>`.
 
 So a status region named "Loading" contains an image named "send", and the noun is read out
-alongside the label. The noun is the design system's own untranslated string, which the
+alongside the label. The noun is the design system's untranslated string, which the
 marks and the icon-only control rules elsewhere are careful never to announce. In a button
-in flight the control's own name is announced too, so the same action is named twice, once
+in flight the control's name is announced too, so the same action is named twice, once
 in the reader's language and once not.
 
 The `<title>` also produces a mouse tooltip on the loader's glyph, which nothing in the

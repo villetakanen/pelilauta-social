@@ -27,7 +27,9 @@ export const actions: Locale = {
   next: 'Seuraava',
   send: 'Lähetä',
   save: 'Tallenna',
+  search: 'Haku',
   share: 'Jaa',
+  theme: 'Vaihda teemaa',
   showMore: 'Näytä lisää',
   show: {
     options: 'Näytä lisäasetukset',

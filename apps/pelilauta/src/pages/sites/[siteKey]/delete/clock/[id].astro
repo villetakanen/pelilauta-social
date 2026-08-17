@@ -1,6 +1,7 @@
 ---
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
 import DeleteClockApp from '../../../../../components/svelte/sites/DeleteClockApp.svelte';
 import ModalPage from '../../../../../layouts/ModalPage.astro';
 
@@ -23,6 +24,9 @@ const site = SiteSchema.parse({
 });
 ---
 
-<ModalPage>
+<ModalPage title={site.name} backHref={`/sites/${site.key}/clocks`}>
+  <div class="content-prose">
+    <h1>{t('site:clocks.delete.title')}</h1>
+  </div>
   <DeleteClockApp site={site} key={id} client:only="svelte" />
 </ModalPage>

@@ -1,5 +1,5 @@
 ---
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { handoutFrom } from 'src/schemas/HandoutSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
@@ -14,12 +14,8 @@ interface Props {
 const { siteKey, id } = Astro.params;
 const { origin } = new URL(Astro.request.url);
 
-const session = await verifySession(Astro);
-if (!session?.uid) {
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { uid, denied } = await requireSession(Astro);
+if (denied) return denied;
 
 // Fetch site data from the api
 const siteResponse = await fetch(`${origin}/api/sites/${siteKey}`);
@@ -32,7 +28,7 @@ const site = SiteSchema.parse({
 });
 
 // A handout is edited by a site owner, the rule HandoutEditor carried itself.
-const { isOwner } = await verifySiteAccess(site, session.uid);
+const { isOwner } = await verifySiteAccess(site, uid);
 if (!isOwner) {
   return Astro.redirect(`/sites/${siteKey}/handouts/${id}`);
 }

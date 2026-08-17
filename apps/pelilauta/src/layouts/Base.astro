@@ -1,0 +1,100 @@
+---
+import AuthManager from '@components/svelte/AuthManager.svelte';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import CnShareAction from '@design-system/components/CnShareAction.svelte';
+import Icon from '@design-system/components/Icon.svelte';
+import BaseBar from '@pelilauta/base/chrome/BaseBar.astro';
+import BaseRail from '@pelilauta/base/chrome/BaseRail.astro';
+import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
+import BaseTail from '@pelilauta/components/server/BaseTail.astro';
+import { t } from 'src/utils/i18n';
+
+// This layout includes AuthManager for client-side authentication. It
+// serves public pages that need to detect user auth state and handle
+// onboarding flows (EULA acceptance, account creation).
+
+type Props = {
+  /** The document's title, as a search result shows it. */
+  title?: string;
+  description?: string;
+  image?: string;
+  noSharing?: boolean;
+  search?: boolean;
+};
+
+const { title, description, image, noSharing, search } = Astro.props;
+---
+
+<html lang="fi">
+  <BaseHead {title} {description} {image} {noSharing} />
+  {/*
+    The scope the tray's stylesheet reads to make the bar and the main region
+    cede its inline size. It selects a descendant of the scope, so something has
+    to contain both — the design site wraps them in a div, and Pelilauta cannot,
+    because CnPoster supports `body` and nothing else. The stylesheet avoids
+    `body` so a book rendering a tray as a specimen moves nothing around it;
+    Pelilauta renders no specimens.
+  */}
+  <body data-cn-rail-scope>
+    <CnAppChrome>
+      <BaseBar>
+        <slot name="app-bar" />
+        {
+          search && (
+            <a href="/search" class="chrome-action">
+              <Icon noun="search" decorative />
+              <span>{t("actions:search")}</span>
+            </a>
+          )
+        }
+        {
+          !noSharing && (
+            <CnShareAction
+              client:load
+              label={t("actions:share")}
+              text={description}
+            />
+          )
+        }
+      </BaseBar>
+
+      <BaseRail />
+      {
+        Astro.slots.has('fab-tray') && (
+          <nav class="fab-tray" aria-label={t("app:quickActions")}>
+            <slot name="fab-tray" />
+          </nav>
+        )
+      }
+    </CnAppChrome>
+
+    <main class="app-main">
+      <slot />
+      <AppFooter>
+        <slot name="app-footer-credits" slot="app-footer-credits" />
+      </AppFooter>
+    </main>
+
+    <slot name="app-background-poster" />
+    <AuthManager client:only="svelte" />
+
+    {/*
+      The share action reports what it did and shows nothing, so telling the
+      reader is the application's. A native share needs no word — the browser
+      showed its own sheet — and a dismissal reports nothing at all.
+    */}
+    <script>
+      import { pushSnack } from 'src/utils/client/snackUtils';
+
+      document.addEventListener('cn-share', (event) => {
+        const outcome = (event as CustomEvent<{ outcome: string }>).detail
+          .outcome;
+        if (outcome === 'copied') pushSnack('snack:share.copied');
+        if (outcome === 'failed') pushSnack('snack:share.failed');
+      });
+    </script>
+
+    <BaseTail />
+  </body>
+</html>

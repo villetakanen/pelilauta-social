@@ -55,9 +55,6 @@ readable contrast in Light and Dark. A consumer uses a semantic role where the
 system has named that purpose; it does not select a reference colour as a local
 substitute.
 
-Transparency may be mixed with a reference colour to derive an overlay. It does
-not introduce another palette colour into the semantic layer.
-
 Compatibility aliases receive no lexicon and no new consumer. They are migration
 scaffolding, not an alternative public vocabulary or a completeness contract.
 They receive no dedicated compatibility test.
@@ -67,7 +64,7 @@ They receive no dedicated compatibility test.
 ### Definition of Done
 
 - A new token family has a named production use and is documented by the book
-  that owns its design intent.
+  that carries its design intent.
 - A source-driven lexicon lists every token declared by its stylesheet and the
   value as declared. A selection matching no token fails the build.
 - Human review accepts the hierarchy, states, and contrast produced by semantic

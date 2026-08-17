@@ -2,15 +2,19 @@
 import ChannelsApp from '@components/server/channels/ChannelsApp.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
+import Base from '@layouts/Base.astro';
 import { t } from 'src/utils/i18n';
 import FrontpageFabs from '../../components/svelte/frontpage/FrontpageFabs.svelte';
-import Page from '../../layouts/Page.astro';
 
 const title = t('seo:channels.title');
 const description = t('seo:channels.description');
 const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp`;
 ---
-<Page title={title} description={description} image={image}>
+<Base
+  title={title}
+  description={description}
+  image={image}
+>
   <!-- Direct SSR rendering - no defer needed with aggregated endpoint -->
   <ChannelsApp />
 
@@ -27,4 +31,4 @@ const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikk
     href="https://linktr.ee/junowski"
     slot="app-footer-credits"
   />
-</Page>
+</Base>

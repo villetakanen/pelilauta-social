@@ -1,7 +1,6 @@
 /*
  * Surface — the padded container, and the five elevation levels.
  *
- * Spec: specs/design-system/surface/spec.md
  *
  * Two vocabularies, one model. `.surface` is the container: padding and an
  * inline-size query boundary. `.elevation-0` through `.elevation-4` are the

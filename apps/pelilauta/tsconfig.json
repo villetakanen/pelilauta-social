@@ -15,6 +15,8 @@
       "@firebase/*": ["src/firebase/*"],
       "@utils/*": ["src/utils/*"],
       "@design-system/*": ["../../packages/design-system/*"],
+      "@pelilauta/*": ["src/*"],
+      "@root/*": ["../../*"],
       "@myrrys/proprietary": ["../../packages/myrrys-proprietary/index.ts"]
     },
     "jsx": "preserve",

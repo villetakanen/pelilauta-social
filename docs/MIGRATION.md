@@ -34,7 +34,7 @@ call site moving:
   `--cn-grid`.
 - The design-system `.surface` loads after Cyan's atomic spacing classes at equal
   specificity. Existing compositions such as `.surface.p-1` therefore receive the
-  forced Surface inset until their owning capability migrates them.
+  forced Surface inset until the capability that governs them migrates them.
 - Cyan's `.surface` still sets `color: var(--color-on-surface)`, because the design
   system's Surface sets no foreground. That declaration disappears with Cyan, and the
   components on those surfaces then own their text colour.
@@ -60,13 +60,13 @@ specificity and rendered outcome — rather than translating its selector. Icon 
 comes from the public `--cn-icon-size-*` tokens, never from the component's private
 variables.
 
-Svelte's scoped styles do not cross a child-component boundary. Where a consumer owns
+Svelte's scoped styles do not cross a child-component boundary. Where a consumer carries
 the layout around a local component, target the child's public class with `:global(…)`
 rather than moving consumer-specific layout into the component to avoid the boundary.
 
 ## Temporary bridges have a home
 
-While an unmigrated capability still owns legacy behaviour, keep the smallest bridge
+While an unmigrated capability still governs legacy behaviour, keep the smallest bridge
 under `apps/pelilauta/src/styles/migrations/`, recording where the behaviour came from,
 what still reads the bridge, which capability takes it over, and what has to be true to
 delete it. Nothing temporary becomes intrinsic to a migrated component.

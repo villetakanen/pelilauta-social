@@ -18,6 +18,9 @@ export const settings: Locale = {
     edit: {
       title: 'Muokkaa profiilia',
     },
+    create: {
+      title: 'Luo profiili',
+    },
   },
   preview: {
     title: 'Esikatselu',

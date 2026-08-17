@@ -14,8 +14,12 @@ export const site: Locale = {
   clocks: {
     title: 'Kellot',
     create: {
+      title: 'Luo kello',
       preview: 'Esikatselu',
       default: 'Kello',
+    },
+    delete: {
+      title: 'Poista kello',
     },
     empty: 'Ei kelloja',
   },
@@ -191,6 +195,7 @@ export const site: Locale = {
   },
   siteList: {
     title: 'Julkiset sivustot',
+    shortTitle: 'Sivustot',
     footer: '{count} julkista peliä tai sivustoa.',
   },
   toc: {
@@ -234,6 +239,7 @@ export const site: Locale = {
     },
   },
   deletePage: {
+    title: 'Poista sivu',
     info: 'Olet poistamassa sivua {name}. Toimintoa ei voi peruuttaa.',
   },
   latestChanges: {

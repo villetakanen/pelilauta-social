@@ -139,48 +139,13 @@ p cn-dice {
 }
 
 /*
- * Sources: core/navigation.css, core/main.css, core/rail.css and core/tray.css.
- * Consumer: PageWithTray. Future owner: App Shell; remove when local navigation
- * owns tray state and placement.
+ * Sources: core/navigation.css, core/main.css and core/rail.css.
+ * Consumer: EditorPage, the one layout still rendering AppRail and the Cyan
+ * bar; remove with the editor's migration. The tray rules that stood here died
+ * with their last cn-tray-button.
  */
 a:has(cn-navigation-icon) {
   text-decoration: none;
-}
-
-cn-tray-button {
-  position: fixed;
-  top: var(--cn-grid);
-  left: calc(var(--cn-grid) * 1.5);
-  z-index: var(--z-index-tray-button, 3000);
-}
-
-body:has(cn-tray-button[aria-expanded="false"]) nav#tray {
-  transform: translateX(100%);
-}
-
-@media screen and (max-width: 620px) {
-  cn-tray-button {
-    left: auto;
-    right: calc(var(--cn-grid) * 1.5);
-  }
-
-  body:has(cn-tray-button) cn-app-bar {
-    margin-right: calc(var(--cn-width-rail) - var(--cn-gap));
-  }
-}
-
-@media (min-width: 621px) {
-  body:has(cn-tray-button[aria-expanded="true"]):has(nav#rail) main {
-    margin-left: calc(var(--cn-width-tray) + var(--cn-gap));
-  }
-
-  body:has(cn-tray-button) nav#rail {
-    padding-top: calc(var(--cn-grid) * 10);
-  }
-
-  body:has(cn-tray-button[aria-expanded="false"]) nav#tray {
-    transform: translateX(0);
-  }
 }
 
 body:has(nav#rail) cn-app-bar {

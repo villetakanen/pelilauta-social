@@ -1,0 +1,360 @@
+/*
+ * Chrome actions: the command and destination control for application bars,
+ * rails and trays.
+ *
+ * A chrome action is an Actions presentation (specs/design-system/actions/spec.md):
+ * it keeps that capability's element semantics, disabled command, focus
+ * treatment, colour-role rules and transitions unchanged. This file states
+ * only what application chrome changes — the target, the state surface, the
+ * foreground source, the two presentations switched by the inherited
+ * `--cn-chrome-presentation` custom property, and a disabled destination,
+ * which Actions does not publish for an anchor.
+ *
+ * `.chrome-action` applies to `button.chrome-action` and `a.chrome-action[href]`,
+ * and to one more element: `label.chrome-action[for]`, a trigger whose control —
+ * and therefore whose focus, disabled state and semantics — is the form element
+ * it points at. The label takes the target, the state surface and the transient
+ * states, and nothing that follows the real control: no focus outline, no
+ * current destination, no disabled presentation, and no labelled presentation —
+ * a trigger is compact whatever its container declares. The class composes with
+ * no Actions button variant, so it is excluded from `.fab` and the default
+ * button surface in buttons.css (see that file's header) rather than restated
+ * here.
+ */
+
+button.chrome-action,
+a.chrome-action[href],
+label.chrome-action[for] {
+  /*
+   * The state surface below is an absolutely positioned `::before` with a
+   * negative z-index, so it paints behind the Icon and label — both in-flow,
+   * non-positioned content that would otherwise win the paint order over any
+   * positioned descendant regardless of z-index. `isolation: isolate` gives
+   * the target its own stacking context, so the negative z-index resolves
+   * within it (behind the target's own children) instead of escaping to the
+   * nearest ancestor stacking context, where it could slip behind unrelated
+   * chrome the target sits on top of.
+   */
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: calc(var(--cn-grid) * 7);
+  block-size: calc(var(--cn-grid) * 7);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  text-decoration: none;
+  vertical-align: middle;
+  font-family: inherit;
+  font-size: var(--cn-font-size-button);
+  font-weight: var(--cn-font-weight-button);
+  line-height: var(--cn-line-height-button);
+  letter-spacing: var(--cn-letter-spacing-button);
+  white-space: nowrap;
+  cursor: pointer;
+
+  /*
+   * The class is an icon-size context, but — unlike buttons.css and fab.css,
+   * which resolve every step to the small step — a chrome action resolves to
+   * the medium step: the owner judged the small step too small against the
+   * six-grid state surface. This departs from the Actions spec on purpose;
+   * `specs/design-system/chrome-actions/spec.md` carries the departure.
+   *
+   * `--cn-icon-size` is taken from the parent rather than left alone. Left
+   * alone, any rule reaching this element with a medium step of its own — Cyan
+   * still ships `button { --cn-icon-size: var(--cn-icon-size-small) }`, which
+   * matches a chrome action rendered as a button — would name the small step
+   * while the line below names the medium one. Each would then reference the
+   * other, and a cyclic custom property is invalid at computed-value time: both
+   * resolve to nothing, and every Icon in the control falls back to the `svg`
+   * element's intrinsic size. `inherit` takes the value the container already
+   * carries, so it restates no measurement and joins no cycle.
+   */
+  --cn-icon-size: inherit;
+  --cn-icon-size-xsmall: var(--cn-icon-size);
+  --cn-icon-size-small: var(--cn-icon-size);
+  --cn-icon-size-large: var(--cn-icon-size);
+  --cn-icon-size-xlarge: var(--cn-icon-size);
+
+  /*
+   * The state surface's and the label's geometry, resolved once here rather
+   * than queried again on a descendant or on `::before`. A style container
+   * query matching the target itself excludes the target's own declaration
+   * and reads an ancestor; the identical query matching one of the target's
+   * descendants — the label `span`, or the generated `::before` box, whose
+   * originating element is the target — does not exclude the target, and can
+   * read the property directly off it. `--cn-chrome-presentation` is meant to
+   * come from a container, one level further out than the target, so a query
+   * repeated on a descendant selector can resolve a different branch than the
+   * one the target itself resolved — a labelled target with a compact
+   * surface or a hidden label, or the reverse, whenever the declaration also
+   * happens to sit on the target. Resolving the branch once, here, into
+   * inherited `--_*` scope tokens, and letting every descendant rule only
+   * read them, keeps the whole control on one branch, because only the
+   * target itself ever evaluates the query.
+   *
+   * Each token is declared exactly once below and once inside the labelled
+   * query further down; the two never share a name. The compact value lives
+   * in the fallback of a `var()` that names the labelled-only token, so
+   * "declared twice" never happens — a labelled context sets the
+   * `--_labelled-*` token, which the fallback then loses to, and a compact
+   * context leaves it unset, which is why the fallback wins there instead.
+   */
+  --_surface-inline: var(--_labelled-surface-inline, calc(var(--cn-grid) * 6));
+  --_surface-inset: var(--_labelled-surface-inset, 50%);
+  --_surface-shift: var(--_labelled-surface-shift, -50%);
+  --_label-position: var(--_labelled-label-position, absolute);
+  --_label-inline: var(--_labelled-label-inline, calc(var(--cn-grid) / 8));
+  --_label-block: var(--_labelled-label-block, calc(var(--cn-grid) / 8));
+  --_label-clip: var(--_labelled-label-clip, inset(50%));
+  /*
+   * The notification badge's inline-start, resolved the same way. Both
+   * branches place the badge's centre on the Icon's inline-end edge: compact
+   * measures that edge from the target's centre, labelled from the inline
+   * inset the content starts at.
+   */
+  --_badge-size: calc(var(--cn-grid) * 2.5);
+  --_badge-inline-start: var(
+    --_labelled-badge-inline-start,
+    calc(50% + var(--cn-icon-size) / 2 - var(--_badge-size) / 2)
+  );
+}
+
+button.chrome-action > :is(.cn-icon, .cn-loader),
+a.chrome-action[href] > :is(.cn-icon, .cn-loader) {
+  /* The Icon or loader keeps its square; the label gives way. */
+  flex: none;
+}
+
+/*
+ * The label: out of flow in compact so the Icon stays centred, but never
+ * `display: none` — that would remove it from the accessibility tree too,
+ * which the spec forbids explicitly. The clip technique matches the one
+ * `apps/design/src/layouts/Book.astro` already uses for its visually-hidden
+ * toggle label. Excluded from the Icon and the loader, which also render as a
+ * `span` (`Icon.svelte`, `CnLoader.svelte`) and must stay visible and in
+ * flow. It reads the `--_label-*` scope tokens the target resolved above and
+ * contains no style query of its own — see the comment on those tokens for
+ * why. Excluded also from the notification badge, which renders as a `span`
+ * of its own and carries the count rather than the label.
+ */
+button.chrome-action > span:not(.cn-icon, .cn-loader, .cn-notification-badge),
+a.chrome-action[href] > span:not(.cn-icon, .cn-loader, .cn-notification-badge) {
+  position: var(--_label-position);
+  /* Compact: a near-zero box, grid-derived rather than a pixel literal, so it
+     still scales with the reader's text size — it only has to survive as
+     non-empty content, since the clip-path removes it from view. Labelled:
+     `auto`, sized by its own text. */
+  inline-size: var(--_label-inline);
+  block-size: var(--_label-block);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: var(--_label-clip);
+  min-inline-size: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*
+ * The state surface: transparent at rest, centred within the target. It
+ * reads the `--_surface-*` scope tokens the target resolved above and
+ * contains no style query of its own — see the comment on those tokens for
+ * why.
+ */
+button.chrome-action::before,
+a.chrome-action[href]::before,
+label.chrome-action[for]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: 50%;
+  inset-inline-start: var(--_surface-inset);
+  transform: translate(var(--_surface-shift), -50%);
+  inline-size: var(--_surface-inline);
+  block-size: calc(var(--cn-grid) * 6);
+  border-radius: calc(var(--cn-grid) * 3);
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * Labelled: the expanded rail has declared its chrome actions show their label.
+ * The target fills the container's inline size, the content starts from a
+ * grid inset at the start edge, and the `--_surface-*` and `--_label-*`
+ * tokens above resolve the state surface to a pill filling that same inline
+ * size and the label to a normal, visible, truncating flex child — no other
+ * rule in this file re-evaluates the query.
+ */
+@container style(--cn-chrome-presentation: labelled) {
+  button.chrome-action,
+  a.chrome-action[href] {
+    inline-size: 100%;
+    justify-content: flex-start;
+    gap: var(--cn-gap);
+    /*
+     * The Icon stands where the compact presentation centres it in the target,
+     * so a container changing presentation moves the label in and the Icon not
+     * at all. A rail and a bar inset their own contents equally, which is what
+     * puts every glyph in the application's chrome on one line.
+     */
+    padding-inline-start: calc((var(--cn-grid) * 7 - var(--cn-icon-size)) / 2);
+
+    --_labelled-surface-inline: 100%;
+    --_labelled-surface-inset: 0;
+    --_labelled-surface-shift: 0%;
+    --_labelled-label-position: static;
+    --_labelled-label-inline: auto;
+    --_labelled-label-block: auto;
+    --_labelled-label-clip: none;
+    --_labelled-badge-inline-start: calc(
+      (var(--cn-grid) * 7 - var(--cn-icon-size)) /
+      2 +
+      var(--cn-icon-size) -
+      var(--_badge-size) /
+      2
+    );
+  }
+}
+
+/*
+ * States: the surface is transparent at rest and carries the transient
+ * feedback; active replaces hover rather than compounding it because this
+ * rule follows the hover rule in source order at equal specificity.
+ */
+button.chrome-action:hover::before,
+a.chrome-action[href]:not([aria-disabled="true"]):hover::before,
+label.chrome-action[for]:hover::before {
+  background-color: var(--cn-hover);
+}
+
+button.chrome-action:active::before,
+a.chrome-action[href]:not([aria-disabled="true"]):active::before,
+label.chrome-action[for]:active::before {
+  background-color: var(--cn-active);
+}
+
+button.chrome-action:focus-visible,
+a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * The current destination.
+ *
+ * The indicator is persistent and the hover and active washes are transient, and
+ * the spec has them compose rather than replace each other. So they are two
+ * layers of one surface, not one property fought over: the wash keeps `::before`
+ * and its `background-color` transition exactly as above, and the indicator
+ * takes `::after` at `z-index: -2` — directly beneath it. That composition is why the
+ * wash still reads over `--cn-indicator` where it too is translucent, letting artwork
+ * show through the current destination as it already does through the washes beside it.
+ *
+ * `::after` is generated only here, so a non-current action carries no second
+ * box, and the geometry reads the same `--_surface-*` scope tokens the target
+ * already resolved for `::before` — one presentation branch, evaluated once.
+ *
+ * `aria-current="false"` is the one value that is not a current destination, and
+ * a `button` is a command whatever it declares; both fall outside this selector
+ * rather than being undone by a later override.
+ */
+a.chrome-action[href][aria-current]:not([aria-current="false"]) {
+  color: var(--cn-on-indicator);
+}
+
+a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset-block-start: 50%;
+  inset-inline-start: var(--_surface-inset);
+  transform: translate(var(--_surface-shift), -50%);
+  inline-size: var(--_surface-inline);
+  block-size: calc(var(--cn-grid) * 6);
+  border-radius: calc(var(--cn-grid) * 3);
+  background-color: var(--cn-indicator);
+  pointer-events: none;
+}
+
+/*
+ * The notification badge stands at the block-start, inline-end corner of the
+ * Icon in both presentations, and takes no space in the target's flow. Its
+ * own fill and foreground survive every state, including the current
+ * destination's anchor foreground, which the badge overrides for itself. It
+ * carries no z-index of its own, so it paints above `::before` and `::after`,
+ * which sit at negative z-indexes inside the target's own stacking context.
+ */
+.chrome-action > .cn-notification-badge {
+  position: absolute;
+  inset-block-start: calc(
+    50% -
+    var(--cn-icon-size) /
+    2 -
+    var(--_badge-size) /
+    2
+  );
+  inset-inline-start: var(--_badge-inline-start);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: var(--_badge-size);
+  block-size: var(--_badge-size);
+  padding-inline: calc(var(--cn-grid) / 2);
+  border-radius: calc(var(--_badge-size) / 2);
+  background-color: var(--cn-color-info);
+  /*
+   * A decorative pick from the palette, not a foreground role: the badge is
+   * hidden from assistive technology and carries no text-contrast ratio, and
+   * no semantic foreground answers a fill that is dark in one scheme and
+   * bright in the other — a single role would leave the characters unread in
+   * whichever scheme it was not chosen for.
+   */
+  color: light-dark(var(--cn-color-primary-95), var(--cn-color-primary-40));
+  font-size: var(--cn-font-size-small);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* A disabled anchor's `aria-disabled="true"` and `tabindex="-1"` are the consumer's. */
+button.chrome-action:disabled,
+a.chrome-action[href][aria-disabled="true"] {
+  opacity: var(--cn-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.chrome-action::before,
+  a.chrome-action[href]::before,
+  label.chrome-action[for]::before {
+    transition: none;
+  }
+}
+
+/*
+ * `.only-on-small` — a part of the chrome that stands only where the chrome
+ * container is at its narrowest, and nowhere else.
+ *
+ * The design system otherwise holds that what chrome carries does not depend on
+ * how wide it is; this is the exception, for the one case where the narrow band
+ * takes something away and the part it took has to reappear elsewhere. Reach for
+ * it there and nowhere else.
+ *
+ * The query names `app-chrome`, so outside that container the class does
+ * nothing at all and whatever carries it stays visible. Misuse shows itself
+ * at once rather than quietly hiding something.
+ */
+@container app-chrome (min-width: 38.7501rem) {
+  button.chrome-action.only-on-small,
+  a.chrome-action[href].only-on-small {
+    display: none;
+  }
+}

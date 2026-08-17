@@ -1,7 +1,5 @@
 /*
  * Unit and radius tokens.
- *
- * Spec: specs/design-system/design-tokens/spec.md
  */
 :root {
   /* Base grid. Every spacing and radius decision derives from this. */
@@ -28,7 +26,7 @@
    * The identity mark's three diameters, in lines rather than grid units: a mark
    * sits beside text, so it measures in the text's leading. Both the mark and a
    * list's overflow count read them, which is why they are named here rather
-   * than restated in each. Spec: specs/design-system/identity-mark/spec.md
+   * than restated in each.
    */
   --cn-avatar-size-small: calc(
     var(--cn-line) *
@@ -45,8 +43,7 @@
 
   /*
    * Icon sizes: absolute lengths rather than grid multiples, following v20, which
-   * files them beside the grid and marks them absolute. Spec:
-   * specs/design-system/components/cn-icon/spec.md
+   * files them beside the grid and marks them absolute.
    */
   --cn-icon-size-xsmall: 1rem; /* 16px at the default root font size */
   --cn-icon-size-small: 1.5rem; /* 24px */
@@ -55,20 +52,46 @@
   --cn-icon-size-xlarge: 8rem; /* 128px */
 
   /*
-   * Stacking. One value for now: the FAB tray rides above page content and the
-   * persistent navigation, and below the dialog, modal and snackbar layers that
-   * Cyan still provides at 50000 and above.
+   * Chrome is fixed and paints over the document, so a page insets its own
+   * first line by the bar's depth rather than measuring it.
    */
+  --cn-app-bar-height: calc(var(--cn-grid) * 8);
+
+  /*
+   * Stacking. Chrome rides above page content and Cyan's own fixed navigation,
+   * and below the dialog, modal and snackbar layers Cyan still provides at 50000
+   * and above. The tray's value resolves among chrome's parts, inside the box.
+   */
+  --cn-z-chrome: 40500;
   --cn-z-fab: 40500;
+  /* A covering tray stands above the bar and the FAB; its scrim immediately below it. */
+  --cn-z-scrim: 40600;
+  --cn-z-rail: 40700;
 
   /* Interaction motion, shared by every control that answers a pointer. */
   --cn-duration-ui: 0.22s;
   --cn-easing-ui: ease-in-out;
 
+  --cn-disabled-opacity: 0.5;
+
+  /*
+   * The tray's two sizes. v20's values: a rail holds a compact chrome action's
+   * seven-grid target with a one-and-a-half grid inset either side.
+   */
+  --cn-width-rail-collapsed: calc(var(--cn-grid) * 10);
+  --cn-width-rail-expanded: calc(var(--cn-grid) * 32);
+
   /*
    * Breakpoints, in rem so a query follows a reader's enlarged default text.
    * A media or container query cannot read a custom property: a rule that
    * needs a threshold states the literal, and a test pins the literal here.
+   *
+   * Each names the width where its band ends, and belongs to the band it ends:
+   * small is the first and narrower, tablet is wider and narrower than the
+   * second, desktop is the second and wider. `CnAppBar`'s `max-width: 38.75rem`
+   * is that convention. The second is where a tray stands beside content
+   * rather than over it.
    */
   --cn-breakpoint-small: 38.75rem; /* 620px; small-screen width */
+  --cn-breakpoint-tablet: 64rem; /* 1024px; widest tablet width */
 }

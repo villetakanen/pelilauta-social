@@ -22,7 +22,7 @@ default link to anchors with destinations, button presentation to `button` and
 `a.button.fab[href]`. No component or client-side behaviour mediates the contract, so
 both applications receive the same presentation from `packages/design-system`.
 
-Each presentation's base selector owns its geometry, type, surface, foreground and
+Each presentation's base selector states its geometry, type, surface, foreground and
 interaction states; variant classes modify that base directly. A component with its
 own action language may replace a presentation within its scope; toggle buttons,
 reaction buttons and tray buttons remain separate capabilities. Placement of floating
@@ -38,23 +38,20 @@ through the contextual sizing contract in
 `specs/design-system/components/cn-icon/spec.md`, and CnLoader keeps the progress
 contract in `specs/design-system/components/cn-loader/spec.md`.
 
-The **Links, Actions and Buttons** Base book explains the element choice and renders
-every presentation, variant, composition and applicable state from shipped source.
+### Documentation
+
+- `apps/design/src/content/base/links-actions-buttons.mdx`
 
 ### Constraints
 
 #### Semantics
 
-An anchor with an `href` navigates to a document, resource or location. A button
-submits, resets or runs a command. Navigation that occurs only after a successful
-command does not turn its initiating button into a link. An anchor without an `href`
-is not a link and receives no action presentation. A native button declares the
-appropriate `type`; consumers do not depend on the implicit `submit` default.
+Navigation that occurs only after a successful command does not turn its initiating
+button into a link. An anchor without an `href` receives no action presentation. A
+native button declares the appropriate `type`; consumers do not depend on the implicit
+`submit` default.
 
-Presentation classes do not change those semantics. An `a.button`, `a.fab` or
-`a.button.fab` preserves its destination, accessible name and native link attributes
-and behaviour. Consumers select the native element before applying a presentation
-class.
+Consumers select the native element before applying a presentation class.
 
 A Cancel control that leaves an edit form for its view URL is an anchor presented as
 a button, with the explicit view URL as its `href`; it does not traverse browser
@@ -63,17 +60,18 @@ button.
 
 #### Shared grammar
 
-Every state preserves the selected variant's surface and foreground identity; hover
+Every state preserves the chosen variant's surface and foreground identity; hover
 and active feedback composes over the surface without a brightness filter. State
 transitions use the shared UI duration and easing roles and resolve without motion
 when the reader requests reduced motion. Keyboard focus adds `--cn-focus-ring`
 without depending on colour change alone.
 
-Only a native button has disabled and loading states, presented at half opacity. A
-disabled control cannot be activated or focused. A command in flight is a disabled
-native control containing an inline CnLoader, alone or before its label, and retains
-an accessible name describing the command. An anchor is navigable or absent;
-`disabled`, `aria-disabled` and a `disabled` class create no disabled-link variant.
+A disabled control renders at `--cn-disabled-opacity`.
+
+A command in flight is a disabled native control containing an inline CnLoader, alone
+or before its label, and retains an accessible name describing the command. This
+capability publishes no disabled presentation for an anchor: availability is a
+navigable destination, or no control.
 
 An icon-only or loader-only control has equal inline and block sizes and takes its
 accessible name from the control, never from the child. Truncation targets the text
@@ -96,7 +94,7 @@ component-private icon size.
 Link presentation does not introduce another colour value or change typography
 metrics. A component may replace the resting underline or colour when its
 specification defines a contextual treatment and preserves visible hover and
-keyboard-focus feedback. The design system provides no generic class for removing or
+keyboard-focus feedback. This capability publishes no class for removing or
 conditionally restoring link decoration.
 
 #### The button
@@ -170,11 +168,10 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
 - Hover, active, keyboard-focus, disabled, loading and reduced-motion states are
   observable in the applicable native elements.
 - The **Links, Actions and Buttons** Base book explains element and variant
-  selection and renders every presentation, variant, composition and applicable
+  choice and renders every presentation, variant, composition and applicable
   state from shipped source in Light and Dark.
 - Action presentation no longer comes from the design site's editorial stylesheet,
   Cyan, or an application migration bridge.
-- No generic decoration-removal or hover-underline utility is published.
 - Human review accepts the presentations, interaction feedback, label truncation,
   icon sizing, and disabled and loading emphasis in both colour schemes.
 
@@ -188,8 +185,6 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
   link treatment does not become a global utility.
 - A `.secondary` ancestor does not recolour a descendant control; the alternate
   treatment requires the direct modifier.
-- A disabled native button cannot submit a form, run a command, or receive keyboard
-  focus. Anchors do not acquire a simulated disabled state.
 - Hover and active feedback do not alter the control's foreground through a filter,
   and keyboard focus remains visible without colour perception.
 - Geometry continues to derive from the design-system spatial and icon roles when
@@ -198,8 +193,7 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
   size.
 - A state, variant or composition does not introduce a legacy token, literal colour
   or component-private icon size.
-- Native and anchor presentation remains equivalent for the same variant and
-  content, apart from native element behaviour.
+- The disabled state's only paint change is opacity from the shared token.
 - An icon-only or loader-only control never depends on its child for the control's
   accessible name.
 
@@ -216,13 +210,6 @@ And hover, active and keyboard focus are visibly distinct
 Given a previously visited anchor with a destination
 When it renders
 Then it uses the same presentation as an unvisited anchor
-```
-
-```gherkin
-Given an anchor presented as a button or floating action button
-When it is activated
-Then it navigates to its destination
-And its accessible name and native link attributes are preserved
 ```
 
 ```gherkin
@@ -250,7 +237,7 @@ Then their geometry, typography, surface, foreground and interaction feedback ma
 Given each variant of the button and FAB presentations
 When each renders at rest, on hover, while active, and with keyboard focus
 Then each state is visibly distinct where applicable
-And each state preserves the selected variant's surface and foreground identity
+And each state preserves the chosen variant's surface and foreground identity
 And keyboard focus includes a visible focus ring
 ```
 
@@ -265,7 +252,7 @@ And the control's accessible name describes its action or destination
 ```gherkin
 Given a button and a FAB containing only an Icon
 When they render in a flex or grid composition
-Then each retains equal inline and block sizes for its selected presentation and size
+Then each retains equal inline and block sizes for its chosen presentation and size
 And neither stretches into the available space
 And each has an accessible name describing its action or destination
 ```
@@ -276,13 +263,6 @@ When it renders an inline CnLoader alone or before its label
 Then the control is disabled and cannot be activated or focused
 And the loader uses the small contextual size and exposes progress
 And the control retains an accessible name describing the command
-```
-
-```gherkin
-Given an anchor presented as a button or FAB
-When a consumer attempts to apply disabled, aria-disabled, or a disabled class
-Then the design system provides no disabled presentation
-And availability is represented by rendering a navigable destination or omitting the control
 ```
 
 ```gherkin

@@ -29,7 +29,6 @@ async function handleSubmit(event: Event) {
 <WithAuth {allow}>
   <div class="content-prose">
     <div>
-      <h1 class="downscaled">{t('actions:confirm.delete')}</h1>
       <div class="border flex align-center p-1">
         <cn-story-clock 
           view

@@ -1,0 +1,196 @@
+---
+/**
+ * NotificationActionSpecimens — CnNotificationAction, one group per axis.
+ *
+ * `CnNotificationAction` is imported directly, with no `client:` directive:
+ * the badge needs no interactivity, and `Composition`'s `themes` mode
+ * re-renders the slot's server HTML for each colour scheme, so an island
+ * would only duplicate what the server already produced.
+ *
+ * Nothing here styles the target, the state surface, the Icon, the label or
+ * the badge; every rule comes from the component's own stylesheet. The
+ * `.surface` and `.elevation-0` classes come from styles/surface.css, wrapped
+ * around each rig.
+ *
+ * Book: apps/design/src/content/components/cn-notification-action.mdx
+ */
+import CnNotificationAction from '../../components/CnNotificationAction.svelte';
+
+interface Props {
+  /** Which axis to render. */
+  group: 'counts';
+  /** The presentation the wrapper declares via --cn-chrome-presentation. */
+  presentation: 'compact' | 'labelled';
+}
+
+const { group, presentation } = Astro.props;
+
+// Rig widths mirror ChromeActionSpecimens: a rail's width for compact, a
+// tray's for labelled. See that specimen's header comment for why these are
+// test rig values rather than design-system ones.
+const RIG_INLINE_SIZE = {
+  compact: 'calc(var(--cn-grid) * 10)', // rail: 80px
+  labelled: 'calc(var(--cn-grid) * 42)', // tray: 336px
+} as const;
+
+const HREF = '/base/chrome-actions';
+const NOUN = 'send';
+const LABEL = 'Ilmoitukset';
+
+const ROWS = [
+  { key: 'count-3', heading: 'Count', count: 3, current: false },
+  { key: 'count-10', heading: 'Ceiling', count: 10, current: false },
+  {
+    key: 'current',
+    heading: 'Current destination',
+    count: 3,
+    current: true,
+  },
+] as const;
+
+// The control stands on the base surface only, per its spec, so the specimen
+// offers no other elevation to stand it on.
+const SURFACES = [
+  { key: 'surface', label: 'Surface', class: 'surface elevation-0' },
+] as const;
+---
+
+<div
+  class="notification-action-specimen"
+  data-group={group}
+  data-presentation={presentation}
+>
+  {group === 'counts' && presentation === 'compact' && (
+    // A rail-width rig fits both surface columns beside a row header, so the
+    // table stays the compact axis's natural shape — the same choice
+    // ChromeActionSpecimens' "current" group makes for compact.
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Row</th>
+          {SURFACES.map((surface) => <th scope="col">{surface.label}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {ROWS.map((row) => (
+          <tr>
+            <th scope="row">{row.heading}</th>
+            {SURFACES.map((surface) => (
+              <td>
+                <div class={surface.class}>
+                  <div
+                    class="slot"
+                    style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+                    data-specimen={`${row.key}-${surface.key}`}
+                  >
+                    <CnNotificationAction
+                      href={HREF}
+                      noun={NOUN}
+                      label={LABEL}
+                      count={row.count}
+                      aria-current={row.current ? 'page' : undefined}
+                    />
+                  </div>
+                </div>
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+
+  {group === 'counts' && presentation === 'labelled' && (
+    // A tray-width rig does not fit two surface columns side by side, so
+    // each surface takes its own list — the same move ChromeActionSpecimens'
+    // "current" group makes for labelled, one list per role instead of one
+    // table.
+    SURFACES.map((surface) => (
+      <>
+        <p class="text-label">{surface.label}</p>
+        <dl class="state-list">
+          {ROWS.map((row) => (
+            <>
+              <dt>{row.heading}</dt>
+              <dd>
+                <div class={surface.class}>
+                  <div
+                    class="slot"
+                    style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
+                    data-specimen={`${row.key}-${surface.key}`}
+                  >
+                    <CnNotificationAction
+                      href={HREF}
+                      noun={NOUN}
+                      label={LABEL}
+                      count={row.count}
+                      aria-current={row.current ? 'page' : undefined}
+                    />
+                  </div>
+                </div>
+              </dd>
+            </>
+          ))}
+        </dl>
+      </>
+    ))
+  )}
+
+</div>
+
+<style>
+  /*
+   * A tray-width rig does not fit every viewport this book renders on;
+   * scrolling the specimen keeps that mismatch local rather than widening
+   * the panel, the figure, the breakout or the page. Same reasoning as
+   * ChromeActionSpecimens.
+   */
+  .notification-action-specimen {
+    overflow-x: auto;
+  }
+
+  table,
+  .state-list {
+    margin-inline: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  .state-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+    column-gap: var(--cn-gap);
+    row-gap: var(--cn-grid);
+    margin-block-end: var(--cn-line);
+  }
+
+  .state-list dt {
+    text-align: end;
+  }
+
+  .state-list dd {
+    margin: 0;
+  }
+
+  /*
+   * The rig's own inline size is set inline, per presentation, from
+   * RIG_INLINE_SIZE above, so a labelled target's own `inline-size: 100%`
+   * always resolves against a real rail or tray width rather than a
+   * percentage of the surrounding page.
+   */
+  .slot {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  th,
+  td {
+    padding: var(--cn-grid) var(--cn-gap);
+    text-align: start;
+    vertical-align: middle;
+  }
+</style>

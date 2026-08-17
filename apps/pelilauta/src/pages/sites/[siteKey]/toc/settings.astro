@@ -1,8 +1,10 @@
 ---
+import Site from '@layouts/Site.astro';
+import { requireSiteOwner } from '@pelilauta/site/utils/requireSiteOwner';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
 import SiteTocTool from '../../../../components/svelte/sites/toc/SiteTocTool.svelte';
-import ModalPage from '../../../../layouts/ModalPage.astro';
 
 const { siteKey } = Astro.params;
 
@@ -17,8 +19,14 @@ const site = SiteSchema.parse({
   ...toClientEntry(await siteResponse.json()),
   key: siteKey,
 });
+
+const denied = await requireSiteOwner(Astro, site);
+if (denied) return denied;
 ---
 
-<ModalPage>
+<Site {site} title={site.name}>
+  <div class="content-prose">
+    <h1>{t('site:toc.title')}</h1>
+  </div>
   <SiteTocTool {site} client:only="svelte" />
-</ModalPage>
+</Site>

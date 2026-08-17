@@ -44,9 +44,8 @@ import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
 
 ## Composition
 
-The control is an icon-only text button and takes its circle, size and states from
-[Links, Actions and Buttons](/base/links-actions-buttons). A parent supplies its
-placement.
+The control is a chrome action helper, and appears among them in
+[Chrome Actions](/base/chrome-actions).
 
 ## Reference
 
@@ -54,19 +53,19 @@ placement.
 
 | Prop | Type | Purpose |
 | :--- | :--- | :--- |
-| `label` | `string` | Accessible name. Defaults to `"Switch theme"`. |
+| `label` | `string` | The control's accessible name. Never in view. Defaults to `"Switch theme"`. |
 
 ### Tokens
 
-`CnThemeSwitch` declares no custom properties. Its geometry and colour come from the
-button presentation in [Links, Actions and Buttons](/base/links-actions-buttons), and its
-icon from [Icon](/components/icon).
+`CnThemeSwitch` declares no custom properties. Its geometry and colour come from
+[Chrome Actions](/base/chrome-actions), and its icon from [Icon](/components/icon).
 
 ## Accessibility
 
-The button carries `label` as its accessible name and contains a decorative icon, so the
-name is the control's alone. It exposes no pressed state: the theme is visible in the
-document rather than in the control.
+`label` names the control through a label element, present for assistive technology
+and hidden from view, so the button needs no separate accessible name. The control
+exposes no pressed state: the theme is visible in the document rather than in the
+control.
 
 ## Not shown here
 
@@ -75,9 +74,9 @@ panel, and this control writes the document root, so an activation inside one pa
 appear to do nothing. The single specimen above re-themes the whole page instead, which
 shows both schemes in turn.
 
-**The replica under reduced motion.** A reader who requests reduced motion gets no
-replica at all, which a page cannot show alongside the animated one — the query applies
-to the whole document, not to one specimen.
+**The replica under reduced motion.** A reader who requests reduced motion never sees the
+replica, which a page cannot show alongside the animated one — the query applies to the
+whole document, not to one specimen.
 
 **The system-preference fallback.** A document with no `color-scheme` on its root takes
 the first scheme preflight declares, and the control derives that from

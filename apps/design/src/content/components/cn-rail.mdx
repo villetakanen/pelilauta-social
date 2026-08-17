@@ -1,0 +1,116 @@
+---
+title: CnRail
+description: "The strip beside a page holding its persistent destinations, in three boxes and two widths."
+order: 85
+runtime: static
+---
+
+import CnRail from '@design-system/components/CnRail.astro'
+import Icon from '@design-system/components/Icon.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+import RailSpecimens from '@design-system/books/specimens/RailSpecimens.astro'
+
+Use CnRail to hold the destinations a reader reaches from wherever they are in the
+application.
+
+## When to use it
+
+An entry inside it is an ordinary [Chrome Action](/base/chrome-actions) — an anchor or a
+button carrying an Icon and a label — and the rail states none of its measurements.
+
+Mount it for the application's own persistent destinations. For a single page's own
+contextual action, use a [floating action
+button](/base/links-actions-buttons#floating-action-buttons-fab) instead.
+
+## Example
+
+This site's own navigation, beside this page, is a `CnRail`, at real scale: this is what
+it looks like where an application mounts one. The frame below holds a second
+one, at the same width band, so you do not have to leave this paragraph to try its
+trigger, a mounted [CnRailAction](/components/cn-rail-action) — click it and watch the
+rail move between its two widths, named after Material
+3's own vocabulary for the same control: expanded, showing every entry's label, and
+collapsed, its icons alone. The trigger's own glyph turns with it, drawing `=` collapsed
+and `|<` expanded, and turning the same way — counter-clockwise — whichever state it is
+leaving.
+
+<div class="breakout">
+  <Composition caption="CnRail, expanded, with a header, two destinations and a footer, in Light and Dark">
+    <RailSpecimens group="canonical" />
+  </Composition>
+</div>
+
+```astro
+---
+import CnRail from '@design-system/components/CnRail.astro'
+import Icon from '@design-system/components/Icon.svelte'
+---
+
+<CnRail label="Kirjaston sivut">
+  <a class="chrome-action" href="/haku" slot="header">
+    <Icon noun="search" decorative />
+    <span>Haku</span>
+  </a>
+
+  <a class="chrome-action" href="/" aria-current="page">
+    <Icon noun="fox" decorative />
+    <span>Etusivu</span>
+  </a>
+  <a class="chrome-action" href="/kirjasto">
+    <Icon noun="books" decorative />
+    <span>Kirjasto</span>
+  </a>
+
+  <a class="chrome-action" href="/ilmoitukset" slot="footer">
+    <Icon noun="send" decorative />
+    <span>Ilmoitukset</span>
+  </a>
+</CnRail>
+```
+
+Beside a page, the rail begins where the application bar's own target ends: the bar
+spans the whole inline size and keeps its corner for the page's identity, so only the
+main region cedes the rail's width. The bar's mark, the trigger and every entry then
+share one vertical axis and one 56px rhythm.
+
+<div class="breakout">
+  <Composition caption="CnAppBar over CnRail, sharing one axis and one 56px rhythm, in Light and Dark">
+    <RailSpecimens group="alignment" />
+  </Composition>
+</div>
+
+A box is spacing, not a surface, and a header or a footer holding nothing does not
+render — neither the space it would take nor, for the footer, its line. The comparison
+below holds the same two destinations either way; the left rail also carries a header
+entry and a footer entry, the right carries neither. Narrower than the frame above, both
+rest collapsed.
+
+<div class="breakout">
+  <Composition caption="The same rail with a header and a footer, and with neither, collapsed, in Light and Dark">
+    <RailSpecimens group="boxes" />
+  </Composition>
+</div>
+
+Narrower still, past `--cn-breakpoint-small`, a rail rests absent, reachable through its
+trigger alone; asked for there or in the collapsed band, it covers the page over a scrim,
+`Escape` closes it and returns focus to its trigger, and `Tab` cannot leave it. This
+site's own navigation is that rail: narrow your browser window to see each band, and the
+covering state, at real scale.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | Required, and localised. Names the control and the landmark. |
+| `id` | `string` | Distinguishes this rail's controls from another's. Defaults to `cn-rail`; a page mounting more than one rail states its own. |
+
+## Accessibility
+
+The rail renders a `nav` landmark named by `label`. Its trigger is `aria-hidden`; the
+toggle beside it carries that name, reports its own checked state, and is the sole
+focusable path into the rail. While the rail covers the page, `Escape` closes it and
+returns focus to that toggle, and `Tab` cannot move focus outside the rail. An entry
+inside a box is an ordinary chrome action, so its accessibility is that capability's,
+documented at [Chrome Actions](/base/chrome-actions).

@@ -2,7 +2,6 @@
  * Poster — the decorative artwork that replaces the ground plane behind one
  * page's content, and the surfaces that cede to it while it paints.
  *
- * Spec: specs/design-system/components/cn-poster/spec.md
  * Component: components/CnPoster.astro
  *
  * The artwork is user material of unknown colour and contrast, so the image is
@@ -38,6 +37,8 @@
    * canvas, which the poster then paints over, and the poster's lower edge
    * dissolves back into it.
    */
+  /* Deprecated with the Cyan bar that reads it: the local bar paints its own
+     veil and cedes nothing. This rule goes when cn-app-bar does. */
   body:has(#cn-poster) {
     --cn-app-bar-background-sticky: transparent;
   }
@@ -49,16 +50,13 @@
 
   /*
    * The ground plane is the one elevation a poster changes: it is the level
-   * that stands for the page itself, and an opaque page over the artwork would
-   * leave nothing to see. Levels 1 through 4 stay opaque, because content that
-   * has risen off the page is content the reader is meant to read.
+   * that stands for the page itself. Levels 1 through 4 stay opaque, because
+   * content that has risen off the page is content the reader is meant to read.
    *
-   * 80% is the share that keeps the inherited body foreground at WCAG 2.2 AA
-   * over near-white artwork in Dark — the tightest of the cases the spec tunes
-   * against — while the artwork still reads through.
+   * The share, and why it is that share, belong to the role.
    */
   body:has(#cn-poster) .elevation-0 {
-    background-color: color-mix(in oklch, var(--cn-surface), transparent 20%);
+    background-color: var(--cn-surface-over-poster);
   }
 
   /*

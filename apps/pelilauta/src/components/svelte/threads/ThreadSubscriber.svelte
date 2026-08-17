@@ -12,8 +12,6 @@ const { thread }: Props = $props();
  * Unread signalling for a thread row in a channel listing. The row is a Surface,
  * not a card, so it takes the design system's `has-notify` attention state — the
  * same signal the front page's CnCard shows, on the container this listing uses.
- *
- * See specs/design-system/surface/spec.md.
  */
 $effect(() => {
   const row = document.getElementById(`thread-${thread.key}`);

@@ -1,27 +1,32 @@
 <script lang="ts">
-import CnLoader from '@design-system/components/CnLoader.svelte';
+import CnIdentityAction from '@design-system/components/CnIdentityAction.svelte';
 import { isActive, isRehydrating } from 'src/stores/session/computed';
 import { profile } from 'src/stores/session/profile';
 import { t } from 'src/utils/i18n';
+
+// Set where this entry is a place of the application drawing the rail. See
+// InboxNavigationButton for why a door passes nothing.
+let { ariaCurrent }: { ariaCurrent?: string } = $props();
 </script>
 
 {#if $isRehydrating}
-  <div class="p-1">
-    <CnLoader inline />
-  </div>
+  <!-- Firebase resolves the session on the client, so the control renders
+       before there is a session to render for. Disabled, it cannot carry a
+       signed-in reader to the login page in that window. -->
+  <CnIdentityAction
+    href="/login"
+    label={t("navigation:login")}
+    disabled
+  />
 {:else if $isActive}
-  <!-- Using isActive ensures we only show the authenticated UI when the session is fully verified -->
-  <a
+  <CnIdentityAction
     href="/settings"
-    aria-label={$profile?.nick}
-    data-testid="setting-navigation-button"
-  >
-    <cn-navigation-icon noun="avatar" label={$profile?.nick}
-    ></cn-navigation-icon>
-  </a>
+    label={$profile?.nick ?? t("navigation:settings")}
+    signedIn
+    nick={$profile?.nick}
+    src={$profile?.avatarURL}
+    aria-current={ariaCurrent}
+  />
 {:else}
-  <a href="/login" aria-label={t("navigation:login")}>
-    <cn-navigation-icon noun="login" label={t("navigation:login")}
-    ></cn-navigation-icon>
-  </a>
+  <CnIdentityAction href="/login" label={t("navigation:login")} />
 {/if}

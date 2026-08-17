@@ -1,8 +1,6 @@
 <script lang="ts">
 /**
  * CnLoader — canonical progress indicator combining a spinning dual ring over a static noun icon.
- *
- * Spec: specs/design-system/components/cn-loader/spec.md
  */
 import Icon from './Icon.svelte';
 

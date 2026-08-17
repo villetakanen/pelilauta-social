@@ -2,7 +2,6 @@
  * fonts.css — the faces the design system delivers, and the two families that read
  * them.
  *
- * Spec: specs/design-system/fonts/spec.md
  *
  * Every face is its publisher's file, by bare specifier. Nothing is subsetted,
  * re-encoded or renamed: a modified font is a Modified Version under the OFL. Both

@@ -11,8 +11,6 @@
  * - An absent utility renders nothing to measure. Cyan published
  *   `.no-decoration` and `.hover-underline`, and porting the rest of it is the
  *   moment they come back; this is the ratchet that says they do not.
- *
- * Spec: specs/design-system/actions/spec.md
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';

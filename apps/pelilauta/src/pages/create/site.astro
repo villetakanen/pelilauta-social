@@ -3,10 +3,10 @@ import { t } from 'src/utils/i18n';
 import CreateSiteForm from '../../components/svelte/sites/CreateSiteForm.svelte';
 import ModalPage from '../../layouts/ModalPage.astro';
 
-const title = `${t('app:shortname')} – ${t('site:create.title')}`;
+const title = t('app:docs.title');
 const shortTitle = t('site:create.title');
 ---
 
-<ModalPage title={title} shortTitle={shortTitle}>
+<ModalPage title={title} shortTitle={shortTitle} backHref="/library">
   <CreateSiteForm client:only="svelte" />
 </ModalPage>

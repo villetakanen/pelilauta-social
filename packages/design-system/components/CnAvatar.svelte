@@ -7,8 +7,6 @@
  * profiles apart. It is not a stable identifier: the endpoints it mixes between
  * are token roles, so a palette change recolours every avatar, and that is
  * allowed.
- *
- * Spec: specs/design-system/identity-mark/spec.md
  */
 import Icon from './Icon.svelte';
 

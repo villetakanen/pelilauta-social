@@ -17,8 +17,6 @@
  * ARIA only: the <title> tooltip stays the noun. A `decorative` icon exposes
  * nothing: no role, no aria-label, and no <title>, so no tooltip either
  * (spec decision 2026-08-10).
- *
- * Spec: specs/design-system/components/cn-icon/spec.md
  */
 import { getIcon as getOpenSourceIcon } from '../icons/open-source';
 import { FallbackIcons } from './icon-fallback';
