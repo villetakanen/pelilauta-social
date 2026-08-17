@@ -22,7 +22,7 @@ if (!threadKey) {
   throw new Error('threadKey is required');
 }
 ---
-<ModalPage title={thread.title}>
+<ModalPage title={thread.title} backHref={`/threads/${threadKey}`}>
   <div class="content-prose">
     <h1>{t('threads:confirmDelete.title')}</h1>
   </div>

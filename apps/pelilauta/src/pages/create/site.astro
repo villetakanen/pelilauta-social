@@ -7,6 +7,6 @@ const title = t('app:docs.title');
 const shortTitle = t('site:create.title');
 ---
 
-<ModalPage title={title} shortTitle={shortTitle}>
+<ModalPage title={title} shortTitle={shortTitle} backHref="/library">
   <CreateSiteForm client:only="svelte" />
 </ModalPage>

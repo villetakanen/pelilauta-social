@@ -31,7 +31,7 @@ const reply = ReplySchema.parse(
   }),
 );
 ---
-<ModalPage title={t('threads:discussion.title')}>
+<ModalPage title={t('threads:discussion.title')} backHref={`/threads/${threadKey}`}>
   <div class="content-prose">
     <h1>{t('threads:confirmDelete.title')}</h1>
   </div>

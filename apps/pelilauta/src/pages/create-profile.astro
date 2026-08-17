@@ -4,7 +4,7 @@ import ModalPage from '@layouts/ModalPage.astro';
 import { t } from 'src/utils/i18n';
 ---
 
-<ModalPage title={t('app:docs.title')}>
+<ModalPage title={t('app:docs.title')} backHref="/">
   <div class="content-prose">
     <h1>{t('settings:profile.create.title')}</h1>
     <CreateProfileForm client:only="svelte" />
