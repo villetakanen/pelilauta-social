@@ -64,7 +64,7 @@ They receive no dedicated compatibility test.
 ### Definition of Done
 
 - A new token family has a named production use and is documented by the book
-  that owns its design intent.
+  that carries its design intent.
 - A source-driven lexicon lists every token declared by its stylesheet and the
   value as declared. A selection matching no token fails the build.
 - Human review accepts the hierarchy, states, and contrast produced by semantic

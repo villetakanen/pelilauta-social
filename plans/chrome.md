@@ -43,7 +43,7 @@ persists on the Pelilauta account.
    inline size.
 5. Main and document spacing follows the chrome's occupied block and inline edges at
    every responsive mode, including app-bar, rail, tray and footer clearance.
-6. Navigation follows the page's own entries, preserves v18 route and authorization
+6. Navigation follows the page's entries, preserves v18 route and authorization
    behaviour, exposes the current entry, and remains keyboard and screen-reader
    operable.
 7. An authenticated theme change updates the document immediately and persists the
@@ -143,7 +143,7 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 #### Phase 2 — Shell and simple-page migration
 
-- **Pelilauta navigation composition** — state each area's own entries from v18's routes
+- **Pelilauta navigation composition** — state each area's entries from v18's routes
   and authorization rules, including active states, and what the tray's block end holds
   for the reader. A page v18 gives no tray takes the default one, which carries the front
   page's entries. A modal page carries none.
@@ -159,10 +159,10 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 #### Phase 3 — Contextual navigation migration
 
-- **Library and docs hierarchy** — make their contextual links the entries their own
+- **Library and docs hierarchy** — make their contextual links the entries their
   pages supply, and retire their legacy tray markup.
 - **Site hierarchy** — make site, page, asset and authorized management links the site's
-  own entries, preserving anonymous rendering and client authorization islands.
+  entries, preserving anonymous rendering and client authorization islands.
 - **Administration hierarchy** — make administrator destinations and tools entries of
   the pages that carry them, retaining server authorization and client visibility rules.
 - **PageWithTray retirement** — move every remaining consumer to the common page shell

@@ -97,7 +97,7 @@ upward gradient made from 70% `--cn-color-primary-95` in Light and
 most 44% of the cover height. The cover has no alternative text because the title
 carries the subject's accessible identity.
 
-A supplied cover that cannot load falls back to the design system's own cover
+A supplied cover that cannot load falls back to the design system's cover
 artwork, so the region keeps its geometry, tint and noun rather than reserving 16:9
 of nothing. The artwork ships with the capability rather than as an application
 asset, and is painted behind the image rather than substituted for it: an image

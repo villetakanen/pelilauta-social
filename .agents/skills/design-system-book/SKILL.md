@@ -65,7 +65,7 @@ The `h1` renders from `title`; do not write one.
 
 Anything that ships in source comes from a specimen that reads it, never from prose.
 
-Read the component's own header comment and its spec before writing. What resolves when,
+Read the component's header comment and its spec before writing. What resolves when,
 what a value inherits, and where the implementation departs from v20 are stated there and
 nowhere else.
 

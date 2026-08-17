@@ -14,8 +14,8 @@ introduction, now ship. `packages/design-system/styles/surface.css` declares bot
 under `specs/design-system/surface/spec.md`, and `/base/surface` documents them.
 
 The class is the owner's intent marker, kept deliberately. The debt is that the design
-system's own exemplar page asks for vocabulary the system does not ship, and
-`specs/design-system/spec.md` requires a demonstration to be set by the system's own
+system's exemplar page asks for vocabulary the system does not ship, and
+`specs/design-system/spec.md` requires a demonstration to be set by the system's
 classes.
 
 ## What done looks like

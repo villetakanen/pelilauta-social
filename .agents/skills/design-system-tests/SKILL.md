@@ -30,5 +30,5 @@ resolves per scheme; geometry and an accessible name resolve once.
 An accessible name is a component assertion. Accessibility is a subject, not a
 level.
 
-A consistency check between two of our own documents belongs at the Lint level.
+A consistency check between two of our documents belongs at the Lint level.
 Where it does not fit there, one document generates the other.

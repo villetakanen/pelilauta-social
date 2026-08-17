@@ -41,5 +41,5 @@ guidance and lexicons is `specs/design-system/principles/spec.md`.
 
 - A principles page that states a rule without rendering it has regressed to
   documentation. Prose annotates what the page shows; it does not substitute for it.
-- A demonstration is set by the system's own elements, classes and tokens — a
+- A demonstration is set by the system's elements, classes and tokens — a
   demonstration with private styling evaluates nothing.

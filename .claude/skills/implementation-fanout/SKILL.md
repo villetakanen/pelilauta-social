@@ -25,7 +25,7 @@ deployable and coherently reversible unit.
 
 A unit is valid only when all of the following hold:
 
-- It owns an explicit, disjoint file set. Two units never write the same file.
+- It has an explicit, disjoint file set. Two units never write the same file.
 - Its correctness is verifiable by a named deterministic check a subagent can
   run alone.
 - It needs no result, decision, or intermediate state from a concurrent unit.

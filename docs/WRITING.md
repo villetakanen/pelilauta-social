@@ -42,7 +42,8 @@ principles win.
 - *Owner* names an access-control role: a person on an entity's `owners` list,
   holding full rights to it. Use the word for that fact only. Any other relation
   between a person and a thing gets its name — author, member, their inbox, a page
-  about them. Artifact responsibility is *carries* or *governs*, not *owns*.
+  about them. Artifact responsibility is *carries* or *governs*, not *owns*; a spec
+  *governs*.
 
 ## Word list
 

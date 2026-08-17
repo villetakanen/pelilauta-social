@@ -17,7 +17,7 @@ the code fully expresses states `(implicit)`.
 A spec states what its own capability does. It cannot bind another capability, so
 a sentence about what another one does, does not do, or is the only exception to
 governs nothing, and goes stale the moment that capability changes. Where the
-boundary matters, name the spec that owns the other side and stop there.
+boundary matters, name the spec that governs the other side and stop there.
 
 Do not write datelines, provenance, or the narrative of how a decision was
 reached; git carries those. Do not announce the spec's authority ("the set

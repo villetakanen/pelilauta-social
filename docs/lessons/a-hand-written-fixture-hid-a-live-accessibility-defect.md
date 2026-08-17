@@ -26,6 +26,6 @@ same rendering path as the specimen it corroborates.
 
 **Fix:** add a line to the **Browser (e2e)** entry in
 `.claude/skills/design-system-tests/SKILL.md`: a browser check asserting anything about
-a component's output mounts that component, or asserts against the book page's own
+a component's output mounts that component, or asserts against the book page's
 specimen. A hand-written stand-in is allowed only for a plain element with no component
 behind it, and any attribute it carries that the component does not emit is a defect.

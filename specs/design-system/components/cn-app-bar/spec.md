@@ -45,10 +45,10 @@ announced twice. The link takes the bar's foreground and never underlines: the b
 chrome, not running text. Where the region leads somewhere, the wordmark names the link,
 so the logomark names nothing of its own. A small screen carries neither: no rail holds
 the navigation trigger there, so the bar reserves `8 × --cn-grid` at its start edge and the
-trigger stands among the bar's own items rather than over them.
+trigger stands among the bar's items rather than over them.
 
 Wider than the small band, whichever glyph the leading region carries stands on the
-rail's own axis, so it, the rail's trigger and every entry beneath fall on one vertical
+rail's axis, so it, the rail's trigger and every entry beneath fall on one vertical
 line.
 
 A modal bar replaces the leading region with the back action and renders no actions. It is
@@ -74,7 +74,7 @@ bar's box does, per `../../rail/spec.md`.
 
 ### Definition of Done
 
-- The design site's own shell mounts the bar, so every book page is a live composition.
+- The design site's shell mounts the bar, so every book page is a live composition.
 - A **CnAppBar** Component book renders the default and modal bars, with and without a
   context noun, in Light and Dark.
 - A browser check asserts the landmark; the reserved slot and absent glyph below
@@ -91,7 +91,7 @@ bar's box does, per `../../rail/spec.md`.
 
 ### Regression Guardrails
 
-- The bar's own layout and paint need no client-side script.
+- The bar's layout and paint need no client-side script.
 - The title is never a heading element.
 - The bar redefines no chrome-action geometry, and carries no navigation of its own beyond
   the back action a modal bar places.

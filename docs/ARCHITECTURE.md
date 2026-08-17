@@ -23,7 +23,7 @@ base or principles book that also carries it.
 
 Three marks, and each names one thing. The **logomark** is the product's graphic —
 the fox. The **wordmark** is the product's name set in type. The **identity mark**
-is a person's, and `specs/design-system/identity-mark/spec.md` owns it: a reader's
+is a person's, and `specs/design-system/identity-mark/spec.md` governs it: a reader's
 avatar and their nick, never the product's.
 
 Prose says which. "The mark", unqualified, tells a reader nothing, and the product
@@ -39,7 +39,7 @@ and the person are the two things chrome most often shows side by side.
 | Component private | local | `--icon-dim` |
 
 A token private to a scope carries `_` where a public one carries `cn-`, and is
-declared on the scope that owns it rather than on `:root`. Another capability may read
+declared on the scope that carries it rather than on `:root`. Another capability may read
 a `--cn-*` token; a `--_*` token may change or disappear with its scope. A value with
 one consumer is private. Renaming it to `--cn-*` requires a second capability that
 needs it.

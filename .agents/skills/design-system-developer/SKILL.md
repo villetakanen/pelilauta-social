@@ -22,7 +22,7 @@ today is a defect.
 
 Declaring a token Cyan already declares fails this test. Cyan's value is shadowed in
 the cascade while Cyan still supplies the rule that reads it, so the application
-depends on Cyan as much as it did before. The surface moves when the design system owns
+depends on Cyan as much as it did before. The surface moves when the design system carries
 the rule that reads the token.
 
 ## Where design intent comes from

@@ -21,8 +21,8 @@ establishes an inline-size containment context and offers its full content-box w
 A content container inside that host selects one layout mode and arranges its own
 regions. Each region holds the content assigned to one part of the composition.
 
-The host owns the container's available width, placement, edge inset, and vertical
-rhythm between sibling containers. The content container owns the inline and block
+The host governs the container's available width, placement, edge inset, and vertical
+rhythm between sibling containers. The content container governs the inline and block
 arrangement of its regions.
 
 The application `<main>` bearing `.app-main` is the usual host for a sequence of
@@ -137,16 +137,16 @@ region that wants its neighbour's height states that itself.
 
 Golden and Triad region boxes remain within their assigned tracks, including when a
 descendant has an oversized intrinsic width or unbreakable content. Descendant
-overflow is owned by the region content. `.breakout` has no effect inside either mode
+overflow is governed by the region content. `.breakout` has no effect inside either mode
 unless it belongs to a nested Prose flow. Source order is both reading order and
 track order. Golden and Triad use `--cn-gap` between stacked regions. Prose uses
 `--cn-line` between the direct children of its flow root. Sibling content containers
 in a host are separated by `--cn-line`.
 
-Not owned here: auto-fill card grid listings, standalone canvas editors, button
+Not governed here: auto-fill card grid listings, standalone canvas editors, button
 action row geometry, and legacy `.content-columns` migration.
 
-Surface continues to own a surface's inset, container type, and `surface-area` query
+Surface continues to govern a surface's inset, container type, and `surface-area` query
 boundary. An occupied region or flow that is also a Surface keeps that one boundary,
 under Surface's name, and it reports the post-inset content-box width.
 

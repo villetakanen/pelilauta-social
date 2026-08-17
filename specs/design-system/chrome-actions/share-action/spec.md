@@ -18,13 +18,13 @@ command, and never a destination.
 ### Constraints
 
 The action shares one page: a URL, a title and a description. An unstated URL or title is
-the document's own; an unstated description is not shared.
+the document's; an unstated description is not shared.
 
 Activation calls the Web Share API, and writes the URL to the clipboard where the browser
 has none.
 
 Once that call settles it dispatches `cn-share`, which bubbles and carries its outcome as
-`detail.outcome`: `shared`, `copied` or `failed`. A reader dismissing the browser's own
+`detail.outcome`: `shared`, `copied` or `failed`. A reader dismissing the browser's
 sheet — the API's `AbortError` — is none of the three and dispatches nothing. Every other
 refusal, of a share or of a clipboard write, is `failed`.
 
@@ -77,5 +77,5 @@ Then nothing is dispatched
 ```gherkin
 Given a share action whose consumer states no URL and no title
 When the reader activates it
-Then the document's own URL and title are shared
+Then the document's URL and title are shared
 ```

@@ -88,7 +88,7 @@ Markers are removed only where an author writes `role="list"`, because Safari dr
 list's semantics from VoiceOver when `list-style` is removed.
 
 Cyan strips them globally, so nothing moves while it is present. When it goes, the
-application's list elements need the role or their own `list-style` — an enumerated
+application's list elements need the role or their `list-style` — an enumerated
 sweep item rather than a surprise.
 
 ## Blueprint
@@ -115,7 +115,7 @@ Its book is the first entry in the design site's `base` group.
 - A button, a text input and a textarea render in the application's font with no
   component rule setting it.
 - A book page renders with `border-box` sizing, no body margin and the theme's
-  background and foreground, with no reset in the design site's own stylesheet.
+  background and foreground, with no reset in the design site's stylesheet.
 - The preflight can be imported at any position in either application's shell without
   changing what a page looks like.
 - A Svelte island inside a flex row lays out identically whether or not Cyan's flex

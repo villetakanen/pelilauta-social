@@ -17,7 +17,7 @@ Model":
    a **stable API**.
 
 v21 ported the second layer's declarations and rewrote their inputs into the second
-layer's own namespace, leaving one namespace carrying both roles:
+layer's namespace, leaving one namespace carrying both roles:
 
 - `packages/design-system/styles/color-reference.css` declares the tonal scales as
   `--cn-color-primary-50: oklch(0.5 0.24 162)`. That is v20's Chroma layer, under

@@ -18,7 +18,7 @@ documented.
 The design site separates three documentation responsibilities:
 
 - A **principles book** teaches a design rule and its application.
-- A **lexicon book** enumerates source-owned names and values.
+- A **lexicon book** enumerates source-defined names and values.
 - A **component book** documents a component's public schema and composition.
 
 A subject may require both principles and a lexicon. The principles book links the
@@ -57,14 +57,14 @@ composition regions belong in the component book.
 
 ### Definition of Done
 
-- Every owned foundation has a principles book that renders the decisions it
+- Every shipped foundation has a principles book that renders the decisions it
   teaches.
 - Each live specimen uses the shipped design-system source it evaluates.
 - Human review accepts the rendered decision and the guidance used to reach it.
 
 ### Regression Guardrails
 
-- A principles book does not copy a source-owned value or inventory that a lexicon
+- A principles book does not copy a source-defined value or inventory that a lexicon
   can generate.
 - A principles book does not document a component API or use private styling to
   simulate shipped behavior.
@@ -82,5 +82,5 @@ Then the published rule leads to one treatment
 ```gherkin
 Given documentation that can be generated from a stylesheet or component schema
 When the design site publishes it
-Then it appears in the owning lexicon or component book rather than principles prose
+Then it appears in the governing lexicon or component book rather than principles prose
 ```

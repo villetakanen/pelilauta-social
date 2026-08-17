@@ -26,14 +26,14 @@ The betas prove that bounded design-system changes can ship through the v21
 workspace while preserving public routes, Firebase schemas, authentication
 boundaries, persisted data shapes, and OS-driven theme selection. The direct
 Svelte Icon consumer migration is complete; retained Cyan components continue
-to own their internal custom-element usage until those components are migrated.
+to carry their internal custom-element usage until those components are migrated.
 
 ## Workspace
 
-- `apps/pelilauta` owns the imported application and subsequent v21 product
+- `apps/pelilauta` carries the imported application and subsequent v21 product
   changes for `pelilauta.social`.
 - `apps/design` hosts the design-system book for `design.pelilauta.social`.
-- `packages/design-system` owns shared design-system implementation and book
+- `packages/design-system` carries shared design-system implementation and book
   pages.
 - `specs` records approved product and design intent.
 - `plans` holds epic-level PBIs.

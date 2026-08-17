@@ -22,7 +22,7 @@ accepted consequence.
 ### Constraints
 
 Modifying an OFL font creates a Modified Version with its own license obligations.
-To account for this, a publisher's own subsets are used, when available.
+To account for this, a publisher's subsets are used, when available.
 
 Every weight `specs/design-system/typography/spec.md` names is loaded in Lato,
 upright and italic.
@@ -34,7 +34,7 @@ Two Lato weights no step names are kept from the set the application shipped;
 dropping them is a separate payload decision.
 
 Coverage is latin and latin-ext. Publisher-split files load with the publisher's
-own `unicode-range`; whole-family files load without one.
+`unicode-range`; whole-family files load without one.
 
 Enforcement ends at the stylesheet: preload markup, cache headers and compression
 live in the applications, and can change this spec's outcome without touching it.

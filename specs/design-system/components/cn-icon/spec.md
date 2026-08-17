@@ -22,7 +22,7 @@ intentional artwork across Light and Dark modes.
 ## Vocabulary
 
 - Each icon is identified by a semantic noun from the approved Pelilauta icon
-  catalog. The catalog is repository-owned, reviewed artwork; adding a noun,
+  catalog. The catalog is reviewed artwork carried in the repository; adding a noun,
   artwork, or alias is a human-approved product decision.
 - A noun resolves deterministically to one piece of artwork, whether the noun
   is statically authored or supplied from data.
@@ -37,7 +37,7 @@ intentional artwork across Light and Dark modes.
 ## Visual Behavior
 
 - Icons are square inline-level boxes. Vertical alignment against adjacent
-  text and controls is owned by the consuming layout, matching legacy
+  text and controls is governed by the consuming layout, matching legacy
   behavior; the icon itself imposes no alignment rule.
 - The supported sizes are extra small, small, medium, large, and extra large.
   Medium is the default.
@@ -47,7 +47,7 @@ intentional artwork across Light and Dark modes.
 - All five sizes are legitimately used across the application, so an icon
   renders at its selected size by default, medium when unspecified.
 - A context that requires a single icon size standardizes every icon it
-  contains to that context's size, regardless of each icon's own size
+  contains to that context's size, regardless of each icon's size
   selection — for example, icons inside buttons and fabs render at the button
   icon size. The intended mechanism is that the context sets the icon-size
   tokens within its own scope; because the icon resolves its size from those
@@ -55,7 +55,7 @@ intentional artwork across Light and Dark modes.
   each icon's selection. This is a design-system rule that resolves against the
   local icon component, so it applies equally to migrated icons; sizing an icon
   for a context is not each consumer's responsibility.
-- Icon does not own the surrounding control, layout, or typography rules that
+- Icon does not govern the surrounding control, layout, or typography rules that
   establish that context. While migrated icons coexist with Cyan contexts,
   reached cross-capability selectors must be preserved by minimal application
   migration helpers, not by intrinsic Icon styling. The relevant local Button,
@@ -85,7 +85,7 @@ intentional artwork across Light and Dark modes.
 - A consumer may mark an icon decorative, opt-in per instance. A decorative
   icon exposes nothing to assistive technology and carries no artwork title; a
   supplied aria-label does not survive it. The composition that hides the icon
-  owns whatever naming its context needs — the case this serves is the identity
+  governs whatever naming its context needs — the case this serves is the identity
   mark's anonymous placeholder
   (`specs/design-system/identity-mark/spec.md`).
 - An icon that is the sole content of a control does not provide the
@@ -148,16 +148,15 @@ intentional artwork across Light and Dark modes.
 - An unknown, empty, or absent noun never silently collapses its layout
   space.
 - Contextual size standardization (for example, icons inside buttons and fabs
-  rendering at the button icon size regardless of their own size selection)
+  rendering at the button icon size regardless of their size selection)
   resolves against the local icon component. When a surface migrates off a
   legacy Cyan `cn-icon` element-scoped size or layout rule, the equivalent
   standardization is re-expressed against the local component so the context
   behavior survives; it is not left to per-consumer hardcoding or silently
   dropped.
-- Until the owning local context exists, required cross-capability behavior is
+- Until the governing local context exists, required cross-capability behavior is
   isolated in an application migration helper. It does not enter stable Icon
-  CSS, and the helper is removed when its named local capability takes
-  ownership.
+  CSS, and the helper is removed when its named local capability takes it over.
 
 ## Acceptance
 

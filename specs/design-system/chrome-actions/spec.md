@@ -121,7 +121,7 @@ therefore not asked to carry identification on its own. Both are declared in
   state.
 - Hover, active and focus presentation does not change the action's footprint or move
   neighbouring content.
-- A toggle and a disclosure control keep their own persistent states; the current
+- A toggle and a disclosure control keep their persistent states; the current
   destination is the only one this capability carries.
 - Hover and active feedback never replaces the indicator, and the indicator never
   suppresses hover or active feedback.

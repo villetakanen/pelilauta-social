@@ -12,8 +12,8 @@ The bar that names Pelilauta. It states one thing and states it everywhere it st
 is the service, and this leads to its front. A reader deep inside an application they
 entered from a link has that one fixed point, whatever else the chrome around them holds.
 
-An application takes it where its pages carry the service's identity rather than an
-identity of their own. It belongs to the base application because more than one needs it.
+An application takes it where its pages carry the service's identity rather than a
+distinct identity. It belongs to the base application because more than one needs it.
 
 ### Architecture
 

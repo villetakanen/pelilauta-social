@@ -57,7 +57,7 @@ hoist stands, rather than smuggling it in.
 ## Design-system inventory
 
 The containers are complete. What is thin is one presentation, and the script the
-tray's own spec asks for.
+tray's spec asks for.
 
 **Complete and in use.** `CnAppChrome` gives the fixed box. `CnAppBar` gives the bar,
 its title pair, its leading region, its scroll veil and its modal mode. `CnTray` gives
@@ -152,7 +152,7 @@ and ports as-is.
 The cheapest honest first pass is: port the four anchors and admin as chrome actions,
 leave inbox showing its glyph without its count, and put the settings-or-login control
 in the reader slot with the avatar it already has. Then the count and the identity
-action ship against their own specs, from `chrome-actions.md`, once the front page has
+action ship against their specs, from `chrome-actions.md`, once the front page has
 shown us what they have to sit in.
 
 ## Order

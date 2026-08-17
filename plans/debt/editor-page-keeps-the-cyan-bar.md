@@ -10,7 +10,7 @@ Two things stop it.
 `EditorPage` renders a bare `<main>` that expects a form carrying `.content-editor`, not
 the `.app-main` host. The clearance for a fixed bar lives on that host
 (`packages/design-system/styles/content-containers.css`), so an editor would put its first
-row under the bar. Where the inset belongs instead is a question about the editor's own
+row under the bar. Where the inset belongs instead is a question about the editor's
 content layout, which is not settled, and answering it here would settle it by accident.
 
 Leaving an editor is also the one modal departure that costs the reader something. The

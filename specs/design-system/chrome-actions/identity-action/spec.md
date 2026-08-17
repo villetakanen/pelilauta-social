@@ -9,8 +9,8 @@ status: approved
 ### Context
 
 One control in the chrome serves a reader with a session and a reader without one: it
-invites a signed-out reader to sign in, and carries a signed-in reader to their own
-part of the application.
+invites a signed-out reader to sign in, and carries a signed-in reader to their part
+of the application.
 
 ### Architecture
 
@@ -18,7 +18,7 @@ A Svelte 5 component, `packages/design-system/components/CnIdentityAction.svelte
 a chrome action per `specs/design-system/chrome-actions/spec.md`, and a destination in
 both modes.
 
-The consumer owns the session. It states which mode renders, the destination and the
+The consumer governs the session. It states which mode renders, the destination and the
 label for that mode, and what the identity mark presents. The component reads no store.
 
 ### Documentation
@@ -42,8 +42,8 @@ destination.
 
 - The books render both modes and the current destination, in both presentations, in
   Light and Dark.
-- Human review accepts that the signed-in mode reads as the reader's own, and that the
-  current destination reads as current with the mark unchanged.
+- Human review accepts that the signed-in mode reads as the reader's part of the
+  application, and that the current destination reads as current with the mark unchanged.
 
 ### Regression Guardrails
 
@@ -63,5 +63,5 @@ And its destination is the one stated for signing in
 Given an identity action whose consumer states the signed-in mode
 When it renders
 Then the identity mark stands where the glyph stood
-And its destination is the one stated for the reader's own part of the application
+And its destination is the one stated for the reader's part of the application
 ```
