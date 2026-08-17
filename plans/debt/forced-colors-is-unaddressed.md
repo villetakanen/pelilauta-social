@@ -17,9 +17,9 @@ without colour perception, and says nothing about the mode where the user has to
 operating system to take colour over. `specs/design-system/chrome-actions/spec.md`
 inherits that silence rather than adding to it.
 
-The gap widens when persistent state arrives. A navigation destination whose only
-"you are here" signal is a background is unreadable in forced colours, and
-`plans/chrome-actions.md` schedules that destination.
+The gap is no longer ahead: the navigation destination shipped, per
+`specs/design-system/chrome-actions/spec.md`, and it says "you are here" with
+`--cn-indicator` and `--cn-on-indicator` — two colours forced colours takes over.
 
 ## Why it is not fixed here
 

@@ -11,15 +11,9 @@ bought is `specs/pelilauta/`: five applications, each with a spec and a spec for
 
 Phases 2 to 5 name outcomes that assume a navigation model no shipped release has
 ever carried. v19 and v20 intended that overhaul and delivered none of it, so this
-plan guessed at it from v20's surface. The spike settles the model against Pelilauta
-itself before the phases are worth keeping.
-
-Phase 1's design-system outcomes stand and are largely delivered. The spike draws
-what it needs from them and from `chrome-actions.md`, rather than working either as
-an epic.
-
-This plan unparks when the spike records the navigation model, and its Phase 2 to 5
-entries are rewritten against that record. Until then, read them as history.
+plan guessed at it from v20's surface. The spike settled the model against Pelilauta
+itself; the Phase 2 to 5 entries await rewriting against its record, and read as
+history until then.
 
 ## Goal
 
@@ -70,13 +64,6 @@ The responsive model is:
 - wider: the tray stands open and the main region cedes its inline size; asking
   collapses it to the rail, and no scrim is shown.
 
-## Blocking sub-epic
-
-[Chrome Actions](chrome-actions.md) specifies and ships the clickable items used by
-the application bar, rail and tray. Its composition UAT completes before container
-specifications or implementations proceed, so containers compose settled targets,
-indicators and interaction states without redefining their geometry.
-
 ## Required specifications
 
 These specifications are approved before the implementation slice that consumes
@@ -120,8 +107,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 #### Phase 1 — Contracts and design-system chrome
 
-- **Chrome actions** — complete `plans/chrome-actions.md` before specifying or shipping
-  the application bar, adaptive navigation or application chrome geometry.
 - **Chrome specifications** — approve the required contracts above before their
   implementation slices begin.
 - **Icon alt text** — withdrawn 2026-08-14. An icon is a noun, and the noun reaching
@@ -149,11 +134,8 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   page's entries. A modal page carries none.
 - **Standard page shell** — migrate `Page.astro` to the local bar and chrome container;
   remove the mobile bottom bar and make `.app-main` cede only persistent chrome space.
-- **Modal and editor shells** — the modal shell is migrated. The editor shell waits for
-  the editor's content layout to state where a fixed bar's clearance sits, and for a
-  decision on leaving with unsaved work:
-  `plans/debt/editor-page-keeps-the-cyan-bar.md`. Where a route reached from a shared
-  link returns to is still open; none states a destination yet.
+- **Modal return** — where a route reached from a shared link returns to is still
+  open; none states a destination yet.
 - **Poster and FAB integration** — keep poster attenuation and FAB placement scoped to
   the new chrome container without moving document scroll or intercepting empty space.
 
@@ -170,18 +152,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 #### Phase 4 — Account theme
 
-- **Account theme schema** — add the canonical optional preference to the account
-  schema and write path, retaining the architecture note's legacy read fallback and
-  requiring no destructive migration.
-- **Shared write contract** — verify the existing account write and Firestore rule
-  paths accept the additive UX field and include any required preference-field
-  allowlist change without altering authorization or business rules.
-- **Initial theme paint** — resolve the canonical preference before themed content
-  paints, with the specified legacy, anonymous and unavailable-account fallbacks
-  across full page loads and Astro view transitions.
-- **Chrome theme switch** — add the theme action to Pelilauta chrome, update the
-  document when `CnThemeSwitch` emits its change event and persist the authenticated
-  choice to the canonical account field.
 - **Theme failure states** — keep the last confirmed theme and expose persistence
   failure through the established feedback path without corrupting account state.
 
@@ -202,8 +172,16 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Done
 
+- Chrome actions delivered in full; the sub-epic's plan is deleted.
+- The modal shell is migrated.
+- v18's `lightMode` is the theme field; no schema or rule change was needed.
+- The stored theme paints before first render, on every layout.
+- The theme switch stands first in each bar and persists to the account.
+
 ## Outscoped
 
+- The editor shell: `EditorPage.astro` keeps its legacy `AppRail` and `AppChrome`,
+  per `plans/debt/editor-page-keeps-the-cyan-bar.md`.
 - Changing public route URLs or route purposes.
 - Destructive account migration or removal of v18-readable fields.
 - Authentication behaviour unrelated to the theme preference.
