@@ -1,8 +1,8 @@
 # Hoisting the chrome to the front page, as-is
 
-An analysis, not a plan. It answers one question for
-[Pelilauta UX Spike](pelilauta-ux-spike.md): if we put the new chrome on the front
-page and settle for nothing else, what is the change, and what do we find out?
+An analysis, not a plan. It answered one question for the Pelilauta UX spike, which closed
+on 2026-08-17: if we put the new chrome on the front page and settle for nothing else, what
+is the change, and what do we find out?
 
 Other routes are allowed to break. `Page.astro` is shared, so they will.
 

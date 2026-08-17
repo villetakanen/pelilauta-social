@@ -6,7 +6,8 @@ deletion is not a closeout requirement.
 
 ## Parked
 
-Parked on 2026-08-14 for [Pelilauta UX Spike](pelilauta-ux-spike.md).
+Parked on 2026-08-14 for the Pelilauta UX spike, which closed on 2026-08-17. The model it
+bought is `specs/pelilauta/`: five applications, each with a spec and a spec for its rail.
 
 Phases 2 to 5 name outcomes that assume a navigation model no shipped release has
 ever carried. v19 and v20 intended that overhaul and delivered none of it, so this

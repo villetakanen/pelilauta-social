@@ -6,13 +6,13 @@ deletion is not a closeout requirement.
 
 ## Parked
 
-Parked on 2026-08-14 with [Chrome](chrome.md), for
-[Pelilauta UX Spike](pelilauta-ux-spike.md).
+Parked on 2026-08-14 with [Chrome](chrome.md), for the Pelilauta UX spike, which closed on
+2026-08-17.
 
 This plan is no longer worked as an epic. Its vocabulary is sound and its Open list
 is stale — the chrome action, the navigation destination and the tray toggle shipped
-without being struck. The spike draws the remaining items, identity and status
-foremost, as the front page asks for them, and each ships against its own spec.
+without being struck. The spike shipped the remaining items, identity and status foremost, each against its own
+spec. What it found waits in `debt/chrome-action-presentation-has-one-consumer.md`.
 
 ## Goal
 
