@@ -14,7 +14,9 @@ service holds about them. One place answers what a reader has here, and the same
 answers what the service knows about them — a reader obtains a copy of that data from it,
 which is what regulation requires of the service.
 
-It exists for one reader at a time, and has nothing to show a reader who is not signed in.
+It exists for one reader at a time, and shows a reader without a session none of another
+reader's material.
+
 A page about somebody, such as a profile, is not a reader's material and belongs to the
 base application.
 
@@ -27,10 +29,9 @@ rail is `chrome/LibraryRail.astro`. Its strings are the `library` locale namespa
 It carries `specs/pelilauta/base/base-bar`, whole, so its pages show the service's
 identity rather than one of its own.
 
-A page of the library establishes the session itself; the layout takes no part in it.
-`/library` and `/settings` verify it on the server and send a reader without one away.
-`/inbox` renders and lets its own island refuse, which is v18's behaviour and not this
-application's decision to change.
+Every page of the library establishes the session itself, through
+`@pelilauta/base/utils/requireSession`, and sends a reader without one to sign in. The
+layout takes no part in it.
 
 ### Constraints
 
@@ -46,7 +47,7 @@ place of this application rather than a modal page.
 
 - A reader reaches their sites, their notifications and their account from anywhere inside
   the library.
-- A reader who is not signed in is shown none of another reader's material.
+- A reader without a session reaches no page of the library.
 
 ### Regression Guardrails
 
@@ -56,7 +57,7 @@ place of this application rather than a modal page.
 ### Scenarios
 
 ```gherkin
-Given a reader who is not signed in
-When they open the library's root
-Then they are sent to the public directory of games
+Given a reader without a session
+When they open a page of the library
+Then they are sent away before it renders
 ```

@@ -1,20 +1,16 @@
 ---
 import { isAdmin } from '@firebase/server/admin';
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import AdminTray from '../../components/svelte/admin/AdminTray.svelte';
 import ChannelsAdmin from '../../components/svelte/admin/channels/ChannelsAdmin.svelte';
 import PageWithTray from '../../layouts/PageWithTray.astro';
 
 // Server-side authentication check
-const session = await verifySession(Astro);
-if (!session?.uid) {
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { uid, denied } = await requireSession(Astro);
+if (denied) return denied;
 
 // Verify admin privileges
-const userIsAdmin = await isAdmin(session.uid);
+const userIsAdmin = await isAdmin(uid);
 if (!userIsAdmin) {
   return Astro.redirect('/403');
 }

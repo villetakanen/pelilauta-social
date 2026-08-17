@@ -1,5 +1,5 @@
 ---
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { PageSchema } from 'src/schemas/PageSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
@@ -21,12 +21,8 @@ if (!siteKey || !pageKey) {
   return Astro.redirect('/404');
 }
 
-const session = await verifySession(Astro);
-if (!session?.uid) {
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { uid, denied } = await requireSession(Astro);
+if (denied) return denied;
 
 // Fetch the site and page data from the api
 const siteResponse = await fetch(`${Astro.url.origin}/api/sites/${siteKey}`);
@@ -48,7 +44,7 @@ if (!siteResponse.ok || !pageResponse.ok) {
  * A page is edited by a site member, owner or player: the same rule PageFabs uses
  * to offer the edit action, and the one `sites/[siteKey]/settings.astro` gates on.
  */
-const { isMember } = await verifySiteAccess(siteKey, session.uid);
+const { isMember } = await verifySiteAccess(siteKey, uid);
 if (!isMember) {
   return Astro.redirect(`/sites/${siteKey}/${pageKey}`);
 }

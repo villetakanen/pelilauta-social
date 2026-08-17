@@ -1,5 +1,6 @@
 ---
 import Site from '@layouts/Site.astro';
+import { requireSiteOwner } from '@pelilauta/site/utils/requireSiteOwner';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
@@ -20,6 +21,9 @@ const site = SiteSchema.parse({
   ...toClientEntry(await siteResponse.json()),
   key: siteKey,
 });
+
+const denied = await requireSiteOwner(Astro, site);
+if (denied) return denied;
 ---
 
 <Site {site} title={site.name}>

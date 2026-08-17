@@ -1,18 +1,11 @@
 ---
 import Library from '@layouts/Library.astro';
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { t } from 'src/utils/i18n';
 import SettingsAppT from '../components/svelte/settings/SettingsApp.svelte';
 
-/* A server side rendered settings page: requires authentication */
-const session = await verifySession(Astro);
-
-if (!session?.uid) {
-  // Redirect unauthenticated users to login
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { denied } = await requireSession(Astro);
+if (denied) return denied;
 
 const title = `${t('app:shortname')} – ${t('app:settings.title')}`;
 const description = t('settings:description');

@@ -1,18 +1,13 @@
 ---
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { type Channel, ChannelSchema } from 'src/schemas/ChannelSchema';
 import { t } from 'src/utils/i18n';
-import { verifySession } from 'src/utils/server/auth/verifySession';
 import ThreadEditorForm from '../../components/svelte/thread-editor/ThreadEditorForm.svelte';
 import EditorPage from '../../layouts/EditorPage.astro';
 
 // Ensure we have a logged-in user before proceeding
-const session = await verifySession(Astro);
-
-if (!session) {
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { uid, denied } = await requireSession(Astro);
+if (denied) return denied;
 
 const title = `${t('app:shortname')} – ${t('actions:create.thread')}`;
 const shortTitle = t('actions:create.thread');

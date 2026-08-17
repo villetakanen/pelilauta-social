@@ -1,19 +1,13 @@
 ---
 import Base from '@layouts/Base.astro';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import AlgoliaSearchApp from '@svelte/search/AlgoliaSearchApp.svelte';
 import { t } from '@utils/i18n';
-import { verifySession } from '@utils/server/auth/verifySession';
 
 /* The search page: can be accessed by anyone, but requires a session to use Algolia
  * for cost-optimization */
-const session = await verifySession(Astro);
-
-if (!session?.uid) {
-  // Redirect unauthenticated users to login
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { uid, denied } = await requireSession(Astro);
+if (denied) return denied;
 ---
 <Base title={t('search:title')}>
   {/*

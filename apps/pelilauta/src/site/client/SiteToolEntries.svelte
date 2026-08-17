@@ -4,10 +4,9 @@
  * tools, and the site owner tools. Both read the session, so both arrive after
  * the rail the server sent.
  *
- * A site player tool the site has enabled stands for every reader, and is
- * disabled for one who is not a player: the site states that it plays this
- * way, whoever is looking. A site owner tool is absent for a reader who is not
- * an owner, as a tool the site has not enabled is absent.
+ * Which tool shows, and how it behaves for a reader who does not hold the
+ * role it needs, are `specs/pelilauta/site/site-rail/spec.md`'s; this
+ * component states none of it.
  */
 import Icon from '@design-system/components/Icon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';

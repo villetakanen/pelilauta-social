@@ -95,6 +95,27 @@ v1 through v18 wrote thread pictures several ways and never migrated them. v21 s
 canon: `thread.poster` is the primary image, `thread.images` the gallery, reconciled on
 read in `parseThread`.
 
+### Site owner tools
+
+v18 serves the pages behind a site's members, tools, settings, content transfer and
+table-of-contents ordering to anybody holding the address, and lets the client app decide
+what to render. v21 verifies the session on the server and answers a reader outside the
+site's `owners` with 403, through `requireSiteOwner`.
+
+The deviation is deliberate. v21 states this policy in its own pages rather than leaving it
+to what the shared backend permits, and it does not widen a page to match a permission it
+finds there.
+
+### One session guard
+
+v18 hand-rolls the same session check on every page that needs one, and skips it where the
+client app refuses instead — the notification inbox served a reader's own chrome to
+anybody holding the address. v21 states the check once, in
+`@pelilauta/base/utils/requireSession`, and every page that needs a reader takes it.
+
+The base application holds the guard because every application needs it. A page states it
+and returns what it answers with, so the check cannot be half-applied.
+
 ### Character sub-app deprecation
 
 v21 removes the character library, the character view, editor and deletion flow, the

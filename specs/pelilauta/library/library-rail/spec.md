@@ -8,9 +8,10 @@ status: draft
 
 ### Context
 
-The navigation a reader reaches from anywhere inside the library. Every entry is a place
-of the library, so unlike `../../base/base-rail/spec.md` this rail holds no doors:
-nothing in it leads out of the application.
+The navigation a reader reaches from anywhere inside the library. Every entry a reader
+with a session sees is a place of the library, so unlike `../../base/base-rail/spec.md`
+this rail carries no door onward. The identity offers a reader without a session the way
+to sign in, which is the one entry leading out.
 
 ### Architecture
 
@@ -28,15 +29,15 @@ state one.
 
 | Entry | Leads to | Current on | Stands in |
 | :--- | :--- | :--- | :--- |
-| Pelit | the reader's games and sites | that page alone | the body |
+| Pelit | the reader's games and sites | that page alone | the default slot |
 | Inbox | the reader's notifications | the notifications | the footer |
 | Asetukset | the reader's account | the account | the footer |
 
 The reader's notifications and account stand in the footer, as they do in the base
 application.
 
-The rail offers no way back to the base application. A reader leaves through the bar's
-identity, and whether that is enough is what the spike is looking at.
+A reader reaches Pelilauta through the bar's identity, which this application carries
+from the base.
 
 ## Contract
 
@@ -49,7 +50,7 @@ identity, and whether that is enough is what the spike is looking at.
 
 - The rail states no measurement, responsive rule or interaction of its own; those are the
   design system's.
-- No entry leads out of the library.
+- For a reader with a session, no entry leads out of the library.
 
 ### Scenarios
 

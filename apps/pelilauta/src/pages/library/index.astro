@@ -2,18 +2,13 @@
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import Library from '@layouts/Library.astro';
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { t } from 'src/utils/i18n';
 import LibrarySitesFabs from '../../components/svelte/site-library/LibrarySitesFabs.svelte';
 import UserSitesList from '../../components/svelte/site-library/UserSitesList.svelte';
 
-// Server-side authentication check
-const session = await verifySession(Astro);
-
-if (!session?.uid) {
-  // Redirect unauthenticated users to public sites list
-  return Astro.redirect('/sites');
-}
+const { denied } = await requireSession(Astro);
+if (denied) return denied;
 
 // Set cache control headers for authenticated content
 Astro.response.headers.set(

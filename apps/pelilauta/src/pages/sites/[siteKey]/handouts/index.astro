@@ -2,7 +2,7 @@
 import CnPoster from '@design-system/components/CnPoster.astro';
 import { getSiteData } from '@firebase/server/sites';
 import Site from '@layouts/Site.astro';
-import { verifySession } from '@utils/server/auth/verifySession';
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
@@ -13,12 +13,8 @@ import SiteStoreInitializer from '../../../../components/svelte/sites/SiteStoreI
 const { siteKey } = Astro.params;
 
 // Verify authentication first
-const session = await verifySession(Astro);
-if (!session?.uid) {
-  return Astro.redirect(
-    `/login?redirect=${encodeURIComponent(Astro.url.pathname)}`,
-  );
-}
+const { uid, denied } = await requireSession(Astro);
+if (denied) return denied;
 
 if (!siteKey) {
   logWarn('HandoutsPage', 'No siteKey provided in params');
@@ -34,7 +30,7 @@ if (!site) {
 }
 
 // Verify site access
-const siteAccess = await verifySiteAccess(site, session.uid);
+const siteAccess = await verifySiteAccess(site, uid);
 if (!siteAccess.isMember) {
   return new Response('Forbidden', { status: 403 });
 }

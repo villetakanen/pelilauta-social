@@ -42,7 +42,7 @@ that interrupts the reader:
 
 | Entry | Leads to | Seen by |
 | :--- | :--- | :--- |
-| Kirjasto | the reader's material | everyone |
+| Kirjasto | the library | everyone |
 | Info | the documentation | everyone |
 | Ylläpito | administration | a reader holding the admin tools |
 
@@ -51,9 +51,9 @@ it is looking at the other application's rail, or at a modal page carrying none,
 condition can never hold.
 
 The rail's footer carries the reader's inbox and their identity. Both lead into the
-reader's material, so both are doors, and the footer holds none of the base
-application's places. What else stands there is being settled against the running
-application, and is not fixed here.
+library, so both are doors, and the footer holds none of the base application's places.
+What else stands there is being settled against the running application, and is not fixed
+here.
 
 An entry a reader may not use is absent rather than disabled: the rail states where this
 reader can go, and a destination they cannot reach is not one of those places.
@@ -63,9 +63,6 @@ The entry leading to the base application's root stands only below
 nothing else would lead home. This is the one place where what the chrome carries
 depends on how wide it is, and it is a deliberate exception to that rule rather than an
 oversight.
-
-None of the applications a door leads to offers a control returning to the base
-application, which is what keeps them separate.
 
 ## Contract
 
@@ -82,7 +79,7 @@ application, which is what keeps them separate.
   exception above; those are the design system's.
 - A door carries no current state, and nothing computes one for it.
 - No entry leads to a page inside another application, only to its front door.
-- `.only-on-small` appears here and nowhere else in this application.
+- Within the base application, `.only-on-small` appears here and nowhere else.
 
 ### Scenarios
 
