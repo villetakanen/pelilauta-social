@@ -58,6 +58,7 @@ an identity action.
 - Back, share, identity and notification actions shipped, specs approved.
 - The tray toggle shipped as `CnRailAction`, governed by the rail spec.
 - `CnRailAction`'s trigger composes the chrome action instead of restating it.
+- The chrome-actions spec states that the rail declares the presentation.
 - `docs/ARCHITECTURE.md` names interaction states after the platform selector that
   switches them on, and reserves `--cn-indicator` for persistent state.
 - `specs/TEMPLATE.md` defines how one capability extends another.

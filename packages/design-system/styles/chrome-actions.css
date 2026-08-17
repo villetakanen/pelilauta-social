@@ -6,9 +6,9 @@
  * it keeps that capability's element semantics, disabled command, focus
  * treatment, colour-role rules and transitions unchanged. This file states
  * only what application chrome changes — the target, the state surface, the
- * foreground source, the two presentations a container declares through the
- * inherited `--cn-chrome-presentation` custom property, and a disabled
- * destination, which Actions does not publish for an anchor.
+ * foreground source, the two presentations switched by the inherited
+ * `--cn-chrome-presentation` custom property, and a disabled destination,
+ * which Actions does not publish for an anchor.
  *
  * `.chrome-action` applies to `button.chrome-action` and `a.chrome-action[href]`,
  * and to one more element: `label.chrome-action[for]`, a trigger whose control —
@@ -185,7 +185,7 @@ label.chrome-action[for]::before {
 }
 
 /*
- * Labelled: the container has declared its chrome actions show their label.
+ * Labelled: the expanded rail has declared its chrome actions show their label.
  * The target fills the container's inline size, the content starts from a
  * grid inset at the start edge, and the `--_surface-*` and `--_label-*`
  * tokens above resolve the state surface to a pill filling that same inline

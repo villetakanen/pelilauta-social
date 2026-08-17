@@ -1,6 +1,6 @@
 ---
 title: Chrome Actions
-description: The command and destination control for application bars, rails and trays, collapsing between an icon and a labelled control.
+description: The command and destination control for application bars and rails, collapsing between an icon and a labelled control.
 order: 5.5
 ---
 
@@ -13,10 +13,11 @@ import CnShareAction from '@design-system/components/CnShareAction.svelte'
 import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
 import CnNotificationAction from '@design-system/components/CnNotificationAction.svelte'
 
-`.chrome-action` ships as one class, applying to `button.chrome-action` and to
-`a.chrome-action[href]`. It takes its foreground from the container that places
-it and outranks the default Actions link and button presentations: no link
-underline, no button surface, no button elevation.
+`.chrome-action` ships as one class, applying to `button.chrome-action`, to
+`a.chrome-action[href]`, and to `label.chrome-action[for]`, the trigger
+[CnRailAction](/components/cn-rail-action) composes. It takes its foreground from
+the container that places it and outranks the default Actions link and button
+presentations: no link underline, no button surface, no button elevation.
 
 ## Markup
 
@@ -48,9 +49,8 @@ publishes no variants of its own.
 
 ## Presentation
 
-A container declares which presentation its chrome actions take by setting the
-inherited custom property `--cn-chrome-presentation` on the action's parent, or
-any ancestor above it. An action carrying its own `--cn-chrome-presentation`
+[CnRail](/components/cn-rail) declares the inherited custom property
+`--cn-chrome-presentation`. An action carrying its own `--cn-chrome-presentation`
 has no effect: a style container query evaluates against the queried
 element's parent, so the action would be reading past its own declaration.
 
@@ -88,10 +88,10 @@ and transient surfaces. The label truncates rather than wrapping; the Icon
 keeps its square in both presentations. A chrome action is an icon-size
 context resolving to the medium step.
 
-A label too long for the tray truncates with an ellipsis rather than wrapping or overflowing.
+A label too long for the rail truncates with an ellipsis rather than wrapping or overflowing.
 
 <div class="breakout">
-  <Composition themes caption="A labelled chrome action whose label overruns the tray, in Light and Dark">
+  <Composition themes caption="A labelled chrome action whose label overruns the rail, in Light and Dark">
     <ChromeActionSpecimens group="truncation" presentation="labelled" />
   </Composition>
 </div>
@@ -204,7 +204,7 @@ otherwise. An unstated `text` is not shared.
 
 Flips the document between the light and dark colour schemes and reports the change. It
 declares the compact presentation on itself, so it stays icon-only in every container — an
-open tray cannot put its label in view. Its theme behaviour and its event are documented in
+expanded rail cannot put its label in view. Its theme behaviour and its event are documented in
 [CnThemeSwitch](/components/cn-theme-switch).
 
 <Composition caption="CnThemeSwitch, which re-themes this page">

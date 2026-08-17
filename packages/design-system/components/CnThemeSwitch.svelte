@@ -66,7 +66,7 @@ function toggle() {
      * presentation rather than taking the one around it: the label names the
      * control and never shows. This element is the button's parent, which is
      * the element a chrome action's style query reads, so a container further
-     * out — an open tray, say — cannot label it.
+     * out — an expanded rail, say — cannot label it.
      */
     --cn-chrome-presentation: compact;
   }

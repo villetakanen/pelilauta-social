@@ -28,7 +28,9 @@ block container would let a collapsed rail's entries pack into rows and rewrap w
 rail travels between its widths.
 
 An entry follows the target, state surface, focus treatment and current-destination
-state of a chrome action per `specs/design-system/chrome-actions/spec.md`. The trigger
+state of a chrome action per `specs/design-system/chrome-actions/spec.md`. The rail
+declares its entries' presentation: `--cn-chrome-presentation` is `labelled` where they
+show their names, `compact` otherwise. The trigger
 composes that class for its target, state surface and transient states, stays compact
 in every presentation, and shows on itself the focus its toggle takes.
 

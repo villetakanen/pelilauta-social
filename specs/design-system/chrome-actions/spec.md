@@ -8,13 +8,13 @@ status: approved
 
 ### Context
 
-Application chrome — bars, rails and trays — presents its commands and destinations
-as one control that shows its label or collapses to its icon. A tray shows labels
-while it is open and icons once it narrows to a rail; an application bar shows icons
-only. Their structure follows Material Design's icon button: a target, a state
-surface centred within it, and a state layer that composes over that surface. Material
-supplies that structural model; the measurements, the states and their appearance are
-local. A chrome action reads as part of the application frame rather than as a content
+Application chrome — bars and rails — presents its commands and destinations
+as one control that shows its label or collapses to its icon. An expanded rail shows
+labels; a collapsed rail and an application bar show icons only. Their structure
+follows Material Design's icon button: a target, a state surface centred within it,
+and a state layer that composes over that surface. Material supplies that structural
+model; the measurements, the states and their appearance are local. A chrome action
+reads as part of the application frame rather than as a content
 button.
 
 ### Architecture
@@ -36,13 +36,11 @@ does not: `back-action/spec.md`, `share-action/spec.md`,
 A subtype states what it adds to a chrome action, and no measurement this one gives:
 `notification-action/spec.md`.
 
-A container declares which presentation its chrome actions take by setting the
-inherited `--cn-chrome-presentation` to `compact` or `labelled`; how the container
-decides — its own width, a reader's action, or a fixed choice — is the container's
-business. Any other value, and no value at all, is compact. A chrome action reads that
-declaration and never inspects its ancestors. Bars, rails and trays place chrome
-actions and allocate the inline size a labelled action fills. They do not resize the
-target's block size, the state surface or the Icon.
+The rail declares the inherited `--cn-chrome-presentation`, per `../rail/spec.md`. Any
+other value, and no value at all, is compact. A chrome action reads the inherited
+declaration and never inspects its ancestors. Bars and rails place chrome actions and
+allocate the inline size a labelled action fills. They do not resize the target's block
+size, the state surface or the Icon.
 
 ### Documentation
 
@@ -112,7 +110,7 @@ therefore not asked to carry identification on its own. Both are declared in
 
 ### Regression Guardrails
 
-- A chrome action carries no selector that references a bar, rail or tray ancestor.
+- A chrome action carries no selector that references a bar or rail ancestor.
 - A container does not resize the compact target, and does not redefine the labelled
   target's block size, the state surface or the Icon.
 - Changing presentation does not replace the element, its destination or command, or
@@ -141,8 +139,8 @@ And its state surface is transparent
 ```
 
 ```gherkin
-Given a labelled chrome action in an open tray
-When its container declares the compact presentation
+Given a labelled chrome action in an expanded rail
+When the rail collapses
 Then the same element remains, with the same destination or command
 And its label is no longer visible
 And its accessible name is unchanged
