@@ -24,6 +24,7 @@ export const actions: Locale = {
   import: 'Import',
   login: 'Sign in',
   logout: 'Sign out',
+  moreOptions: 'More options',
   send: 'Send',
   save: 'Save',
   search: 'Search',

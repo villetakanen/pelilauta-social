@@ -78,26 +78,10 @@ test('can create and edit a reply', async ({ page }) => {
     .locator('article')
     .filter({ hasText: replyContent });
 
-  // Open menu (assuming there is a menu button, might need hover or click)
-  // Based on ReplyArticle.svelte: <cn-menu inline> ... </cn-menu>
-  // We might need to target the menu trigger.
-  // Let's assume the menu is visible or accessible.
-  // The menu seems to be always visible in the toolbar?
-  // "toolbar downscaled" -> "cn-menu inline"
-
-  // Click the edit button. It might be inside a menu or directly visible depending on implementation.
-  // In ReplyArticle.svelte I added:
-  // <button class="text" onclick={() => editDialog?.showDialog()}>
-  //   <Icon noun="edit" size="small" />
-  //   <span>{t('actions:edit')}</span>
-  // </button>
-  // It is inside the <ul> of <cn-menu>.
-
-  // We might need to click the menu trigger first if it's a dropdown, but <cn-menu inline> suggests it's inline?
-  // If it's inline, the button should be visible.
-
-  // Click the edit button.
-  // Use evaluate to bypass visibility checks completely
+  // The edit control is an item in the reply's CnMenu. A closed popover is
+  // display: none rather than absent, so the control is in the document and a
+  // scripted click reaches its handler without opening the menu first. Driving the
+  // trigger instead would test the menu, which apps/design already covers.
   await replyArticle
     .locator('button:has(.cn-icon[data-noun="edit"])')
     .evaluate((node) => (node as HTMLElement).click());

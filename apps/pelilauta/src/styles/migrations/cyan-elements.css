@@ -34,48 +34,6 @@ cn-bubble .toolbar:last-child {
 }
 
 /*
- * Source: core/cn-menu.css. Consumer: reply actions. Future owner: Menu; remove
- * when the reply menu no longer renders cn-menu.
- */
-main :where(cn-menu) ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-:where(cn-menu) ul + ul {
-  margin-top: -1px;
-  border-top: 1px solid var(--color-border);
-}
-
-:where(cn-menu) li::before {
-  display: none;
-}
-
-main :where(cn-menu) ul > li {
-  margin: 0;
-  padding: 0 var(--cn-grid);
-}
-
-:where(cn-menu) ul > li > a,
-:where(cn-menu) ul > li > button {
-  text-decoration: none;
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: var(--cn-grid);
-  align-items: center;
-  height: calc(var(--cn-grid) * 5);
-}
-
-cn-menu ul li:hover {
-  background: color-mix(in hsl, var(--color-link), transparent 90%);
-  outline: none;
-}
-
-/*
  * Sources: components/cn-lightbox.css and cn-reaction-button.css.
  * Consumers: thread media and reactions. Future owners: Lightbox and Reaction;
  * remove each host bridge with its Cyan component.

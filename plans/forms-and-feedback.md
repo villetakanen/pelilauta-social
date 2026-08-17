@@ -34,7 +34,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
   `SiteOptionsApp`.
 - **Snackbar** — spec, ship and book local feedback; migrate `Snackbar.astro`,
   `BaseTail.astro` and the `snackUtils` producer contract behind them.
-- **Menu** — spec, ship and book the local menu; migrate `ReplyArticle`'s menu.
 - **Bridge prune** — drop each migrated element's rules from
   `apps/pelilauta/src/styles/migrations/cyan-elements.css` when its last consumer
   leaves.
@@ -44,6 +43,8 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Done
 
+- **Menu** — `CnMenu` ships, booked at `/components/cn-menu`.
+- **Reply menu** — `ReplyArticle` renders `CnMenu`; the bridge is gone.
 - **Chip** — `.chip`, `.chip.promoted` and `.chip-list` ship in
   `packages/design-system/styles/chip.css`, booked at `/base/chip`. Cyan's prefix went
   with the port, so the tag surfaces apply `.chip`.
@@ -59,3 +60,4 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 - The chrome epic's deferred sweeps and rail accessibility findings.
 - The content-grids page migrations.
 - Form control debts: touch target, action row height, form register.
+- `NounSelect`'s icon listbox, which is no Cyan element.
