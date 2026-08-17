@@ -28,6 +28,7 @@ export const actions: Locale = {
   save: 'Save',
   search: 'Search',
   share: 'Share',
+  theme: 'Switch theme',
   showMore: 'Show more',
   show: {
     options: 'Show advanced options',

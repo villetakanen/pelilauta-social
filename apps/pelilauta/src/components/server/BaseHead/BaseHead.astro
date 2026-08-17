@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import { t } from 'src/utils/i18n';
 import ServiceWorker from './ServiceWorker.astro';
+import ThemeScript from './ThemeScript.astro';
 import '@11thdeg/cyan-css';
 import '@design-system/styles/ds.css';
 import '../../../styles/migrations/cyan-elements.css';
@@ -26,6 +27,8 @@ const ogImage = image || `${Astro.url.origin}favicons/fox-ico-512.png`;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{metaTitle}</title>
+
+  <ThemeScript />
 
   <!-- Preconnect to external domains -->
 

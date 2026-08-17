@@ -9,6 +9,7 @@ import '../../../overrides.css';
 
 import { t } from 'src/utils/i18n';
 import ServiceWorker from './ServiceWorker.astro';
+import ThemeScript from './ThemeScript.astro';
 
 type Props = {
   title?: string;
@@ -26,6 +27,8 @@ const canonicalURL = Astro.url.origin;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{metaTitle}</title>
+
+  <ThemeScript />
 
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="canonical" href={canonicalURL} />

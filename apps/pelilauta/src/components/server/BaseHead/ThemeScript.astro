@@ -1,0 +1,28 @@
+---
+/**
+ * ThemeScript — applies the signed-in reader's stored theme before first paint.
+ *
+ * The session's account is a persistent atom under the localStorage key
+ * `session-account` (src/stores/session/account.ts), so `lightMode` is readable
+ * synchronously, before Firebase resolves. Classic and inline, so it runs before
+ * the body renders.
+ *
+ * A reader without an account, or without the field, leaves the root unforced:
+ * preflight's `color-scheme: dark light` stands and the browser's preference
+ * resolves it.
+ */
+---
+
+<script is:inline>
+  (() => {
+    try {
+      const raw = localStorage.getItem('session-account');
+      if (!raw || raw === 'null') return;
+      const mode = JSON.parse(raw).lightMode;
+      if (mode === 'light' || mode === 'dark')
+        document.documentElement.style.colorScheme = mode;
+    } catch {
+      // Storage denied or malformed. The root stays unforced.
+    }
+  })();
+</script>

@@ -6,7 +6,9 @@
  * than the service. The way to Pelilauta stands in the rail's footer instead.
  */
 import CnAppBar from '@design-system/components/CnAppBar.astro';
+import AppThemeSwitch from 'src/components/svelte/app/AppThemeSwitch.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
+import { t } from 'src/utils/i18n';
 import { systemToNoun } from 'src/utils/schemaHelpers';
 
 interface Props {
@@ -21,5 +23,6 @@ const { site } = Astro.props;
   noun={systemToNoun(site.system)}
   href={`/sites/${site.key}`}
 >
+  <AppThemeSwitch client:load label={t('actions:theme')} />
   <slot />
 </CnAppBar>

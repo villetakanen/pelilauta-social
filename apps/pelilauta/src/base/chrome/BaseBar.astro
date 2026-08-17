@@ -8,9 +8,11 @@
  * one of them.
  */
 import CnAppBar from '@design-system/components/CnAppBar.astro';
+import AppThemeSwitch from 'src/components/svelte/app/AppThemeSwitch.svelte';
 import { t } from 'src/utils/i18n';
 ---
 
 <CnAppBar title={t('app:wordmark')} href="/">
+  <AppThemeSwitch client:load label={t('actions:theme')} />
   <slot />
 </CnAppBar>
