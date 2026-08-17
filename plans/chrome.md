@@ -174,9 +174,7 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 - Chrome actions delivered in full; the sub-epic's plan is deleted.
 - The modal shell is migrated.
-- v18's `lightMode` is the theme field; no schema or rule change was needed.
-- The stored theme paints before first render, on every layout.
-- The theme switch stands first in each bar and persists to the account.
+- The account theme shipped, on v18's `lightMode` field.
 
 ## Outscoped
 

@@ -9,6 +9,34 @@ import SearchResult from './SearchResult.svelte';
 const APP_ID = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
 const API_KEY = import.meta.env.PUBLIC_ALGOLIA_API_KEY;
 
+/*
+ * The document's scheme, not the OS's: the account's stored theme forces the
+ * root's colorScheme, and the logo has to follow the page it stands on. The
+ * root wins where it is set; the OS preference answers where it is not.
+ */
+const resolveScheme = () => {
+  if (typeof document === 'undefined') return 'dark';
+  const forced = document.documentElement.style.colorScheme;
+  if (forced === 'light' || forced === 'dark') return forced;
+  return window.matchMedia('(prefers-color-scheme: light)').matches
+    ? 'light'
+    : 'dark';
+};
+let scheme = $state(resolveScheme());
+$effect(() => {
+  const update = () => {
+    scheme = resolveScheme();
+  };
+  const preference = window.matchMedia('(prefers-color-scheme: light)');
+  window.addEventListener('cn-theme-change', update);
+  preference.addEventListener('change', update);
+  update();
+  return () => {
+    window.removeEventListener('cn-theme-change', update);
+    preference.removeEventListener('change', update);
+  };
+});
+
 // Initialize Algolia client
 const client = algoliasearch(APP_ID, API_KEY);
 
@@ -160,12 +188,13 @@ function handleKeyDown(event: KeyboardEvent) {
       <div class="toolbar">
         <h2 class="text-h4 m-0 grow">{t("search:title")}</h2>
         <div>
-        <img src=/Algolia-logo-blue.svg alt="Algolia Logo" class="light-only" 
-            style="max-height: var(--cn-line)"/>
-        <img
-          src=/Algolia-logo-white.svg 
-          alt="Algolia Logo" class="dark-only" 
-          style="height: var(--cn-line); display: block"/>
+          <img
+            src={scheme === 'dark'
+              ? '/Algolia-logo-white.svg'
+              : '/Algolia-logo-blue.svg'}
+            alt="Algolia Logo"
+            style="height: var(--cn-line); display: block"
+          />
         </div>
       </div>
       <div class="search-form">
