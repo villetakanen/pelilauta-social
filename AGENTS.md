@@ -32,6 +32,10 @@
 - Run `apps/pelilauta`'s e2e suite. `test:e2e` seeds Firestore before it starts, and a
   full run takes tens of minutes. It is not acceptance either — `docs/MIGRATION.md` says
   why. Read a spec where the change relies on it, and run `apps/design`'s suite instead.
+- Write any detail of the Firestore security rules into the repository. The repository is
+  public and the rules guard the live service, so what they permit, forbid or fail to
+  cover stays out of every file here, code and prose alike. Reason about them where you
+  are given them, and state a conclusion without the rule behind it.
 
 ## Delivery Contract
 
