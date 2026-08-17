@@ -9,7 +9,7 @@ status: draft
 ### Context
 
 The navigation a reader reaches from anywhere inside the base application. It carries two
-kinds of entry that look alike: the base application's own places, and the doors leading
+kinds of entry that look alike: the base application's places, and the doors leading
 out of it. A reader who takes a door leaves, and the base rail is no longer what they are
 looking at.
 
@@ -18,7 +18,7 @@ looking at.
 An Astro component, `apps/pelilauta/src/base/chrome/BaseRail.astro`, reached as
 `@pelilauta/base/chrome/BaseRail.astro`. It wraps `CnRail` and supplies its entries;
 `../../../design-system/rail/spec.md` and `../../../design-system/chrome-actions/spec.md`
-own everything about how they are drawn, placed and behave.
+govern everything about how they are drawn, placed and behave.
 
 It renders on the server. The entries that depend on who is reading are islands, so the
 rail arrives with the page and fills in what only the session knows.
@@ -28,7 +28,7 @@ rail arrives with the page and fills in what only the session knows.
 The rail holds nothing a page reaches through its own content: the discussions entry
 leads to the forum's root, and a channel is reached from there, not from here.
 
-The base application's own places. Each is a page taking `Base.astro`, so each can be the
+The base application's places. Each is a page taking `Base.astro`, so each can be the
 one the reader is on:
 
 | Entry | Leads to | Current on | Seen by |
@@ -42,7 +42,7 @@ that interrupts the reader:
 
 | Entry | Leads to | Seen by |
 | :--- | :--- | :--- |
-| Kirjasto | the reader's own material | everyone |
+| Kirjasto | the reader's material | everyone |
 | Info | the documentation | everyone |
 | Ylläpito | administration | a reader holding the admin tools |
 
@@ -50,9 +50,9 @@ A door is never the current entry, and states nothing about being one. A reader 
 it is looking at the other application's rail, or at a modal page carrying none, so the
 condition can never hold.
 
-The rail's footer carries the reader's own: their inbox and their identity. Both lead
-into the reader's own material, so both are doors, and the footer holds no place of the
-base application's own. What else stands there is being settled against the running
+The rail's footer carries the reader's inbox and their identity. Both lead into the
+reader's material, so both are doors, and the footer holds none of the base
+application's places. What else stands there is being settled against the running
 application, and is not fixed here.
 
 An entry a reader may not use is absent rather than disabled: the rail states where this
@@ -74,7 +74,7 @@ application, which is what keeps them separate.
 - A reader inside the base application can reach every place above, and every door they
   may take.
 - A reader on a phone can reach the base application's root.
-- The rail states which of the base application's own places the reader is on.
+- The rail states which of the base application's places the reader is on.
 
 ### Regression Guardrails
 

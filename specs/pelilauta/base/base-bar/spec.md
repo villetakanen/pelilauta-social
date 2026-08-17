@@ -20,8 +20,8 @@ author has made distinct may well carry something else.
 ### Architecture
 
 `apps/pelilauta/src/base/chrome/BaseBar.astro`, reached as
-`@pelilauta/base/chrome/BaseBar.astro`. It wraps `CnAppBar`, which owns everything about
-how a bar is drawn, placed and behaves.
+`@pelilauta/base/chrome/BaseBar.astro`. It wraps `CnAppBar`, which governs everything
+about how a bar is drawn, placed and behaves.
 
 An application takes it whole and states its own actions through the slot. It states no
 identity, because the identity is not the consumer's to state.
@@ -31,7 +31,7 @@ identity, because the identity is not the consumer's to state.
 The identity is the product's logomark and wordmark, leading to the base application's
 root. It is the same on every page of every application that takes this bar.
 
-The bar carries the page's own name nowhere. A page names itself in the document's title
+The bar carries the page's name nowhere. A page names itself in the document's title
 and in its first heading.
 
 ## Contract

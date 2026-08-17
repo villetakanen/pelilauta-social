@@ -15,7 +15,7 @@ it prevents none, or something else already prevents it, delete it. A section
 the code fully expresses states `(implicit)`.
 
 Do not write datelines, provenance, or the narrative of how a decision was
-reached; git carries those. Do not announce the spec's own authority ("the set
+reached; git carries those. Do not announce the spec's authority ("the set
 is closed; a step is added by changing this spec").
 
 Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.

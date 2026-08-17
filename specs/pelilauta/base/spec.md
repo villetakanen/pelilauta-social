@@ -26,7 +26,7 @@ files beside it. What runs in the browser goes under `@pelilauta/base/client`. A
 sub-application that follows takes the same shape under its own directory.
 
 Its layouts are the exception: every layout sits in `apps/pelilauta/src/layouts`,
-whichever application owns it. `Base.astro` is the base application's. `ModalPage.astro`
+whichever application it belongs to. `Base.astro` is the base application's. `ModalPage.astro`
 beside it belongs to no application; every application takes it for a page that
 interrupts a reader instead of being somewhere they are — signing in, or creating a game.
 
@@ -34,7 +34,7 @@ Its strings are the `base` locale namespace, `locales/<language>/base.ts`. A str
 another application would need is not one of them.
 
 A page belongs to the base application by taking `Base.astro`, and by nothing else. The
-layout is the membership: a page's own file states which application it is part of, and a
+layout is the membership: a page's file states which application it is part of, and a
 reader does not infer that from the chrome the page happens to render.
 
 ### Constraints
