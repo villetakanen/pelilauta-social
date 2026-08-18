@@ -19,7 +19,7 @@
  *    own schemas.
  */
 import { randomUUID } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { config as loadEnv } from 'dotenv';
@@ -28,11 +28,18 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 
-import { ACCOUNTS_COLLECTION_NAME, parseAccount } from 'src/schemas/AccountSchema';
+import {
+  ACCOUNTS_COLLECTION_NAME,
+  parseAccount,
+} from 'src/schemas/AccountSchema';
 import { AppMetaSchema } from 'src/schemas/AppMetaSchema';
 import { parseChannel } from 'src/schemas/ChannelSchema';
 import { PAGES_COLLECTION_NAME, parsePage } from 'src/schemas/PageSchema';
-import { PROFILES_COLLECTION_NAME, parseProfile } from 'src/schemas/ProfileSchema';
+import {
+  PROFILES_COLLECTION_NAME,
+  parseProfile,
+} from 'src/schemas/ProfileSchema';
+import { REACTIONS_COLLECTION_NAME } from 'src/schemas/ReactionsSchema';
 import { SITES_COLLECTION_NAME, SiteSchema } from 'src/schemas/SiteSchema';
 
 // biome-ignore lint/suspicious/noExplicitAny: seed documents are untyped JSON, validated by the app's own schemas below.
@@ -48,7 +55,7 @@ const META_COLLECTION_NAME = 'meta';
 
 // The collections a reset wipes. A collection joins this list when a spec
 // writes to it, per `docs/acceptance-testing-workplan.md`.
-const RESET_COLLECTIONS = [SITES_COLLECTION_NAME];
+const RESET_COLLECTIONS = [SITES_COLLECTION_NAME, REACTIONS_COLLECTION_NAME];
 
 function readSeedJson(filename: string): SeedDoc {
   return JSON.parse(readFileSync(join(seedDir, filename), 'utf8'));
@@ -256,9 +263,7 @@ async function main() {
   // stay in seed/assets/ and are not uploaded here.
   const unreferenced = readdirSync(assetsDir).filter(
     (file) =>
-      file !== 'provenance.md' &&
-      !assetRefs.has(file) &&
-      !file.startsWith('.'),
+      file !== 'provenance.md' && !assetRefs.has(file) && !file.startsWith('.'),
   );
   if (unreferenced.length > 0) {
     console.log('Left for a spec to upload:', unreferenced.join(', '));

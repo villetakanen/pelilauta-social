@@ -9,8 +9,8 @@
 // files load unmodified outside their usual bundler.
 import { existsSync } from 'node:fs';
 import { register } from 'node:module';
-import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 register(import.meta.url);
 

@@ -18,14 +18,61 @@
       { "slug": "group-agreements", "name": "Group Agreements" }
     ],
     "pageRefs": [
-      { "key": "front-page", "name": "Front Page", "author": "@existingUser", "flowTime": "@now" },
-      { "key": "mara-venn", "name": "Mara Venn", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "orrick-slate", "name": "Orrick Slate", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "pip-fenlock", "name": "Pip Fenlock", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "session-18", "name": "Session 18 — The Abbey Bell", "author": "@existingUser", "category": "game-logs", "flowTime": "@now" },
-      { "key": "session-19", "name": "Session 19 — A Door We Were Specifically Told Not to Open", "author": "@existingUser", "category": "game-logs", "flowTime": "@now" },
-      { "key": "table-charter", "name": "Agreement A — Gloamroad Table Charter", "author": "@existingUser", "category": "group-agreements", "flowTime": "@now" },
-      { "key": "treasure-and-decision-compact", "name": "Agreement B — Company Treasure & Decision Compact", "author": "@existingUser", "category": "group-agreements", "flowTime": "@now" }
+      {
+        "key": "front-page",
+        "name": "Front Page",
+        "author": "@existingUser",
+        "flowTime": "@now"
+      },
+      {
+        "key": "mara-venn",
+        "name": "Mara Venn",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "orrick-slate",
+        "name": "Orrick Slate",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "pip-fenlock",
+        "name": "Pip Fenlock",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "session-18",
+        "name": "Session 18 — The Abbey Bell",
+        "author": "@existingUser",
+        "category": "game-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "session-19",
+        "name": "Session 19 — A Door We Were Specifically Told Not to Open",
+        "author": "@existingUser",
+        "category": "game-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "table-charter",
+        "name": "Agreement A — Gloamroad Table Charter",
+        "author": "@existingUser",
+        "category": "group-agreements",
+        "flowTime": "@now"
+      },
+      {
+        "key": "treasure-and-decision-compact",
+        "name": "Agreement B — Company Treasure & Decision Compact",
+        "author": "@existingUser",
+        "category": "group-agreements",
+        "flowTime": "@now"
+      }
     ]
   },
   "bellweather-knives": {
@@ -59,14 +106,61 @@
       { "slug": "crew-agreements", "name": "Crew Agreements" }
     ],
     "pageRefs": [
-      { "key": "front-page", "name": "Front Page", "author": "@existingUser", "flowTime": "@now" },
-      { "key": "sella-vey", "name": "Sella Vey", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "brin-latch-marrow", "name": "Brin \"Latch\" Marrow", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "orso-pell", "name": "Orso Pell", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "score-07", "name": "Score 07 — The Ministry Has No Basement", "author": "@existingUser", "category": "score-logs", "flowTime": "@now" },
-      { "key": "score-08", "name": "Score 08 — Funeral for a Living Man", "author": "@existingUser", "category": "score-logs", "flowTime": "@now" },
-      { "key": "player-compact", "name": "Agreement A — Bellweather Player Compact", "author": "@existingUser", "category": "crew-agreements", "flowTime": "@now" },
-      { "key": "crew-constitution", "name": "Agreement B — Bellweather Crew Constitution", "author": "@existingUser", "category": "crew-agreements", "flowTime": "@now" }
+      {
+        "key": "front-page",
+        "name": "Front Page",
+        "author": "@existingUser",
+        "flowTime": "@now"
+      },
+      {
+        "key": "sella-vey",
+        "name": "Sella Vey",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "brin-latch-marrow",
+        "name": "Brin \"Latch\" Marrow",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "orso-pell",
+        "name": "Orso Pell",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "score-07",
+        "name": "Score 07 — The Ministry Has No Basement",
+        "author": "@existingUser",
+        "category": "score-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "score-08",
+        "name": "Score 08 — Funeral for a Living Man",
+        "author": "@existingUser",
+        "category": "score-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "player-compact",
+        "name": "Agreement A — Bellweather Player Compact",
+        "author": "@existingUser",
+        "category": "crew-agreements",
+        "flowTime": "@now"
+      },
+      {
+        "key": "crew-constitution",
+        "name": "Agreement B — Bellweather Crew Constitution",
+        "author": "@existingUser",
+        "category": "crew-agreements",
+        "flowTime": "@now"
+      }
     ]
   },
   "fallowdeep": {
@@ -88,14 +182,61 @@
       { "slug": "table-agreements", "name": "Table Agreements" }
     ],
     "pageRefs": [
-      { "key": "front-page", "name": "Front Page", "author": "@existingUser", "flowTime": "@now" },
-      { "key": "edda-morn", "name": "Edda Morn", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "tallow-finch", "name": "Tallow Finch", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "juniper-of-the-gate", "name": "Juniper-of-the-Gate", "author": "@existingUser", "category": "characters", "flowTime": "@now" },
-      { "key": "expedition-04", "name": "Expedition 04 — The River That Hadn't Happened Yet", "author": "@existingUser", "category": "expedition-logs", "flowTime": "@now" },
-      { "key": "expedition-05", "name": "Expedition 05 — Apple Houses", "author": "@existingUser", "category": "expedition-logs", "flowTime": "@now" },
-      { "key": "campaign-covenant", "name": "Agreement A — Fallowdeep Campaign Covenant", "author": "@existingUser", "category": "table-agreements", "flowTime": "@now" },
-      { "key": "expedition-ledger", "name": "Agreement B — The Expedition Ledger", "author": "@existingUser", "category": "table-agreements", "flowTime": "@now" }
+      {
+        "key": "front-page",
+        "name": "Front Page",
+        "author": "@existingUser",
+        "flowTime": "@now"
+      },
+      {
+        "key": "edda-morn",
+        "name": "Edda Morn",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "tallow-finch",
+        "name": "Tallow Finch",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "juniper-of-the-gate",
+        "name": "Juniper-of-the-Gate",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "expedition-04",
+        "name": "Expedition 04 — The River That Hadn't Happened Yet",
+        "author": "@existingUser",
+        "category": "expedition-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "expedition-05",
+        "name": "Expedition 05 — Apple Houses",
+        "author": "@existingUser",
+        "category": "expedition-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "campaign-covenant",
+        "name": "Agreement A — Fallowdeep Campaign Covenant",
+        "author": "@existingUser",
+        "category": "table-agreements",
+        "flowTime": "@now"
+      },
+      {
+        "key": "expedition-ledger",
+        "name": "Agreement B — The Expedition Ledger",
+        "author": "@existingUser",
+        "category": "table-agreements",
+        "flowTime": "@now"
+      }
     ]
   },
   "seed-hidden-site": {
