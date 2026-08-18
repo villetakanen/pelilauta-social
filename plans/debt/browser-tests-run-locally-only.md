@@ -32,5 +32,5 @@ regression that ships because a browser test was green locally and never ran aga
 which is the failure this deferral accepts.
 
 Until then, a change to a design-system layout, surface or token is verified by running
-`pnpm --filter design test:e2e` before pushing, and a change to an application journey
-by running `pnpm test:uat`. The pull request says which was run.
+`pnpm --filter design test:e2e` before pushing, and a delivery is accepted by running
+`pnpm test:uat` at review. The pull request says which was run.
