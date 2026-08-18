@@ -7,33 +7,6 @@
  */
 
 /*
- * Source: core/cn-bubble.css.
- * Consumer: discussion bubbles. Future owner: Bubble; remove when the bubble is a
- * local component.
- */
-cn-bubble *:first-child {
-  margin-top: 0;
-}
-
-cn-bubble {
-  min-height: calc(var(--cn-gap) * 4);
-  padding: var(--cn-gap);
-}
-
-cn-bubble .toolbar {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-cn-bubble .toolbar:first-child {
-  margin-top: calc(-1 * var(--cn-gap));
-}
-
-cn-bubble .toolbar:last-child {
-  margin-bottom: calc(-1 * var(--cn-grid));
-}
-
-/*
  * Sources: components/cn-lightbox.css and cn-reaction-button.css.
  * Consumers: thread media and reactions. Future owners: Lightbox and Reaction;
  * remove each host bridge with its Cyan component.

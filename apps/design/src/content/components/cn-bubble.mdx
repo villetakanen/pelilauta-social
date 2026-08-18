@@ -1,0 +1,99 @@
+---
+title: CnBubble
+description: "The shape one message takes in a conversation, with its tail on the side that spoke."
+order: 25
+runtime: static
+---
+
+import BubbleSpecimen from '@design-system/books/specimens/BubbleSpecimen.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+Use a bubble to present one message of an exchange — a thread reply, a comment, a
+line of chat — and set `reply` where the reader wrote the message.
+
+## When to use it
+
+Use it where the reader is following who said what. Two speakers alternate, and the
+tail and the square corner say which side each message came from, so a reader
+skimming a long thread reads the shape rather than the byline.
+
+Use it for one message. A piece of content that stands on its own — a thread, a page,
+a site — is a [card](/components/cn-card), and a region of the page that merely needs
+a background is a [surface](/base/surface).
+
+## Example
+
+The bubble presents whatever the composition renders. A leading `header` and a
+trailing `footer` reach its edges, which is where a byline and a timestamp row
+belong.
+
+<Composition themes stack breakout caption="Two messages of one conversation, the second the reader's, in Light and Dark">
+  <BubbleSpecimen client:load />
+</Composition>
+
+The mark is what the tail points at. Give the bubble a `nick`, and an `avatar` where the
+participant has a picture, and it builds the mark itself — decoration, announcing
+nothing, because the `header` already names who spoke.
+
+Where the column is narrower than the small breakpoint, the mark leaves and the message
+takes the whole row. The bubble reads its own row, so the column decides this and the
+window does not.
+
+<Composition narrow caption="The same conversation in a narrow column: the mark leaves, the message stays">
+  <BubbleSpecimen client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnBubble from '@design-system/components/CnBubble.svelte'
+</script>
+
+<CnBubble reply={message.author === reader}>
+  <header>
+    <p>{message.author}</p>
+  </header>
+  <p>{message.body}</p>
+  <footer>
+    <p>{message.time}</p>
+  </footer>
+</CnBubble>
+```
+
+A band is a row, so give its text no block margin: a margin collapses out of the band
+and the band stops being what sits against the edge.
+
+The bubble reserves the gap its tail stands in and carries no other outer spacing.
+How far apart two messages sit, how wide the column is, and where an avatar aligns
+are the presenting surface's.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `reply` | `boolean` | Presents the message as the current reader's: the tail, the square corner, the colours and the mark move to the other edge. Which messages those are is the consumer's to decide. |
+| `nick` | `string` | The participant's nick. Renders the mark, and reduces to initials where there is no picture. |
+| `avatar` | `string` | The participant's picture. Renders the mark. |
+| `children` | `Snippet` | The message. Rendered directly inside the article. |
+
+Given neither `nick` nor `avatar`, the bubble renders no mark and reserves no room for
+one.
+
+## Accessibility
+
+The message is an `article`, so a reader walking a conversation walks one region per
+message. The tail is a pseudo-element and reaches no reader.
+
+`reply` changes presentation and nothing else. A reader who cannot see the tail hears
+the same message either way, so the composition states who wrote it — a byline in the
+`header` is what identifies the message.
+
+The mark is decoration and reaches no reader either. Name the participant in the
+`header` whenever you give the bubble a mark: the mark repeats that name for a reader
+who recognises a face faster than a word, and it is the `header` that carries the name
+when the column is too narrow to keep the picture.
+
+The bubble takes no attributes beyond its props. A consumer that has to label or
+identify the message from outside it wraps the bubble in the element carrying that
+relation.

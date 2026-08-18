@@ -119,7 +119,14 @@ const Identity = href ? 'a' : 'div';
     opacity: 0;
     /* Decorative paint, and it overhangs the bar by its own depth again. */
     pointer-events: none;
-    animation: cn-app-bar-veil both linear;
+    /*
+     * Longhands, not the animation shorthand: lightningcss 1.33 merges the
+     * timeline into the shorthand, which cannot carry it, and the invalid
+     * declaration takes the whole animation with it in the production build.
+     */
+    animation-name: cn-app-bar-veil;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll();
     /* Nothing at the top; full once the bar's own depth has passed beneath. */
     animation-range: calc(var(--cn-grid) * 2) calc(var(--cn-grid) * 12);

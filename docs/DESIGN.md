@@ -14,3 +14,21 @@ the depth of writing to the domain: a principles book may need deep and wide pro
 component book short technical details, a comment in a data model some background, a
 comment in a CSS file a two-word disambiguation. Do not use a sibling file to judge
 register or length.
+
+## Foundations
+
+### Spacing and responsiveness
+
+Spacing derives from one base grid; `specs/design-system/spatial-system/spec.md`
+governs the measurements.
+
+v19 established one central model for responsive layout:
+
+- Layout responds to CSS container queries, not media queries.
+- The atomic-CSS screen-size helpers, such as `.sm-hidden` or `.only-on-desktop`,
+  are deprecated.
+- The design system decides what shows or hides at a width. The application chrome
+  carries a component-specific mechanism
+  (`specs/design-system/application-chrome/spec.md`); content container layouts
+  handle widths as view modes internal to the component
+  (`specs/design-system/content-container-layouts/spec.md`).

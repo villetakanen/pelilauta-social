@@ -13,7 +13,6 @@ const compact = migration.replace(/\s+/g, ' ').trim();
 describe('Cyan element migration contract', () => {
   it('keeps a bridge for every reached element context', () => {
     const contexts = [
-      'cn-bubble',
       'cn-lightbox',
       'cn-reaction-button',
       'cn-sortable-list',
@@ -28,9 +27,6 @@ describe('Cyan element migration contract', () => {
     }
 
     expect(compact).toContain(
-      'cn-bubble .toolbar:first-child { margin-top: calc(-1 * var(--cn-gap)); }',
-    );
-    expect(compact).toContain(
       'cn-sortable-list { display: block; font-family: var(--cn-font-family-ui); font-weight: var(--cn-font-weight-ui); font-size: var(--cn-font-size-ui); letter-spacing: var(--cn-letter-spacing-ui); }',
     );
 
@@ -44,6 +40,11 @@ describe('Cyan element migration contract', () => {
     // application, so a rule reappearing here would be styling nothing — and
     // would read as a live dependency to whoever finds it.
     expect(migration).not.toMatch(/\bcn-card\b/);
+
+    // CnBubble replaced the reply bubble, the only cn-bubble the application
+    // rendered. Its bands are a `header` and a `footer` the consumer writes, so
+    // the rules that cancelled Cyan's `.toolbar` padding govern nothing.
+    expect(migration).not.toMatch(/\bcn-bubble\b/);
 
     // CnLoader replaced every `cn-loader` element, including the ones inside
     // buttons and fabs whose negative margins pulled a 72px ring back into a

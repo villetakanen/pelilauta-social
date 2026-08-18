@@ -207,7 +207,7 @@
     var(--cn-color-primary-40)
   );
   --cn-on-reply-bubble: light-dark(
-    var(--cn-color-surface-100),
+    var(--cn-color-surface-20),
     var(--cn-color-surface-95)
   );
   --cn-reply-context-bg: light-dark(

@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { marked } from 'marked';
@@ -6,8 +7,8 @@ import type { Reply } from 'src/schemas/ReplySchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
+import { getProfileAtom } from '../../../stores/profiles';
 import { uid } from '../../../stores/session';
-import AvatarLink from '../app/AvatarLink.svelte';
 import ProfileLink from '../app/ProfileLink.svelte';
 import ReactionButton from '../app/ReactionButton.svelte';
 import EditReplyDialog from './EditReplyDialog.svelte';
@@ -19,6 +20,14 @@ const { reply }: Props = $props();
 const fromUser = $derived.by(() => {
   return reply.owners[0] === $uid;
 });
+
+/**
+ * The bubble draws the identity mark, so this is the profile the mark is drawn
+ * from. The nick is also in the header, through ProfileLink, which is what names
+ * the author; the mark repeats it and the bubble drops it in a narrow column.
+ */
+const authorAtom = getProfileAtom(reply.owners[0]);
+const author = $derived($authorAtom);
 
 const images = $derived.by(() => {
   return (
@@ -39,18 +48,16 @@ onMount(() => {
 let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
 </script>
 
-<article
-  class="flex {fromUser ? 'flex-row-reverse' : ''}"
-  id={reply.key}
-  aria-labelledby={`reply-author-${reply.key}`}
->
-  <div class="sm-hidden flex-none" style="flex: 0 0 auto">
-    <AvatarLink uid={reply.owners[0]} />
-  </div>
-  <cn-bubble reply={fromUser || undefined} class="grow">
-    <div class="toolbar downscaled">
-      <p class="grow">
-        <ProfileLink uid={reply.owners[0]} id={`reply-author-${reply.key}`} />
+<!-- The id is the anchor a link to a single reply lands on. -->
+<div id={reply.key}>
+  <CnBubble
+    reply={fromUser}
+    nick={author?.nick ?? ''}
+    avatar={author?.avatarURL ?? ''}
+  >
+    <header class="reply-band">
+      <p class="reply-author">
+        <ProfileLink uid={reply.owners[0]} />
       </p>
       <ReactionButton
         target="reply"
@@ -74,7 +81,7 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
           </a>
         {/if}
       </CnMenu>
-    </div>
+    </header>
     <div>
       {#if images.length}
         <cn-lightbox {images}></cn-lightbox>
@@ -82,15 +89,38 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
       {@html marked(reply.markdownContent || "")}
     </div>
     {#if reply.updatedAt}
-      <div class="flex justify-end">
+      <footer class="reply-band reply-band--end">
         <span class="text-small text-low">
           {displayTime}
         </span>
-      </div>
+      </footer>
     {/if}
-  </cn-bubble>
-</article>
+  </CnBubble>
+</div>
 
 {#if fromUser}
   <EditReplyDialog {reply} bind:this={editDialog} />
 {/if}
+
+<style>
+  /*
+   * The bands are rows inside the bubble, which releases the padding a leading
+   * header and a trailing footer sit in. Cyan's `.toolbar` carried its own padding
+   * and a bridge rule cancelled it; the band sets its layout here instead, so the
+   * bubble's edges are the only thing positioning it.
+   */
+  .reply-band {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .reply-band--end {
+    justify-content: flex-end;
+  }
+
+  .reply-author {
+    flex: 1 1 auto;
+    margin-block: 0;
+  }
+</style>

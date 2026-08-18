@@ -223,3 +223,24 @@ describe('the indicator marks persistent state legibly', () => {
     });
   }
 });
+
+describe('a message is readable in its bubble', () => {
+  // The bubble colours leave the surface family, so no step gap predicts them:
+  // a message sits on a neutral step in the default variant and on a brand step
+  // in the reply variant, and each pairs with a foreground of its own. The pair
+  // is the whole of what CnBubble paints, and a consumer overrides neither.
+
+  const cases = [
+    ['--cn-on-bubble', '--cn-bubble'],
+    ['--cn-on-reply-bubble', '--cn-reply-bubble'],
+  ] as const;
+
+  for (const [foreground, background] of cases) {
+    for (const mode of ['light', 'dark'] as const) {
+      test(`${foreground} on ${background}, ${mode}`, () => {
+        const { ratio } = measure(foreground, background, mode, tokens);
+        expect(ratio, `${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      });
+    }
+  }
+});
