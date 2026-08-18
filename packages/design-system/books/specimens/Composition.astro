@@ -21,17 +21,35 @@ interface Props {
    * same content is evaluated in Light and Dark on one page.
    */
   themes?: boolean;
+  /**
+   * Stacks the colour-scheme panels instead of setting them side by side, so each
+   * panel is offered the whole width. A component whose behaviour turns on its own
+   * width cannot be shown in a half-width panel.
+   */
+  stack?: boolean;
+  /**
+   * Spans the width the Prose container was offered rather than its reading
+   * measure. Pair it with `stack` where a demonstration needs more width than the
+   * measure allows.
+   */
+  breakout?: boolean;
 }
 
-const { caption, narrow = false, themes = false } = Astro.props;
+const {
+  caption,
+  narrow = false,
+  themes = false,
+  stack = false,
+  breakout = false,
+} = Astro.props;
 const content = themes ? await Astro.slots.render('default') : undefined;
 const MODES = ['light', 'dark'] as const;
 ---
 
-<figure>
+<figure class:list={[{ breakout }]}>
   {
     themes ? (
-      <div class="modes">
+      <div class:list={['modes', { stack }]}>
         {MODES.map((mode) => (
           <div
             class="composition themed"
@@ -70,6 +88,11 @@ const MODES = ['light', 'dark'] as const;
   .modes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  /* One panel per row, so each is offered the whole width rather than half of it. */
+  .modes.stack {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .themed {
