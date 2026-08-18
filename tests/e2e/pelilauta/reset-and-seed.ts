@@ -54,7 +54,7 @@ const TEST_PROJECT_ID = 'skaldbase-test';
 const META_COLLECTION_NAME = 'meta';
 
 // The collections a reset wipes. A collection joins this list when a spec
-// writes to it, per `docs/acceptance-testing-workplan.md`.
+// writes to it, per `docs/ACCEPTANCE_TESTING.md`.
 const RESET_COLLECTIONS = [SITES_COLLECTION_NAME, REACTIONS_COLLECTION_NAME];
 
 function readSeedJson(filename: string): SeedDoc {

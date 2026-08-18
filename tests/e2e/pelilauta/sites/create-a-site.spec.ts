@@ -1,9 +1,8 @@
 /**
  * Journey: existingUser creates a site.
  *
- * `docs/acceptance-testing-workplan.md` carries the steps. The spec asserts what
- * the reader observes: the address the form promised, the site's front page, and
- * the library listing.
+ * The spec asserts what the reader observes: the address the form promised, the
+ * site's front page, and the library listing.
  */
 import type { Browser, Page } from 'playwright';
 import { afterAll, beforeAll, expect, it } from 'vitest';

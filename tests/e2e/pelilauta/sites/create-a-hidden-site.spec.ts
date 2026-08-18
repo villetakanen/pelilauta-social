@@ -1,9 +1,10 @@
 /**
  * Journey: existingUser creates a hidden site.
  *
- * `docs/acceptance-testing-workplan.md` carries the steps. Hidden is observable
- * in one place — the public listing at `/sites`, which `/api/sites` builds from
- * the sites where `hidden` is false.
+ * Hidden is observable in one place — the public listing at `/sites`, which
+ * `/api/sites` builds from the sites where `hidden` is false. The reader's
+ * listing at `/library` queries by owner and shows their hidden sites too, so
+ * it cannot carry the assertion.
  */
 import type { Browser, Page } from 'playwright';
 import { t } from 'src/utils/i18n';

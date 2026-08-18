@@ -1,8 +1,8 @@
 # Acceptance Testing
 
 The test plan for v21's user acceptance suite: what it verifies, how it models the
-application, and what runs it. `docs/acceptance-testing-workplan.md` carries the
-build tasks and the individual specs while the suite is under construction.
+application, and what runs it. The specs under `tests/e2e/pelilauta/` carry the
+journeys themselves.
 
 ## Goals
 
