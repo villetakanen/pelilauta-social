@@ -59,9 +59,8 @@ cn-reaction-button {
 }
 
 /*
- * Sources: components/cn-sortable-list.css and utilities/toolbar.css.
- * Consumers: sortable editors and settings controls. Future owners: those
- * component and layout epics.
+ * Source: components/cn-sortable-list.css.
+ * Consumer: sortable editors. Future owner: that component's epic.
  */
 /*
  * No line-height: Cyan reads --cn-line-height-ui and declares it nowhere, so the
@@ -74,12 +73,6 @@ cn-sortable-list {
   font-weight: var(--cn-font-weight-ui);
   font-size: var(--cn-font-size-ui);
   letter-spacing: var(--cn-letter-spacing-ui);
-}
-
-.toolbar cn-toggle-button {
-  flex-grow: 0;
-  flex-shrink: 1;
-  display: inline-flex;
 }
 
 /*

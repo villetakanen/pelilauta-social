@@ -17,7 +17,6 @@ describe('Cyan element migration contract', () => {
       'cn-lightbox',
       'cn-reaction-button',
       'cn-sortable-list',
-      'cn-toggle-button',
       'cn-d20-ability-score',
       'cn-dice',
       'cn-navigation-icon',
@@ -59,6 +58,11 @@ describe('Cyan element migration contract', () => {
 
     // The design system places the tray, so no bridge restates its geometry.
     expect(migration).not.toMatch(/fab-tray/);
+
+    // CnToggle replaced every cn-toggle-button, so the toolbar rule that kept
+    // Cyan's host from stretching in a flex row governs nothing. The local
+    // toggle is a full-width row by design, and styles/toggle.css says so.
+    expect(migration).not.toMatch(/\bcn-toggle-button\b/);
 
     // Nothing renders cn-tray-button since the layouts moved to CnRail, so a
     // rule keyed on it would match nothing on any page.

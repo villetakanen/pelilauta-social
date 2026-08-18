@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnToggle from '@design-system/components/CnToggle.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
@@ -94,16 +95,16 @@ function setDescription(e: Event) {
   siteData.description = (e.target as HTMLTextAreaElement).value;
 }
 
-function setOptions(e: Event) {
-  options = (e.target as CyanToggleButton).pressed;
+function setOptions(e: Event & { currentTarget: HTMLInputElement }) {
+  options = e.currentTarget.checked;
 }
 
-function setHidden(e: Event) {
-  siteData.hidden = (e.target as CyanToggleButton).pressed;
+function setHidden(e: Event & { currentTarget: HTMLInputElement }) {
+  siteData.hidden = e.currentTarget.checked;
 }
 
-function setUsePlainTextURLs(e: Event) {
-  siteData.usePlainTextURLs = (e.target as CyanToggleButton).pressed;
+function setUsePlainTextURLs(e: Event & { currentTarget: HTMLInputElement }) {
+  siteData.usePlainTextURLs = e.currentTarget.checked;
 }
 </script>
 
@@ -151,26 +152,26 @@ function setUsePlainTextURLs(e: Event) {
           {t('site:create.system.description')}
         </p>
 
-        <cn-toggle-button
+        <CnToggle
           label={t('actions:show.options')}
-          pressed={options}
+          checked={options}
           onchange={setOptions}
-        ></cn-toggle-button>
+        />
 
         {#if options}
         <div class="border p-1">
-          <cn-toggle-button
+          <CnToggle
             label={t('entries:site.hidden')}
-            pressed={siteData.hidden}
-            onchange={setHidden}></cn-toggle-button>
+            checked={siteData.hidden ?? false}
+            onchange={setHidden} />
           <p class="downscaled mt-0 pt-0 px-1">
             {t('site:create.hidden.description')}
           </p>
 
-          <cn-toggle-button
+          <CnToggle
             label={t('entries:site.customPageKeys')}
-            pressed={siteData.usePlainTextURLs}
-            onchange={setUsePlainTextURLs}></cn-toggle-button>
+            checked={siteData.usePlainTextURLs ?? false}
+            onchange={setUsePlainTextURLs} />
 
           <p class="downscaled mt-0 pt-0 px-1">
             {t('site:create.plaintexturls.description')}

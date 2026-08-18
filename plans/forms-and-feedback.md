@@ -29,9 +29,6 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Open
 
-- **Toggle** — spec, ship and book the local toggle; migrate the five consumers:
-  `User`, `SitePlayersTool`, `CreateSiteForm`, `SiteExtraSettingsPane` and
-  `SiteOptionsApp`.
 - **Snackbar** — spec, ship and book local feedback; migrate `Snackbar.astro`,
   `BaseTail.astro` and the `snackUtils` producer contract behind them.
 - **Bridge prune** — drop each migrated element's rules from
@@ -43,6 +40,10 @@ Outcomes, not steps, in two lists. The set grows as the work finds more.
 
 ### Done
 
+- **Toggle** — `CnToggle` ships, booked at `/components/cn-toggle`, and replaces
+  `cn-toggle-button` in `User`, `SitePlayersTool`, `CreateSiteForm`,
+  `SiteExtraSettingsPane` and `SiteOptionsApp`. The switch now names itself, so
+  the admin user grid widens its frozen column to fit the label.
 - **Menu** — `CnMenu` ships, booked at `/components/cn-menu`.
 - **Reply menu** — `ReplyArticle` renders `CnMenu`; the bridge is gone.
 - **Chip** — `.chip`, `.chip.promoted` and `.chip-list` ship in

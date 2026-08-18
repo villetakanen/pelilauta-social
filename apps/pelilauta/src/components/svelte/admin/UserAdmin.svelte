@@ -33,7 +33,7 @@ async function purgeUser(uid: string) {
 <style>
 .user-grid {
   display: grid;
-  grid-template-columns: 6fr 2fr 1fr 1fr 1fr;
+  grid-template-columns: 6fr 2fr 1fr 2fr 1fr;
   gap: var(--cn-grid);
   align-items: center;
 }

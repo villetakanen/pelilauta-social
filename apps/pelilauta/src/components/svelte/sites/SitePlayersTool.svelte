@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnToggle from '@design-system/components/CnToggle.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { addNotification } from 'src/firebase/client/notifications';
 import { t } from 'src/utils/i18n';
@@ -56,8 +57,8 @@ function setSelectedUid(e: Event) {
   selectedUid = (e.target as HTMLSelectElement).value;
 }
 
-function setUsePlayers(e: Event) {
-  usePlayers = (e.target as CyanToggleButton).pressed;
+function setUsePlayers(e: Event & { currentTarget: HTMLInputElement }) {
+  usePlayers = e.currentTarget.checked;
   update({ usePlayers });
 }
 </script>
@@ -66,11 +67,11 @@ function setUsePlayers(e: Event) {
   <h2>{t('site:players.title')}</h2>
   <p class="downscaled">{t('site:players.description')}</p>
 
-  <cn-toggle-button
+  <CnToggle
     label={t('site:players.usePlayers')}
-    pressed={usePlayers}
+    checked={usePlayers}
     onchange={setUsePlayers}
-  ></cn-toggle-button>
+  />
 
 {#if $site && $site.usePlayers}
 {#if $site.players?.length}
