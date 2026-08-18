@@ -55,6 +55,12 @@ What would someone guess wrong if it were not written here?
 Do not copy a value that is already written somewhere else. Link to it instead —
 two copies can disagree.
 
+A decorative micro-interaction — motion that announces nothing and changes no
+state — is one sentence here: its trigger, what it shows, and the clause that
+keeps it harmless, such as changing no measurement or resting under reduced
+motion. It gets no scenario; the human review in the Definition of Done is its
+gate.
+
 ## Contract
 
 ### Definition of Done
