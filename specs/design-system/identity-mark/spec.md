@@ -1,5 +1,5 @@
 ---
-status: approved
+status: live
 ---
 
 # Identity Mark

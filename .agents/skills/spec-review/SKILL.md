@@ -1,6 +1,6 @@
 ---
 name: spec-review
-description: Adversarially review one Pelilauta living spec as an independent critic. Use after a spec is created or altered, before requesting draft-to-approved status, or when asked whether a spec is precise, minimal and ready for implementation.
+description: Adversarially review one Pelilauta living spec as an independent critic. Use after a spec is created or altered while it is `proposed`, or when asked whether a spec is precise, minimal and ready for implementation.
 ---
 
 # Spec Review
@@ -18,7 +18,7 @@ sources without author conclusions. If none is available, report `review incompl
 Review one named spec, or infer one altered `spec.md`. Ask when ambiguous. Read its
 complete state and diff, `specs/TEMPLATE.md`, `docs/DESIGN.md`,
 `docs/ARCHITECTURE.md`, and related specs. Check v20 design claims and v18 behaviour
-claims at source. Human decisions and approved local specs override upstream intent;
+claims at source. Human decisions and live local specs override upstream intent;
 current code does not settle intent ambiguity.
 
 ## Review

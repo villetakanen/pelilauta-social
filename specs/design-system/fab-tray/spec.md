@@ -1,5 +1,5 @@
 ---
-status: approved
+status: live
 ---
 
 # FAB Tray

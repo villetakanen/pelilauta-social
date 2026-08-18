@@ -32,18 +32,22 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
    of the capability: `specs/<domain>/<capability>/<sub-feature>/spec.md`. A spec can be split to multiple children, inside the folder, as
   long as these are listed in the parent
 6. Encode the status of the document in the frontmatter:
-   `status: draft | approved | deprecated`, nothing else. A `draft`
-  denotes a new or a modified spec, lacking human approval. An `approved`
-  spec has been reviewed as a human, and it is expected to portray
-  how the system is expected to work. A historical spec, we want to
-  keep for reference, is marked `deprecated`.
-7. When making a minor adjustments to a spec, ask the human to approve
-   the diff, to avoid committing extra state-changes for compliance.
-8. Large scale, or irreversible decisions require an additional ADR in
+   `status: proposed | live | deprecated`, nothing else. A `proposed`
+  spec carries agent edits an operator may not have read; implementing
+  against it requires an explicit ask, and waiting. A `live` spec has
+  been read through by an operator and portrays how the system is
+  supposed to work. A spec kept for its context or architecture as a
+  lesson or example is `deprecated`. The status is a process gate, not
+  protection: any spec may be edited at any time, an agent edit to a
+  `live` spec sets it `proposed`, and an operator makes it `live` by
+  reading it — never request, await or announce approval.
+7. Large scale, or irreversible decisions require an additional ADR in
   `docs/adrs/`.
-9. Before presenting a draft, apply the template's sentence tests to your own text.
-  Delete what the code, another spec or a sibling sentence already carries.
-10. Before requesting approval for a new or changed spec, run the spec-review -skill.
+8. Before presenting new spec text, apply the template's sentence tests to your
+  own text. Delete what the code, another spec or a sibling sentence already
+  carries.
+9. After creating or changing a spec, run the spec-review -skill, then report the
+  spec is `proposed` and move on.
 
 ## Prose
 

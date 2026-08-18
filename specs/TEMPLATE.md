@@ -1,11 +1,19 @@
 ---
-status: draft
+status: proposed
 ---
 
 # <Capability>
 
 <!--
 Spec template. Copy to specs/<domain>/<capability>/spec.md.
+
+status is a process gate, not protection: `proposed` — the text carries agent
+edits an operator may not have read; implementing against it requires an
+explicit ask, and waiting for the answer. `live` — an operator has read it
+through; it portrays how the capability is supposed to work. `deprecated` —
+kept for its context or architecture as a lesson or example. Any spec may be
+edited at any time; an agent edit to a live spec sets it proposed. An operator
+makes a spec live by reading it — there is nothing to request.
 
 When there is nothing left to add, stop.
 
