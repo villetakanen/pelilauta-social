@@ -1,0 +1,85 @@
+---
+title: CnReactionButton
+description: "The love toggle an entry's action row gives the reader, with its count."
+order: 26
+runtime: interactive
+---
+
+import ReactionButtonSpecimens from '@design-system/books/specimens/ReactionButtonSpecimens.svelte'
+import ReactionButtonDemo from '@design-system/books/specimens/ReactionButtonDemo.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+Use a reaction button to let a reader toggle their love reaction on an entry, and to
+show every reader how many there are.
+
+## When to use it
+
+Use it in the compact action region of an entry or a reply, wherever the reader may
+love the thing and see the count. Where the reaction is shown but not offered — a
+reader who is not signed in, an entry that cannot be loved — render it `disabled`;
+the count still reads.
+
+It is a toggle on the content beside it, not a command of its own. An action that
+does something once — send, share, delete — is a [button](/base/buttons).
+
+## Example
+
+The consumer supplies the state. Pass the current `count`, `countLabel` and
+`pressed`, receive the native click, and supply the updated values once the change
+is real; the component keeps showing what it was given.
+
+<Composition caption="A consumer receiving the click and supplying the new count and pressed state">
+  <ReactionButtonDemo client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnReactionButton from '@design-system/components/CnReactionButton.svelte'
+</script>
+
+<CnReactionButton
+  label={t('threads:reaction.love')}
+  count={entry.loveCount}
+  countLabel={t('threads:reaction.loveCount', { count: entry.loveCount })}
+  pressed={entry.lovedByReader}
+  onclick={() => toggleLove(entry)}
+/>
+```
+
+The component is an island: without `client:load`, or the framework's equivalent,
+the control renders its supplied state and the click reaches no one.
+
+A supplied flip of `pressed` replays a burst out of the state surface, coloured by
+the state it lands. The click alone plays nothing, so a change that fails to persist
+celebrates nothing.
+
+Two presentations ship. The default is an entry's; `small` is a reply's.
+
+<Composition themes caption="Both presentations: unpressed, pressed, disabled and a zero count, in Light and Dark">
+  <ReactionButtonSpecimens />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | Required. The toggle's accessible name. Localise it. |
+| `count` | `number` | Required. The reaction count, a non-negative integer, rendered as given. |
+| `countLabel` | `string` | Required. The count's accessible description. Localise it, and change it with `count`. |
+| `pressed` | `boolean` | Whether the current reader's reaction is among the counted. |
+| `disabled` | `boolean` | Renders the control inert: no pointer, no focus, no click. The supplied state and count stay visible. |
+| `small` | `boolean` | The compact presentation. |
+| `onclick` | `(event) => void` | Required. Runs on every activation, with the button as the event's `currentTarget`. |
+
+## Accessibility
+
+The control is one native toggle button: one focus stop, activated anywhere on its
+surface or count, announcing `label` as its name, the pressed state through
+`aria-pressed`, and `countLabel` as its description. Activation, the keyboard, focus
+and the disabled state are the platform's.
+
+The heart is decoration and reaches no reader, so the name and the count's meaning
+are the consumer's to supply — the visible count is a bare numeral, and `countLabel`
+is what says what it counts.
