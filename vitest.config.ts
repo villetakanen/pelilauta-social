@@ -1,0 +1,25 @@
+import { defineConfig } from 'vitest/config';
+
+/**
+ * The acceptance suite's runner. `docs/ACCEPTANCE_TESTING.md` states the model.
+ *
+ * The root project holds only this suite. `pnpm test` runs `pnpm -r`, which
+ * excludes the workspace root, so `pnpm verify` does not reach it — the
+ * decision `plans/debt/browser-tests-run-locally-only.md` records.
+ */
+export default defineConfig({
+  test: {
+    include: ['tests/e2e/pelilauta/**/*.spec.ts'],
+    globalSetup: ['tests/e2e/pelilauta/global-setup.ts'],
+    // Every spec shares one database, so they run one at a time.
+    pool: 'forks',
+    maxWorkers: 1,
+    fileParallelism: false,
+    // A journey drives a real browser against a dev server that compiles on
+    // demand; the first navigation of a route is the slow one.
+    testTimeout: 120_000,
+    hookTimeout: 180_000,
+    // Reset, seed, sign-in and a cold dev server all happen before the first spec.
+    teardownTimeout: 30_000,
+  },
+});

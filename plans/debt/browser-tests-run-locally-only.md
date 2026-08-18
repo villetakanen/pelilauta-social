@@ -2,9 +2,11 @@
 
 `pnpm verify` — the release gate, and what CI runs on a pull request — is
 `check:skills && lint && test && build`, where `test` is `pnpm -r --if-present run
-test`. That reaches every Vitest project. It reaches no Playwright suite: `apps/design`
-defines `test:e2e`, and nothing calls it. So the design system's behavioural coverage,
-101 tests at the time of writing, has never run outside a developer's machine.
+test`. That reaches every Vitest project inside the workspace packages. It reaches no
+browser suite: `apps/design` defines `test:e2e`, the root defines `test:uat`, and
+`pnpm -r` excludes the root, so nothing calls either. So the design system's
+behavioural coverage, 101 tests at the time of writing, has never run outside a
+developer's machine.
 
 The coverage is real and it is used. `apps/design/e2e/content-container.spec.ts` alone
 holds every Content Container Layouts scenario across both row modes: thresholds at two
@@ -30,4 +32,5 @@ regression that ships because a browser test was green locally and never ran aga
 which is the failure this deferral accepts.
 
 Until then, a change to a design-system layout, surface or token is verified by running
-`pnpm --filter design test:e2e` before pushing, and the pull request says it was run.
+`pnpm --filter design test:e2e` before pushing, and a change to an application journey
+by running `pnpm test:uat`. The pull request says which was run.

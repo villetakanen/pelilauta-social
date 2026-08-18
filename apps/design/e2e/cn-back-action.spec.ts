@@ -145,25 +145,13 @@ test.describe('accessible name', () => {
     // Confirmed against the accessibility tree the control's real, rendered
     // markup produces, rather than a hand-picked assumption about what
     // "decorative" emits (Icon.svelte's decorative <svg> carries
-    // aria-hidden="true" and no role or label of its own).
-    const handle = await target.elementHandle();
-    const snapshot = await page.accessibility.snapshot({
-      root: handle ?? undefined,
-    });
-    expect(snapshot?.role).toBe('button');
-    expect(snapshot?.name).toBe(label);
-
-    const flatten = (
-      node: { role: string; name: string; children?: unknown[] } | null,
-    ): { role: string; name: string }[] =>
-      node
-        ? [node, ...((node.children ?? []) as (typeof node)[]).flatMap(flatten)]
-        : [];
-    for (const node of flatten(snapshot)) {
-      expect(node.role).not.toBe('img');
-      expect(node.name.toLowerCase()).not.toContain('arrow');
-      expect(node.name.toLowerCase()).not.toContain('back');
-    }
+    // aria-hidden="true" and no role or label of its own). `ariaSnapshot`
+    // renders the control as a single `button "<name>"` line with no
+    // children at all when nothing else in it is exposed to the tree — an
+    // `img` node, or an accessible name carrying the icon's own words,
+    // would show up as a nested line here.
+    const snapshot = await target.ariaSnapshot();
+    expect(snapshot).toBe(`- button "${label}"`);
   });
 });
 
