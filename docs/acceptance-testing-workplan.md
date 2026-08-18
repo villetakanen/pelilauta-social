@@ -2,7 +2,7 @@
 
 The tasks that build the suite `docs/ACCEPTANCE_TESTING.md` describes, in the order
 they unblock each other, and the first specs in full. When the suite runs and
-`plans/acceptance-testing.md` closes, this file goes; the test plan stays.
+`plans/uat-framework.md` closes, this file goes; the test plan stays.
 
 ## Tasks
 
