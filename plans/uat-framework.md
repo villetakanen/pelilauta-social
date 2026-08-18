@@ -36,22 +36,25 @@ harness is what replaces it, proven by the site journeys as its first real cargo
 
 ## Possible work (non-binding)
 
-- **Reset and seed** — a TypeScript Vitest `globalSetup` wipes the named
-  collections (`sites`, to begin with), seeds from `tests/e2e/pelilauta/seed/`
-  through the application's schemas, and uploads the seed assets.
-- **Harness** — a root Vitest project signs existingUser in once and hands each
-  spec a Playwright page; waits on reset and seed.
+- **Harness** — a root Vitest project calls `reset-and-seed.ts` from its
+  `globalSetup`, signs existingUser in once, and hands each spec a Playwright
+  page; waits on reset and seed.
 - **Site creation specs** — the three site journeys;
   `docs/acceptance-testing-workplan.md` carries the steps and assertions.
 
 ## Done
 
-- Test plan: `docs/ACCEPTANCE_TESTING.md` and the workplan are written.
+- Test plan: `docs/ACCEPTANCE_TESTING.md` and the workplan are written and
+  accepted.
 - Seed: inventory in `docs/acceptance-testing-seed.md`, JSON and assets under
   `tests/e2e/pelilauta/seed/`.
+- Reset and seed: `tests/e2e/pelilauta/reset-and-seed.ts` wipes the named
+  collections, checks the example accounts, uploads the seed assets, and writes
+  the seed through the application's schemas. Runs today as a standalone script,
+  invoked with Node directly; Harness wires it into `globalSetup`. Run once
+  against `skaldbase-test` and verified.
 
 ## Open questions
 
-- Has the test plan been read and accepted? The reset waits on it.
 - Does the harness sign in through the login form or a minted session?
   `plans/debt/e2e-signs-in-through-the-form.md` waits on that decision.

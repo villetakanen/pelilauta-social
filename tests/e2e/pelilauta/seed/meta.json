@@ -1,0 +1,17 @@
+{
+  "pelilauta": {
+    "admins": ["@adminUser"]
+  },
+  "threads": {
+    "topics": [
+      {
+        "slug": "seed-channel",
+        "name": "Testikanava",
+        "description": "Hyväksymistestien kanava.",
+        "icon": "discussion",
+        "category": "Pelilauta",
+        "threadCount": 0
+      }
+    ]
+  }
+}
