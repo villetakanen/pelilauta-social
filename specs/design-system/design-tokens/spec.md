@@ -1,5 +1,5 @@
 ---
-status: approved
+status: proposed
 ---
 
 # Design Tokens
@@ -9,19 +9,43 @@ status: approved
 ### Context
 
 Design tokens carry recurring visual decisions across the design system and both
-applications. Reference tokens define the available values; semantic tokens name
-their purpose. Consumers depend on that purpose, allowing a visual expression to
-change without changing the meaning of every use.
+applications. Chroma tokens define the available palette; semantic tokens name its
+purpose. Consumers depend on that purpose, allowing a visual expression to change
+without changing the meaning of every use.
 
 ### Architecture
 
 The permanent model runs in one direction:
 
-1. The **reference layer** declares literal values.
-2. The **semantic layer** assigns roles. A theme-dependent role expresses Light
-   and Dark as two arms of one declaration; a theme-invariant role uses one
-   expression.
-3. **Consumers** read semantic roles according to purpose.
+1. The **chroma layer** declares literal, lightness-indexed palette values under
+   `--chroma-{family}-{step}`. It is the theme's replaceable input for its core
+   families.
+2. The **semantic layer** assigns roles under `--cn-*`. A theme-dependent role
+   expresses Light and Dark as two arms of one declaration; a theme-invariant role
+   uses one expression.
+3. **Consumers** read semantic roles according to purpose. An approved decorative
+   use may reference a chroma step directly when its governing component
+   specification states the exception.
+
+```mermaid
+flowchart LR
+  Chroma["chroma tokens<br/>--chroma-{family}-{step}"]
+  Semantic["semantic tokens<br/>--cn-*"]
+  Consumers["design-system and application consumers"]
+  Compat["compat/cyan-4.css"]
+
+  Chroma --> Semantic
+  Semantic --> Consumers
+  Chroma -. approved decorative use .-> Consumers
+  Chroma --> Compat
+  Semantic --> Compat
+```
+
+Two core chroma families, primary and surface, are complete 13-step (0–100)
+lightness-indexed scales and the only replaceable theme surface: a replacement
+theme supplies a complete family, preserving the OKLCH lightness step of every
+index it carries. Three auxiliary families, love, warning and error, are partial
+20/40/60/90 scales and not themeable. No info family or role exists.
 
 Surface consumes background and shadow roles to form elevation levels as defined
 by `specs/design-system/surface/spec.md`. Components compose those levels where
@@ -32,8 +56,9 @@ from the grid, so the token entry point composes both families and supplies ever
 dependency together.
 
 Cyan 4 compatibility aliases are outside the permanent model. They keep legacy
-consumers testable while migration is incomplete. An alias is added when a
-remaining legacy consumer requires it and terminates in a reference or semantic
+consumers testable while migration is incomplete. `compat/cyan-4.css` carries only
+the names its remaining Cyan consumers require. An alias is added when a
+remaining legacy consumer requires it and terminates in a chroma or semantic
 token. The aliases are removed before `v21.0.0-rc.1`.
 
 ### Constraints
@@ -52,8 +77,12 @@ text size.
 
 Semantic colour roles preserve purpose, hierarchy, interaction states, and
 readable contrast in Light and Dark. A consumer uses a semantic role where the
-system has named that purpose; it does not select a reference colour as a local
-substitute.
+system has named that purpose; it does not select a chroma step as a local
+substitute for an unnamed purpose.
+
+Token JSON is the single writable source for chroma, semantic, and compatibility
+declarations. Generated CSS is committed, and a check fails when it differs from
+its source. A book reads token JSON; it does not reparse generated CSS.
 
 Compatibility aliases receive no lexicon and no new consumer. They are migration
 scaffolding, not an alternative public vocabulary or a completeness contract.
@@ -65,16 +94,20 @@ They receive no dedicated compatibility test.
 
 - A new token family has a named production use and is documented by the book
   that carries its design intent.
-- A source-driven lexicon lists every token declared by its stylesheet and the
-  value as declared. A selection matching no token fails the build.
+- A source-driven lexicon lists all and only the declarations in its token JSON
+  source. A selection matching no token fails the build.
 - Human review accepts the hierarchy, states, and contrast produced by semantic
   roles in Light and Dark.
 
 ### Regression Guardrails
 
-- A semantic colour token depends only on reference colours or other semantic
-  tokens. A reference token does not depend on the semantic or compatibility
+- A chroma token is literal and depends on nothing. A semantic colour token
+  depends only on chroma or another semantic token. A compatibility alias
+  depends on a permanent token; no permanent token depends on compatibility
   vocabulary.
+- A replacement theme supplies a complete primary or surface family without
+  changing a semantic or component token, preserving the OKLCH lightness step of
+  every index it carries. The auxiliary families are not a themeable surface.
 - The token entry point supplies the grid dependency required by semantic shadow
   declarations.
 - No design-system stylesheet sets the root text size or uses a pixel breakpoint.

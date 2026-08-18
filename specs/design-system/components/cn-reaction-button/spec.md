@@ -1,5 +1,5 @@
 ---
-status: approved
+status: proposed
 ---
 
 # CnReactionButton
@@ -58,16 +58,19 @@ grid unit of inline padding. Neither presentation grows or shrinks in a flex row
 
 At rest, the state surface uses `--cn-button-text` and `--cn-text-low`. Hover composes
 `--cn-hover` and the button hover shadow; active composes `--cn-active`. The pressed
-surface is a 120-degree gradient from `--cn-color-love` at 11% to
-`--cn-color-error` at 90%, with `--cn-surface` as its foreground. Keyboard focus uses
-`--cn-focus-ring`. The pressed gradient remains beneath hover and active feedback.
+surface is a 120-degree gradient from CnReactionButton's private love expression at
+11% to its private error expression at 90%, each drawn from its fixed
+`--chroma-love-*` or `--chroma-error-*` scale, with `--cn-surface` as its
+foreground. Keyboard focus uses `--cn-focus-ring`. The pressed gradient remains
+beneath hover and active feedback.
 Disabled presentation keeps the supplied pressed state beneath
 `--cn-disabled-opacity` and takes no hover or active feedback. A state change does
 not alter the control's dimensions or move the count.
 
 A supplied change of `pressed` replays a burst: a replica of the noun expanding out
-of the state surface and fading, in `--cn-color-love` where the reaction landed and
-`--cn-color-primary-20` where it left. A click alone plays nothing.
+of the state surface and fading, in CnReactionButton's private love expression
+where the reaction landed and `--chroma-primary-20` where it left. A click alone
+plays nothing.
 
 Transitions and the burst use the shared UI duration and easing roles and stop when
 the reader requests reduced motion.

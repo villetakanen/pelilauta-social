@@ -17,6 +17,16 @@ register or length.
 
 ## Foundations
 
+### Colour
+
+Replaceable chroma imports predate Pelilauta and exist in Cyan 1. v19 supplies the
+current chromatic and semantic vocabulary, together with OKLCH lightness as an
+approximation of contrast. v20 carries that model in the design-system
+implementation being ported; `specs/design-system/design-tokens/spec.md` governs it.
+
+Semantics preserve purpose across colour schemes. Components consume purpose, not
+a chroma step.
+
 ### Spacing and responsiveness
 
 Spacing derives from one base grid; `specs/design-system/spatial-system/spec.md`

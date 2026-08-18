@@ -1,5 +1,5 @@
 ---
-status: approved
+status: proposed
 ---
 
 # CnLoader
@@ -32,7 +32,7 @@ The ring uses 0.72 opacity and line width `calc(var(--cn-grid) / 2)`. The center
 
 - `CnLoader.svelte` exports a Svelte 5 component rendering `<span class="cn-loader">` with `role="status"`.
 - `inline` prop switches host and nested icon size between `--cn-loader-size` and `--cn-line`.
-- Tokens `--cn-loader-size`, `--cn-loader-line-width`, and `--cn-loader-color` are declared on `:root` with `light-dark()` values.
+- Tokens `--cn-loader-size` and `--cn-loader-line-width` are declared on `:root`; `--cn-loader-color` is private to CnLoader, with a `light-dark()` value.
 - `loader.css` provides container auto-centering rules for section and article children.
 - `prefers-reduced-motion: reduce` stops ring rotation.
 - The **CnLoader** Component book renders `CnLoader` in standalone and inline states across Light and Dark.

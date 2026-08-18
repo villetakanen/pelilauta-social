@@ -1,5 +1,5 @@
 ---
-status: approved
+status: proposed
 ---
 
 # CnCard
@@ -92,8 +92,8 @@ CnCard does not supply application actions or business logic.
 A cover is decorative, lazily loaded, cropped to 16:9, and may receive native
 responsive image candidates and sizing hints. It bleeds through the CnCard's top and
 horizontal padding while preserving the CnCard radius. Its lower edge carries an
-upward gradient made from 70% `--cn-color-primary-95` in Light and
-`--cn-color-primary-30` in Dark, blended with `hard-light`. The tint occupies at
+upward gradient made from 70% `--chroma-primary-95` in Light and
+`--chroma-primary-30` in Dark, blended with `hard-light`. The tint occupies at
 most 44% of the cover height. The cover has no alternative text because the title
 carries the subject's accessible identity.
 
