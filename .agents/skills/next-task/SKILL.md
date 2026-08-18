@@ -6,19 +6,20 @@ description: Briefly propose the next small, contained, atomic, deliverable and 
 # Next Task
 
 Read the named epic. If none is named, identify the active epic from the current
-branch and `plans/`. Read every Open item, the domain's parent spec, the existing
+branch and `plans/`. Read every Possible work entry, the domain's parent spec, the existing
 specs for candidate capabilities, and v20's implementation and books for the
 surfaces in question.
 
-Treat an Open item that leaves the relationship between elements, components or
+Treat a Possible work entry that leaves the relationship between elements, components or
 documents undecided as a candidate, not an automatic task. Split it until one
 decision directly enables one deliverable. Do not put a plan-wide classification
 question ahead of concrete work unless every smaller candidate depends on that exact
 decision.
 
-Do not treat Known scope as closed. A task may split an Open item or name newly
-discovered work absent from the plan when that work is necessary to the epic's Goal
-or Success criterion. Reject work outside the epic's Goal.
+Possible work is non-binding: an entry is a candidate, not a commitment, and the
+set is not closed. A task may split an entry or name newly discovered work absent
+from the plan when that work is necessary to the epic's Goal or Success criteria.
+Reject work outside the epic's Goal.
 
 Choose exactly one task. Prefer the smallest vertical slice that produces observable,
 verifiable value and can ship on its own. Check the relevant specs before proposing

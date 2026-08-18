@@ -11,7 +11,8 @@
 - `apps/pelilauta` is the v21 application; `apps/design` publishes the design system.
 - `packages/design-system` contains the components, styles, specs and books both use.
 - `specs` contains approved behaviour, one capability per directory.
-- `plans` contains transient epic scope; `plans/debt` contains known unplanned gaps.
+- `plans` contains transient epic scope; a plan carries behaviour only until a spec
+  takes it. `plans/debt` contains known unplanned gaps.
 - `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;
   `docs/ARCHITECTURE.md` holds the naming and what each artifact carries.
 
