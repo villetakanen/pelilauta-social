@@ -38,8 +38,6 @@ rules that kept them rendering — can leave the application.
 
 ## Possible work (non-binding)
 
-- **Snackbar** — spec, ship and book local feedback; migrate `Snackbar.astro`,
-  `BaseTail.astro` and the `snackUtils` producer contract behind them.
 - **Token-layer debts** — the first work touching the token layers picks up the
   four debt files under `plans/debt/` that name them.
 
@@ -51,3 +49,6 @@ rules that kept them rendering — can leave the application.
 - `.chip` ships and is booked; the tag surfaces apply it.
 - Accordion needs no capability; `details.surface` carries it.
 - Toggle and chip bridge rules left with their last consumers.
+- CnSnackbar ships, booked at `/components/cn-snackbar`.
+- SnackbarHost and a queue in `snackUtils` replace the document event;
+  `Snackbar.astro` and `BaseTail.astro` are gone.

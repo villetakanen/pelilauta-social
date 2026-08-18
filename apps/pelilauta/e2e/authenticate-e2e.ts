@@ -77,7 +77,7 @@ export async function authenticate(page: Page, useNewUserAccount = false) {
 
   // Check for any error messages
   const errorElements = await page
-    .locator('cn-snackbar, .error, [role="alert"]')
+    .locator('.cn-snackbar, .error, [role="alert"]')
     .all();
   if (errorElements.length > 0) {
     for (const errorElement of errorElements) {

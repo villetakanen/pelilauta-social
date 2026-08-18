@@ -1,0 +1,106 @@
+---
+title: CnSnackbar
+description: "The corner report on an operation, brief by default and standing while it offers something."
+order: 48
+runtime: interactive
+---
+
+import SnackbarSpecimen from '@design-system/books/specimens/SnackbarSpecimen.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+Use a snackbar to tell a reader how an operation went without moving them off what
+they were doing.
+
+## When to use it
+
+Use it for the result of something the reader just did: a page saved, an upload
+finished, a request that failed. The report is short, and the reader loses nothing
+by missing it — a message they must act on belongs in the view, not in a corner
+that empties itself.
+
+The component presents one snack. Which snack is current, and what happens to the
+ones behind it, is decided by whatever mounts it: CnSnackbar holds no queue, reads
+no storage and listens to no event.
+
+## Example
+
+<Composition caption="A message-only snack, in Light and Dark">
+  <SnackbarSpecimen client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnSnackbar from '@design-system/components/CnSnackbar.svelte'
+
+  let snack = $state()
+</script>
+
+<CnSnackbar {snack} onDismiss={() => (snack = undefined)} />
+```
+
+A message on its own stands for five seconds and then leaves. `onDismiss` runs
+after the exit, and until it does, the snack is still the current one — which is
+what lets a replacement arrive at an empty corner rather than crossfading with
+what it replaced.
+
+The component is an island: without `client:load`, or the framework's equivalent,
+nothing is presented.
+
+### An action
+
+A snack that offers an action does not time out. An offer the reader has not read
+is an offer they did not get, so it stands until they take it or something
+replaces it. Activating it runs the callback once and starts the exit, whatever
+the callback does.
+
+<Composition caption="A snack offering an undo, in Light and Dark">
+  <SnackbarSpecimen client:load group="action" />
+</Composition>
+
+```svelte
+<CnSnackbar
+  snack={{
+    message: t('site:snacks.pageDeleted'),
+    action: { label: t('actions:undo'), callback: restore },
+  }}
+  onDismiss={() => (snack = undefined)}
+/>
+```
+
+An action is one button. Where the reader has two things to choose between, the
+choice belongs in a dialog, where they can read it.
+
+### Above the layers
+
+The snackbar reports on the operation, so it stands above whatever the operation
+was run from — including a modal surface. The panel behind the bar below stands at
+the modal layer.
+
+<Composition caption="A snack over the modal layer, in Light and Dark">
+  <SnackbarSpecimen client:load group="modal" />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `snack` | `Snack \| null` | The current snack. Nothing renders without one. |
+| `onDismiss` | `() => void` | Requests dismissal, once the exit transition has run. |
+
+A `Snack` is a `message` string and, optionally, an `action` — a `label` and a
+`callback` taking no arguments. Localise both strings.
+
+The component exports `DISPLAY_MS`, the five seconds a message-only snack stands,
+and `EXIT_MS`, the exit transition's length.
+
+## Accessibility
+
+The message announces as a status, so a reader who cannot see the corner is told
+what happened without being interrupted. The action is a native button carrying
+its label — focus, Enter and Space are the platform's.
+
+A snack cannot be dismissed from the keyboard, and that is deliberate: a message
+leaves on its own, and an action leaves when it is taken. Nothing in a snackbar is
+reachable only there, so nothing is lost when it goes.
