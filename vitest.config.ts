@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 /**
@@ -8,6 +9,17 @@ import { defineConfig } from 'vitest/config';
  * decision `plans/debt/browser-tests-run-locally-only.md` records.
  */
 export default defineConfig({
+  /*
+   * The application's bare `src/` specifiers, resolved the way its Astro
+   * build resolves them. A spec reads the reader-facing copy through
+   * `src/utils/i18n` rather than repeating it, for the same reason
+   * `docs/acceptance-testing-seed.md` gives for the seed's schema imports.
+   */
+  resolve: {
+    alias: {
+      src: fileURLToPath(new URL('./apps/pelilauta/src', import.meta.url)),
+    },
+  },
   test: {
     include: ['tests/e2e/pelilauta/**/*.spec.ts'],
     globalSetup: ['tests/e2e/pelilauta/global-setup.ts'],
