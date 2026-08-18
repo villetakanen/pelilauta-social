@@ -13,7 +13,7 @@ they were doing.
 
 ## When to use it
 
-Use it for the result of something the reader just did: a page saved, an upload
+Use it for the result of an operation the reader started: a page saved, an upload
 finished, a request that failed. The report is short, and the reader loses nothing
 by missing it — a message they must act on belongs in the view, not in a corner
 that empties itself.
@@ -60,8 +60,8 @@ the callback does.
 ```svelte
 <CnSnackbar
   snack={{
-    message: t('site:snacks.pageDeleted'),
-    action: { label: t('actions:undo'), callback: restore },
+    message: 'Sivu poistettu',
+    action: { label: 'Kumoa', callback: restore },
   }}
   onDismiss={() => (snack = undefined)}
 />

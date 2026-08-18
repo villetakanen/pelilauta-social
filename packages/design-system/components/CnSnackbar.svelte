@@ -113,11 +113,9 @@ function act() {
 <style>
   .cn-snackbar {
     /*
-     * Above the modal layer. This design system's own layers stop at the rail's
-     * 40700, and Cyan still provides the dialog and modal layers at 50000 and
-     * above; a report on an operation has to clear whatever the operation was
-     * run from. Private to this component: no other capability may read it
-     * (docs/ARCHITECTURE.md).
+     * Above every layer this design system and Cyan declare, so a report
+     * clears whatever it reports on. Private to this component: no other
+     * capability may read it (docs/ARCHITECTURE.md).
      */
     --_snackbar-z-index: 60000;
 
@@ -163,7 +161,7 @@ function act() {
   /*
    * The button is the one styles/buttons.css publishes. Its block margins
    * centre a pill in a seven-unit row, which this bar already is, so they are
-   * released and the bar's own padding stands instead.
+   * released, and the padding declared here stands instead.
    */
   .cn-snackbar button {
     flex: none;

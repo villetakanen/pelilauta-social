@@ -20,7 +20,7 @@ import { type LocaleSubstitutions, t } from 'src/utils/i18n';
 
 export type { Snack };
 
-/** The key the hand-off is stored under, in the tab's own storage. */
+/** The key the hand-off is stored under, in the tab's storage. */
 const SESSION_KEY = 'snack';
 
 /**

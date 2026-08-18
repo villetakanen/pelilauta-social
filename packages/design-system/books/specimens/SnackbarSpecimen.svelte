@@ -8,7 +8,7 @@
  * in the one corner. `.frame` below establishes one: `container-type` makes it
  * both the containing block a fixed descendant resolves against and a stacking
  * context the layer inside it resolves in. So each pane's snackbar sits at that
- * pane's own lower inline-start corner, at the inset the component states.
+ * that pane's lower inline-start corner, at the inset the component states.
  *
  * Each pane renders its own colour scheme directly rather than through
  * `Composition`'s `themes` mode, which clones one server-rendered string: this
@@ -104,7 +104,7 @@ function raise(mode: Mode) {
 
   /*
    * A stand-in for the modal layer Cyan provides at 50000, so the book shows
-   * what the component's own layer is measured against. Test rig, not a system
+   * what the component's layer is measured against. Test rig, not a system
    * value: no design-system surface declares this.
    */
   .modal-stand-in {
