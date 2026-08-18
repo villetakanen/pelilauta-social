@@ -26,9 +26,9 @@ const { displayName, tagInfo } = Astro.props;
         <p class="text-low">
           {t("tag:synonymsInfo", { count: tagInfo.synonyms.length })}:
         </p>
-        <div class="flex flex-wrap">
+        <div class="chip-list">
           {tagInfo.synonyms.map((syn) => (
-            <span class="cn-chip">#{syn}</span>
+            <span class="chip">#{syn}</span>
           ))}
         </div>
       </>

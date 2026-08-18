@@ -30,9 +30,9 @@ const featuredTags = [
   <h2 class="text-h5">{t('frontPage:featuredTags.title')}</h2>
   <p class="text-caption">{t('frontPage:featuredTags.description')}</p>
   
-  <div class="flex flex-wrap">
+  <div class="chip-list">
     {featuredTags.map((item) => (
-      <a href={`/tags/${encodeURIComponent(item.tag)}`} class="cn-chip flex-none">
+      <a href={`/tags/${encodeURIComponent(item.tag)}`} class="chip">
         <Icon noun={item.icon} size="xsmall" />
         <span>{item.displayName}</span>
       </a>

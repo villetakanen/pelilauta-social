@@ -1,11 +1,11 @@
 ---
 import AuthManager from '@components/svelte/AuthManager.svelte';
+import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import AdminBar from '@pelilauta/admin/chrome/AdminBar.astro';
 import AdminRail from '@pelilauta/admin/chrome/AdminRail.astro';
 import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
-import BaseTail from '@pelilauta/components/server/BaseTail.astro';
 
 // Every page taking this layout states the guard itself, and renders for a
 // reader holding the tools alone.
@@ -38,6 +38,6 @@ const { title, description } = Astro.props;
 
     <AuthManager client:only="svelte" />
 
-    <BaseTail />
+    <SnackbarHost client:only="svelte" />
   </body>
 </html>

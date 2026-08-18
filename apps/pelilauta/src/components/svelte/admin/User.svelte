@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnToggle from '@design-system/components/CnToggle.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { setFrozen } from 'src/firebase/client/account/setFrozen';
 import type { Account } from 'src/schemas/AccountSchema';
@@ -13,8 +14,8 @@ const { account }: Props = $props();
 const adminStatus = $derived(() => $appMeta.admins.includes(account.uid));
 const frozenStatus = $derived(() => account.frozen);
 
-const toggleFrozen = async () => {
-  account.frozen = !account.frozen;
+const toggleFrozen = async (e: Event & { currentTarget: HTMLInputElement }) => {
+  account.frozen = e.currentTarget.checked;
   await setFrozen(account.frozen, account.uid);
 };
 </script>
@@ -32,9 +33,10 @@ const toggleFrozen = async () => {
   {:else}
     <p></p>
   {/if}
-  <cn-toggle-button
+  <CnToggle
+    label="Frozen"
     disabled={adminStatus()}
-    pressed={frozenStatus()}
+    checked={frozenStatus() ?? false}
     onchange={toggleFrozen}
-  ></cn-toggle-button>
+  />
 

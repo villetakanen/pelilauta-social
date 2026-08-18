@@ -5,6 +5,9 @@ export const admin: Locale = {
     title: 'Ylläpito',
     description: 'Pelilaudan ylläpidon työkalut',
   },
+  thread: {
+    tools: 'Ylläpito',
+  },
   rail: {
     label: 'Ylläpito',
     channels: 'Forum Administration',

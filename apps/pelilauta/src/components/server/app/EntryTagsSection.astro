@@ -5,9 +5,9 @@ export interface Props {
 const { tags } = Astro.props;
 ---
 {tags && tags.length > 0 &&
-  <div class="flex flex-wrap items-start mt-2">
+  <div class="chip-list mt-2">
     {tags.map((tag) => (
-      <a href={`/tags/${tag}`} class="cn-chip" style="flex:none">
+      <a href={`/tags/${tag}`} class="chip">
         {tag}
       </a>
     ))}

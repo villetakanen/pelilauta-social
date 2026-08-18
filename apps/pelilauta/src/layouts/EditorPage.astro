@@ -1,7 +1,7 @@
 ---
+import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import AppBar from '../components/server/AppBar.astro';
 import AppRail from '../components/server/AppRail.astro';
-import Snackbar from '../components/server/app/Snackbar.astro';
 import EditorHead from '../components/server/BaseHead/EditorHead.astro';
 
 // NOTE: EditorPage intentionally does not include AuthManager.
@@ -31,7 +31,6 @@ const { title, shortTitle, description } = Astro.props;
       <slot />
     </main>
 
-    <!-- Editor does not have the tailer - so we need to import snackbar here -->
-    <Snackbar />
+    <SnackbarHost client:only="svelte" />
   </body>
 </html>

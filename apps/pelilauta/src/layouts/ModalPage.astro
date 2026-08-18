@@ -1,9 +1,9 @@
 ---
+import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import { t } from 'src/utils/i18n';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
-import BaseTail from '../components/server/BaseTail.astro';
 
 // NOTE: ModalPage intentionally does not include AuthManager.
 // This layout is only used for server-side authenticated pages where
@@ -66,6 +66,6 @@ const { title, shortTitle, description, image, backHref } = Astro.props;
       });
     </script>
 
-    <BaseTail />
+    <SnackbarHost client:only="svelte" />
   </body>
 </html>

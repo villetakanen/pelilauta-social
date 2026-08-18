@@ -65,7 +65,7 @@ export async function authenticateAdmin(page: Page) {
 
   // Check for errors
   const errorElements = await page
-    .locator('cn-snackbar, .error, [role="alert"]')
+    .locator('.cn-snackbar, .error, [role="alert"]')
     .all();
 
   if (errorElements.length > 0) {

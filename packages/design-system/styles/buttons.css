@@ -19,13 +19,17 @@
 }
 
 /*
- * Geometry, type and the interaction frame. `.fab` and `.chrome-action` are
- * excluded throughout: a floating action button and a chrome action are each
- * their own capability with their own geometry and surface, so neither
- * inherits the button's gradient, elevation or hover wash.
+ * Geometry, type and the interaction frame. `.fab`, `.chrome-action`, `.chip` and a
+ * menu item are excluded throughout: a floating action button, a chrome action, a
+ * chip and a menu row are each a capability with its own geometry and surface, so
+ * none inherits the button's gradient, elevation or hover wash. A chip's exclusion
+ * reaches its descendants too, because a chip's remove control is a native button
+ * that the chip scales. A menu's exclusion is written as a descendant selector
+ * because a menu item is an element the consumer wrote, carrying no class of ours. The
+ * menu's trigger sits outside the container and stays a text icon button.
  */
-button:not(.fab, .chrome-action),
-a.button[href]:not(.fab, .chrome-action) {
+button:not(.fab, .chrome-action, .chip, .chip *, .cn-menu-container *),
+a.button[href]:not(.fab, .chrome-action, .chip, .chip *, .cn-menu-container *) {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -85,9 +89,13 @@ a.button[href]:not(.fab, .chrome-action) {
  * load order, so a legacy ancestor cannot recolour a button that did not ask
  * for the alternate treatment.
  */
-:is(button, a.button[href]):not(.fab, .chrome-action):not(.cta):not(.text):not(
-    .secondary
-  ) {
+:is(button, a.button[href]):not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):not(.cta):not(.text):not(.secondary) {
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
@@ -97,7 +105,13 @@ a.button[href]:not(.fab, .chrome-action) {
   color: var(--cn-on-button);
 }
 
-:is(button, a.button[href]).cta:not(.fab, .chrome-action) {
+:is(button, a.button[href]).cta:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ) {
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
@@ -107,7 +121,13 @@ a.button[href]:not(.fab, .chrome-action) {
   color: var(--cn-on-button-cta);
 }
 
-:is(button, a.button[href]).text:not(.fab, .chrome-action) {
+:is(button, a.button[href]).text:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ) {
   background-image: none;
   background-color: var(--cn-button-text);
   color: var(--cn-on-surface);
@@ -115,7 +135,13 @@ a.button[href]:not(.fab, .chrome-action) {
 }
 
 /* v20's alternate chroma treatment, and only where the button itself asks. */
-:is(button, a.button[href]).secondary:not(.fab, .chrome-action) {
+:is(button, a.button[href]).secondary:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ) {
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
@@ -129,8 +155,14 @@ a.button[href]:not(.fab, .chrome-action) {
  * Hover and active wash over the variant's own surface, so the foreground keeps
  * its identity: an overlay rather than a brightness filter.
  */
-button:not(.fab, .chrome-action)::after,
-a.button[href]:not(.fab, .chrome-action)::after {
+button:not(.fab, .chrome-action, .chip, .chip *, .cn-menu-container *)::after,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  )::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -139,25 +171,67 @@ a.button[href]:not(.fab, .chrome-action)::after {
   transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
 }
 
-button:not(.fab, .chrome-action):hover::after,
-a.button[href]:not(.fab, .chrome-action):hover::after {
+button:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):hover::after,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):hover::after {
   background-color: var(--cn-hover);
   transition-timing-function: var(--_enter-easing);
 }
 
-button:not(.fab, .chrome-action):active::after,
-a.button[href]:not(.fab, .chrome-action):active::after {
+button:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):active::after,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):active::after {
   background-color: var(--cn-active);
 }
 
-button:not(.fab, .chrome-action):hover,
-a.button[href]:not(.fab, .chrome-action):hover {
+button:not(.fab, .chrome-action, .chip, .chip *, .cn-menu-container *):hover,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):hover {
   box-shadow: var(--cn-shadow-button-hover);
   transition-timing-function: var(--_enter-easing);
 }
 
-button:not(.fab, .chrome-action):focus-visible,
-a.button[href]:not(.fab, .chrome-action):focus-visible {
+button:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):focus-visible,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):focus-visible {
   outline: 2px solid var(--cn-focus-ring);
   outline-offset: 2px;
 }
@@ -167,7 +241,13 @@ a.button[href]:not(.fab, .chrome-action):focus-visible {
  * or absent, so no `disabled`, `aria-disabled` or `.disabled` presentation is
  * published for an anchor.
  */
-button:not(.fab, .chrome-action):disabled {
+button:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):disabled {
   opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
@@ -177,15 +257,25 @@ button:not(.fab, .chrome-action):disabled {
  * An icon or an inline loader on its own makes the control a circle: equal
  * inline and block size, and a radius already half of it.
  */
-:is(button, a.button[href]):not(.fab, .chrome-action):has(
-    > :is(.cn-icon, .cn-loader):only-child
-  ) {
+:is(button, a.button[href]):not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  ):has(> :is(.cn-icon, .cn-loader):only-child) {
   inline-size: var(--cn-button-size);
   padding-inline: 0;
 }
 
 /* A leading icon or loader sits closer to the edge than the label does. */
-:is(button, a.button[href]):not(.fab, .chrome-action)
+:is(button, a.button[href]):not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  )
   > :is(.cn-icon, .cn-loader):first-child:not(:only-child) {
   margin-inline-start: calc(-1 * var(--cn-grid));
 }
@@ -194,12 +284,25 @@ button:not(.fab, .chrome-action):disabled {
  * Truncation belongs to the label, not to the button: an icon or loader keeps
  * its square while the text gives way.
  */
-:is(button, a.button[href]):not(.fab, .chrome-action)
+:is(button, a.button[href]):not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  )
   > :is(.cn-icon, .cn-loader) {
   flex: none;
 }
 
-:is(button, a.button[href]):not(.fab, .chrome-action) > :is(span, .label) {
+:is(button, a.button[href]):not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *
+  )
+  > :is(span, .label) {
   min-inline-size: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -207,10 +310,22 @@ button:not(.fab, .chrome-action):disabled {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  button:not(.fab, .chrome-action),
-  a.button[href]:not(.fab, .chrome-action),
-  button:not(.fab, .chrome-action)::after,
-  a.button[href]:not(.fab, .chrome-action)::after {
+  button:not(.fab, .chrome-action, .chip, .chip *, .cn-menu-container *),
+  a.button[href]:not(
+      .fab,
+      .chrome-action,
+      .chip,
+      .chip *,
+      .cn-menu-container *
+    ),
+  button:not(.fab, .chrome-action, .chip, .chip *, .cn-menu-container *)::after,
+  a.button[href]:not(
+      .fab,
+      .chrome-action,
+      .chip,
+      .chip *,
+      .cn-menu-container *
+    )::after {
     transition: none;
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "pelilauta-social",
-  "version": "21.0.0-beta.37",
+  "version": "21.0.0-beta.38",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40",
@@ -12,12 +12,15 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "check:skills": "node .agents/check-skills-exposed.mjs",
-    "verify": "pnpm check:skills && pnpm lint && pnpm test && pnpm -r --if-present run build"
+    "verify": "pnpm check:skills && pnpm lint && pnpm test && pnpm -r --if-present run build",
+    "test:uat": "vitest run"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "lefthook": "^1.13.4"
+    "lefthook": "^1.13.4",
+    "playwright": "^1.62.1",
+    "vitest": "^4.1.10"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [

@@ -1,0 +1,266 @@
+{
+  "gloamroad-company": {
+    "key": "gloamroad-company",
+    "name": "The Gloamroad Company",
+    "description": "A D&D-style heroic-fantasy campaign wiki: the Lanterns Beneath the Crown campaign.",
+    "system": "dd",
+    "homepage": "front-page",
+    "hidden": false,
+    "sortOrder": "name",
+    "usePlainTextURLs": true,
+    "owners": ["@existingUser"],
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now",
+    "pageCategories": [
+      { "slug": "characters", "name": "Characters" },
+      { "slug": "game-logs", "name": "Game Logs" },
+      { "slug": "group-agreements", "name": "Group Agreements" }
+    ],
+    "pageRefs": [
+      {
+        "key": "front-page",
+        "name": "Front Page",
+        "author": "@existingUser",
+        "flowTime": "@now"
+      },
+      {
+        "key": "mara-venn",
+        "name": "Mara Venn",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "orrick-slate",
+        "name": "Orrick Slate",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "pip-fenlock",
+        "name": "Pip Fenlock",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "session-18",
+        "name": "Session 18 — The Abbey Bell",
+        "author": "@existingUser",
+        "category": "game-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "session-19",
+        "name": "Session 19 — A Door We Were Specifically Told Not to Open",
+        "author": "@existingUser",
+        "category": "game-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "table-charter",
+        "name": "Agreement A — Gloamroad Table Charter",
+        "author": "@existingUser",
+        "category": "group-agreements",
+        "flowTime": "@now"
+      },
+      {
+        "key": "treasure-and-decision-compact",
+        "name": "Agreement B — Company Treasure & Decision Compact",
+        "author": "@existingUser",
+        "category": "group-agreements",
+        "flowTime": "@now"
+      }
+    ]
+  },
+  "bellweather-knives": {
+    "key": "bellweather-knives",
+    "name": "The Bellweather Knives",
+    "description": "A Blades in the Dark campaign wiki: a Shadows crew working Doskvol's Charterhall and Nightmarket.",
+    "system": "pbta",
+    "homepage": "front-page",
+    "hidden": false,
+    "sortOrder": "name",
+    "usePlainTextURLs": true,
+    "owners": ["@existingUser"],
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now",
+    "posterURL": "@asset:bellweather-knives-hero.png",
+    "backgroundURL": "@asset:bellweather-knives-hero.png",
+    "assets": [
+      {
+        "url": "@asset:bellweather-knives-hero.png",
+        "name": "Bellweather Knives hero image",
+        "description": "AI-generated test material; see seed/assets/provenance.md.",
+        "license": "0",
+        "storagePath": "Sites/bellweather-knives/bellweather-knives-hero.png",
+        "uploadedBy": "@existingUser"
+      }
+    ],
+    "pageCategories": [
+      { "slug": "characters", "name": "Characters" },
+      { "slug": "score-logs", "name": "Score Logs" },
+      { "slug": "crew-agreements", "name": "Crew Agreements" }
+    ],
+    "pageRefs": [
+      {
+        "key": "front-page",
+        "name": "Front Page",
+        "author": "@existingUser",
+        "flowTime": "@now"
+      },
+      {
+        "key": "sella-vey",
+        "name": "Sella Vey",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "brin-latch-marrow",
+        "name": "Brin \"Latch\" Marrow",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "orso-pell",
+        "name": "Orso Pell",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "score-07",
+        "name": "Score 07 — The Ministry Has No Basement",
+        "author": "@existingUser",
+        "category": "score-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "score-08",
+        "name": "Score 08 — Funeral for a Living Man",
+        "author": "@existingUser",
+        "category": "score-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "player-compact",
+        "name": "Agreement A — Bellweather Player Compact",
+        "author": "@existingUser",
+        "category": "crew-agreements",
+        "flowTime": "@now"
+      },
+      {
+        "key": "crew-constitution",
+        "name": "Agreement B — Bellweather Crew Constitution",
+        "author": "@existingUser",
+        "category": "crew-agreements",
+        "flowTime": "@now"
+      }
+    ]
+  },
+  "fallowdeep": {
+    "key": "fallowdeep",
+    "name": "Fallowdeep",
+    "description": "An original homebrew folk-horror exploration campaign: Fallowdeep, the orchard beneath the world.",
+    "system": "homebrew",
+    "homepage": "front-page",
+    "hidden": false,
+    "sortOrder": "name",
+    "usePlainTextURLs": true,
+    "owners": ["@existingUser"],
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now",
+    "pageCategories": [
+      { "slug": "characters", "name": "Characters" },
+      { "slug": "expedition-logs", "name": "Expedition Logs" },
+      { "slug": "table-agreements", "name": "Table Agreements" }
+    ],
+    "pageRefs": [
+      {
+        "key": "front-page",
+        "name": "Front Page",
+        "author": "@existingUser",
+        "flowTime": "@now"
+      },
+      {
+        "key": "edda-morn",
+        "name": "Edda Morn",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "tallow-finch",
+        "name": "Tallow Finch",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "juniper-of-the-gate",
+        "name": "Juniper-of-the-Gate",
+        "author": "@existingUser",
+        "category": "characters",
+        "flowTime": "@now"
+      },
+      {
+        "key": "expedition-04",
+        "name": "Expedition 04 — The River That Hadn't Happened Yet",
+        "author": "@existingUser",
+        "category": "expedition-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "expedition-05",
+        "name": "Expedition 05 — Apple Houses",
+        "author": "@existingUser",
+        "category": "expedition-logs",
+        "flowTime": "@now"
+      },
+      {
+        "key": "campaign-covenant",
+        "name": "Agreement A — Fallowdeep Campaign Covenant",
+        "author": "@existingUser",
+        "category": "table-agreements",
+        "flowTime": "@now"
+      },
+      {
+        "key": "expedition-ledger",
+        "name": "Agreement B — The Expedition Ledger",
+        "author": "@existingUser",
+        "category": "table-agreements",
+        "flowTime": "@now"
+      }
+    ]
+  },
+  "seed-hidden-site": {
+    "key": "seed-hidden-site",
+    "name": "Piilotettu testisivusto",
+    "description": "Hyväksymistestien piilotettu sivusto.",
+    "system": "homebrew",
+    "homepage": "front-page",
+    "hidden": true,
+    "sortOrder": "name",
+    "usePlainTextURLs": true,
+    "owners": ["@existingUser"],
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now",
+    "pageCategories": [{ "slug": "yleinen", "name": "Yleinen" }],
+    "pageRefs": [
+      {
+        "key": "front-page",
+        "name": "Etusivu",
+        "author": "@existingUser",
+        "category": "yleinen",
+        "flowTime": "@now"
+      }
+    ]
+  }
+}

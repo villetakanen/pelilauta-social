@@ -1,0 +1,20 @@
+{
+  "@existingUser": {
+    "uid": "@existingUser",
+    "eulaAccepted": true,
+    "language": "fi",
+    "lightMode": "light",
+    "frozen": false,
+    "lastLogin": "@now",
+    "updatedAt": "@now"
+  },
+  "@adminUser": {
+    "uid": "@adminUser",
+    "eulaAccepted": true,
+    "language": "fi",
+    "lightMode": "light",
+    "frozen": false,
+    "lastLogin": "@now",
+    "updatedAt": "@now"
+  }
+}

@@ -14,11 +14,9 @@ describe('Cyan element migration contract', () => {
   it('keeps a bridge for every reached element context', () => {
     const contexts = [
       'cn-bubble',
-      'cn-menu',
       'cn-lightbox',
       'cn-reaction-button',
       'cn-sortable-list',
-      'cn-toggle-button',
       'cn-d20-ability-score',
       'cn-dice',
       'cn-navigation-icon',
@@ -31,9 +29,6 @@ describe('Cyan element migration contract', () => {
 
     expect(compact).toContain(
       'cn-bubble .toolbar:first-child { margin-top: calc(-1 * var(--cn-gap)); }',
-    );
-    expect(compact).toContain(
-      'main :where(cn-menu) ul { list-style-type: none; margin: 0; padding: 0; display: flex; flex-direction: column; }',
     );
     expect(compact).toContain(
       'cn-sortable-list { display: block; font-family: var(--cn-font-family-ui); font-weight: var(--cn-font-weight-ui); font-size: var(--cn-font-size-ui); letter-spacing: var(--cn-letter-spacing-ui); }',
@@ -55,8 +50,19 @@ describe('Cyan element migration contract', () => {
     // control. The inline variant needs none of that.
     expect(migration).not.toMatch(/\bcn-loader\b/);
 
+    // CnMenu replaced the reply menu, the only cn-menu the application had. Its
+    // rows are the anchors and buttons the consumer wrote rather than a ul of li,
+    // so
+    // a bridge keyed on that shape would match nothing on any page.
+    expect(migration).not.toMatch(/\bcn-menu\b/);
+
     // The design system places the tray, so no bridge restates its geometry.
     expect(migration).not.toMatch(/fab-tray/);
+
+    // CnToggle replaced every cn-toggle-button, so the toolbar rule that kept
+    // Cyan's host from stretching in a flex row governs nothing. The local
+    // toggle is a full-width row by design, and styles/toggle.css says so.
+    expect(migration).not.toMatch(/\bcn-toggle-button\b/);
 
     // Nothing renders cn-tray-button since the layouts moved to CnRail, so a
     // rule keyed on it would match nothing on any page.

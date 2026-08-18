@@ -1,0 +1,68 @@
+---
+title: CnToggle
+description: "The switch a settings pane gives one boolean setting, applied as it is flipped."
+order: 47
+runtime: interactive
+---
+
+import ToggleSpecimen from '@design-system/books/specimens/ToggleSpecimen.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+Use a toggle where flipping the setting is the whole action: the change applies at
+once, and the pane offers nothing to submit.
+
+## When to use it
+
+Use it for a setting a reader turns on and leaves on — a site's tools, a player's
+permissions, an administrator's freeze. Where the reader is choosing among several
+values, or where the change only takes effect once a form is sent, use a form
+control and a submit button instead.
+
+One toggle carries one setting. Stack them to make a pane, and each row spans it,
+so the switches line up on one edge whatever the labels say.
+
+## Example
+
+The consumer supplies the value. Pass the current one through `checked`, read the new
+one off the event, and write it wherever the setting lives; the component keeps no
+state of its own.
+
+<Composition themes caption="A settings pane: one setting on, one off, one frozen, in Light and Dark">
+  <ToggleSpecimen client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnToggle from '@design-system/components/CnToggle.svelte'
+</script>
+
+<CnToggle
+  label={t('site:options.useClocks')}
+  checked={$site.useClocks}
+  onchange={(event) => setOption('useClocks', event.currentTarget.checked)}
+/>
+```
+
+The component is an island: without `client:load`, or the framework's equivalent,
+the switch renders and applies nothing.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | Required. The switch's accessible name, and the row's visible text. Localise it. |
+| `checked` | `boolean` | The setting's current value. Leave it unwritten and the switch shows what the reader last did to it. |
+| `disabled` | `boolean` | Renders the row inert: it takes no pointer, no focus and no key. |
+| `onchange` | `(event) => void` | Runs on every flip. The input is the event's `currentTarget`, so the new value is `event.currentTarget.checked`. |
+
+## Accessibility
+
+The control is a native checkbox announcing as a switch, named by the label around
+it. Its state, the Space key, focus and the disabled behaviour are the platform's —
+the component adds no role, no tabindex and no key handler.
+
+There is no unlabelled variant. A switch whose meaning is carried by the setting
+beside it is a switch with no name, and a reader who cannot see the pane hears
+nothing.

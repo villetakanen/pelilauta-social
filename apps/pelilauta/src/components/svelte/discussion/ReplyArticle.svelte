@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnMenu from '@design-system/components/CnMenu.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
@@ -57,32 +58,22 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
         key={reply.key}
         title={reply.markdownContent?.substring(0, 50)}
       ></ReactionButton>
-      <cn-menu inline>
-        <ul>
-          <li>
-            <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
-              <Icon noun="fork" size="small" />
-              <span>{t("actions:fork")}</span>
-            </a>
-          </li>
-          {#if fromUser}
-            <li>
-              <button class="text" onclick={() => editDialog?.showDialog()}>
-                <Icon noun="edit" size="small" />
-                <span>{t("actions:edit")}</span>
-              </button>
-            </li>
-            <li>
-              <a
-                href={`/threads/${reply.threadKey}/replies/${reply.key}/delete`}
-              >
-                <Icon noun="delete" size="small" />
-                <span>{t("actions:delete")}</span>
-              </a>
-            </li>
-          {/if}
-        </ul>
-      </cn-menu>
+      <CnMenu inline label={t("actions:moreOptions")}>
+        <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
+          <Icon noun="fork" decorative />
+          <span>{t("actions:fork")}</span>
+        </a>
+        {#if fromUser}
+          <button type="button" onclick={() => editDialog?.showDialog()}>
+            <Icon noun="edit" decorative />
+            <span>{t("actions:edit")}</span>
+          </button>
+          <a href={`/threads/${reply.threadKey}/replies/${reply.key}/delete`}>
+            <Icon noun="delete" decorative />
+            <span>{t("actions:delete")}</span>
+          </a>
+        {/if}
+      </CnMenu>
     </div>
     <div>
       {#if images.length}

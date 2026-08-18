@@ -1,9 +1,9 @@
 ---
 import AuthManager from '@components/svelte/AuthManager.svelte';
+import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
-import BaseTail from '@pelilauta/components/server/BaseTail.astro';
 import DocsBar from '@pelilauta/docs/chrome/DocsBar.astro';
 import DocsRail from '@pelilauta/docs/chrome/DocsRail.astro';
 import { t } from 'src/utils/i18n';
@@ -41,6 +41,6 @@ const { title, description } = Astro.props;
 
     <AuthManager client:only="svelte" />
 
-    <BaseTail />
+    <SnackbarHost client:only="svelte" />
   </body>
 </html>

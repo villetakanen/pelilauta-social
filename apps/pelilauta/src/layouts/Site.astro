@@ -1,9 +1,9 @@
 ---
 import AuthManager from '@components/svelte/AuthManager.svelte';
+import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
-import BaseTail from '@pelilauta/components/server/BaseTail.astro';
 import SiteBar from '@pelilauta/site/chrome/SiteBar.astro';
 import SiteRail from '@pelilauta/site/chrome/SiteRail.astro';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -58,6 +58,6 @@ const { site, title, description, image, noSharing } = Astro.props;
     <slot name="app-background-poster" />
     <AuthManager client:only="svelte" />
 
-    <BaseTail />
+    <SnackbarHost client:only="svelte" />
   </body>
 </html>

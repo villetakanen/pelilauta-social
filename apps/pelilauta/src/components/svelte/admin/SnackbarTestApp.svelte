@@ -34,6 +34,16 @@ function showImmediateErrorSnack() {
   });
 }
 
+function showActionSnack() {
+  pushSnack({
+    message: 'This one waits for you',
+    action: {
+      label: 'Kumoa',
+      callback: () => pushSnack('The action ran'),
+    },
+  });
+}
+
 function pushSessionAndNavigate() {
   pushSessionSnack({
     message: sessionMessage,
@@ -85,6 +95,9 @@ function pushSessionSuccessAndNavigate() {
             <button class="button" onclick={showImmediateErrorSnack}>
               Show Error
             </button>
+            <button class="button" onclick={showActionSnack}>
+              Show With Action
+            </button>
           </div>
         </div>
       </div>
@@ -127,13 +140,19 @@ function pushSessionSuccessAndNavigate() {
         <h3>How It Works</h3>
         <ul class="text-caption">
           <li>
-            <strong>Immediate snackbars</strong> use <code>pushSnack()</code> and dispatch a DOM event
-            that <code>&lt;cn-snackbar&gt;</code> catches immediately.
+            <strong>Immediate snackbars</strong> use <code>pushSnack()</code>, which adds the
+            message to the queue in <code>snackUtils</code>. The layout's
+            <code>SnackbarHost</code> presents the queue one message at a time.
           </li>
           <li>
-            <strong>Session snackbars</strong> use <code>pushSessionSnack()</code> to store the message
-            in sessionStorage, then navigate. The target page's <code>BaseTail.astro</code> component
-            reads the stored message on load and displays it.
+            <strong>Session snackbars</strong> use <code>pushSessionSnack()</code> to store one
+            message in sessionStorage, then navigate. The <code>SnackbarHost</code> in the
+            destination document collects it on mount and queues it there.
+          </li>
+          <li>
+            A message with an <strong>action</strong> waits until the reader takes it, rather
+            than timing out. Only immediate messages can carry one: a callback cannot survive
+            a navigation.
           </li>
           <li>
             Session snackbars are useful for showing success messages after form submissions

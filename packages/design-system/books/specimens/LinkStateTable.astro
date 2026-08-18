@@ -15,7 +15,7 @@ interface Props {
 
 const { source } = Astro.props;
 
-const LINK_SELECTOR = 'a:where([href]:not(.button, .fab))';
+const LINK_SELECTOR = 'a:where([href]:not(.button, .fab, .chip))';
 const states = [
   {
     name: 'Resting',

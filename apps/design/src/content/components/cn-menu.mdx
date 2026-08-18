@@ -1,0 +1,86 @@
+---
+title: CnMenu
+description: "The more-options trigger, and the temporary surface holding a view's secondary commands."
+order: 45
+runtime: interactive
+---
+
+import MenuSpecimen from '@design-system/books/specimens/MenuSpecimen.svelte'
+import Composition from '@design-system/books/specimens/Composition.astro'
+
+Use a menu to move a surface's secondary commands off it, so a toolbar shows its
+primary actions and nothing else.
+
+## When to use it
+
+The trigger is the text icon button that [Links, Actions and
+Buttons](/base/links-actions-buttons) publishes, and the container is the floating
+level of [Surface](/base/surface). Both books carry the presentation; this page
+carries what the menu adds.
+
+Use it for the commands a reader reaches occasionally: forking a reply, editing it,
+deleting it. Do not use it for a view's primary action — that is a button in the
+toolbar, or the [floating action button](/base/links-actions-buttons) where the view
+has one destination for it.
+
+## Example
+
+The items are authored, not passed as data. Write the anchor that navigates and the
+button that commands, and the menu lays them out as rows.
+
+<Composition themes caption="CnMenu with an anchor and two commands, in Light and Dark">
+  <MenuSpecimen client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnMenu from '@design-system/components/CnMenu.svelte'
+  import Icon from '@design-system/components/Icon.svelte'
+</script>
+
+<CnMenu label="Lisää toimintoja">
+  <a href={`/threads/${key}/fork`}>
+    <Icon noun="card" decorative />
+    <span>Haarauta</span>
+  </a>
+  <button type="button" onclick={remove}>
+    <Icon noun="delete" decorative />
+    <span>Poista</span>
+  </button>
+</CnMenu>
+```
+
+The component is an island: without `client:load`, or the framework's equivalent, the
+trigger renders and opens nothing.
+
+### The inline trigger
+
+`inline` turns the glyph on its side, for a menu that sits in a row of text rather
+than at the end of a toolbar.
+
+<Composition themes caption="The inline trigger, in Light and Dark">
+  <MenuSpecimen client:load inline />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | The trigger's accessible name. Localise it; the default, `More options`, is English. |
+| `inline` | `boolean` | Renders the horizontal `dots` glyph instead of the upright `kebab`. |
+| `children` | `Snippet` | The items. Each is an anchor with a destination or a button, holding a leading `Icon` and a `span` label. |
+
+An item keeps the element it was written as, so a command that navigates on success
+stays a button and a destination stays an anchor. Activating either one closes the
+menu.
+
+## Accessibility
+
+The trigger is a disclosure: it carries the accessible name, reports whether the
+container is open, and keeps focus when the container opens. Tab reaches the items,
+and each announces as the element it is — the menu adds no role and no tabindex to
+them, so an item owes its own accessible name to its label.
+
+Escape closes the container and returns focus to the trigger.

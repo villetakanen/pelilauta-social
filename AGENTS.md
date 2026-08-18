@@ -11,7 +11,8 @@
 - `apps/pelilauta` is the v21 application; `apps/design` publishes the design system.
 - `packages/design-system` contains the components, styles, specs and books both use.
 - `specs` contains approved behaviour, one capability per directory.
-- `plans` contains transient epic scope; `plans/debt` contains known unplanned gaps.
+- `plans` contains transient epic scope; a plan carries behaviour only until a spec
+  takes it. `plans/debt` contains known unplanned gaps.
 - `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;
   `docs/ARCHITECTURE.md` holds the naming and what each artifact carries.
 
@@ -32,6 +33,9 @@
 - Run `apps/pelilauta`'s e2e suite. `test:e2e` seeds Firestore before it starts, and a
   full run takes tens of minutes. It is not acceptance either — `docs/MIGRATION.md` says
   why. Read a spec where the change relies on it, and run `apps/design`'s suite instead.
+- Run `pnpm test:uat` to check work in progress. It is release acceptance, and it
+  resets Firestore and takes ten minutes. Run it at delivery review. In flight,
+  `astro check`, `pnpm test` and `apps/design`'s suite are the checks.
 - Write any detail of the Firestore security rules into the repository. The repository is
   public and the rules guard the live service, so what they permit, forbid or fail to
   cover stays out of every file here, code and prose alike. Reason about them where you

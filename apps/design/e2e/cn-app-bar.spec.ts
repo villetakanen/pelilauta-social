@@ -112,18 +112,16 @@ const resolveLength = (page: Page, property: string, expr: string) =>
 
 /**
  * The accessible role a node resolves to, read off the real accessibility
- * tree rather than assumed from markup. `interestingOnly` (default `true`)
- * drops a landmark with no accessible name of its own — exactly this bar's
- * case — flattening its children straight into the tree and losing the
- * `banner` node entirely, so this always asks for the full tree.
+ * tree rather than assumed from markup. `locator.ariaSnapshot()` renders the
+ * node itself as the outermost YAML item only when the node is a landmark or
+ * otherwise carries a role of its own; nested inside `<main>`, this bar
+ * carries none, so its snapshot instead flattens straight to its children —
+ * the shell's own bar therefore opens with a `banner` line and the
+ * specimen's never does.
  */
-const roleOf = async (page: Page, locator: Locator) => {
-  const handle = await locator.elementHandle();
-  const snapshot = await page.accessibility.snapshot({
-    root: handle ?? undefined,
-    interestingOnly: false,
-  });
-  return snapshot?.role;
+const roleOf = async (locator: Locator) => {
+  const snapshot = await locator.ariaSnapshot();
+  return snapshot.match(/^-\s*([a-z]+)/)?.[1];
 };
 
 test.describe('the landmark', () => {
@@ -139,7 +137,7 @@ test.describe('the landmark', () => {
     );
     expect(nested).toBe(false);
 
-    expect(await roleOf(page, bar)).toBe('banner');
+    expect(await roleOf(bar)).toBe('banner');
   });
 
   test("this book's own specimens, nested inside <main>, never resolve to the banner landmark", async ({
@@ -153,7 +151,7 @@ test.describe('the landmark', () => {
     const nested = await bar.evaluate((node) => Boolean(node.closest('main')));
     expect(nested).toBe(true);
 
-    expect(await roleOf(page, bar)).not.toBe('banner');
+    expect(await roleOf(bar)).not.toBe('banner');
   });
 });
 

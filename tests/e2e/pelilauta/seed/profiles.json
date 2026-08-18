@@ -1,0 +1,16 @@
+{
+  "@existingUser": {
+    "key": "@existingUser",
+    "username": "koekayttaja",
+    "nick": "Koekäyttäjä",
+    "avatarURL": "",
+    "bio": "Hyväksymistestien vakiokäyttäjä."
+  },
+  "@adminUser": {
+    "key": "@adminUser",
+    "username": "koeyllapitaja",
+    "nick": "Koeylläpitäjä",
+    "avatarURL": "",
+    "bio": "Hyväksymistestien ylläpitäjätunnus."
+  }
+}

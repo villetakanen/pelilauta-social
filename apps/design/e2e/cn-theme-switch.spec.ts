@@ -180,23 +180,12 @@ test.describe('accessible name', () => {
     // <svg> and no role or label of its own — confirmed here against the
     // accessibility tree the button's real, rendered markup produces,
     // rather than a hand-picked assumption about what "decorative" emits.
-    const handle = await control.elementHandle();
-    const snapshot = await page.accessibility.snapshot({
-      root: handle ?? undefined,
-    });
-    expect(snapshot?.role).toBe('button');
-    expect(snapshot?.name).toBe('Switch theme');
-
-    const flatten = (
-      node: { role: string; name: string; children?: unknown[] } | null,
-    ): { role: string; name: string }[] =>
-      node
-        ? [node, ...((node.children ?? []) as (typeof node)[]).flatMap(flatten)]
-        : [];
-    for (const node of flatten(snapshot)) {
-      expect(node.role).not.toBe('img');
-      expect(node.name.toLowerCase()).not.toContain('moon');
-    }
+    // `ariaSnapshot` renders the control as a single `button "<name>"` line
+    // with no children at all when nothing else in it is exposed to the
+    // tree — an `img` node, or an accessible name carrying the icon's own
+    // words, would show up as a nested line here.
+    const snapshot = await control.ariaSnapshot();
+    expect(snapshot).toBe('- button "Switch theme"');
   });
 
   test('the label is clipped from view but present to assistive technology', async ({

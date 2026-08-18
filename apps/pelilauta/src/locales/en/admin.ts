@@ -5,6 +5,9 @@ export const admin: Locale = {
     title: 'Administration',
     description: "Pelilauta's administrative tools",
   },
+  thread: {
+    tools: 'Admin tools',
+  },
   rail: {
     label: 'Administration',
     channels: 'Forum Administration',

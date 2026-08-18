@@ -61,7 +61,7 @@ async function saveChanges() {
       onChannelUpdated(result.channel);
     }
 
-    // Show success (TODO: cn-snackbar)
+    // Show success (TODO: report through pushSnack)
     console.log('Success:', t('admin:channels.edit.success'));
   } catch (error) {
     logError('ChannelSettings', 'Error saving channel:', error);
@@ -147,7 +147,7 @@ async function handleDelete() {
 
     if (response.ok) {
       logDebug('ChannelSettings', 'Channel deleted:', channel.slug);
-      // Show success feedback (TODO: implement with cn-snackbar)
+      // Show success feedback (TODO: report through pushSnack)
       console.log(
         'Success:',
         t('admin:channels.delete.success', { name: channel.name }),
@@ -159,7 +159,7 @@ async function handleDelete() {
     } else {
       const data = await response.json();
       const errorMessage = data.error || response.statusText;
-      // Show error feedback (TODO: implement with cn-snackbar)
+      // Show error feedback (TODO: report through pushSnack)
       console.error('Error:', errorMessage);
       alert(`${t('admin:channels.delete.failed')}: ${errorMessage}`);
       logError('ChannelSettings', 'Failed to delete channel:', errorMessage);

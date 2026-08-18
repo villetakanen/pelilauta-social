@@ -18,6 +18,11 @@ Cutting `21.0.0` — or any version that is not a beta increment — is a claim 
 replaces live v18. Only the owner makes it, and only on an explicit request naming
 the version.
 
+The claim needs evidence: run `pnpm test:uat`, the acceptance suite
+`docs/ACCEPTANCE_TESTING.md` describes, and say in the pull request that it passed.
+It is the only evidence v21 does what v18 does — `docs/MIGRATION.md` rules the
+inherited v18 suite out of giving that.
+
 Set the root version and the project's release-facing status together, in the pull
 request that carries the work. Nested application versions keep their meaning and
 are not touched as release bookkeeping.

@@ -1,6 +1,4 @@
 <script lang="ts">
-import type { CnToggleButton } from '@11thdeg/cyan-lit';
-
 /**
  * Extra settings panel for site configuration.
  *
@@ -9,12 +7,12 @@ import type { CnToggleButton } from '@11thdeg/cyan-lit';
  * these settings are applied immediately without local state management.
  * This is intentional - extra settings don't need preview/reset/dirty tracking.
  */
+import CnToggle from '@design-system/components/CnToggle.svelte';
 import { site, update } from '@stores/site';
 import { t } from '@utils/i18n';
 
-async function setHidden(e: Event) {
-  const value = (e.target as CnToggleButton).pressed;
-  await update({ hidden: value });
+async function setHidden(e: Event & { currentTarget: HTMLInputElement }) {
+  await update({ hidden: e.currentTarget.checked });
 }
 </script>
 
@@ -22,10 +20,10 @@ async function setHidden(e: Event) {
   <fieldset>
     <legend>{t('site:settings.meta.extra')}</legend>
   
-    <cn-toggle-button
+    <CnToggle
       label={t('entries:site.hidden')}
-      pressed={$site.hidden}
-      onchange={setHidden}></cn-toggle-button>
+      checked={$site.hidden ?? false}
+      onchange={setHidden} />
   
     <p class="text-caption text-low">
       {t('site:create.hidden.description')}

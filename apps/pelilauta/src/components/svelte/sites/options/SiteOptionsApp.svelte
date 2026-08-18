@@ -1,5 +1,5 @@
 <script lang="ts">
-import { CnToggleButton } from '@11thdeg/cyan-lit';
+import CnToggle from '@design-system/components/CnToggle.svelte';
 import type { Site } from '@schemas/SiteSchema';
 import { site, update } from '@stores/site';
 import { t } from '@utils/i18n';
@@ -37,23 +37,23 @@ async function setSidebarKey(key: string) {
 
     <fieldset>
       <legend>{t('site:options.tools')}</legend>
-    <cn-toggle-button 
+    <CnToggle
       label={t('site:options.useClocks')}
-      pressed={$site.useClocks || undefined}
-      onchange={(e: Event) => setOption('useClocks', (e.target as CnToggleButton).pressed)}
-    ></cn-toggle-button>
+      checked={$site.useClocks ?? false}
+      onchange={(e) => setOption('useClocks', e.currentTarget.checked)}
+    />
 
-    <cn-toggle-button 
+    <CnToggle
       label={t('site:options.useHandouts')}
-      pressed={$site.useHandouts || undefined}
-      onchange={(e: Event) => setOption('useHandouts', (e.target as CnToggleButton).pressed)}
-    ></cn-toggle-button>
+      checked={$site.useHandouts ?? false}
+      onchange={(e) => setOption('useHandouts', e.currentTarget.checked)}
+    />
 
-    <cn-toggle-button 
+    <CnToggle
       label={t('site:options.useRecentChanges')}
-      pressed={$site.useRecentChanges || undefined}
-      onchange={(e: Event) => setOption('useRecentChanges', (e.target as CnToggleButton).pressed)}
-    ></cn-toggle-button>
+      checked={$site.useRecentChanges ?? false}
+      onchange={(e) => setOption('useRecentChanges', e.currentTarget.checked)}
+    />
     </fieldset>
 
     
@@ -61,11 +61,11 @@ async function setSidebarKey(key: string) {
     <fieldset>
       <legend>{t('site:options.extras')}</legend>
 
-    <cn-toggle-button 
+    <CnToggle
       label={t('entries:site.customPageKeys')}
-      pressed={$site.usePlainTextURLs || undefined}
-      onchange={(e: Event) => setOption('usePlainTextURLs', (e.target as CnToggleButton).pressed)}
-    ></cn-toggle-button>
+      checked={$site.usePlainTextURLs ?? false}
+      onchange={(e) => setOption('usePlainTextURLs', e.currentTarget.checked)}
+    />
 
     <p class="downscaled text-low">{t('site:create.plaintexturls.description')}</p>
     </fieldset>
@@ -78,11 +78,11 @@ async function setSidebarKey(key: string) {
 
     <fieldset>
       <legend>{t('site:options.sidebar')}</legend>
-      <cn-toggle-button 
+      <CnToggle
         label={t('site:options.useSidebar')}
-        pressed={$site.useSidebar || undefined}
-        onchange={(e: Event) => setOption('useSidebar', (e.target as CnToggleButton).pressed)}
-      ></cn-toggle-button>
+        checked={$site.useSidebar ?? false}
+        onchange={(e) => setOption('useSidebar', e.currentTarget.checked)}
+      />
 
       {#if $site.useSidebar}
         <SitePageSelect 

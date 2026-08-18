@@ -2,29 +2,29 @@
  * Native links
  *
  * The low-specificity selectors let a specified component treatment, and the
- * later button and FAB capabilities, replace presentation without changing an
+ * later button, FAB and chip capabilities, replace presentation without changing an
  * anchor's navigation behaviour.
  */
 
-a:where([href]:not(.button, .fab)),
-a:where([href]:not(.button, .fab)):visited {
+a:where([href]:not(.button, .fab, .chip)),
+a:where([href]:not(.button, .fab, .chip)):visited {
   color: var(--cn-link);
 }
 
-a:where([href]:not(.button, .fab)) {
+a:where([href]:not(.button, .fab, .chip)) {
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
 
-a:where([href]:not(.button, .fab)):hover {
+a:where([href]:not(.button, .fab, .chip)):hover {
   color: var(--cn-link-hover);
 }
 
-a:where([href]:not(.button, .fab)):active {
+a:where([href]:not(.button, .fab, .chip)):active {
   color: var(--cn-link-active);
 }
 
-a:where([href]:not(.button, .fab)):focus-visible {
+a:where([href]:not(.button, .fab, .chip)):focus-visible {
   outline: 2px solid var(--cn-focus-ring);
   outline-offset: 2px;
 }

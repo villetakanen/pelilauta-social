@@ -1,0 +1,78 @@
+---
+/**
+ * ChipSpecimens — real chips in a real chip list, one group per axis.
+ *
+ * The elements are the ones a consumer writes: an `a` to navigate, a `span` to read,
+ * a `button` to act, a `div` for a label chip that nests its remove control. Nothing
+ * here styles them; every rule comes from styles/chip.css.
+ *
+ * Book: apps/design/src/content/base/chip.mdx
+ */
+import Icon from '../../components/Icon.svelte';
+
+interface Props {
+  /** Which axis to render. */
+  group: 'hosts' | 'variants' | 'content' | 'wrapping';
+}
+
+const { group } = Astro.props;
+
+/* Enough chips that the row has to wrap in the book's composition frame. */
+const TAGS = [
+  'Fantasy',
+  'Science fiction',
+  'Dungeon crawl',
+  'Play by post',
+  'Campaign diary',
+  'House rules',
+  'Character creation',
+  'One shot',
+];
+---
+
+<div class="chip-specimens" data-group={group}>
+  {group === 'hosts' && (
+    <div class="chip-list" data-variant="hosts">
+      <a class="chip" href="/base/chip">Destination</a>
+      <span class="chip">Read-only</span>
+      <button class="chip" type="button">Command</button>
+      <button class="chip" type="button" disabled>Disabled</button>
+    </div>
+  )}
+
+  {group === 'variants' && (
+    <div class="chip-list" data-variant="variants">
+      <a class="chip" href="/base/chip">Free tag</a>
+      <a class="chip promoted" href="/base/chip">Promoted label</a>
+    </div>
+  )}
+
+  {group === 'content' && (
+    <div class="chip-list" data-variant="content">
+      <a class="chip" href="/base/chip">
+        <Icon noun="label-tag" decorative />
+        Leading icon
+      </a>
+      <div class="chip promoted">
+        <span>Removable label</span>
+        <button type="button" aria-label="Remove Removable label">
+          <Icon noun="close" />
+        </button>
+      </div>
+      <div class="chip promoted">
+        <span>Removal in flight</span>
+        <button type="button" aria-label="Remove Removal in flight" disabled>
+          <Icon noun="close" />
+        </button>
+      </div>
+    </div>
+  )}
+
+  {group === 'wrapping' && (
+    <div class="chip-list" data-variant="wrapping">
+      {TAGS.map((tag) => (
+        <a class="chip" href="/base/chip">{tag}</a>
+      ))}
+    </div>
+  )}
+</div>
