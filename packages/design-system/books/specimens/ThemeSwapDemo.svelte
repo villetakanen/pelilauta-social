@@ -35,20 +35,27 @@ const STEPS: ReadonlyArray<[step: string, lightness: number]> = [
 ];
 
 /** Surface has no lightness exception: every step uses step/100 directly. */
-const SURFACE_STEPS: ReadonlyArray<[step: string, lightness: number]> = STEPS.map(
-  ([step]) => [step, Number(step) / 100],
-);
+const SURFACE_STEPS: ReadonlyArray<[step: string, lightness: number]> =
+  STEPS.map(([step]) => [step, Number(step) / 100]);
 
 type Family = 'primary' | 'surface';
 
-const grayscale: Record<Family, boolean> = $state({ primary: false, surface: false });
+const grayscale: Record<Family, boolean> = $state({
+  primary: false,
+  surface: false,
+});
 
 const toggle = (family: Family) => {
   grayscale[family] = !grayscale[family];
 };
 
 const declare = (family: Family, steps: ReadonlyArray<[string, number]>) =>
-  steps.map(([step, lightness]) => `--chroma-${family}-${step}: oklch(${lightness} 0 0);`).join(' ');
+  steps
+    .map(
+      ([step, lightness]) =>
+        `--chroma-${family}-${step}: oklch(${lightness} 0 0);`,
+    )
+    .join(' ');
 
 const containerStyle = $derived(
   [

@@ -11,7 +11,10 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
 const theme = JSON.parse(
-  readFileSync(new URL('../tokens/themes/default.json', import.meta.url), 'utf8'),
+  readFileSync(
+    new URL('../tokens/themes/default.json', import.meta.url),
+    'utf8',
+  ),
 ) as {
   families: Record<string, { kind: string; steps: Record<string, string> }>;
   lightnessExceptions?: Record<string, Record<string, string>>;
@@ -34,7 +37,10 @@ const steps: Step[] = Object.entries(theme.families).flatMap(
   ([familyName, definition]) =>
     Object.entries(definition.steps).map(([step, value]) => {
       const match = OKLCH.exec(value);
-      if (!match) throw new Error(`${familyName}-${step}: '${value}' is not literal oklch()`);
+      if (!match)
+        throw new Error(
+          `${familyName}-${step}: '${value}' is not literal oklch()`,
+        );
       return {
         family: familyName,
         kind: definition.kind,
@@ -119,16 +125,21 @@ describe('depth', () => {
   test('core families carry exactly the 13 steps', () => {
     for (const [name, definition] of Object.entries(theme.families)) {
       if (definition.kind !== 'core') continue;
-      expect(family(name).map((step) => step.step).sort((a, b) => a - b), name).toEqual(
-        CORE_STEPS,
-      );
+      expect(
+        family(name)
+          .map((step) => step.step)
+          .sort((a, b) => a - b),
+        name,
+      ).toEqual(CORE_STEPS);
     }
   });
 
   test('status families are four steps and no more', () => {
     for (const name of ['error', 'warning', 'love']) {
       expect(
-        family(name).map((step) => step.step).sort((a, b) => a - b),
+        family(name)
+          .map((step) => step.step)
+          .sort((a, b) => a - b),
         name,
       ).toEqual(AUXILIARY_STEPS);
     }

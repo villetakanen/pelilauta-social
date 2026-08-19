@@ -1,4 +1,5 @@
 ---
+import { tokensFromJSON } from './color';
 /**
  * RoleTable — a semantic role shown in Light and Dark at once.
  *
@@ -13,7 +14,6 @@
  * Book: apps/design/src/content/principles/color-system.mdx
  */
 import type { ChromaTheme, RoleSource } from './tokenTable';
-import { tokensFromJSON } from './color';
 
 interface Props {
   /** The theme JSON, e.g. `tokens/themes/default.json`. */

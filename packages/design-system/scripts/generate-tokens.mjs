@@ -40,7 +40,9 @@ const errors = [];
 
 /* ----- theme → chroma ----- */
 
-const theme = JSON.parse(readFileSync(path('tokens/themes/default.json'), 'utf8'));
+const theme = JSON.parse(
+  readFileSync(path('tokens/themes/default.json'), 'utf8'),
+);
 const exceptions = theme.lightnessExceptions ?? {};
 
 const chroma = new Map();
@@ -78,19 +80,33 @@ for (const [family, definition] of Object.entries(theme.families ?? {})) {
 
 /* ----- role sources → semantic and elevation ----- */
 
-const semantic = JSON.parse(readFileSync(path('tokens/semantic-color.json'), 'utf8'));
-const elevation = JSON.parse(readFileSync(path('tokens/elevation.json'), 'utf8'));
+const semantic = JSON.parse(
+  readFileSync(path('tokens/semantic-color.json'), 'utf8'),
+);
+const elevation = JSON.parse(
+  readFileSync(path('tokens/elevation.json'), 'utf8'),
+);
 
 /** Custom properties units.css declares; the one layer still written by hand. */
 const unitNames = new Set(
-  [...readFileSync(path('styles/units.css'), 'utf8').matchAll(/(--[\w-]+)\s*:/g)].map(
-    (match) => match[1],
-  ),
+  [
+    ...readFileSync(path('styles/units.css'), 'utf8').matchAll(
+      /(--[\w-]+)\s*:/g,
+    ),
+  ].map((match) => match[1]),
 );
 
 const layers = [
-  { source: 'tokens/semantic-color.json', tokens: semantic.tokens ?? {}, units: false },
-  { source: 'tokens/elevation.json', tokens: elevation.tokens ?? {}, units: true },
+  {
+    source: 'tokens/semantic-color.json',
+    tokens: semantic.tokens ?? {},
+    units: false,
+  },
+  {
+    source: 'tokens/elevation.json',
+    tokens: elevation.tokens ?? {},
+    units: true,
+  },
 ];
 const layerOf = new Map(); // token name → layer index
 for (const [index, layer] of layers.entries()) {
@@ -123,14 +139,18 @@ for (const [index, layer] of layers.entries()) {
       // A brace the reference grammar did not consume is a typo'd kind or
       // malformed reference, and would ship as literal text in committed CSS.
       if (value.replace(REFERENCE, '').match(/[{}]/))
-        errors.push(`${name}: contains a brace no {chroma:|token:|unit:} reference explains`);
+        errors.push(
+          `${name}: contains a brace no {chroma:|token:|unit:} reference explains`,
+        );
       for (const [, kind, target] of value.matchAll(REFERENCE)) {
         if (kind === 'chroma' && !chroma.has(`--chroma-${target}`))
           errors.push(`${name}: references missing {chroma:${target}}`);
         if (kind === 'unit' && !layer.units)
           errors.push(`${name}: a semantic colour may not depend on a unit`);
         if (kind === 'unit' && layer.units && !unitNames.has(`--${target}`))
-          errors.push(`${name}: references {unit:${target}} which units.css does not declare`);
+          errors.push(
+            `${name}: references {unit:${target}} which units.css does not declare`,
+          );
         if (kind === 'token') {
           const targetLayer = layerOf.get(target);
           if (targetLayer === undefined)
@@ -159,7 +179,9 @@ for (const [index, layer] of layers.entries()) {
     visiting.add(name);
     const token = all[name];
     const values =
-      typeof token?.value === 'string' ? [token.value] : [token?.light, token?.dark];
+      typeof token?.value === 'string'
+        ? [token.value]
+        : [token?.light, token?.dark];
     for (const value of values)
       for (const [, kind, target] of (value ?? '').matchAll(REFERENCE))
         if (kind === 'token' && target in all) visit(target, [...trail, name]);
@@ -188,7 +210,9 @@ const header = (source) => `/*
  */
 `;
 
-const sortedChroma = [...chroma.entries()].sort(([a], [b]) => a.localeCompare(b, 'en'));
+const sortedChroma = [...chroma.entries()].sort(([a], [b]) =>
+  a.localeCompare(b, 'en'),
+);
 const chromaCss = `${header('tokens/themes/default.json')}:root {
 ${sortedChroma.map(([name, value]) => `  ${name}: ${value};`).join('\n')}
 }
@@ -212,7 +236,10 @@ ${lines.join('\n')}
 
 const outputs = [
   ['styles/chroma.css', chromaCss],
-  ['styles/semantic.css', roleCss('tokens/semantic-color.json', semantic.tokens)],
+  [
+    'styles/semantic.css',
+    roleCss('tokens/semantic-color.json', semantic.tokens),
+  ],
   ['styles/elevation.css', roleCss('tokens/elevation.json', elevation.tokens)],
 ];
 

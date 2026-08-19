@@ -45,7 +45,11 @@ a.button.fab[href] {
   --_on-fab-cta: var(--chroma-surface-100);
   /* The secondary surface keeps the shared button roles, which stay public. */
   --_fab-secondary: var(--cn-button);
-  --_fab-secondary-blend: color-mix(in oklch, var(--cn-button), var(--cn-on-surface) 22%);
+  --_fab-secondary-blend: color-mix(
+    in oklch,
+    var(--cn-button),
+    var(--cn-on-surface) 22%
+  );
   --_on-fab-secondary: var(--cn-on-button);
   background-image: linear-gradient(
     in oklab 137deg,

@@ -1,4 +1,5 @@
 ---
+import { type Mode, measure, tokensFromJSON } from './color';
 /**
  * ContrastMatrix — measured WCAG contrast for foreground/background pairs.
  *
@@ -11,7 +12,6 @@
  * Book: apps/design/src/content/principles/color-system.mdx
  */
 import type { ChromaTheme, RoleSource } from './tokenTable';
-import { type Mode, measure, tokensFromJSON } from './color';
 
 interface Props {
   /** The theme JSON, e.g. `tokens/themes/default.json`. */

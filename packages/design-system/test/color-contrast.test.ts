@@ -26,10 +26,7 @@ import { parseTokens } from '../books/specimens/tokenTable';
 const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
 
-const tokens = tokenMap(
-  styles('chroma.css'),
-  styles('semantic.css'),
-);
+const tokens = tokenMap(styles('chroma.css'), styles('semantic.css'));
 
 describe('the colour maths', () => {
   test('black against white is the full WCAG range', () => {
@@ -238,10 +235,7 @@ describe('a message is readable in its bubble', () => {
   // chains.
 
   const componentStyle = readFileSync(
-    new URL(
-      '../components/CnBubble.svelte',
-      import.meta.url,
-    ),
+    new URL('../components/CnBubble.svelte', import.meta.url),
     'utf8',
   ).match(/<style[^>]*>([\s\S]*?)<\/style>/)?.[1];
   if (!componentStyle) throw new Error('CnBubble.svelte has no style block');

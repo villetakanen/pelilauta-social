@@ -85,25 +85,38 @@ for (const family of ['primary', 'surface'] as const) {
     // other core family, must not notice.
     await page.goto('/principles/color-system');
     const demo = page.locator('.theme-swap-demo');
-    const toggle = demo.getByRole('button', { name: `${family[0].toUpperCase()}${family.slice(1)}: Grayscale` });
+    const toggle = demo.getByRole('button', {
+      name: `${family[0].toUpperCase()}${family.slice(1)}: Grayscale`,
+    });
     await expect(toggle).toBeVisible();
 
     const swatch60 = demo.locator(`[title="--chroma-${family}-60"]`);
     const before = await channels(swatch60);
-    expect(isGrey(before), `shipped ${family}-60 is chromatic, got ${JSON.stringify(before)}`).toBe(false);
+    expect(
+      isGrey(before),
+      `shipped ${family}-60 is chromatic, got ${JSON.stringify(before)}`,
+    ).toBe(false);
 
     const outside = await page.evaluate(
-      (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(),
+      (name) =>
+        getComputedStyle(document.documentElement)
+          .getPropertyValue(name)
+          .trim(),
       `--chroma-${family}-60`,
     );
 
     await toggle.click();
     await expect(
-      demo.getByRole('button', { name: `${family[0].toUpperCase()}${family.slice(1)}: Colour` }),
+      demo.getByRole('button', {
+        name: `${family[0].toUpperCase()}${family.slice(1)}: Colour`,
+      }),
     ).toHaveAttribute('aria-pressed', 'true');
 
     const after = await channels(swatch60);
-    expect(isGrey(after), `swapped ${family}-60 should be grey, got ${JSON.stringify(after)}`).toBe(true);
+    expect(
+      isGrey(after),
+      `swapped ${family}-60 should be grey, got ${JSON.stringify(after)}`,
+    ).toBe(true);
 
     // Lightness survives the swap: grey at the same step stays mid-toned, not black or white.
     expect(after.r).toBeGreaterThan(64);
@@ -111,7 +124,10 @@ for (const family of ['primary', 'surface'] as const) {
 
     // The override never leaks to the document root.
     const outsideAfter = await page.evaluate(
-      (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(),
+      (name) =>
+        getComputedStyle(document.documentElement)
+          .getPropertyValue(name)
+          .trim(),
       `--chroma-${family}-60`,
     );
     expect(outsideAfter).toBe(outside);

@@ -12,8 +12,8 @@
  *        apps/design/src/content/principles/color-system.mdx
  */
 import {
-  chromaDeclarations,
   type ChromaTheme,
+  chromaDeclarations,
   parseTokens,
   type RoleSource,
   roleDeclarations,

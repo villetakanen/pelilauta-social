@@ -58,7 +58,11 @@
    * tightest of the combinations.
    */
   body:has(#cn-poster) .elevation-0 {
-    --_surface-over-poster: color-mix(in oklch, var(--cn-surface), transparent 20%);
+    --_surface-over-poster: color-mix(
+      in oklch,
+      var(--cn-surface),
+      transparent 20%
+    );
     background-color: var(--_surface-over-poster);
   }
 

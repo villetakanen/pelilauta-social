@@ -100,7 +100,8 @@ describe('preflight', () => {
   });
 
   test('every custom property it reads is defined by the design system', () => {
-    const theme = read('../styles/semantic.css') + read('../styles/elevation.css');
+    const theme =
+      read('../styles/semantic.css') + read('../styles/elevation.css');
     const read_ = withoutComments(preflight).matchAll(
       /var\(\s*(--[\w-]+)\s*(,)?/g,
     );
