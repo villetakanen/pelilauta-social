@@ -2,52 +2,89 @@
   "name": "semantic-color",
   "description": "Shared colour roles. Each token maps a purpose onto the chroma palette, either as one value for both schemes or as a light/dark pair emitted through light-dark(). Values reference tokens symbolically: {chroma:family-step}, {token:cn-name}, never a raw var().",
   "tokens": {
-    "cn-surface": { "light": "{chroma:surface-95}", "dark": "{chroma:surface-20}" },
-    "cn-surface-1": { "light": "{chroma:surface-100}", "dark": "{chroma:surface-30}" },
-    "cn-surface-2": { "light": "{chroma:surface-100}", "dark": "{chroma:surface-30}" },
-    "cn-surface-3": { "light": "{chroma:surface-100}", "dark": "{chroma:surface-40}" },
-    "cn-surface-4": { "light": "{chroma:primary-99}", "dark": "{chroma:primary-40}" },
-    "cn-on-surface": { "light": "{chroma:surface-10}", "dark": "{chroma:surface-90}" },
-    "cn-on-surface-secondary": { "light": "{chroma:surface-40}", "dark": "{chroma:surface-60}" },
-    "cn-background": { "value": "{token:cn-surface}" },
-    "cn-on-background": { "value": "{token:cn-on-surface}" },
-    "cn-text": { "light": "{chroma:surface-10}", "dark": "{chroma:surface-95}" },
-    "cn-text-high": { "light": "{chroma:surface-0}", "dark": "{chroma:surface-100}" },
-    "cn-text-low": { "light": "{chroma:surface-30}", "dark": "{chroma:surface-60}" },
-    "cn-text-heading": { "light": "{chroma:surface-30}", "dark": "{chroma:surface-99}" },
-    "cn-text-subheading": { "light": "{chroma:surface-40}", "dark": "{chroma:surface-80}" },
-    "cn-link": { "light": "{chroma:primary-40}", "dark": "{chroma:surface-80}" },
-    "cn-link-hover": { "light": "{chroma:surface-50}", "dark": "{chroma:primary-80}" },
-    "cn-link-active": { "light": "{chroma:primary-30}", "dark": "{chroma:surface-70}" },
-    "cn-button": { "light": "{chroma:surface-50}", "dark": "{chroma:surface-40}" },
-    "cn-button-light": { "value": "{chroma:primary-50}" },
-    "cn-button-cta": { "value": "{chroma:error-40}" },
-    "cn-on-button": { "value": "{chroma:surface-100}" },
-    "cn-on-button-cta": { "value": "{chroma:surface-100}" },
+    "cn-surface": {
+      "light": "{chroma:surface-95}",
+      "dark": "{chroma:surface-20}"
+    },
+    "cn-surface-1": {
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-30}"
+    },
+    "cn-surface-2": {
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-30}"
+    },
+    "cn-surface-3": {
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-40}"
+    },
+    "cn-surface-4": {
+      "light": "{chroma:primary-99}",
+      "dark": "{chroma:primary-40}"
+    },
+    "cn-on-surface": {
+      "light": "{chroma:surface-10}",
+      "dark": "{chroma:surface-90}"
+    },
+    "cn-on-surface-secondary": {
+      "light": "{chroma:surface-40}",
+      "dark": "{chroma:surface-60}"
+    },
+    "cn-background": {
+      "value": "{token:cn-surface}"
+    },
+    "cn-text": {
+      "light": "{chroma:surface-10}",
+      "dark": "{chroma:surface-95}"
+    },
+    "cn-text-high": {
+      "light": "{chroma:surface-0}",
+      "dark": "{chroma:surface-100}"
+    },
+    "cn-text-low": {
+      "light": "{chroma:surface-30}",
+      "dark": "{chroma:surface-60}"
+    },
+    "cn-text-heading": {
+      "light": "{chroma:surface-30}",
+      "dark": "{chroma:surface-99}"
+    },
+    "cn-text-subheading": {
+      "light": "{chroma:surface-40}",
+      "dark": "{chroma:surface-80}"
+    },
+    "cn-link": {
+      "light": "{chroma:primary-40}",
+      "dark": "{chroma:surface-80}"
+    },
+    "cn-link-hover": {
+      "light": "{chroma:surface-50}",
+      "dark": "{chroma:primary-80}"
+    },
+    "cn-link-active": {
+      "light": "{chroma:primary-30}",
+      "dark": "{chroma:surface-70}"
+    },
+    "cn-button": {
+      "light": "{chroma:surface-50}",
+      "dark": "{chroma:surface-40}"
+    },
+    "cn-button-light": {
+      "value": "{chroma:primary-50}"
+    },
+    "cn-button-cta": {
+      "value": "{chroma:error-40}"
+    },
+    "cn-on-button": {
+      "value": "{chroma:surface-100}"
+    },
+    "cn-on-button-cta": {
+      "value": "{chroma:surface-100}"
+    },
     "cn-button-text": {
       "comment": "The button colour at a third, so the text button reads as a tint of the page; the page shows through it, so it pairs with --cn-on-surface, not --cn-on-button.",
       "value": "color-mix(in oklab, {token:cn-button} 33%, transparent)"
     },
-    "cn-button-secondary-light": {
-      "comment": "v20's alternate button chroma, mapped per scheme as v20 maps it.",
-      "light": "{chroma:primary-40}",
-      "dark": "{chroma:primary-80}"
-    },
-    "cn-button-secondary": { "light": "{chroma:primary-60}", "dark": "{chroma:primary-95}" },
-    "cn-fab": { "value": "{chroma:primary-70}" },
-    "cn-fab-blend": { "value": "{chroma:surface-50}" },
-    "cn-on-fab": { "value": "{chroma:surface-100}" },
-    "cn-fab-cta": { "value": "{chroma:error-60}" },
-    "cn-fab-cta-blend": { "value": "{chroma:surface-50}" },
-    "cn-on-fab-cta": { "value": "{chroma:surface-100}" },
-    "cn-fab-secondary": {
-      "comment": "v20 builds the secondary fab from the button grey, blended toward on-surface.",
-      "value": "{token:cn-button}"
-    },
-    "cn-fab-secondary-blend": {
-      "value": "color-mix(in oklch, {token:cn-button}, {token:cn-on-surface} 22%)"
-    },
-    "cn-on-fab-secondary": { "value": "{token:cn-on-button}" },
     "cn-hover": {
       "light": "color-mix(in oklch, {chroma:surface-50}, transparent 90%)",
       "dark": "color-mix(in oklch, {chroma:surface-50}, transparent 33%)"
@@ -61,57 +98,50 @@
       "light": "color-mix(in oklch, {chroma:surface-100}, transparent 33%)",
       "dark": "color-mix(in oklch, {chroma:surface-30}, transparent 33%)"
     },
-    "cn-on-indicator": { "value": "{token:cn-text-high}" },
-    "cn-surface-over-poster": {
-      "comment": "The ground plane while artwork paints behind it: the most transparent it can be while inherited body text keeps WCAG 2.2 AA over near-white artwork in Dark. poster.css decides when this applies.",
-      "value": "color-mix(in oklch, {token:cn-surface}, transparent 20%)"
+    "cn-on-indicator": {
+      "value": "{token:cn-text-high}"
     },
     "cn-scrim": {
       "comment": "A veil over whatever is beneath a covering tray, so it darkens in both schemes rather than taking a surface role.",
       "light": "color-mix(in oklch, {chroma:surface-10}, transparent 45%)",
       "dark": "color-mix(in oklch, {chroma:surface-10}, transparent 30%)"
     },
-    "cn-focus-ring": { "light": "{chroma:primary-60}", "dark": "{chroma:primary-40}" },
-    "cn-border": { "light": "{chroma:surface-70}", "dark": "{chroma:surface-30}" },
-    "cn-border-hover": { "light": "{chroma:surface-50}", "dark": "{chroma:surface-40}" },
-    "cn-border-focus": { "light": "{chroma:primary-70}", "dark": "{chroma:primary-40}" },
-    "cn-color-success": { "value": "{chroma:primary-60}" },
-    "cn-color-warning": { "light": "{chroma:warning-40}", "dark": "{chroma:warning-60}" },
-    "cn-color-error": { "light": "{chroma:error-40}", "dark": "{chroma:error-60}" },
-    "cn-info": { "light": "{chroma:primary-50}", "dark": "{chroma:primary-90}" },
-    "cn-on-info": { "light": "{chroma:primary-95}", "dark": "{chroma:primary-40}" },
-    "cn-color-love": { "light": "{chroma:love-40}", "dark": "{chroma:love-60}" },
-    "cn-bubble": { "light": "{chroma:surface-90}", "dark": "{chroma:surface-30}" },
-    "cn-on-bubble": { "light": "{chroma:surface-20}", "dark": "{chroma:surface-95}" },
-    "cn-reply-bubble": { "light": "{chroma:primary-70}", "dark": "{chroma:primary-40}" },
-    "cn-on-reply-bubble": { "light": "{chroma:surface-20}", "dark": "{chroma:surface-95}" },
-    "cn-reply-context-bg": { "light": "{chroma:primary-90}", "dark": "{chroma:primary-20}" },
-    "cn-reply-context-text": { "light": "{chroma:primary-20}", "dark": "{chroma:primary-90}" },
-    "cn-reply-dock-bg": { "light": "{chroma:surface-100}", "dark": "{chroma:surface-20}" },
-    "cn-reply-dock-border": { "light": "{chroma:surface-80}", "dark": "{chroma:surface-30}" },
-    "cn-input": { "light": "{chroma:surface-80}", "dark": "{chroma:surface-0}" },
-    "cn-on-input": { "value": "{token:cn-on-surface}" },
-    "cn-input-hover": { "light": "{chroma:surface-70}", "dark": "{chroma:surface-0}" },
-    "cn-input-focus": { "light": "{chroma:surface-70}", "dark": "{chroma:surface-0}" },
-    "cn-input-disabled": { "light": "{chroma:surface-80}", "dark": "{chroma:surface-20}" },
-    "cn-selection": {
-      "light": "color-mix(in oklch, {chroma:primary-60}, transparent 70%)",
-      "dark": "color-mix(in oklch, {chroma:primary-40}, transparent 70%)"
+    "cn-focus-ring": {
+      "light": "{chroma:primary-60}",
+      "dark": "{chroma:primary-40}"
     },
-    "cn-on-selection": { "value": "{token:cn-on-surface}" },
-    "cn-backdrop": {
-      "light": "color-mix(in oklch, {chroma:surface-0}, transparent 50%)",
-      "dark": "color-mix(in oklch, {chroma:surface-0}, transparent 30%)"
+    "cn-border": {
+      "light": "{chroma:surface-70}",
+      "dark": "{chroma:surface-30}"
     },
-    "cn-lightbox-background": { "value": "{chroma:surface-30}" },
-    "cn-lightbox-color": { "value": "{chroma:surface-95}" },
-    "cn-loader-color": { "light": "{chroma:primary-60}", "dark": "{chroma:surface-60}" },
-    "cn-avatar-backdrop-from": {
-      "comment": "An identity backdrop is any mix of the two ends, so both and everything between answer to --cn-on-avatar; the bands invert per mode.",
-      "light": "{chroma:primary-30}",
-      "dark": "{chroma:primary-60}"
+    "cn-color-warning": {
+      "light": "{chroma:warning-40}",
+      "dark": "{chroma:warning-60}"
     },
-    "cn-avatar-backdrop-to": { "light": "{chroma:surface-50}", "dark": "{chroma:surface-80}" },
-    "cn-on-avatar": { "light": "{chroma:surface-95}", "dark": "{chroma:surface-10}" }
+    "cn-color-error": {
+      "light": "{chroma:error-40}",
+      "dark": "{chroma:error-60}"
+    },
+    "cn-info": {
+      "light": "{chroma:primary-50}",
+      "dark": "{chroma:primary-90}"
+    },
+    "cn-on-info": {
+      "light": "{chroma:primary-95}",
+      "dark": "{chroma:primary-40}"
+    },
+    "cn-input": {
+      "light": "{chroma:surface-80}",
+      "dark": "{chroma:surface-0}"
+    },
+    "cn-on-input": {
+      "value": "{token:cn-on-surface}"
+    },
+    "cn-lightbox-background": {
+      "value": "{chroma:surface-30}"
+    },
+    "cn-lightbox-color": {
+      "value": "{chroma:surface-95}"
+    }
   }
 }

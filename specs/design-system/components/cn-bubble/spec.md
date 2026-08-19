@@ -45,10 +45,15 @@ The CnBubble Component book,
 
 ### Constraints
 
+The two colour pairs are private to CnBubble: no other capability consumes them, and
+no specification defines a customization surface for them. They carry `--_*` names on
+the row, the component's root, rather than `--cn-*` names on `:root`
+(docs/ARCHITECTURE.md).
+
 | Variant | Reserved margin and tail | Square corner | Background | Foreground |
 | :--- | :--- | :--- | :--- | :--- |
-| Default | Left | Upper-left | `--cn-bubble` | `--cn-on-bubble` |
-| Reply | Right | Upper-right | `--cn-reply-bubble` | `--cn-on-reply-bubble` |
+| Default | Left | Upper-left | `--_bubble` | `--_on-bubble` |
+| Reply | Right | Upper-right | `--_reply-bubble` | `--_on-reply-bubble` |
 
 The other three corners use `--cn-border-radius-medium`. The tail is a right triangle
 one gap wide and one gap high. It extends from the article's block-start edge into the

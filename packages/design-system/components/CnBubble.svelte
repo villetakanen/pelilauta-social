@@ -67,6 +67,18 @@ const marked = $derived(Boolean(nick || avatar));
     align-items: flex-start;
     /* The mark stands beyond the margin the tail occupies. */
     column-gap: var(--cn-gap);
+
+    /*
+     * Private to CnBubble: one capability paints these, so they carry no
+     * `--cn-*` name (docs/ARCHITECTURE.md).
+     */
+    --_bubble: light-dark(var(--chroma-surface-90), var(--chroma-surface-30));
+    --_on-bubble: light-dark(var(--chroma-surface-20), var(--chroma-surface-95));
+    --_reply-bubble: light-dark(var(--chroma-primary-70), var(--chroma-primary-40));
+    --_on-reply-bubble: light-dark(
+      var(--chroma-surface-20),
+      var(--chroma-surface-95)
+    );
   }
 
   .cn-bubble-row.reply {
@@ -86,16 +98,16 @@ const marked = $derived(Boolean(nick || avatar));
     border-radius: var(--cn-border-radius-medium);
     /* Square where the tail meets it: the shape says which side spoke. */
     border-start-start-radius: 0;
-    background: var(--cn-bubble);
-    color: var(--cn-on-bubble);
+    background: var(--_bubble);
+    color: var(--_on-bubble);
   }
 
   .cn-bubble.reply {
     margin-inline: 0 var(--cn-gap);
     border-start-start-radius: var(--cn-border-radius-medium);
     border-start-end-radius: 0;
-    background: var(--cn-reply-bubble);
-    color: var(--cn-on-reply-bubble);
+    background: var(--_reply-bubble);
+    color: var(--_on-reply-bubble);
   }
 
   /*
@@ -130,14 +142,14 @@ const marked = $derived(Boolean(nick || avatar));
     border-block-end-width: var(--cn-gap);
     border-inline-end-width: var(--cn-gap);
     border-color: transparent;
-    border-inline-end-color: var(--cn-bubble);
+    border-inline-end-color: var(--_bubble);
   }
 
   .cn-bubble.reply::after {
     inset-inline: auto calc(-1 * var(--cn-gap));
     border-inline-end-width: 0;
     border-inline-start-width: var(--cn-gap);
-    border-inline-start-color: var(--cn-reply-bubble);
+    border-inline-start-color: var(--_reply-bubble);
   }
 
   /* The bubble's padding opens the message; the first line does not add to it. */

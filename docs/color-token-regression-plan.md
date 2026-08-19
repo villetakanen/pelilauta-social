@@ -16,6 +16,14 @@ This document coordinates the repair. It introduces no design decision. ADR 0002
 already preserves `--chroma-*` as the permanent palette exception to the public
 `--cn-*` namespace.
 
+## Scope decision (operator, 2026-08-19)
+
+The repair is limited to the colour system: its tokens and their collateral —
+styles, compatibility aliases, tests, books, and records. Units and typography
+stay in their hand-written stylesheets; moving them to generated sources is
+ordinary debt, not part of this repair. T6 is descoped, and Gate 2 narrows to
+the colour and elevation sources.
+
 ## Regression
 
 Replaceable chroma imports predate Pelilauta and exist in Cyan 1. V19 supplies the
@@ -92,7 +100,6 @@ The writable sources and generated files carry these responsibilities:
 | `tokens/themes/default.json` | The default theme's literal v20 OKLCH scales, grouped as complete lightness-indexed chroma families. | Semantic purpose, CSS syntax, compatibility aliases. |
 | `tokens/semantic-color.json` | Shared colour roles, symbolic chroma references, and Light and Dark mappings. | Literal palette values, shadow geometry, one-component values. |
 | `tokens/elevation.json` | Shared shadow colour and grid-derived shadow roles. | Component shadows. |
-| `tokens/units.json` and `tokens/typography.json` | Public measurement and type decisions now duplicated between CSS and books. | Component-private values. |
 | `tokens/compatibility/cyan-4.json` | Names required by remaining Cyan 4 consumers and their permanent targets. | Permanent token declarations. |
 | `scripts/generate-tokens.mjs` | Schema and dependency validation; deterministic CSS emission. | Design rationale and handwritten token values. |
 | Generated `styles/chroma.css` | The active theme's `--chroma-*` declarations. | Hand edits. |
@@ -324,18 +331,10 @@ declared on `:root`.
 
 ### T6 — Move the remaining public token families to generated sources
 
-**Depends on:** T5.
+**Descoped by the scope decision above.** Units and typography stay hand-written.
 
-1. Move units and typography values into their JSON sources without changing their
-   generated declarations.
-2. Classify public component measurement tokens by the same shared-use and supported
-   customization rules used for colour.
-3. Generate the existing CSS entry files so application imports do not change.
-4. Remove tests that compare two writable inventories. Retain behavioural,
-   mathematical, Cyan parity, and browser checks.
-
-**Gate 2:** every public global token has one writable JSON source, generated CSS is
-current, and books can consume the source structure without a CSS declaration parser.
+**Gate 2:** every public colour and elevation token has one writable JSON source
+and generated CSS is current — satisfied at the end of T5.
 
 ### T7 — Remove the compatibility bridge
 

@@ -94,6 +94,9 @@ $effect(() => {
 
 <style>
   .cn-reaction-button {
+    /* Private: the pressed gradient and its burst are this component's only
+       consumer, so the love hue stays out of the shared semantic layer. */
+    --_love: light-dark(var(--chroma-love-40), var(--chroma-love-60));
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -147,7 +150,7 @@ $effect(() => {
   .cn-reaction-button[aria-pressed='true'] .state-surface {
     background: linear-gradient(
       120deg,
-      var(--cn-color-love) 11%,
+      var(--_love) 11%,
       var(--cn-color-error) 90%
     );
     color: var(--cn-surface);
@@ -213,7 +216,7 @@ $effect(() => {
   }
 
   .burst.love {
-    color: var(--cn-color-love);
+    color: var(--_love);
   }
 
   @keyframes cn-reaction-burst {

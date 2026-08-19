@@ -21,6 +21,7 @@ import {
   resolve,
   tokenMap,
 } from '../books/specimens/color';
+import { parseTokens } from '../books/specimens/tokenTable';
 
 const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
@@ -230,16 +231,33 @@ describe('a message is readable in its bubble', () => {
   // a message sits on a neutral step in the default variant and on a brand step
   // in the reply variant, and each pairs with a foreground of its own. The pair
   // is the whole of what CnBubble paints, and a consumer overrides neither.
+  //
+  // The pair is private to CnBubble (docs/ARCHITECTURE.md: `--_*`), declared on
+  // the component's root rather than `:root`, so it is read out of the
+  // component source rather than out of semantic.css. Chroma stays global, so
+  // the reference layer still resolves the private declarations' `var()`
+  // chains.
+
+  const componentStyle = readFileSync(
+    new URL(
+      '../components/CnBubble.svelte',
+      import.meta.url,
+    ),
+    'utf8',
+  ).match(/<style[^>]*>([\s\S]*?)<\/style>/)?.[1];
+  if (!componentStyle) throw new Error('CnBubble.svelte has no style block');
+
+  const bubbleTokens = tokenMap(styles('chroma.css'), componentStyle);
 
   const cases = [
-    ['--cn-on-bubble', '--cn-bubble'],
-    ['--cn-on-reply-bubble', '--cn-reply-bubble'],
+    ['--_on-bubble', '--_bubble'],
+    ['--_on-reply-bubble', '--_reply-bubble'],
   ] as const;
 
   for (const [foreground, background] of cases) {
     for (const mode of ['light', 'dark'] as const) {
       test(`${foreground} on ${background}, ${mode}`, () => {
-        const { ratio } = measure(foreground, background, mode, tokens);
+        const { ratio } = measure(foreground, background, mode, bubbleTokens);
         expect(ratio, `${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
       });
     }

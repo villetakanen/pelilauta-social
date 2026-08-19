@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Design Tokens
@@ -59,9 +59,11 @@ Tokens remain inputs to CSS calculations. Consumers compose final measurements
 from them instead of storing precomputed results that would stop responding when
 an input changes.
 
-Token JSON is the single writable source for every public global token.
+Token JSON is the single writable source for every public colour and elevation
+token; measurement and typography tokens stay in their hand-written stylesheets.
 Generated CSS is committed, and a check fails when it differs from
-its source. A book reads token JSON; it does not reparse generated CSS.
+its source. A book reads token JSON where a JSON source exists; it does not
+reparse generated CSS.
 
 Compatibility aliases receive no lexicon and no new consumer. They are migration
 scaffolding, not an alternative public vocabulary or a completeness contract.

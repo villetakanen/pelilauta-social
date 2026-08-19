@@ -33,12 +33,26 @@ a.button.fab[href] {
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
+  /*
+   * The FAB's colour roles are private to this stylesheet: no other capability
+   * reads a variant's surface or foreground, so none is a public --cn-* contract.
+   */
+  --_fab: var(--chroma-primary-70);
+  --_fab-blend: var(--chroma-surface-50);
+  --_on-fab: var(--chroma-surface-100);
+  --_fab-cta: var(--chroma-error-60);
+  --_fab-cta-blend: var(--chroma-surface-50);
+  --_on-fab-cta: var(--chroma-surface-100);
+  /* The secondary surface keeps the shared button roles, which stay public. */
+  --_fab-secondary: var(--cn-button);
+  --_fab-secondary-blend: color-mix(in oklch, var(--cn-button), var(--cn-on-surface) 22%);
+  --_on-fab-secondary: var(--cn-on-button);
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-fab),
-    var(--cn-fab-blend)
+    var(--_fab),
+    var(--_fab-blend)
   );
-  color: var(--cn-on-fab);
+  color: var(--_on-fab);
   box-shadow: var(--cn-shadow-elevation-1);
   /* Elevation resolves faster than the surface it lifts from, as the button does. */
   --_elevation-duration: calc(var(--cn-duration-ui) / 2);
@@ -57,20 +71,20 @@ a.button.fab[href] {
 :is(button, a).fab.cta {
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-fab-cta),
-    var(--cn-fab-cta-blend)
+    var(--_fab-cta),
+    var(--_fab-cta-blend)
   );
-  color: var(--cn-on-fab-cta);
+  color: var(--_on-fab-cta);
 }
 
 /* The secondary surface runs against the grain: v20 turns its gradient to -37deg. */
 :is(button, a).fab.secondary {
   background-image: linear-gradient(
     in oklab -37deg,
-    var(--cn-fab-secondary),
-    var(--cn-fab-secondary-blend)
+    var(--_fab-secondary),
+    var(--_fab-secondary-blend)
   );
-  color: var(--cn-on-fab-secondary);
+  color: var(--_on-fab-secondary);
 }
 
 /* The small modifier collapses both measurements to the regular button size. */

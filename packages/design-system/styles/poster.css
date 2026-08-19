@@ -53,10 +53,13 @@
    * that stands for the page itself. Levels 1 through 4 stay opaque, because
    * content that has risen off the page is content the reader is meant to read.
    *
-   * The share, and why it is that share, belong to the role.
+   * The share is the most transparent the plane can be while the inherited body
+   * foreground still reaches WCAG 2.2 AA over near-white artwork in Dark, the
+   * tightest of the combinations.
    */
   body:has(#cn-poster) .elevation-0 {
-    background-color: var(--cn-surface-over-poster);
+    --_surface-over-poster: color-mix(in oklch, var(--cn-surface), transparent 20%);
+    background-color: var(--_surface-over-poster);
   }
 
   /*

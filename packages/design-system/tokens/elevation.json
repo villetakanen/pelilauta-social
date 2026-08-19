@@ -2,20 +2,24 @@
   "name": "elevation",
   "description": "Shared shadow roles: the shadow colour and the grid-derived elevation shadows. Depends on units ({unit:cn-grid}) and on its own shadow colour; values reference tokens symbolically, never as a raw var().",
   "tokens": {
-    "cn-shadow-color": { "light": "{chroma:surface-30}", "dark": "{chroma:surface-0}" },
+    "cn-shadow-color": {
+      "light": "{chroma:surface-30}",
+      "dark": "{chroma:surface-0}"
+    },
     "cn-shadow-elevation-1": {
       "value": "calc({unit:cn-grid} * 0.125) calc({unit:cn-grid} * 0.125) calc({unit:cn-grid} * 0.5) {token:cn-shadow-color}"
     },
     "cn-shadow-elevation-2": {
       "value": "calc({unit:cn-grid} * 0.25) calc({unit:cn-grid} * 0.25) {unit:cn-grid} {token:cn-shadow-color}"
     },
-    "cn-shadow-button-hover": { "value": "{token:cn-shadow-elevation-2}" },
+    "cn-shadow-button-hover": {
+      "value": "{token:cn-shadow-elevation-2}"
+    },
     "cn-shadow-elevation-3": {
       "value": "calc({unit:cn-grid} * 0.5) calc({unit:cn-grid} * 0.5) calc({unit:cn-grid} * 2) {token:cn-shadow-color}"
     },
     "cn-shadow-elevation-4": {
       "value": "calc({unit:cn-grid} * 0.75) calc({unit:cn-grid} * 0.75) calc({unit:cn-grid} * 3) {token:cn-shadow-color}"
-    },
-    "cn-reply-dock-shadow": { "value": "{token:cn-shadow-elevation-3}" }
+    }
   }
 }

@@ -59,10 +59,10 @@ grid unit of inline padding. Neither presentation grows or shrinks in a flex row
 At rest, the state surface uses `--cn-button-text` and `--cn-text-low`. Hover composes
 `--cn-hover` and the button hover shadow; active composes `--cn-active`. The pressed
 surface is a 120-degree gradient from CnReactionButton's private love expression at
-11% to its private error expression at 90%, each drawn from its fixed
-`--chroma-love-*` or `--chroma-error-*` scale, with `--cn-surface` as its
-foreground. Keyboard focus uses `--cn-focus-ring`. The pressed gradient remains
-beneath hover and active feedback.
+11% to the shared `--cn-color-error` semantic role at 90%, with `--cn-surface` as its
+foreground. The private love expression is a component-scoped token, not a
+customization surface, fixed to the `--chroma-love-*` scale. Keyboard focus uses
+`--cn-focus-ring`. The pressed gradient remains beneath hover and active feedback.
 Disabled presentation keeps the supplied pressed state beneath
 `--cn-disabled-opacity` and takes no hover or active feedback. A state change does
 not alter the control's dimensions or move the count.

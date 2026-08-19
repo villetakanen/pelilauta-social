@@ -152,7 +152,10 @@ a.button[href]:not(
   box-shadow: none;
 }
 
-/* v20's alternate chroma treatment, and only where the button itself asks. */
+/*
+ * v20's alternate chroma treatment, and only where the button itself asks. The
+ * pair is private: no other capability reads it, so it is not a --cn-* contract.
+ */
 :is(button, a.button[href]).secondary:not(
     .fab,
     .chrome-action,
@@ -161,11 +164,13 @@ a.button[href]:not(
     .cn-menu-container *,
     .cn-reaction-button
   ) {
+  --_button-secondary-light: light-dark(var(--chroma-primary-40), var(--chroma-primary-80));
+  --_button-secondary: light-dark(var(--chroma-primary-60), var(--chroma-primary-95));
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-button-secondary-light),
-    var(--cn-button-secondary)
+    var(--_button-secondary-light),
+    var(--_button-secondary)
   );
   color: var(--cn-on-button);
 }

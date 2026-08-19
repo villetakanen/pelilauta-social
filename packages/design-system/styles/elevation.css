@@ -9,5 +9,4 @@
   --cn-shadow-button-hover: var(--cn-shadow-elevation-2);
   --cn-shadow-elevation-3: calc(var(--cn-grid) * 0.5) calc(var(--cn-grid) * 0.5) calc(var(--cn-grid) * 2) var(--cn-shadow-color);
   --cn-shadow-elevation-4: calc(var(--cn-grid) * 0.75) calc(var(--cn-grid) * 0.75) calc(var(--cn-grid) * 3) var(--cn-shadow-color);
-  --cn-reply-dock-shadow: var(--cn-shadow-elevation-3);
 }

@@ -85,11 +85,28 @@ const imageLayer = $derived(
     overflow: hidden;
     user-select: none;
     box-shadow: var(--cn-shadow-elevation-1);
-    color: var(--cn-on-avatar);
+
+    /*
+     * Private to CnAvatar: only this component paints a derived backdrop, so
+     * these carry no `--cn-*` name (docs/ARCHITECTURE.md). An identity
+     * backdrop is any mix of the two ends, so both and everything between
+     * answer to --_on-avatar; the bands invert per mode.
+     */
+    --_avatar-backdrop-from: light-dark(
+      var(--chroma-primary-30),
+      var(--chroma-primary-60)
+    );
+    --_avatar-backdrop-to: light-dark(
+      var(--chroma-surface-50),
+      var(--chroma-surface-80)
+    );
+    --_on-avatar: light-dark(var(--chroma-surface-95), var(--chroma-surface-10));
+
+    color: var(--_on-avatar);
     background: color-mix(
       in oklch,
-      var(--cn-avatar-backdrop-from),
-      var(--cn-avatar-backdrop-to) var(--cn-avatar-mix, 50%)
+      var(--_avatar-backdrop-from),
+      var(--_avatar-backdrop-to) var(--cn-avatar-mix, 50%)
     );
   }
 
