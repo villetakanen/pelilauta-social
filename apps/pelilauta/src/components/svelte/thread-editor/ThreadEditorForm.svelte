@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
@@ -140,9 +141,13 @@ function onAddFiles(newFiles: File[]) {
   </section>
 
   <!-- Lightbox for attachments like images -->
-  {#if files.length > 0}
+  {#if previews.length}
     <section style="container: images / inline-size; width: min(420px,90vw); margin: 0 auto; margin-bottom: var(--cn-gap)">
-      <cn-lightbox images={previews}></cn-lightbox>
+      <CnLightbox
+        images={previews}
+        openLabel={t('actions:openImage')}
+        closeLabel={t('actions:close')}
+      />
     </section>
   {/if}
 

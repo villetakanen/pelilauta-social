@@ -1,5 +1,7 @@
 ---
+import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import { t } from 'src/utils/i18n';
 import { markdownToHTML } from 'src/utils/marked';
 import QuoteBubble from './QuoteBubble.astro';
 
@@ -27,7 +29,14 @@ const figures =
       replyKey={thread.quoteRef.split('/')[1]}
     />
   )}
-  { figures.length > 0 && <cn-lightbox images={JSON.stringify(figures)}></cn-lightbox> }
+  { figures.length > 0 && (
+    <CnLightbox
+      images={figures}
+      openLabel={t('actions:openImage')}
+      closeLabel={t('actions:close')}
+      client:load
+    />
+  )}
   <section set:html={htmlContent} />
   
 </article>

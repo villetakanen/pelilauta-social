@@ -13,7 +13,6 @@ const compact = migration.replace(/\s+/g, ' ').trim();
 describe('Cyan element migration contract', () => {
   it('keeps a bridge for every reached element context', () => {
     const contexts = [
-      'cn-lightbox',
       'cn-sortable-list',
       'cn-d20-ability-score',
       'cn-dice',
@@ -54,6 +53,12 @@ describe('Cyan element migration contract', () => {
     // buttons and fabs whose negative margins pulled a 72px ring back into a
     // control. The inline variant needs none of that.
     expect(migration).not.toMatch(/\bcn-loader\b/);
+
+    // CnLightbox replaced every cn-lightbox: the thread body, a reply, and the
+    // unsaved previews in the editor and both reply dialogs. Its gallery and its
+    // dialog compose the shared elevation utilities and state their own radii and
+    // inset, so the host custom properties Cyan's component read govern nothing.
+    expect(migration).not.toMatch(/\bcn-lightbox\b/);
 
     // CnMenu replaced the reply menu, the only cn-menu the application had. Its
     // rows are the anchors and buttons the consumer wrote rather than a ul of li,

@@ -12,6 +12,7 @@ export const actions: Locale = {
     handout: 'Create secret',
   },
   choose: 'Choose',
+  close: 'Close',
   confirm: {
     delete: 'Confirm deletion',
   },
@@ -25,6 +26,7 @@ export const actions: Locale = {
   login: 'Sign in',
   logout: 'Sign out',
   moreOptions: 'More options',
+  openImage: 'Open image',
   send: 'Send',
   save: 'Save',
   search: 'Search',

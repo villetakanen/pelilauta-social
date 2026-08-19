@@ -7,19 +7,6 @@
  */
 
 /*
- * Source: components/cn-lightbox.css.
- * Consumer: thread media. Future owner: Lightbox; remove this host bridge with
- * the Cyan component.
- */
-cn-lightbox {
-  --cn-lightbox-background: var(--color-surface-2);
-  --cn-lightbox-color: var(--color-on-surface);
-  --cn-lightbox-border-radius: var(--cn-border-radius-medium);
-  --cn-lightbox-image-border-radius: var(--cn-border-radius-small);
-  --cn-lightbox-inner-spacing: var(--cn-grid);
-}
-
-/*
  * Source: components/cn-sortable-list.css.
  * Consumer: sortable editors. Future owner: that component's epic.
  */

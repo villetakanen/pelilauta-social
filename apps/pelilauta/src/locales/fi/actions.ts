@@ -12,6 +12,7 @@ export const actions: Locale = {
     handout: 'Luo salaisuus',
   },
   choose: 'Valitse',
+  close: 'Sulje',
   confirm: {
     delete: 'Vahvista poisto',
   },
@@ -25,6 +26,7 @@ export const actions: Locale = {
   login: 'Kirjaudu sisään',
   logout: 'Kirjaudu ulos',
   moreOptions: 'Lisää toimintoja',
+  openImage: 'Avaa kuva',
   next: 'Seuraava',
   send: 'Lähetä',
   save: 'Tallenna',
