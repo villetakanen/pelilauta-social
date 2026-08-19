@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: live
 ---
 
 # Design Tokens
@@ -83,8 +83,8 @@ They receive no dedicated compatibility test.
 - A chroma token is literal and depends on nothing. A semantic token depends
   only on chroma or another semantic token. A compatibility alias depends on a
   permanent token; no permanent token depends on compatibility vocabulary.
-- The accidental numbered `--cn-color-{family}-{step}` vocabulary is removed
-  before `v21.0.0-rc.1`. A retained compatibility alias is removed when its
+- No numbered `--cn-color-{family}-{step}` vocabulary exists: a numbered step
+  belongs to chroma alone. A retained compatibility alias is removed when its
   last Cyan consumer migrates.
 
 ### Scenarios

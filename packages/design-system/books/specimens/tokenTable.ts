@@ -145,3 +145,69 @@ export function parseTokens(
 
   return found;
 }
+
+/**
+ * The colour lexicon's JSON sources, rendered to declaration text so the
+ * parser above stays the single reader of a token's declared value. Units and
+ * typography have no JSON source and keep parsing their hand-written CSS
+ * directly; this exists only so the colour books can read
+ * `tokens/themes/default.json`, `tokens/semantic-color.json` and
+ * `tokens/elevation.json` instead of the stylesheets `scripts/generate-tokens.mjs`
+ * generates from them.
+ */
+
+/** Shape of `tokens/themes/default.json`. */
+export interface ChromaTheme {
+  families: Record<string, { kind: string; steps: Record<string, string> }>;
+}
+
+/** One role token in `tokens/semantic-color.json` or `tokens/elevation.json`. */
+export interface RoleToken {
+  value?: string;
+  light?: string;
+  dark?: string;
+  comment?: string;
+}
+
+/** Shape of a role JSON source: `{ tokens: { "cn-name": RoleToken } }`. */
+export interface RoleSource {
+  tokens: Record<string, RoleToken>;
+}
+
+const REFERENCE = /\{(chroma|token|unit):([\w-]+)\}/g;
+
+/** `{chroma:family-step}` → `var(--chroma-family-step)`, `{token:x}` and
+ * `{unit:x}` → `var(--x)` — the same substitution the generator applies. */
+function substituteReference(value: string): string {
+  return value.replace(REFERENCE, (_, kind, target) =>
+    kind === 'chroma' ? `var(--chroma-${target})` : `var(--${target})`,
+  );
+}
+
+/** The chroma layer as CSS declaration text, one `--chroma-family-step` per
+ * literal step, in the theme's own step order. */
+export function chromaDeclarations(theme: ChromaTheme): string {
+  const lines: string[] = [];
+  for (const [family, definition] of Object.entries(theme.families)) {
+    for (const [step, value] of Object.entries(definition.steps)) {
+      lines.push(`--chroma-${family}-${step}: ${value};`);
+    }
+  }
+  return lines.join('\n');
+}
+
+/** One role layer (semantic-color.json or elevation.json) as CSS declaration
+ * text, substituting its symbolic references and combining a light/dark pair
+ * through `light-dark()` — the same shape `styles/semantic.css` and
+ * `styles/elevation.css` commit. */
+export function roleDeclarations(source: RoleSource): string {
+  const lines: string[] = [];
+  for (const [name, token] of Object.entries(source.tokens)) {
+    const value =
+      typeof token.value === 'string'
+        ? substituteReference(token.value)
+        : `light-dark(${substituteReference(token.light ?? '')}, ${substituteReference(token.dark ?? '')})`;
+    lines.push(`--${name}: ${value};`);
+  }
+  return lines.join('\n');
+}

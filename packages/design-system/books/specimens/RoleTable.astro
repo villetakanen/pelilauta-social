@@ -6,13 +6,20 @@
  * their own theme. Scoping `color-scheme` on each cell makes the browser resolve
  * both arms on one page. Cyan 4's colour book uses the same approach.
  *
+ * The swatch itself resolves through the live cascade (`var(--cn-name)`); the
+ * token graph here only confirms the role exists, from the writable role JSON
+ * rather than a generated stylesheet.
+ *
  * Book: apps/design/src/content/principles/color-system.mdx
  */
-import { parseTokens } from './tokenTable';
+import type { ChromaTheme, RoleSource } from './tokenTable';
+import { tokensFromJSON } from './color';
 
 interface Props {
-  /** The stylesheet declaring the roles, imported with `?raw`. */
-  source: string;
+  /** The theme JSON, e.g. `tokens/themes/default.json`. */
+  theme: ChromaTheme;
+  /** Role sources the named roles are declared in. */
+  roles: readonly RoleSource[];
   /** Roles to show, in reading order. */
   names: readonly string[];
   /** What each role is for, keyed by token name. */
@@ -21,16 +28,14 @@ interface Props {
   caption?: string;
 }
 
-const { source, names, intents = {}, caption } = Astro.props;
+const { theme, roles, names, intents = {}, caption } = Astro.props;
 
-const roles = parseTokens(source, { names });
+const tokens = tokensFromJSON(theme, ...roles);
 
-const missing = names.filter(
-  (name) => !roles.some((role) => role.name === name),
-);
+const missing = names.filter((name) => !tokens.has(name));
 if (missing.length > 0) {
   throw new Error(
-    `RoleTable asked for roles the stylesheet does not declare: ${missing.join(', ')}.`,
+    `RoleTable asked for roles the sources do not declare: ${missing.join(', ')}.`,
   );
 }
 ---
@@ -46,20 +51,20 @@ if (missing.length > 0) {
     </tr>
   </thead>
   <tbody>
-    {roles.map((role) => (
+    {names.map((name) => (
       <tr>
-        <th scope="row"><code>{role.name}</code></th>
+        <th scope="row"><code>{name}</code></th>
         {(['light', 'dark'] as const).map((mode) => (
           <td>
             <span
               class="cell"
               data-mode={mode}
-              data-role={role.name}
-              style={`color-scheme: ${mode}; background: var(${role.name});`}
+              data-role={name}
+              style={`color-scheme: ${mode}; background: var(${name});`}
             ></span>
           </td>
         ))}
-        {Object.keys(intents).length > 0 && <td>{intents[role.name] ?? ''}</td>}
+        {Object.keys(intents).length > 0 && <td>{intents[name] ?? ''}</td>}
       </tr>
     ))}
   </tbody>

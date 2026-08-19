@@ -7,76 +7,78 @@ order: 7
 import ColorRamp from "@design-system/books/specimens/ColorRamp.astro";
 import Composition from "@design-system/books/specimens/Composition.astro";
 import RoleTable from "@design-system/books/specimens/RoleTable.astro";
-import chromaSource from "@design-system/styles/chroma.css?raw";
-import themeSource from "@design-system/styles/semantic.css?raw";
+import theme from "@design-system/tokens/themes/default.json";
+import ThemeSwapDemo from "@design-system/books/specimens/ThemeSwapDemo.svelte";
+import semanticColor from "@design-system/tokens/semantic-color.json";
 
-Our colour system pairs a cool cerulean surface palette with a primary spectrum
-transitioning from teal to yellow-green. Surface tones anchor layout backgrounds
-and panels, while primary tones signify navigation, interactive focus, and key actions.
-Dedicated functional families provide unambiguous feedback for errors, warnings,
-and social reactions; informational notices are a semantic role over primary.
+The colour system carries Pelilauta's identity coherently through every surface. A
+site owner replaces that identity by supplying a chroma family — a rebrand
+without a redesign — while every reader keeps the same hierarchy, states, and
+contrast in Light and Dark. `specs/design-system/color-system/spec.md` governs the
+contract; this book argues its shape.
 
-Light and Dark themes are independent expressions of this unified semantic model.
-Both themes share identical semantic tokens and elevation tiers.
+## Chroma: the theme-supplied layer
 
-## Layered colour architecture
+Chroma families are literal, lightness-indexed OKLCH scales: `--chroma-{family}-{step}`,
+step 0 black to step 100 white. The step number states perceived lightness, so equal
+steps carry equal lightness across every family — a replacement theme keeps that
+guarantee by supplying a complete family rather than individual steps.
 
-We structure colour declarations in three decoupled tiers:
-1. **Reference scales:** Primitive OKLCH palette ramps defining available tones.
-2. **Semantic roles:** Theme-aware tokens mapping reference tones to UI intent (`light-dark()`).
-3. **Component mappings:** UI components consume semantic roles, and reach the palette
-   only for decoration.
-
-This separation allows reference palettes to be tuned without breaking component styling.
-Complete token definitions are published in [Colour tokens](/tokens/color).
-
-Overlays are roles as much as opaque surfaces are. A translucent surface, a wash and a
-scrim each say something about the page, so each is named and themed with the rest.
-
-Decoration is the exception. Where a colour states nothing — a gradient's stops, the
-flourish the theme switch throws — a component takes a palette step and needs no role for
-it.
-
-## Perceptual OKLCH scales
-
-All primitive colour scales are declared in the OKLCH colour space. Step numbers represent
-perceptual lightness: step 40 exhibits identical perceived lightness across all hues.
-Steps 0 and 100 represent neutral absolute endpoints.
+The primary family shifts hue as it lightens: petrol and teal at the dark end,
+yellow-green at the light end. The rotation mimics how colour behaves under real
+light — the deep greens of a northern forest as the sun reaches them, glowing sunlit
+yellow where the light lands and shadowed green where it does not. A single held hue
+would be a swatch; the rotation is a landscape.
 
 <ColorRamp
-  source={chromaSource}
-  family="surface"
-  intent="Backgrounds, elevation surfaces, borders, and body text."
-/>
-<ColorRamp
-  source={chromaSource}
+  theme={theme}
   family="primary"
   intent="Links, keyboard focus rings, and high-emphasis controls."
 />
 
-The surface family maintains a constant hue so step transitions read purely as lightness
-changes. The primary family shifts hue across its scale—from teal at dark steps to
-yellow-green at light steps—providing visual vibrancy for interactive elements.
-
-### Functional colour families
-
-Three functional families provide feedback across system states:
+The surface family holds a constant cerulean hue and varies only in lightness, giving
+the architecture depth and atmosphere rather than neutral chrome.
 
 <ColorRamp
-  source={chromaSource}
+  theme={theme}
+  family="surface"
+  intent="Backgrounds, elevation surfaces, borders, and body text."
+/>
+
+Two core families, primary and surface, are the only themeable surface: complete
+13-step scales, and a replacement theme changes no semantic or component token.
+
+### The auxiliary status families
+
+Three auxiliary families are fixed, never themeable: love, warning, and error. A
+status colour is a learned convention rather than a brand signal, and a convention's
+value is staying put — a re-brandable error colour would break the low-cognition
+recognition it exists for. Love is a structural family, not decoration: reactions are
+the community's main social currency, and appreciation is a first-class signal.
+
+Each auxiliary family carries only the four jobs a status colour has: dark text on a
+tint, a strong fill for Light, a bright fill for Dark, and a pale tint background. That
+is why the scale is a partial 20/40/60/90, not the core families' 13 steps.
+
+<ColorRamp
+  theme={theme}
   family="error"
   intent="Destructive actions and validation failures."
 />
 <ColorRamp
-  source={chromaSource}
+  theme={theme}
   family="warning"
   intent="Cautionary feedback and alerts."
 />
 <ColorRamp
-  source={chromaSource}
+  theme={theme}
   family="love"
   intent="Likes, bookmarks, and community appreciation."
 />
+
+Information is not a fourth family. `--cn-info` and `--cn-on-info` are a semantic pair
+over primary — the v20 info scale named a chroma distinction the design never
+actually made.
 
 ### Contrast by construction
 
@@ -89,16 +91,36 @@ between two palette steps establishes a verified lower bound for contrast ratio:
 | 60 or more | 4.5:1 | WCAG AA Normal Text |
 | 70 or more | 7:1 | WCAG AAA Enhanced |
 
-A step difference of 40 provides no guarantee; the lowest measured ratio among those pairs
-is 2.36:1.
+A step difference of 40 provides no guarantee; the lowest measured ratio among those
+pairs is 2.36:1. `packages/design-system/test/color-contrast.test.ts` computes these
+floors from the palette; this table cites them rather than restating a copy.
 
-## Semantic roles and themes
+### A theme swap, live
 
-Semantic roles form the component-facing colour API. Each role resolves to theme-specific
-reference tones via CSS `light-dark()`.
+<Composition caption="Each toggle redeclares one core family's 13 steps on this container alone; the sample card and both ramps read them live">
+  <ThemeSwapDemo client:load />
+</Composition>
+
+A theme swap is not a filter over the rendered page — it is a core family's thirteen
+custom properties, redeclared. Primary and surface toggle independently, each
+replacing its own `--chroma-{family}-0` through `--chroma-{family}-100` with a
+zero-chroma ramp that keeps every step's OKLCH lightness, so the card's heading,
+link, button and ground all read the same hierarchy and contrast as before; only the
+hue left. That is the rebrand-without-a-redesign the colour system promises: a site
+owner supplies new primary and surface families, and every semantic role built on
+them re-themes without a single component changing.
+
+## Semantics: the stable component-facing layer
+
+Semantic roles name purpose under `--cn-*`. A scheme-dependent role states Light and
+Dark as two arms of one `light-dark()` declaration; a scheme-invariant role states one
+expression. Components consume a role for its purpose, never a chroma step directly —
+so a theme change moves every role together, links included, and nothing is
+overridden one at a time.
 
 <RoleTable
-  source={themeSource}
+  theme={theme}
+  roles={[semanticColor]}
   caption="Surface roles"
   names={[
     "--cn-surface",
@@ -117,7 +139,8 @@ reference tones via CSS `light-dark()`.
 />
 
 <RoleTable
-  source={themeSource}
+  theme={theme}
+  roles={[semanticColor]}
   caption="Text, action, and edge roles"
   names={[
     "--cn-text",
@@ -137,10 +160,19 @@ reference tones via CSS `light-dark()`.
   }}
 />
 
-Theme mappings preserve intent rather than raw numeric symmetry. In Light theme,
-the ground plane uses surface step 95 while levels 1–3 use pure white. In Dark theme,
-levels 1 and 2 share surface step 30 while level 3 increases lightness. Level 4
-transitions to the primary family in both themes.
+A role's mapping preserves intent rather than raw numeric symmetry. In Light, the
+ground plane uses surface step 95 while levels 1 through 3 use pure white; in Dark,
+levels 1 and 2 share surface step 30 while level 3 raises lightness. Level 4 leaves the
+surface family for primary in both themes. Complete token declarations are published
+in [Colour tokens](/tokens/color).
+
+## Decoration: the chroma exception
+
+Where a colour states nothing — a gradient's stops, the flourish the theme switch
+throws — a component takes a palette step directly and needs no role for it. This is
+the one place a component reaches past the semantic layer, and it is named exactly
+because it is the exception: a purpose the system has named always uses that role
+instead.
 
 ## Surface and elevation
 
@@ -176,4 +208,3 @@ text (`--cn-text`) meets WCAG 2.2 AA contrast on level 4 across both themes.
 
 For shadow measurements, see [Spatial System](/principles/spatial-system). For utility
 class usage, see [Surface reference](/base/surface).
-

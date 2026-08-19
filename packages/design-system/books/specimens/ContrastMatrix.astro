@@ -2,17 +2,22 @@
 /**
  * ContrastMatrix — measured WCAG contrast for foreground/background pairs.
  *
- * Every figure is computed from the production stylesheets at build time.
- * The thresholds are asserted in
+ * Every figure is computed at build time from the token graph — the theme's
+ * chroma JSON and the semantic role JSON, the same writable sources
+ * scripts/generate-tokens.mjs renders to the production stylesheets. The
+ * thresholds are asserted in
  * packages/design-system/test/color-contrast.test.ts; this renders them.
  *
  * Book: apps/design/src/content/principles/color-system.mdx
  */
-import chromaSource from '@design-system/styles/chroma.css?raw';
-import themeSource from '@design-system/styles/semantic.css?raw';
-import { type Mode, measure, tokenMap } from './color';
+import type { ChromaTheme, RoleSource } from './tokenTable';
+import { type Mode, measure, tokensFromJSON } from './color';
 
 interface Props {
+  /** The theme JSON, e.g. `tokens/themes/default.json`. */
+  theme: ChromaTheme;
+  /** Role sources to resolve against, e.g. `tokens/semantic-color.json`. */
+  roles: readonly RoleSource[];
   /** Foreground token names, in the order they should be read. */
   foregrounds: readonly string[];
   /** The background they are measured against. */
@@ -24,13 +29,15 @@ interface Props {
 }
 
 const {
+  theme,
+  roles,
   foregrounds,
   background,
   modes = ['light', 'dark'] as const,
   caption,
 } = Astro.props;
 
-const tokens = tokenMap(chromaSource, themeSource);
+const tokens = tokensFromJSON(theme, ...roles);
 
 // measure() throws on an unresolvable pair rather than skipping it, so a
 // renamed token fails the build instead of shortening the table.

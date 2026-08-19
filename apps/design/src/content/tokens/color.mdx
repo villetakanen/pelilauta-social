@@ -5,34 +5,40 @@ order: 10
 ---
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
-import chromaSource from '@design-system/styles/chroma.css?raw'
-import themeSource from '@design-system/styles/semantic.css?raw'
-import elevationSource from '@design-system/styles/elevation.css?raw'
+import theme from '@design-system/tokens/themes/default.json'
+import semanticColor from '@design-system/tokens/semantic-color.json'
+import elevation from '@design-system/tokens/elevation.json'
+import { chromaDeclarations, roleDeclarations } from '@design-system/books/specimens/tokenTable'
 
-Declared color custom properties and values. Color selection and contrast rules are
-defined in [Colour System](/principles/color-system). Swatches resolve dynamically
-in the active color scheme.
+Declared color custom properties and values, read from their writable JSON sources —
+`tokens/themes/default.json`, `tokens/semantic-color.json`, and
+`tokens/elevation.json`. `scripts/generate-tokens.mjs` renders the same sources to
+`styles/chroma.css`, `styles/semantic.css`, and `styles/elevation.css`, which the
+application imports. Color selection and contrast rules are defined in
+[Colour System](/principles/color-system). Swatches resolve dynamically in the active
+color scheme.
 
 ## Semantic roles
 
-Component-facing color tokens. Each role defines light and dark values in a single
-`light-dark()` declaration.
+Component-facing color tokens, declared in `tokens/semantic-color.json`. Each role
+defines light and dark values in a single `light-dark()` declaration.
 
-<TokenTable source={themeSource} without="shadow" swatch caption="Semantic roles" />
+<TokenTable source={roleDeclarations(semanticColor)} without="shadow" swatch caption="Semantic roles" />
 
 ## Elevation shadows
 
-Elevation shadow tokens declared in `styles/elevation.css`. Shadow geometry scales
+Elevation shadow tokens declared in `tokens/elevation.json`. Shadow geometry scales
 with `--cn-grid` as defined in [Units and grid](/tokens/units).
 
-<TokenTable source={elevationSource} prefix="--cn-shadow" caption="Elevation shadows" />
+<TokenTable source={roleDeclarations(elevation)} prefix="--cn-shadow" caption="Elevation shadows" />
 
 ## Reference palette
 
-Primitive OKLCH color scales, declared in `styles/chroma.css`. UI components consume
-semantic roles rather than referencing primitive palette tokens directly; the
+Primitive OKLCH color scales, declared in `tokens/themes/default.json`. UI components
+consume semantic roles rather than referencing primitive palette tokens directly; the
+exceptions are documented decorative uses, stated in each component's specification.
 
-<TokenTable source={chromaSource} prefix="--chroma-" swatch caption="Reference palette" />
+<TokenTable source={chromaDeclarations(theme)} prefix="--chroma-" swatch caption="Reference palette" />
 
 ## Cyan 4 aliases
 

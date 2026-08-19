@@ -53,7 +53,8 @@ Where the system has named a purpose, a consumer uses that semantic role, never
 a chroma step. A purpose no role names is a component's private decision over
 chroma, stated in its specification — a status expression (love, warning,
 error) is such a decision over its auxiliary family. It becomes a shared role
-when two capabilities consume the same purpose.
+when two capabilities consume the same purpose; a compatibility alias is not a
+capability.
 
 ## Contract
 
@@ -67,7 +68,8 @@ when two capabilities consume the same purpose.
 ### Regression Guardrails
 
 - Each chroma family carries exactly its defined steps, and a step's OKLCH
-  lightness equals its index divided by one hundred.
+  lightness equals its index divided by one hundred, unless the theme declares
+  a reasoned exception for that step.
 - Replacing a core family changes no semantic or component token and keeps
   every consumer resolvable.
 - No declaration or consumer names an info chroma family; information is the
