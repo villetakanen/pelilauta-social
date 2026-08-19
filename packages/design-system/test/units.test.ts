@@ -132,10 +132,10 @@ test('the default radius is medium', () => {
 
 test('the token entry point includes the elevation shadows and their grid dependency', () => {
   const theme = declarations(
-    read(new URL('../styles/color-theme.css', import.meta.url).pathname),
+    read(new URL('../styles/elevation.css', import.meta.url).pathname),
   );
 
-  // color-theme.css derives its shadows from --cn-grid but does not define it.
+  // elevation.css derives its shadows from --cn-grid but does not define it.
   // tokens.css exists to guarantee the pairing; assert the dependency is real
   // and that the composed sources supply it. Declaration order is irrelevant.
   const shadow = theme.get('--cn-shadow-elevation-3');
@@ -148,4 +148,5 @@ test('the token entry point includes the elevation shadows and their grid depend
   const entry = read(new URL('../styles/tokens.css', import.meta.url).pathname);
   expect(entry).toMatch(/units\.css/);
   expect(entry).toMatch(/color\.css/);
+  expect(entry).toMatch(/elevation\.css/);
 });

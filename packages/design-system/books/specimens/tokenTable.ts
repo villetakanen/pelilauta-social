@@ -28,8 +28,8 @@ export interface TokenFilter {
   prefix?: string;
   /**
    * Drop declarations whose name contains this, after the include filter.
-   * color-theme.css declares colour roles and box-shadows together and they are
-   * presented differently.
+   * Colour roles live in semantic.css and box-shadows in elevation.css, but a
+   * stylesheet source may still carry both when a book presents them differently.
    */
   without?: string;
 }

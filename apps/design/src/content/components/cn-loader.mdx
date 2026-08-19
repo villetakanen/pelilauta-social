@@ -10,7 +10,7 @@ import LoaderSpecimens from '@design-system/books/specimens/LoaderSpecimens.svel
 import Composition from '@design-system/books/specimens/Composition.astro'
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import loaderSource from '@design-system/styles/loader.css?raw'
-import colorThemeSource from '@design-system/styles/color-theme.css?raw'
+import colorThemeSource from '@design-system/styles/semantic.css?raw'
 
 `CnLoader` combines two visual signals: a spinning dual ring indicating active background
 processing, and a centred static icon identifying the entity or domain being loaded.
@@ -111,7 +111,7 @@ explicitly position and centre the loader.
   source={colorThemeSource}
   names={['--cn-loader-color']}
   swatch
-  caption="Color token from styles/color-theme.css"
+  caption="Color token from styles/semantic.css"
 />
 
 The ring and centred icon share `--cn-loader-color`: the ring at 0.72 opacity and the

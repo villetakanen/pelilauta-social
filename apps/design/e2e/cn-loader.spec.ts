@@ -84,7 +84,7 @@ test('paints the ring in the light-scheme --cn-loader-color role', async ({
       // The reference token the role resolves to in the light scheme, read from
       // the live cascade rather than restated here.
       reference: getComputedStyle(document.documentElement)
-        .getPropertyValue('--cn-color-primary-60')
+        .getPropertyValue('--chroma-primary-60')
         .trim(),
     };
   });

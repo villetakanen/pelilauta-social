@@ -45,7 +45,7 @@
   --color-hover: var(--cn-hover);
   --color-button: var(--cn-button);
   --color-button-light: var(--cn-button-light);
-  --color-button-accent: var(--cn-color-primary-70);
+  --color-button-accent: var(--chroma-primary-70);
   --color-button-cta: var(--cn-button-cta);
   --color-on-button: var(--cn-on-button);
   --color-on-button-cta: var(--cn-on-button-cta);
@@ -106,8 +106,8 @@
   );
 
   /* Older cn-color names. */
-  --cn-color-primary: var(--cn-color-primary-70);
-  --cn-color-primary-variant: var(--cn-color-primary-80);
+  --cn-color-primary: var(--chroma-primary-70);
+  --cn-color-primary-variant: var(--chroma-primary-80);
   --cn-color-on-primary: var(--cn-on-button);
   --cn-color-secondary: var(--cn-surface-4);
   --cn-color-secondary-variant: var(--cn-surface-3);
@@ -126,7 +126,7 @@
   --cn-color-on-button-active: var(--cn-on-button);
   --cn-color-text-secondary: var(--cn-text-low);
   --cn-color-avatar-1: var(--cn-surface-4);
-  --cn-color-avatar-2: var(--cn-color-primary-50);
+  --cn-color-avatar-2: var(--chroma-primary-50);
   --cn-color-error-bg: color-mix(
     in oklch,
     var(--cn-color-error),

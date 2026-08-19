@@ -6,7 +6,8 @@ order: 10
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
 import chromaSource from '@design-system/styles/chroma.css?raw'
-import themeSource from '@design-system/styles/color-theme.css?raw'
+import themeSource from '@design-system/styles/semantic.css?raw'
+import elevationSource from '@design-system/styles/elevation.css?raw'
 
 Declared color custom properties and values. Color selection and contrast rules are
 defined in [Colour System](/principles/color-system). Swatches resolve dynamically
@@ -21,10 +22,10 @@ Component-facing color tokens. Each role defines light and dark values in a sing
 
 ## Elevation shadows
 
-Elevation shadow tokens declared in `styles/color-theme.css`. Shadow geometry scales
+Elevation shadow tokens declared in `styles/elevation.css`. Shadow geometry scales
 with `--cn-grid` as defined in [Units and grid](/tokens/units).
 
-<TokenTable source={themeSource} prefix="--cn-shadow" caption="Elevation shadows" />
+<TokenTable source={elevationSource} prefix="--cn-shadow" caption="Elevation shadows" />
 
 ## Reference palette
 

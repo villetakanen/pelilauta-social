@@ -28,7 +28,7 @@ const styles = (path: string) =>
 const tokens = tokenMap(
   styles('chroma.css'),
   styles('color-reference.css'),
-  styles('color-theme.css'),
+  styles('semantic.css'),
 );
 
 describe('the colour maths', () => {
@@ -64,7 +64,7 @@ describe('resolving a semantic token', () => {
     // --cn-background is var(--cn-surface), which is light-dark() over two
     // reference tokens. Two hops, and the arm must survive both.
     expect(resolve('var(--cn-background)', 'dark', tokens)).toEqual(
-      resolve('var(--cn-color-surface-20)', 'dark', tokens),
+      resolve('var(--chroma-surface-20)', 'dark', tokens),
     );
   });
 

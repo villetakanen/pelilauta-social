@@ -134,14 +134,14 @@
     inset: 0;
     background-image: linear-gradient(
       180deg,
-      light-dark(transparent, var(--cn-color-primary-10)) 10%,
-      light-dark(transparent, var(--cn-color-primary-20)) 20%,
-      light-dark(transparent, var(--cn-color-primary-30)) 30%,
-      light-dark(transparent, var(--cn-color-primary-40)) 40%,
-      light-dark(transparent, var(--cn-color-primary-50)) 50%,
-      light-dark(transparent, var(--cn-color-primary-60)) 60%,
-      light-dark(transparent, var(--cn-color-primary-70)) 70%,
-      light-dark(transparent, var(--cn-color-primary-80)) 80%
+      light-dark(transparent, var(--chroma-primary-10)) 10%,
+      light-dark(transparent, var(--chroma-primary-20)) 20%,
+      light-dark(transparent, var(--chroma-primary-30)) 30%,
+      light-dark(transparent, var(--chroma-primary-40)) 40%,
+      light-dark(transparent, var(--chroma-primary-50)) 50%,
+      light-dark(transparent, var(--chroma-primary-60)) 60%,
+      light-dark(transparent, var(--chroma-primary-70)) 70%,
+      light-dark(transparent, var(--chroma-primary-80)) 80%
     );
     mix-blend-mode: hard-light;
     opacity: 0.44;
@@ -160,9 +160,9 @@
     inset: 0;
     background-image: linear-gradient(
       180deg,
-      light-dark(var(--cn-color-surface-90), transparent) 10%,
-      light-dark(var(--cn-color-primary-40), transparent) 40%,
-      light-dark(var(--cn-color-primary-80), transparent) 70%
+      light-dark(var(--chroma-surface-90), transparent) 10%,
+      light-dark(var(--chroma-primary-40), transparent) 40%,
+      light-dark(var(--chroma-primary-80), transparent) 70%
     );
     mix-blend-mode: overlay;
     content: "";

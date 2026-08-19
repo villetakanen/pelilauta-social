@@ -88,7 +88,7 @@ function toggle() {
     inset-block-start: anchor(--cn-theme-switch center);
     inset-inline-start: anchor(--cn-theme-switch start);
     pointer-events: none;
-    color: light-dark(var(--cn-color-primary-40), var(--cn-color-primary-90));
+    color: light-dark(var(--chroma-primary-40), var(--chroma-primary-90));
     animation: cn-theme-switch-burst calc(var(--cn-duration-ui) * 2)
       var(--cn-easing-ui) forwards;
     /*

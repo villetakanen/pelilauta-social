@@ -1,8 +1,9 @@
 /*
  * The design system's token entry point.
  *
- * color-theme.css derives its elevation shadows from --cn-grid, so colour and units
- * ship together. Importing color.css alone omits that dependency.
+ * elevation.css derives its shadows from --cn-grid and paints them with a semantic
+ * colour, so units and colour precede it. Importing color.css alone omits both.
  */
 @import "./units.css";
 @import "./color.css";
+@import "./elevation.css";

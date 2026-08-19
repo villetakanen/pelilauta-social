@@ -23,6 +23,11 @@ The component holds no state of its own: the consumer supplies the current
 value through the `checked` prop, the input carries it, and the consumer reads
 it back from the `change` event.
 
+The checked thumb reads `--chroma-primary-70` directly rather than through a
+semantic role: the checked track already carries the primary accent through
+`--cn-button-light`, and the thumb's step is a private contrast expression local to
+this component.
+
 ### Documentation
 
 The CnToggle Component book, `apps/design/src/content/components/cn-toggle.mdx`.

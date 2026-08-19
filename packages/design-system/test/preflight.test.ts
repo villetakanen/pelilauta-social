@@ -100,7 +100,7 @@ describe('preflight', () => {
   });
 
   test('every custom property it reads is defined by the design system', () => {
-    const theme = read('../styles/color-theme.css');
+    const theme = read('../styles/semantic.css') + read('../styles/elevation.css');
     const read_ = withoutComments(preflight).matchAll(
       /var\(\s*(--[\w-]+)\s*(,)?/g,
     );
@@ -113,7 +113,8 @@ describe('preflight', () => {
 
   test('is the only design-system stylesheet declaring color-scheme', () => {
     const others = [
-      '../styles/color-theme.css',
+      '../styles/semantic.css',
+      '../styles/elevation.css',
       '../styles/color.css',
       '../styles/units.css',
       '../styles/fonts.css',

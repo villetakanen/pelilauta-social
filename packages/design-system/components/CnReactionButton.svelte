@@ -207,7 +207,7 @@ $effect(() => {
     align-items: center;
     justify-content: center;
     pointer-events: none;
-    color: var(--cn-color-primary-20);
+    color: var(--chroma-primary-20);
     animation: cn-reaction-burst calc(var(--cn-duration-ui) * 2)
       var(--cn-easing-ui) forwards;
   }

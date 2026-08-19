@@ -89,10 +89,10 @@ async function readTheme(page: import('@playwright/test').Page) {
       bodyColor: body.color,
       buttonColor: buttonStyle.color,
       references: {
-        surface10: reference('--cn-color-surface-10'),
-        surface20: reference('--cn-color-surface-20'),
-        surface95: reference('--cn-color-surface-95'),
-        surface100: reference('--cn-color-surface-100'),
+        surface10: reference('--chroma-surface-10'),
+        surface20: reference('--chroma-surface-20'),
+        surface95: reference('--chroma-surface-95'),
+        surface100: reference('--chroma-surface-100'),
       },
     };
     button.remove();

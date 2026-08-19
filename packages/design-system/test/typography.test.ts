@@ -201,7 +201,7 @@ describe('the rules that read it', () => {
   });
 
   test('headings take the colour roles the theme declares', () => {
-    const theme = declarations(read('../styles/color-theme.css'));
+    const theme = declarations(read('../styles/semantic.css'));
     for (const [selector, role] of [
       ['h1', '--cn-text-heading'],
       ['h2', '--cn-text-heading'],

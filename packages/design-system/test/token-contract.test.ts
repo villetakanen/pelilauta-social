@@ -100,7 +100,8 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
 
 const chroma = read('chroma.css');
 const bridge = read('color-reference.css');
-const theme = read('color-theme.css');
+const semantic = read('semantic.css');
+const elevation = read('elevation.css');
 
 /** Everything the package itself defines, across all its stylesheets. */
 const declaredInPackage = new Set(
@@ -116,8 +117,21 @@ describe('layer composition', () => {
     expect(imports.slice(0, 3)).toEqual([
       './chroma.css',
       './color-reference.css',
-      './color-theme.css',
+      './semantic.css',
     ]);
+  });
+
+  test('tokens.css supplies units and colour before elevation', () => {
+    const imports = [
+      ...read('tokens.css').matchAll(/@import\s+"([^"]+)"/g),
+    ].map((match) => match[1]);
+    const at = (name: string) =>
+      imports.findIndex((entry) => entry.endsWith(name));
+
+    // elevation.css reads --cn-grid from units and paints with a semantic
+    // colour, so both dependencies enter the cascade first.
+    expect(at('elevation.css')).toBeGreaterThan(at('units.css'));
+    expect(at('elevation.css')).toBeGreaterThan(at('color.css'));
   });
 
   test('chroma tokens are literal, so the stack has a bottom', () => {
@@ -140,7 +154,7 @@ describe('layer composition', () => {
   });
 
   test('semantic colours derive from the reference layer', () => {
-    const literalColours = declarations(theme)
+    const literalColours = declarations(semantic)
       .filter((declaration) =>
         /#[0-9a-fA-F]{3,8}\b|\b(?:black|white)\b|\b(?:oklch|rgba?|hsla?)\(/.test(
           declaration.value,
@@ -186,7 +200,7 @@ describe('resolvability', () => {
   });
 
   test('every light-dark() token supplies both arms', () => {
-    const incomplete = declarations(theme)
+    const incomplete = declarations(semantic + elevation)
       .filter((declaration) => declaration.value.includes('light-dark('))
       .filter((declaration) => {
         const inner = declaration.value.slice(

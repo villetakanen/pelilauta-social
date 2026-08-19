@@ -25,7 +25,7 @@ const styles = (path: string) =>
 const tokens = tokenMap(
   styles('chroma.css'),
   styles('color-reference.css'),
-  styles('color-theme.css'),
+  styles('semantic.css'),
 );
 
 const color = (token: string, mode: Mode): Oklch => {

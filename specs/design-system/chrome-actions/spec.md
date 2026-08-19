@@ -92,7 +92,7 @@ is opaque and meets AA against the surfaces a chrome action stands on, and is
 distinguishable from a non-current action's foreground. `--cn-indicator` is a tint of
 the same family, quiet enough that chrome does not read as a slab of brand colour, and
 therefore not asked to carry identification on its own. Both are declared in
-`packages/design-system/styles/color-theme.css`.
+`packages/design-system/styles/semantic.css`.
 
 ## Contract
 

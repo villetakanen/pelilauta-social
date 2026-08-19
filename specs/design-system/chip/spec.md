@@ -28,7 +28,10 @@ variant: a chip someone curated, against the free tags beside it. Its surface fa
 from the chip surface to the primary ramp at the weight the chip surface carries, so a
 promotion is a shift in hue and the foreground stays the on-surface role the plain chip
 resolves. The primary step sits one ramp step above the luminance `--cn-button`
-carries, in both schemes.
+carries, in both schemes: `--chroma-primary-60` in Light, `--chroma-primary-50` in
+Dark, read directly rather than through a semantic role, because the promotion is a
+decoration one ramp step removed from the button surface rather than a state
+another capability shares.
 
 `.chip-list` is the row wrapper — wrapping flex with `--cn-grid` gap for its
 direct children — so a consumer lays out a chip row without app-local layout
