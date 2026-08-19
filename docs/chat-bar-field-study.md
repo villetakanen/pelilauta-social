@@ -277,7 +277,13 @@ The hint is drawn from the cerulean surface family, at a step strong enough to r
 it is the system's treatment for every field rather than the chat bar's alone.
 
 The grey that started this study is not a decision anyone took. `CnChatBar` writes no
-`::placeholder` rule, and `styles/` carries no placeholder colour — the one name in the
-repository sits in `compat/cyan-4.css:109` and reaches only legacy Cyan selectors. The
-grey is the browser's, painted into the silence. It is the one neutral thing on a screen
-whose every other surface is tinted.
+`::placeholder` rule and `styles/` carries no placeholder colour, so in `apps/design` —
+which loads `ds.css` alone (`Book.astro:13`) — the browser paints it. It is the one
+neutral thing on a screen whose every other surface is tinted.
+
+The application does not show the same field. `BaseHead.astro:6` loads
+`@11thdeg/cyan-css` on every page, so Cyan 4's `textarea::placeholder` applies there:
+italic, at `--color-on-field-placeholder`, which `compat/cyan-4.css:109` maps to
+`--cn-on-surface-secondary`. A field therefore reads one way in the book and another in
+the product, and neither is the design system's. That divergence, rather than the grey
+itself, is what a field capability has to close.
