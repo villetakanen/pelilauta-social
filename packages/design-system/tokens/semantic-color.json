@@ -1,0 +1,147 @@
+{
+  "name": "semantic-color",
+  "description": "Shared colour roles. Each token maps a purpose onto the chroma palette, either as one value for both schemes or as a light/dark pair emitted through light-dark(). Values reference tokens symbolically: {chroma:family-step}, {token:cn-name}, never a raw var().",
+  "tokens": {
+    "cn-surface": {
+      "light": "{chroma:surface-95}",
+      "dark": "{chroma:surface-20}"
+    },
+    "cn-surface-1": {
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-30}"
+    },
+    "cn-surface-2": {
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-30}"
+    },
+    "cn-surface-3": {
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-40}"
+    },
+    "cn-surface-4": {
+      "light": "{chroma:primary-99}",
+      "dark": "{chroma:primary-40}"
+    },
+    "cn-on-surface": {
+      "light": "{chroma:surface-10}",
+      "dark": "{chroma:surface-90}"
+    },
+    "cn-on-surface-secondary": {
+      "light": "{chroma:surface-40}",
+      "dark": "{chroma:surface-60}"
+    },
+    "cn-background": {
+      "value": "{token:cn-surface}"
+    },
+    "cn-text": {
+      "light": "{chroma:surface-10}",
+      "dark": "{chroma:surface-95}"
+    },
+    "cn-text-high": {
+      "light": "{chroma:surface-0}",
+      "dark": "{chroma:surface-100}"
+    },
+    "cn-text-low": {
+      "light": "{chroma:surface-30}",
+      "dark": "{chroma:surface-60}"
+    },
+    "cn-text-heading": {
+      "light": "{chroma:surface-30}",
+      "dark": "{chroma:surface-99}"
+    },
+    "cn-text-subheading": {
+      "light": "{chroma:surface-40}",
+      "dark": "{chroma:surface-80}"
+    },
+    "cn-link": {
+      "light": "{chroma:primary-40}",
+      "dark": "{chroma:surface-80}"
+    },
+    "cn-link-hover": {
+      "light": "{chroma:surface-50}",
+      "dark": "{chroma:primary-80}"
+    },
+    "cn-link-active": {
+      "light": "{chroma:primary-30}",
+      "dark": "{chroma:surface-70}"
+    },
+    "cn-button": {
+      "light": "{chroma:surface-50}",
+      "dark": "{chroma:surface-40}"
+    },
+    "cn-button-light": {
+      "value": "{chroma:primary-50}"
+    },
+    "cn-button-cta": {
+      "value": "{chroma:error-40}"
+    },
+    "cn-on-button": {
+      "value": "{chroma:surface-100}"
+    },
+    "cn-on-button-cta": {
+      "value": "{chroma:surface-100}"
+    },
+    "cn-button-text": {
+      "comment": "The button colour at a third, so the text button reads as a tint of the page; the page shows through it, so it pairs with --cn-on-surface, not --cn-on-button.",
+      "value": "color-mix(in oklab, {token:cn-button} 33%, transparent)"
+    },
+    "cn-hover": {
+      "light": "color-mix(in oklch, {chroma:surface-50}, transparent 90%)",
+      "dark": "color-mix(in oklch, {chroma:surface-50}, transparent 33%)"
+    },
+    "cn-active": {
+      "light": "color-mix(in oklch, {chroma:surface-50}, transparent 33%)",
+      "dark": "color-mix(in oklch, {chroma:surface-50}, transparent 70%)"
+    },
+    "cn-indicator": {
+      "comment": "Persistent state: one translucent neutral step, so artwork reads through; the foreground carries identification. Neutral, not brand — test/color-contrast.test.ts holds the ratios behind that choice.",
+      "light": "color-mix(in oklch, {chroma:surface-100}, transparent 33%)",
+      "dark": "color-mix(in oklch, {chroma:surface-30}, transparent 33%)"
+    },
+    "cn-on-indicator": {
+      "value": "{token:cn-text-high}"
+    },
+    "cn-scrim": {
+      "comment": "A veil over whatever is beneath a covering tray, so it darkens in both schemes rather than taking a surface role.",
+      "light": "color-mix(in oklch, {chroma:surface-10}, transparent 45%)",
+      "dark": "color-mix(in oklch, {chroma:surface-10}, transparent 30%)"
+    },
+    "cn-focus-ring": {
+      "light": "{chroma:primary-60}",
+      "dark": "{chroma:primary-40}"
+    },
+    "cn-border": {
+      "light": "{chroma:surface-70}",
+      "dark": "{chroma:surface-30}"
+    },
+    "cn-color-warning": {
+      "light": "{chroma:warning-40}",
+      "dark": "{chroma:warning-60}"
+    },
+    "cn-color-error": {
+      "light": "{chroma:error-40}",
+      "dark": "{chroma:error-60}"
+    },
+    "cn-info": {
+      "light": "{chroma:primary-50}",
+      "dark": "{chroma:primary-90}"
+    },
+    "cn-on-info": {
+      "light": "{chroma:primary-95}",
+      "dark": "{chroma:primary-40}"
+    },
+    "cn-input": {
+      "light": "{chroma:surface-80}",
+      "dark": "{chroma:surface-0}"
+    },
+    "cn-on-input": {
+      "value": "{token:cn-on-surface}"
+    },
+    "cn-lightbox-background": {
+      "value": "{chroma:surface-30}"
+    },
+    "cn-lightbox-color": {
+      "value": "{chroma:surface-95}"
+    }
+  }
+}

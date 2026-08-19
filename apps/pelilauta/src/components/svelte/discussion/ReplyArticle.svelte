@@ -1,5 +1,6 @@
 <script lang="ts">
 import CnBubble from '@design-system/components/CnBubble.svelte';
+import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { marked } from 'marked';
@@ -83,9 +84,11 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
       </CnMenu>
     </header>
     <div>
-      {#if images.length}
-        <cn-lightbox {images}></cn-lightbox>
-      {/if}
+      <CnLightbox
+        {images}
+        openLabel={t("actions:openImage")}
+        closeLabel={t("actions:close")}
+      />
       {@html marked(reply.markdownContent || "")}
     </div>
     {#if reply.updatedAt}

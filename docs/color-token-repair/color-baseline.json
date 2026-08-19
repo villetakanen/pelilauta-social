@@ -1,0 +1,797 @@
+{
+  "capturedAt": "before/color-token-repair",
+  "tokens": {
+    "--cn-surface": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.95 0.03 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.2 0.07 242)"
+      }
+    },
+    "--cn-surface-1": {
+      "light": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      }
+    },
+    "--cn-surface-2": {
+      "light": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      }
+    },
+    "--cn-surface-3": {
+      "light": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.4 0.12 242)"
+      }
+    },
+    "--cn-surface-4": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.99 0.05 110),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.99 0.05 110)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.99 0.05 110),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.4 0.22 170)"
+      }
+    },
+    "--cn-on-surface": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.1 0.05 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.9 0.06 242)"
+      }
+    },
+    "--cn-on-surface-secondary": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.4 0.12 242),\n    oklch(0.6 0.17 242)\n  )",
+        "color": "oklch(0.4 0.12 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.4 0.12 242),\n    oklch(0.6 0.17 242)\n  )",
+        "color": "oklch(0.6 0.17 242)"
+      }
+    },
+    "--cn-background": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.95 0.03 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.2 0.07 242)"
+      }
+    },
+    "--cn-on-background": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.1 0.05 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.9 0.06 242)"
+      }
+    },
+    "--cn-text": {
+      "light": {
+        "raw": "light-dark(oklch(0.1 0.05 242), oklch(0.95 0.03 242))",
+        "color": "oklch(0.1 0.05 242)"
+      },
+      "dark": {
+        "raw": "light-dark(oklch(0.1 0.05 242), oklch(0.95 0.03 242))",
+        "color": "oklch(0.95 0.03 242)"
+      }
+    },
+    "--cn-text-high": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0 0 242),\n    oklch(1 0 242)\n  )",
+        "color": "oklch(0 0 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0 0 242),\n    oklch(1 0 242)\n  )",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-text-low": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0.6 0.17 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0.6 0.17 242)\n  )",
+        "color": "oklch(0.6 0.17 242)"
+      }
+    },
+    "--cn-text-heading": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0.99 0.015 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0.99 0.015 242)\n  )",
+        "color": "oklch(0.99 0.015 242)"
+      }
+    },
+    "--cn-text-subheading": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.4 0.12 242),\n    oklch(0.8 0.12 242)\n  )",
+        "color": "oklch(0.4 0.12 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.4 0.12 242),\n    oklch(0.8 0.12 242)\n  )",
+        "color": "oklch(0.8 0.12 242)"
+      }
+    },
+    "--cn-link": {
+      "light": {
+        "raw": "light-dark(oklch(0.4 0.22 170), oklch(0.8 0.12 242))",
+        "color": "oklch(0.4 0.22 170)"
+      },
+      "dark": {
+        "raw": "light-dark(oklch(0.4 0.22 170), oklch(0.8 0.12 242))",
+        "color": "oklch(0.8 0.12 242)"
+      }
+    },
+    "--cn-link-hover": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.8 0.27 120)\n  )",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.8 0.27 120)\n  )",
+        "color": "oklch(0.8 0.27 120)"
+      }
+    },
+    "--cn-link-active": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.3 0.18 175),\n    oklch(0.7 0.17 242)\n  )",
+        "color": "oklch(0.3 0.18 175)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.3 0.18 175),\n    oklch(0.7 0.17 242)\n  )",
+        "color": "oklch(0.7 0.17 242)"
+      }
+    },
+    "--cn-button": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.4 0.12 242)"
+      }
+    },
+    "--cn-button-light": {
+      "light": {
+        "raw": "oklch(0.5 0.24 162)",
+        "color": "oklch(0.5 0.24 162)"
+      },
+      "dark": {
+        "raw": "oklch(0.5 0.24 162)",
+        "color": "oklch(0.5 0.24 162)"
+      }
+    },
+    "--cn-button-cta": {
+      "light": {
+        "raw": "oklch(0.4 0.18 318)",
+        "color": "oklch(0.4 0.18 318)"
+      },
+      "dark": {
+        "raw": "oklch(0.4 0.18 318)",
+        "color": "oklch(0.4 0.18 318)"
+      }
+    },
+    "--cn-on-button": {
+      "light": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-on-button-cta": {
+      "light": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-button-text": {
+      "light": {
+        "raw": "color-mix(in oklab, light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  ) 33%, transparent)",
+        "color": "oklab(0.5 -0.065726 -0.123613 / 0.33)"
+      },
+      "dark": {
+        "raw": "color-mix(in oklab, light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  ) 33%, transparent)",
+        "color": "oklab(0.4 -0.0563366 -0.105954 / 0.33)"
+      }
+    },
+    "--cn-button-secondary-light": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.4 0.22 170),\n    oklch(0.8 0.27 120)\n  )",
+        "color": "oklch(0.4 0.22 170)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.4 0.22 170),\n    oklch(0.8 0.27 120)\n  )",
+        "color": "oklch(0.8 0.27 120)"
+      }
+    },
+    "--cn-button-secondary": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.6 0.26 150),\n    oklch(0.95 0.18 110)\n  )",
+        "color": "oklch(0.6 0.26 150)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.6 0.26 150),\n    oklch(0.95 0.18 110)\n  )",
+        "color": "oklch(0.95 0.18 110)"
+      }
+    },
+    "--cn-fab": {
+      "light": {
+        "raw": "oklch(0.7 0.27 135)",
+        "color": "oklch(0.7 0.27 135)"
+      },
+      "dark": {
+        "raw": "oklch(0.7 0.27 135)",
+        "color": "oklch(0.7 0.27 135)"
+      }
+    },
+    "--cn-fab-blend": {
+      "light": {
+        "raw": "oklch(0.5 0.14 242)",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "oklch(0.5 0.14 242)",
+        "color": "oklch(0.5 0.14 242)"
+      }
+    },
+    "--cn-on-fab": {
+      "light": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-fab-cta": {
+      "light": {
+        "raw": "oklch(0.6 0.2 318)",
+        "color": "oklch(0.6 0.2 318)"
+      },
+      "dark": {
+        "raw": "oklch(0.6 0.2 318)",
+        "color": "oklch(0.6 0.2 318)"
+      }
+    },
+    "--cn-fab-cta-blend": {
+      "light": {
+        "raw": "oklch(0.5 0.14 242)",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "oklch(0.5 0.14 242)",
+        "color": "oklch(0.5 0.14 242)"
+      }
+    },
+    "--cn-on-fab-cta": {
+      "light": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-fab-secondary": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.4 0.12 242)"
+      }
+    },
+    "--cn-fab-secondary-blend": {
+      "light": {
+        "raw": "color-mix(\n    in oklch,\n    light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  ),\n    light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  ) 22%\n  )",
+        "color": "oklch(0.412 0.1202 242)"
+      },
+      "dark": {
+        "raw": "color-mix(\n    in oklch,\n    light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  ),\n    light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  ) 22%\n  )",
+        "color": "oklch(0.51 0.1068 242)"
+      }
+    },
+    "--cn-on-fab-secondary": {
+      "light": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "oklch(1 0 242)",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-hover": {
+      "light": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 90%),\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 33%)\n  )",
+        "color": "oklch(0.5 0.14 242 / 0.1)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 90%),\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 33%)\n  )",
+        "color": "oklch(0.5 0.14 242 / 0.67)"
+      }
+    },
+    "--cn-active": {
+      "light": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 33%),\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 70%)\n  )",
+        "color": "oklch(0.5 0.14 242 / 0.67)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 33%),\n    color-mix(in oklch, oklch(0.5 0.14 242), transparent 70%)\n  )",
+        "color": "oklch(0.5 0.14 242 / 0.3)"
+      }
+    },
+    "--cn-indicator": {
+      "light": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(1 0 242), transparent 33%),\n    color-mix(in oklch, oklch(0.3 0.09 242), transparent 33%)\n  )",
+        "color": "oklch(1 0 242 / 0.67)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(1 0 242), transparent 33%),\n    color-mix(in oklch, oklch(0.3 0.09 242), transparent 33%)\n  )",
+        "color": "oklch(0.3 0.09 242 / 0.67)"
+      }
+    },
+    "--cn-on-indicator": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0 0 242),\n    oklch(1 0 242)\n  )",
+        "color": "oklch(0 0 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0 0 242),\n    oklch(1 0 242)\n  )",
+        "color": "oklch(1 0 242)"
+      }
+    },
+    "--cn-surface-over-poster": {
+      "light": {
+        "raw": "color-mix(\n    in oklch,\n    light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.2 0.07 242)\n  ),\n    transparent 20%\n  )",
+        "color": "oklch(0.95 0.03 242 / 0.8)"
+      },
+      "dark": {
+        "raw": "color-mix(\n    in oklch,\n    light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.2 0.07 242)\n  ),\n    transparent 20%\n  )",
+        "color": "oklch(0.2 0.07 242 / 0.8)"
+      }
+    },
+    "--cn-scrim": {
+      "light": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.1 0.05 242), transparent 45%),\n    color-mix(in oklch, oklch(0.1 0.05 242), transparent 30%)\n  )",
+        "color": "oklch(0.1 0.05 242 / 0.55)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.1 0.05 242), transparent 45%),\n    color-mix(in oklch, oklch(0.1 0.05 242), transparent 30%)\n  )",
+        "color": "oklch(0.1 0.05 242 / 0.7)"
+      }
+    },
+    "--cn-focus-ring": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.6 0.26 150),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.6 0.26 150)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.6 0.26 150),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.4 0.22 170)"
+      }
+    },
+    "--cn-border": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.7 0.17 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.7 0.17 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.7 0.17 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      }
+    },
+    "--cn-border-hover": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.4 0.12 242)\n  )",
+        "color": "oklch(0.4 0.12 242)"
+      }
+    },
+    "--cn-border-focus": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.7 0.27 135),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.7 0.27 135)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.7 0.27 135),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.4 0.22 170)"
+      }
+    },
+    "--cn-color-success": {
+      "light": {
+        "raw": "oklch(0.6 0.26 150)",
+        "color": "oklch(0.6 0.26 150)"
+      },
+      "dark": {
+        "raw": "oklch(0.6 0.26 150)",
+        "color": "oklch(0.6 0.26 150)"
+      }
+    },
+    "--cn-color-warning": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.4 0.2 65),\n    oklch(0.6 0.25 65)\n  )",
+        "color": "oklch(0.4 0.2 65)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.4 0.2 65),\n    oklch(0.6 0.25 65)\n  )",
+        "color": "oklch(0.6 0.25 65)"
+      }
+    },
+    "--cn-color-error": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.4 0.18 318),\n    oklch(0.6 0.2 318)\n  )",
+        "color": "oklch(0.4 0.18 318)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.4 0.18 318),\n    oklch(0.6 0.2 318)\n  )",
+        "color": "oklch(0.6 0.2 318)"
+      }
+    },
+    "--cn-color-info": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.5 0.24 162),\n    oklch(0.9 0.27 110)\n  )",
+        "color": "oklch(0.5 0.24 162)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.5 0.24 162),\n    oklch(0.9 0.27 110)\n  )",
+        "color": "oklch(0.9 0.27 110)"
+      }
+    },
+    "--cn-color-love": {
+      "light": {
+        "raw": "light-dark(oklch(0.4 0.18 30), oklch(0.6 0.2 30))",
+        "color": "oklch(0.4 0.18 30)"
+      },
+      "dark": {
+        "raw": "light-dark(oklch(0.4 0.18 30), oklch(0.6 0.2 30))",
+        "color": "oklch(0.6 0.2 30)"
+      }
+    },
+    "--cn-bubble": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.9 0.06 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.9 0.06 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.9 0.06 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      }
+    },
+    "--cn-on-bubble": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.2 0.07 242),\n    oklch(0.95 0.03 242)\n  )",
+        "color": "oklch(0.2 0.07 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.2 0.07 242),\n    oklch(0.95 0.03 242)\n  )",
+        "color": "oklch(0.95 0.03 242)"
+      }
+    },
+    "--cn-reply-bubble": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.7 0.27 135),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.7 0.27 135)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.7 0.27 135),\n    oklch(0.4 0.22 170)\n  )",
+        "color": "oklch(0.4 0.22 170)"
+      }
+    },
+    "--cn-on-reply-bubble": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.2 0.07 242),\n    oklch(0.95 0.03 242)\n  )",
+        "color": "oklch(0.2 0.07 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.2 0.07 242),\n    oklch(0.95 0.03 242)\n  )",
+        "color": "oklch(0.95 0.03 242)"
+      }
+    },
+    "--cn-reply-context-bg": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.9 0.27 110),\n    oklch(0.2 0.14 180)\n  )",
+        "color": "oklch(0.9 0.27 110)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.9 0.27 110),\n    oklch(0.2 0.14 180)\n  )",
+        "color": "oklch(0.2 0.14 180)"
+      }
+    },
+    "--cn-reply-context-text": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.2 0.14 180),\n    oklch(0.9 0.27 110)\n  )",
+        "color": "oklch(0.2 0.14 180)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.2 0.14 180),\n    oklch(0.9 0.27 110)\n  )",
+        "color": "oklch(0.9 0.27 110)"
+      }
+    },
+    "--cn-reply-dock-bg": {
+      "light": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(1 0 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(1 0 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.2 0.07 242)"
+      }
+    },
+    "--cn-reply-dock-border": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.8 0.12 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.8 0.12 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.8 0.12 242),\n    oklch(0.3 0.09 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      }
+    },
+    "--cn-input": {
+      "light": {
+        "raw": "light-dark(oklch(0.8 0.12 242), oklch(0 0 242))",
+        "color": "oklch(0.8 0.12 242)"
+      },
+      "dark": {
+        "raw": "light-dark(oklch(0.8 0.12 242), oklch(0 0 242))",
+        "color": "oklch(0 0 242)"
+      }
+    },
+    "--cn-on-input": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.1 0.05 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.9 0.06 242)"
+      }
+    },
+    "--cn-input-hover": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.7 0.17 242),\n    oklch(0 0 242)\n  )",
+        "color": "oklch(0.7 0.17 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.7 0.17 242),\n    oklch(0 0 242)\n  )",
+        "color": "oklch(0 0 242)"
+      }
+    },
+    "--cn-input-focus": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.7 0.17 242),\n    oklch(0 0 242)\n  )",
+        "color": "oklch(0.7 0.17 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.7 0.17 242),\n    oklch(0 0 242)\n  )",
+        "color": "oklch(0 0 242)"
+      }
+    },
+    "--cn-input-disabled": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.8 0.12 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.8 0.12 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.8 0.12 242),\n    oklch(0.2 0.07 242)\n  )",
+        "color": "oklch(0.2 0.07 242)"
+      }
+    },
+    "--cn-shadow-color": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": "oklch(0.3 0.09 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": "oklch(0 0 242)"
+      }
+    },
+    "--cn-shadow-elevation-1": {
+      "light": {
+        "raw": "calc(0.5rem * 0.125)\n    calc(0.5rem * 0.125) calc(0.5rem * 0.5)\n    light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0.3 0.09 242) 1px 1px 4px 0px"
+      },
+      "dark": {
+        "raw": "calc(0.5rem * 0.125)\n    calc(0.5rem * 0.125) calc(0.5rem * 0.5)\n    light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0 0 242) 1px 1px 4px 0px"
+      }
+    },
+    "--cn-shadow-elevation-2": {
+      "light": {
+        "raw": "calc(0.5rem * 0.25)\n    calc(0.5rem * 0.25) 0.5rem light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0.3 0.09 242) 2px 2px 8px 0px"
+      },
+      "dark": {
+        "raw": "calc(0.5rem * 0.25)\n    calc(0.5rem * 0.25) 0.5rem light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0 0 242) 2px 2px 8px 0px"
+      }
+    },
+    "--cn-shadow-button-hover": {
+      "light": {
+        "raw": "calc(0.5rem * 0.25)\n    calc(0.5rem * 0.25) 0.5rem light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0.3 0.09 242) 2px 2px 8px 0px"
+      },
+      "dark": {
+        "raw": "calc(0.5rem * 0.25)\n    calc(0.5rem * 0.25) 0.5rem light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0 0 242) 2px 2px 8px 0px"
+      }
+    },
+    "--cn-shadow-elevation-3": {
+      "light": {
+        "raw": "calc(0.5rem * 0.5) calc(0.5rem * 0.5)\n    calc(0.5rem * 2) light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0.3 0.09 242) 4px 4px 16px 0px"
+      },
+      "dark": {
+        "raw": "calc(0.5rem * 0.5) calc(0.5rem * 0.5)\n    calc(0.5rem * 2) light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0 0 242) 4px 4px 16px 0px"
+      }
+    },
+    "--cn-shadow-elevation-4": {
+      "light": {
+        "raw": "calc(0.5rem * 0.75)\n    calc(0.5rem * 0.75) calc(0.5rem * 3) light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0.3 0.09 242) 6px 6px 24px 0px"
+      },
+      "dark": {
+        "raw": "calc(0.5rem * 0.75)\n    calc(0.5rem * 0.75) calc(0.5rem * 3) light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0 0 242) 6px 6px 24px 0px"
+      }
+    },
+    "--cn-reply-dock-shadow": {
+      "light": {
+        "raw": "calc(0.5rem * 0.5) calc(0.5rem * 0.5)\n    calc(0.5rem * 2) light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0.3 0.09 242) 4px 4px 16px 0px"
+      },
+      "dark": {
+        "raw": "calc(0.5rem * 0.5) calc(0.5rem * 0.5)\n    calc(0.5rem * 2) light-dark(\n    oklch(0.3 0.09 242),\n    oklch(0 0 242)\n  )",
+        "color": null,
+        "shadow": "oklch(0 0 242) 4px 4px 16px 0px"
+      }
+    },
+    "--cn-selection": {
+      "light": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.6 0.26 150), transparent 70%),\n    color-mix(in oklch, oklch(0.4 0.22 170), transparent 70%)\n  )",
+        "color": "oklch(0.6 0.26 150 / 0.3)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0.6 0.26 150), transparent 70%),\n    color-mix(in oklch, oklch(0.4 0.22 170), transparent 70%)\n  )",
+        "color": "oklch(0.4 0.22 170 / 0.3)"
+      }
+    },
+    "--cn-on-selection": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.1 0.05 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.1 0.05 242),\n    oklch(0.9 0.06 242)\n  )",
+        "color": "oklch(0.9 0.06 242)"
+      }
+    },
+    "--cn-backdrop": {
+      "light": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0 0 242), transparent 50%),\n    color-mix(in oklch, oklch(0 0 242), transparent 30%)\n  )",
+        "color": "oklch(0 0 242 / 0.5)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    color-mix(in oklch, oklch(0 0 242), transparent 50%),\n    color-mix(in oklch, oklch(0 0 242), transparent 30%)\n  )",
+        "color": "oklch(0 0 242 / 0.7)"
+      }
+    },
+    "--cn-lightbox-background": {
+      "light": {
+        "raw": "oklch(0.3 0.09 242)",
+        "color": "oklch(0.3 0.09 242)"
+      },
+      "dark": {
+        "raw": "oklch(0.3 0.09 242)",
+        "color": "oklch(0.3 0.09 242)"
+      }
+    },
+    "--cn-lightbox-color": {
+      "light": {
+        "raw": "oklch(0.95 0.03 242)",
+        "color": "oklch(0.95 0.03 242)"
+      },
+      "dark": {
+        "raw": "oklch(0.95 0.03 242)",
+        "color": "oklch(0.95 0.03 242)"
+      }
+    },
+    "--cn-loader-color": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.6 0.26 150),\n    oklch(0.6 0.17 242)\n  )",
+        "color": "oklch(0.6 0.26 150)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.6 0.26 150),\n    oklch(0.6 0.17 242)\n  )",
+        "color": "oklch(0.6 0.17 242)"
+      }
+    },
+    "--cn-avatar-backdrop-from": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.3 0.18 175),\n    oklch(0.6 0.26 150)\n  )",
+        "color": "oklch(0.3 0.18 175)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.3 0.18 175),\n    oklch(0.6 0.26 150)\n  )",
+        "color": "oklch(0.6 0.26 150)"
+      }
+    },
+    "--cn-avatar-backdrop-to": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.8 0.12 242)\n  )",
+        "color": "oklch(0.5 0.14 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.5 0.14 242),\n    oklch(0.8 0.12 242)\n  )",
+        "color": "oklch(0.8 0.12 242)"
+      }
+    },
+    "--cn-on-avatar": {
+      "light": {
+        "raw": "light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.1 0.05 242)\n  )",
+        "color": "oklch(0.95 0.03 242)"
+      },
+      "dark": {
+        "raw": "light-dark(\n    oklch(0.95 0.03 242),\n    oklch(0.1 0.05 242)\n  )",
+        "color": "oklch(0.1 0.05 242)"
+      }
+    }
+  }
+}

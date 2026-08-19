@@ -1,11 +1,19 @@
 ---
-status: draft
+status: proposed
 ---
 
 # <Capability>
 
 <!--
 Spec template. Copy to specs/<domain>/<capability>/spec.md.
+
+status is a process gate, not protection: `proposed` — the text carries agent
+edits an operator may not have read; implementing against it requires an
+explicit ask, and waiting for the answer. `live` — an operator has read it
+through; it portrays how the capability is supposed to work. `deprecated` —
+kept for its context or architecture as a lesson or example. Any spec may be
+edited at any time; an agent edit to a live spec sets it proposed. An operator
+makes a spec live by reading it — there is nothing to request.
 
 When there is nothing left to add, stop.
 
@@ -34,6 +42,12 @@ The user or system need this capability serves: who is served, and what they
 get. Then what wins when its goals collide. Do not describe the world before
 the work; that description is false once the work lands. One paragraph.
 
+The Context is the paragraph the rest of the spec exists to serve. The need is
+a product fact: it comes from a human decision, an ADR or a plan — an
+implementation carries behaviour, never need. Test: could the paragraph be
+written by reading the component? Then it restates behaviour as need; ask the
+human, and write the answers.
+
 ### Architecture
 
 What would a reader of the code get backwards? State which way the dependencies
@@ -54,6 +68,12 @@ What would someone guess wrong if it were not written here?
 
 Do not copy a value that is already written somewhere else. Link to it instead —
 two copies can disagree.
+
+A decorative micro-interaction — motion that announces nothing and changes no
+state — is one sentence here: its trigger, what it shows, and the clause that
+keeps it harmless, such as changing no measurement or resting under reduced
+motion. It gets no scenario; the human review in the Definition of Done is its
+gate.
 
 ## Contract
 

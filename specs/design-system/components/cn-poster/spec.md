@@ -1,5 +1,5 @@
 ---
-status: approved
+status: live
 ---
 
 # CnPoster
@@ -22,7 +22,7 @@ A companion global stylesheet (`poster.css`) attenuates the artwork. While a pos
 
 ### Constraints
 
-Each colour scheme attenuates with its own opacity, tint and blend mode, following v20's `CnBackgroundPoster`. No filter reaches the artwork in either scheme.
+Each colour scheme attenuates with its own opacity, tint and blend mode, following v20's `CnBackgroundPoster`. No filter reaches the artwork in either scheme. The tint gradients reference `--chroma-primary` and `--chroma-surface` steps directly: they attenuate decorative artwork of unknown colour, a purpose no semantic role names.
 
 The wash and the 80% ground plane keep body text readable. Over artwork the design system does not control, WCAG 2.2 AA is the target they are tuned to, not a guarantee. They hold it with no artwork at all, since a failed load is undetectable without script, and a pinned poster holds it without the lower-edge dissolve.
 

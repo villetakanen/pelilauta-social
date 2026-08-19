@@ -7,31 +7,6 @@
  */
 
 /*
- * Sources: components/cn-lightbox.css and cn-reaction-button.css.
- * Consumers: thread media and reactions. Future owners: Lightbox and Reaction;
- * remove each host bridge with its Cyan component.
- */
-cn-lightbox {
-  --cn-lightbox-background: var(--color-surface-2);
-  --cn-lightbox-color: var(--color-on-surface);
-  --cn-lightbox-border-radius: var(--cn-border-radius-medium);
-  --cn-lightbox-image-border-radius: var(--cn-border-radius-small);
-  --cn-lightbox-inner-spacing: var(--cn-grid);
-}
-
-cn-reaction-button {
-  --background-reaction-button: var(--color-button-text);
-  --background-reaction-button-hover: var(--color-button-text-hover);
-  --background-reaction-button-active: linear-gradient(
-    120deg,
-    var(--color-reaction-red) 11%,
-    var(--color-error) 90%
-  );
-  --color-reaction-button: var(--color-text-low);
-  --color-reaction-button-active: var(--color-surface);
-}
-
-/*
  * Source: components/cn-sortable-list.css.
  * Consumer: sortable editors. Future owner: that component's epic.
  */

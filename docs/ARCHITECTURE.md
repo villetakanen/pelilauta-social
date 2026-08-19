@@ -34,7 +34,7 @@ and the person are the two things chrome most often shows side by side.
 | Scope | Pattern | Example |
 | :--- | :--- | :--- |
 | Public design-system token | `--cn-*` | `--cn-grid` |
-| Reference palette | `--cn-color-*` | `--cn-color-primary-50` |
+| Palette | `--chroma-{family}-{step}` | `--chroma-primary-50` |
 | Private to a scope | `--_*` | `--_elevation-duration` |
 | Component private | local | `--icon-dim` |
 
@@ -44,8 +44,14 @@ a `--cn-*` token; a `--_*` token may change or disappear with its scope. A value
 one consumer is private. Renaming it to `--cn-*` requires a second capability that
 needs it.
 
-Do not introduce `--cyan-*`, `--chroma-*` or undocumented `--color-*` tokens.
-`--chroma-*` predates Cyan and carried into it unrenamed; it names nothing here.
+`--chroma-{family}-{step}` predates Cyan and is the one deliberate exception to the
+`--cn-*` namespace: [ADR 0002](adrs/0002-preserve-v20-design-system-names.md)
+preserves it because a theme replaces a whole chroma family while keeping its
+lightness steps, so the contrast a semantic role depends on survives the swap.
+`--cn-*` names a semantic role that depends on chroma; it carries no numbered step.
+Do not introduce `--cyan-*`, undocumented `--color-*`, or a numbered
+`--cn-color-{family}-{step}` token — the accidental vocabulary that repeats
+`--chroma-*` inside the `--cn-*` namespace.
 `styles/compat/cyan-4.css` declares the aliases Cyan itself reads, and leaves with it.
 
 ### CSS Classes

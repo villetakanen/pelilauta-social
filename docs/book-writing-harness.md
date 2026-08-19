@@ -318,7 +318,7 @@ not index: a pointer into a finished plan rots, and a commit is not navigable.
 **It is not published.** `docs/`, not `apps/design/src/content`. Its reader is the agent
 writing a book. It has no length cap and this plan does not govern its shape.
 
-**An agent drafts it and a human approves it,** as with a spec. The first draft is assembly
+**An agent drafts it and an operator reads it,** as with a spec. The first draft is assembly
 from decisions already settled, not authorship. After approval, a decision enters when a
 human makes it.
 

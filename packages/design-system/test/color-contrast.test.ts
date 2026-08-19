@@ -21,14 +21,12 @@ import {
   resolve,
   tokenMap,
 } from '../books/specimens/color';
+import { parseTokens } from '../books/specimens/tokenTable';
 
 const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
 
-const tokens = tokenMap(
-  styles('color-reference.css'),
-  styles('color-theme.css'),
-);
+const tokens = tokenMap(styles('chroma.css'), styles('semantic.css'));
 
 describe('the colour maths', () => {
   test('black against white is the full WCAG range', () => {
@@ -63,7 +61,7 @@ describe('resolving a semantic token', () => {
     // --cn-background is var(--cn-surface), which is light-dark() over two
     // reference tokens. Two hops, and the arm must survive both.
     expect(resolve('var(--cn-background)', 'dark', tokens)).toEqual(
-      resolve('var(--cn-color-surface-20)', 'dark', tokens),
+      resolve('var(--chroma-surface-20)', 'dark', tokens),
     );
   });
 
@@ -107,9 +105,9 @@ describe('the step gap predicts contrast', () => {
   // figures from a convenient example.
   const palette = [
     ...readFileSync(
-      new URL('../styles/color-reference.css', import.meta.url),
+      new URL('../styles/chroma.css', import.meta.url),
       'utf8',
-    ).matchAll(/--cn-color-(\w+)-(\d+):\s*(oklch\([^)]+\))/g),
+    ).matchAll(/--chroma-(\w+)-(\d+):\s*(oklch\([^)]+\))/g),
   ].map((match) => ({
     family: match[1],
     step: Number(match[2]),
@@ -229,16 +227,30 @@ describe('a message is readable in its bubble', () => {
   // a message sits on a neutral step in the default variant and on a brand step
   // in the reply variant, and each pairs with a foreground of its own. The pair
   // is the whole of what CnBubble paints, and a consumer overrides neither.
+  //
+  // The pair is private to CnBubble (docs/ARCHITECTURE.md: `--_*`), declared on
+  // the component's root rather than `:root`, so it is read out of the
+  // component source rather than out of semantic.css. Chroma stays global, so
+  // the reference layer still resolves the private declarations' `var()`
+  // chains.
+
+  const componentStyle = readFileSync(
+    new URL('../components/CnBubble.svelte', import.meta.url),
+    'utf8',
+  ).match(/<style[^>]*>([\s\S]*?)<\/style>/)?.[1];
+  if (!componentStyle) throw new Error('CnBubble.svelte has no style block');
+
+  const bubbleTokens = tokenMap(styles('chroma.css'), componentStyle);
 
   const cases = [
-    ['--cn-on-bubble', '--cn-bubble'],
-    ['--cn-on-reply-bubble', '--cn-reply-bubble'],
+    ['--_on-bubble', '--_bubble'],
+    ['--_on-reply-bubble', '--_reply-bubble'],
   ] as const;
 
   for (const [foreground, background] of cases) {
     for (const mode of ['light', 'dark'] as const) {
       test(`${foreground} on ${background}, ${mode}`, () => {
-        const { ratio } = measure(foreground, background, mode, tokens);
+        const { ratio } = measure(foreground, background, mode, bubbleTokens);
         expect(ratio, `${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
       });
     }

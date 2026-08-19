@@ -109,7 +109,7 @@ and consumers do not apply them as styling utilities. Token names follow neither
 class category: public tokens remain `--cn-*`, with `--chroma-*` as the deliberate
 palette exception and local custom properties remaining private.
 
-Approved capability specifications changed by these renames return to draft for
+Live capability specifications changed by these renames return to proposed for
 human approval. Repository-wide import and selector churn is accepted during early
 beta so that later component ports begin from one naming model rather than adding
 aliases for the accidental one.

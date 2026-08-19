@@ -1,0 +1,74 @@
+{
+  "kauhupelit-syysiltoina": {
+    "title": "Kauhupelien tunnelman luominen syysiltoina",
+    "channel": "yleinen",
+    "author": "@existingUser",
+    "owners": ["@existingUser"],
+    "poster": "@asset:cat-pirate-thread.webp",
+    "images": [
+      {
+        "url": "@asset:cat-pirate-thread.webp",
+        "alt": "Kissanmerirosvon seikkailukuva"
+      }
+    ],
+    "markdownContent": "Syksyn pimeys tarjoaa loistavat puitteet kauhuroolipelien peluuttamiseen. Miten te luotte tunnelmaa pelipöydässä? Käytättekö taustamusiikkia, himmennettyä valaistusta vai nojaatteko pelkästään kuvailuun?\n\nMuistakaa myös turvatyökalut (kuten X-kortti ja linjat & verhot), jotta kaikilla säilyy turvallinen olo pelin aikana.",
+    "replyCount": 1,
+    "lovedCount": 0,
+    "public": true,
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "ensikertalaisen-pelinjohtaminen": {
+    "title": "Vinkkejä ensimmäiseen pelinjohtajakertaan",
+    "channel": "yleinen",
+    "author": "@adminUser",
+    "owners": ["@adminUser"],
+    "markdownContent": "Oletko aloittamassa ensimmäistä kampanjaasi pelinjohtajana? Tässä muutama hyväksi havaittu käytäntö:\n\n1. Aloita pienestä: yksi kylä ja yksi luolasto riittävät aluksi.\n2. Pidä nollasessio eli Session Zero odotusten tasaamiseksi.\n3. Muista, että pelaajat yllättävät aina – luota improvisointiin.",
+    "replyCount": 0,
+    "lovedCount": 0,
+    "public": true,
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "sandboxing-ja-heksaryominta": {
+    "title": "Heksaryömintä ja avoimen maailman kampanjat",
+    "channel": "roolipelit",
+    "author": "@existingUser",
+    "owners": ["@existingUser"],
+    "markdownContent": "Heksaryömintä (hexcrawl) on mainio tapa luoda avoin ja tutkiva pelikokemus. Miten te hallitsette matkustamisen resursseja, kohtaamistaulukoita ja sääilmiöitä ilman, että pelaaminen muuttuu pelkäksi kirjanpidoksi?",
+    "replyCount": 0,
+    "lovedCount": 0,
+    "public": true,
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "soolopelaaminen-ja-oraakkelit": {
+    "title": "Sooloroolipelit ja oraakkelityökalujen käyttö",
+    "channel": "roolipelit",
+    "author": "@existingUser",
+    "owners": ["@existingUser"],
+    "markdownContent": "Soolopelaaminen on kasvattanut suosiotaan huimasti. Pelit kuten Ironsworn ja Mythic GM Emulator tarjoavat hienoja työkaluja tarinankerrontaan yksin. Millaisia kokemuksia teillä on soolopeleistä?",
+    "replyCount": 0,
+    "lovedCount": 0,
+    "public": true,
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "tracon-2026-peliohjelma": {
+    "title": "Traconin pöytäpeliohjelma ja miitit",
+    "channel": "tapahtumat",
+    "author": "@adminUser",
+    "owners": ["@adminUser"],
+    "markdownContent": "Tervetuloa keskustelemaan tulevan Traconin pöytäroolipeliohjelmasta! Kokoamme tänne tietoa avoimista pelipöydistä, työpajoista ja yhteisön miiteistä.",
+    "replyCount": 0,
+    "lovedCount": 0,
+    "public": true,
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "kauhupelit-syysiltoina/vastaus-1": {
+    "threadKey": "kauhupelit-syysiltoina",
+    "owners": ["@adminUser"],
+    "markdownContent": "Erinomainen aihe! Olemme käyttäneet äänimaisemia ja kynttilävalaistusta. Turvamekaniikat käydään aina läpi session 0:ssa ennen ensimmäistäkään noppakierrosta.",
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  }
+}

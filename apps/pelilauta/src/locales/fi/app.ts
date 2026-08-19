@@ -13,6 +13,10 @@ export const app = {
   title: 'Pelilauta 2 - Versio 16',
   shortname: 'Pelilauta 2',
   quickActions: 'Pikatoiminnot',
+  reactions: {
+    love: 'Tykkää',
+    loveCount: '{count} tykkäystä',
+  },
   /** The product's wordmark, as chrome shows it. */
   wordmark: 'Pelilauta',
   mekanismi: 'Mekanismi',

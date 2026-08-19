@@ -3,63 +3,92 @@
  *
  * The Colour System book teaches these rules, so they are asserted rather than
  * described: a step number is a lightness, a family holds one hue, and the
- * status families are four steps deep. A palette edit that breaks one of these
- * makes the book wrong, and nothing else would say so.
+ * status families are four steps deep. tokens/themes/default.json is the
+ * single writable source; a palette edit that breaks one of these makes the
+ * book wrong, and nothing else would say so.
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
-const source = readFileSync(
-  new URL('../styles/color-reference.css', import.meta.url),
-  'utf8',
-);
+const theme = JSON.parse(
+  readFileSync(
+    new URL('../tokens/themes/default.json', import.meta.url),
+    'utf8',
+  ),
+) as {
+  families: Record<string, { kind: string; steps: Record<string, string> }>;
+  lightnessExceptions?: Record<string, Record<string, string>>;
+};
+
+const OKLCH = /^oklch\((\d*\.?\d+) (\d*\.?\d+) (\d*\.?\d+)\)$/;
+const CORE_STEPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+const AUXILIARY_STEPS = [20, 40, 60, 90];
 
 interface Step {
   family: string;
+  kind: string;
   step: number;
   l: number;
   c: number;
   h: number;
 }
 
-const steps: Step[] = [
-  ...source.matchAll(
-    /--cn-color-(\w+)-(\d+):\s*oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)/g,
-  ),
-].map((match) => ({
-  family: match[1],
-  step: Number(match[2]),
-  l: Number(match[3]),
-  c: Number(match[4]),
-  h: Number(match[5]),
-}));
+const steps: Step[] = Object.entries(theme.families).flatMap(
+  ([familyName, definition]) =>
+    Object.entries(definition.steps).map(([step, value]) => {
+      const match = OKLCH.exec(value);
+      if (!match)
+        throw new Error(
+          `${familyName}-${step}: '${value}' is not literal oklch()`,
+        );
+      return {
+        family: familyName,
+        kind: definition.kind,
+        step: Number(step),
+        l: Number(match[1]),
+        c: Number(match[2]),
+        h: Number(match[3]),
+      };
+    }),
+);
 
 const family = (name: string) => steps.filter((step) => step.family === name);
+const exceptionDeclared = (familyName: string, step: number) =>
+  Boolean(theme.lightnessExceptions?.[familyName]?.[String(step)]);
 
 test('the palette is declared entirely in oklch', () => {
-  const declarations = source.match(/--cn-color-[\w-]+:/g) ?? [];
-  expect(steps).toHaveLength(declarations.length);
+  const values = Object.values(theme.families).flatMap((definition) =>
+    Object.values(definition.steps),
+  );
+  expect(steps).toHaveLength(values.length);
+  for (const value of values) expect(value).toMatch(OKLCH);
+});
+
+test('every family kind is core or auxiliary', () => {
+  for (const [name, definition] of Object.entries(theme.families)) {
+    expect(['core', 'auxiliary'], name).toContain(definition.kind);
+  }
 });
 
 describe('a step number is its perceived lightness', () => {
-  // The property the whole book rests on: --cn-color-surface-50 is oklch L 0.5,
+  // The property the whole book rests on: --chroma-surface-50 is oklch L 0.5,
   // so the number predicts contrast without resolving anything.
   for (const step of steps) {
-    const name = `--cn-color-${step.family}-${step.step}`;
+    const name = `${step.family}-${step.step}`;
+    const expectedL = step.step / 100;
 
-    // v20 states primary-10 at L 0.12 rather than 0.10, and ours is a faithful
-    // port of that file. Asserted as the single exception so it cannot be
-    // silently "corrected" into a divergence from the authority, and cannot
-    // quietly grow a second one.
-    if (name === '--cn-color-primary-10') {
-      test(`${name} is v20's documented exception`, () => {
-        expect(step.l).toBe(0.12);
+    if (Math.abs(step.l - expectedL) > 1e-9) {
+      test(`${name} declares its exception rather than silently diverging`, () => {
+        expect(
+          exceptionDeclared(step.family, step.step),
+          `${name} is L ${step.l}, not ${expectedL}, but lightnessExceptions has no entry for it`,
+        ).toBe(true);
       });
       continue;
     }
 
     test(name, () => {
-      expect(step.l).toBeCloseTo(step.step / 100, 5);
+      expect(step.l).toBeCloseTo(expectedL, 5);
     });
   }
 });
@@ -72,7 +101,7 @@ describe('hue', () => {
   });
 
   test('every status family holds one hue', () => {
-    for (const name of ['error', 'warning', 'info', 'love']) {
+    for (const name of ['error', 'warning', 'love']) {
       expect(
         new Set(family(name).map((step) => step.h)),
         `${name} should not rotate`,
@@ -93,20 +122,26 @@ describe('hue', () => {
 });
 
 describe('depth', () => {
-  test('primary and surface are the full ramps', () => {
-    for (const name of ['primary', 'surface']) {
-      expect(family(name).map((step) => step.step)).toEqual([
-        0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100,
-      ]);
+  test('core families carry exactly the 13 steps', () => {
+    for (const [name, definition] of Object.entries(theme.families)) {
+      if (definition.kind !== 'core') continue;
+      expect(
+        family(name)
+          .map((step) => step.step)
+          .sort((a, b) => a - b),
+        name,
+      ).toEqual(CORE_STEPS);
     }
   });
 
   test('status families are four steps and no more', () => {
-    for (const name of ['error', 'warning', 'info', 'love']) {
+    for (const name of ['error', 'warning', 'love']) {
       expect(
-        family(name).map((step) => step.step),
+        family(name)
+          .map((step) => step.step)
+          .sort((a, b) => a - b),
         name,
-      ).toEqual([20, 40, 60, 90]);
+      ).toEqual(AUXILIARY_STEPS);
     }
   });
 });
@@ -114,12 +149,12 @@ describe('depth', () => {
 describe('chroma', () => {
   test('it peaks in the middle of a ramp and falls to zero at both ends', () => {
     const surface = family('surface');
-    const first = surface[0];
-    const last = surface[surface.length - 1];
+    const first = surface.find((step) => step.step === 0);
+    const last = surface.find((step) => step.step === 100);
     const peak = Math.max(...surface.map((step) => step.c));
 
-    expect(first.c).toBe(0);
-    expect(last.c).toBe(0);
+    expect(first?.c).toBe(0);
+    expect(last?.c).toBe(0);
     expect(peak).toBeGreaterThan(0.1);
   });
 });

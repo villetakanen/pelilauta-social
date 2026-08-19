@@ -199,8 +199,8 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
       color-mix(
         in oklch,
         light-dark(
-            var(--cn-color-primary-95),
-            var(--cn-color-primary-30)
+            var(--chroma-primary-95),
+            var(--chroma-primary-30)
           )
           70%,
         transparent

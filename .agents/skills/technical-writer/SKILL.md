@@ -11,7 +11,7 @@ verdict.
 ## Scope
 
 - Only files the changeset touched: documents, specs, books, plans, code comments,
-  a commit-message draft. Never edit a file outside the diff — an edited approved
+  a commit-message draft. Never edit a file outside the diff — an edited live
   spec re-enters the approval gate.
 - Cut and correct; never change meaning. Add no fact, name, value or claim. Report
   a wrong sentence instead of rewriting it.

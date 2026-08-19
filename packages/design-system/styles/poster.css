@@ -53,10 +53,17 @@
    * that stands for the page itself. Levels 1 through 4 stay opaque, because
    * content that has risen off the page is content the reader is meant to read.
    *
-   * The share, and why it is that share, belong to the role.
+   * The share is the most transparent the plane can be while the inherited body
+   * foreground still reaches WCAG 2.2 AA over near-white artwork in Dark, the
+   * tightest of the combinations.
    */
   body:has(#cn-poster) .elevation-0 {
-    background-color: var(--cn-surface-over-poster);
+    --_surface-over-poster: color-mix(
+      in oklch,
+      var(--cn-surface),
+      transparent 20%
+    );
+    background-color: var(--_surface-over-poster);
   }
 
   /*
@@ -134,14 +141,14 @@
     inset: 0;
     background-image: linear-gradient(
       180deg,
-      light-dark(transparent, var(--cn-color-primary-10)) 10%,
-      light-dark(transparent, var(--cn-color-primary-20)) 20%,
-      light-dark(transparent, var(--cn-color-primary-30)) 30%,
-      light-dark(transparent, var(--cn-color-primary-40)) 40%,
-      light-dark(transparent, var(--cn-color-primary-50)) 50%,
-      light-dark(transparent, var(--cn-color-primary-60)) 60%,
-      light-dark(transparent, var(--cn-color-primary-70)) 70%,
-      light-dark(transparent, var(--cn-color-primary-80)) 80%
+      light-dark(transparent, var(--chroma-primary-10)) 10%,
+      light-dark(transparent, var(--chroma-primary-20)) 20%,
+      light-dark(transparent, var(--chroma-primary-30)) 30%,
+      light-dark(transparent, var(--chroma-primary-40)) 40%,
+      light-dark(transparent, var(--chroma-primary-50)) 50%,
+      light-dark(transparent, var(--chroma-primary-60)) 60%,
+      light-dark(transparent, var(--chroma-primary-70)) 70%,
+      light-dark(transparent, var(--chroma-primary-80)) 80%
     );
     mix-blend-mode: hard-light;
     opacity: 0.44;
@@ -160,9 +167,9 @@
     inset: 0;
     background-image: linear-gradient(
       180deg,
-      light-dark(var(--cn-color-surface-90), transparent) 10%,
-      light-dark(var(--cn-color-primary-40), transparent) 40%,
-      light-dark(var(--cn-color-primary-80), transparent) 70%
+      light-dark(var(--chroma-surface-90), transparent) 10%,
+      light-dark(var(--chroma-primary-40), transparent) 40%,
+      light-dark(var(--chroma-primary-80), transparent) 70%
     );
     mix-blend-mode: overlay;
     content: "";

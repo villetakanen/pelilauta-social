@@ -55,7 +55,7 @@ const tokens = (page: Page, scope: string): Promise<Tokens> =>
         'background-color',
       ),
       promotedSurface: read(
-        'background-image: linear-gradient(in oklab 137deg, var(--cn-button-text), color-mix(in oklab, light-dark(var(--cn-color-primary-60), var(--cn-color-primary-50)) 33%, transparent));',
+        'background-image: linear-gradient(in oklab 137deg, var(--cn-button-text), color-mix(in oklab, light-dark(var(--chroma-primary-60), var(--chroma-primary-50)) 33%, transparent));',
         'background-image',
       ),
       onButton: read('color: var(--cn-on-button);', 'color'),

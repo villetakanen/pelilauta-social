@@ -1,5 +1,5 @@
 ---
-status: approved
+status: live
 ---
 
 # CnThemeSwitch
@@ -35,7 +35,8 @@ The `label` property supplies the chrome action's label, and with it the control
 accessible name.
 
 An activation carries a micro-interaction expanding from the glyph, in the theme it lands
-in, and changes no measurement of the control.
+in, and changes no measurement of the control. Its colour is a direct chroma palette
+step, an approved decorative exception to semantic colour use.
 
 ## Contract
 

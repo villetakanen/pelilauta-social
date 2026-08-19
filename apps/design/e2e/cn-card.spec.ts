@@ -203,7 +203,7 @@ test('a flag class added on the client raises the flag on an unhydrated CnCard',
   expect((await flag()).content).toBe('none');
 
   for (const [state, role] of [
-    ['has-notify', '--cn-color-info'],
+    ['has-notify', '--cn-info'],
     ['has-alert', '--cn-color-warning'],
   ] as const) {
     const expected = await card.evaluate((element, token) => {

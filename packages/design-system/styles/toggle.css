@@ -85,7 +85,7 @@
 
 .cn-toggle input:checked::before {
   inset-inline-start: calc(var(--cn-grid) * 3);
-  background-color: var(--cn-color-primary-70);
+  background-color: var(--chroma-primary-70);
 }
 
 .cn-toggle input:focus-visible {

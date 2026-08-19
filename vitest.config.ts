@@ -21,8 +21,8 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['tests/e2e/pelilauta/**/*.spec.ts'],
-    globalSetup: ['tests/e2e/pelilauta/global-setup.ts'],
+    include: ['uat/pelilauta/e2e/**/*.spec.ts'],
+    globalSetup: ['uat/pelilauta/e2e/global-setup.ts'],
     // Every spec shares one database, so they run one at a time.
     pool: 'forks',
     maxWorkers: 1,

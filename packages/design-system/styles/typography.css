@@ -70,7 +70,7 @@ body,
  * Headings, each with its mirror class — v20's "utilities mirroring semantic tag
  * behaviors" — for text that renders at a heading step without opening a section.
  * No margins: whatever owns the layout states the spacing, which in a content
- * container is the column's row-gap. Colour roles are color-theme.css's.
+ * container is the column's row-gap. Colour roles are semantic.css's.
  */
 h1,
 .text-h1 {

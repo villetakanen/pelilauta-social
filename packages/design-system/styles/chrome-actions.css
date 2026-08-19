@@ -309,15 +309,8 @@ a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
   block-size: var(--_badge-size);
   padding-inline: calc(var(--cn-grid) / 2);
   border-radius: calc(var(--_badge-size) / 2);
-  background-color: var(--cn-color-info);
-  /*
-   * A decorative pick from the palette, not a foreground role: the badge is
-   * hidden from assistive technology and carries no text-contrast ratio, and
-   * no semantic foreground answers a fill that is dark in one scheme and
-   * bright in the other — a single role would leave the characters unread in
-   * whichever scheme it was not chosen for.
-   */
-  color: light-dark(var(--cn-color-primary-95), var(--cn-color-primary-40));
+  background-color: var(--cn-info);
+  color: var(--cn-on-info);
   font-size: var(--cn-font-size-small);
   line-height: 1;
   pointer-events: none;

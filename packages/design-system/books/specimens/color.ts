@@ -11,7 +11,13 @@
  * Books: apps/design/src/content/tokens/color.mdx
  *        apps/design/src/content/principles/color-system.mdx
  */
-import { parseTokens } from './tokenTable';
+import {
+  type ChromaTheme,
+  chromaDeclarations,
+  parseTokens,
+  type RoleSource,
+  roleDeclarations,
+} from './tokenTable';
 
 export type Mode = 'light' | 'dark';
 
@@ -151,6 +157,28 @@ export function tokenMap(...sources: string[]): Map<string, string> {
     for (const { name, value } of parseTokens(source)) tokens.set(name, value);
   }
   return tokens;
+}
+
+/**
+ * The same token Map `tokenMap()` returns, built from the writable JSON
+ * sources instead of the generated stylesheets: a chroma theme
+ * (`tokens/themes/default.json`) and any number of role sources
+ * (`tokens/semantic-color.json`, `tokens/elevation.json`).
+ *
+ * Declarations are the theme and role sources rendered to the same CSS text
+ * `scripts/generate-tokens.mjs` commits to `styles/*.css`, then read by the
+ * same `parseTokens` every stylesheet-driven specimen uses — so a symbolic
+ * reference resolves exactly as its generated `var()`/`light-dark()` form
+ * does, and a books specimen never re-implements the substitution rule.
+ */
+export function tokensFromJSON(
+  theme: ChromaTheme,
+  ...roleSources: RoleSource[]
+): Map<string, string> {
+  return tokenMap(
+    chromaDeclarations(theme),
+    ...roleSources.map(roleDeclarations),
+  );
 }
 
 export interface Measurement {

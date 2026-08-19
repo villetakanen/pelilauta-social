@@ -99,7 +99,7 @@
 }
 
 .has-notify::after {
-  background-color: var(--cn-color-info);
+  background-color: var(--cn-info);
 }
 
 .has-alert::after {

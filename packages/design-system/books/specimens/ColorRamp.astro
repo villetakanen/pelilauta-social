@@ -3,35 +3,43 @@
  * ColorRamp — one family's tonal scale, as colour.
  *
  * v20's colour book renders every family this way. Steps are read from the
- * stylesheet, so a ramp cannot show a step that no longer exists.
+ * theme JSON, so a ramp cannot show a step that no longer exists.
+ *
+ * Reads tokens/themes/default.json: the writable source
+ * scripts/generate-tokens.mjs renders to styles/chroma.css (ADR 0002). The
+ * swatch itself still resolves through that generated `--chroma-*` custom
+ * property, so a build-time drift between the two would show as a blank
+ * swatch, not a silently wrong one.
  *
  * Book: apps/design/src/content/principles/color-system.mdx
  */
-import { parseTokens } from './tokenTable';
+import type { ChromaTheme } from './tokenTable';
 
 interface Props {
-  /** The stylesheet, imported by the book with `?raw`. */
-  source: string;
-  /** Family name, e.g. `surface` — matches `--cn-color-<family>-<step>`. */
+  /** The theme JSON, e.g. `tokens/themes/default.json`. */
+  theme: ChromaTheme;
+  /** Family name, e.g. `surface` — matches `--chroma-<family>-<step>`. */
   family: string;
   /** What the family is for. One line, shown beside the name. */
   intent?: string;
 }
 
-const { source, family, intent } = Astro.props;
+const { theme, family, intent } = Astro.props;
 
-const steps = parseTokens(source, { prefix: `--cn-color-${family}-` }).map(
-  (token) => ({
-    step: token.name.replace(`--cn-color-${family}-`, ''),
-    name: token.name,
-  }),
-);
+const definition = theme.families[family];
 
-if (steps.length === 0) {
+if (!definition) {
   throw new Error(
     `ColorRamp found no steps for family "${family}". The palette no longer declares it.`,
   );
 }
+
+// Object.keys of a plain object orders integer-like keys ascending, so this
+// walks 0, 10, 20 … 100 regardless of the JSON's own key order.
+const steps = Object.keys(definition.steps).map((step) => ({
+  step,
+  name: `--chroma-${family}-${step}`,
+}));
 ---
 
 <figure class="ramp">

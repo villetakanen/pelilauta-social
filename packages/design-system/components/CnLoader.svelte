@@ -27,13 +27,14 @@ let {
 
 <style>
   .cn-loader {
+    --_loader-color: light-dark(var(--chroma-primary-60), var(--chroma-surface-60));
     display: block;
     position: relative;
     width: var(--cn-loader-size);
     height: var(--cn-loader-size);
     box-sizing: border-box;
     vertical-align: middle;
-    color: var(--cn-loader-color);
+    color: var(--_loader-color);
   }
 
   .cn-loader-inline {
@@ -68,8 +69,8 @@ let {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: var(--cn-loader-line-width) solid var(--cn-loader-color);
-    border-color: var(--cn-loader-color) transparent var(--cn-loader-color) transparent;
+    border: var(--cn-loader-line-width) solid var(--_loader-color);
+    border-color: var(--_loader-color) transparent var(--_loader-color) transparent;
     animation: lds-dual-ring 1.2s linear infinite;
     opacity: 0.72;
     box-sizing: border-box;

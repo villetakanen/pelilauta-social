@@ -31,6 +31,8 @@ behaviour.
   and checked in `apps/design`.
 - The application retains reaction persistence, optimistic updates and authentication;
   the design-system control receives state and reports activation.
+- A subscriber-derived non-operable reaction remains non-operable; the application
+  maps it to the local control's native disabled state.
 - A lightbox exposes every image caption, supports keyboard operation, returns focus
   after modal viewing and leaves document scrolling available outside the modal.
 - Firestore schemas, write paths, subscriptions, authorization and public URLs do not
@@ -59,4 +61,3 @@ behaviour.
   keep Firebase state and failure handling in Pelilauta's `ReactionButton`.
 - **Application migration** — replace the three Cyan elements at their call sites and
   remove each bridge section after its last consumer leaves.
-

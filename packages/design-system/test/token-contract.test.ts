@@ -98,8 +98,9 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
   .filter((name) => name.endsWith('.css'))
   .sort();
 
-const reference = read('color-reference.css');
-const theme = read('color-theme.css');
+const chroma = read('chroma.css');
+const semantic = read('semantic.css');
+const elevation = read('elevation.css');
 
 /** Everything the package itself defines, across all its stylesheets. */
 const declaredInPackage = new Set(
@@ -112,22 +113,46 @@ describe('layer composition', () => {
       (match) => match[1],
     );
 
-    expect(imports.slice(0, 2)).toEqual([
-      './color-reference.css',
-      './color-theme.css',
-    ]);
+    expect(imports.slice(0, 2)).toEqual(['./chroma.css', './semantic.css']);
   });
 
-  test('reference tokens are literal, so the stack has a bottom', () => {
-    const referencing = declarations(reference)
+  test('tokens.css supplies units and colour before elevation', () => {
+    const imports = [
+      ...read('tokens.css').matchAll(/@import\s+"([^"]+)"/g),
+    ].map((match) => match[1]);
+    const at = (name: string) =>
+      imports.findIndex((entry) => entry.endsWith(name));
+
+    // elevation.css reads --cn-grid from units and paints with a semantic
+    // colour, so both dependencies enter the cascade first.
+    expect(at('elevation.css')).toBeGreaterThan(at('units.css'));
+    expect(at('elevation.css')).toBeGreaterThan(at('color.css'));
+  });
+
+  test('chroma tokens are literal, so the stack has a bottom', () => {
+    const referencing = declarations(chroma)
       .filter((declaration) => declaration.value.includes('var('))
       .map((declaration) => declaration.name);
 
     expect(referencing).toEqual([]);
   });
 
+  test('permanent stylesheets never read compatibility vocabulary', () => {
+    // Compat leans on the permanent system; the permanent system never leans
+    // back. The whole compat layer is deleted before rc.1, and this test with it.
+    const offenders = sheets
+      .filter((sheet) => !sheet.startsWith('compat'))
+      .flatMap((sheet) =>
+        varReferences(read(sheet))
+          .filter((usage) => /^--(color|background)-/.test(usage.name))
+          .map((usage) => `${sheet}: ${usage.name}`),
+      );
+
+    expect(offenders).toEqual([]);
+  });
+
   test('semantic colours derive from the reference layer', () => {
-    const literalColours = declarations(theme)
+    const literalColours = declarations(semantic)
       .filter((declaration) =>
         /#[0-9a-fA-F]{3,8}\b|\b(?:black|white)\b|\b(?:oklch|rgba?|hsla?)\(/.test(
           declaration.value,
@@ -173,7 +198,7 @@ describe('resolvability', () => {
   });
 
   test('every light-dark() token supplies both arms', () => {
-    const incomplete = declarations(theme)
+    const incomplete = declarations(semantic + elevation)
       .filter((declaration) => declaration.value.includes('light-dark('))
       .filter((declaration) => {
         const inner = declaration.value.slice(

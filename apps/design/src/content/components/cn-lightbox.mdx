@@ -1,0 +1,88 @@
+---
+title: CnLightbox
+description: "The poster's media inside their message, opened full screen for a close look."
+order: 28
+runtime: progressive
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import LightboxSpecimens from '@design-system/books/specimens/LightboxSpecimens.svelte'
+
+Use CnLightbox to carry a poster's media inside their message and let their audience
+open any image full screen for a closer look.
+
+## When to use it
+
+Use it where a message shares media that text alone does not carry — a meme, an
+advertisement, a mood piece, art. Do not use it for a decorative or fallback image
+that names no destination of its own; use [CnCard](/components/cn-card)'s cover
+instead.
+
+## Example
+
+A single image renders as one 16:9 figure, its caption below it.
+
+<Composition themes caption="One image, in Light and Dark">
+  <LightboxSpecimens group="single" client:load />
+</Composition>
+
+Several images render as a strip of square thumbnails in supplied order, each
+caption overlaid on its thumbnail. The strip overflows on the inline axis through
+the platform's scrolling, and a fade at its trailing edge signals the thumbnails
+still off screen.
+
+<Composition themes stack breakout caption="Five images, overflowing a panel, in Light and Dark">
+  <LightboxSpecimens group="strip" client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnLightbox from '@design-system/components/CnLightbox.svelte'
+</script>
+
+<CnLightbox
+  images={[{ src: coverUrl, caption: 'Saaristo aamuvalossa' }]}
+  openLabel="Avaa kuva"
+  closeLabel="Sulje"
+/>
+```
+
+Activating an image, with the pointer or the keyboard, opens it full screen in a
+native dialog. Click either panel's image above to see it: the dialog inherits the
+panel's colour scheme, so the image opened from the Dark panel opens the Dark
+dialog. The reader exits through the [back action](/base/chrome-actions#back-action)
+that `closeLabel` names, or by clicking the dialog's backdrop.
+
+An image can carry an empty caption — live data does, and CnLightbox supports it
+rather than treating it as an authoring mistake. The image control still needs an
+accessible name, so `openLabel` supplies it in place of the missing caption.
+
+<Composition themes caption="An image with an empty caption, in Light and Dark">
+  <LightboxSpecimens group="uncaptioned" client:load />
+</Composition>
+
+An empty `images` renders nothing at all.
+
+<Composition themes caption="An empty images array, in Light and Dark: nothing renders">
+  <LightboxSpecimens group="empty" client:load />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `images` | `{ src: string; caption: string }[]` | Required. The images in presentation order. A caption is the image's alt text and its visible caption; an empty caption renders no caption element. Empty renders nothing. |
+| `openLabel` | `string` | Required. Localised accessible name for an image whose caption is empty. |
+| `closeLabel` | `string` | Required. Localised accessible name for the back action that exits the dialog. |
+
+The component is an island: without `client:load`, or the framework's equivalent,
+the gallery renders but opens nothing.
+
+## Accessibility
+
+Each image is one native button; its caption is never a second focus stop, and
+activating it opens the full-screen view of that image. Escape dismissal, focus
+containment and focus return are the platform dialog's: closing it, by any means,
+returns focus to the control that opened it.

@@ -1,5 +1,5 @@
 ---
-status: approved
+status: live
 ---
 
 # Actions
@@ -108,10 +108,10 @@ are mutually exclusive:
 | Default | Standard action or navigation. | `--cn-button-light`, `--cn-button`, `--cn-on-button`. |
 | `.text` | Secondary or low-prominence action or navigation. | A translucent `--cn-button` wash and `--cn-on-surface`. |
 | `.cta` | The single most important action or destination in the current composition. | `--cn-button-cta`, `--cn-button`, `--cn-on-button-cta`. |
-| `.secondary` | The v20 alternate chroma treatment where that palette is explicitly required. It does not mean low prominence. | `--cn-button-secondary-light`, `--cn-button-secondary`, `--cn-on-button`. |
+| `.secondary` | The v20 alternate chroma treatment where that palette is explicitly required. It does not mean low prominence. | A colour pair scoped to the variant, and the shared `--cn-on-button` foreground. |
 
 The `secondary` modifier applies only to the control itself; an unrelated
-`.secondary` ancestor does not recolour descendants. The secondary roles preserve
+`.secondary` ancestor does not recolour descendants. The scoped pair preserves
 v20's theme mapping: the light stop resolves to primary 40 in Light and primary 80 in
 Dark, the other stop to primary 60 in Light and primary 95 in Dark.
 
@@ -136,15 +136,16 @@ visible text label in a trailing `span`. It keeps its label on one line. A FAB m
 lose its visible label and keep its accessible name; the trigger for that omission is
 the tray's, defined by `specs/design-system/fab-tray/spec.md`.
 
-A FAB's surface is v20's gradient between the variant's pair of colour roles. The
-`secondary` surface follows v20 in running its gradient against the default angle.
-The variants are mutually exclusive:
+A FAB's surface is v20's gradient between the variant's pair of colour roles, scoped
+to the FAB presentation and named for it rather than published as a `--cn-*`
+contract. The `secondary` surface follows v20 in running its gradient against the
+default angle. The variants are mutually exclusive:
 
-| Variant | Intended prominence | Roles |
+| Variant | Intended prominence | Colour pair |
 | :--- | :--- | :--- |
-| Default | The view's prominent contextual action. | `--cn-fab`, `--cn-fab-blend`, `--cn-on-fab`. |
-| `.cta` | The contextual action requiring the strongest attention. | `--cn-fab-cta`, `--cn-fab-cta-blend`, `--cn-on-fab-cta`. |
-| `.secondary` | A supporting action shown beside the prominent action. | `--cn-fab-secondary`, `--cn-fab-secondary-blend`, `--cn-on-fab-secondary`. |
+| Default | The view's prominent contextual action. | Primary 70 blending to surface 50, with a surface-100 foreground. |
+| `.cta` | The contextual action requiring the strongest attention. | Error 60 blending to surface 50, with a surface-100 foreground. |
+| `.secondary` | A supporting action shown beside the prominent action. | The shared `--cn-button` blending toward `--cn-on-surface`, with the shared `--cn-on-button` foreground. |
 
 The standard FAB has a minimum inline size and a fixed block size of seven grid
 units; the `small` modifier uses the regular button size for both measurements. A

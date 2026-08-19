@@ -1,5 +1,5 @@
 ---
-status: approved
+status: live
 ---
 
 # CnLoader
@@ -24,7 +24,7 @@ The `noun` prop forwards to `CnIcon`, defaulting to `"fox"`. `CnIcon` renders at
 
 The spinning ring overlay rotates infinitely at 1.2s linear speed, independent of UI duration tokens. When `prefers-reduced-motion: reduce` matches, ring animation resolves to `none`.
 
-The ring uses 0.72 opacity and line width `calc(var(--cn-grid) / 2)`. The center icon uses 0.44 opacity. Ring and icon share `--cn-loader-color`, which resolves via `light-dark()` in both light and dark color schemes.
+The ring uses 0.72 opacity and line width `calc(var(--cn-grid) / 2)`. The center icon uses 0.44 opacity. Ring and icon share the component-private `--_loader-color`, `light-dark(--chroma-primary-60, --chroma-surface-60)`: chroma step 60 of the primary family in Light, and step 60 of the surface family in Dark.
 
 ## Contract
 
@@ -32,7 +32,7 @@ The ring uses 0.72 opacity and line width `calc(var(--cn-grid) / 2)`. The center
 
 - `CnLoader.svelte` exports a Svelte 5 component rendering `<span class="cn-loader">` with `role="status"`.
 - `inline` prop switches host and nested icon size between `--cn-loader-size` and `--cn-line`.
-- Tokens `--cn-loader-size`, `--cn-loader-line-width`, and `--cn-loader-color` are declared on `:root` with `light-dark()` values.
+- Tokens `--cn-loader-size` and `--cn-loader-line-width` are declared on `:root`. The ring and icon colour is component-private (`--_loader-color`), not a public token, and resolves to `light-dark(--chroma-primary-60, --chroma-surface-60)`.
 - `loader.css` provides container auto-centering rules for section and article children.
 - `prefers-reduced-motion: reduce` stops ring rotation.
 - The **CnLoader** Component book renders `CnLoader` in standalone and inline states across Light and Dark.
@@ -42,7 +42,7 @@ The ring uses 0.72 opacity and line width `calc(var(--cn-grid) / 2)`. The center
 - Class `.cn-loader` is preserved on the root element so parent button and container layout selectors match.
 - `CnIcon` remains a descendant inside `.cn-loader`.
 - `prefers-reduced-motion: reduce` disables ring animation.
-- Visual colors depend strictly on `--cn-loader-color` without legacy or hardcoded hex overrides.
+- Visual colors depend strictly on the private `--_loader-color` without legacy or hardcoded hex overrides.
 
 ### Scenarios
 

@@ -22,6 +22,10 @@ export const en: Locale = {
     title: 'Pelilauta 2 -  Version 16 – Alpha release',
     shortname: 'Pelilauta',
     quickActions: 'Quick actions',
+    reactions: {
+      love: 'Love',
+      loveCount: '{count} likes',
+    },
     errors: {
       fetchingThreads:
         'Failed to load threads. Please try refreshing the page.',

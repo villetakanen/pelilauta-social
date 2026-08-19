@@ -48,7 +48,7 @@ when implementation cannot begin without settling its intent.
 
 Reject a candidate that:
 
-- starts implementation without a required spec, or relies on an unapproved change
+- starts implementation without a required spec, or relies on a `proposed` change
   to one;
 - needs a later task before it is useful, verifiable or safe to release;
 - bundles an independent outcome;

@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import Icon from '@design-system/components/Icon.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -98,9 +99,13 @@ async function handleSave() {
         </div>
       {/if}
 
-      {#if files.length > 0}
+      {#if previews.length}
         <section class="images-preview">
-          <cn-lightbox images={previews}></cn-lightbox>
+          <CnLightbox
+            images={previews}
+            openLabel={t("actions:openImage")}
+            closeLabel={t("actions:close")}
+          />
         </section>
       {/if}
 

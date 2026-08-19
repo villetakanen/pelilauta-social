@@ -10,7 +10,12 @@
 
 - `apps/pelilauta` is the v21 application; `apps/design` publishes the design system.
 - `packages/design-system` contains the components, styles, specs and books both use.
-- `specs` contains approved behaviour, one capability per directory.
+- `specs` contains the system's behaviour, one capability per directory. A spec's
+  `status` is `proposed`, `live` or `deprecated`: implementation follows `live`
+  specs; building on a `proposed` spec requires an explicit ask, and waiting.
+  Any spec may be edited at any time — an agent edit to a `live` spec sets it
+  `proposed`, and an operator makes it `live` by reading it. The status is a
+  process gate, never a ceremony: do not request, await or announce approval.
 - `plans` contains transient epic scope; a plan carries behaviour only until a spec
   takes it. `plans/debt` contains known unplanned gaps.
 - `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;

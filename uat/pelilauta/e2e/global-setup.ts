@@ -19,12 +19,15 @@ import { type ChildProcess, spawn } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config as loadEnv } from 'dotenv';
 import { chromium } from 'playwright';
-import { existingUser } from '../../../credentials';
-import { BASE_URL, STORAGE_STATE_PATH } from './harness';
+import { adminUser, existingUser } from '../../../credentials';
+import { BASE_URL, STORAGE_STATE_PATHS } from './harness';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '../../..');
+
+loadEnv({ path: join(repoRoot, 'apps/pelilauta/.env') });
 
 /** Milliseconds to wait for a dev server this setup started to answer. */
 const SERVER_START_TIMEOUT = 180_000;
@@ -33,7 +36,10 @@ let devServer: ChildProcess | undefined;
 
 async function isServerUp(): Promise<boolean> {
   try {
-    const response = await fetch(BASE_URL, { redirect: 'manual' });
+    const response = await fetch(BASE_URL, {
+      redirect: 'manual',
+      signal: AbortSignal.timeout(3000),
+    });
     return response.status > 0;
   } catch {
     return false;
@@ -54,8 +60,7 @@ function run(command: string, args: string[]): Promise<void> {
 
 async function startDevServer(): Promise<void> {
   console.log('[uat] no application at', BASE_URL, '- starting a dev server');
-  const port = new URL(BASE_URL).port || '4321';
-  devServer = spawn('pnpm', ['--filter', 'pelilauta', 'dev', '--port', port], {
+  devServer = spawn('pnpm', ['--filter', 'pelilauta', 'dev'], {
     cwd: repoRoot,
     stdio: 'inherit',
     /*
@@ -65,7 +70,7 @@ async function startDevServer(): Promise<void> {
      * backwards, because the variable's other job is to request the background
      * explicitly. `apps/design/playwright.config.ts` carries the same note.
      */
-    env: { ...process.env, ASTRO_DEV_BACKGROUND: '1' },
+    env: { ...process.env, ASTRO_DEV_BACKGROUND: '0' },
   });
 
   // A dev server that gives up says so and exits — Astro refuses to start a
@@ -89,38 +94,49 @@ async function startDevServer(): Promise<void> {
   throw new Error(`The dev server did not answer at ${BASE_URL} in time.`);
 }
 
-async function signInExistingUser(): Promise<void> {
-  mkdirSync(dirname(STORAGE_STATE_PATH), { recursive: true });
+async function signInUser(
+  user: { email: string; password: string },
+  storagePath: string,
+): Promise<void> {
+  mkdirSync(dirname(storagePath), { recursive: true });
 
   const browser = await chromium.launch();
   const context = await browser.newContext({ baseURL: BASE_URL });
   const page = await context.newPage();
 
-  await page.goto(`${BASE_URL}/login`);
+  await page.goto(`${BASE_URL}/login`, {
+    waitUntil: 'domcontentloaded',
+    timeout: 60_000,
+  });
   // The login form is a client-only island; it exists once it has hydrated.
-  await page.locator('#password-email').waitFor({ state: 'visible' });
-  await page.locator('#password-email').fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
+  await page
+    .locator('#password-email')
+    .waitFor({ state: 'visible', timeout: 60_000 });
+  await page.locator('#password-email').fill(user.email);
+  await page.locator('#password-password').fill(user.password);
   await page.getByRole('button', { name: 'Login' }).click();
 
   // A signed-in reader lands on the front page, and the login route redirects
   // them away from the form for as long as the session holds.
-  await page.waitForURL(`${BASE_URL}/`);
-  await page.goto(`${BASE_URL}/library`);
-  await page.waitForURL(`${BASE_URL}/library`);
+  await page.waitForURL(`${BASE_URL}/`, { timeout: 60_000 });
+  await page.goto(`${BASE_URL}/library`, {
+    waitUntil: 'domcontentloaded',
+    timeout: 60_000,
+  });
+  await page.waitForURL(`${BASE_URL}/library`, { timeout: 60_000 });
 
   // Firebase Auth keeps the client session in IndexedDB, and the server session
   // in a cookie. A spec's context needs both.
-  await context.storageState({ path: STORAGE_STATE_PATH, indexedDB: true });
+  await context.storageState({ path: storagePath, indexedDB: true });
   await browser.close();
-  console.log('[uat] signed in as', existingUser.email);
+  console.log('[uat] signed in as', user.email);
 }
 
 export async function setup(): Promise<void> {
   await run('node', [
     '--import',
-    './tests/e2e/pelilauta/schema-resolver-loader.mjs',
-    './tests/e2e/pelilauta/reset-and-seed.ts',
+    './uat/pelilauta/e2e/schema-resolver-loader.mjs',
+    './uat/pelilauta/e2e/reset-and-seed.ts',
   ]);
 
   if (await isServerUp()) {
@@ -129,7 +145,8 @@ export async function setup(): Promise<void> {
     await startDevServer();
   }
 
-  await signInExistingUser();
+  await signInUser(existingUser, STORAGE_STATE_PATHS.existingUser);
+  await signInUser(adminUser, STORAGE_STATE_PATHS.adminUser);
 }
 
 export async function teardown(): Promise<void> {

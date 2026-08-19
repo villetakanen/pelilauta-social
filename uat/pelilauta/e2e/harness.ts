@@ -20,19 +20,27 @@ export const BASE_URL = process.env.UAT_BASE_URL ?? 'http://localhost:4321';
  * state has to carry both — hence `indexedDB: true` where it is saved.
  */
 export const STORAGE_STATE_PATH = join(here, '.auth/existing-user.json');
+export const STORAGE_STATE_PATHS = {
+  existingUser: join(here, '.auth/existing-user.json'),
+  adminUser: join(here, '.auth/admin-user.json'),
+} as const;
+
+export type ReaderRole = keyof typeof STORAGE_STATE_PATHS;
 
 /**
  * A page a signed-in reader drives, and the browser behind it. A spec closes the
  * browser when it is done.
  */
-export async function openReaderPage(): Promise<{
+export async function openReaderPage(
+  role: ReaderRole = 'existingUser',
+): Promise<{
   browser: Browser;
   page: Page;
 }> {
   const browser = await chromium.launch();
   const context = await browser.newContext({
     baseURL: BASE_URL,
-    storageState: STORAGE_STATE_PATH,
+    storageState: STORAGE_STATE_PATHS[role],
   });
   const page = await context.newPage();
   return { browser, page };

@@ -5,8 +5,14 @@
  * The backdrop is not a token: it is any mix of two, chosen per nick, so no
  * stylesheet states the colour a reader actually sees and the book can only show
  * the handful of nicks it names. A palette edit that darkens one end, or a new
- * role picked for --cn-on-avatar, breaks the mark for some fraction of the
+ * role picked for --_on-avatar, breaks the mark for some fraction of the
  * community and for nobody on the page. That is what is computed here.
+ *
+ * --_avatar-backdrop-from/-to and --_on-avatar are private to CnAvatar
+ * (docs/ARCHITECTURE.md), so they are read from the component's own style
+ * block rather than from a root stylesheet; the private values still
+ * reference public --chroma-* roles, so they resolve against the same
+ * stylesheet token map as before.
  */
 
 import { readFileSync } from 'node:fs';
@@ -22,9 +28,22 @@ import {
 const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
 
+const componentSource = readFileSync(
+  new URL('../components/CnAvatar.svelte', import.meta.url),
+  'utf8',
+);
+
+/** Just the `<style>` block: the script section's template literals for
+ * `--cn-avatar-mix` are not declarations and must not be parsed as one. */
+const componentStyle = componentSource.match(/<style>([\s\S]*)<\/style>/)?.[1];
+if (!componentStyle) {
+  throw new Error('CnAvatar.svelte has no <style> block to read tokens from.');
+}
+
 const tokens = tokenMap(
-  styles('color-reference.css'),
-  styles('color-theme.css'),
+  styles('chroma.css'),
+  styles('semantic.css'),
+  componentStyle,
 );
 
 const color = (token: string, mode: Mode): Oklch => {
@@ -51,10 +70,10 @@ const percentages = Array.from({ length: 101 }, (_, index) => index);
 
 describe('the initials are legible on every backdrop a nick can derive', () => {
   for (const mode of ['light', 'dark'] as const) {
-    test(`--cn-on-avatar over the whole mix range, ${mode}`, () => {
-      const from = color('--cn-avatar-backdrop-from', mode);
-      const to = color('--cn-avatar-backdrop-to', mode);
-      const on = color('--cn-on-avatar', mode);
+    test(`--_on-avatar over the whole mix range, ${mode}`, () => {
+      const from = color('--_avatar-backdrop-from', mode);
+      const to = color('--_avatar-backdrop-to', mode);
+      const on = color('--_on-avatar', mode);
 
       const worst = percentages
         .map((percent) => ({
@@ -74,8 +93,8 @@ describe('the initials are legible on every backdrop a nick can derive', () => {
 describe('the mark reads as a shape against the page behind it', () => {
   for (const mode of ['light', 'dark'] as const) {
     test(`the backdrop range against --cn-surface, ${mode}`, () => {
-      const from = color('--cn-avatar-backdrop-from', mode);
-      const to = color('--cn-avatar-backdrop-to', mode);
+      const from = color('--_avatar-backdrop-from', mode);
+      const to = color('--_avatar-backdrop-to', mode);
       const surface = color('--cn-surface', mode);
 
       const worst = percentages

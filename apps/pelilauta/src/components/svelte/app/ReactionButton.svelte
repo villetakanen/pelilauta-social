@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnReactionButton from '@design-system/components/CnReactionButton.svelte';
 import { persistentAtom } from '@nanostores/persistent';
 import { toggleReaction } from 'src/firebase/client/reactions';
 import {
@@ -64,14 +65,11 @@ const count = $derived.by(() => {
   return $reactions[type]?.length || 0;
 });
 
-const checked = $derived.by(() => {
-  return $reactions[type]?.includes($uid) || undefined;
-});
+const pressed = $derived($reactions[type]?.includes($uid) ?? false);
 
-const inactive = $derived.by(() => {
-  if ($reactions.subscribers.includes($uid)) return true;
-  return undefined;
-});
+// A subscriber follows the entry rather than reacting to it, so the control
+// stays visible and inert.
+const disabled = $derived($reactions.subscribers.includes($uid));
 
 onMount(async () => {
   try {
@@ -87,7 +85,7 @@ onMount(async () => {
   }
 });
 
-async function onclick(e: Event) {
+async function onclick(e: MouseEvent) {
   e.preventDefault();
   logDebug('ReactionButton', `Reaction ${type} clicked for ${key}`);
   if (!$uid) return;
@@ -141,18 +139,13 @@ async function onclick(e: Event) {
 </script>
 
 {#if $uid }
-  <cn-reaction-button
-    {onclick}
-    role="button"
-    tabindex="0"
-    onkeydown={(e: Event) => {if ((e as KeyboardEvent).key === 'Enter') onclick(e);}}
+  <CnReactionButton
+    label={t('app:reactions.love')}
     {count}
-    {checked}
-    {inactive}
-    aria-pressed={checked}
-    noun={type}
-    small={small || undefined}
-  ></cn-reaction-button>  
+    countLabel={t('app:reactions.loveCount', { count })}
+    {pressed}
+    {disabled}
+    {small}
+    {onclick}
+  />
 {/if}
-
-

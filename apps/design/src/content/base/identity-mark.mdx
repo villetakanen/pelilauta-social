@@ -7,7 +7,7 @@ order: 6
 import Composition from '@design-system/books/specimens/Composition.astro'
 import IdentitySpecimens from '@design-system/books/specimens/IdentitySpecimens.svelte'
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
-import colorThemeSource from '@design-system/styles/color-theme.css?raw'
+import avatarSource from '@design-system/components/CnAvatar.svelte?raw'
 
 Identity marks represent user and system profiles. We provide two formats: the pictorial
 mark (`CnAvatar`) and the textual mark (`.cn-nick`). `CnAvatar` renders statically on the
@@ -50,24 +50,29 @@ The component supports three standard sizes aligned to layout line multiples:
 
 ## Dynamic backdrops and contrast
 
-Initials backdrops are derived from the nick, between `--cn-avatar-backdrop-from` and
-`--cn-avatar-backdrop-to`, to separate the profiles that share a view. The derivation is an
+Initials backdrops are derived from the nick, between `--_avatar-backdrop-from` and
+`--_avatar-backdrop-to`, to separate the profiles that share a view. The derivation is an
 implementation detail and the colour is not promised: both ends are token roles, so a
 palette revision recolours every avatar. A consumer needing a stable colour stores one.
+
+These two tokens, and the `--_on-avatar` text role they are read against, are private to
+`CnAvatar`: no other capability paints a derived backdrop, so they carry no `--cn-*` name
+and are declared on the mark itself rather than on `:root`
+(`docs/ARCHITECTURE.md`). They still draw from the same public `--chroma-*` roles a
+palette revision changes.
 
 <Composition themes caption="Six distinct nicknames and resulting derived backdrops">
   <IdentitySpecimens group="distinct" />
 </Composition>
 
 All derived backdrop values maintain WCAG AA contrast:
-- 4.5:1 against `--cn-on-avatar` for the initials.
+- 4.5:1 against `--_on-avatar` for the initials.
 - 3:1 against the page surface behind the mark.
 
 <TokenTable
-  source={colorThemeSource}
-  names={['--cn-avatar-backdrop-from', '--cn-avatar-backdrop-to', '--cn-on-avatar']}
-  swatch
-  caption="Backdrop interpolation tokens and text color role"
+  source={avatarSource}
+  names={['--_avatar-backdrop-from', '--_avatar-backdrop-to', '--_on-avatar']}
+  caption="Backdrop interpolation tokens and text color role, private to CnAvatar"
 />
 
 ## Avatar lists

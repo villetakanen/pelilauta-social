@@ -163,4 +163,4 @@ CLAUDE.local.md
 .astro/
 
 # The acceptance suite's signed-in browser state, written by its global setup
-tests/e2e/pelilauta/.auth/
+uat/pelilauta/e2e/.auth/
