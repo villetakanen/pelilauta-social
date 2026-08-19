@@ -1,7 +1,7 @@
 # Acceptance Testing
 
 The test plan for v21's user acceptance suite: what it verifies, how it models the
-application, and what runs it. The specs under `tests/e2e/pelilauta/` carry the
+application, and what runs it. The specs under `uat/pelilauta/e2e/` carry the
 journeys themselves.
 
 ## Goals
@@ -15,7 +15,7 @@ run is evidence that a reader can do what a journey promises — the evidence
 ## Model
 
 Every run starts from one known state. The runner wipes a named set of Firestore
-collections — `sites` and `reactions`, to begin with; the set grows with what the
+collections — `sites`, `reactions` and `stream`; the set grows with what the
 specs write — then writes the default seed, overwriting its documents in place. The
 three example accounts persist in Auth between runs, because their uids tie the
 Auth accounts to the Firestore documents the seed writes; the runner creates an
@@ -36,10 +36,10 @@ reader observes. It does not read Firestore to prove a write happened.
 ## Runners
 
 Vitest is the driver and Playwright supplies the browser: one runner, one command
-— `pnpm test:uat` — for the specs under `tests/e2e/pelilauta/**/*.spec.ts`. Specs
+— `pnpm test:uat` — for the specs under `uat/pelilauta/e2e/**/*.spec.ts`. Specs
 run in a single worker because they share one database. The runner's global setup
-resets, seeds, and signs existingUser in through the login form once, saving the
-browser state every spec's context loads.
+resets, seeds, and signs example accounts in through the login form once, saving the
+browser states for each actor.
 
 The suite runs locally, on demand and before a release. It is not part of
 `pnpm verify`, by the decision `plans/debt/browser-tests-run-locally-only.md`

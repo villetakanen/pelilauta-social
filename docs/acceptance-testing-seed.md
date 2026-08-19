@@ -7,10 +7,11 @@ that holds it. The inventory is sourced from v18's seeds —
 
 ## Shape
 
-The seed is JSON under `tests/e2e/pelilauta/seed/`: `account.json`, `profiles.json`,
-`sites.json`, `pages.json` and `meta.json`, one file per top-level collection, keyed
-by document id. Pages are a subcollection of a site, so `pages.json` keys on the
-compound id `siteKey/pageKey`. The seeder splits on `/` to place each document.
+The seed is JSON under `uat/pelilauta/e2e/seed/`: `account.json`, `profiles.json`,
+`sites.json`, `pages.json`, `threads.json`, `replies.json` and `meta.json`, one file
+per top-level collection, keyed by document id. Pages and replies are subcollections,
+so `pages.json` and `replies.json` key on compound ids (`siteKey/pageKey` and
+`threadKey/replyKey`). The seeder splits on `/` to place each document.
 `seed/assets/` holds two kinds of binary file: one the seeder uploads itself, and
 one a spec uploads through the running application. `seed/assets/provenance.md`
 states which is which.
@@ -52,9 +53,19 @@ does: signed in, redirected to onboarding.
 - `profiles/@existingUser`, `profiles/@adminUser` — a `nick`, a matching
   `username`, `avatarURL: ""`, a one-line `bio`.
 - `meta/pelilauta` — `admins: ["@adminUser"]`.
-- `meta/threads` — `topics` with one channel: `slug: "seed-channel"`, a name, a
-  description, an icon, a category, `threadCount: 0`. One channel makes the forum
-  navigable and keeps the empty-channel state reachable.
+- `meta/threads` — `topics` with authentic forum channels under category
+  `Pelilauta`: `yleinen` (`threadCount: 2`), `roolipelit` (`threadCount: 2`),
+  `tapahtumat` (`threadCount: 1`) and empty `test-channel` (`threadCount: 0`).
+- `stream/kauhupelit-syysiltoina` — a public discussion thread authored and owned by
+  `@existingUser` in channel `yleinen`, with `poster` and gallery image
+  `seed/assets/cat-pirate-thread.webp`, Finnish markdown content on tabletop horror RPG
+  session pacing, `replyCount: 1` and `lovedCount: 0`.
+- `stream/ensikertalaisen-pelinjohtaminen`, `stream/sandboxing-ja-heksaryominta`,
+  `stream/soolopelaaminen-ja-oraakkelit`, `stream/tracon-2026-peliohjelma` — four
+  Finnish discussion threads across `yleinen`, `roolipelit` and `tapahtumat`, providing
+  realistic thread volume across the forum channels.
+- `stream/kauhupelit-syysiltoina/comments/vastaus-1` — a Finnish discussion reply owned
+  by `@adminUser`.
 - `sites/gloamroad-company`, `sites/bellweather-knives`, `sites/fallowdeep` —
   three public sites owned by `@existingUser`, one per major campaign-wiki shape:
   a heroic-fantasy quest log, a *Blades in the Dark* crew dossier, and a homebrew

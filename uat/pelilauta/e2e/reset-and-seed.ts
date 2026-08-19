@@ -4,8 +4,8 @@
  * `docs/ACCEPTANCE_TESTING.md` states the model, `docs/acceptance-testing-seed.md`
  * lists the documents. Run with:
  *
- *   node --import tests/e2e/pelilauta/schema-resolver-loader.mjs \
- *     tests/e2e/pelilauta/reset-and-seed.ts
+ *   node --import uat/pelilauta/e2e/schema-resolver-loader.mjs \
+ *     uat/pelilauta/e2e/reset-and-seed.ts
  *
  * The `--import` loads a module-resolution hook so this script can import the
  * application's own zod schemas without Astro's Vite build; see that file for
@@ -40,7 +40,9 @@ import {
   parseProfile,
 } from 'src/schemas/ProfileSchema';
 import { REACTIONS_COLLECTION_NAME } from 'src/schemas/ReactionsSchema';
+import { parseReply, REPLIES_COLLECTION } from 'src/schemas/ReplySchema';
 import { SITES_COLLECTION_NAME, SiteSchema } from 'src/schemas/SiteSchema';
+import { parseThread, THREADS_COLLECTION_NAME } from 'src/schemas/ThreadSchema';
 
 // biome-ignore lint/suspicious/noExplicitAny: seed documents are untyped JSON, validated by the app's own schemas below.
 type SeedDoc = Record<string, any>;
@@ -55,7 +57,11 @@ const META_COLLECTION_NAME = 'meta';
 
 // The collections a reset wipes. A collection joins this list when a spec
 // writes to it, per `docs/ACCEPTANCE_TESTING.md`.
-const RESET_COLLECTIONS = [SITES_COLLECTION_NAME, REACTIONS_COLLECTION_NAME];
+const RESET_COLLECTIONS = [
+  SITES_COLLECTION_NAME,
+  REACTIONS_COLLECTION_NAME,
+  THREADS_COLLECTION_NAME,
+];
 
 function readSeedJson(filename: string): SeedDoc {
   return JSON.parse(readFileSync(join(seedDir, filename), 'utf8'));
@@ -112,6 +118,7 @@ async function main() {
     storageBucket: process.env.PUBLIC_storageBucket,
   });
   const db = getFirestore(app);
+  db.settings({ ignoreUndefinedProperties: true });
   const auth = getAuth(app);
   const bucket = getStorage(app).bucket();
 
@@ -154,10 +161,20 @@ async function main() {
   const profilesRaw = readSeedJson('profiles.json');
   const sitesRaw = readSeedJson('sites.json');
   const pagesRaw = readSeedJson('pages.json');
+  const threadsRaw = readSeedJson('threads.json');
+  const repliesRaw = readSeedJson('replies.json');
   const metaRaw = readSeedJson('meta.json');
 
   const assetRefs = new Map<string, string | undefined>();
-  for (const doc of [accountRaw, profilesRaw, sitesRaw, pagesRaw, metaRaw]) {
+  for (const doc of [
+    accountRaw,
+    profilesRaw,
+    sitesRaw,
+    pagesRaw,
+    threadsRaw,
+    repliesRaw,
+    metaRaw,
+  ]) {
     collectAssetRefs(doc, assetRefs);
   }
 
@@ -247,6 +264,27 @@ async function main() {
       .set(parsePage(data, pageKey, siteKey));
   }
   console.log(`Wrote ${Object.keys(pages).length} page document(s).`);
+
+  const threads = resolveDeep(threadsRaw) as SeedDoc;
+  for (const [key, data] of Object.entries(threads)) {
+    await db
+      .collection(THREADS_COLLECTION_NAME)
+      .doc(key)
+      .set(parseThread(data, key));
+  }
+  console.log(`Wrote ${Object.keys(threads).length} thread document(s).`);
+
+  const replies = resolveDeep(repliesRaw) as SeedDoc;
+  for (const [compoundKey, data] of Object.entries(replies)) {
+    const [threadKey, replyKey] = compoundKey.split('/');
+    await db
+      .collection(THREADS_COLLECTION_NAME)
+      .doc(threadKey)
+      .collection(REPLIES_COLLECTION)
+      .doc(replyKey)
+      .set(parseReply(data, replyKey, threadKey));
+  }
+  console.log(`Wrote ${Object.keys(replies).length} reply document(s).`);
 
   const meta = resolveDeep(metaRaw) as SeedDoc;
   await db

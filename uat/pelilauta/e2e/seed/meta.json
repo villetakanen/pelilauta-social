@@ -1,0 +1,41 @@
+{
+  "pelilauta": {
+    "admins": ["@adminUser"]
+  },
+  "threads": {
+    "topics": [
+      {
+        "slug": "yleinen",
+        "name": "Yleinen",
+        "description": "Yleistä keskustelua roolipeleistä ja pelikulttuurista.",
+        "icon": "discussion",
+        "category": "Pelilauta",
+        "threadCount": 2
+      },
+      {
+        "slug": "roolipelit",
+        "name": "Roolipelit",
+        "description": "Pöytäroolipelit, säännöt, skenaariot ja pelikokemukset.",
+        "icon": "d20",
+        "category": "Pelilauta",
+        "threadCount": 2
+      },
+      {
+        "slug": "tapahtumat",
+        "name": "Tapahtumat",
+        "description": "Tapahtumat, conit ja pelimiitit.",
+        "icon": "adventurer",
+        "category": "Pelilauta",
+        "threadCount": 1
+      },
+      {
+        "slug": "test-channel",
+        "name": "Test Channel",
+        "description": "Channel for API testing",
+        "icon": "discussion",
+        "category": "Pelilauta",
+        "threadCount": 0
+      }
+    ]
+  }
+}
