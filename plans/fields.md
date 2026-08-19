@@ -7,14 +7,20 @@ a delivery record.
 
 ## Goal
 
-The design system paints the surfaces a reader types into, and the design site shows
-what they do. v21 owns no field: `apps/design` loads `ds.css` alone and renders a browser
-default, while `apps/pelilauta` loads `@11thdeg/cyan-css` on every page and renders
-Cyan 4's. A field reads one way in the book and another in the product, so no one can
-say how a field behaves before building one — which is what stopped `plans/reply-authoring.md`.
+Pelilauta is a place people write to each other. Starting a thread, answering someone,
+naming a site, writing a handout, searching the library — each is a reader typing. The
+design system paints the cards, chips, buttons and rails around that act and has never
+painted the surface the act happens on. This epic gives the reader's core act a surface
+the design system owns, sampling `input[type="text"]` and `textarea`.
+
+Nothing owns it today. `apps/design` loads `ds.css` alone and shows a browser default;
+`apps/pelilauta` loads `@11thdeg/cyan-css` on every page and shows Cyan 4's. Fields are
+also the largest element family Cyan still paints, so this is the surface v21's core
+work reaches next.
 
 ## Success criteria
 
+- A reader can tell a field is a field before touching it.
 - A reader sees the same field in `apps/design` and in `apps/pelilauta`.
 - A field shows a resting state, a hover state and an engaged state, each distinct in
   both colour schemes.
@@ -29,7 +35,15 @@ say how a field behaves before building one — which is what stopped `plans/rep
 
 - `docs/chat-bar-field-study.md` carries the settled intent. Where it and an inherited
   implementation disagree, the study holds; where the study and a live spec disagree,
-  the contradiction is reported rather than resolved in code.
+  the contradiction is reported rather than resolved in code. One such contradiction is
+  known: ruling 2 puts the chat bar at elevation 4, while
+  `specs/design-system/components/cn-chat-bar/spec.md:55` says 3 and elevation 4's
+  background is `primary-99` in Light — the colour the study gives a focused field.
+- The Goal above carries the Context's why. It came from the product owner in this
+  epic's planning and is not re-derived or re-interviewed.
+- Colour roles take the `--cn-color-field*` names.
+  `plans/debt/colour-token-naming.md` records why the majority shape in `semantic.css`
+  is not the convention.
 - v20 and Cyan 4 are read for what they do, never for what was meant. A value repeated
   across them is one value and several copies.
 - The 34 `apps/pelilauta` surfaces that render a field today keep working while the
@@ -60,6 +74,9 @@ say how a field behaves before building one — which is what stopped `plans/rep
   `textarea`, the partial sample this epic commits to. Waits on the roles.
 - **The book** — a fields page in `apps/design` showing every state in both schemes, so
   the next reader can see a field rather than infer one. Waits on the element style.
+- **Preflight boundary** — state where the reset stops and the field treatment begins,
+  if `preflight/spec.md:115` proves ambiguous once the element style lands. Small, and
+  possibly nothing.
 - **Cyan overlap** — establish what Cyan's `input-text.css`, `textarea.css` and
   `select.css` still paint once the sample lands, and whether load order alone decides
   it. `plans/debt/form-control-register.md` records that the font rules already tie on
