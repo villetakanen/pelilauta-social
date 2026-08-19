@@ -42,6 +42,12 @@ The user or system need this capability serves: who is served, and what they
 get. Then what wins when its goals collide. Do not describe the world before
 the work; that description is false once the work lands. One paragraph.
 
+The Context is the paragraph the rest of the spec exists to serve. The need is
+a product fact: it comes from a human decision, an ADR or a plan — an
+implementation carries behaviour, never need. Test: could the paragraph be
+written by reading the component? Then it restates behaviour as need; ask the
+human, and write the answers.
+
 ### Architecture
 
 What would a reader of the code get backwards? State which way the dependencies

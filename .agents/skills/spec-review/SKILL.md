@@ -29,7 +29,8 @@ plan from its Contract. Challenge:
 - **Premise:** Context carries the need the capability serves — who is served and
   what they get — settled, without unsupported assumptions or an unapproved
   solution. A Context that could be pasted onto a sibling capability without
-  becoming false carries nothing.
+  becoming false carries nothing. A Context derivable from the implementation
+  restates behaviour, not need.
 - **Ambiguity:** subjects, states, ranges, precedence and terms permit one observable
   interpretation.
 - **Testability:** Contract outcomes and required checking methods are explicit.

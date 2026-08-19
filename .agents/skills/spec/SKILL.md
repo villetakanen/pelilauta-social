@@ -59,5 +59,10 @@ technical.
 The spec's context and architecture carry the why nothing else holds: the user or
 system need the capability exists for. State no why the reader can derive.
 
-A why comes from v18, v20, an ADR or a human decision. A why with no source is a
-question to the human, not a sentence in the spec.
+An implementation carries behaviour, logic and contracts — what the system does,
+never why. A why comes from a spec, an ADR, a plan or a human decision. Where the
+only why on record is v20's, confirm it with the human before carrying it, because
+v20 canonicalised its mistakes. Before settling the Context, interview the human
+as the product owner: who is served first, what they get, and what wins when goals
+collide. A why with no source remains a question to the human, not a sentence in
+the spec.
