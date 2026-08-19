@@ -14,7 +14,6 @@ describe('Cyan element migration contract', () => {
   it('keeps a bridge for every reached element context', () => {
     const contexts = [
       'cn-lightbox',
-      'cn-reaction-button',
       'cn-sortable-list',
       'cn-d20-ability-score',
       'cn-dice',
@@ -45,6 +44,11 @@ describe('Cyan element migration contract', () => {
     // rendered. Its bands are a `header` and a `footer` the consumer writes, so
     // the rules that cancelled Cyan's `.toolbar` padding govern nothing.
     expect(migration).not.toMatch(/\bcn-bubble\b/);
+
+    // CnReactionButton replaced the love toggle every entry, reply and site
+    // sidebar rendered. Its state surface and count are the component's own
+    // styles, so the host tokens Cyan read govern nothing.
+    expect(migration).not.toMatch(/\bcn-reaction-button\b/);
 
     // CnLoader replaced every `cn-loader` element, including the ones inside
     // buttons and fabs whose negative margins pulled a 72px ring back into a
