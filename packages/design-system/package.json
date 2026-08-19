@@ -9,7 +9,9 @@
   "scripts": {
     "generate:icons": "node scripts/generate-icon-registry.mjs",
     "check:icons": "node scripts/generate-icon-registry.mjs --check",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate:tokens": "node scripts/generate-tokens.mjs",
+    "check:tokens": "node scripts/generate-tokens.mjs --check"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.0",

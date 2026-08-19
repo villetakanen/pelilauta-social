@@ -5,7 +5,7 @@ order: 10
 ---
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
-import referenceSource from '@design-system/styles/color-reference.css?raw'
+import chromaSource from '@design-system/styles/chroma.css?raw'
 import themeSource from '@design-system/styles/color-theme.css?raw'
 
 Declared color custom properties and values. Color selection and contrast rules are
@@ -28,10 +28,12 @@ with `--cn-grid` as defined in [Units and grid](/tokens/units).
 
 ## Reference palette
 
-Primitive OKLCH color scales. UI components consume semantic roles rather than
-referencing primitive palette tokens directly.
+Primitive OKLCH color scales, declared in `styles/chroma.css`. UI components consume
+semantic roles rather than referencing primitive palette tokens directly; the
+`--cn-color-*` names in `styles/color-reference.css` are a temporary alias bridge over
+this layer (removed at the repair plan's T7).
 
-<TokenTable source={referenceSource} prefix="--cn-color-" swatch caption="Reference palette" />
+<TokenTable source={chromaSource} prefix="--chroma-" swatch caption="Reference palette" />
 
 ## Cyan 4 aliases
 

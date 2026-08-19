@@ -23,6 +23,7 @@ const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
 
 const tokens = tokenMap(
+  styles('chroma.css'),
   styles('color-reference.css'),
   styles('color-theme.css'),
 );

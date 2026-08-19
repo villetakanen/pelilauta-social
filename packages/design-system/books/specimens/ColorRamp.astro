@@ -5,14 +5,17 @@
  * v20's colour book renders every family this way. Steps are read from the
  * stylesheet, so a ramp cannot show a step that no longer exists.
  *
+ * Reads styles/chroma.css: it is the literal layer the palette now ends in
+ * (styles/color-reference.css is only an alias bridge over it, ADR 0002).
+ *
  * Book: apps/design/src/content/principles/color-system.mdx
  */
 import { parseTokens } from './tokenTable';
 
 interface Props {
-  /** The stylesheet, imported by the book with `?raw`. */
+  /** chroma.css, imported by the book with `?raw`. */
   source: string;
-  /** Family name, e.g. `surface` — matches `--cn-color-<family>-<step>`. */
+  /** Family name, e.g. `surface` — matches `--chroma-<family>-<step>`. */
   family: string;
   /** What the family is for. One line, shown beside the name. */
   intent?: string;
@@ -20,9 +23,9 @@ interface Props {
 
 const { source, family, intent } = Astro.props;
 
-const steps = parseTokens(source, { prefix: `--cn-color-${family}-` }).map(
+const steps = parseTokens(source, { prefix: `--chroma-${family}-` }).map(
   (token) => ({
-    step: token.name.replace(`--cn-color-${family}-`, ''),
+    step: token.name.replace(`--chroma-${family}-`, ''),
     name: token.name,
   }),
 );

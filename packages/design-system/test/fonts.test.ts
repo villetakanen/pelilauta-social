@@ -163,6 +163,7 @@ describe('the two families', () => {
       '../styles/tokens.css',
       '../styles/units.css',
       '../styles/color.css',
+      '../styles/chroma.css',
       '../styles/color-theme.css',
       '../styles/color-reference.css',
       '../styles/content-containers.css',

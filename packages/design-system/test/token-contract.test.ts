@@ -98,7 +98,8 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
   .filter((name) => name.endsWith('.css'))
   .sort();
 
-const reference = read('color-reference.css');
+const chroma = read('chroma.css');
+const bridge = read('color-reference.css');
 const theme = read('color-theme.css');
 
 /** Everything the package itself defines, across all its stylesheets. */
@@ -112,18 +113,30 @@ describe('layer composition', () => {
       (match) => match[1],
     );
 
-    expect(imports.slice(0, 2)).toEqual([
+    expect(imports.slice(0, 3)).toEqual([
+      './chroma.css',
       './color-reference.css',
       './color-theme.css',
     ]);
   });
 
-  test('reference tokens are literal, so the stack has a bottom', () => {
-    const referencing = declarations(reference)
+  test('chroma tokens are literal, so the stack has a bottom', () => {
+    const referencing = declarations(chroma)
       .filter((declaration) => declaration.value.includes('var('))
       .map((declaration) => declaration.name);
 
     expect(referencing).toEqual([]);
+  });
+
+  test('the numbered bridge only aliases canonical chroma', () => {
+    const offRamp = declarations(bridge)
+      .filter(
+        (declaration) =>
+          !/^var\(--chroma-[a-z]+-\d+\)$/.test(declaration.value.trim()),
+      )
+      .map((declaration) => declaration.name);
+
+    expect(offRamp).toEqual([]);
   });
 
   test('semantic colours derive from the reference layer', () => {

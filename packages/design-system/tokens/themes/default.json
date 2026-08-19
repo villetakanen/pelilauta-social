@@ -1,0 +1,74 @@
+{
+  "name": "default",
+  "description": "The v20 palette: primary as a northern forest under the sun, surface as cerulean depth.",
+  "families": {
+    "primary": {
+      "kind": "core",
+      "steps": {
+        "0": "oklch(0 0 185)",
+        "10": "oklch(0.12 0.09 185)",
+        "20": "oklch(0.2 0.14 180)",
+        "30": "oklch(0.3 0.18 175)",
+        "40": "oklch(0.4 0.22 170)",
+        "50": "oklch(0.5 0.24 162)",
+        "60": "oklch(0.6 0.26 150)",
+        "70": "oklch(0.7 0.27 135)",
+        "80": "oklch(0.8 0.27 120)",
+        "90": "oklch(0.9 0.27 110)",
+        "95": "oklch(0.95 0.18 110)",
+        "99": "oklch(0.99 0.05 110)",
+        "100": "oklch(1 0 110)"
+      }
+    },
+    "surface": {
+      "kind": "core",
+      "steps": {
+        "0": "oklch(0 0 242)",
+        "10": "oklch(0.1 0.05 242)",
+        "20": "oklch(0.2 0.07 242)",
+        "30": "oklch(0.3 0.09 242)",
+        "40": "oklch(0.4 0.12 242)",
+        "50": "oklch(0.5 0.14 242)",
+        "60": "oklch(0.6 0.17 242)",
+        "70": "oklch(0.7 0.17 242)",
+        "80": "oklch(0.8 0.12 242)",
+        "90": "oklch(0.9 0.06 242)",
+        "95": "oklch(0.95 0.03 242)",
+        "99": "oklch(0.99 0.015 242)",
+        "100": "oklch(1 0 242)"
+      }
+    },
+    "error": {
+      "kind": "auxiliary",
+      "steps": {
+        "20": "oklch(0.2 0.15 318)",
+        "40": "oklch(0.4 0.18 318)",
+        "60": "oklch(0.6 0.2 318)",
+        "90": "oklch(0.9 0.1 318)"
+      }
+    },
+    "warning": {
+      "kind": "auxiliary",
+      "steps": {
+        "20": "oklch(0.2 0.15 65)",
+        "40": "oklch(0.4 0.2 65)",
+        "60": "oklch(0.6 0.25 65)",
+        "90": "oklch(0.9 0.2 65)"
+      }
+    },
+    "love": {
+      "kind": "auxiliary",
+      "steps": {
+        "20": "oklch(0.2 0.15 30)",
+        "40": "oklch(0.4 0.18 30)",
+        "60": "oklch(0.6 0.2 30)",
+        "90": "oklch(0.9 0.1 30)"
+      }
+    }
+  },
+  "lightnessExceptions": {
+    "primary": {
+      "10": "hand-tuned: oklch lightness 0.12 keeps the deepest forest step legible"
+    }
+  }
+}

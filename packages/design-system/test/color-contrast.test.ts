@@ -26,6 +26,7 @@ const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
 
 const tokens = tokenMap(
+  styles('chroma.css'),
   styles('color-reference.css'),
   styles('color-theme.css'),
 );
@@ -107,9 +108,9 @@ describe('the step gap predicts contrast', () => {
   // figures from a convenient example.
   const palette = [
     ...readFileSync(
-      new URL('../styles/color-reference.css', import.meta.url),
+      new URL('../styles/chroma.css', import.meta.url),
       'utf8',
-    ).matchAll(/--cn-color-(\w+)-(\d+):\s*(oklch\([^)]+\))/g),
+    ).matchAll(/--chroma-(\w+)-(\d+):\s*(oklch\([^)]+\))/g),
   ].map((match) => ({
     family: match[1],
     step: Number(match[2]),
