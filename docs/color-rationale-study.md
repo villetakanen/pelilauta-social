@@ -74,8 +74,10 @@ carry them — the design language lives exactly here:
 6. **Love is structural because appreciation is core.** Reactions are the
    community's main social currency; warmth between players is a first-class
    signal, not decoration.
-7. **Info was primary in disguise.** Its role resolved to primary steps — it
-   named a distinction the design never actually made, so it was removed.
+7. **Info was primary in disguise.** Its role resolved to primary steps — the
+   v20 info scale named a chroma distinction the design never actually made.
+   The scale was removed; information survives as the semantic pair
+   `--cn-info`/`--cn-on-info` over primary.
 8. **The auxiliary steps are the four jobs a status colour has**: dark text on
    tint, strong fill for Light, bright fill for Dark, pale tint background.
    A status needs no more.
@@ -92,5 +94,6 @@ Research notes with verbatim quotes: Material 3 (Science of Color & Design,
 roles, tone-based surfaces), USWDS (colour token docs; maintainer threads
 uswds#2712, #3329), Radix Colors / IBM Carbon / Apple HIG, and the perception
 foundations (Ottosson's Oklab, Chevreul/Albers/Itten, APCA, signalling history,
-distinctive-asset theory). Full notes with URLs are in the repair session's
-working records; the quotes above are verbatim from the cited pages.
+distinctive-asset theory). The full notes with every quote and URL are in
+`docs/color-rationale-study/`; the quotes above are verbatim from the cited
+pages.
