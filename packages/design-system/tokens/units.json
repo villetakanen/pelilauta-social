@@ -1,0 +1,195 @@
+{
+  "name": "units",
+  "description": "Measurement tokens: the base grid and every spacing, radius, size, timing and breakpoint derived from it. A unit token may reference only another unit token, symbolically as {unit:cn-name}, never a raw var().",
+  "groups": [
+    {
+      "comment": "Base grid. Every spacing and radius decision derives from this.",
+      "tokens": {
+        "cn-grid": {
+          "value": "0.5rem",
+          "note": "8px at the default root font size"
+        },
+        "cn-gap": {
+          "value": "calc({unit:cn-grid} * 2)",
+          "note": "16px"
+        },
+        "cn-line": {
+          "value": "calc({unit:cn-grid} * 3)",
+          "note": "24px"
+        }
+      }
+    },
+    {
+      "comment": "The measure: the widest a line of text is set, 67 characters of the base\nparagraph. Stated in grid steps, not `ch`, which would resolve against\nwhatever font is rendering.\n\nMeasured: Lato's `0` advance is 0.58em, so 67ch at the 17px base is 41.29rem =\n82.58 steps, rounded up. Changing the base face or its size makes this wrong.",
+      "tokens": {
+        "cn-measure": {
+          "value": "calc({unit:cn-grid} * 83)",
+          "note": "41.5rem"
+        }
+      }
+    },
+    {
+      "tokens": {
+        "cn-border-radius-small": {
+          "value": "calc({unit:cn-grid} * 0.5)",
+          "note": "4px"
+        },
+        "cn-border-radius-medium": {
+          "value": "{unit:cn-grid}",
+          "note": "8px"
+        },
+        "cn-border-radius-large": {
+          "value": "calc({unit:cn-grid} * 2)",
+          "note": "16px"
+        },
+        "cn-border-radius-xl": {
+          "value": "calc({unit:cn-grid} * 4)",
+          "note": "32px"
+        }
+      }
+    },
+    {
+      "comment": "For a consumer that wants \"rounded\" without choosing a step.",
+      "tokens": {
+        "cn-border-radius": {
+          "value": "{unit:cn-border-radius-medium}"
+        }
+      }
+    },
+    {
+      "comment": "Control geometry: the visible pill, and the row it occupies.",
+      "tokens": {
+        "cn-button-size": {
+          "value": "calc({unit:cn-grid} * 4.75)",
+          "note": "38px"
+        },
+        "cn-button-physical-size": {
+          "value": "calc({unit:cn-grid} * 7)",
+          "note": "56px"
+        },
+        "cn-fab-size": {
+          "value": "calc({unit:cn-grid} * 7)",
+          "note": "56px, the standard floating action button"
+        },
+        "cn-avatar-size-small": {
+          "value": "calc({unit:cn-line} * 1.5)",
+          "note": "36px, beside one line",
+          "comment": "The identity mark's three diameters, in lines rather than grid units: a mark\nsits beside text, so it measures in the text's leading. Both the mark and a\nlist's overflow count read them, which is why they are named here rather\nthan restated in each."
+        },
+        "cn-avatar-size-medium": {
+          "value": "calc({unit:cn-line} * 2)",
+          "note": "48px, heading a region"
+        },
+        "cn-avatar-size-large": {
+          "value": "calc({unit:cn-line} * 3)",
+          "note": "72px, standing for the profile itself; Cyan's one diameter"
+        }
+      }
+    },
+    {
+      "comment": "Icon sizes: absolute lengths rather than grid multiples, following v20, which\nfiles them beside the grid and marks them absolute.",
+      "tokens": {
+        "cn-icon-size-xsmall": {
+          "value": "1rem",
+          "note": "16px at the default root font size"
+        },
+        "cn-icon-size-small": {
+          "value": "1.5rem",
+          "note": "24px"
+        },
+        "cn-icon-size": {
+          "value": "2.25rem",
+          "note": "36px, the medium default"
+        },
+        "cn-icon-size-large": {
+          "value": "4.5rem",
+          "note": "72px"
+        },
+        "cn-icon-size-xlarge": {
+          "value": "8rem",
+          "note": "128px"
+        }
+      }
+    },
+    {
+      "comment": "Chrome is fixed and paints over the document, so a page insets its own\nfirst line by the bar's depth rather than measuring it.",
+      "tokens": {
+        "cn-app-bar-height": {
+          "value": "calc({unit:cn-grid} * 8)"
+        }
+      }
+    },
+    {
+      "comment": "The depth an on-screen keyboard occupies at the block end. Chrome measures it\nand publishes it here; `0px` is the value every browser gets until something\ndoes, and the value a browser that shortens its own layout viewport keeps.",
+      "tokens": {
+        "cn-keyboard-inset": {
+          "value": "0rem"
+        }
+      }
+    },
+    {
+      "comment": "Stacking. Chrome rides above page content and Cyan's own fixed navigation,\nand below the dialog, modal and snackbar layers Cyan still provides at 50000\nand above. The tray's value resolves among chrome's parts, inside the box.",
+      "tokens": {
+        "cn-z-chrome": {
+          "value": "40500"
+        },
+        "cn-z-fab": {
+          "value": "40500"
+        },
+        "cn-z-chat-bar": {
+          "value": "40550",
+          "comment": "The authoring dock stands above the FAB and below a covering tray."
+        },
+        "cn-z-scrim": {
+          "value": "40600",
+          "comment": "A covering tray stands above the bar and the FAB; its scrim immediately below it."
+        },
+        "cn-z-rail": {
+          "value": "40700"
+        }
+      }
+    },
+    {
+      "comment": "Interaction motion, shared by every control that answers a pointer.",
+      "tokens": {
+        "cn-duration-ui": {
+          "value": "0.22s"
+        },
+        "cn-easing-ui": {
+          "value": "ease-in-out"
+        }
+      }
+    },
+    {
+      "tokens": {
+        "cn-disabled-opacity": {
+          "value": "0.5"
+        }
+      }
+    },
+    {
+      "comment": "The tray's two sizes. v20's values: a rail holds a compact chrome action's\nseven-grid target with a one-and-a-half grid inset either side.",
+      "tokens": {
+        "cn-width-rail-collapsed": {
+          "value": "calc({unit:cn-grid} * 10)"
+        },
+        "cn-width-rail-expanded": {
+          "value": "calc({unit:cn-grid} * 32)"
+        }
+      }
+    },
+    {
+      "comment": "Breakpoints, in rem so a query follows a reader's enlarged default text.\nA media or container query cannot read a custom property: a rule that\nneeds a threshold states the literal, and a test pins the literal here.\n\nEach names the width where its band ends, and belongs to the band it ends:\nsmall is the first and narrower, tablet is wider and narrower than the\nsecond, desktop is the second and wider. `CnAppBar`'s `max-width: 38.75rem`\nis that convention. The second is where a tray stands beside content\nrather than over it.",
+      "tokens": {
+        "cn-breakpoint-small": {
+          "value": "38.75rem",
+          "note": "620px; small-screen width"
+        },
+        "cn-breakpoint-tablet": {
+          "value": "64rem",
+          "note": "1024px; widest tablet width"
+        }
+      }
+    }
+  ]
+}

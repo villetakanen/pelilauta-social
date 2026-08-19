@@ -7,6 +7,8 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
+import { parseTokens, unitDeclarations } from '../books/specimens/tokenTable';
+import units from '../tokens/units.json';
 
 const read = (relative: string) =>
   readFileSync(fileURLToPath(new URL(relative, import.meta.url)), 'utf8');
@@ -16,25 +18,29 @@ const withoutComments = (source: string) =>
   source.replace(/\/\*[\s\S]*?\*\//g, '');
 
 const css = withoutComments(read('../styles/content-containers.css'));
-const units = withoutComments(read('../styles/units.css'));
 
-/** The measure, in grid units, as the stylesheet declares it. */
+/**
+ * The measure, in grid units, as the spatial tokens declare it. It is a length
+ * on the grid, so specs/design-system/spatial-system/spec.md carries it and
+ * these containers read it; the value is asserted here because the wide-mode
+ * thresholds below are derived from it.
+ */
 const measureSteps = Number(
-  css.match(/--cn-measure:\s*calc\(var\(--cn-grid\) \* (\d+)\)/)?.[1],
+  parseTokens(unitDeclarations(units), {
+    names: ['--cn-measure'],
+  })[0]?.value.match(/calc\(var\(--cn-grid\) \* (\d+)\)/)?.[1],
 );
 
 describe('the measure', () => {
-  test('is not declared in the unit tokens', () => {
-    // styles/units.css is asserted identical to the Cyan 4 file it shadows, and
-    // the measure has no Cyan counterpart. Moving it there breaks units.test.ts.
-    expect(units).not.toContain('--cn-measure');
+  test('is 83 grid units', () => {
+    expect(measureSteps).toBe(83);
   });
 
-  test('is declared once, in grid units', () => {
-    // Golden's primary is the same width as a prose flow by design. Two
-    // declarations would let one of them drift.
-    expect(measureSteps).toBe(83);
-    expect(css.match(/--cn-measure:/g)).toHaveLength(1);
+  test('these containers read it rather than declaring it', () => {
+    // Golden's primary is the same width as a prose flow by design. A second
+    // declaration here would let one of them drift from the other.
+    expect(css).not.toMatch(/--cn-measure\s*:/);
+    expect(css).toContain('var(--cn-measure)');
   });
 });
 

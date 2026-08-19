@@ -15,7 +15,12 @@
     inset-block-start: 0;
     inset-inline-start: 0;
     inline-size: 100dvw;
-    block-size: 100dvh;
+    /*
+     * What the reader can see: the viewport, less whatever an on-screen
+     * keyboard occupies. The token is `0px` until the script below measures
+     * one, and stays `0px` in a browser that shortens the viewport itself.
+     */
+    block-size: calc(100dvh - var(--cn-keyboard-inset));
 
     /*
      * The tray pins against this box rather than the browser viewport, and the
@@ -36,3 +41,39 @@
     pointer-events: auto;
   }
 </style>
+
+<script>
+  /*
+   * Chrome publishes the keyboard's depth, and nothing else measures it: a part
+   * asking the window would answer about the window rather than about the
+   * container bounding it. Coalesced into a frame, because the visual viewport
+   * reports every step of the keyboard's animation.
+   */
+  import { keyboardInset } from './keyboard-inset';
+
+  const view = window.visualViewport;
+  if (view) {
+    let queued = false;
+
+    const publish = () => {
+      queued = false;
+      const inset = keyboardInset({
+        innerHeight: window.innerHeight,
+        visualHeight: view.height,
+        scale: view.scale,
+      });
+      document.documentElement.style.setProperty(
+        '--cn-keyboard-inset',
+        `${inset}px`,
+      );
+    };
+
+    view.addEventListener('resize', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(publish);
+    });
+
+    publish();
+  }
+</script>

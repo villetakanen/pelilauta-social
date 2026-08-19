@@ -5,6 +5,7 @@
  *
  * Sources and outputs:
  * - tokens/themes/default.json      → styles/chroma.css
+ * - tokens/units.json               → styles/units.css
  * - tokens/semantic-color.json      → styles/semantic.css
  * - tokens/elevation.json           → styles/elevation.css
  *
@@ -22,9 +23,11 @@
  *   {token:cn-name}, {unit:cn-name} — never as an embedded var();
  * - a semantic role depends only on chroma or another semantic role; an
  *   elevation role may also depend on units and other elevation roles;
+ * - a unit depends only on another unit, referenced the same symbolic way;
  * - every reference resolves, and no chain forms a cycle.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -87,14 +90,62 @@ const elevation = JSON.parse(
   readFileSync(path('tokens/elevation.json'), 'utf8'),
 );
 
-/** Custom properties units.css declares; the one layer still written by hand. */
-const unitNames = new Set(
-  [
-    ...readFileSync(path('styles/units.css'), 'utf8').matchAll(
-      /(--[\w-]+)\s*:/g,
-    ),
-  ].map((match) => match[1]),
-);
+/* ----- units ----- */
+
+const units = JSON.parse(readFileSync(path('tokens/units.json'), 'utf8'));
+const unitGroups = units.groups ?? [];
+
+/** name → token, in declaration order, flattened out of their groups. */
+const unitTokens = new Map();
+for (const group of unitGroups) {
+  for (const [name, token] of Object.entries(group.tokens ?? {})) {
+    if (unitTokens.has(name)) errors.push(`duplicate declaration --${name}`);
+    unitTokens.set(name, token);
+  }
+}
+const unitNames = new Set([...unitTokens.keys()].map((name) => `--${name}`));
+
+for (const [name, token] of unitTokens) {
+  const value = token.value;
+  if (typeof value !== 'string') {
+    errors.push(`${name}: needs a value`);
+    continue;
+  }
+  if (value.includes('var('))
+    errors.push(`${name}: embeds var(); reference tokens symbolically`);
+  if (value.trim() === '') errors.push(`${name}: states an empty value`);
+  if (value.replace(REFERENCE, '').match(/[{}]/))
+    errors.push(`${name}: contains a brace no {unit:} reference explains`);
+  for (const [, kind, target] of value.matchAll(REFERENCE)) {
+    if (kind !== 'unit')
+      errors.push(
+        `${name}: a unit may reference only another unit, as {unit:name}`,
+      );
+    else if (!unitTokens.has(target))
+      errors.push(`${name}: references missing {unit:${target}}`);
+  }
+}
+
+/* Cycle detection over the units' own {unit:...} edges. */
+{
+  const visiting = new Set();
+  const done = new Set();
+  const visit = (name, trail) => {
+    if (done.has(name)) return;
+    if (visiting.has(name)) {
+      errors.push(`cycle: ${[...trail, name].join(' -> ')}`);
+      return;
+    }
+    visiting.add(name);
+    const value = unitTokens.get(name)?.value ?? '';
+    for (const [, kind, target] of value.matchAll(REFERENCE))
+      if (kind === 'unit' && unitTokens.has(target))
+        visit(target, [...trail, name]);
+    visiting.delete(name);
+    done.add(name);
+  };
+  for (const name of unitTokens.keys()) visit(name, []);
+}
 
 const layers = [
   {
@@ -111,7 +162,11 @@ const layers = [
 const layerOf = new Map(); // token name → layer index
 for (const [index, layer] of layers.entries()) {
   for (const name of Object.keys(layer.tokens)) {
-    if (layerOf.has(name) || chroma.has(`--${name}`))
+    if (
+      layerOf.has(name) ||
+      chroma.has(`--${name}`) ||
+      unitNames.has(`--${name}`)
+    )
       errors.push(`duplicate declaration --${name}`);
     layerOf.set(name, index);
   }
@@ -218,6 +273,38 @@ ${sortedChroma.map(([name, value]) => `  ${name}: ${value};`).join('\n')}
 }
 `;
 
+/** A group or per-token comment, as one or more full `  /* ... *\/` lines. */
+function commentLines(text, indent) {
+  if (!text.includes('\n')) return [`${indent}/* ${text} */`];
+  const lines = text.split('\n');
+  return [
+    `${indent}/*`,
+    ...lines.map((line) =>
+      line === '' ? `${indent} *` : `${indent} * ${line}`,
+    ),
+    `${indent} */`,
+  ];
+}
+
+function unitsCss(source, groups) {
+  const blocks = groups.map((group) => {
+    const lines = [];
+    if (group.comment) lines.push(...commentLines(group.comment, '  '));
+    for (const [name, token] of Object.entries(group.tokens ?? {})) {
+      if (token.comment) lines.push(...commentLines(token.comment, '  '));
+      const declaration = `  --${name}: ${substitute(token.value)};`;
+      lines.push(
+        token.note ? `${declaration} /* ${token.note} */` : declaration,
+      );
+    }
+    return lines.join('\n');
+  });
+  return `${header(source)}:root {
+${blocks.join('\n\n')}
+}
+`;
+}
+
 function roleCss(source, tokens) {
   const lines = [];
   for (const [name, token] of Object.entries(tokens)) {
@@ -234,14 +321,37 @@ ${lines.join('\n')}
 `;
 }
 
+/**
+ * Biome formats every committed stylesheet, so a raw emission and its committed
+ * counterpart differ by wrapping alone. Both paths below format their output
+ * through Biome, which is what makes `--check` an answer about the token source
+ * rather than about line width.
+ */
+const biome = [
+  join(packageRoot, 'node_modules/.bin/biome'),
+  join(packageRoot, '../../node_modules/.bin/biome'),
+].find((candidate) => existsSync(candidate));
+
+function format(relative, css) {
+  if (!biome) throw new Error('Biome is not installed; cannot format output.');
+  const run = spawnSync(biome, ['format', `--stdin-file-path=${relative}`], {
+    input: css,
+    encoding: 'utf8',
+  });
+  if (run.status !== 0)
+    throw new Error(`Biome failed on ${relative}: ${run.stderr}`);
+  return run.stdout;
+}
+
 const outputs = [
   ['styles/chroma.css', chromaCss],
+  ['styles/units.css', unitsCss('tokens/units.json', unitGroups)],
   [
     'styles/semantic.css',
     roleCss('tokens/semantic-color.json', semantic.tokens),
   ],
   ['styles/elevation.css', roleCss('tokens/elevation.json', elevation.tokens)],
-];
+].map(([relative, css]) => [relative, format(relative, css)]);
 
 if (process.argv.includes('--check')) {
   let clean = true;

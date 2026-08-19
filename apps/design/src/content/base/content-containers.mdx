@@ -4,8 +4,6 @@ description: Stackable content containers, with a set of predefined layouts.
 order: 2
 ---
 
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
-import containersSource from '@design-system/styles/content-containers.css?raw'
 
 ## The host
 
@@ -33,10 +31,10 @@ readable measure.
 
 ## The measure
 
-<TokenTable source={containersSource} prefix="--cn-measure" />
-
-It holds 67 characters of Lato at the reading size, and scales with the reader's
-browser font settings. See [Spatial System](/principles/spatial-system).
+A prose flow caps at `--cn-measure`, and a golden primary takes the same width. It
+holds 67 characters of Lato at the reading size, and scales with the reader's browser
+font settings. The value is published in [Units and grid](/tokens/units), and
+[Spatial System](/principles/spatial-system) explains where it recurs.
 
 The flow centres at the measure where the host offers more, and fills the host where it
 offers less.

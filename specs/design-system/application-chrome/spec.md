@@ -28,8 +28,10 @@ application mounts one rather than building its own.
 
 ### Constraints
 
-The box is `100dvw` by `100dvh`, fixed, and establishes an inline-size container named
-`app-chrome`. A part inside the box answers that container rather than the window, so it
+The box is `100dvw` by the visible block size, fixed, and establishes an inline-size
+container named `app-chrome`. The visible block size is `100dvh` less the depth an
+on-screen keyboard occupies, so a part at the block end stands above the keyboard rather
+than behind it. A part inside the box answers that container rather than the window, so it
 renders whole wherever a composition establishes one — a book specimen bounding a part at
 a few hundred pixels gets the presentation that size calls for, and not the one the
 reader's window happens to call for.
@@ -37,6 +39,12 @@ reader's window happens to call for.
 The box states its own stacking above the document with a published token, and each part
 that must sit above or below its siblings states its own the same way. Where a part sits
 does not depend on where an application writes it.
+
+An application declares `interactive-widget=resizes-content`, so a browser that resizes
+the layout viewport for the keyboard resizes the box with it and no measurement happens.
+Where a browser resizes only the visual viewport, chrome measures the difference and
+publishes it as `--cn-keyboard-inset`. The token is `0px` until something measures it, so
+every browser, and every render before script runs, gets the full box.
 
 Content clears chrome by the tokens that size it, never by measuring what is present:
 `--cn-app-bar-height` at the block start, and at each other edge the width or depth of
@@ -54,7 +62,12 @@ behind it cedes nothing to it.
   a viewport-sized layer of its own. Cyan's `nav#rail`, `nav#tray` and `cn-tray-button`
   leave with the navigation capability, not with this one.
 - `packages/design-system/styles/units.css` publishes the box's stacking token beside
-  `--cn-z-fab`.
+  `--cn-z-fab`, and `--cn-keyboard-inset` at `0px`.
+- A unit test drives the keyboard measurement over the viewport figures a browser
+  reports, including a browser that has already resized its layout viewport, and a
+  zoomed viewport, which is shorter for another reason.
+- A browser check asserts that the box spans the viewport while no keyboard stands, and
+  that a published inset shortens it by that much.
 - A **CnAppChrome** Component book renders it holding an application bar and a quick
   action, in Light and Dark.
 - A browser check asserts that the box spans the viewport and stays put while the document
@@ -69,6 +82,8 @@ behind it cedes nothing to it.
 - The box paints no background, border or shadow.
 - Every stacking value in chrome is a published token; no part states a literal.
 - Chrome states what it occupies; a page never measures it.
+- Chrome is the only thing that measures the keyboard. A part reads the token, and a
+  second measurement would answer a different question in a bounded composition.
 - No part inside the box asks the window its size. A part that does renders one
   presentation in an application and another in a composition that bounds it.
 - The container's name is the contract each part queries; renaming it silently drops
