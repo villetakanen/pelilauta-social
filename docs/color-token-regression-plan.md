@@ -67,7 +67,7 @@ flowchart TD
   Semantic["generated semantic.css<br/>shared --cn-* roles"]
   Elevation["generated elevation.css<br/>shared shadow roles"]
   Private["component styles<br/>private colour decisions"]
-  Compat["generated compat/cyan-4.css<br/>v18 aliases only"]
+  Compat["hand-written compat/cyan-4.css<br/>temporary v18 aliases, deleted before rc.1"]
   Books["book lexicons<br/>read token JSON"]
   Consumers["design-system and application consumers"]
 
@@ -76,7 +76,6 @@ flowchart TD
   Generator --> Chroma
   Generator --> Semantic
   Generator --> Elevation
-  Generator --> Compat
   Theme --> Books
   Tokens --> Books
   Chroma --> Semantic
@@ -100,13 +99,12 @@ The writable sources and generated files carry these responsibilities:
 | `tokens/themes/default.json` | The default theme's literal v20 OKLCH scales, grouped as complete lightness-indexed chroma families. | Semantic purpose, CSS syntax, compatibility aliases. |
 | `tokens/semantic-color.json` | Shared colour roles, symbolic chroma references, and Light and Dark mappings. | Literal palette values, shadow geometry, one-component values. |
 | `tokens/elevation.json` | Shared shadow colour and grid-derived shadow roles. | Component shadows. |
-| `tokens/compatibility/cyan-4.json` | Names required by remaining Cyan 4 consumers and their permanent targets. | Permanent token declarations. |
 | `scripts/generate-tokens.mjs` | Schema and dependency validation; deterministic CSS emission. | Design rationale and handwritten token values. |
 | Generated `styles/chroma.css` | The active theme's `--chroma-*` declarations. | Hand edits. |
 | Generated `styles/semantic.css` | Shared `--cn-*` colour declarations. | Hand edits. |
 | Generated `styles/elevation.css` | Shared shadow declarations. | Hand edits. |
 | Component stylesheet | Private colour decisions and approved decorative palette use. | Public tokens without a second capability. |
-| Generated `styles/compat/cyan-4.css` | Names required by remaining Cyan 4 consumers. | Permanent palette declarations and aliases used only by migrated code. |
+| Hand-written `styles/compat/cyan-4.css` | Names required by remaining Cyan 4 consumers; temporary, deleted whole before rc.1. | Permanent palette declarations and aliases used only by migrated code. |
 | `styles/color.css` | Imports the colour layers in dependency order. | Token declarations. |
 | `styles/tokens.css` | Composes units, colour, and elevation dependencies. | Layer implementation. |
 
@@ -343,8 +341,9 @@ and generated CSS is current — satisfied at the end of T5.
 1. Remove every temporary numbered `--cn-color-{family}-{step}` alias.
 2. Remove `color-reference.css` after no import, parser, test, book, or consumer names
    it.
-3. Move retained Cyan aliases into `tokens/compatibility/cyan-4.json`, generate the
-   stylesheet, and prune it against remaining Cyan package and application usage.
+3. Leave `compat/cyan-4.css` hand-written (operator decision, 2026-08-19): the
+   Cyan bridge is intentionally temporary scaffolding for the beta and is deleted
+   whole before rc.1. It gets no JSON source, no generation, and no lexicon.
 4. Assert that permanent sources do not read `--color-*`, `--background-*`, or other
    compatibility names.
 5. Assert that compatibility aliases terminate in chroma or semantic roles and do

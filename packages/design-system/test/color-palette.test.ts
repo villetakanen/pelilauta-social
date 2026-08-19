@@ -17,11 +17,6 @@ const theme = JSON.parse(
   lightnessExceptions?: Record<string, Record<string, string>>;
 };
 
-const bridge = readFileSync(
-  new URL('../styles/color-reference.css', import.meta.url),
-  'utf8',
-);
-
 const OKLCH = /^oklch\((\d*\.?\d+) (\d*\.?\d+) (\d*\.?\d+)\)$/;
 const CORE_STEPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 const AUXILIARY_STEPS = [20, 40, 60, 90];
@@ -150,47 +145,5 @@ describe('chroma', () => {
     expect(first?.c).toBe(0);
     expect(last?.c).toBe(0);
     expect(peak).toBeGreaterThan(0.1);
-  });
-});
-
-describe('the bridge file', () => {
-  // color-reference.css is a temporary alias layer over --chroma-*: every
-  // declaration must forward to the token that generated it, and nothing
-  // else — no literal ever gets a second, uncontrolled source of truth.
-  const declarations = [
-    ...bridge.matchAll(
-      /--cn-color-([\w-]+):\s*([^;]+);/g,
-    ),
-  ].map((match) => ({ name: match[1], value: match[2].trim() }));
-
-  test('every declaration is an alias to --chroma-*, not a literal', () => {
-    expect(declarations.length).toBeGreaterThan(0);
-    for (const { name, value } of declarations) {
-      expect(value, name).toMatch(/^var\(--chroma-[\w-]+\)$/);
-    }
-  });
-
-  test('every alias matches a step declared in the token source', () => {
-    for (const { name, value } of declarations) {
-      const target = /^var\((--chroma-[\w-]+)\)$/.exec(value)?.[1];
-      expect(target, name).toBe(`--chroma-${name}`);
-
-      const match = /^([a-z]+)-(\d+)$/.exec(name);
-      expect(match, name).not.toBeNull();
-      const [, familyName, stepText] = match ?? [];
-      expect(
-        family(familyName).some((step) => step.step === Number(stepText)),
-        name,
-      ).toBe(true);
-    }
-  });
-
-  test('every declared step has a bridge alias', () => {
-    const aliased = new Set(declarations.map((d) => d.name));
-    for (const step of steps) {
-      expect(aliased.has(`${step.family}-${step.step}`), `${step.family}-${step.step}`).toBe(
-        true,
-      );
-    }
   });
 });

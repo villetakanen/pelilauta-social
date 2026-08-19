@@ -42,7 +42,6 @@ if (!componentStyle) {
 
 const tokens = tokenMap(
   styles('chroma.css'),
-  styles('color-reference.css'),
   styles('semantic.css'),
   componentStyle,
 );

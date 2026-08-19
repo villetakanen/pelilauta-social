@@ -166,7 +166,6 @@ describe('the two families', () => {
       '../styles/chroma.css',
       '../styles/semantic.css',
       '../styles/elevation.css',
-      '../styles/color-reference.css',
       '../styles/content-containers.css',
       '../styles/typography.css',
       '../styles/docs.css',

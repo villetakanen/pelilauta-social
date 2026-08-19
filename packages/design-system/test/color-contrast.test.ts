@@ -28,7 +28,6 @@ const styles = (path: string) =>
 
 const tokens = tokenMap(
   styles('chroma.css'),
-  styles('color-reference.css'),
   styles('semantic.css'),
 );
 

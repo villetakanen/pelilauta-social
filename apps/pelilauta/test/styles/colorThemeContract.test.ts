@@ -176,7 +176,6 @@ describe('v20 color theme contract', () => {
 
     expect(source.trim().split('\n')).toEqual([
       '@import "./chroma.css";',
-      '@import "./color-reference.css";',
       '@import "./semantic.css";',
       '@import "./compat/cyan-4.css";',
     ]);

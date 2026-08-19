@@ -9,7 +9,6 @@
  * Book: apps/design/src/content/principles/color-system.mdx
  */
 import chromaSource from '@design-system/styles/chroma.css?raw';
-import referenceSource from '@design-system/styles/color-reference.css?raw';
 import themeSource from '@design-system/styles/semantic.css?raw';
 import { type Mode, measure, tokenMap } from './color';
 
@@ -31,7 +30,7 @@ const {
   caption,
 } = Astro.props;
 
-const tokens = tokenMap(chromaSource, referenceSource, themeSource);
+const tokens = tokenMap(chromaSource, themeSource);
 
 // measure() throws on an unresolvable pair rather than skipping it, so a
 // renamed token fails the build instead of shortening the table.

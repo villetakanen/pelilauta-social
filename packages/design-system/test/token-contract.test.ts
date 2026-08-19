@@ -99,7 +99,6 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
   .sort();
 
 const chroma = read('chroma.css');
-const bridge = read('color-reference.css');
 const semantic = read('semantic.css');
 const elevation = read('elevation.css');
 
@@ -114,11 +113,7 @@ describe('layer composition', () => {
       (match) => match[1],
     );
 
-    expect(imports.slice(0, 3)).toEqual([
-      './chroma.css',
-      './color-reference.css',
-      './semantic.css',
-    ]);
+    expect(imports.slice(0, 2)).toEqual(['./chroma.css', './semantic.css']);
   });
 
   test('tokens.css supplies units and colour before elevation', () => {
@@ -142,15 +137,18 @@ describe('layer composition', () => {
     expect(referencing).toEqual([]);
   });
 
-  test('the numbered bridge only aliases canonical chroma', () => {
-    const offRamp = declarations(bridge)
-      .filter(
-        (declaration) =>
-          !/^var\(--chroma-[a-z]+-\d+\)$/.test(declaration.value.trim()),
-      )
-      .map((declaration) => declaration.name);
+  test('permanent stylesheets never read compatibility vocabulary', () => {
+    // Compat leans on the permanent system; the permanent system never leans
+    // back. The whole compat layer is deleted before rc.1, and this test with it.
+    const offenders = sheets
+      .filter((sheet) => !sheet.startsWith('compat'))
+      .flatMap((sheet) =>
+        varReferences(read(sheet))
+          .filter((usage) => /^--(color|background)-/.test(usage.name))
+          .map((usage) => `${sheet}: ${usage.name}`),
+      );
 
-    expect(offRamp).toEqual([]);
+    expect(offenders).toEqual([]);
   });
 
   test('semantic colours derive from the reference layer', () => {
