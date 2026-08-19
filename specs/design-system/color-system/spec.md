@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Color System
@@ -70,7 +70,8 @@ when two capabilities consume the same purpose.
   lightness equals its index divided by one hundred.
 - Replacing a core family changes no semantic or component token and keeps
   every consumer resolvable.
-- No declaration or consumer names an info family or role.
+- No declaration or consumer names an info chroma family; information is the
+  semantic pair `--cn-info` and `--cn-on-info` over a core family.
 
 ### Scenarios
 

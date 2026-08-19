@@ -188,9 +188,13 @@
     var(--cn-color-error-40),
     var(--cn-color-error-60)
   );
-  --cn-color-info: light-dark(
+  --cn-info: light-dark(
     var(--cn-color-primary-50),
     var(--cn-color-primary-90)
+  );
+  --cn-on-info: light-dark(
+    var(--cn-color-primary-95),
+    var(--cn-color-primary-40)
   );
   --cn-color-love: light-dark(var(--cn-color-love-40), var(--cn-color-love-60));
 

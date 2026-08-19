@@ -335,7 +335,7 @@ test('an attention class paints its flag on a surface rendered without one', asy
     const result = {
       notify: read('has-notify'),
       alert: read('has-alert'),
-      info: role('--cn-color-info'),
+      info: role('--cn-info'),
       warning: role('--cn-color-warning'),
     };
     host.remove();

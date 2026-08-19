@@ -14,7 +14,7 @@ Our colour system pairs a cool cerulean surface palette with a primary spectrum
 transitioning from teal to yellow-green. Surface tones anchor layout backgrounds
 and panels, while primary tones signify navigation, interactive focus, and key actions.
 Dedicated functional families provide unambiguous feedback for errors, warnings,
-informational notices, and social reactions.
+and social reactions; informational notices are a semantic role over primary.
 
 Light and Dark themes are independent expressions of this unified semantic model.
 Both themes share identical semantic tokens and elevation tiers.
@@ -60,7 +60,7 @@ yellow-green at light steps—providing visual vibrancy for interactive elements
 
 ### Functional colour families
 
-Four functional families provide feedback across system states:
+Three functional families provide feedback across system states:
 
 <ColorRamp
   source={referenceSource}
@@ -71,11 +71,6 @@ Four functional families provide feedback across system states:
   source={referenceSource}
   family="warning"
   intent="Cautionary feedback and alerts."
-/>
-<ColorRamp
-  source={referenceSource}
-  family="info"
-  intent="System status notices and neutral updates."
 />
 <ColorRamp
   source={referenceSource}

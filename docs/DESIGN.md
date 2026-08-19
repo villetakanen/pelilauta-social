@@ -42,9 +42,9 @@ Colour is constrained so it can be given away. A sub-community themes its site
 by replacing a whole chroma family, never a single role — the capability
 Mekanismi's users loved, made safe by lightness-indexed scales whose contrast
 survives the replacement. Love is a structural family because appreciation is
-this community's core signal. Info does not exist: it was primary in disguise,
-naming a distinction the design never made. `docs/color-rationale-study.md`
-records the rationale in full.
+this community's core signal. Info is a role over primary, not a family: the
+v20 info scale named a distinction the design never made.
+`docs/color-rationale-study.md` records the rationale in full.
 
 ### Spacing and responsiveness
 

@@ -72,7 +72,7 @@ describe('hue', () => {
   });
 
   test('every status family holds one hue', () => {
-    for (const name of ['error', 'warning', 'info', 'love']) {
+    for (const name of ['error', 'warning', 'love']) {
       expect(
         new Set(family(name).map((step) => step.h)),
         `${name} should not rotate`,
@@ -102,7 +102,7 @@ describe('depth', () => {
   });
 
   test('status families are four steps and no more', () => {
-    for (const name of ['error', 'warning', 'info', 'love']) {
+    for (const name of ['error', 'warning', 'love']) {
       expect(
         family(name).map((step) => step.step),
         name,

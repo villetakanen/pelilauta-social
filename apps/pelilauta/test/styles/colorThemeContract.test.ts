@@ -72,10 +72,6 @@ const expectedReferences = {
   '--cn-color-warning-40': 'oklch(0.4 0.2 65)',
   '--cn-color-warning-60': 'oklch(0.6 0.25 65)',
   '--cn-color-warning-90': 'oklch(0.9 0.2 65)',
-  '--cn-color-info-20': 'oklch(0.2 0.12 170)',
-  '--cn-color-info-40': 'oklch(0.4 0.15 170)',
-  '--cn-color-info-60': 'oklch(0.6 0.18 170)',
-  '--cn-color-info-90': 'oklch(0.9 0.1 170)',
   '--cn-color-love-20': 'oklch(0.2 0.15 30)',
   '--cn-color-love-40': 'oklch(0.4 0.18 30)',
   '--cn-color-love-60': 'oklch(0.6 0.2 30)',
@@ -174,7 +170,7 @@ describe('v20 color theme contract', () => {
     );
     const actual = declarations(source);
 
-    expect(actual.size).toBe(42);
+    expect(actual.size).toBe(38);
     expect(Object.fromEntries(actual)).toEqual(expectedReferences);
   });
 
