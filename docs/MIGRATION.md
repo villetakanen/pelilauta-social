@@ -44,6 +44,26 @@ call site moving:
 The remaining call sites are migration inputs, not a stable inventory. The terminal
 sweep classifies every use before Cyan's declarations are removed.
 
+## A native dialog arrives in the corner, collapsed
+
+Two design-system rules take away what the UA stylesheet gives a `dialog`, and a
+component that renders one sees neither of them.
+
+`styles/preflight.css` zeroes the margin of every element, which removes the
+`margin: auto` that centres a modal dialog against its zero inset.
+
+`.surface` is an inline-size query container, so it applies inline-size
+containment, which collapses a `fit-content` box, and anything sized against it,
+to nothing.
+
+A dialog therefore restates `position: fixed`, `inset: 0`, `margin: auto` and
+`fit-content` on both axes, and composes an elevation utility for its surface
+rather than `.surface`. `packages/design-system/components/CnLightbox.svelte` is
+the worked example.
+
+Both traps survive every check that reads the DOM instead of the rendered box. A
+dialog's checks assert its geometry.
+
 ## The inherited e2e suite is not evidence
 
 `apps/pelilauta/e2e` came from v18. It is ad hoc, depends on emulator and historical

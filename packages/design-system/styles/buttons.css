@@ -20,14 +20,17 @@
 
 /*
  * Geometry, type and the interaction frame. `.fab`, `.chrome-action`, `.chip`, a
- * menu item and `.cn-reaction-button` are excluded throughout: a floating action
- * button, a chrome action, a chip, a menu row and a reaction toggle are each a
- * capability with its own geometry and surface, so none inherits the button's
- * gradient, elevation or hover wash. A chip's exclusion
- * reaches its descendants too, because a chip's remove control is a native button
- * that the chip scales. A menu's exclusion is written as a descendant selector
- * because a menu item is an element the consumer wrote, carrying no class of ours. The
- * menu's trigger sits outside the container and stays a text icon button.
+ * menu item, a lightbox image and `.cn-reaction-button` are excluded throughout: a
+ * floating action button, a chrome action, a chip, a menu row, a cropped image and
+ * a reaction toggle are each a capability with its own geometry and surface, so
+ * none inherits the button's gradient, elevation or hover wash. A chip's
+ * exclusion reaches its descendants too, because a chip's remove control is a
+ * native button that the chip scales. A menu's exclusion is written as a
+ * descendant selector because a menu item is an element the consumer wrote,
+ * carrying no class of ours. The menu's trigger sits outside the container and
+ * stays a text icon button. A lightbox's exclusion is a descendant selector for
+ * the same reason a menu's is; its dialog needs none, because the control that
+ * closes it is the back action, already excluded as a chrome action.
  */
 button:not(
     .fab,
@@ -35,6 +38,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ),
 a.button[href]:not(
@@ -43,6 +47,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ) {
   position: relative;
@@ -110,6 +115,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):not(.cta):not(.text):not(.secondary) {
   background-color: transparent;
@@ -127,6 +133,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ) {
   background-color: transparent;
@@ -144,6 +151,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ) {
   background-image: none;
@@ -162,6 +170,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ) {
   --_button-secondary-light: light-dark(
@@ -191,6 +200,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   )::after,
 a.button[href]:not(
@@ -199,6 +209,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   )::after {
   content: "";
@@ -215,6 +226,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):hover::after,
 a.button[href]:not(
@@ -223,6 +235,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):hover::after {
   background-color: var(--cn-hover);
@@ -235,6 +248,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):active::after,
 a.button[href]:not(
@@ -243,6 +257,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):active::after {
   background-color: var(--cn-active);
@@ -254,6 +269,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):hover,
 a.button[href]:not(
@@ -262,6 +278,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):hover {
   box-shadow: var(--cn-shadow-button-hover);
@@ -274,6 +291,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):focus-visible,
 a.button[href]:not(
@@ -282,6 +300,7 @@ a.button[href]:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):focus-visible {
   outline: 2px solid var(--cn-focus-ring);
@@ -299,6 +318,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):disabled {
   opacity: var(--cn-disabled-opacity);
@@ -316,6 +336,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   ):has(> :is(.cn-icon, .cn-loader):only-child) {
   inline-size: var(--cn-button-size);
@@ -329,6 +350,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   )
   > :is(.cn-icon, .cn-loader):first-child:not(:only-child) {
@@ -345,6 +367,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   )
   > :is(.cn-icon, .cn-loader) {
@@ -357,6 +380,7 @@ button:not(
     .chip,
     .chip *,
     .cn-menu-container *,
+    .cn-lightbox *,
     .cn-reaction-button
   )
   > :is(span, .label) {
@@ -373,6 +397,7 @@ button:not(
       .chip,
       .chip *,
       .cn-menu-container *,
+      .cn-lightbox *,
       .cn-reaction-button
     ),
   a.button[href]:not(
@@ -381,6 +406,7 @@ button:not(
       .chip,
       .chip *,
       .cn-menu-container *,
+      .cn-lightbox *,
       .cn-reaction-button
     ),
   button:not(
@@ -389,6 +415,7 @@ button:not(
       .chip,
       .chip *,
       .cn-menu-container *,
+      .cn-lightbox *,
       .cn-reaction-button
     )::after,
   a.button[href]:not(
@@ -397,6 +424,7 @@ button:not(
       .chip,
       .chip *,
       .cn-menu-container *,
+      .cn-lightbox *,
       .cn-reaction-button
     )::after {
     transition: none;

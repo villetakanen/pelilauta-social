@@ -28,7 +28,7 @@ The public inputs are:
 | :--- | :--- | :--- |
 | `images` | `{ src: string; caption: string }[]` | The images in presentation order. A caption is the image's alt text and its visible caption; the component never separates the two. |
 | `openLabel` | `string` | Required localised accessible name for an image control whose caption is empty. |
-| `closeLabel` | `string` | Required localised accessible name for the dialog's close control. |
+| `closeLabel` | `string` | Required localised accessible name CnLightbox gives the back action that exits the dialog. |
 
 ### Documentation
 
@@ -50,13 +50,16 @@ The CnLightbox Component book,
   caption element, and the image control takes its accessible name from
   `openLabel` instead; live data carries empty captions, so the empty case is a
   supported state, not consumer error.
-- The gallery takes the raised-surface background and the on-surface foreground
-  (`specs/design-system/surface/spec.md`). The overlaid thumbnail caption sits on
-  a scrim private to CnLightbox that keeps it readable over any image in both
-  schemes.
-- The dialog's close control composes the `close` noun from
-  `specs/design-system/components/cn-icon/spec.md` and takes its accessible name
-  from `closeLabel`. Clicking the dialog's backdrop also closes it.
+- The gallery takes the raised surface and the on-surface foreground. The
+  full-screen view is a dialog, and takes elevation 4
+  (`specs/design-system/surface/spec.md`).
+- The overlaid thumbnail caption sits on a scrim private to CnLightbox that keeps
+  it readable over any image in both schemes. Nothing else in the component stands
+  on artwork.
+- The dialog composes the back action
+  (`specs/design-system/chrome-actions/back-action/spec.md`), named by
+  `closeLabel`; CnLightbox closes the dialog when it dispatches `cn-back`.
+  Clicking the dialog's backdrop also closes it.
 - Images load lazily.
 - A fade at the strip's trailing edge signals off-screen thumbnails; it changes no
   measurement and intercepts nothing.
@@ -130,7 +133,7 @@ And focus returns to the control that opened it
 
 ```gherkin
 Given the open dialog
-When the reader activates the close control named by closeLabel
+When the reader activates the back action named by closeLabel
 Then the dialog closes
 And focus returns to the control that opened it
 ```

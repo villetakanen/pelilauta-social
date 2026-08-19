@@ -9,7 +9,8 @@ status: live
 ### Context
 
 Pelilauta presents modals both as dialogs and as pages standing in for them. The back
-action is the default button for exiting the modal.
+action is the exit for every modal and dialog, so the same control has to close a
+dialog and step back from a page that stands in for one.
 
 ### Architecture
 
@@ -21,7 +22,12 @@ command: it navigates nothing, and is never a destination.
 Activation dispatches `cn-back`, which bubbles. The control changes neither the document
 nor the session history, and knows nothing of the reader's unsaved work.
 
-The glyph is the `arrow-left` Icon.
+The glyph is the `arrow-left` Icon, and it stands for both `close` and `back`.
+Giving each meaning its own glyph would tell the reader they are different
+actions when they are not, so the reader learns a single exit for the whole
+application.
+
+The control stands at the block-start, inline-start corner of the modal it exits.
 
 `label` defaults to `<`, which names the control for nobody. The default is deliberate:
 `<` reads as a placeholder, where an English name would read as a finished label.
