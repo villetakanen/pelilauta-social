@@ -36,6 +36,7 @@ const readout = $derived(
       label="Vastaa keskusteluun"
       placeholder="Kirjoita viesti..."
       {onsend}
+      menuLabel="Lisää"
     >
       {#if attached}
         {#snippet supporting()}
@@ -52,14 +53,14 @@ const readout = $derived(
           </span>
         {/snippet}
       {/if}
-      {#snippet leading()}
-        <button
-          type="button"
-          class="chrome-action"
-          aria-label="Lisää liite"
-          onclick={() => (attached = true)}
-        >
+      {#snippet menu()}
+        <button type="button" onclick={() => (attached = true)}>
           <Icon noun="assets" decorative />
+          <span>Lisää kuva</span>
+        </button>
+        <button type="button" onclick={() => (attached = false)}>
+          <Icon noun="delete" decorative />
+          <span>Poista liite</span>
         </button>
       {/snippet}
       {#snippet trailing()}

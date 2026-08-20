@@ -21,6 +21,8 @@ const markup = (props: {
   placeholder?: string;
   disabled?: boolean;
   supporting?: string;
+  menu?: string;
+  menuLabel?: string;
   leading?: string;
   trailing?: string;
 }) =>
@@ -28,6 +30,7 @@ const markup = (props: {
     props: {
       ...props,
       supporting: props.supporting ? snippet(props.supporting) : undefined,
+      menu: props.menu ? snippet(props.menu) : undefined,
       leading: props.leading ? snippet(props.leading) : undefined,
       trailing: props.trailing ? snippet(props.trailing) : undefined,
     },
@@ -100,6 +103,60 @@ describe('the disabled state', () => {
       leading: '<button type="button">Liitä</button>',
     });
     expect(html).toContain('<button type="button">Liitä</button>');
+  });
+});
+
+describe("the bar's own add action", () => {
+  test('given no menu, the bar renders no action of its own', () => {
+    const html = markup({ label: 'Vastaa' });
+    expect(html).not.toContain('cn-menu-trigger');
+  });
+
+  test('the action is a menu trigger, named by menuLabel', () => {
+    const html = markup({
+      label: 'Vastaa',
+      menu: '<button type="button">Lisää kuva</button>',
+      menuLabel: 'Lisää',
+    });
+    expect(html).toMatch(/class="[^"]*cn-menu-trigger[^"]*"/);
+    expect(html).toContain('aria-label="Lisää"');
+  });
+
+  test('the trigger takes the chrome action presentation', () => {
+    const html = markup({
+      label: 'Vastaa',
+      menu: '<button type="button">Lisää kuva</button>',
+    });
+    expect(html).toMatch(/class="chrome-action cn-menu-trigger"/);
+  });
+
+  test('the items are the consumer\'s, on the menu surface', () => {
+    const html = markup({
+      label: 'Vastaa',
+      menu: '<button type="button">Lisää kuva</button>',
+    });
+    expect(html).toMatch(
+      /class="cn-menu-container[^"]*"[^>]*><button type="button">Lisää kuva<\/button>/,
+    );
+  });
+
+  test('the action stands before the textarea', () => {
+    const html = markup({
+      label: 'Vastaa',
+      menu: '<button type="button">Lisää kuva</button>',
+    });
+    expect(html.indexOf('cn-menu-trigger')).toBeLessThan(
+      html.indexOf('<textarea'),
+    );
+  });
+
+  test('disabled reaches the action', () => {
+    const html = markup({
+      label: 'Vastaa',
+      menu: '<button type="button">Lisää kuva</button>',
+      disabled: true,
+    });
+    expect(html).toMatch(/<div class="actions[^"]*" inert/);
   });
 });
 

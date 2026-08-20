@@ -9,6 +9,11 @@
  * capability of its own, so surface, placement, input and action composition
  * are one component here.
  *
+ * The bar owns one action of its own, the `+` at the row's inline start: what a
+ * reader adds to a reply is a menu, and the bar renders the action and the
+ * surface while the consumer writes the items. Everything else in the row is
+ * the consumer's.
+ *
  * It is controlled. The consumer binds `value`, and `onsend` reports a send
  * intent carrying the current value — sending neither clears the value nor
  * unmounts anything, so a failed write keeps the draft on screen. Attachment
@@ -33,6 +38,7 @@
  * costs the draft twice in the DOM and grows in every browser.
  */
 import type { Snippet } from 'svelte';
+import CnMenu from './CnMenu.svelte';
 
 let {
   value = $bindable(''),
@@ -41,6 +47,8 @@ let {
   disabled = false,
   onsend,
   supporting,
+  menu,
+  menuLabel = 'Add',
   leading,
   trailing,
 }: {
@@ -56,7 +64,15 @@ let {
   onsend?: (value: string) => void;
   /** Context above the input row: an attachment preview, a write error. */
   supporting?: Snippet;
-  /** Actions at the row's inline start. */
+  /**
+   * The commands behind the bar's own `+`: what a reader can add to a reply.
+   * The bar renders the action and the surface; the items are the consumer's,
+   * one anchor or button each, as CnMenu takes them.
+   */
+  menu?: Snippet;
+  /** The `+` action's accessible name. Localise it, wherever `menu` is given. */
+  menuLabel?: string;
+  /** Actions at the row's inline start, after the `+`. */
   leading?: Snippet;
   /** Actions at the row's inline end. */
   trailing?: Snippet;
@@ -82,8 +98,15 @@ function keydown(event: KeyboardEvent) {
     {/if}
 
     <div class="input-row">
-      {#if leading}
-        <div class="actions" inert={disabled}>{@render leading()}</div>
+      {#if menu || leading}
+        <div class="actions" inert={disabled}>
+          {#if menu}
+            <CnMenu noun="add" chrome opens="block-start" label={menuLabel}>
+              {@render menu()}
+            </CnMenu>
+          {/if}
+          {#if leading}{@render leading()}{/if}
+        </div>
       {/if}
 
       <div class="field">
@@ -144,9 +167,70 @@ function keydown(event: KeyboardEvent) {
    * rounded.
    */
   .cn-chat-bar {
+    --_indicator: calc(var(--cn-grid) / 8);
+    /*
+     * The row the bar stands in before the draft grows it: a supplied action's
+     * seven units. Half of it is the radius, so the ends are round at rest and
+     * stay that curve at every height the draft reaches.
+     */
+    --_row: calc(var(--cn-grid) * 7);
+    /*
+     * The draft's padding, two units above and below the line, moved a quarter
+     * unit toward the block start. A reader measures a line by its lowercase,
+     * and Roboto Mono reserves four pixels of descent inside the three-unit
+     * line: centring the line box puts the lowercase two pixels below the row's
+     * centre, and below the two glyphs standing either side of it. The pair
+     * still totals four units, so every line the draft grows by lands where it
+     * did.
+     */
+    --_draft-pad-start: calc(var(--cn-grid) * 1.75);
+    --_draft-pad-end: calc(var(--cn-grid) * 2.25);
+
     grid-row: 3;
     overflow: hidden;
     z-index: var(--cn-z-chat-bar);
+
+    /*
+     * The bar is the field. It reads the `--cn-color-field*` roles
+     * `styles/fields.css` paints a field with, so the surface a reader types
+     * into is one surface across the system, and the elevation supplies the
+     * shadow and the tier rather than a background. The indicator runs the
+     * whole way round, because the bar is a container the reader types into
+     * and not a line of a form; it follows whatever radius the band gives.
+     *
+     * Hover lifts the indicator alone and leaves the fill where it rests, and
+     * focus changes the fill as well — the field's states, painted on the whole
+     * bar, because the bar reads as one object. The two supplied action regions
+     * keep their own hover on top of it.
+     */
+    background-color: var(--cn-color-field);
+    box-shadow: inset 0 0 0 var(--_indicator) var(--cn-color-field-border);
+
+    /*
+     * The bar is a field's row, not a surface holding one: `.surface`'s padding
+     * would stand outside the input row and carry the bar to eleven units. A
+     * supplied action is seven units tall, the draft's line is three with two
+     * units of padding above and below it, so the bar stands at seven — the row
+     * a field occupies — and grows three at every line. The controls carry their
+     * own inset above and below, so the bar adds none there; along the inline
+     * edges it adds half a unit, so a control at either end stands off the
+     * pill's curve rather than against it.
+     */
+    padding-block: 0;
+    padding-inline: calc(var(--cn-grid) * 0.5);
+
+    /*
+     * The draft reads as a field's value: the mono family, at the size and the
+     * leading `styles/fields.css` gives a field. Stated here because the value
+     * is not published as a token, and stated once, so the mirror below takes
+     * the control's metrics by inheritance rather than by a second copy.
+     */
+    font-family: var(--cn-font-family-mono);
+    font-size: 1.0186rem;
+    line-height: var(--cn-line);
+    transition:
+      background-color var(--cn-duration-ui) var(--cn-easing-ui),
+      box-shadow var(--cn-duration-ui) var(--cn-easing-ui);
 
     /*
      * Supporting content takes what it needs and gives it up first; the input
@@ -156,28 +240,50 @@ function keydown(event: KeyboardEvent) {
      */
     display: grid;
     grid-template-rows: minmax(0, auto) minmax(min-content, 1fr);
-    gap: var(--cn-grid);
     border-radius: 0;
     color: var(--cn-text-high);
     pointer-events: auto;
   }
 
+  .cn-chat-bar:hover {
+    box-shadow: inset 0 0 0 calc(2 * var(--_indicator))
+      var(--cn-color-field-border-hover);
+  }
+
+  .cn-chat-bar:focus-within {
+    background-color: var(--cn-color-field-focus);
+    box-shadow: inset 0 0 0 calc(2 * var(--_indicator))
+      var(--cn-color-field-border-focus);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cn-chat-bar {
+      transition: none;
+    }
+  }
+
   /*
    * 38.75rem is --cn-breakpoint-small, which a container query cannot read.
    * Past it the bar is an object rather than an edge: inset from the container,
-   * centred, and no wider than a line of text reads. Where it stands and how it
-   * grows do not change.
+   * centred, no wider than a line of text reads, and a pill. Where it stands and
+   * how it grows do not change.
    */
   @container app-chrome (min-width: 38.7501rem) {
     .cn-chat-bar-placement {
       padding: var(--cn-gap);
     }
 
+    /*
+     * A pill at rest: the radius is half the resting row, so the ends are as
+     * round as the bar is tall at one line. It is a length rather than a
+     * proportion, so a draft that grows the bar keeps the same corner instead
+     * of stretching it into a lozenge.
+     */
     .cn-chat-bar {
       justify-self: center;
       inline-size: 100%;
       max-inline-size: var(--cn-measure);
-      border-radius: var(--cn-border-radius-large);
+      border-radius: calc(var(--_row) / 2);
     }
   }
 
@@ -186,9 +292,16 @@ function keydown(event: KeyboardEvent) {
    * supporting region gives up its space first. `min-block-size: 0` is what
    * lets a flex item scroll rather than push its container open.
    */
+  /*
+   * The region carries the space it needs, rather than the grid carrying a gap:
+   * a gap between tracks stands whether or not the region is rendered, and a bar
+   * with no supporting content is a unit taller for it.
+   */
   .supporting {
     min-block-size: 0;
     overflow-y: auto;
+    padding-block: var(--cn-grid);
+    padding-inline: var(--cn-grid);
   }
 
   /*
@@ -252,6 +365,8 @@ function keydown(event: KeyboardEvent) {
    * `pre-wrap` wraps it the way the control does.
    */
   .mirror {
+    padding-block: var(--_draft-pad-start) var(--_draft-pad-end);
+    padding-inline: var(--cn-grid);
     white-space: pre-wrap;
     overflow-wrap: break-word;
     visibility: hidden;
@@ -266,20 +381,39 @@ function keydown(event: KeyboardEvent) {
     position: absolute;
     inset: 0;
     inline-size: 100%;
+    block-size: 100%;
     overflow-y: auto;
-    padding: 0;
+    padding-block: var(--_draft-pad-start) var(--_draft-pad-end);
+    padding-inline: var(--cn-grid);
     border: none;
     border-radius: 0;
     background: none;
+    box-shadow: none;
     font: inherit;
     color: inherit;
     resize: none;
   }
 
+  /*
+   * The control stays a hole in the states too: `styles/fields.css` paints a
+   * textarea's own hover and focus more specifically than the rule above, so
+   * without this a field's indicator draws inside the bar's.
+   */
+  textarea:hover,
+  textarea:focus-within {
+    background: none;
+    box-shadow: none;
+  }
+
+  /*
+   * No ring. The bar's own focus state is the focus indication, as it is for
+   * every field: a focused text control matches `:focus-visible` whichever way
+   * the reader reached it, so a ring meant for the keyboard lands on every
+   * click. `specs/design-system/fields/spec.md` carries the reasoning.
+   */
+  textarea:focus,
   textarea:focus-visible {
-    /* An outline, so focus adds no measurement to the row. */
-    outline: 2px solid var(--cn-focus-ring);
-    outline-offset: 2px;
+    outline: none;
   }
 
   textarea:disabled {

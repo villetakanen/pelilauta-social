@@ -56,9 +56,14 @@ Viimeksi unohdimme ne kotiin.`;
   <p class="filler" style="--rig-width: 74%"></p>
 {/snippet}
 
-{#snippet attachAction()}
-  <button type="button" class="chrome-action" aria-label="Lisää liite">
+{#snippet addMenu()}
+  <button type="button">
     <Icon noun="assets" decorative />
+    <span>Lisää kuva</span>
+  </button>
+  <button type="button">
+    <Icon noun="label-tag" decorative />
+    <span>Lisää linkki</span>
   </button>
 {/snippet}
 
@@ -73,8 +78,8 @@ Viimeksi unohdimme ne kotiin.`;
     <p class="text-label">Empty</p>
     <div class="frame" data-band={group}>
       {@render frameContent()}
-      <CnChatBar label="Vastaa keskusteluun" placeholder="Kirjoita viesti...">
-        {#snippet leading()}{@render attachAction()}{/snippet}
+      <CnChatBar label="Vastaa keskusteluun" placeholder="Kirjoita viesti..." menuLabel="Lisää">
+        {#snippet menu()}{@render addMenu()}{/snippet}
         {#snippet trailing()}{@render sendAction()}{/snippet}
       </CnChatBar>
     </div>
@@ -88,8 +93,9 @@ Viimeksi unohdimme ne kotiin.`;
         label="Vastaa keskusteluun"
         placeholder="Kirjoita viesti..."
         value={MULTILINE_DRAFT}
+        menuLabel="Lisää"
       >
-        {#snippet leading()}{@render attachAction()}{/snippet}
+        {#snippet menu()}{@render addMenu()}{/snippet}
         {#snippet trailing()}{@render sendAction()}{/snippet}
       </CnChatBar>
     </div>
@@ -99,7 +105,7 @@ Viimeksi unohdimme ne kotiin.`;
     <p class="text-label">Supporting content</p>
     <div class="frame" data-band={group}>
       {@render frameContent()}
-      <CnChatBar label="Vastaa keskusteluun" placeholder="Kirjoita viesti...">
+      <CnChatBar label="Vastaa keskusteluun" placeholder="Kirjoita viesti..." menuLabel="Lisää">
         {#snippet supporting()}
           <span class="attachment-chip">
             <Icon noun="assets" decorative />
@@ -109,7 +115,7 @@ Viimeksi unohdimme ne kotiin.`;
             </button>
           </span>
         {/snippet}
-        {#snippet leading()}{@render attachAction()}{/snippet}
+        {#snippet menu()}{@render addMenu()}{/snippet}
         {#snippet trailing()}{@render sendAction()}{/snippet}
       </CnChatBar>
     </div>
@@ -123,8 +129,9 @@ Viimeksi unohdimme ne kotiin.`;
         label="Vastaa keskusteluun"
         placeholder="Kirjoita viesti..."
         value={LONG_DRAFT}
+        menuLabel="Lisää"
       >
-        {#snippet leading()}{@render attachAction()}{/snippet}
+        {#snippet menu()}{@render addMenu()}{/snippet}
         {#snippet trailing()}{@render sendAction()}{/snippet}
       </CnChatBar>
     </div>
@@ -139,12 +146,9 @@ Viimeksi unohdimme ne kotiin.`;
         placeholder="Kirjoita viesti..."
         value="Lähetetään..."
         disabled
+        menuLabel="Lisää"
       >
-        {#snippet leading()}
-          <button type="button" class="chrome-action" aria-label="Lisää liite" disabled>
-            <Icon noun="assets" decorative />
-          </button>
-        {/snippet}
+        {#snippet menu()}{@render addMenu()}{/snippet}
         {#snippet trailing()}
           <button type="button" class="chrome-action" aria-label="Lähetä" disabled>
             <Icon noun="send" decorative />
