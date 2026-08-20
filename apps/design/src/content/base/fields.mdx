@@ -10,13 +10,36 @@ import theme from '@design-system/tokens/themes/default.json'
 import semanticColor from '@design-system/tokens/semantic-color.json'
 
 `packages/design-system/styles/fields.css` paints `input[type="text"]` and
-`textarea` with a filled container, closed by a border along its block end.
+`textarea` with a filled container, closed by an indicator along its block end.
 `specs/design-system/fields/spec.md` governs the states below; this page renders
 them.
 
+Every specimen stands at elevation 1, which is where a field is expected.
+
+## Every state
+
+Each state of a text input, one after another, named by its own label. Hover and
+focus need a pointer or a keyboard to reach; the rest stand as they render.
+
+<Composition themes elevation={1} caption="Every state of a text input, one per label">
+  <label>rest <input type="text" placeholder="Placeholder text" /></label>
+  <label>rest, with a value <input type="text" value="The words a reader typed" /></label>
+  <label>hover <input type="text" value="Hover me with a pointer" /></label>
+  <label>focus <input type="text" value="Tab to me, or tap into me" /></label>
+  <label>disabled <input type="text" value="A field a reader cannot use" disabled /></label>
+</Composition>
+
+```html
+<label>rest <input type="text" placeholder="Placeholder text" /></label>
+<label>rest, with a value <input type="text" value="The words a reader typed" /></label>
+<label>hover <input type="text" value="Hover me with a pointer" /></label>
+<label>focus <input type="text" value="Tab to me, or tap into me" /></label>
+<label>disabled <input type="text" value="A field a reader cannot use" disabled /></label>
+```
+
 ## Rest and placeholder
 
-<Composition themes caption="A field at rest, with its placeholder">
+<Composition themes elevation={1} caption="A field at rest, with its placeholder">
   <input type="text" placeholder="Placeholder text" />
   <textarea placeholder="Placeholder text"></textarea>
 </Composition>
@@ -40,7 +63,7 @@ mono at the 17px reading step would stand about 4% taller than the prose beside
 it. At 16.3px the two lowercases stand equal, which is the height a reader
 measures a line by.
 
-<Composition themes caption="A field against the reading step it sits beside">
+<Composition themes elevation={1} caption="A field against the reading step it sits beside">
   <p>The prose around a field is set at the reading step.</p>
   <input type="text" value="The words a reader types into the field." />
 </Composition>
@@ -54,8 +77,8 @@ measures a line by.
 
 A field spaces its content two grid units on every side, and the reading leading
 stands between them. The block padding is three units in total and each line is
-three, so a field lands on the grid at every line count. A field draws no inner control, so the box
-a reader sees is the box a reader taps.
+three, so a field lands on the grid at every line count. A field draws no inner
+control, so the box a reader sees is the box a reader taps.
 
 | | value | grid units |
 | :--- | ---: | ---: |
@@ -65,6 +88,25 @@ a reader sees is the box a reader taps.
 | Height, one line | 48px | 6 |
 | Height, two lines | 72px | 9 |
 | Height, three lines | 96px | 12 |
+| Margin, block | 4px | 0.5 |
+| Row, one line | 56px | 7 |
+
+The field a reader sees is six units tall, and half a unit of margin on either
+side puts it in a seven-unit row — the same visual-inside-physical pair a button
+takes.
+
+A label wrapping a field carries the container instead, and the field inside it
+keeps only its type. The container stands the same 48px: half a unit of padding,
+the label's two units, the value's three, half a unit of padding.
+
+| | value | grid units |
+| :--- | ---: | ---: |
+| Padding, block | 4px | 0.5 |
+| Padding, inline | 16px | 2 |
+| Label line | 16px | 2 |
+| Value leading | 24px | 3 |
+| Height, one line | 48px | 6 |
+| Height, two lines | 72px | 9 |
 
 ## Hover and focus
 
@@ -73,7 +115,7 @@ fill and its own border colour. Hover and focus need a pointer or a keyboard to
 reach: hover the field below with a pointer, then tab to it or tap into it, in
 both colour schemes.
 
-<Composition themes caption="Hover this field with a pointer, then tab to it or tap into it">
+<Composition themes elevation={1} caption="Hover this field with a pointer, then tab to it or tap into it">
   <input type="text" placeholder="Hover, then focus me" />
 </Composition>
 
@@ -96,6 +138,7 @@ the border for each state stand beside each other without an interaction.
     "--cn-color-field-border-hover",
     "--cn-color-field-border-focus",
     "--cn-color-field-placeholder",
+    "--cn-color-field-label",
   ]}
   intents={{
     "--cn-color-field": "Resting fill",
@@ -105,6 +148,7 @@ the border for each state stand beside each other without an interaction.
     "--cn-color-field-border-hover": "Indicator under a pointer",
     "--cn-color-field-border-focus": "Indicator while the reader types",
     "--cn-color-field-placeholder": "Placeholder text",
+    "--cn-color-field-label": "The label naming the field",
   }}
 />
 
@@ -115,7 +159,7 @@ reader who reaches the field by touch. Keyboard focus additionally draws
 
 ## Disabled
 
-<Composition themes caption="A disabled field">
+<Composition themes elevation={1} caption="A disabled field">
   <input type="text" placeholder="Disabled" disabled />
   <textarea placeholder="Disabled" disabled></textarea>
 </Composition>
@@ -134,9 +178,19 @@ field. Judge the fill above against that alternative before the value ships.
 ## A labelled field
 
 A field's accessible name comes from a `<label>` wrapping the control. The label
-text stands outside the filled container, so no state fill reaches it.
+becomes the filled container and the field inside it draws nothing of its own,
+so the name stands inside the fill, above the reader's words — Material Design
+3's populated filled field. The label text is the one part of a field set in
+Lato, at the label step: it is the field's name, written for a reader, where the
+value below it is the reader's own text.
 
-<Composition themes caption="A field named by a wrapping label">
+The label is also the one part of a field that states a foreground colour: a
+surface step in from the end of the scale, off the near-black the body takes in
+Light and off the near-white it takes in Dark. The surface steps are saturated at
+hue 242, so the name carries a hint of colour where the value keeps the body
+foreground — the system's word beside the reader's.
+
+<Composition themes elevation={1} caption="A field named by a wrapping label">
   <label>my awesome field <input type="text" placeholder="hello!"/></label>
 </Composition>
 

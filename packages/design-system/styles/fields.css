@@ -4,9 +4,12 @@
  * fields under this stylesheet.
  *
  * A field is a filled container closed by an active indicator along its
- * block end alone, not a Material text field's shape, label or icons. Rest,
- * hover and focus each paint their own fill and their own indicator colour.
- * A field states no foreground colour, so it inherits the body's.
+ * block end alone, not a Material text field's shape or icons. Rest, hover and
+ * focus each paint a distinct fill and indicator colour. A field states no
+ * foreground colour, so it inherits the body's.
+ *
+ * A label wrapping a field stands inside the fill, as Material's does: the
+ * label becomes the container, and the field it wraps draws nothing.
  *
  * The indicator is painted with an inset box-shadow rather than a border. A
  * shadow never enters the box model, so doubling it on focus cannot change
@@ -14,6 +17,20 @@
  * border of changing width could not make without reserving a gutter for its
  * wider state.
  */
+
+/*
+ * The two measurements both container kinds share: the resting indicator's
+ * width, and the margin that puts a field in a seven-unit row.
+ */
+input[type="text"],
+textarea,
+label:has(> input[type="text"]),
+label:has(> textarea) {
+  --_field-indicator-width: calc(var(--cn-grid) / 8);
+  --_field-margin-block: calc(var(--cn-grid) * 0.5);
+
+  margin-block: var(--_field-margin-block);
+}
 
 /*
  * A field is set in the mono family, which `fonts.css` decides, and the
@@ -28,14 +45,14 @@
  *
  * A Material filled field spaces its content 16dp on every side and stands 56dp
  * tall at its default density, 48 and 40 at the two steps below. A single-line
- * field here stands at 48, the middle step: a unit and a half of padding above
- * and below the reading leading. The half unit is what the height costs, and
- * every line the field grows by lands back on the grid.
+ * field here stands 48 visually, the middle step: a unit and a half of padding
+ * above and below the reading leading. Half a unit of margin on either side
+ * puts it in a seven-unit row, so the field the reader sees is six units and
+ * the row it occupies is 56 — the same visual-inside-physical pair a button
+ * takes. Every line the field grows by lands back on the grid.
  */
 input[type="text"],
 textarea {
-  --_field-indicator-width: calc(var(--cn-grid) / 8);
-
   font-size: 1.0186rem; /* 16.3px */
   line-height: var(--cn-line);
   padding-block: calc(var(--cn-grid) * 1.5);
@@ -61,12 +78,72 @@ textarea:hover {
  * composes its own label around a field still paints the state.
  */
 input[type="text"]:focus-within,
-textarea:focus-within,
-label:focus-within input[type="text"],
-label:focus-within textarea {
+textarea:focus-within {
   background-color: var(--cn-color-field-focus);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-focus);
+}
+
+/*
+ * A label wrapping a field: the label becomes the filled container and the
+ * field inside it draws nothing of its own. This is Material Design 3's
+ * populated filled field — the label text stands above the value, inside the
+ * fill. The container is the same 48 the field alone is: half a unit of
+ * padding, two units of label, three of value, half a unit of padding. Every
+ * line the value grows by adds three, so the container lands on the grid at
+ * every line count, and its margins put it in the same seven-unit row.
+ *
+ * The label text is the one part of a field set in Lato: it is the field's
+ * name, written for a reader, where the value below it is the reader's own
+ * text. It takes the label step's size and line.
+ *
+ * It is also the one part of a field that states a foreground colour: a surface
+ * step in from the end of the scale, off the near-black the body takes in Light
+ * and off the near-white it takes in Dark. The steps are saturated at hue 242,
+ * so the name carries a hint of colour where the value below it does not — the
+ * system's word beside the reader's.
+ */
+label:has(> input[type="text"]),
+label:has(> textarea) {
+  display: grid;
+  font-family: var(--cn-font-family);
+  font-size: var(--cn-font-size-caption);
+  font-weight: var(--cn-font-weight-text);
+  line-height: calc(var(--cn-grid) * 2);
+  letter-spacing: var(--cn-letter-spacing-text);
+  padding-block: calc(var(--cn-grid) * 0.5);
+  color: var(--cn-color-field-label);
+  padding-inline: calc(var(--cn-grid) * 2);
+  background-color: var(--cn-color-field);
+  box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
+    var(--cn-color-field-border);
+}
+
+label:has(> input[type="text"]):hover,
+label:has(> textarea):hover {
+  background-color: var(--cn-color-field-hover);
+  box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
+    var(--cn-color-field-border-hover);
+}
+
+label:has(> input[type="text"]):focus-within,
+label:has(> textarea):focus-within {
+  background-color: var(--cn-color-field-focus);
+  box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
+    var(--cn-color-field-border-focus);
+}
+
+/*
+ * The wrapped field keeps its own type and its leading, and gives up every
+ * measurement and every colour the container now carries.
+ */
+label:has(> input[type="text"]) > input[type="text"],
+label:has(> textarea) > textarea {
+  color: var(--cn-text);
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  box-shadow: none;
 }
 
 /*
@@ -77,6 +154,7 @@ label:focus-within textarea {
 input[type="text"]::placeholder,
 textarea::placeholder {
   color: var(--cn-color-field-placeholder);
+  font-style: italic;
 }
 
 input[type="text"]:focus-within::placeholder,
@@ -92,9 +170,20 @@ label:focus-within textarea::placeholder {
  * settles.
  */
 input[type="text"]:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+label:has(> input[type="text"]:focus-visible),
+label:has(> textarea:focus-visible) {
   outline: 2px solid var(--cn-focus-ring);
   outline-offset: 2px;
+}
+
+/*
+ * The ring belongs to the container, so a wrapped field does not draw a second
+ * one inside it.
+ */
+label:has(> input[type="text"]) > input[type="text"]:focus-visible,
+label:has(> textarea) > textarea:focus-visible {
+  outline: none;
 }
 
 /*
@@ -105,7 +194,14 @@ textarea:focus-visible {
  * rather than a colour of its own.
  */
 input[type="text"]:disabled,
-textarea:disabled {
+textarea:disabled,
+label:has(> input[type="text"]:disabled),
+label:has(> textarea:disabled) {
   opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
+}
+
+label:has(> input[type="text"]:disabled) > input[type="text"],
+label:has(> textarea:disabled) > textarea {
+  opacity: 1;
 }

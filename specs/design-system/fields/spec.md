@@ -41,7 +41,7 @@ together.
 
 | Role | Light | Dark |
 | :--- | :--- | :--- |
-| `--cn-color-field` | surface 80 | surface 10 |
+| `--cn-color-field` | surface 95 | elevation 3's background |
 | `--cn-color-field-hover` | surface 90 | surface 20 |
 | `--cn-color-field-focus` | primary 99 | primary 10 |
 | `--cn-color-field-border` | surface 70 | surface 30 |

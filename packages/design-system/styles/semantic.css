@@ -119,6 +119,10 @@
     var(--chroma-primary-70),
     var(--chroma-primary-30)
   );
+  --cn-color-field-label: light-dark(
+    var(--chroma-surface-30),
+    var(--chroma-surface-80)
+  );
   --cn-color-field-placeholder: light-dark(
     var(--chroma-surface-50),
     var(--chroma-surface-70)

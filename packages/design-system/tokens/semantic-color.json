@@ -161,6 +161,10 @@
       "light": "{chroma:primary-70}",
       "dark": "{chroma:primary-30}"
     },
+    "cn-color-field-label": {
+      "light": "{chroma:surface-30}",
+      "dark": "{chroma:surface-80}"
+    },
     "cn-color-field-placeholder": {
       "light": "{chroma:surface-50}",
       "dark": "{chroma:surface-70}"
