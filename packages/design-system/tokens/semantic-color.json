@@ -8,15 +8,15 @@
     },
     "cn-surface-1": {
       "light": "{chroma:surface-100}",
-      "dark": "{chroma:surface-30}"
+      "dark": "color-mix(in oklch, {chroma:surface-20}, {chroma:surface-40} 33%)"
     },
     "cn-surface-2": {
       "light": "{chroma:surface-100}",
-      "dark": "{chroma:surface-30}"
+      "dark": "color-mix(in oklch, {chroma:surface-20}, {chroma:surface-40} 33%)"
     },
     "cn-surface-3": {
       "light": "{chroma:surface-100}",
-      "dark": "{chroma:surface-40}"
+      "dark": "color-mix(in oklch, {chroma:surface-20}, {chroma:surface-40} 67%)"
     },
     "cn-surface-4": {
       "light": "{chroma:primary-99}",
@@ -138,8 +138,8 @@
       "value": "{token:cn-on-surface}"
     },
     "cn-color-field": {
-      "light": "{chroma:surface-90}",
-      "dark": "{chroma:surface-10}"
+      "light": "{chroma:surface-95}",
+      "dark": "color-mix(in oklch, {chroma:surface-20}, {chroma:surface-40} 67%)"
     },
     "cn-color-field-hover": {
       "light": "{chroma:surface-90}",
@@ -150,8 +150,8 @@
       "dark": "{chroma:primary-10}"
     },
     "cn-color-field-border": {
-      "light": "{chroma:surface-60}",
-      "dark": "{chroma:surface-30}"
+      "light": "{chroma:surface-50}",
+      "dark": "{chroma:surface-70}"
     },
     "cn-color-field-border-hover": {
       "light": "{chroma:primary-60}",

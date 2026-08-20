@@ -8,10 +8,13 @@ status: live
 
 ### Context
 
-Surface establishes a padded container and a visual depth hierarchy. Five levels
-coordinate background colour and shadow to encode the application ground plane,
-resting content, raised content, floating content and the highest system layer.
-Colour and shadow express one hierarchy in both themes.
+Surface tells a reader what is the application, what is content, and what the
+application has put in front of them. Five levels carry that with background colour
+and shadow, so the ranking is legible before a word is read and nothing needs a
+border to be seen as separate. Each level means one thing, and the system publishes
+only the levels it has meanings for: Material treats elevation as an abstract depth
+applied wherever a designer wants it, and this system gives every level a purpose a
+component either has or does not have.
 
 ### Architecture
 
@@ -27,13 +30,24 @@ sets `background-color` and `box-shadow`, consuming the surface and shadow roles
 defined by `specs/design-system/design-tokens/spec.md`. Components such as Card
 compose these utilities rather than restating their declarations.
 
-| level | role | Light background | Dark background | standalone shadow |
+| level | means | Light background | Dark background | standalone shadow |
 | :--- | :--- | :--- | :--- | :--- |
-| 0 | application ground plane | `--cn-surface`: surface 95 | `--cn-surface`: surface 20 | none |
-| 1 | resting surface | surface 100 | surface 30 | none |
-| 2 | raised surface | surface 100 | surface 30 | `--cn-shadow-elevation-2` |
-| 3 | floating or active surface | surface 100 | surface 40 | `--cn-shadow-elevation-3` |
-| 4 | highest system layer | `--cn-surface-4`: primary 99 | `--cn-surface-4`: primary 40 | `--cn-shadow-elevation-4` |
+| 0 | the application itself | surface 95 | surface 20 | none |
+| 1 | payload | surface 100 | surface 20, a third of the way to 40 | none |
+| 2 | payload inside payload | surface 100 | surface 20, a third of the way to 40 | `--cn-shadow-elevation-2` |
+| 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` |
+| 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` |
+
+A surface at level 0 claims no separation from the application. Level 1 holds what a
+reader came to read or use, and is the default. Level 2 is the rise that keeps payload
+distinguishable from the payload holding it; a surface reaches it by nesting rather than
+by choosing it. Level 3 covers a region of content without dimming it, whether it stays
+or is dismissed. Level 4 is the application interrupting the reader.
+
+Levels 1 and 2 share a background in both schemes and are separated by their shadows.
+Where the schemes differ is level 3: light gives it the same background again, and dark
+raises its lightness by as much as level 1 rose from the application, because a shadow
+carries less on a dark ground than on a light one.
 
 Levels in a nested elevation chain increase from ancestor to descendant. A child
 therefore has a level greater than every elevated ancestor. Its background remains
@@ -54,6 +68,14 @@ Without a positive-level elevated ancestor, the standalone shadow applies.
 ### Constraints
 
 `.elevation-0` paints the page background colour.
+
+An action is not a surface. An action may take an elevation shadow to show that it lifts,
+and takes no level with it; `specs/design-system/actions/spec.md` governs what an action
+is.
+
+A state may raise a surface by a level when the state makes its content something else.
+Level 4 is not a destination a state reaches, because a state on a component cannot be an
+interrupt from the application.
 
 Elevation 1 and every one-level rise are shadowless. Their lift is conveyed by
 the change in surface colour where the theme provides one.

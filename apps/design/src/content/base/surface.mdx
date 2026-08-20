@@ -33,33 +33,66 @@ must declare it explicitly.
 Each elevation utility applies the background color role and box shadow assigned to
 that level. Elevation hierarchy is defined in [Colour & Surface principles](/principles/color-system).
 
-| Class | Background | Shadow | Primary use |
+| Class | Background | Shadow | Level means |
 | :--- | :--- | :--- | :--- |
-| `.elevation-0` | `--cn-surface` | none | Application ground plane |
-| `.elevation-1` | `--cn-surface-1` | none | Resting content: cards and panels |
-| `.elevation-2` | `--cn-surface-2` | `--cn-shadow-elevation-2` | Raised content above a resting surface |
-| `.elevation-3` | `--cn-surface-3` | `--cn-shadow-elevation-3` | Floating or active content: menus and popovers |
-| `.elevation-4` | `--cn-surface-4` | `--cn-shadow-elevation-4` | Highest system layer: modal dialogs |
+| `.elevation-0` | `--cn-surface` | none | The application itself |
+| `.elevation-1` | `--cn-surface-1` | none | Payload, the default |
+| `.elevation-2` | `--cn-surface-2` | `--cn-shadow-elevation-2` | Payload inside payload |
+| `.elevation-3` | `--cn-surface-3` | `--cn-shadow-elevation-3` | Floats over content |
+| `.elevation-4` | `--cn-surface-4` | `--cn-shadow-elevation-4` | A system interrupt |
 
 <Composition
   themes
-  caption="The five levels, each on a surface for its padding"
+  elevation={0}
+  caption="Level 0, the application itself. Background luminance: Light OKLCH L 0.95, Dark OKLCH L 0.200."
 >
-  <div class="surface elevation-0">elevation-0</div>
-  <div class="surface elevation-1">elevation-1</div>
-  <div class="surface elevation-2">elevation-2</div>
-  <div class="surface elevation-3">elevation-3</div>
-  <div class="surface elevation-4">elevation-4</div>
+  A surface here claims no separation from the application.
 </Composition>
 
-Elevation 0 renders an opaque ground plane (surface step 95 in Light, step 20 in Dark).
-Elevations 0 and 1 are shadowless. Elevations 2 through 4 apply progressively larger box
-shadows when rendered without an elevated ancestor.
+<Composition
+  themes
+  elevation={1}
+  caption="Level 1, payload. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.267."
+>
+  What the reader came to read or use. The default.
+</Composition>
 
-In Light theme, levels 1 through 3 share one background, so the raised level's shadow
-carries the separation. In Dark theme, levels 2 and 3 separate through both background
-lightness and shadow. Level 4 transitions to the primary color family (step 99 in Light, step 40
-in Dark).
+<Composition
+  themes
+  elevation={2}
+  caption="Level 2, payload inside payload. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.267."
+>
+  The rise that keeps an inner thing distinguishable from what holds it. Reached
+  by nesting rather than chosen.
+</Composition>
+
+<Composition
+  themes
+  elevation={3}
+  caption="Level 3, floats over content. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.333."
+>
+  Covers a region of content without dimming it, whether it stays or is dismissed.
+</Composition>
+
+<Composition
+  themes
+  elevation={4}
+  caption="Level 4, a system interrupt. Background luminance: Light OKLCH L 0.99, Dark: primary step 40."
+>
+  The application interrupting the reader.
+</Composition>
+
+Elevation 0 renders an opaque ground plane, surface step 95 in Light and surface step
+20 in Dark. Elevations 0 and 1 are shadowless; elevations 2 through 4 apply
+progressively larger box shadows when rendered without an elevated ancestor.
+
+Levels 1 and 2 share a background in both schemes and separate by their shadows alone.
+Level 1 stands away from the application: surface step 100 in Light, and in Dark a
+third of the way from step 20 to step 40. Level 3 shares that background again in
+Light, and in Dark stands two thirds of the way from step 20 to step 40 — as far above
+level 2 as level 1 stands above the application — because a shadow carries less on a
+dark ground than on a light one. Level 4 leaves the surface family for primary, step 99
+in Light and step 40 in Dark.
 
 Every level carries the inherited body foreground at WCAG 2.2 AA in both themes. Surface
 sets no foreground: a consumer raises one to strengthen a role, not to repair it.
