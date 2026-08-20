@@ -59,6 +59,8 @@ export const threads: Locale = {
     noMoreThreads: 'No more threads to load',
   },
   discussion: {
+    join: 'Join the discussion',
+    sendFailed: 'The reply was not sent. Try again.',
     title: 'Discussion',
     reply: 'Reply',
     empty: 'Start the discussion by replying below.',

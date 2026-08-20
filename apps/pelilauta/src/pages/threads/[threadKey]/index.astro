@@ -6,6 +6,7 @@ import { createPlainSnippet } from 'src/utils/snippetHelpers';
 import DiscussionApp from '../../../components/server/DiscussionApp/DiscussionApp.astro';
 import ThreadArticle from '../../../components/server/ThreadsApp/ThreadArticle.astro';
 import ThreadInfoSection from '../../../components/server/ThreadsApp/ThreadInfoSection.astro';
+import ThreadChatBar from '../../../components/svelte/discussion/ThreadChatBar.svelte';
 
 const { threadKey } = Astro.params;
 
@@ -42,4 +43,5 @@ const snippet = createPlainSnippet(thread.markdownContent || '', 160);
     <ThreadInfoSection thread={thread} />
   </div>
   <DiscussionApp thread={thread} />
+  <ThreadChatBar thread={thread} slot="authoring" client:only="svelte" />
 </Base>

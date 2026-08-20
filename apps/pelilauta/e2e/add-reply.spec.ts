@@ -87,11 +87,7 @@ test.describe('Reply Submission UX Improvements', () => {
       page.getByRole('heading', { name: uniqueThreadTitle, level: 1 }),
     ).toBeVisible();
 
-    // Now add a reply - open the reply dialog
-    await page.getByRole('button', { name: 'Vastaa' }).click();
-
-    // Wait for dialog to be visible
-    await expect(page.getByRole('dialog')).toBeVisible();
+    // Now add a reply, in the bar standing in chrome
 
     // Fill in the reply content
     const replyContent = 'This is my test reply!';
@@ -110,8 +106,10 @@ test.describe('Reply Submission UX Improvements', () => {
     // Wait for successful API response
     await responsePromise;
 
-    // The dialog should close
-    await expect(page.getByRole('dialog')).toBeHidden({ timeout: 5000 });
+    // The draft clears where the write succeeded
+    await expect(page.getByPlaceholder('Kirjoita viesti...')).toHaveValue('', {
+      timeout: 5000,
+    });
 
     // Verify the reply appears
     await expect(page.getByText(replyContent)).toBeVisible({ timeout: 10000 });
@@ -197,12 +195,6 @@ test.describe('Reply Submission UX Improvements', () => {
       page.getByRole('heading', { name: uniqueThreadTitle, level: 1 }),
     ).toBeVisible();
 
-    // Open the reply dialog
-    await page.getByRole('button', { name: 'Vastaa' }).click();
-
-    // Wait for dialog to be visible
-    await expect(page.getByRole('dialog')).toBeVisible();
-
     // Fill in the reply content
     await page.getByPlaceholder('Kirjoita viesti...').fill(replyContent);
 
@@ -216,16 +208,17 @@ test.describe('Reply Submission UX Improvements', () => {
       0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
     ]);
 
-    // Upload the test image - set file directly on the hidden input
-    // Note: With cn-reply-dialog, the input is slotted and might not be a direct descendant of the role="dialog" element in the accessibility tree
-    await page.locator('cn-reply-dialog input[type="file"]').setInputFiles({
+    // Upload the test image directly on the hidden input the bar's `+` clicks.
+    await page.getByTestId('file-input').setInputFiles({
       name: 'test-image.png',
       mimeType: 'image/png',
       buffer: testImageBuffer,
     });
 
-    // Verify file is shown in the dialog (preview should appear)
-    await expect(page.getByRole('dialog').locator('cn-lightbox')).toBeVisible();
+    // The chosen file previews in the bar's supporting region
+    await expect(
+      page.locator('.cn-chat-bar').locator('cn-lightbox'),
+    ).toBeVisible();
 
     // Start timing the reply submission with file
     const startTime = Date.now();
@@ -243,8 +236,10 @@ test.describe('Reply Submission UX Improvements', () => {
     // Wait for successful API response
     await responsePromise;
 
-    // Wait for the dialog to close after successful submission (file uploads may take longer)
-    await expect(page.getByRole('dialog')).toBeHidden({ timeout: 5000 });
+    // The draft clears once the write lands (a file upload may take longer)
+    await expect(page.getByPlaceholder('Kirjoita viesti...')).toHaveValue('', {
+      timeout: 5000,
+    });
 
     const endTime = Date.now();
     const responseTime = endTime - startTime;
@@ -330,15 +325,8 @@ test.describe('Reply Submission UX Improvements', () => {
       page.getByRole('heading', { name: uniqueThreadTitle, level: 1 }),
     ).toBeVisible();
 
-    // Open the reply dialog
-    await page.getByRole('button', { name: 'Vastaa' }).click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-
-    // Try to submit empty reply
-    await page.getByRole('button', { name: 'Lähetä' }).click();
-
-    // Dialog should still be open (form validation should prevent submission)
-    await expect(page.getByRole('dialog')).toBeVisible();
+    // An empty draft is not sendable, so the action cannot be pressed.
+    await expect(page.getByRole('button', { name: 'Lähetä' })).toBeDisabled();
 
     // Fill in some content and try again
     await page
@@ -357,8 +345,10 @@ test.describe('Reply Submission UX Improvements', () => {
     // Wait for successful API response
     await responsePromise;
 
-    // Wait for the dialog to close after successful validation and submission
-    await expect(page.getByRole('dialog')).toBeHidden({ timeout: 3000 });
+    // The draft clears once the write lands
+    await expect(page.getByPlaceholder('Kirjoita viesti...')).toHaveValue('', {
+      timeout: 3000,
+    });
   });
 
   test('Error handling works correctly', async ({ page }) => {

@@ -67,6 +67,13 @@ const { title, description, image, noSharing, search } = Astro.props;
           </nav>
         )
       }
+      {/*
+        Authoring stands in chrome, not in the page: a reader writing an answer
+        keeps it wherever the content has scrolled to, and the chrome box is
+        what measures the space an on-screen keyboard leaves. A page that
+        renders nothing here adds nothing to the chrome.
+      */}
+      <slot name="authoring" />
     </CnAppChrome>
 
     <main class="app-main">

@@ -142,9 +142,12 @@ function keydown(event: KeyboardEvent) {
    * ceiling holds and the overflow lands where it belongs.
    */
   .cn-chat-bar-placement {
+    --_rail: 0rem;
+
     position: absolute;
     inset: 0;
     pointer-events: none;
+    padding-inline-start: var(--_rail);
     display: grid;
     /*
      * The application bar's depth, the slack that pushes the bar to the block
@@ -158,6 +161,26 @@ function keydown(event: KeyboardEvent) {
       var(--cn-app-bar-height)
       1fr
       fit-content(calc(100% - var(--cn-app-bar-height)));
+  }
+
+  /*
+   * The rail stands in the same chrome and above the bar in the stack, so the
+   * bar cedes its strip as the main region does. What the strip is worth comes
+   * from the rail's own token; whether one stands at all is asked of the chrome
+   * rather than read from that token, because a bounded book composition
+   * inherits the token from the page around it and would cede to a rail that
+   * is nowhere near it.
+   */
+  :global(.app-chrome:has(.cn-rail)) .cn-chat-bar-placement {
+    --_rail: var(--cn-rail-occupies);
+
+    transition: padding-inline-start var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.app-chrome:has(.cn-rail)) .cn-chat-bar-placement {
+      transition: none;
+    }
   }
 
   /*
@@ -271,6 +294,7 @@ function keydown(event: KeyboardEvent) {
   @container app-chrome (min-width: 38.7501rem) {
     .cn-chat-bar-placement {
       padding: var(--cn-gap);
+      padding-inline-start: calc(var(--cn-gap) + var(--_rail));
     }
 
     /*

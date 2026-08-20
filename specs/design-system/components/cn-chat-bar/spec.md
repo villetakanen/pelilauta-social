@@ -55,6 +55,11 @@ In the small band the surface spans the container's inline size. Past
 `--cn-breakpoint-small` it is centred, inset from the container's edges by `--cn-gap`, and
 capped at `--cn-measure`.
 
+Where a rail stands in the same chrome, the placement cedes the strip the rail occupies,
+as the main region does, so the surface is centred on the content rather than on the
+viewport. What the strip is worth is the rail's to say; whether one stands is asked of the
+chrome, because a bounded composition inherits the occupancy from the page around it.
+
 The surface grows until it reaches the application bar, and no further: a reader who
 fills the area keeps the bar, and with it the way out.
 
@@ -166,6 +171,9 @@ action inoperable, and suppresses send intent. Supplied actions are native butto
   state rules tie an unscoped rule here on specificity, so the reset names the bar, and a
   state added to a field reaches inside it unless it is reset there as well.
 - The radius stays a length. A proportion stretches the corner as the draft grows the bar.
+- The surface stays clear of the rail. The rail stands above the bar in the stack, so a
+  surface centred on the viewport loses its inline-start controls behind it at the widths
+  where a collapsed rail is visible.
 - The bar's row stays seven units at one line. Padding around the input row is what
   carried it past that before.
 

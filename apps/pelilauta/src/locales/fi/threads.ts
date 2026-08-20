@@ -54,6 +54,8 @@ export const threads: Locale = {
     },
   },
   discussion: {
+    join: 'Osallistu keskusteluun',
+    sendFailed: 'Viestin lähetys ei onnistunut. Yritä uudelleen.',
     title: 'Keskustelu',
     reply: 'Vastaa',
     empty: 'Aloita keskustelu aiheesta vastaamalla alta.',
