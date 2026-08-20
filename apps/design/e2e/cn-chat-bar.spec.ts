@@ -249,17 +249,21 @@ test('two differently sized app-chrome containers each take their own presentati
     await narrowSurface.evaluate((el) => getComputedStyle(el).borderRadius),
   ).toBe('0px');
 
-  // The wider band: --cn-gap padding on the placement root, the large radius.
+  // The wider band: --cn-gap padding on the placement root, a pill at rest.
   const gapPadding = await resolveValue(page, 'padding', 'var(--cn-gap)');
   expect(
     await placementRoot(wideFrame).evaluate(
       (el) => getComputedStyle(el).padding,
     ),
   ).toBe(gapPadding);
+  /*
+   * Half the resting row, which is a supplied action's seven units — a length,
+   * so a bar grown by its draft keeps the same corner.
+   */
   const largeRadius = await resolveValue(
     page,
     'borderRadius',
-    'var(--cn-border-radius-large)',
+    'calc(var(--cn-grid) * 3.5)',
   );
   expect(
     await wideSurface.evaluate((el) => getComputedStyle(el).borderRadius),
@@ -440,20 +444,35 @@ test.describe('the disabled presentation', () => {
       expect(await region.evaluate((el) => el.hasAttribute('inert'))).toBe(
         true,
       );
-      const button = region.locator('button');
-      await button.evaluate((el) => (el as HTMLButtonElement).focus());
-      await expect(button).not.toBeFocused();
+      /*
+       * Every button the region holds, which past the `+` includes the items on
+       * its menu surface: the surface is inside the inert region too.
+       */
+      for (const button of await region.locator('button').all()) {
+        await button.evaluate((el) => (el as HTMLButtonElement).focus());
+        await expect(button).not.toBeFocused();
+      }
     }
   });
 });
 
 test.describe('focus indication', () => {
-  test('keyboard focus draws an outline and changes no measurement', async ({
+  /*
+   * The bar's focus state is the indication, and the control draws no ring:
+   * a focused text control matches `:focus-visible` whichever way the reader
+   * reached it, so a ring meant for the keyboard lands on every click.
+   * `specs/design-system/fields/spec.md` carries the reasoning.
+   */
+  test('focus changes the bar and no measurement of the control', async ({
     page,
   }) => {
     await openDemo(page);
     const textarea = demoTextarea(page);
+    const bar = page.locator('.cn-chat-bar').first();
     const before = await box(textarea);
+    const resting = await bar.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
 
     await textarea.focus();
     await page.keyboard.press('Shift+Tab');
@@ -463,8 +482,11 @@ test.describe('focus indication', () => {
     const after = await box(textarea);
     expect(after).toEqual(before);
     expect(
+      await bar.evaluate((el) => getComputedStyle(el).backgroundColor),
+    ).not.toBe(resting);
+    expect(
       await textarea.evaluate((el) => getComputedStyle(el).outlineStyle),
-    ).toBe('solid');
+    ).toBe('none');
   });
 });
 
@@ -509,21 +531,11 @@ test.describe('the growth ceiling', () => {
   });
 
   /*
-   * Spec (Architecture): "Once the surface reaches the application bar, the
-   * textarea scrolls in the space that is left, and the input row stays
-   * operable there whatever the container's block size or the reader's text
-   * size." This fails, and not on a missing token. `.cn-chat-bar` does carry
-   * `overflow: hidden` here (unlike the prior small-band defect this file
-   * reported before this redesign), and `.input-row`'s own box does shrink
-   * to fit (confirmed directly: its rendered height is 190px against a
-   * 222px-tall surface). But the textarea inside it — sized by
-   * `field-sizing: content` to its full twelve-line height (1152px) — is
-   * still laid out and painted at that full height rather than being
-   * clamped to the row's shrunk box: `textarea.scrollHeight` and
-   * `.clientHeight` are equal (1152 and 1152, measured directly), so
-   * nothing scrolls; the excess is simply invisible, clipped only by
-   * `.cn-chat-bar`'s `overflow: hidden`, with no scrollbar and no way for a
-   * reader to reach it.
+   * The control fills its field rather than standing at its own intrinsic
+   * height, so at the ceiling the draft is taller than the box that holds it
+   * and scrolls inside it. Before that, `scrollHeight` and `clientHeight` came
+   * out equal — the excess was invisible, clipped by `.cn-chat-bar`'s
+   * `overflow: hidden`, with no scrollbar and no way for a reader to reach it.
    */
   test('the textarea scrolls in the space that is left', async ({ page }) => {
     await page.goto(BOOK);
@@ -539,20 +551,11 @@ test.describe('the growth ceiling', () => {
    * Spec (Scenario): "Given a chat bar whose draft is longer than its
    * container can show / When it renders / Then its surface reaches the
    * application bar and grows no further / And the input row remains
-   * operable." The surface half holds (see the test above this one); the
-   * input row does not. Because the oversized textarea is laid out at its
-   * full content height inside a row whose own box was shrunk to fit
-   * (`.input-row { flex: 0 1 auto; min-block-size: 0; }`, cross-axis
-   * alignment `align-items: flex-end` in `.input-row`), the leading and
-   * trailing actions — flex-end-aligned to that oversized, not the shrunk,
-   * cross size — land far outside the visible, clipped surface: measured
-   * directly on this same fixture, the trailing action's box sits roughly
-   * 900px below the surface's own clipped bottom edge, entirely outside
-   * `.cn-chat-bar`'s `overflow: hidden` box. It is a real, attached button —
-   * Playwright's own actionability check does not always catch this kind of
-   * ancestor clipping — but it is not reachable within the surface a reader
-   * actually sees, which is what "the input row remains operable" means
-   * here.
+   * operable." Both halves hold once the control is clamped to the field: the
+   * row's cross size is the shrunk box, not the draft's full content height,
+   * so the flex-end-aligned actions stay inside the visible surface. While the
+   * control was laid out at its content height they landed roughly 900px below
+   * the surface's clipped bottom edge — attached, and unreachable.
    */
   test('the input row remains operable at the ceiling', async ({ page }) => {
     await page.goto(BOOK);
@@ -573,12 +576,11 @@ test.describe('the growth ceiling', () => {
 test.describe('overflow', () => {
   /*
    * The wide-band, hydrated counterpart of "the growth ceiling" above: the
-   * surface caps correctly at the same formula (confirmed: 158px against a
-   * 254px root, 64px app-bar height and 16px gap padding on each side), but
-   * the same defect reproduces on live typed input — `scrollHeight` and
-   * `clientHeight` come out equal here too, so nothing scrolls.
+   * surface caps at the same formula (confirmed: 158px against a 254px root,
+   * 64px app-bar height and 16px gap padding on each side), and the draft
+   * scrolls in what is left on live typed input as it does on a rendered one.
    */
-  test('a value past the growth ceiling stops the surface growing, and the textarea should scroll it', async ({
+  test('a value past the growth ceiling stops the surface growing, and the textarea scrolls it', async ({
     page,
   }) => {
     await openDemo(page);

@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # CnMenu
@@ -8,9 +8,11 @@ status: live
 
 ### Context
 
-`CnMenu` holds a surface's secondary commands on a temporary surface behind
-Material's more-options trigger, so a toolbar shows its primary actions and
-nothing else. The model is Material 3's menu, stripped to its container and its
+`CnMenu` holds a set of commands on a temporary surface behind one trigger, so a
+surface shows the trigger and nothing else. Material's more-options trigger is
+the case it was drawn for — a toolbar's secondary commands — and a trigger of its
+own naming serves the same shape wherever one command stands for several, as a
+chat bar's `+` does for what a reader can add to a reply. The model is Material 3's menu, stripped to its container and its
 items: no dividers, submenus, selection states, or trailing elements. The items
 stay the consumer's native elements, so when presentation and semantics compete,
 the element wins.
@@ -50,12 +52,20 @@ The CnMenu Component book, `apps/design/src/content/components/cn-menu.mdx`.
 
 - The trigger is the text icon button `specs/design-system/actions/spec.md`
   defines: the `kebab` noun by default, the `dots` noun with the `inline` prop.
+  A menu that is not the more-options one takes its glyph from the `noun` prop.
   Its accessible name comes from the `label` prop, defaulting to
   `"More options"`.
+- A trigger standing among chrome actions takes the chrome action's
+  presentation instead, through the `chrome` prop, so it matches the controls
+  beside it rather than the buttons elsewhere on the page.
 - An item row seats a leading icon and a label with the hover wash; activating
   an item performs it and closes the menu.
 - The container aligns to the trigger and opens toward the viewport centre on
   both axes, so it stays fully in view wherever the trigger sits.
+- Which side of the trigger it opens toward first is the `opens` prop: the
+  block end by default, where a trigger in a toolbar has room, or the block
+  start for a trigger standing at its container's block end. The viewport still
+  overrides either, on both axes.
 - The open container renders in the top layer, above every sibling surface; the
   stacking comes from the popover, not from the surface role it composes.
 
@@ -66,6 +76,10 @@ The CnMenu Component book, `apps/design/src/content/components/cn-menu.mdx`.
 - Both applications receive `CnMenu` from the design system's components.
 - The Component book renders the default and inline triggers with a live
   container of link and button items in both themes.
+- `packages/design-system/test/menu.test.ts` verifies what the rendered markup
+  carries for the trigger's glyph, its presentation and the side the container
+  opens toward. A container opening toward the block start is exercised in place
+  by `../cn-chat-bar/spec.md`'s suite.
 - Every scenario below runs as a check in `apps/design`.
 - Human review accepts the trigger and the container surface in both themes.
 
@@ -74,8 +88,9 @@ The CnMenu Component book, `apps/design/src/content/components/cn-menu.mdx`.
 - The items keep their element semantics; the component adds no role, tabindex,
   or pointer behaviour to them.
 - Closing the menu from the keyboard returns focus to the trigger.
-- The trigger stays the system text icon button; a bespoke trigger surface
-  drifts from the buttons it must match.
+- The trigger stays a presentation the system publishes — the text icon button,
+  or the chrome action; a bespoke trigger surface drifts from the controls it
+  must match.
 - The trigger's expanded state stays exposed to assistive technology.
 
 ### Scenarios

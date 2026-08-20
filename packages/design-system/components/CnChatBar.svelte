@@ -9,7 +9,7 @@
  * capability of its own, so surface, placement, input and action composition
  * are one component here.
  *
- * The bar owns one action of its own, the `+` at the row's inline start: what a
+ * The bar renders one action of its own, the `+` at the row's inline start: what a
  * reader adds to a reply is a menu, and the bar renders the action and the
  * surface while the consumer writes the items. Everything else in the row is
  * the consumer's.
@@ -65,7 +65,7 @@ let {
   /** Context above the input row: an attachment preview, a write error. */
   supporting?: Snippet;
   /**
-   * The commands behind the bar's own `+`: what a reader can add to a reply.
+   * The commands behind the bar's `+`: what a reader can add to a reply.
    * The bar renders the action and the surface; the items are the consumer's,
    * one anchor or button each, as CnMenu takes them.
    */
@@ -148,7 +148,7 @@ function keydown(event: KeyboardEvent) {
     display: grid;
     /*
      * The application bar's depth, the slack that pushes the bar to the block
-     * end, and the bar's own row. `fit-content` is what makes the ceiling hold:
+     * end, and the bar's row. `fit-content` is what makes the ceiling hold:
      * the row is as tall as the bar's content and clamps at what the
      * application bar leaves, and a clamped track is a definite length. A
      * maximum would not be — a percentage against a content-sized box resolves
@@ -201,7 +201,7 @@ function keydown(event: KeyboardEvent) {
      * Hover lifts the indicator alone and leaves the fill where it rests, and
      * focus changes the fill as well — the field's states, painted on the whole
      * bar, because the bar reads as one object. The two supplied action regions
-     * keep their own hover on top of it.
+     * keep their hover on top of it.
      */
     background-color: var(--cn-color-field);
     box-shadow: inset 0 0 0 var(--_indicator) var(--cn-color-field-border);
@@ -313,7 +313,7 @@ function keydown(event: KeyboardEvent) {
     min-block-size: 0;
     display: flex;
     /*
-     * The field takes the row's own block size rather than its content's, which
+     * The field takes the row's block size rather than its content's, which
      * is what makes it scroll once the row has given up space: an item aligned
      * to an edge keeps its content height and would carry the controls out of
      * the bar with it. The controls take the edge for themselves below.
@@ -360,7 +360,7 @@ function keydown(event: KeyboardEvent) {
   }
 
   /*
-   * The draft, in the control's own metrics, laid out and never seen. The
+   * The draft, in the control's metrics, laid out and never seen. The
    * trailing newline the markup adds keeps room for the line being typed, and
    * `pre-wrap` wraps it the way the control does.
    */
@@ -395,18 +395,19 @@ function keydown(event: KeyboardEvent) {
   }
 
   /*
-   * The control stays a hole in the states too: `styles/fields.css` paints a
-   * textarea's own hover and focus more specifically than the rule above, so
-   * without this a field's indicator draws inside the bar's.
+   * The control stays a hole in the states too. `styles/fields.css` paints a
+   * textarea's hover and focus, and an unscoped rule here would tie it on
+   * specificity and leave source order to decide whether a field's indicator
+   * draws inside the bar's. Naming the bar settles it.
    */
-  textarea:hover,
-  textarea:focus-within {
+  .cn-chat-bar textarea:hover,
+  .cn-chat-bar textarea:focus-within {
     background: none;
     box-shadow: none;
   }
 
   /*
-   * No ring. The bar's own focus state is the focus indication, as it is for
+   * No ring. The bar's focus state is the focus indication, as it is for
    * every field: a focused text control matches `:focus-visible` whichever way
    * the reader reached it, so a ring meant for the keyboard lands on every
    * click. `specs/design-system/fields/spec.md` carries the reasoning.

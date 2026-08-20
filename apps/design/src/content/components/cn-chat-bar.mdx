@@ -99,7 +99,7 @@ past it the bar is inset and centred.
 | `disabled` | `boolean` | Renders the textarea immutable and every supplied action inoperable. Defaults to `false`. |
 | `onsend` | `(value: string) => void` | Reports a send intent carrying the current value. Runs on Enter, never on Shift+Enter or during text composition, and never for a value that is empty or only white space. |
 | `supporting` | `Snippet` | Context above the input row: an attachment preview, a write error. |
-| `menu` | `Snippet` | The commands behind the bar's own `+`: what a reader can add to a reply. One anchor or button each. |
+| `menu` | `Snippet` | The commands behind the bar's `+`: what a reader can add to a reply. One anchor or button each. |
 | `menuLabel` | `string` | The `+` action's accessible name. Localise it wherever `menu` is given. |
 | `leading` | `Snippet` | Actions at the input row's inline start, after the `+`. |
 | `trailing` | `Snippet` | Actions at the input row's inline end. |
@@ -109,5 +109,6 @@ past it the bar is inset and centred.
 The textarea's accessible name is `label`; a consumer supplies and localises it, and the
 placeholder names nothing. `disabled` marks the textarea, the `+` and every supplied leading and
 trailing action inoperable, so a supplied button needs no separate `disabled` attribute
-to match. Keyboard focus on the textarea draws the shared focus ring without moving or
-resizing anything around it.
+to match. The bar draws no focus ring: its own focus state — the fill, the indicator — is the
+focus indication, and it changes no measurement of the row. [Fields](/base/fields)
+carries why a ring meant for the keyboard cannot stay off a click.
