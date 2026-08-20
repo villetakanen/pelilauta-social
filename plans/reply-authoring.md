@@ -20,6 +20,12 @@ bar, and a reader who is not signed in has an invitation to join the discussion 
 button was. Creation no longer opens or closes anything, so the focus criterion below
 belongs to editing alone.
 
+Two criteria left this epic the same day. Whether the bar stands above a virtual keyboard
+is settled on a phone, and `specs/design-system/components/cn-chat-bar/spec.md`'s
+Definition of Done already asks for that review; repeated here it read as work with no
+owner. Whether the end of the reply column is reachable under a fixed bar belongs to the
+footer rather than to authoring (human decision, 2026-08-20).
+
 ## Success criteria
 
 - No Pelilauta surface renders `cn-reply-dialog`. **Done.**
@@ -29,8 +35,6 @@ belongs to editing alone.
   prefilled for editing. **Done.**
 - The chat bar retains Markdown entry, image selection and preview, disabled in-flight
   controls, successful clearing and failure recovery without losing the draft.
-- The dock remains reachable above the virtual keyboard on a narrow viewport and does
-  not obscure the end of the reply column on a wide viewport.
 - Editing moves focus into the authoring control and returns it to the invoker on close;
   keyboard operation reaches every authoring action. Creation has no invoker: the bar is
   already there.
