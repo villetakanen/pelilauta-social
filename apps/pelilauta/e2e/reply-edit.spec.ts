@@ -41,29 +41,10 @@ test('can create and edit a reply', async ({ page }) => {
       .waitFor({ state: 'hidden', timeout: 10000 });
   }
 
-  // Click reply button to open dialog
-  // Try a more specific selector if getByRole fails
-  const replyButton = page
-    .locator('button:has(.cn-icon[data-noun="send"])')
-    .first();
-  if (await replyButton.isVisible()) {
-    await replyButton.click();
-  } else {
-    console.log('Reply button not found with icon selector. Dumping buttons:');
-    const buttons = await page.locator('button').allInnerTexts();
-    console.log(buttons);
-    throw new Error('Reply button not found');
-  }
-
-  // Wait for dialog
-  const replyDialog = page.locator('dialog[open]');
-  await expect(replyDialog).toBeVisible();
-
-  // Fill reply content
-  await replyDialog.locator('textarea[name="reply"]').fill(replyContent);
-
-  // Submit reply
-  await replyDialog.locator('button[type="submit"]').click();
+  // The bar stands in chrome, so there is nothing to open: write in it and send.
+  const draft = page.getByPlaceholder('Kirjoita viesti...');
+  await draft.fill(replyContent);
+  await page.getByRole('button', { name: 'Lähetä' }).click();
 
   // Wait for reply to appear
   await expect(
@@ -86,20 +67,15 @@ test('can create and edit a reply', async ({ page }) => {
     .locator('button:has(.cn-icon[data-noun="edit"])')
     .evaluate((node) => (node as HTMLElement).click());
 
-  // Wait for edit dialog
-  const editDialog = page.locator('dialog[open]');
-  await expect(editDialog).toBeVisible();
+  // The edit arrives in the same bar, carrying what the reply says.
+  await expect(draft).toHaveValue(replyContent);
+  await expect(page.locator('.cn-chat-bar')).toContainText('Muokkaat viestiä');
 
-  // Check pre-filled content
-  await expect(editDialog.locator('textarea[name="reply"]')).toHaveValue(
-    replyContent,
-  );
+  await draft.fill(updatedContent);
+  await page.getByRole('button', { name: 'Lähetä' }).click();
 
-  // Update content
-  await editDialog.locator('textarea[name="reply"]').fill(updatedContent);
-
-  // Save
-  await editDialog.locator('button[type="submit"]').click();
+  // The edit ends where it succeeded, and the bar returns to an empty draft.
+  await expect(draft).toHaveValue('', { timeout: 5000 });
 
   // Verify updated content in UI
   await expect(

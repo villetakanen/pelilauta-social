@@ -30,8 +30,10 @@ reference and its files to `/api/threads/add-reply`, and the discussion's subscr
 brings the stored reply back. This capability decides what happens to the draft after the
 write, and nothing about the write.
 
-Editing an existing reply is not this capability's yet; `EditReplyDialog.svelte` keeps
-v18's dialog until it is.
+One bar writes and edits. A reply's edit action stands in the document and the bar stands
+in chrome, so the reply the reader is editing travels between them through
+`apps/pelilauta/src/stores/replyEditing.ts` rather than as a prop. `updateReply` writes the
+change, on the path v18 already used.
 
 ### Documentation
 
@@ -51,9 +53,22 @@ The draft clears where the write succeeded. Where it failed, the draft and its
 attachments stay as the reader left them, and the bar reports the failure above its row,
 so a second attempt costs nothing typed.
 
-The bar carries no discard action. A draft stands until the reader sends it or empties it,
-and there is nothing to close: the dialog's cancel closed a surface this capability no
-longer has.
+A reader editing a reply they wrote has the reply's text in the bar, the caret in it, and
+a note above the row saying the bar is editing rather than answering, with the way out
+beside it. Sending writes the change. An edit that ends outright, written or abandoned,
+returns the focus to the trigger the reader opened the edit action from, because the
+action itself is a row on a closed menu by then. The draft they were writing waits while
+the edit borrows the bar, and comes back when it ends, so an edit costs the reader nothing
+of a half-written answer.
+
+The bar edits one reply at a time. A reader who starts editing a second reply leaves the
+first, and what they had typed into it goes with it; the answer they were writing before
+any edit still waits. One bar is what this capability chose, and two edits at once is what
+the two dialogs it replaced could hold.
+
+The bar carries no discard action for a new reply. A draft stands until the reader sends
+it or empties it, and there is nothing to close: the dialog's cancel closed a surface this
+capability no longer has.
 
 A reader adds images through the bar's `+`, and the chosen files preview above the row
 before the reply is sent. The files a reply carries are the ones the write path already
@@ -79,7 +94,9 @@ application's translations.
 - `apps/pelilauta/e2e/add-reply.spec.ts` drives the bar: a reply, a reply with an
   attachment, an empty draft that cannot be sent, and an unauthenticated write that is
   refused.
-- No Pelilauta surface renders `cn-reply-dialog` for composing a new reply.
+- A reader edits a reply they wrote in the same bar, and the answer they were writing is
+  still there afterwards.
+- No Pelilauta surface renders `cn-reply-dialog`.
 
 ### Regression Guardrails
 
@@ -88,6 +105,10 @@ application's translations.
 - The draft survives a failed write. Clearing on failure loses a reader's words.
 - The composer stays out of the document. Rendered in flow it takes the thread's space and
   scrolls away from the reader who is using it.
+- The focus returns to a control that is in the document. An edit action on a closed menu
+  is `display: none`, and asking it for the focus fails silently.
+- An edit and a new reply stay one bar. A second authoring surface is what this capability
+  replaced.
 - The invitation stays in the document. Rendered in chrome it would stand over a thread a
   reader has not joined.
 
@@ -132,4 +153,32 @@ And sending carries the file to the write path
 Given a signed-in reader with an empty draft
 When the bar renders
 Then the send action is inoperable
+```
+
+```gherkin
+Given a reader who has written a reply
+When they press its edit action
+Then the bar carries the reply's text with the caret in it
+And the bar says it is editing, with the way out beside it
+```
+
+```gherkin
+Given a reader editing a reply, who had a half-written answer in the bar
+When the edit ends, whether written or abandoned
+Then the half-written answer is back in the bar
+And the focus returns to the trigger the edit action was opened from
+```
+
+```gherkin
+Given a reader editing one reply
+When they start editing another
+Then the bar carries the second reply
+And the focus stays in the bar
+```
+
+```gherkin
+Given a reader editing a reply
+When the change is written
+Then the reply shows it in the discussion
+And the bar is answering again
 ```

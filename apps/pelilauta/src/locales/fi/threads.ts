@@ -54,6 +54,8 @@ export const threads: Locale = {
     },
   },
   discussion: {
+    editing: 'Muokkaat viestiä',
+    editFailed: 'Muutosten tallennus ei onnistunut. Yritä uudelleen.',
     join: 'Osallistu keskusteluun',
     sendFailed: 'Viestin lähetys ei onnistunut. Yritä uudelleen.',
     title: 'Keskustelu',

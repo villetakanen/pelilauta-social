@@ -22,11 +22,11 @@ belongs to editing alone.
 
 ## Success criteria
 
-- No Pelilauta surface renders `cn-reply-dialog`.
+- No Pelilauta surface renders `cn-reply-dialog`. **Done.**
 - A thread mounts reply authoring in `CnAppChrome`, independent of the thread content's
   layout and scroll position.
 - Reply creation and editing share one local chat bar, with existing reply content
-  prefilled for editing. **Creation is done**; editing still renders `cn-reply-dialog`.
+  prefilled for editing. **Done.**
 - The chat bar retains Markdown entry, image selection and preview, disabled in-flight
   controls, successful clearing and failure recovery without losing the draft.
 - The dock remains reachable above the virtual keyboard on a narrow viewport and does

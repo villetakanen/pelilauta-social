@@ -9,10 +9,10 @@ import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 import { getProfileAtom } from '../../../stores/profiles';
+import { editedReply, editReply } from '../../../stores/replyEditing';
 import { uid } from '../../../stores/session';
 import ProfileLink from '../app/ProfileLink.svelte';
 import ReactionButton from '../app/ReactionButton.svelte';
-import EditReplyDialog from './EditReplyDialog.svelte';
 
 interface Props {
   reply: Reply;
@@ -46,11 +46,38 @@ onMount(() => {
   displayTime = toDisplayString(reply.updatedAt, true);
 });
 
-let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
+/**
+ * The edit action hands the reply to the thread's chat bar and takes the focus
+ * with it. When the edit ends the focus comes back to the menu's trigger, not
+ * to the action itself: the action is a row on a closed popover by then, and a
+ * closed popover is `display: none`, which cannot take focus. The trigger is
+ * the control the reader pressed to reach the action, and it is always in the
+ * document.
+ *
+ * A reader who left this edit by starting another one keeps their focus in the
+ * bar, where the other reply now is, so only an edit that ended outright
+ * returns it here.
+ */
+let root = $state<HTMLElement | null>(null);
+let editingHere = $derived($editedReply?.key === reply.key);
+let wasEditingHere = $state(false);
+
+$effect(() => {
+  if (editingHere) {
+    wasEditingHere = true;
+    return;
+  }
+  if (!wasEditingHere) return;
+
+  wasEditingHere = false;
+  if ($editedReply === null) {
+    root?.querySelector<HTMLElement>('.cn-menu-trigger')?.focus();
+  }
+});
 </script>
 
 <!-- The id is the anchor a link to a single reply lands on. -->
-<div id={reply.key}>
+<div id={reply.key} bind:this={root}>
   <CnBubble
     reply={fromUser}
     nick={author?.nick ?? ''}
@@ -72,7 +99,7 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
           <span>{t("actions:fork")}</span>
         </a>
         {#if fromUser}
-          <button type="button" onclick={() => editDialog?.showDialog()}>
+          <button type="button" onclick={() => editReply(reply)}>
             <Icon noun="edit" decorative />
             <span>{t("actions:edit")}</span>
           </button>
@@ -100,10 +127,6 @@ let editDialog = $state<ReturnType<typeof EditReplyDialog>>();
     {/if}
   </CnBubble>
 </div>
-
-{#if fromUser}
-  <EditReplyDialog {reply} bind:this={editDialog} />
-{/if}
 
 <style>
   /*

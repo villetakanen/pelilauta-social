@@ -115,6 +115,10 @@ The bar draws no focus ring. Its own focus state is the focus indication, for th
 `:focus-visible` whichever way the reader reached it, so a ring meant for the keyboard
 lands on every click.
 
+The bar can be asked for the caret. A consumer that fills the draft on the reader's behalf
+calls `focus()` on the component, because the reader asked for the bar somewhere else and
+the caret has to follow them to it.
+
 Enter sends a non-empty value and inserts no newline. Shift+Enter inserts a newline and
 sends nothing. Enter during text composition sends nothing. A value containing only
 white space sends nothing.

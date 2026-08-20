@@ -78,6 +78,17 @@ let {
   trailing?: Snippet;
 } = $props();
 
+let control = $state<HTMLTextAreaElement | null>(null);
+
+/**
+ * Puts the reader in the draft. A consumer that fills the bar on the reader's
+ * behalf — editing something they wrote — calls this, because the reader asked
+ * for the bar somewhere else and the caret has to follow.
+ */
+export function focus() {
+  control?.focus();
+}
+
 /**
  * Enter sends; Shift+Enter is the browser's newline and reaches nothing here.
  * A composing reader is mid-word — an IME's Enter commits the candidate — so
@@ -112,6 +123,7 @@ function keydown(event: KeyboardEvent) {
       <div class="field">
         <div class="mirror" aria-hidden="true">{`${value}\n`}</div>
         <textarea
+          bind:this={control}
           rows="1"
           aria-label={label}
           {placeholder}
