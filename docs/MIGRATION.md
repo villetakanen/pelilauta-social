@@ -104,6 +104,22 @@ not prove an input is optional.
   collections and clear `useCharacters`, `useCharacterKeeper` and
   `characterKeeperSheetKey` from site documents (ADR 0003).
 
+## Cyan adds eighteen pixels to a chat bar's row
+
+`CnChatBar` stands seven grid units at one line in `apps/design`, and 74px in
+`apps/pelilauta`, with the same markup. Removing `@11thdeg/cyan-css` from the page
+returns it to 56, so the difference is Cyan's and not the component's.
+
+Measured on a page mounting the bar with a leading menu action and a trailing send
+action: the mirror and both buttons stay at 56, and `.cn-menu` — the wrapper around the
+menu's trigger — measures 74 while the trigger inside it measures 56. The wrapper is a
+flex container in both applications, so a display change is not what does it.
+
+The bar is not chased further while Cyan is loaded, because the row is right where the
+stylesheet is not. The terminal sweep re-measures it: a bar whose row is not 56 once
+Cyan is gone is the component's defect, and the eighteen pixels are a real finding either
+way.
+
 ## The terminal sweep
 
 One repository-wide sweep when the migration is believed complete. Resolve every
