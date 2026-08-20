@@ -26,7 +26,7 @@ Each colour scheme attenuates with its own opacity, tint and blend mode, followi
 
 The wash and the 80% ground plane keep body text readable. Over artwork the design system does not control, WCAG 2.2 AA is the target they are tuned to, not a guarantee. They hold it with no artwork at all, since a failed load is undetectable without script, and a pinned poster holds it without the lower-edge dissolve.
 
-Elevations 1 through 4 remain opaque over a poster.
+A poster changes no level but the ground plane it paints behind.
 
 Below the spatial system's small-screen breakpoint and in print, the poster paints nothing and its overrides are inactive. Under `prefers-reduced-transparency` and under `forced-colors`, the poster paints nothing, the sticky application bar takes its surface back, and the remaining cessions resolve to the plain surface with nothing painting beneath them. The preferences hide the poster rather than gate it: a browser that cannot parse a preference cannot honour it either, and shows the poster.
 
@@ -49,7 +49,7 @@ The artwork is decorative and has no alternative text. The consuming application
 - Id `cn-poster` is preserved on the root element so the chrome and ground-plane rules match.
 - The image's computed style carries no `filter` in either colour scheme.
 - The chrome and ground-plane overrides apply only on a page that mounts a poster; where a preference stops the poster painting, what they touch renders as the plain surface.
-- Nothing but a mounted poster makes `.elevation-0` transparent; it is the only override of a level `specs/design-system/surface/spec.md` defines.
+- Nothing but a mounted poster makes `.elevation-0` transparent.
 - The accessibility preferences appear only in queries that hide the poster, never in the guard that shows it.
 - The poster takes no pointer events and adds no focus stop.
 - Cyan's poster, gradient and `nav#rail` blend rules do not participate.
