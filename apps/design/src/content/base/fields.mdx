@@ -1,0 +1,145 @@
+---
+title: Fields
+description: The filled surface a reader types into, a text input and a textarea, with rest, hover, focus and disabled states in both colour schemes.
+order: 4.5
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import RoleTable from '@design-system/books/specimens/RoleTable.astro'
+import theme from '@design-system/tokens/themes/default.json'
+import semanticColor from '@design-system/tokens/semantic-color.json'
+
+`packages/design-system/styles/fields.css` paints `input[type="text"]` and
+`textarea` with a filled container, closed by a border along its block end.
+`specs/design-system/fields/spec.md` governs the states below; this page renders
+them.
+
+## Rest and placeholder
+
+<Composition themes caption="A field at rest, with its placeholder">
+  <input type="text" placeholder="Placeholder text" />
+  <textarea placeholder="Placeholder text"></textarea>
+</Composition>
+
+```html
+<input type="text" placeholder="Placeholder text" />
+<textarea placeholder="Placeholder text"></textarea>
+```
+
+The placeholder clears when the field takes focus, before the first letter typed.
+
+## Type
+
+A field is set in the mono family, which `packages/design-system/styles/fonts.css`
+decides. It states its own size and leading rather than inheriting them, so a
+field in a caption is the same field as one in prose.
+
+The size is `1.0186rem`, 16.3px at the default root size. Roboto Mono carries a
+taller lowercase than Lato — an x-height of 0.5283 of its em against 0.5065 — so
+mono at the 17px reading step would stand about 4% taller than the prose beside
+it. At 16.3px the two lowercases stand equal, which is the height a reader
+measures a line by.
+
+<Composition themes caption="A field against the reading step it sits beside">
+  <p>The prose around a field is set at the reading step.</p>
+  <input type="text" value="The words a reader types into the field." />
+</Composition>
+
+```html
+<p>The prose around a field is set at the reading step.</p>
+<input type="text" value="The words a reader types into the field." />
+```
+
+## Spacing
+
+A field spaces its content two grid units on every side, and the reading leading
+stands between them. The block padding is three units in total and each line is
+three, so a field lands on the grid at every line count. A field draws no inner control, so the box
+a reader sees is the box a reader taps.
+
+| | value | grid units |
+| :--- | ---: | ---: |
+| Padding, block | 12px | 1.5 |
+| Padding, inline | 16px | 2 |
+| Leading | 24px | 3 |
+| Height, one line | 48px | 6 |
+| Height, two lines | 72px | 9 |
+| Height, three lines | 96px | 12 |
+
+## Hover and focus
+
+A field distinguishes three states — rest, hover and focus — each with its own
+fill and its own border colour. Hover and focus need a pointer or a keyboard to
+reach: hover the field below with a pointer, then tab to it or tap into it, in
+both colour schemes.
+
+<Composition themes caption="Hover this field with a pointer, then tab to it or tap into it">
+  <input type="text" placeholder="Hover, then focus me" />
+</Composition>
+
+```html
+<input type="text" placeholder="Hover, then focus me" />
+```
+
+The table below carries the same three states as flat colour, so the fill and
+the border for each state stand beside each other without an interaction.
+
+<RoleTable
+  theme={theme}
+  roles={[semanticColor]}
+  caption="Field colour roles"
+  names={[
+    "--cn-color-field",
+    "--cn-color-field-hover",
+    "--cn-color-field-focus",
+    "--cn-color-field-border",
+    "--cn-color-field-border-hover",
+    "--cn-color-field-border-focus",
+    "--cn-color-field-placeholder",
+  ]}
+  intents={{
+    "--cn-color-field": "Resting fill",
+    "--cn-color-field-hover": "Fill under a pointer",
+    "--cn-color-field-focus": "Fill while the reader types",
+    "--cn-color-field-border": "Resting indicator",
+    "--cn-color-field-border-hover": "Indicator under a pointer",
+    "--cn-color-field-border-focus": "Indicator while the reader types",
+    "--cn-color-field-placeholder": "Placeholder text",
+  }}
+/>
+
+Focus reaches a reader who taps: the selector is `:focus-within`, held on the
+control and on a label wrapping it, because `:focus-visible` does not fire for a
+reader who reaches the field by touch. Keyboard focus additionally draws
+`--cn-focus-ring`.
+
+## Disabled
+
+<Composition themes caption="A disabled field">
+  <input type="text" placeholder="Disabled" disabled />
+  <textarea placeholder="Disabled" disabled></textarea>
+</Composition>
+
+```html
+<input type="text" placeholder="Disabled" disabled />
+<textarea placeholder="Disabled" disabled></textarea>
+```
+
+`--cn-color-field-disabled` is not settled. `specs/design-system/fields/spec.md`
+reserves the role and leaves its value for this page to settle by experiment. The
+alternative not taken here is the Material Design 3 shape: a fill that collapses
+toward the surface, with the active indicator surviving as the only trace of the
+field. Judge the fill above against that alternative before the value ships.
+
+## A labelled field
+
+A field's accessible name comes from a `<label>` wrapping the control. The label
+text stands outside the filled container, so no state fill reaches it.
+
+<Composition themes caption="A field named by a wrapping label">
+  <label>my awesome field <input type="text" placeholder="hello!"/></label>
+</Composition>
+
+```html
+<label>my awesome field <input type="text" placeholder="hello!"/></label>
+```
