@@ -110,8 +110,8 @@
       "light": "{chroma:primary-60}",
       "dark": "{chroma:primary-40}"
     },
-    "cn-border": {
-      "light": "{chroma:surface-70}",
+    "cn-color-border": {
+      "light": "{chroma:surface-60}",
       "dark": "{chroma:surface-30}"
     },
     "cn-color-warning": {
@@ -138,7 +138,7 @@
       "value": "{token:cn-on-surface}"
     },
     "cn-color-field": {
-      "light": "{chroma:surface-80}",
+      "light": "{chroma:surface-90}",
       "dark": "{chroma:surface-10}"
     },
     "cn-color-field-hover": {
@@ -150,7 +150,7 @@
       "dark": "{chroma:primary-10}"
     },
     "cn-color-field-border": {
-      "light": "{chroma:surface-70}",
+      "light": "{chroma:surface-60}",
       "dark": "{chroma:surface-30}"
     },
     "cn-color-field-border-hover": {

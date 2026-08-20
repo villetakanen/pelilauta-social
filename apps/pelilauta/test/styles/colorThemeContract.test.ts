@@ -89,7 +89,7 @@ const colorPrefixes = [
   '--chroma-',
   '--cn-active',
   '--cn-backdrop',
-  '--cn-border',
+  '--cn-color-border',
   '--cn-bubble',
   '--cn-button',
   '--cn-color-',

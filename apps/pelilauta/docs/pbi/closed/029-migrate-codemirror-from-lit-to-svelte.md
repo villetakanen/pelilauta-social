@@ -350,7 +350,7 @@ The Lit component has a CSS file that defines CSS custom properties for Cyan Des
 .codemirror-editor-container {
   --_cn-editor-padding: var(--cn-grid, 0.5rem);
   --_cn-editor-border: var(--cn-editor-border, none);
-  --_cn-editor-border-bottom: var(--cn-border);
+  --_cn-editor-border-bottom: var(--cn-color-border);
   --_cn-editor-border-radius: var(--cn-border-radius-field, 0 1rem 0 0);
   
   /* Caret color with light-dark() function for theme switching */

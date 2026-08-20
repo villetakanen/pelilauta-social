@@ -65,7 +65,7 @@ All values are OKLCH lightness at hue 242, from `chroma.css:27-39`. Placements a
 | `--cn-surface-1`, `--cn-surface-2` | surface-100 | 1.0 | surface-30 | .30 |
 | `--cn-surface-3` | surface-100 | 1.0 | surface-40 | .40 |
 | `--cn-input` | surface-80 | .80 | surface-0 | 0 |
-| `--cn-border` | surface-70 | .70 | surface-30 | .30 |
+| `--cn-color-border` | surface-70 | .70 | surface-30 | .30 |
 | `--cn-on-input` | surface-10 | .10 | surface-90 | .90 |
 
 The placement is consistent across schemes: a field is darker than the surface holding

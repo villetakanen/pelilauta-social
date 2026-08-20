@@ -88,7 +88,7 @@ const readout = $derived(
     block-size: 16rem;
     color: var(--cn-text);
     background: var(--cn-background);
-    border: 1px solid var(--cn-border);
+    border: 1px solid var(--cn-color-border);
   }
 
   .chrome-action {

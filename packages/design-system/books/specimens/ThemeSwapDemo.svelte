@@ -183,7 +183,7 @@ const containerStyle = $derived(
   .swatch {
     display: block;
     block-size: 2rem;
-    border: 1px solid var(--cn-border);
+    border: 1px solid var(--cn-color-border);
   }
 
   .step {

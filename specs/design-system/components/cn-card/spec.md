@@ -49,7 +49,7 @@ CnCard composes `.elevation-0` through `.elevation-4` from
 `specs/design-system/surface/spec.md`; elevation 1 is the default. CnCard defines its
 padding, radius, clipping, containment, and foreground treatment, so it does not
 compose the `.surface` container class or reproduce elevation declarations.
-At elevation 0, CnCard adds a one-pixel `--cn-border` edge to remain distinct from
+At elevation 0, CnCard adds a one-pixel `--cn-color-border` edge to remain distinct from
 the application ground plane. Other consumers of `.elevation-0` remain borderless.
 Its inset is one grid unit vertically and one gap horizontally. The body region
 adds one grid unit of vertical separation around the description and supplied
@@ -274,7 +274,7 @@ Then the notification flag becomes visible
 ```gherkin
 Given a CnCard at elevation 0
 When it renders on the application ground plane
-Then it has a one-pixel border using `--cn-border`
+Then it has a one-pixel border using `--cn-color-border`
 ```
 
 ```gherkin

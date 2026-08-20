@@ -59,7 +59,7 @@ let {
   }
 
   .loader-specimens section {
-    border: 1px dashed var(--cn-border);
+    border: 1px dashed var(--cn-color-border);
     padding: var(--cn-gap);
     inline-size: 100%;
   }

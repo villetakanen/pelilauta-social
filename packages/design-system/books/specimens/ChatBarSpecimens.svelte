@@ -185,7 +185,7 @@ Viimeksi unohdimme ne kotiin.`;
     padding-block-start: var(--cn-gap);
     color: var(--cn-text);
     background: var(--cn-background);
-    border: 1px solid var(--cn-border);
+    border: 1px solid var(--cn-color-border);
   }
 
   .frame[data-band='narrow'] {
