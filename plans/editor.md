@@ -27,6 +27,12 @@ browser-cached chunk. The v18 wrapper is deleted, not moved.
   `plans/debt/editor-page-keeps-the-cyan-bar.md` is retired.
 - A component spec governs the editor, filed under the extensions category on
   the component template, and the design site carries its book.
+- The editor view is designed, not inherited: the canvas stands at the
+  rendered page's measure with the gutter beside it, the frontmatter region
+  beside the canvas past the small band and stacked within it, and a
+  design-system shell spec governs that grammar.
+- The shell warns on leaving a dirty document and lets the consumer mark it
+  clean after a save.
 
 ## Guardrails
 
@@ -38,8 +44,8 @@ browser-cached chunk. The v18 wrapper is deleted, not moved.
   package, linked by Vite alias and tsconfig paths like `@design-system`.
 - Pasted HTML still lands as sanitised markdown, as both v18's wrapper and
   v20's `cyan-editor` do it.
-- Leaving an editor with unsaved work leaves, as v18 does. The departure is
-  application logic; the design system does not decide it.
+- The editor's field treatment — mono face, fill, indicator — is not reopened
+  in this epic; a look-and-feel change is a later decision.
 
 ## Out of scope
 
@@ -75,6 +81,13 @@ browser-cached chunk. The v18 wrapper is deleted, not moved.
   five views resolve the same editor chunk.
 - A design-site book for the editor, under the extensions category, as v20's
   book page demos it.
+
+- Spec and build the editor shell in `packages/editor`: bar, frontmatter
+  region (consumer-slotted, shallow), body canvas at the page's measure —
+  `content-golden`'s geometry — dirty tracking with an exit warning and a
+  consumer `markClean`. `EditorPage.astro` shrinks to a consumer.
+- Find and fix the rendered defects at and below 800px: bar clearance, field
+  rendering. Review with screenshots at small, 800px and wide before done.
 
 ## Done
 

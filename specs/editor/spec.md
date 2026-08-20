@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # CnEditor
@@ -67,9 +67,9 @@ host as `aria-disabled` because CodeMirror's read-only facet renders and
 announces nothing. The fill dims by `--cn-disabled-opacity` while
 `--cn-color-field-disabled` has no value, as `fields.css` does.
 
-The host fills the column it is given and scrolls internally; the consumer owns
-giving it a height-bounded column. Given a `name`, the host renders a hidden
-input so a form reads the document from `FormData`.
+The host fills the column it is given and scrolls internally; the editor shell
+(`shell/spec.md`) is the layout that gives it one. Given a `name`, the host
+renders a hidden input so a form reads the document from `FormData`.
 
 The gutter is line numbers for a document long enough to navigate by them. It is
 chrome beside the field, not part of the fill: a surface step, closed against
