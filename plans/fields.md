@@ -33,6 +33,10 @@ work reaches next.
 
 ## Guardrails
 
+- This epic runs as a spike, and a slice does not wait for a spec. Nobody knows yet what
+  a field wants to be, so the sample is built to find out, and
+  `specs/design-system/fields/spec.md` takes what holds once it is seen. Where the sample
+  and the spec disagree, the sample is the evidence and the spec is amended.
 - `docs/chat-bar-field-study.md` carries the settled intent. Where it and an inherited
   implementation disagree, the study holds; where the study and a live spec disagree,
   the contradiction is reported rather than resolved in code. One such contradiction is
@@ -64,16 +68,13 @@ work reaches next.
 
 ## Possible work (non-binding)
 
-- **Field specification** — a `specs/design-system/fields` spec carrying the states, the
-  colour roles and the engaged-state selector, from the study's rulings. Every later
-  slice waits on it being live.
 - **The colour roles** — promote the study's values into `semantic.css` under the
   `--cn-color-field*` names, with the editor theme following the resting value it already
-  reads. Waits on the spec.
+  reads.
 - **The element style** — a `styles/fields.css` painting `input[type="text"]` and
-  `textarea`, the partial sample this epic commits to. Waits on the roles.
+  `textarea`, the partial sample this epic commits to.
 - **The book** — a fields page in `apps/design` showing every state in both schemes, so
-  the next reader can see a field rather than infer one. Waits on the element style.
+  the next reader can see a field rather than infer one.
 - **Preflight boundary** — state where the reset stops and the field treatment begins,
   if `preflight/spec.md:115` proves ambiguous once the element style lands. Small, and
   possibly nothing.
@@ -83,6 +84,9 @@ work reaches next.
   specificity.
 
 ## Done
+
+- **Field specification** — `specs/design-system/fields/spec.md` is live. It leaves the
+  disabled state's values open for the sample to settle.
 
 ## Open questions
 

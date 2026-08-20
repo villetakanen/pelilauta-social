@@ -30,8 +30,9 @@ leading and trailing icons, and error treatment are not this capability's.
 A field's accessible name comes from a `<label>` wrapping the control. Its text stands
 outside the filled container, so it is unaffected by the state fills.
 
-`specs/design-system/preflight/spec.md` governs a field's type inheritance, resize
-behaviour and default block size. This spec begins at colour, shape, border and state.
+`specs/design-system/preflight/spec.md` governs a field's resize behaviour and default
+block size, and `specs/design-system/fonts/spec.md` decides that a field is set in the
+mono family. This spec begins at type size, colour, shape, border and state.
 
 The colour roles are declared in `semantic.css` over the chroma families, under the
 direction `specs/design-system/color-system/spec.md` sets. A component that paints its own
@@ -73,10 +74,21 @@ The focus state's selector is `:focus-within`. Most readers reach a field by tou
 `:focus-visible` does not fire for them. The selector holds on the control and on the
 label wrapping it, so a component composing a field paints the state on either.
 
+A field states its own type size and leading rather than inheriting them, so it is the
+same field in prose, in a caption and in a component. The size is the reading step
+measured in the mono face, at which the field's lowercase stands as tall as the lowercase
+of the prose beside it. It does not sit on the spacing grid, and the type scale
+`specs/design-system/typography/spec.md` publishes does not either.
+
+A field spaces its content a unit and a half above and below it, and two units to either
+side. Its block padding is three units in total and each line of its content is three, so
+a field lands on the grid at every line count, and a single-line field stands at six. A
+field draws no inner control, so the box a reader sees is the box a reader taps.
+
 A field takes no radius. The indicator closes the fill rather than enclosing it, and a
 rounded corner would read as an enclosure.
 
-A field draws its active indicator as a border along the block end alone. Its resting
+A field draws its active indicator along the block end alone. Its resting
 width is `calc(var(--cn-grid) / 8)`, one device pixel at the default root size, growing
 with the reader's text setting. Focus doubles it, and changes no measurement of the field
 or its content.
