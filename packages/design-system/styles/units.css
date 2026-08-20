@@ -1,11 +1,22 @@
 /*
- * Unit and radius tokens.
+ * Generated from tokens/units.json by scripts/generate-tokens.mjs.
+ * Do not edit: change the JSON source and run `pnpm generate:tokens`.
  */
 :root {
   /* Base grid. Every spacing and radius decision derives from this. */
   --cn-grid: 0.5rem; /* 8px at the default root font size */
   --cn-gap: calc(var(--cn-grid) * 2); /* 16px */
   --cn-line: calc(var(--cn-grid) * 3); /* 24px */
+
+  /*
+   * The measure: the widest a line of text is set, 67 characters of the base
+   * paragraph. Stated in grid steps, not `ch`, which would resolve against
+   * whatever font is rendering.
+   *
+   * Measured: Lato's `0` advance is 0.58em, so 67ch at the 17px base is 41.29rem =
+   * 82.58 steps, rounded up. Changing the base face or its size makes this wrong.
+   */
+  --cn-measure: calc(var(--cn-grid) * 83); /* 41.5rem */
 
   --cn-border-radius-small: calc(var(--cn-grid) * 0.5); /* 4px */
   --cn-border-radius-medium: var(--cn-grid); /* 8px */
@@ -58,12 +69,21 @@
   --cn-app-bar-height: calc(var(--cn-grid) * 8);
 
   /*
+   * The depth an on-screen keyboard occupies at the block end. Chrome measures it
+   * and publishes it here; `0px` is the value every browser gets until something
+   * does, and the value a browser that shortens its own layout viewport keeps.
+   */
+  --cn-keyboard-inset: 0rem;
+
+  /*
    * Stacking. Chrome rides above page content and Cyan's own fixed navigation,
    * and below the dialog, modal and snackbar layers Cyan still provides at 50000
    * and above. The tray's value resolves among chrome's parts, inside the box.
    */
   --cn-z-chrome: 40500;
   --cn-z-fab: 40500;
+  /* The authoring dock stands above the FAB and below a covering tray. */
+  --cn-z-chat-bar: 40550;
   /* A covering tray stands above the bar and the FAB; its scrim immediately below it. */
   --cn-z-scrim: 40600;
   --cn-z-rail: 40700;

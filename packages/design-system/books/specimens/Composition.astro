@@ -33,6 +33,12 @@ interface Props {
    * measure allows.
    */
   breakout?: boolean;
+  /**
+   * Paints the panel at a surface elevation, so a demonstration stands on the
+   * level its subject is expected to sit at. Without it the panel keeps the
+   * page's ground plane.
+   */
+  elevation?: 0 | 1 | 2 | 3 | 4;
 }
 
 const {
@@ -41,7 +47,9 @@ const {
   themes = false,
   stack = false,
   breakout = false,
+  elevation,
 } = Astro.props;
+const level = elevation === undefined ? undefined : `elevation-${elevation}`;
 const content = themes ? await Astro.slots.render('default') : undefined;
 const MODES = ['light', 'dark'] as const;
 ---
@@ -52,7 +60,7 @@ const MODES = ['light', 'dark'] as const;
       <div class:list={['modes', { stack }]}>
         {MODES.map((mode) => (
           <div
-            class="composition themed"
+            class:list={['composition', 'themed', level ?? 'ground']}
             data-mode={mode}
             style={`color-scheme: ${mode};`}
             set:html={content}
@@ -60,7 +68,7 @@ const MODES = ['light', 'dark'] as const;
         ))}
       </div>
     ) : (
-      <div class:list={['composition', { narrow }]}>
+      <div class:list={['composition', { narrow }, level]}>
         <slot />
       </div>
     )
@@ -70,7 +78,7 @@ const MODES = ['light', 'dark'] as const;
 
 <style>
   figure {
-    border: 1px solid var(--cn-border);
+    border: 1px solid var(--cn-color-border);
     border-radius: var(--cn-border-radius-medium);
   }
 
@@ -97,12 +105,16 @@ const MODES = ['light', 'dark'] as const;
 
   .themed {
     color: var(--cn-text);
+  }
+
+  /* The panel without an elevation keeps the page's ground plane. */
+  .ground {
     background: var(--cn-background);
   }
 
   figcaption {
     padding: var(--cn-grid) var(--cn-gap);
     color: var(--cn-text-low);
-    border-block-start: 1px solid var(--cn-border);
+    border-block-start: 1px solid var(--cn-color-border);
   }
 </style>

@@ -5,10 +5,15 @@ order: 5
 ---
 
 import TokenTable from '@design-system/books/specimens/TokenTable.astro'
-import unitsSource from '@design-system/styles/units.css?raw'
+import units from '@design-system/tokens/units.json'
+import { unitDeclarations } from '@design-system/books/specimens/tokenTable'
 
-Declared spatial custom properties. Spatial hierarchy and alignment principles are
-defined in [Spatial System](/principles/spatial-system).
+export const unitsSource = unitDeclarations(units)
+
+Declared spatial custom properties, read from their writable JSON source,
+`tokens/units.json`. `scripts/generate-tokens.mjs` renders the same source to
+`styles/units.css`, which the application imports. Spatial hierarchy and alignment
+principles are defined in [Spatial System](/principles/spatial-system).
 
 ## Spatial grid
 
@@ -83,6 +88,16 @@ application bar and the main region cede whichever the tray currently stands in.
   prefix="--cn-width"
 />
 
+## The keyboard
+
+Application chrome ends where an on-screen keyboard begins. Chrome measures the depth and
+publishes it here; the declared value is what every browser gets until it does.
+
+<TokenTable
+  source={unitsSource}
+  names={['--cn-keyboard-inset']}
+/>
+
 ## Stacking layers
 
 Global z-index scale for pinned and elevated UI layers.
@@ -113,6 +128,16 @@ The opacity a disabled control renders at.
 <TokenTable
   source={unitsSource}
   prefix="--cn-disabled"
+/>
+
+## The measure
+
+The widest a line of text is set: 67 characters of the base paragraph, rounded up to a
+whole grid step. A box of text caps its inline size with it.
+
+<TokenTable
+  source={unitsSource}
+  names={['--cn-measure']}
 />
 
 ## Layout breakpoints

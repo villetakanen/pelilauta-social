@@ -38,19 +38,10 @@
 }
 
 /*
- * The measure: 67 characters of the base paragraph. Stated in grid steps, not `ch`,
- * which would resolve against whatever font is rendering.
- *
- * Measured: Lato's `0` advance is 0.58em, so 67ch at the 17px base is 41.29rem =
- * 82.58 steps, rounded up. Changing the base face or its size makes this wrong.
- *
- * Prose caps its flow with it and Golden gives it to its primary region, so it is
- * declared once for both: the two are the same width by design, not by coincidence.
+ * Prose caps its flow at the measure and Golden gives it to its primary region:
+ * the two are the same width by design, not by coincidence. The token is a
+ * spatial length, declared in styles/units.css.
  */
-.content-prose,
-.content-golden {
-  --cn-measure: calc(var(--cn-grid) * 83); /* 41.5rem */
-}
 
 /* Prose — one centred flow at the readable measure. */
 .content-prose {

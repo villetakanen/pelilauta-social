@@ -62,10 +62,7 @@ nearer boundary and reach its region.
 
 ### Constraints
 
-The readable measure, exposed as `--cn-measure`, is the smallest whole `--cn-grid`
-width that contains 67 Lato zero-glyph advances at Typography's reading size: 83 grid
-units (`41.5rem`). It scales with the reader's default text size. A change to the base
-face or reading size re-measures it by the same method.
+Readable is the measure, `--cn-measure`, which `../spatial-system/spec.md` defines.
 
 The fixed measures form a phi family rounded to whole `--cn-grid` units, using
 `phi = 1.618` and `phi squared = 2.618`:
@@ -172,9 +169,6 @@ under Surface's name, and it reports the post-inset content-box width.
   region fills the host and exceeds Readable.
 - Playwright measures fixed tracks and gaps with a tolerance of one rendered pixel at
   16px and 20px root reference sizes.
-- A browser fixture measures 67 Lato zero glyphs and verifies that `--cn-measure` is
-  the smallest whole `--cn-grid` width that contains them (83 grid units / `41.5rem`)
-  at 16px and 20px root reference sizes.
 - Unnamed query probes report Readable for capped ordinary Prose content, the host
   content-box width for breakouts, and the assigned track width for every unpadded
   Golden and Triad region. A Surface region answers under `surface-area` with the
@@ -202,7 +196,7 @@ under Surface's name, and it reports the post-inset content-box width.
   units and gaps after any measure or spacing change.
 - The query boundary remains on the individual region or prose flow item rather than on
   the host; a query within a region must not resolve against host width.
-- Stacked Golden and Triad regions fill the host width and do not inherit `--cn-measure`.
+- Stacked Golden and Triad regions fill the host width.
 - Breakouts inside Golden and Triad regions remain contained within their track box.
 
 ### Scenarios

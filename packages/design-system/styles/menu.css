@@ -56,6 +56,15 @@
   min-inline-size: calc(var(--cn-grid) * 20);
 }
 
+/*
+ * Above the trigger and forward from it, which is where a trigger standing at
+ * its container's block end has room — a chat bar's, against the foot of the
+ * chrome. The fallbacks are the same three, so the viewport still decides.
+ */
+.cn-menu-container[data-opens="block-start"] {
+  position-area: block-start span-inline-end;
+}
+
 /* Rows, in the order the consumer authored them. */
 .cn-menu-container:popover-open {
   display: flex;

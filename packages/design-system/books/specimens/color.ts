@@ -65,9 +65,23 @@ const KEYWORDS: Record<string, Oklch> = {
  * Resolve a declared value to a colour for one theme, following `var()` chains
  * and picking the matching arm of any `light-dark()`.
  *
- * Returns undefined for anything it cannot resolve: `color-mix()`, gradients, a
- * token defined elsewhere. Callers that require a colour check for undefined.
+ * Resolves `color-mix()` between two opaque colours in OKLCH. Returns undefined
+ * for anything else it cannot resolve: a mix with `transparent`, whose alpha an
+ * OKLCH triplet cannot carry, gradients, a token defined elsewhere. Callers that
+ * require a colour check for undefined.
  */
+/** Interpolate in OKLCH, taking hue along the shorter arc, as CSS does. */
+function mixOklch(from: Oklch, to: Oklch, t: number): Oklch {
+  let delta = to.h - from.h;
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  return {
+    l: from.l + (to.l - from.l) * t,
+    c: from.c + (to.c - from.c) * t,
+    h: (from.h + delta * t + 360) % 360,
+  };
+}
+
 export function resolve(
   value: string,
   mode: Mode,
@@ -87,6 +101,26 @@ export function resolve(
     const args = topLevelArgs(lightDark[1]);
     if (args.length !== 2) return undefined;
     return resolve(mode === 'light' ? args[0] : args[1], mode, tokens, seen);
+  }
+
+  const colorMix = trimmed.match(/^color-mix\(\s*in\s+oklch\s*,([\s\S]+)\)$/i);
+  if (colorMix) {
+    const args = topLevelArgs(colorMix[1]);
+    if (args.length !== 2) return undefined;
+    const parts = args.map((arg) => {
+      const percent = arg.match(/\s(\d+(?:\.\d+)?)%$/);
+      return {
+        color: percent ? arg.slice(0, percent.index).trim() : arg,
+        weight: percent ? Number(percent[1]) : undefined,
+      };
+    });
+    const second =
+      parts[1].weight ??
+      (parts[0].weight === undefined ? 50 : 100 - parts[0].weight);
+    const from = resolve(parts[0].color, mode, tokens, seen);
+    const to = resolve(parts[1].color, mode, tokens, seen);
+    if (!from || !to) return undefined;
+    return mixOklch(from, to, second / 100);
   }
 
   const variable = trimmed.match(/^var\(\s*(--[\w-]+)\s*(?:,([\s\S]*))?\)$/);

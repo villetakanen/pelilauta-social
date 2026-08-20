@@ -1,0 +1,114 @@
+---
+title: CnChatBar
+description: "The authoring surface a reader answers a conversation from, reachable while the conversation scrolls."
+order: 27
+runtime: interactive
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import ChatBarSpecimens from '@design-system/books/specimens/ChatBarSpecimens.svelte'
+import ChatBarDemo from '@design-system/books/specimens/ChatBarDemo.svelte'
+
+Use CnChatBar to give a reader one authoring surface for a Markdown reply that stays
+reachable while the conversation it answers keeps scrolling.
+
+## When to use it
+
+Mount it as a direct child of the application chrome your page already renders; it has
+no placement of its own outside that container, and an astro-island standing between
+the two carries no layout of its own either.
+
+Use it wherever a reader composes a reply. Where a message has already been sent, its
+presentation is [CnBubble](/components/cn-bubble)'s, not this component's.
+
+## Example
+
+The consumer binds `value`, supplies `label` and `placeholder`, and receives a send
+intent through `onsend`. Sending neither clears the draft nor removes the bar, so a
+failed write keeps what the reader typed.
+
+The bar renders one action of its own: the `+` at the row's inline start. What a reader
+can add to a reply is a menu, so the bar renders the action and the surface — a
+[CnMenu](/components/cn-menu) trigger, with the platform's light dismissal, Escape and
+focus return — and the consumer writes the items through `menu`. Name it with `menuLabel`.
+
+<Composition caption="A consumer binding value, receiving a send intent, and rendering leading and trailing actions plus supporting content">
+  <ChatBarDemo client:load />
+</Composition>
+
+```svelte
+<script>
+  import CnChatBar from '@design-system/components/CnChatBar.svelte'
+
+  let value = $state('')
+  function onsend(draft) {
+    // report or persist draft; value is untouched until the consumer changes it
+  }
+</script>
+
+<CnChatBar
+  bind:value
+  label="Vastaa keskusteluun"
+  placeholder="Kirjoita viesti..."
+  menuLabel="Lisää"
+  {onsend}
+>
+  {#snippet menu()}<button type="button">Lisää kuva</button>{/snippet}
+  {#snippet trailing()}<button type="button">…</button>{/snippet}
+</CnChatBar>
+```
+
+The component is an island: without `client:load`, or the framework's equivalent, Enter
+sends nothing and the draft never leaves the textarea.
+
+Beyond the `+`, the bar renders no action of its own — `leading`, `trailing` and
+`supporting` are consumer-supplied regions, and every control placed in them is a
+native button under [Links, Actions and Buttons](/base/links-actions-buttons); the bar
+attaches no role or keyboard handler to them. The menu's items are the consumer's on
+the same terms, and activating one closes the menu.
+
+The bar is the field. It reads the same `--cn-color-field*` roles as
+[Fields](/base/fields), so hover lifts its indicator and leaves the fill still, focus
+changes the fill, and the elevation supplies the shadow rather than a background. The
+indicator runs the whole way round, because the bar is a container a reader types into
+rather than a line of a form, and the textarea inside draws nothing. Hover a bar below
+with a pointer, then tap or tab into it.
+
+The bar stands at its container's block end and grows with the draft until it reaches the
+application bar. Two presentations ship, driven by the surrounding `app-chrome` container
+rather than the browser window: below the small breakpoint it spans the container, and
+past it the bar is inset and centred.
+
+<Composition themes stack caption="Empty, multiline, supporting content, a draft past the frame, and disabled, in the small band">
+  <ChatBarSpecimens group="narrow" />
+</Composition>
+
+<Composition themes stack caption="The same five compositions past the small breakpoint">
+  <ChatBarSpecimens group="wide" />
+</Composition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `value` | `string` | Bindable. The draft. Defaults to an empty string. |
+| `label` | `string` | Required. The textarea's accessible name. Localise it; the placeholder does not repeat it. |
+| `placeholder` | `string` | The prompt shown while the draft is empty. |
+| `disabled` | `boolean` | Renders the textarea immutable and every supplied action inoperable. Defaults to `false`. |
+| `onsend` | `(value: string) => void` | Reports a send intent carrying the current value. Runs on Enter, never on Shift+Enter or during text composition, and never for a value that is empty or only white space. |
+| `supporting` | `Snippet` | Context above the input row: an attachment preview, a write error. |
+| `menu` | `Snippet` | The commands behind the bar's `+`: what a reader can add to a reply. One anchor or button each. |
+| `menuLabel` | `string` | The `+` action's accessible name. Localise it wherever `menu` is given. |
+| `leading` | `Snippet` | Actions at the input row's inline start, after the `+`. |
+| `trailing` | `Snippet` | Actions at the input row's inline end. |
+
+## Accessibility
+
+The textarea's accessible name is `label`; a consumer supplies and localises it, and the
+placeholder names nothing. `disabled` marks the textarea, the `+` and every supplied leading and
+trailing action inoperable, so a supplied button needs no separate `disabled` attribute
+to match. The bar draws no focus ring: its own focus state — the fill, the indicator — is the
+focus indication, and it changes no measurement of the row. [Fields](/base/fields)
+carries why a ring meant for the keyboard cannot stay off a click.

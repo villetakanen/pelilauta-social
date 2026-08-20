@@ -65,8 +65,8 @@
   );
   --color-on-toggle-button: var(--cn-on-button);
   --color-on-toggle-button-off: var(--cn-on-surface-secondary);
-  --color-border: var(--cn-border);
-  --color-border-subtle: var(--cn-border);
+  --color-border: var(--cn-color-border);
+  --color-border-subtle: var(--cn-color-border);
   --color-border-hover: light-dark(
     var(--chroma-surface-50),
     var(--chroma-surface-40)
@@ -171,5 +171,5 @@
   --background-toggle-button-off: var(--cn-surface-4);
   --background-mobile-nav-bar: var(--cn-surface);
   --background-editor: var(--cn-input);
-  --cn-input-border: 1px solid var(--cn-border);
+  --cn-input-border: 1px solid var(--cn-color-border);
 }

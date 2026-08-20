@@ -147,13 +147,12 @@ export function parseTokens(
 }
 
 /**
- * The colour lexicon's JSON sources, rendered to declaration text so the
- * parser above stays the single reader of a token's declared value. Units and
- * typography have no JSON source and keep parsing their hand-written CSS
- * directly; this exists only so the colour books can read
- * `tokens/themes/default.json`, `tokens/semantic-color.json` and
- * `tokens/elevation.json` instead of the stylesheets `scripts/generate-tokens.mjs`
- * generates from them.
+ * The colour and unit lexicons' JSON sources, rendered to declaration text so
+ * the parser above stays the single reader of a token's declared value.
+ * Typography has no JSON source and keeps parsing its hand-written CSS
+ * directly; this exists only so a book can read `tokens/themes/default.json`,
+ * `tokens/semantic-color.json`, `tokens/elevation.json` and `tokens/units.json`
+ * instead of the stylesheets `scripts/generate-tokens.mjs` generates from them.
  */
 
 /** Shape of `tokens/themes/default.json`. */
@@ -208,6 +207,40 @@ export function roleDeclarations(source: RoleSource): string {
         ? substituteReference(token.value)
         : `light-dark(${substituteReference(token.light ?? '')}, ${substituteReference(token.dark ?? '')})`;
     lines.push(`--${name}: ${value};`);
+  }
+  return lines.join('\n');
+}
+
+/** One measurement token in `tokens/units.json`. */
+export interface UnitToken {
+  value: string;
+  /** The resolved length, shown as the table's note column, e.g. `8px`. */
+  note?: string;
+  /** Introductory prose; not part of the declared value, so left unrendered. */
+  comment?: string;
+}
+
+/** Shape of `tokens/units.json`: declarations grouped for prose, not for the
+ * table — the table reads the flattened declaration order below. */
+export interface UnitsSource {
+  groups: Array<{
+    comment?: string;
+    tokens: Record<string, UnitToken>;
+  }>;
+}
+
+/** The units layer as CSS declaration text, substituting its symbolic
+ * `{unit:cn-name}` references and carrying each token's note as the trailing
+ * comment `parseTokens` reads back out — the same shape `styles/units.css`
+ * commits. */
+export function unitDeclarations(source: UnitsSource): string {
+  const lines: string[] = [];
+  for (const group of source.groups) {
+    for (const [name, token] of Object.entries(group.tokens)) {
+      const value = substituteReference(token.value);
+      const note = token.note ? ` /* ${token.note} */` : '';
+      lines.push(`--${name}: ${value};${note}`);
+    }
   }
   return lines.join('\n');
 }

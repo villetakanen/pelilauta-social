@@ -14,7 +14,6 @@ import { onMount } from 'svelte';
 import { authUser, sessionState, uid } from '../../../stores/session';
 import { hasSeen, setSeen, subscription } from '../../../stores/subscription';
 import ReplyArticle from './ReplyArticle.svelte';
-import ReplyDialog from './ReplyDialog.svelte';
 
 interface Props {
   thread: Thread;
@@ -97,17 +96,20 @@ onMount(async () => {
     {/each}
   </div>
 
+  <!--
+    A signed-in reader writes in the chat bar the thread page mounts in chrome,
+    so nothing stands here for them. A reader who is not signed in is invited
+    to the discussion instead, at the end of the replies, in the document.
+  -->
   {#if isLoading}
     <div class="toolbar items-center">
       <CnLoader inline />
     </div>
-  {:else if isAuthenticated}
-    <ReplyDialog {thread} />
-  {:else}
+  {:else if !isAuthenticated}
     <div class="toolbar items-center">
       <a href="/login" class="button">
-        <Icon noun="send" />
-        <span>{t("actions:login")}</span>
+        <Icon noun="discussion" />
+        <span>{t("threads:discussion.join")}</span>
       </a>
     </div>
   {/if}

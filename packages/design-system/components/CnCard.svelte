@@ -154,7 +154,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
   }
 
   .cn-card.elevation-0 {
-    border: 1px solid var(--cn-border);
+    border: 1px solid var(--cn-color-border);
   }
 
   .cover {

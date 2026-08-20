@@ -130,11 +130,11 @@ overridden one at a time.
     "--cn-surface-4",
   ]}
   intents={{
-    "--cn-surface": "Application ground plane",
-    "--cn-surface-1": "Resting content cards and panels",
-    "--cn-surface-2": "Raised cards and hover layers",
-    "--cn-surface-3": "Menus and popovers",
-    "--cn-surface-4": "Modal dialogs and high-priority chrome",
+    "--cn-surface": "The application itself",
+    "--cn-surface-1": "Payload, the default",
+    "--cn-surface-2": "Payload inside payload",
+    "--cn-surface-3": "Floats over content",
+    "--cn-surface-4": "A system interrupt",
   }}
 />
 
@@ -147,7 +147,7 @@ overridden one at a time.
     "--cn-text-low",
     "--cn-text-high",
     "--cn-link",
-    "--cn-border",
+    "--cn-color-border",
     "--cn-focus-ring",
   ]}
   intents={{
@@ -155,16 +155,16 @@ overridden one at a time.
     "--cn-text-low": "Secondary metadata and timestamps",
     "--cn-text-high": "Maximum contrast headings",
     "--cn-link": "Navigational links",
-    "--cn-border": "Structural dividers and boundaries",
+    "--cn-color-border": "Structural dividers and boundaries",
     "--cn-focus-ring": "Keyboard focus indicators",
   }}
 />
 
 A role's mapping preserves intent rather than raw numeric symmetry. In Light, the
-ground plane uses surface step 95 while levels 1 through 3 use pure white; in Dark,
-levels 1 and 2 share surface step 30 while level 3 raises lightness. Level 4 leaves the
-surface family for primary in both themes. Complete token declarations are published
-in [Colour tokens](/tokens/color).
+ground plane uses surface step 95 while levels 1 through 3 use pure white. In Dark, the
+levels below the system layer span surface step 20 to step 40: the ground plane at step
+20, levels 1 and 2 a third of the way to step 40, and level 3 two thirds of the way. Level 4 leaves the surface family for primary in both themes. Complete
+token declarations are published in [Colour tokens](/tokens/color).
 
 ## Decoration: the chroma exception
 
@@ -177,25 +177,27 @@ instead.
 ## Surface and elevation
 
 Elevation establishes depth across five distinct tiers:
-- **Level 0:** Application ground plane.
-- **Level 1:** Resting content surfaces (cards, panels).
-- **Level 2:** Content raised above resting surfaces.
-- **Level 3:** Floating contextual overlays (menus, popovers).
-- **Level 4:** Highest system layer (modal dialogs).
+- **Level 0:** The application itself.
+- **Level 1:** Payload, the default.
+- **Level 2:** Payload inside payload, reached by nesting rather than chosen.
+- **Level 3:** Floats over content, whether it stays or is dismissed.
+- **Level 4:** A system interrupt.
 
 <Composition themes caption="The five elevation tiers in Light and Dark">
-  <div class="surface elevation-0">Level 0: Ground plane</div>
-  <div class="surface elevation-1">Level 1: Resting content</div>
-  <div class="surface elevation-2">Level 2: Raised content</div>
-  <div class="surface elevation-3">Level 3: Floating content</div>
-  <div class="surface elevation-4">Level 4: System layer</div>
+  <div class="surface elevation-0">Level 0: the application itself</div>
+  <div class="surface elevation-1">Level 1: payload</div>
+  <div class="surface elevation-2">Level 2: payload inside payload</div>
+  <div class="surface elevation-3">Level 3: floats over content</div>
+  <div class="surface elevation-4">Level 4: a system interrupt</div>
 </Composition>
 
 ### Light and shadow interaction
 
-In Light theme, levels 1 through 3 share a single white background; visual separation
-is achieved through shadow geometry. In Dark theme, levels 2 and 3 separate through both
-lightness differences and ambient shadows.
+Light and Dark separate the levels by different means. In Light, levels 1 through 3
+share a single white background, so shadow alone carries the separation. In Dark, level
+1 steps up from the application and level 3 steps up again, because a shadow carries
+less on a dark ground than on a light one. Levels 1 and 2 share a background in both
+themes, and their shadows separate them.
 
 Levels 0 and 1 are shadowless. Nested surfaces rising by one level remain shadowless;
 larger level increases render relative shadows scaled to the ancestor delta to prevent

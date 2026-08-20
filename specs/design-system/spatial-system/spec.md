@@ -62,6 +62,11 @@ textual or interactive children. It includes at least one grid unit of padding. 
 consumer that requires a rounded corner without selecting a size uses
 the default medium radius token.
 
+The measure, `--cn-measure`, is the widest a line of text is set: 83 grid units. It
+is the smallest whole grid width that contains 67 Lato zero-glyph advances at
+Typography's reading size, and a change to that face or that size re-measures it by the
+same method. A consumer caps a box of text with it, in any layout.
+
 Three bands: small, tablet and desktop. Small ends at `38.75rem`, tablet at `64rem` —
 the width where a tray fits beside content rather than over it. Each token names the
 width where its band ends.
@@ -81,6 +86,9 @@ measurements according to its structure.
   measurements, grouping, vertical rhythm, radius proportionality, and
   `.surface` padding.
 - A source-driven lexicon publishes every unit and radius token.
+- A browser fixture measures 67 Lato zero glyphs and verifies that `--cn-measure` is
+  the smallest whole `--cn-grid` width that contains them (83 grid units / `41.5rem`)
+  at 16px and 20px root reference sizes.
 - Human review accepts the resulting rhythm and proportions at default and enlarged
   browser text sizes.
 

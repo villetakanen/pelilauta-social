@@ -12,14 +12,14 @@
  * script, so there is nothing here a browser would know that this does not.
  * Cascade facts belong in the design-site checks; this is a source fact.
  */
-import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
-import { parseTokens } from '../books/specimens/tokenTable';
+import { parseTokens, unitDeclarations } from '../books/specimens/tokenTable';
+import units from '../tokens/units.json';
 
-const unitsSource = readFileSync(
-  new URL('../styles/units.css', import.meta.url),
-  'utf8',
-);
+// The book reads tokens/units.json, not the generated styles/units.css
+// (specs/design-system/design-tokens/spec.md), so the fixture below is the
+// same declaration text the book itself renders.
+const unitsSource = unitDeclarations(units);
 
 describe('parseTokens', () => {
   test('returns every declaration in source order, and none invented', () => {
@@ -149,8 +149,8 @@ describe('parseTokens', () => {
   });
 });
 
-describe('against the production units.css', () => {
-  test('the book cannot miss a token the stylesheet declares', () => {
+describe('against the production units.json', () => {
+  test('the book cannot miss a token the source declares', () => {
     // If a family is added, this fails until the book accounts for it.
     const all = parseTokens(unitsSource).map((token) => token.name);
     const shown = [
@@ -164,9 +164,11 @@ describe('against the production units.css', () => {
       ...parseTokens(unitsSource, { prefix: '--cn-icon-size' }),
       ...parseTokens(unitsSource, { prefix: '--cn-app-bar' }),
       ...parseTokens(unitsSource, { prefix: '--cn-width' }),
+      ...parseTokens(unitsSource, { names: ['--cn-keyboard-inset'] }),
       ...parseTokens(unitsSource, { prefix: '--cn-z' }),
       ...parseTokens(unitsSource, { prefix: '--cn-duration' }),
       ...parseTokens(unitsSource, { prefix: '--cn-easing' }),
+      ...parseTokens(unitsSource, { names: ['--cn-measure'] }),
       ...parseTokens(unitsSource, { prefix: '--cn-breakpoint' }),
       ...parseTokens(unitsSource, { prefix: '--cn-disabled' }),
     ].map((token) => token.name);

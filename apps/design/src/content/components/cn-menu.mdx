@@ -70,6 +70,9 @@ than at the end of a toolbar.
 | :--- | :--- | :--- |
 | `label` | `string` | The trigger's accessible name. Localise it; the default, `More options`, is English. |
 | `inline` | `boolean` | Renders the horizontal `dots` glyph instead of the upright `kebab`. |
+| `noun` | `string` | The trigger's glyph, where the menu is not the more-options one — a chat bar's `add`. Defaults to the pair `inline` selects. |
+| `opens` | `'block-end' \| 'block-start'` | Which side of the trigger the surface opens toward. Defaults to `block-end`, below it; `block-start` suits a trigger at its container's block end. |
+| `chrome` | `boolean` | Gives the trigger the chrome action's presentation instead of the text button's, for a menu standing beside other chrome actions. |
 | `children` | `Snippet` | The items. Each is an anchor with a destination or a button, holding a leading `Icon` and a `span` label. |
 
 An item keeps the element it was written as, so a command that navigates on success

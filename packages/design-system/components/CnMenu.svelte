@@ -33,12 +33,33 @@ import Icon from './Icon.svelte';
 let {
   label = 'More options',
   inline = false,
+  noun,
+  chrome = false,
+  opens = 'block-end',
   children,
 }: {
   /** The trigger's accessible name. Localise it. */
   label?: string;
   /** Selects the horizontal `dots` glyph over the upright `kebab`. */
   inline?: boolean;
+  /**
+   * The trigger's glyph, where the menu is not the more-options one: a chat
+   * bar's `add`, for instance. Defaults to the pair `inline` selects.
+   */
+  noun?: string;
+  /**
+   * Gives the trigger the chrome action's presentation instead of the text
+   * button's, for a menu standing inside application chrome beside other
+   * chrome actions.
+   */
+  chrome?: boolean;
+  /**
+   * Which side of the trigger the surface opens toward. `block-end` is below it,
+   * where a trigger in a toolbar has room; `block-start` is above it, for a
+   * trigger standing at the block end of its container. Either way the platform
+   * flips it where the viewport gives it no room.
+   */
+  opens?: 'block-end' | 'block-start';
   /** The items: an anchor or a button the consumer wrote, one command each. */
   children?: Snippet;
 } = $props();
@@ -62,13 +83,13 @@ function closeAfterItem(event: MouseEvent) {
 <div class="cn-menu">
   <button
     type="button"
-    class="text cn-menu-trigger"
+    class={`${chrome ? 'chrome-action' : 'text'} cn-menu-trigger`}
     popovertarget={containerId}
     aria-expanded={open}
     aria-controls={containerId}
     aria-label={label}
   >
-    <Icon noun={inline ? 'dots' : 'kebab'} decorative />
+    <Icon noun={noun ?? (inline ? 'dots' : 'kebab')} decorative />
   </button>
 
   <!--
@@ -82,6 +103,7 @@ function closeAfterItem(event: MouseEvent) {
     bind:this={container}
     id={containerId}
     class="cn-menu-container elevation-3"
+    data-opens={opens}
     popover
     ontoggle={(event) => {
       open = (event as ToggleEvent).newState === 'open';

@@ -145,6 +145,7 @@ describe('entry point', () => {
       './buttons.css',
       './chip.css',
       './toggle.css',
+      './fields.css',
       './fab.css',
       './chrome-actions.css',
       './rail.css',
