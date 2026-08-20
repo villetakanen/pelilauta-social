@@ -137,6 +137,34 @@
     "cn-on-input": {
       "value": "{token:cn-on-surface}"
     },
+    "cn-color-field": {
+      "light": "{chroma:surface-80}",
+      "dark": "{chroma:surface-10}"
+    },
+    "cn-color-field-hover": {
+      "light": "{chroma:surface-90}",
+      "dark": "{chroma:surface-20}"
+    },
+    "cn-color-field-focus": {
+      "light": "{chroma:primary-99}",
+      "dark": "{chroma:primary-10}"
+    },
+    "cn-color-field-border": {
+      "light": "{chroma:surface-70}",
+      "dark": "{chroma:surface-30}"
+    },
+    "cn-color-field-border-hover": {
+      "light": "{chroma:primary-60}",
+      "dark": "{chroma:primary-40}"
+    },
+    "cn-color-field-border-focus": {
+      "light": "{chroma:primary-70}",
+      "dark": "{chroma:primary-30}"
+    },
+    "cn-color-field-placeholder": {
+      "light": "{chroma:surface-50}",
+      "dark": "{chroma:surface-70}"
+    },
     "cn-lightbox-background": {
       "value": "{chroma:surface-30}"
     },

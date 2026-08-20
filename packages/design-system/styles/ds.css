@@ -10,6 +10,10 @@
 @import "./buttons.css";
 @import "./chip.css";
 @import "./toggle.css";
+/* After toggle.css: the last of the form controls, and the only one a reader
+   types into rather than triggers — it shares no gradient, elevation or
+   icon-size context with its neighbours for load order to carry. */
+@import "./fields.css";
 @import "./fab.css";
 @import "./chrome-actions.css";
 @import "./rail.css";

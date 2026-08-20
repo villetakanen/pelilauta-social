@@ -1,0 +1,111 @@
+/*
+ * Fields — the surface a reader types into: `input[type="text"]` and
+ * `textarea`. Not select, checkbox, radio, range or file; those are not
+ * fields under this stylesheet.
+ *
+ * A field is a filled container closed by an active indicator along its
+ * block end alone, not a Material text field's shape, label or icons. Rest,
+ * hover and focus each paint their own fill and their own indicator colour.
+ * A field states no foreground colour, so it inherits the body's.
+ *
+ * The indicator is painted with an inset box-shadow rather than a border. A
+ * shadow never enters the box model, so doubling it on focus cannot change
+ * any measurement of the field or reflow its content — the one promise a
+ * border of changing width could not make without reserving a gutter for its
+ * wider state.
+ */
+
+/*
+ * A field is set in the mono family, which `fonts.css` decides, and the
+ * markdown editor is the field that decides it. Its size is the reading step
+ * measured in the mono face: Roboto Mono's x-height is 0.5283 of its em against
+ * Lato's 0.5065, so the two stand equal where 17px * 0.5065 = 16.2979px *
+ * 0.5283. A reader measures a line by its lowercase, so the field's words and
+ * the prose beside them read at one size.
+ *
+ * The size and the leading are stated rather than inherited, so a field is the
+ * same field in prose, in a caption and in a component.
+ *
+ * A Material filled field spaces its content 16dp on every side and stands 56dp
+ * tall at its default density, 48 and 40 at the two steps below. A single-line
+ * field here stands at 48, the middle step: a unit and a half of padding above
+ * and below the reading leading. The half unit is what the height costs, and
+ * every line the field grows by lands back on the grid.
+ */
+input[type="text"],
+textarea {
+  --_field-indicator-width: calc(var(--cn-grid) / 8);
+
+  font-size: 1.0186rem; /* 16.3px */
+  line-height: var(--cn-line);
+  padding-block: calc(var(--cn-grid) * 1.5);
+  padding-inline: calc(var(--cn-grid) * 2);
+  background-color: var(--cn-color-field);
+  border: none;
+  border-radius: 0;
+  box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
+    var(--cn-color-field-border);
+}
+
+input[type="text"]:hover,
+textarea:hover {
+  background-color: var(--cn-color-field-hover);
+  box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
+    var(--cn-color-field-border-hover);
+}
+
+/*
+ * Focus is `:focus-within`, not `:focus-visible`: most readers reach a field
+ * by touch, and `:focus-visible` does not fire for them. The selector is
+ * written on the control and on a label wrapping it, so a component that
+ * composes its own label around a field still paints the state.
+ */
+input[type="text"]:focus-within,
+textarea:focus-within,
+label:focus-within input[type="text"],
+label:focus-within textarea {
+  background-color: var(--cn-color-field-focus);
+  box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
+    var(--cn-color-field-border-focus);
+}
+
+/*
+ * The placeholder is the design system's treatment, not a consumer's: the
+ * faintest surface step at rest, and gone at the first touch of focus,
+ * before the reader's first letter.
+ */
+input[type="text"]::placeholder,
+textarea::placeholder {
+  color: var(--cn-color-field-placeholder);
+}
+
+input[type="text"]:focus-within::placeholder,
+textarea:focus-within::placeholder,
+label:focus-within input[type="text"]::placeholder,
+label:focus-within textarea::placeholder {
+  color: transparent;
+}
+
+/*
+ * Keyboard focus additionally draws the shared ring. Its width and offset
+ * are the accessibility requirement's, not a measurement this stylesheet
+ * settles.
+ */
+input[type="text"]:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--cn-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Disabled: the governing spec reserves `--cn-color-field-disabled` and
+ * leaves its value unsettled, because this epic is a spike. This is the
+ * sample's first proposal, not a settled one — the resting fill and
+ * indicator, dimmed by the opacity every disabled control already shares,
+ * rather than a colour of its own.
+ */
+input[type="text"]:disabled,
+textarea:disabled {
+  opacity: var(--cn-disabled-opacity);
+  cursor: not-allowed;
+}
