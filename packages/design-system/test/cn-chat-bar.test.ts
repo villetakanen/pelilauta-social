@@ -130,7 +130,7 @@ describe("the bar's own add action", () => {
     expect(html).toMatch(/class="chrome-action cn-menu-trigger"/);
   });
 
-  test('the items are the consumer\'s, on the menu surface', () => {
+  test("the items are the consumer's, on the menu surface", () => {
     const html = markup({
       label: 'Vastaa',
       menu: '<button type="button">Lisää kuva</button>',
