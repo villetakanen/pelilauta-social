@@ -4,7 +4,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@design-system/*": ["../../packages/design-system/*"]
+      "@design-system/*": ["../../packages/design-system/*"],
+      "@editor/*": ["../../packages/editor/*"]
     }
   }
 }

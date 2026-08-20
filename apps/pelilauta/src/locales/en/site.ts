@@ -13,8 +13,14 @@ export const site: Locale = {
   deletePage: {
     title: 'Delete page',
   },
+  editor: {
+    title: 'Edit page',
+  },
   handouts: {
     title: 'Secrets',
+    edit: {
+      title: 'Edit secret',
+    },
   },
   options: {
     title: 'Tools',

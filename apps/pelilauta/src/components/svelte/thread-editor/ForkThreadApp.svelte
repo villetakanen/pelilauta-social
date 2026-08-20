@@ -1,5 +1,6 @@
 <script lang="ts">
 import Icon from '@design-system/components/Icon.svelte';
+import CnEditor from '@editor/CnEditor.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import { CHANNEL_DEFAULT_SLUG, type Channels } from 'src/schemas/ChannelSchema';
 import type { Reply } from 'src/schemas/ReplySchema';
@@ -11,7 +12,6 @@ import { logDebug, logError } from 'src/utils/logHelpers';
 import { uid } from '../../../stores/session';
 import MarkdownContent from '../app/MarkdownContent.svelte';
 import ProfileLink from '../app/ProfileLink.svelte';
-import CodeMirrorEditor from '../CodeMirrorEditor/CodeMirrorEditor.svelte';
 import ChannelSelect from './ChannelSelect.svelte';
 import { submitThreadUpdate } from './submitThreadUpdate';
 
@@ -75,8 +75,8 @@ function onChannelChange(event: Event) {
     handleChange();
   }
 }
-function onContentChange(event: CustomEvent<string>) {
-  markdownContent = event.detail;
+function onContentChange(content: string) {
+  markdownContent = content;
   handleChange();
 }
 function onTitleChange(event: Event) {
@@ -90,7 +90,7 @@ function handleChange() {
 }
 </script>
 
-<form class="content-editor" {onsubmit}>
+<form class="editor-form" {onsubmit}>
   <div class="toolbar">
     <label class="grow">
       {t('entries:thread.title')}
@@ -123,12 +123,12 @@ function handleChange() {
     </div>
   </div>
 
-  <section class="grow">
-    <CodeMirrorEditor
+  <section class="editor-region">
+    <CnEditor
       bind:value={markdownContent}
       name="markdownContent"
       disabled={saving}
-      oninput={onContentChange}
+      onChange={onContentChange}
       placeholder={t('entries:thread.placeholders.content')}
     />
   </section>
@@ -137,12 +137,35 @@ function handleChange() {
       <button type="reset" class="text">
         {t('actions:cancel')}
       </button>
-      <span>
-        debug: {JSON.stringify({ changed, saving })}
-      </span>
       <button type="submit">
         <Icon noun="send" />
         <span>{t('actions:send')}</span>
       </button>
     </div>
   </form>
+
+<style>
+  /*
+   * As `ThreadEditorForm`: a full-height flex column so `CnEditor` gets the
+   * space left over from the fixed-height rows around it.
+   */
+  .editor-form {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    min-block-size: 0;
+    gap: var(--cn-gap);
+  }
+
+  /*
+   * `CnEditor`'s host grows by its own CSS, but only within a flex parent —
+   * this section is that parent, standing in the row `.content-editor` used
+   * to give it directly.
+   */
+  .editor-region {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-block-size: 0;
+  }
+</style>

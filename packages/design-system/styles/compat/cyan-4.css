@@ -75,10 +75,7 @@
     var(--chroma-primary-70),
     var(--chroma-primary-40)
   );
-  --color-selection: light-dark(
-    color-mix(in oklch, var(--chroma-primary-60), transparent 70%),
-    color-mix(in oklch, var(--chroma-primary-40), transparent 70%)
-  );
+  --color-selection: var(--cn-color-selection);
   --color-on-selection: var(--cn-on-surface);
   --color-success: var(--chroma-primary-60);
   --color-warning: var(--cn-color-warning);

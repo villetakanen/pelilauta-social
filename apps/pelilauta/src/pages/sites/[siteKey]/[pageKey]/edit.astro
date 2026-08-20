@@ -52,7 +52,10 @@ if (!isMember) {
 // so we can just parse the the entities to typed objects
 const site = SiteSchema.parse(await siteResponse.json());
 const page = PageSchema.parse(await pageResponse.json());
+
+const title = `${t('app:shortname')} – ${t('site:editor.title')}`;
+const shortTitle = t('site:editor.title');
 ---
-<EditorPage title={t('site:editor.title')}>
+<EditorPage title={title} shortTitle={shortTitle} backHref={`/sites/${siteKey}/${pageKey}`}>
   <PageEditorForm site={site} page={page} client:only="svelte"/>
 </EditorPage>

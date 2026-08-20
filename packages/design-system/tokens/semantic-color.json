@@ -177,6 +177,10 @@
       "light": "{chroma:surface-50}",
       "dark": "{chroma:surface-70}"
     },
+    "cn-color-selection": {
+      "light": "color-mix(in oklch, {chroma:primary-60}, transparent 70%)",
+      "dark": "color-mix(in oklch, {chroma:primary-40}, transparent 70%)"
+    },
     "cn-lightbox-background": {
       "value": "{chroma:surface-30}"
     },

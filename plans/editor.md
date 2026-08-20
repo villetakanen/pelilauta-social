@@ -78,6 +78,11 @@ browser-cached chunk. The v18 wrapper is deleted, not moved.
 
 ## Done
 
+- packages/editor built: factory, Svelte host, field theme, paste, tests
+- Five editor views full-screen in the local chrome; Cyan bar retired
+- --cn-color-selection minted; the editor paints selection with it
+- Editor book on the design site under extensions
+
 ## Open questions
 
 - Known risk, accepted: v19's WYSIWYG intent may move every input to the prose

@@ -1,0 +1,112 @@
+---
+title: CnEditor
+description: "The markdown canvas a reader writes a thread, a page or a handout into."
+order: 10
+runtime: interactive
+---
+
+import Composition from '@design-system/books/specimens/Composition.astro'
+import EditorSpecimen from '@editor/books/EditorSpecimen.svelte'
+
+Use CnEditor where writing is the whole screen: a thread, a page, a handout. Give the
+reader the markdown source and let the highlighting show what the document will
+become.
+
+## When to use it
+
+Use it for a document long enough that the reader composes it as its own canvas,
+scrolling within it rather than within the page. Where the text is a line or two
+that sits beside other content — a short bio, a reply — use a
+[field](/base/fields) or [CnChatBar](/components/cn-chat-bar) instead; both take
+their place in a layout the way this component does not.
+
+## Example
+
+<Composition caption="The editor at rest, with markdown already in it">
+  <EditorSpecimen client:only="svelte" />
+</Composition>
+
+```svelte
+<script>
+  import CnEditor from '@editor/CnEditor.svelte'
+
+  let value = $state('# A page\n\nWrite it here.')
+</script>
+
+<CnEditor bind:value placeholder="Kirjoita tähän..." />
+```
+
+The component is an island: without `client:only` (or the framework's equivalent),
+it renders nothing. `createEditor` needs a browser to mount CodeMirror, and it says
+so rather than failing inside CodeMirror.
+
+A consumer can prefill or reset the document by writing to `value`; the editor
+takes the new text whenever it differs from what it already holds. It cannot
+stream text into the document while the reader is typing — a write during an
+edit is not a case the binding answers.
+
+CnEditor is a field. It renders in the mono face at the reading size
+[Fields](/base/fields) sets, and takes the same `--cn-color-field*` roles: the
+resting fill, the fill while the reader types, and the indicator along the block
+end. Hover moves the indicator alone and doubles its width; focus takes the fill
+as well and keeps the indicator doubled. The indicator is an inset shadow rather
+than a border, so doubling it cannot reflow the line the reader is in the middle
+of.
+
+Markdown highlighting takes its sizes from the typography tokens: a heading the
+reader types renders at the size that heading will be, and a quote or inline code
+each take the step their rendered form takes.
+
+Pasted HTML arrives as markdown. A reader copying a passage out of a browser gets
+its headings, lists, emphasis and tables rather than a wall of tags, because
+markdown is the only thing this document holds. The paste is sanitised before it
+is converted, so a script in the copied markup never reaches the document.
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `value` | `string` | Bindable. The document. Defaults to an empty string. |
+| `placeholder` | `string` | The prompt shown while the document is empty. |
+| `disabled` | `boolean` | Renders the document read-only and dims the field. |
+| `gutter` | `boolean` | Renders line numbers, for a document long enough to navigate by them. |
+| `dark` | `boolean` | States the colour scheme to build. Left unset, it is read once from the mount point's computed `color-scheme`. |
+| `name` | `string` | Renders a hidden input carrying the document, for a form that reads it from `FormData`. |
+| `onChange` | `(value: string) => void` | Runs on every document change. |
+| `onBlur` | `(value: string) => void` | Runs on blur, and only if the document changed while focus was held. |
+
+### The factory
+
+`createEditor` is the framework-agnostic escape hatch behind `CnEditor.svelte`: a
+host that is not Svelte — an Astro island written directly, another framework's
+component — mounts it itself and drives the handle it returns.
+
+| Member | Type | Purpose |
+| :--- | :--- | :--- |
+| `view` | `EditorView` | The underlying CodeMirror view, for a caller that needs it directly. |
+| `getValue()` | `() => string` | The current document. |
+| `setValue(next)` | `(string) => void` | Replaces the document. A no-op when it already reads `next`, so a prefill cannot loop back through `onChange`. |
+| `setPlaceholder(next)` | `(string) => void` | Replaces the placeholder. |
+| `setDisabled(next)` | `(boolean) => void` | Toggles read-only, and mirrors it to the host element so it is one CSS selector away. |
+| `setGutter(next)` | `(boolean) => void` | Toggles line numbers. |
+| `focus()` | `() => void` | Moves focus into the document. |
+| `destroy()` | `() => void` | Tears the view down. Idempotent; every other member is inert afterwards. |
+
+CodeMirror is not in an application bundle. Every view mounts the editor as
+an island, and they resolve one content-hashed chunk between them, which the
+browser caches across all of them; a page that mounts no editor loads none of it.
+
+Not shipped: a toolbar, write/preview tabs, WYSIWYG rendering, and image upload. A
+fenced code block highlights as code, not by the language it names, because
+`@codemirror/language-data` is deliberately not a dependency.
+
+## Accessibility
+
+`disabled` is mirrored to the host as `aria-disabled`, so assistive technology
+announces the state instead of exposing a document that merely does not
+change.
+
+The caret takes the indicator's focus colour rather than a generic caret. Where
+the reader is working and where the field says focus is are then one signal.

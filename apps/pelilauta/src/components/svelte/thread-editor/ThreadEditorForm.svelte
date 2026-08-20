@@ -2,6 +2,7 @@
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
+import CnEditor from '@editor/CnEditor.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
@@ -11,7 +12,6 @@ import { logDebug, logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
 import { uid } from '../../../stores/session';
 import AddFilesButton from '../app/AddFilesButton.svelte';
-import CodeMirrorEditor from '../CodeMirrorEditor/CodeMirrorEditor.svelte';
 import ChannelSelect from './ChannelSelect.svelte';
 import { submitThreadUpdate } from './submitThreadUpdate';
 
@@ -84,8 +84,7 @@ async function handleChange() {
   }
 }
 
-async function handleContentChange(event: CustomEvent<string>) {
-  const content = event.detail;
+async function handleContentChange(content: string) {
   markdownContent = content;
   tags = extractTags(content);
   handleChange();
@@ -110,7 +109,7 @@ function onAddFiles(newFiles: File[]) {
 
 <form
   id="thread-editor"
-  class="content-editor"
+  class="editor-form"
   onsubmit={handleSubmit}>
 
   <!-- Toolbar for title, channel, and add files button -->
@@ -151,11 +150,11 @@ function onAddFiles(newFiles: File[]) {
     </section>
   {/if}
 
-    <CodeMirrorEditor
+    <CnEditor
       bind:value={markdownContent}
       name="markdownContent"
       disabled={saving}
-      oninput={handleContentChange}
+      onChange={handleContentChange}
       placeholder={t('entries:thread.placeholders.content')}
     />
 
@@ -188,4 +187,21 @@ function onAddFiles(newFiles: File[]) {
     </button>
   </section>
 </form>
+
+<style>
+  /*
+   * The editor route's shell hands this form the full canvas
+   * (`EditorPage.astro`'s `.editor-main`); the form fills it as a flex
+   * column so `CnEditor` — the one child that grows, by its own CSS — gets
+   * the space left over from the toolbars around it, instead of the page
+   * scrolling past the form's natural height as `.content-editor` did.
+   */
+  .editor-form {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    min-block-size: 0;
+    gap: var(--cn-gap);
+  }
+</style>
 

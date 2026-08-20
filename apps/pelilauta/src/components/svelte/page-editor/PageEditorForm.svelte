@@ -1,6 +1,7 @@
 <script lang="ts">
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
+import CnEditor from '@editor/CnEditor.svelte';
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils';
@@ -9,7 +10,6 @@ import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
 import { uid } from '../../../stores/session';
-import CodeMirrorEditor from '../CodeMirrorEditor/CodeMirrorEditor.svelte';
 import { submitPageUpdate } from './submitPageUpdate';
 
 /**
@@ -18,7 +18,7 @@ import { submitPageUpdate } from './submitPageUpdate';
  * Fields supported
  * - title (textfield)
  * - page-category (select, if categories are available)
- * - content (CodeMirrorEditor)
+ * - content (CnEditor)
  * - tags (auto-generated from content)
  * - insert an asset from the site media library
  *
@@ -87,14 +87,14 @@ async function handleSubmission(event: Event) {
   }
 }
 
-function handleEditorChange(event: CustomEvent<string>) {
+function handleEditorChange(content: string) {
   hasChanges = true;
-  editorValue = event.detail;
+  editorValue = content;
   tags = extractTags(editorValue || '');
 }
 </script>
 
-<form class="content-editor" onsubmit={handleSubmission}>
+<form class="editor-form" onsubmit={handleSubmission}>
   <section class="toolbar">
     <label class="grow">
       {t('entries:page.name')}
@@ -131,12 +131,11 @@ function handleEditorChange(event: CustomEvent<string>) {
   {/if}
 
 
-    <CodeMirrorEditor
+    <CnEditor
       bind:value={editorValue}
       gutter
       disabled={saving}
-      oninput={handleEditorChange}
-      onchange={handleEditorChange}
+      onChange={handleEditorChange}
       placeholder={t('entries:page.markdownContent')}
     />
 
@@ -166,3 +165,17 @@ function handleEditorChange(event: CustomEvent<string>) {
     </button>
   </section>
 </form>
+
+<style>
+  /*
+   * As `ThreadEditorForm`: a full-height flex column so `CnEditor` gets the
+   * space left over from the fixed-height rows around it.
+   */
+  .editor-form {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    min-block-size: 0;
+    gap: var(--cn-gap);
+  }
+</style>

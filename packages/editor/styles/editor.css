@@ -1,0 +1,49 @@
+/*
+ * The box the editor mounts into. Everything the reader sees inside it is the
+ * theme's — this states only how the host stands in a layout, which is a thing
+ * CodeMirror's theme cannot reach.
+ *
+ * The editor is a canvas: it takes the space it is given and scrolls its own
+ * document, rather than growing a page. So the host is a flex child that fills
+ * its parent and refuses to be its parent's minimum, which is what `min-block-
+ * size: 0` buys — without it the content's intrinsic height wins and the page
+ * scrolls instead of the editor.
+ */
+
+.cn-editor {
+  /*
+   * The field's resting indicator, named here so the theme can double it. It is
+   * `fields.css`'s `--_field-indicator-width`, restated because that one is
+   * private to the field selectors and a `.cm-editor` matches none of them.
+   */
+  --_editor-indicator-width: calc(var(--cn-grid) / 8);
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-block-size: 0;
+  inline-size: 100%;
+  position: relative;
+  isolation: isolate;
+}
+
+.cn-editor .cm-editor {
+  block-size: 100%;
+}
+
+.cn-editor .cm-scroller {
+  overflow: auto;
+}
+
+/*
+ * Disabled dims the whole field, as `fields.css` does, because
+ * `--cn-color-field-disabled` is declared and has no value yet. When it gets
+ * one, the fill becomes that colour and this opacity goes.
+ */
+.cn-editor[aria-disabled="true"] {
+  opacity: var(--cn-disabled-opacity);
+}
+
+.cn-editor[aria-disabled="true"] .cm-content {
+  cursor: not-allowed;
+}

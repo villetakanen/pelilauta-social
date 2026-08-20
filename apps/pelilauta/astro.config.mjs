@@ -23,6 +23,9 @@ export default defineConfig({
         '@design-system': fileURLToPath(
           new URL('../../packages/design-system', import.meta.url),
         ),
+        '@editor': fileURLToPath(
+          new URL('../../packages/editor', import.meta.url),
+        ),
       },
     },
     plugins: [

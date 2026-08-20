@@ -1,36 +1,141 @@
 ---
 import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
-import AppBar from '../components/server/AppBar.astro';
-import AppRail from '../components/server/AppRail.astro';
-import EditorHead from '../components/server/BaseHead/EditorHead.astro';
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import { t } from 'src/utils/i18n';
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 
 // NOTE: EditorPage intentionally does not include AuthManager.
 // This layout is only used for server-side authenticated pages where
 // authentication is verified during server-side rendering.
 // Client-side auth state management is not needed for these pages.
 
-const { title, shortTitle, description } = Astro.props;
+// IMPORTANT: an editor is a modal-shaped surface for an authenticated action,
+// and NEVER indexed by search engines, exactly as ModalPage's routes are —
+// BaseHead's `noSharing` is what both shells ask for it with.
+
+export interface Props {
+  title?: string;
+  shortTitle?: string;
+  description?: string;
+  /**
+   * Where the bar's back action leads. A route that states none returns
+   * through the session instead, as ModalPage does.
+   */
+  backHref?: string;
+}
+
+const { title, shortTitle, description, backHref } = Astro.props;
 ---
 
 <html lang="fi">
-  <EditorHead title={title} description={description} />
+  <BaseHead {title} {description} noSharing={true} />
   <body>
-    <!-- Modal top bar (with back-link) -->
-    <AppBar title={title} shortTitle={shortTitle} modal>
-      <slot name="app-bar" />
-    </AppBar>
+    <CnAppChrome>
+      <CnAppBar
+        title={title ?? ''}
+        shortTitle={shortTitle}
+        modal
+        backLabel={t('common:back')}
+      />
+    </CnAppChrome>
 
-    <!-- We will not show the botton bar on mobile for editor views -->
+    <!--
+      The editor is a canvas that takes the screen, not flowing content in a
+      layout container, so `<main>` here is not `.app-main`: that host carries
+      content-container clearance (`content-containers.css`) for stacked prose
+      and grids, and would put a page-scrolling reader above the editor rather
+      than a fixed canvas below the bar.
 
-    <!-- AppRail is always shown on desktop, it does not take that much space -->
-    <AppRail hideOnMobile />
-
-    <!-- The main application content area -->
-    <main>
-      <!-- The main content area is expected to contain a form with .content-editor class -->
+      This is the clearance decision `plans/debt/editor-page-keeps-the-cyan-bar.md`
+      was waiting on: an editor route gets its own local host, sized to the
+      viewport rather than to its content. `box-sizing: border-box` with
+      `padding-block-start: var(--cn-app-bar-height)` reserves the fixed bar's
+      depth inside a box already capped to the viewport, so the content area
+      left over is exactly the space below the bar — no separate subtraction to
+      keep in sync with it. `--cn-keyboard-inset` shortens that same box the way
+      `CnAppChrome` shortens itself, so an on-screen keyboard covers no more of
+      the editor than it already covers of the bar.
+    -->
+    <main class="editor-main">
+      <!--
+        A visually-hidden heading, so every editor route carries one without
+        repeating it in each view: the bar already carries the same words as a
+        label, and a reader using the document outline gets a heading to land
+        on. `shortTitle` is the plain phrase; `title` alone is usually that
+        phrase behind the product name, which reads oddly as a heading.
+      -->
+      <h1 class="visually-hidden">{shortTitle ?? title}</h1>
       <slot />
     </main>
+
+    {/*
+      The design system's back action reports the reader's intent and navigates
+      nothing, so where they land is decided here — the same contract
+      ModalPage's routes get. Leaving an editor with unsaved work leaves, as
+      v18 does: guarding the departure is application logic the design system
+      does not decide (`plans/editor.md`), and no editor view asks for a guard
+      today.
+    */}
+    <script is:inline define:vars={{ backHref }}>
+      document.addEventListener('cn-back', () => {
+        if (backHref) {
+          window.location.href = backHref;
+          return;
+        }
+        if (window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+        window.location.href = '/';
+      });
+    </script>
 
     <SnackbarHost client:only="svelte" />
   </body>
 </html>
+
+<style is:global>
+  /*
+   * The editor owns the viewport: the page itself must not scroll, or the
+   * fixed chrome and the height-locked `.editor-main` below would disagree
+   * with what the browser actually lets the reader scroll to.
+   */
+  html,
+  body {
+    block-size: 100%;
+    overflow: hidden;
+  }
+</style>
+
+<style>
+  .editor-main {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    block-size: calc(100dvh - var(--cn-keyboard-inset));
+    padding-block-start: var(--cn-app-bar-height);
+    overflow: hidden;
+  }
+
+  /*
+   * The slotted view is a Svelte island, and the preflight renders it
+   * `display: contents` (`preflight.css`) — so the flex child the editor
+   * needs to reach through to is the island's one element, exactly as
+   * `content-containers.css` reaches through it for a content container.
+   */
+  .editor-main > :global(*),
+  .editor-main > :global(astro-island > *) {
+    flex: 1;
+    min-block-size: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

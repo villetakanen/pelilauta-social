@@ -1,9 +1,9 @@
 <script lang="ts">
+import CnEditor from '@editor/CnEditor.svelte';
 import type { Handout } from 'src/schemas/HandoutSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { update } from 'src/stores/site/handouts';
 import { t } from 'src/utils/i18n';
-import CodeMirrorEditor from '../../CodeMirrorEditor/CodeMirrorEditor.svelte';
 
 interface Props {
   handout: Handout;
@@ -20,8 +20,8 @@ const changed = $derived.by(() => {
 function titleChanged(e: Event) {
   title = (e.target as HTMLInputElement).value;
 }
-function markdownContentChanged(e: CustomEvent<string>) {
-  markdownContent = e.detail;
+function markdownContentChanged(content: string) {
+  markdownContent = content;
 }
 
 async function handleSubmit(e: Event) {
@@ -38,7 +38,7 @@ async function handleSubmit(e: Event) {
 }
 </script>
 
-<form class="content-editor" onsubmit={handleSubmit}>
+<form class="editor-form" onsubmit={handleSubmit}>
 
   <div class="toolbar">
     <label class="grow">
@@ -46,10 +46,10 @@ async function handleSubmit(e: Event) {
       <input type="text" value={handout.title}  oninput={titleChanged}/>
     </label>
   </div>
-  
-  <CodeMirrorEditor
+
+  <CnEditor
     bind:value={markdownContent}
-    oninput={markdownContentChanged}
+    onChange={markdownContentChanged}
   />
 
   <div class="toolbar justify-end">
@@ -62,3 +62,17 @@ async function handleSubmit(e: Event) {
   </div>
 
 </form>
+
+<style>
+  /*
+   * As `ThreadEditorForm`: a full-height flex column so `CnEditor` gets the
+   * space left over from the fixed-height rows around it.
+   */
+  .editor-form {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    min-block-size: 0;
+    gap: var(--cn-gap);
+  }
+</style>

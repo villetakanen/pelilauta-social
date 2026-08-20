@@ -4,6 +4,7 @@ import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
 import { handoutFrom } from 'src/schemas/HandoutSchema';
 import { SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { t } from 'src/utils/i18n';
 import HandoutEditor from '../../../../../components/svelte/sites/handouts/HandoutEditor.svelte';
 import EditorPage from '../../../../../layouts/EditorPage.astro';
 
@@ -45,8 +46,11 @@ const handout = handoutFrom(
   id,
   siteKey,
 );
+
+const title = `${t('app:shortname')} – ${t('site:handouts.edit.title')}`;
+const shortTitle = t('site:handouts.edit.title');
 ---
 
-<EditorPage>
+<EditorPage title={title} shortTitle={shortTitle} backHref={`/sites/${siteKey}/handouts/${id}`}>
   <HandoutEditor handout={handout} site={site} client:only="svelte" />
 </EditorPage>

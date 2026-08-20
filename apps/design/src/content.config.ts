@@ -51,4 +51,5 @@ export const collections = {
   base: book('base', bookSchema),
   tokens: book('tokens', bookSchema),
   components: book('components', componentSchema),
+  extensions: book('extensions', componentSchema),
 };
