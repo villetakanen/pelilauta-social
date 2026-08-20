@@ -105,19 +105,27 @@
   );
   --cn-color-field-focus: light-dark(
     var(--chroma-primary-99),
-    var(--chroma-primary-10)
+    var(--chroma-surface-40)
   );
   --cn-color-field-border: light-dark(
     var(--chroma-surface-50),
     var(--chroma-surface-70)
   );
   --cn-color-field-border-hover: light-dark(
-    var(--chroma-primary-60),
-    var(--chroma-primary-40)
+    var(--chroma-primary-50),
+    var(--chroma-primary-80)
   );
   --cn-color-field-border-focus: light-dark(
-    var(--chroma-primary-70),
-    var(--chroma-primary-30)
+    var(--chroma-primary-40),
+    var(--chroma-primary-80)
+  );
+  --cn-color-field-label-hover: light-dark(
+    var(--chroma-primary-30),
+    var(--chroma-primary-80)
+  );
+  --cn-color-field-label-focus: light-dark(
+    var(--chroma-primary-40),
+    var(--chroma-primary-80)
   );
   --cn-color-field-label: light-dark(
     var(--chroma-surface-30),

@@ -4,9 +4,10 @@
  * fields under this stylesheet.
  *
  * A field is a filled container closed by an active indicator along its
- * block end alone, not a Material text field's shape or icons. Rest, hover and
- * focus each paint a distinct fill and indicator colour. A field states no
- * foreground colour, so it inherits the body's.
+ * block end alone, not a Material text field's shape or icons. The indicator
+ * carries every state: hover recolours and doubles it and leaves the fill
+ * where it rests, and focus changes the fill as well. A field states no
+ * foreground colour for the reader's words, so they take the body's.
  *
  * A label wrapping a field stands inside the fill, as Material's does: the
  * label becomes the container, and the field it wraps draws nothing.
@@ -21,6 +22,10 @@
 /*
  * The two measurements both container kinds share: the resting indicator's
  * width, and the margin that puts a field in a seven-unit row.
+ *
+ * The fill and the indicator cross between states over the interaction motion
+ * every control that answers a pointer shares, so a pointer passing over a
+ * field does not flicker it.
  */
 input[type="text"],
 textarea,
@@ -30,6 +35,10 @@ label:has(> textarea) {
   --_field-margin-block: calc(var(--cn-grid) * 0.5);
 
   margin-block: var(--_field-margin-block);
+  transition:
+    color var(--cn-duration-ui) var(--cn-easing-ui),
+    background-color var(--cn-duration-ui) var(--cn-easing-ui),
+    box-shadow var(--cn-duration-ui) var(--cn-easing-ui);
 }
 
 /*
@@ -64,10 +73,17 @@ textarea {
     var(--cn-color-field-border);
 }
 
-input[type="text"]:hover,
-textarea:hover {
-  background-color: var(--cn-color-field-hover);
-  box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
+/*
+ * Hover moves the indicator alone. The fill stays where it rests, so a pointer
+ * crossing a form does not wash its fields in and out; the indicator takes a
+ * high-visibility step of the primary family and grows from one eighth of a
+ * grid unit to two, which is the one signal a reader needs to know the field
+ * is reachable. The label crosses to the primary scale with it, at the step it
+ * rests on. A disabled field is not reachable, so it answers no pointer.
+ */
+input[type="text"]:not(:disabled):hover,
+textarea:not(:disabled):hover {
+  box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-hover);
 }
 
@@ -94,7 +110,7 @@ textarea:focus-within {
  * every line count, and its margins put it in the same seven-unit row.
  *
  * The label text is the one part of a field set in Lato: it is the field's
- * name, written for a reader, where the value below it is the reader's own
+ * name, written for a reader, where the value below it is the reader's
  * text. It takes the label step's size and line.
  *
  * It is also the one part of a field that states a foreground colour: a surface
@@ -112,22 +128,23 @@ label:has(> textarea) {
   line-height: calc(var(--cn-grid) * 2);
   letter-spacing: var(--cn-letter-spacing-text);
   padding-block: calc(var(--cn-grid) * 0.5);
-  color: var(--cn-color-field-label);
   padding-inline: calc(var(--cn-grid) * 2);
+  color: var(--cn-color-field-label);
   background-color: var(--cn-color-field);
   box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border);
 }
 
-label:has(> input[type="text"]):hover,
-label:has(> textarea):hover {
-  background-color: var(--cn-color-field-hover);
-  box-shadow: inset 0 calc(-1 * var(--_field-indicator-width)) 0 0
+label:has(> input[type="text"]:not(:disabled)):hover,
+label:has(> textarea:not(:disabled)):hover {
+  color: var(--cn-color-field-label-hover);
+  box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-hover);
 }
 
 label:has(> input[type="text"]):focus-within,
 label:has(> textarea):focus-within {
+  color: var(--cn-color-field-label-focus);
   background-color: var(--cn-color-field-focus);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-focus);
@@ -142,6 +159,20 @@ label:has(> textarea) > textarea {
   color: var(--cn-text);
   margin: 0;
   padding: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/*
+ * The reset repeats for the states, because a field's `:hover` carries more
+ * classes than the descendant selector above carries, and specificity weighs
+ * those before it weighs elements. Without this, a wrapped field paints its
+ * indicator inside the container's.
+ */
+label:has(> input[type="text"]) > input[type="text"]:hover,
+label:has(> input[type="text"]) > input[type="text"]:focus-within,
+label:has(> textarea) > textarea:hover,
+label:has(> textarea) > textarea:focus-within {
   background-color: transparent;
   box-shadow: none;
 }
@@ -165,24 +196,22 @@ label:focus-within textarea::placeholder {
 }
 
 /*
- * Keyboard focus additionally draws the shared ring. Its width and offset
- * are the accessibility requirement's, not a measurement this stylesheet
- * settles.
+ * A field draws no focus ring, and the active indicator is the focus
+ * indication. A focused text control matches `:focus-visible` whichever
+ * way the reader reached it, because typing is expected of it, so a ring
+ * written for the keyboard lands on every click as well.
+ *
+ * Material Design 3's filled field takes the same position: its focus state is
+ * a second active indicator cross-faded over the resting one, and no ring. That
+ * meets WCAG 2.2 SC 2.4.7, which asks that focus be visible rather than that it
+ * be an outline — the fill changes, the indicator doubles and the label
+ * recolours. SC 2.4.13 Focus Appearance, which would ask for the ring's
+ * geometry, is AAA, and a filled field does not target it.
  */
+input[type="text"]:focus,
+textarea:focus,
 input[type="text"]:focus-visible,
-textarea:focus-visible,
-label:has(> input[type="text"]:focus-visible),
-label:has(> textarea:focus-visible) {
-  outline: 2px solid var(--cn-focus-ring);
-  outline-offset: 2px;
-}
-
-/*
- * The ring belongs to the container, so a wrapped field does not draw a second
- * one inside it.
- */
-label:has(> input[type="text"]) > input[type="text"]:focus-visible,
-label:has(> textarea) > textarea:focus-visible {
+textarea:focus-visible {
   outline: none;
 }
 
@@ -204,4 +233,13 @@ label:has(> textarea:disabled) {
 label:has(> input[type="text"]:disabled) > input[type="text"],
 label:has(> textarea:disabled) > textarea {
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  input[type="text"],
+  textarea,
+  label:has(> input[type="text"]),
+  label:has(> textarea) {
+    transition: none;
+  }
 }

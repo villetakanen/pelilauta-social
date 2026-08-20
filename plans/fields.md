@@ -68,13 +68,6 @@ work reaches next.
 
 ## Possible work (non-binding)
 
-- **The colour roles** — promote the study's values into `semantic.css` under the
-  `--cn-color-field*` names, with the editor theme following the resting value it already
-  reads.
-- **The element style** — a `styles/fields.css` painting `input[type="text"]` and
-  `textarea`, the partial sample this epic commits to.
-- **The book** — a fields page in `apps/design` showing every state in both schemes, so
-  the next reader can see a field rather than infer one.
 - **Preflight boundary** — state where the reset stops and the field treatment begins,
   if `preflight/spec.md:115` proves ambiguous once the element style lands. Small, and
   possibly nothing.
@@ -85,18 +78,45 @@ work reaches next.
 
 ## Done
 
-- **Field specification** — `specs/design-system/fields/spec.md` is live. It leaves the
-  disabled state's values open for the sample to settle.
+- **Field specification** — `specs/design-system/fields/spec.md` carries what the spike
+  settled. The disabled state's value is still open.
+- **The colour roles** — `semantic.css` and `tokens/semantic-color.json` carry the
+  `--cn-color-field*` family, including the three label roles the spike added.
+- **The element style** — `styles/fields.css` paints `input[type="text"]`, `textarea` and
+  a `<label>` wrapping either.
+- **The book** — `apps/design/src/content/base/fields.mdx` opens with every state of a
+  text input and carries the states, the type, the spacing and the roles.
+- **The spike closes here.** A field is done enough for the chat bar, which is the epic
+  this one was cut from and resumes next. Fields the application has not reached keep
+  Cyan's treatment.
+
+## What the spike settled against the study
+
+`docs/chat-bar-field-study.md` recorded the product owner's rulings before anything was
+drawn. Seeing it drawn moved five of them, in the same voice, on 2026-08-20:
+
+- **Hover paints no fill** (against rulings 4, 16 and 18). A fill that moves under the
+  pointer washes a form in and out as a pointer crosses it. Hover recolours the indicator
+  to a high-visibility primary step and doubles its width instead.
+- **Dark focus takes a surface step**, not `primary-10` (against ruling 15). Light keeps
+  the warm primary tint. In Dark the indicator and the label already carry the primary
+  family, and a third primary left the state louder than the words in it.
+- **A field draws no focus ring** (against ruling 10). A focused text control matches
+  `:focus-visible` however it was reached, so a ring meant for the keyboard lands on every
+  click. Material Design 3's filled field rules the same way, and the focus state carries
+  WCAG 2.2 SC 2.4.7 on its own.
+- **A label wrapping a field stands inside the fill**, and becomes the container. The
+  study never ruled on a label, because the chat bar has none.
+- **A field stands six units in a seven-unit row**, the pair a control takes.
+
+The study is testimony of what was decided before the sample existed, and it is left as
+written.
 
 ## Open questions
 
-- The focus ring on a field. Cyan 4 suppressed it and signalled with fill and border;
-  v20 only ever ringed actionable controls. The study keeps the ring on the
-  accessibility requirement, and its width and offset are unsettled.
-- Whether a field's engaged state is one state or two. The study rules `:focus-within`
-  for the treatment a tap must reach; whether a keyboard reader additionally gets the
-  ring, and whether `ARCHITECTURE.md` carries one row or two, is undecided.
-- The resting surface a field sits on. The study anchors its steps to a raised surface
-  rather than the page, and which elevation a form's fields sit at is unestablished.
+- The disabled state's value. The element style dims the resting treatment with the shared
+  opacity, and `--cn-color-field-disabled` is still reserved rather than settled.
+- The resting surface a field sits on. The book stands its specimens at elevation 1, and
+  which elevation a form's fields sit at is unestablished.
 - Assumption, not fact: that the 34 application surfaces want one field treatment. The
   epic samples two element types and does not survey the rest.

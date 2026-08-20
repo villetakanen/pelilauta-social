@@ -147,19 +147,27 @@
     },
     "cn-color-field-focus": {
       "light": "{chroma:primary-99}",
-      "dark": "{chroma:primary-10}"
+      "dark": "{chroma:surface-40}"
     },
     "cn-color-field-border": {
       "light": "{chroma:surface-50}",
       "dark": "{chroma:surface-70}"
     },
     "cn-color-field-border-hover": {
-      "light": "{chroma:primary-60}",
-      "dark": "{chroma:primary-40}"
+      "light": "{chroma:primary-50}",
+      "dark": "{chroma:primary-80}"
     },
     "cn-color-field-border-focus": {
-      "light": "{chroma:primary-70}",
-      "dark": "{chroma:primary-30}"
+      "light": "{chroma:primary-40}",
+      "dark": "{chroma:primary-80}"
+    },
+    "cn-color-field-label-hover": {
+      "light": "{chroma:primary-30}",
+      "dark": "{chroma:primary-80}"
+    },
+    "cn-color-field-label-focus": {
+      "light": "{chroma:primary-40}",
+      "dark": "{chroma:primary-80}"
     },
     "cn-color-field-label": {
       "light": "{chroma:surface-30}",

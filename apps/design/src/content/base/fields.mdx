@@ -110,10 +110,13 @@ the label's two units, the value's three, half a unit of padding.
 
 ## Hover and focus
 
-A field distinguishes three states — rest, hover and focus — each with its own
-fill and its own border colour. Hover and focus need a pointer or a keyboard to
-reach: hover the field below with a pointer, then tab to it or tap into it, in
-both colour schemes.
+A field distinguishes three states — rest, hover and focus. Hover moves the
+indicator alone: the fill stays where it rests, so a pointer crossing a form
+does not wash its fields in and out, and the indicator takes a high-visibility
+step of the primary family and grows from one eighth of a grid unit to two, and
+the label crosses to the primary scale at the step it rests on. Focus moves both. Each needs a pointer or a
+keyboard to reach: hover the field below with a pointer, then tab to it or tap
+into it, in both colour schemes.
 
 <Composition themes elevation={1} caption="Hover this field with a pointer, then tab to it or tap into it">
   <input type="text" placeholder="Hover, then focus me" />
@@ -123,8 +126,10 @@ both colour schemes.
 <input type="text" placeholder="Hover, then focus me" />
 ```
 
-The table below carries the same three states as flat colour, so the fill and
-the border for each state stand beside each other without an interaction.
+The table below carries the same states as flat colour, so the fill and the
+border for each stand beside each other without an interaction.
+`--cn-color-field-hover` is not in it: the role stands unpainted while hover
+leaves the fill alone.
 
 <RoleTable
   theme={theme}
@@ -132,30 +137,46 @@ the border for each state stand beside each other without an interaction.
   caption="Field colour roles"
   names={[
     "--cn-color-field",
-    "--cn-color-field-hover",
     "--cn-color-field-focus",
     "--cn-color-field-border",
     "--cn-color-field-border-hover",
     "--cn-color-field-border-focus",
     "--cn-color-field-placeholder",
     "--cn-color-field-label",
+    "--cn-color-field-label-hover",
+    "--cn-color-field-label-focus",
   ]}
   intents={{
     "--cn-color-field": "Resting fill",
-    "--cn-color-field-hover": "Fill under a pointer",
     "--cn-color-field-focus": "Fill while the reader types",
     "--cn-color-field-border": "Resting indicator",
     "--cn-color-field-border-hover": "Indicator under a pointer",
     "--cn-color-field-border-focus": "Indicator while the reader types",
     "--cn-color-field-placeholder": "Placeholder text",
     "--cn-color-field-label": "The label naming the field",
+    "--cn-color-field-label-hover": "The label under a pointer",
+    "--cn-color-field-label-focus": "The label while the reader types",
   }}
 />
 
-Focus reaches a reader who taps: the selector is `:focus-within`, held on the
-control and on a label wrapping it, because `:focus-visible` does not fire for a
-reader who reaches the field by touch. Keyboard focus additionally draws
-`--cn-focus-ring`.
+Focus keeps the width hover gave the indicator and darkens it — primary 40
+against hover's primary 50, so the line changes in lightness and not in hue
+alone, and a reader who cannot separate the two hues still sees the state. The
+fill changes to the primary family with it, and the label moves to the primary
+scale. The selector is
+`:focus-within`, held on the control and on a label wrapping it, because
+`:focus-visible` does not fire for a reader who reaches the field by touch.
+
+A field draws no focus ring, and the active indicator is the focus indication.
+A focused text control matches `:focus-visible` whichever way the reader
+reached it, because typing is expected of it, so a ring written for the keyboard
+lands on every click as well. Material Design 3's filled field takes the same
+position: its focus state is a second active indicator cross-faded over the
+resting one, and no ring.
+
+That meets WCAG 2.2 SC 2.4.7, which asks that focus be visible rather than that
+it be an outline. SC 2.4.13 Focus Appearance, which would ask for the ring's
+geometry, is AAA, and a filled field does not target it.
 
 ## Disabled
 
@@ -168,6 +189,8 @@ reader who reaches the field by touch. Keyboard focus additionally draws
 <input type="text" placeholder="Disabled" disabled />
 <textarea placeholder="Disabled" disabled></textarea>
 ```
+
+A disabled field answers no pointer: hover does not reach it.
 
 `--cn-color-field-disabled` is not settled. `specs/design-system/fields/spec.md`
 reserves the role and leaves its value for this page to settle by experiment. The
@@ -182,7 +205,7 @@ becomes the filled container and the field inside it draws nothing of its own,
 so the name stands inside the fill, above the reader's words — Material Design
 3's populated filled field. The label text is the one part of a field set in
 Lato, at the label step: it is the field's name, written for a reader, where the
-value below it is the reader's own text.
+value below it is the reader's text.
 
 The label is also the one part of a field that states a foreground colour: a
 surface step in from the end of the scale, off the near-black the body takes in
