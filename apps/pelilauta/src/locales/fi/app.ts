@@ -29,7 +29,6 @@ export const app = {
     title: 'Pelilauta 2',
     description:
       'Pelilauta 2 - Versio 16 – Roolipelikeskustelut, sivustot, wikit ja muuta sellaista',
-    version: 'Versio',
     source: 'Koodi',
     dangerZone: 'Vaaravyöhyke',
   },
