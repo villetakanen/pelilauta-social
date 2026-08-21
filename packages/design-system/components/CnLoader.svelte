@@ -22,7 +22,7 @@ let {
   aria-label={label}
 >
   <span class="lds-dual-ring" aria-hidden="true"></span>
-  <Icon {noun} size={inline ? 'small' : 'large'} />
+  <Icon {noun} size={inline ? 'small' : 'large'} decorative />
 </span>
 
 <style>

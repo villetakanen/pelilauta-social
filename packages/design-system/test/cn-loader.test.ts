@@ -16,6 +16,13 @@ describe('CnLoader server rendering', () => {
     expect(html).toContain('data-noun="fox"');
   });
 
+  test('the icon is decorative, so the status region announces only its label', () => {
+    const html = markup({});
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).not.toContain('role="img"');
+    expect(html).not.toContain('<title>');
+  });
+
   test('renders inline variant with small icon', () => {
     const html = markup({ inline: true });
     expect(html).toContain('cn-loader-inline');

@@ -20,7 +20,7 @@ A companion global stylesheet (`loader.css`) styles auto-centering layout rules 
 
 The host element carries `role="status"` and `aria-label` set to the `label` prop, defaulting to `"Loading"`.
 
-The `noun` prop forwards to `CnIcon`, defaulting to `"fox"`. `CnIcon` renders at the same dimensions as the host in both default (72px, `--cn-loader-size`) and inline (24px, `--cn-line`) variants.
+The `noun` prop forwards to `CnIcon`, defaulting to `"fox"`. `CnIcon` renders at the same dimensions as the host in both default (72px, `--cn-loader-size`) and inline (24px, `--cn-line`) variants. The icon is decorative: it exposes no role, name or tooltip, so the status region announces only its `label`.
 
 The spinning ring overlay rotates infinitely at 1.2s linear speed, independent of UI duration tokens. When `prefers-reduced-motion: reduce` matches, ring animation resolves to `none`.
 
@@ -51,6 +51,7 @@ Given a default CnLoader component
 When it renders
 Then the root element is span.cn-loader with role="status" and aria-label="Loading"
 And it contains a nested .lds-dual-ring and a nested .cn-icon with noun="fox"
+And the icon exposes nothing to assistive technology
 ```
 
 ```gherkin

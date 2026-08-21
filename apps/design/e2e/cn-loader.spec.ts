@@ -23,6 +23,13 @@ test('renders standalone default CnLoader with ARIA role and noun icon', async (
 
   const icon = loader.locator('.cn-icon');
   await expect(icon).toHaveAttribute('data-noun', 'fox');
+
+  // Decorative: the status region announces only its label, and the glyph
+  // carries no tooltip.
+  const svg = icon.locator('svg');
+  await expect(svg).toHaveAttribute('aria-hidden', 'true');
+  await expect(svg).not.toHaveAttribute('role', 'img');
+  await expect(svg.locator('title')).toHaveCount(0);
 });
 
 test('renders inline variant with 24px dimensions matching var(--cn-line)', async ({
