@@ -75,7 +75,7 @@ function getRedirectUrl(): string {
 </form>
 
 {#if !isAuthenticated}
-  <div class="text-caption text-secondary mt-1 flex items-center gap-1">
+  <div class="text-caption text-low mt-1 flex items-center gap-1">
     <Icon noun="info" size="small" />
     <span>
       <a href="/login?redirect={encodeURIComponent(getRedirectUrl())}" class="text-link">
