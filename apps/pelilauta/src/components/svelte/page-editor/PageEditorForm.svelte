@@ -1,6 +1,7 @@
 <script lang="ts">
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
+import CnEditorShell from '@editor/CnEditorShell.svelte';
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils';
@@ -9,7 +10,6 @@ import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
 import { uid } from '../../../stores/session';
-import CodeMirrorEditor from '../CodeMirrorEditor/CodeMirrorEditor.svelte';
 import { submitPageUpdate } from './submitPageUpdate';
 
 /**
@@ -18,7 +18,7 @@ import { submitPageUpdate } from './submitPageUpdate';
  * Fields supported
  * - title (textfield)
  * - page-category (select, if categories are available)
- * - content (CodeMirrorEditor)
+ * - content (CnEditor, through the editor shell)
  * - tags (auto-generated from content)
  * - insert an asset from the site media library
  *
@@ -26,6 +26,12 @@ import { submitPageUpdate } from './submitPageUpdate';
  * - Delete page
  * - Cancel
  * - Save
+ *
+ * The view is a consumer of the editor shell: it slots the page's frontmatter —
+ * name, category, the legacy-content warning, the tags the content produced,
+ * and the actions — and the shell decides the geometry and whether the
+ * document is dirty. The shell also asks before a dirty departure, so this
+ * form saves and navigates, and guards nothing itself.
  */
 
 interface Props {
@@ -34,15 +40,18 @@ interface Props {
 }
 const { site, page }: Props = $props();
 
-let hasChanges = $state(false);
 let editorValue = $state(page.markdownContent);
 let tags = $state<string[]>(page.tags || []);
 let contentMigrated = $state(false);
 let saving = $state(false);
 
-function handleChange(_event: Event) {
-  hasChanges = true;
-}
+/*
+ * Dirtiness is the shell's, reported here rather than tracked: the fields are
+ * native controls inside the region it reads, so a name edited back to what it
+ * was leaves the save action disabled, which a set-once flag never managed.
+ */
+let shell: CnEditorShell | undefined = $state();
+let dirty = $state(false);
 
 async function migrateLegacyContent() {
   const { convertToMarkdown } = await import('./migrateContent');
@@ -54,6 +63,13 @@ async function migrateLegacyContent() {
 }
 
 onMount(() => {
+  /*
+   * This runs after the shell has taken its clean snapshot on mount, so the
+   * migrated document reads as dirty once it lands — correctly: the writer now
+   * holds an unsaved conversion that only exists because the legacy content had
+   * no markdown form yet, and it should read as work to save, not as the
+   * document's untouched state.
+   */
   if (!page.markdownContent && (page.content || page.htmlContent)) {
     migrateLegacyContent();
   }
@@ -61,7 +77,7 @@ onMount(() => {
 
 async function handleSubmission(event: Event) {
   event.preventDefault();
-  if (saving || !hasChanges) {
+  if (saving || !dirty) {
     return;
   }
   saving = true;
@@ -77,6 +93,14 @@ async function handleSubmission(event: Event) {
     const slug = `/sites/${site.key}/${page.key}`;
     const flowtime = Date.now();
 
+    /*
+     * Clean before leaving. The write has landed, so the document the shell is
+     * holding is saved — and navigating away from a shell that still reads
+     * dirty would raise the browser's guard over a departure the writer
+     * asked for.
+     */
+    shell?.markClean();
+
     // We have updated the page, asking to update subscriber
     // flowtime on next load (and bypass cache)
     window.location.href = `${slug}?flowtime=${flowtime}`;
@@ -87,41 +111,63 @@ async function handleSubmission(event: Event) {
   }
 }
 
-function handleEditorChange(event: CustomEvent<string>) {
-  hasChanges = true;
-  editorValue = event.detail;
+function handleEditorChange(content: string) {
+  editorValue = content;
   tags = extractTags(editorValue || '');
+}
+
+/*
+ * Cancel is a departure, so it asks the shell, which answers for whether the
+ * writer needs asking first and leaves through the route's one handler.
+ */
+function cancel() {
+  shell?.requestBack();
 }
 </script>
 
-<form class="content-editor" onsubmit={handleSubmission}>
-  <section class="toolbar">
-    <label class="grow">
-      {t('entries:page.name')}
-      <input
-        type="text"
-        value={page.name}
-        name="name"
-        required
-        maxlength="42"
-        disabled={saving}
-        data-testid="page-name"
-        oninput={handleChange}
-      />
-    </label>
+<form onsubmit={handleSubmission}>
+  <CnEditorShell
+    bind:this={shell}
+    bind:value={editorValue}
+    gutter
+    disabled={saving}
+    placeholder={t('entries:page.markdownContent')}
+    onChange={handleEditorChange}
+    onDirtyChange={(next) => {
+      dirty = next;
+    }}
+    confirmTitle={t('common:editor.unsaved.title')}
+    confirmBody={t('common:editor.unsaved.body')}
+    confirmLeave={t('common:editor.unsaved.leave')}
+    confirmStay={t('common:editor.unsaved.stay')}
+    frontmatter={frontmatter}
+  />
+</form>
 
-    {#if site.pageCategories && site.pageCategories.length > 0}
+{#snippet frontmatter()}
+  <label class="grow">
+    {t('entries:page.name')}
+    <input
+      type="text"
+      value={page.name}
+      name="name"
+      required
+      maxlength="42"
+      disabled={saving}
+      data-testid="page-name"
+    />
+  </label>
+
+  {#if site.pageCategories && site.pageCategories.length > 0}
     <label>
       {t('entries:page.category')}
-      <select name="category" value={page.category} oninput={handleChange} data-testid="page-category">
+      <select name="category" value={page.category} data-testid="page-category">
         {#each site.pageCategories as category}
           <option value={category.slug}>{category.name}</option>
         {/each}
       </select>
     </label>
-    {/if}
-
-  </section>
+  {/if}
 
   {#if contentMigrated}
     <div class="alert warning flex flex-row items-center px-1">
@@ -130,33 +176,27 @@ function handleEditorChange(event: CustomEvent<string>) {
     </div>
   {/if}
 
-
-    <CodeMirrorEditor
-      bind:value={editorValue}
-      gutter
-      disabled={saving}
-      oninput={handleEditorChange}
-      onchange={handleEditorChange}
-      placeholder={t('entries:page.markdownContent')}
-    />
-
   {#if tags && tags.length > 0}
-  <section class="tags py-1 elevation-1 flex">
+    <section class="tags py-1 elevation-1 flex">
       {#each tags as tag}
         <span class="cn-tag">{tag}</span>
       {/each}
-  </section>
+    </section>
   {/if}
 
-  <section class="toolbar">
+  <section class="actions">
     <a href={`/sites/${site.key}/${page.key}/delete`} class="button text">
       {t('actions:delete')}
     </a>
-    <div class="grow"></div>
-    <a href={`/sites/${site.key}/${page.key}`} class="button text">
+    <button type="button" disabled={saving} class="button text" onclick={cancel}>
       {t('actions:cancel')}
-    </a>
-    <button type="submit" class="button cta" data-testid="save-button" disabled={!hasChanges || saving}>
+    </button>
+    <button
+      type="submit"
+      class="button cta"
+      data-testid="save-button"
+      disabled={saving || !dirty}
+    >
       {#if saving}
         <CnLoader inline noun="save" />
       {:else}
@@ -165,4 +205,14 @@ function handleEditorChange(event: CustomEvent<string>) {
       <span>{t('actions:save')}</span>
     </button>
   </section>
-</form>
+{/snippet}
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--cn-gap);
+    margin-block-start: var(--cn-line);
+  }
+</style>

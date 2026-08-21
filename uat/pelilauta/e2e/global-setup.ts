@@ -125,6 +125,19 @@ async function signInUser(
   });
   await page.waitForURL(`${BASE_URL}/library`, { timeout: 60_000 });
 
+  /*
+   * The client session activates when the AuthManager island hydrates and
+   * writes the reader's uid to localStorage. Saving before that races the
+   * island: the state then carries the server cookie and an empty client
+   * session, and a spec on a route without AuthManager — an editor — is
+   * signed in on the server and signed out on the client.
+   */
+  await page.waitForFunction(
+    () => (window.localStorage.getItem('session-uid') ?? '') !== '',
+    undefined,
+    { timeout: 60_000 },
+  );
+
   // Firebase Auth keeps the client session in IndexedDB, and the server session
   // in a cookie. A spec's context needs both.
   await context.storageState({ path: storagePath, indexedDB: true });

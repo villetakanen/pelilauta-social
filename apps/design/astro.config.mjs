@@ -8,6 +8,7 @@ import { optionalProprietary } from '../../packages/design-system/vite/optional-
 const designSystem = fileURLToPath(
   new URL('../../packages/design-system', import.meta.url),
 );
+const editor = fileURLToPath(new URL('../../packages/editor', import.meta.url));
 
 export default defineConfig({
   site: 'https://design.pelilauta.social',
@@ -21,6 +22,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@design-system': designSystem,
+        '@editor': editor,
       },
     },
     plugins: [

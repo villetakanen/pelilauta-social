@@ -13,7 +13,12 @@ import runtimeVocabulary from '@design-system/books/runtimes.json';
  */
 
 /** Collection names, which are also the URL groups. Must match groups.json. */
-export type GroupId = 'principles' | 'base' | 'tokens' | 'components';
+export type GroupId =
+  | 'principles'
+  | 'base'
+  | 'tokens'
+  | 'components'
+  | 'extensions';
 
 export const GROUPS: readonly { id: GroupId; label: string }[] =
   taxonomy.groups as { id: GroupId; label: string }[];

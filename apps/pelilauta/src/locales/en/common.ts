@@ -13,6 +13,18 @@ export const common: Locale = {
     deleted: 'Deleted successfully.',
     updated: 'Updated successfully.',
   },
+  /*
+   * The editor shell's departure question. It belongs to no one editor view:
+   * a thread, a page and a handout all ask it in the same words.
+   */
+  editor: {
+    unsaved: {
+      title: 'Unsaved changes',
+      body: 'Leaving now discards what you have written.',
+      leave: 'Leave',
+      stay: 'Keep editing',
+    },
+  },
   action: {
     cancel: 'Cancel',
     save: 'Save',

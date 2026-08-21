@@ -1,36 +1,111 @@
 ---
 import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
-import AppBar from '../components/server/AppBar.astro';
-import AppRail from '../components/server/AppRail.astro';
-import EditorHead from '../components/server/BaseHead/EditorHead.astro';
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import { t } from 'src/utils/i18n';
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 
 // NOTE: EditorPage intentionally does not include AuthManager.
 // This layout is only used for server-side authenticated pages where
 // authentication is verified during server-side rendering.
 // Client-side auth state management is not needed for these pages.
 
-const { title, shortTitle, description } = Astro.props;
+// IMPORTANT: an editor is a modal-shaped surface for an authenticated action,
+// and NEVER indexed by search engines, exactly as ModalPage's routes are —
+// BaseHead's `noSharing` is what both shells ask for it with.
+
+export interface Props {
+  title?: string;
+  shortTitle?: string;
+  description?: string;
+  /**
+   * Where the bar's back action leads. A route that states none returns
+   * through the session instead, as ModalPage does.
+   */
+  backHref?: string;
+}
+
+const { title, shortTitle, description, backHref } = Astro.props;
 ---
 
 <html lang="fi">
-  <EditorHead title={title} description={description} />
+  <BaseHead {title} {description} noSharing={true} />
   <body>
-    <!-- Modal top bar (with back-link) -->
-    <AppBar title={title} shortTitle={shortTitle} modal>
-      <slot name="app-bar" />
-    </AppBar>
+    <CnAppChrome>
+      <CnAppBar
+        title={title ?? ''}
+        shortTitle={shortTitle}
+        modal
+        backLabel={t('common:action.back')}
+      />
+    </CnAppChrome>
 
-    <!-- We will not show the botton bar on mobile for editor views -->
-
-    <!-- AppRail is always shown on desktop, it does not take that much space -->
-    <AppRail hideOnMobile />
-
-    <!-- The main application content area -->
+    <!--
+      An editor route's geometry belongs to the shell the view mounts
+      (`packages/editor/CnEditorShell.svelte`): it locks itself to the viewport,
+      clears the fixed bar by the token that sizes it, and locks the page so the
+      canvas is what scrolls. So `<main>` here carries the landmark and nothing
+      else — not `.app-main`, whose clearance and rhythm are for stacked prose,
+      and no local geometry of its own, which would reserve the bar's depth a
+      second time inside a shell that already has.
+    -->
     <main>
-      <!-- The main content area is expected to contain a form with .content-editor class -->
+      <!--
+        A visually-hidden heading, so every editor route carries one without
+        repeating it in each view: the bar already carries the same words as a
+        label, and a reader using the document outline gets a heading to land
+        on. `shortTitle` is the plain phrase; `title` alone is usually that
+        phrase behind the product name, which reads oddly as a heading.
+      -->
+      <h1 class="visually-hidden">{shortTitle ?? title}</h1>
       <slot />
     </main>
+
+    {/*
+      The design system's back action reports the reader's intent and navigates
+      nothing, so where they land is decided here — the same contract
+      ModalPage's routes get. The shell stops this event while its document is
+      dirty and asks, then re-dispatches it once the writer has said to leave,
+      so this handler is the one place a departure lands either way.
+    */}
+    <script is:inline define:vars={{ backHref }}>
+      document.addEventListener('cn-back', () => {
+        if (backHref) {
+          window.location.href = backHref;
+          return;
+        }
+        if (window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+        window.location.href = '/';
+      });
+    </script>
 
     <SnackbarHost client:only="svelte" />
   </body>
 </html>
+
+<style>
+  /*
+   * Cyan pads a bare `main`, and the design site — which carries no Cyan —
+   * does not, so the shell measured right in its book and stood inset by
+   * Cyan's padding here, overflowing the viewport it had sized itself to.
+   * The landmark states its own box rather than inheriting one: the shell
+   * sizes itself against the viewport, so anything between it and the
+   * viewport has to be nothing.
+   */
+  main {
+    margin: 0;
+    padding: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

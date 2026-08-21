@@ -24,8 +24,8 @@ Its layout is `apps/pelilauta/src/layouts/Site.astro`. Its bar is
 beside it. What runs in the browser goes under `@pelilauta/site/client`, and what the
 server needs under `@pelilauta/site/utils`. Its strings are the `site` locale namespace.
 
-Editing a page or a handout still takes `EditorPage.astro`, which carries Cyan's bar and
-none of this chrome: `plans/debt/editor-page-keeps-the-cyan-bar.md`.
+Editing a page or a handout takes `EditorPage.astro`, a full-screen editor shell with
+the modal bar and none of this chrome.
 
 A page of the site establishes the site itself, states which reader may see it, and hands
 the layout what it read. The layout reads nothing.

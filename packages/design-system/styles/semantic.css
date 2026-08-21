@@ -135,6 +135,10 @@
     var(--chroma-surface-50),
     var(--chroma-surface-70)
   );
+  --cn-color-selection: light-dark(
+    color-mix(in oklch, var(--chroma-primary-60), transparent 70%),
+    color-mix(in oklch, var(--chroma-primary-40), transparent 70%)
+  );
   --cn-lightbox-background: var(--chroma-surface-30);
   --cn-lightbox-color: var(--chroma-surface-95);
 }

@@ -4,7 +4,7 @@ import { ReplySchema } from 'src/schemas/ReplySchema';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import ForkThreadApp from '../../../../../components/svelte/thread-editor/ForkThreadApp.svelte';
-import ModalPage from '../../../../../layouts/ModalPage.astro';
+import EditorPage from '../../../../../layouts/EditorPage.astro';
 
 // We want to fetch the thread and the reply server side, and pass those to
 // the client form. All authz for ui will happen on the client side, and for
@@ -34,10 +34,10 @@ if (!threadResponse.ok || !replyResponse.ok || !channelsResponse.ok) {
 const thread = ThreadSchema.parse(await threadResponse.json());
 const reply = ReplySchema.parse(await replyResponse.json());
 const channels = ChannelsSchema.parse(await channelsResponse.json());
+
+const title = `${t('app:shortname')} – ${t('threads:fork.title')}`;
+const shortTitle = t('threads:fork.title');
 ---
-<ModalPage title={thread.title} backHref={`/threads/${threadKey}`}>
-  <div class="content-prose">
-    <h1>{t('threads:fork.title')}</h1>
-  </div>
+<EditorPage title={title} shortTitle={shortTitle} backHref={`/threads/${threadKey}`}>
   <ForkThreadApp {thread} {reply} {channels} client:only="svelte"/>
-</ModalPage>
+</EditorPage>

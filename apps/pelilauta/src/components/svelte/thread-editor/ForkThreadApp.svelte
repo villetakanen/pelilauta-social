@@ -1,5 +1,16 @@
 <script lang="ts">
+/**
+ * Forking a reply into its own thread — a quoted-reply variant of thread
+ * authoring.
+ *
+ * As `ThreadEditorForm`, this view is a consumer of the editor shell: it
+ * slots the frontmatter — title, channel, the quoted reply — and the shell
+ * decides the geometry and whether the document is dirty. It also
+ * cross-posts a link back into the original thread once the fork saves,
+ * which is this route's one departure from `ThreadEditorForm`'s save path.
+ */
 import Icon from '@design-system/components/Icon.svelte';
+import CnEditorShell from '@editor/CnEditorShell.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import { CHANNEL_DEFAULT_SLUG, type Channels } from 'src/schemas/ChannelSchema';
 import type { Reply } from 'src/schemas/ReplySchema';
@@ -11,7 +22,6 @@ import { logDebug, logError } from 'src/utils/logHelpers';
 import { uid } from '../../../stores/session';
 import MarkdownContent from '../app/MarkdownContent.svelte';
 import ProfileLink from '../app/ProfileLink.svelte';
-import CodeMirrorEditor from '../CodeMirrorEditor/CodeMirrorEditor.svelte';
 import ChannelSelect from './ChannelSelect.svelte';
 import { submitThreadUpdate } from './submitThreadUpdate';
 
@@ -21,30 +31,36 @@ interface Props {
   channels: Channels;
 }
 const { thread, reply, channels }: Props = $props();
-let title = $state(`Re: ${thread.title}`);
-let channel = $state(
-  thread?.channel?.toLocaleLowerCase() || CHANNEL_DEFAULT_SLUG,
-);
+
+// Uncontrolled defaults for the title and channel fields; FormData reads
+// their edited values at submit, as ThreadEditorForm's fields do.
+const initialTitle = `Re: ${thread.title}`;
+const initialChannel =
+  thread?.channel?.toLocaleLowerCase() || CHANNEL_DEFAULT_SLUG;
+
 let markdownContent = $state('');
 let saving = $state(false);
-let changed = $state(false);
 
-function reset() {
-  title = `Re: ${thread.title}`;
-  channel = thread?.channel?.toLocaleLowerCase() || CHANNEL_DEFAULT_SLUG;
-  markdownContent = '';
-}
+/*
+ * Dirtiness is the shell's, reported here rather than tracked: title and
+ * channel are native controls inside the region it reads, so a field edited
+ * back to its original value leaves the send action disabled, which a
+ * set-once flag never managed.
+ */
+let shell: CnEditorShell | undefined = $state();
+let dirty = $state(false);
 
 async function onsubmit(e: Event) {
   e.preventDefault();
-  if (saving || !changed) {
+  if (saving || !dirty) {
     return;
   }
   saving = true;
   logDebug('ForkThreadApp', 'onsubmit', e);
+  const form = new FormData(e.target as HTMLFormElement);
   const data: Partial<Thread> = {
-    title,
-    channel,
+    title: form.get('title') as string,
+    channel: form.get('channel') as string,
     markdownContent,
     quoteRef: `${thread.key}/${reply.key}`,
     tags: extractTags(markdownContent),
@@ -56,10 +72,17 @@ async function onsubmit(e: Event) {
 
     await submitReply(
       thread,
-      `${t('threads:fork.crossPost')} [${title}](/threads/${slug})`,
+      `${t('threads:fork.crossPost')} [${data.title}](/threads/${slug})`,
     );
 
     saving = false;
+    /*
+     * Clean before leaving. The write has landed, so the document the shell is
+     * holding is saved — and navigating away from a shell that still reads
+     * dirty would raise the browser's guard over a departure the writer
+     * asked for.
+     */
+    shell?.markClean();
     window.location.href = `/threads/${slug}`;
   } catch (error) {
     logError('Error saving thread', error);
@@ -68,48 +91,55 @@ async function onsubmit(e: Event) {
   }
 }
 
-function onChannelChange(event: Event) {
-  const select = event.target as HTMLSelectElement;
-  const selectedChannel = select.value;
-  if (selectedChannel !== channel) {
-    handleChange();
-  }
-}
-function onContentChange(event: CustomEvent<string>) {
-  markdownContent = event.detail;
-  handleChange();
-}
-function onTitleChange(event: Event) {
-  const input = event.target as HTMLInputElement;
-  title = input.value;
-  handleChange();
+function onContentChange(content: string) {
+  markdownContent = content;
 }
 
-function handleChange() {
-  changed = true;
+/*
+ * Cancel is a departure, so it asks the shell, which answers for whether the
+ * writer needs asking first and leaves through the route's one handler.
+ */
+function cancel() {
+  shell?.requestBack();
 }
 </script>
 
-<form class="content-editor" {onsubmit}>
-  <div class="toolbar">
-    <label class="grow">
-      {t('entries:thread.title')}
-      <input
-        name="title"
-        type="text"
-        value={title}
-        disabled={saving}
-        oninput={onTitleChange}
-        placeholder={t('entries:thread.placeholders.title')}
-      />
-    </label>
-    <ChannelSelect 
-      channels={channels}
-      channelKey={channel}
+<form {onsubmit}>
+  <CnEditorShell
+    bind:this={shell}
+    bind:value={markdownContent}
+    name="markdownContent"
+    disabled={saving}
+    placeholder={t('entries:thread.placeholders.content')}
+    onChange={onContentChange}
+    onDirtyChange={(next) => {
+      dirty = next;
+    }}
+    confirmTitle={t('common:editor.unsaved.title')}
+    confirmBody={t('common:editor.unsaved.body')}
+    confirmLeave={t('common:editor.unsaved.leave')}
+    confirmStay={t('common:editor.unsaved.stay')}
+    frontmatter={frontmatter}
+  />
+</form>
+
+{#snippet frontmatter()}
+  <label>
+    {t('entries:thread.title')}
+    <input
+      name="title"
+      type="text"
+      value={initialTitle}
       disabled={saving}
-      onchange={onChannelChange}
+      placeholder={t('entries:thread.placeholders.title')}
     />
-  </div>
+  </label>
+
+  <ChannelSelect
+    channels={channels}
+    channelKey={initialChannel}
+    disabled={saving}
+  />
 
   <div class="mb-2">
     <p>{t('threads:fork.quoted')}</p>
@@ -123,26 +153,23 @@ function handleChange() {
     </div>
   </div>
 
-  <section class="grow">
-    <CodeMirrorEditor
-      bind:value={markdownContent}
-      name="markdownContent"
-      disabled={saving}
-      oninput={onContentChange}
-      placeholder={t('entries:thread.placeholders.content')}
-    />
+  <section class="actions">
+    <button type="button" disabled={saving} class="text" onclick={cancel}>
+      {t('actions:cancel')}
+    </button>
+    <button type="submit" disabled={saving || !dirty}>
+      <Icon noun="send" />
+      <span>{t('actions:send')}</span>
+    </button>
   </section>
+{/snippet}
 
-    <div class="toolbar">
-      <button type="reset" class="text">
-        {t('actions:cancel')}
-      </button>
-      <span>
-        debug: {JSON.stringify({ changed, saving })}
-      </span>
-      <button type="submit">
-        <Icon noun="send" />
-        <span>{t('actions:send')}</span>
-      </button>
-    </div>
-  </form>
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--cn-gap);
+    margin-block-start: var(--cn-line);
+  }
+</style>

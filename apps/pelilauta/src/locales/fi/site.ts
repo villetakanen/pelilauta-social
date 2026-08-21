@@ -71,6 +71,9 @@ export const site: Locale = {
     create: {
       title: 'Luo salaisuus',
     },
+    edit: {
+      title: 'Muokkaa salaisuutta',
+    },
     metadata: {
       title: 'Lukijat',
     },
