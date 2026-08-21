@@ -5,12 +5,12 @@ order: 80
 runtime: static
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import CnAppBarSpecimens from '@design-system/books/specimens/CnAppBarSpecimens.astro'
 
 `CnAppBar` renders the application's `banner` landmark: a leading region, a title, then
 the actions a consumer supplies through its default slot. It states no target, state
-surface or Icon size of its own — every action placed in it is a chrome action, compact
+surface or CnIcon size of its own — every action placed in it is a chrome action, compact
 by declaration. [Chrome Actions](/base/chrome-actions) specifies that geometry.
 
 ## When to use it
@@ -29,9 +29,9 @@ helpers, or your own actions built to that same contract, in its slot.
 
 ## Example
 
-<Composition caption="The default bar, with a context noun, in Light and Dark">
+<DsComposition caption="The default bar, with a context noun, in Light and Dark">
   <CnAppBarSpecimens group="context" />
-</Composition>
+</DsComposition>
 
 ```astro
 ---
@@ -40,7 +40,7 @@ import CnAppBar from '@design-system/components/CnAppBar.astro'
 
 <CnAppBar title="Aamunkoin vartijat" shortTitle="Vartijat" noun="card">
   <button type="button" class="chrome-action">
-    <Icon noun="search" decorative />
+    <CnIcon noun="search" decorative />
     <span>Hae</span>
   </button>
 </CnAppBar>
@@ -53,9 +53,9 @@ along with the actions.
 
 ### Leading region
 
-<Composition caption="The default bar, with no context noun, standing for the site, in Light and Dark">
+<DsComposition caption="The default bar, with no context noun, standing for the site, in Light and Dark">
   <CnAppBarSpecimens group="no-noun" />
-</Composition>
+</DsComposition>
 
 Passing no `noun` renders the product's logomark, rather than no leading region at all.
 
@@ -65,15 +65,15 @@ No rail holds a navigation trigger there, so the bar reserves `8 × --cn-grid` a
 start edge for it and shows no context glyph in that space. The title falls back to
 `shortTitle`, where one is passed.
 
-<Composition caption="The same bar above and below --cn-breakpoint-small">
+<DsComposition caption="The same bar above and below --cn-breakpoint-small">
   <CnAppBarSpecimens group="bands" />
-</Composition>
+</DsComposition>
 
 ### Modal
 
-<Composition caption="The modal bar, in Light and Dark">
+<DsComposition caption="The modal bar, in Light and Dark">
   <CnAppBarSpecimens group="modal" />
-</Composition>
+</DsComposition>
 
 The leading region carries the back action in place of a context glyph or the site
 mark, and the bar renders no actions — a modal bar's slot content is dropped rather
@@ -112,7 +112,7 @@ chrome does not nest it inside sectioning content — an application places it d
 never inside `<main>`, `<article>`, `<aside>`, `<nav>` or `<section>`.
 
 The title renders as a `<p>`, not a heading: the document's outline is the page's, and
-the bar is chrome. A context noun's Icon is decorative and exposes nothing; the
+the bar is chrome. A context noun's CnIcon is decorative and exposes nothing; the
 logomark instead carries `role="img"` and `aria-label="Pelilauta.social"`.
 A modal bar's back action takes its accessible name from `backLabel`, which a consumer
 must localise — its own default is a placeholder, not a name.

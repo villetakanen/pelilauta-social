@@ -1,4 +1,5 @@
 ---
+import CnIcon from '@design-system/components/CnIcon.svelte';
 /**
  * Administration's rail: the tools, one entry each.
  *
@@ -6,7 +7,6 @@
  * entry depends on who is reading and none of them is an island.
  */
 import CnRail from '@design-system/components/CnRail.astro';
-import Icon from '@design-system/components/Icon.svelte';
 import { showDeveloperTools } from '@pelilauta/admin/utils/requireDeveloperTools';
 import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
 import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
@@ -51,7 +51,7 @@ const tools = [
     href="/admin"
     aria-current={path === "/admin" ? 'page' : undefined}
   >
-    <Icon noun="admin" decorative />
+    <CnIcon noun="admin" decorative />
     <span>{t("admin:app.title")}</span>
   </a>
 
@@ -62,7 +62,7 @@ const tools = [
         href={tool.href}
         aria-current={path.startsWith(tool.href) ? 'page' : undefined}
       >
-        <Icon noun={tool.noun} decorative />
+        <CnIcon noun={tool.noun} decorative />
         <span>{tool.label}</span>
       </a>
     ))
@@ -71,7 +71,7 @@ const tools = [
   {/* The way to Pelilauta stands here because this application's bar names
       administration instead. */}
   <a class="chrome-action" href="/" slot="footer">
-    <Icon noun="fox" decorative />
+    <CnIcon noun="fox" decorative />
     <span>{t("app:shortname")}</span>
   </a>
 

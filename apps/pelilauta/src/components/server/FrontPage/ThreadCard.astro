@@ -1,6 +1,6 @@
 ---
 import CnCard from '@design-system/components/CnCard.svelte';
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -90,7 +90,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
         href={`/threads/${thread.key}?jumpTo=unread#discussion`}
         class="px-1 flex"
       >
-        <Icon noun="discussion" size="small" />
+        <CnIcon noun="discussion" size="small" />
         <span class="text-caption">{thread.replyCount || 0}</span>
       </a>
     </Fragment>

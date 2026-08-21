@@ -2,7 +2,7 @@
 /**
  * CnLoader — canonical progress indicator combining a spinning dual ring over a static noun icon.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   noun = 'fox',
@@ -22,7 +22,7 @@ let {
   aria-label={label}
 >
   <span class="lds-dual-ring" aria-hidden="true"></span>
-  <Icon {noun} size={inline ? 'small' : 'large'} decorative />
+  <CnIcon {noun} size={inline ? 'small' : 'large'} decorative />
 </span>
 
 <style>

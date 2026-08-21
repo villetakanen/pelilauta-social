@@ -1,6 +1,6 @@
 <script lang="ts">
 import CnCard from '@design-system/components/CnCard.svelte';
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Site } from 'src/schemas/SiteSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
@@ -46,10 +46,10 @@ const coverSrcset = $derived.by(() => {
   {#snippet actions()}
     <span class="membership">
       {#if owns()}
-        <Icon noun="avatar" size="small" />
+        <CnIcon noun="avatar" size="small" />
       {/if}
       {#if showPlayerIndicator && plays()}
-        <Icon noun="adventurer" size="small" />
+        <CnIcon noun="adventurer" size="small" />
       {/if}
     </span>
     <p>{toDisplayString(site.flowTime)}</p>

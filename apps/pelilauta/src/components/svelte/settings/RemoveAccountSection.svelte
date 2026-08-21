@@ -1,8 +1,8 @@
 <script lang="ts">
 // Import stores, utilities, and i18n function
 
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils'; // For user feedback
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
@@ -106,7 +106,7 @@ async function deRegister(e: SubmitEvent) {
             {#if loading}
               <CnLoader inline />
             {:else}
-              <Icon noun="check" />
+              <CnIcon noun="check" />
             {/if}
             <span>{t('actions:confirm.delete')}</span>
           </button>

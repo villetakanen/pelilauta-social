@@ -2,8 +2,8 @@
 // Import stores and utilities
 
 import CnAvatar from '@design-system/components/CnAvatar.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { authUser, uid } from 'src/stores/session'; // Use centralized session stores
 import { profile } from 'src/stores/session/profile'; // $profile is used directly as per nanostores/svelte
 import { pushSessionSnack } from 'src/utils/client/snackUtils'; // For user feedback
@@ -75,7 +75,7 @@ async function updateAvatar() {
         {#if avatarURL && avatarURL !== $profile?.avatarURL}
           <div class="flex flex-row items-center my-1">
             <CnAvatar src={$profile?.avatarURL} aria-hidden />
-            <span class="mx-1"><Icon noun="add" /></span>
+            <span class="mx-1"><CnIcon noun="add" /></span>
             <CnAvatar src={avatarURL} aria-hidden />
           </div>
           <button
@@ -87,7 +87,7 @@ async function updateAvatar() {
           {#if loadingAvatarUpdate}
             <CnLoader inline />
           {:else}
-            <Icon noun="avatar" />
+            <CnIcon noun="avatar" />
           {/if}
           <span>{t('settings:authz.updateAvatar')}</span>
         </button>

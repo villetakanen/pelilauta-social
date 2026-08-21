@@ -3,7 +3,7 @@
  * CnBackAction — a command that closes the modal standing above it. It
  * navigates nothing: no history, no location, no route.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let { label = '<' }: { label?: string } = $props();
 
@@ -21,6 +21,6 @@ function back() {
   class="chrome-action cn-back-action"
   onclick={back}
 >
-  <Icon noun="arrow-left" decorative />
+  <CnIcon noun="arrow-left" decorative />
   <span>{label}</span>
 </button>

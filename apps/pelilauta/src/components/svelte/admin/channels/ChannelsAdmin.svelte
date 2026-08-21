@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import {
   addTopicFormOpen,
@@ -118,13 +118,13 @@ function handleChannelDeleted(deletedSlug: string) {
           {#if isLoading}
             <CnLoader inline />
           {:else}
-            <Icon noun="spiral" />
+            <CnIcon noun="spiral" />
           {/if}
           <span>{t('admin:channels.refreshAll')}</span>
         </button>
 
         <a href="/admin/channels/add" class="button">
-          <Icon noun="add" />
+          <CnIcon noun="add" />
           <span>{t('admin:channels.addChannel')}</span>
         </a>
       </div>
@@ -139,11 +139,11 @@ function handleChannelDeleted(deletedSlug: string) {
     {#if error}
       <div class="p-4 border border-error radius-s bg-error-low">
         <p class="text-error">
-          <Icon noun="info" size="small" />
+          <CnIcon noun="info" size="small" />
           {error}
         </p>
                 <button onclick={() => error = null} class="mt-2">
-          <Icon noun="tools" />
+          <CnIcon noun="tools" />
           {t('admin:errors.retry')}
         </button>
       </div>
@@ -176,7 +176,7 @@ function handleChannelDeleted(deletedSlug: string) {
     {:else}
     <div class="toolbar items-center">
       <button onclick={() => addTopicFormOpen.set(true)} data-add-topic-trigger>
-        <Icon noun="add" />
+        <CnIcon noun="add" />
         <span>{t('admin:topics.addTopic')}</span>
       </button>
       </div>

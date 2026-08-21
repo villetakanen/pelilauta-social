@@ -3,7 +3,7 @@
  * CnAppBar — the application's block-start chrome: context, title, actions.
  */
 import CnBackAction from './CnBackAction.svelte';
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 interface Props {
   title: string;
@@ -46,14 +46,14 @@ const Identity = href ? 'a' : 'div';
   <Identity class="identity" href={href}>
     {
       modal ? null : noun ? (
-        <Icon noun={noun} decorative />
+        <CnIcon noun={noun} decorative />
       ) : (
         /*
          * The product's logomark. It names itself only where nothing else does:
          * inside the link the wordmark beside it is the name, and a second one
          * would be announced twice.
          */
-        <Icon noun="fox" decorative={Boolean(href)} aria-label={href ? undefined : 'Pelilauta.social'} />
+        <CnIcon noun="fox" decorative={Boolean(href)} aria-label={href ? undefined : 'Pelilauta.social'} />
       )
     }
 
@@ -201,7 +201,7 @@ const Identity = href ? 'a' : 'div';
   /*
    * Wider than the small band a rail stands beneath the bar, and the bar's mark
    * stands on the rail's own axis: the rail's box inset, plus the inset that
-   * centres an Icon in a compact chrome action's target. The mark, the trigger
+   * centres a CnIcon in a compact chrome action's target. The mark, the trigger
    * below it and every entry below that then share one vertical line.
    */
   @container app-chrome (min-width: 38.7501rem) {

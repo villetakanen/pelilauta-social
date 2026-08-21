@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
 
@@ -15,7 +15,7 @@ const visible = $derived.by(() => {
     aria-label={t('actions:create.thread')}
     data-testid="createDiscussionFab">
 
-    <Icon noun="send" size="small" />
+    <CnIcon noun="send" size="small" />
     <span class="sm-hidden">{t('actions:create.thread')}</span>
 
   </a>

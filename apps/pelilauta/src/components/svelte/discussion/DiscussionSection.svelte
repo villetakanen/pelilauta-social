@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import {
   REPLIES_COLLECTION,
   type Reply,
@@ -108,7 +108,7 @@ onMount(async () => {
   {:else if !isAuthenticated}
     <div class="toolbar items-center">
       <a href="/login" class="button">
-        <Icon noun="discussion" />
+        <CnIcon noun="discussion" />
         <span>{t("threads:discussion.join")}</span>
       </a>
     </div>

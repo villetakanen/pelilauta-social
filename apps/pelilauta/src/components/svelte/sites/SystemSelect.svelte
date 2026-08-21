@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { systemToNounMapping } from 'src/schemas/nouns';
 import { t } from 'src/utils/i18n';
 
@@ -28,7 +28,7 @@ const noun = $derived.by(() => {
 
     </select>
   </label>
-  <Icon {noun} />
+  <CnIcon {noun} />
 </div>
 
 

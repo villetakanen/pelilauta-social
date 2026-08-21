@@ -6,7 +6,7 @@ import { expect, type Page, test } from '@playwright/test';
  * the declaration sits on the action itself rather than its container, the
  * accessible name assistive technology reads off a visually-hidden label,
  * whether the default Actions link and button presentations are actually
- * displaced, whether the Icon's contextual size resolves to the medium step
+ * displaced, whether the CnIcon's contextual size resolves to the medium step
  * chrome-actions.css departs from the Actions spec to grant it — and holds
  * that size and its square even when a labelled action is too narrow for its
  * label — and whether the resting, hover, active and keyboard-focus
@@ -58,22 +58,22 @@ const mount = async (page: Page, markup: string) => {
 // mid-test. It changes no selector this file depends on — `a.chrome-action[href]`
 // still matches, and the accessible-name and role stay the anchor's own.
 //
-// The icon span mirrors exactly what `Icon.svelte` renders for the markup the
-// book prescribes — `<Icon noun="…" decorative />` — on BOTH axes that matter
+// The icon span mirrors exactly what `CnIcon.svelte` renders for the markup the
+// book prescribes — `<CnIcon noun="…" decorative />` — on BOTH axes that matter
 // here, and this fixture must keep matching both:
 //   - Size: no `size` prop, so `--icon-dim: var(--cn-icon-size)` and
 //     `width/height: var(--icon-dim)`, reading the real custom property a
 //     chrome action's own scope may override.
 //   - Accessibility: `decorative` renders no `role`, no `aria-label` and no
-//     `<title>` — `aria-hidden="true"` below is what that decorative Icon
-//     actually emits, not a hand-picked shortcut. An Icon WITHOUT
+//     `<title>` — `aria-hidden="true"` below is what that decorative CnIcon
+//     actually emits, not a hand-picked shortcut. A CnIcon WITHOUT
 //     `decorative` renders `role="img"` and `aria-label={noun}` instead
-//     (Icon.svelte:80-88), which would prefix the accessible name with the
+//     (CnIcon.svelte:80-88), which would prefix the accessible name with the
 //     noun — exactly the defect a mismatched fixture here once made this
 //     file blind to (it asserted its own hand-hidden icon, never the real
 //     component's output). Geometry and states below stay probe-only, sound
 //     on their own terms; the accessible-name assertion after the probe
-//     tests reads the book's own rendered `<Icon>` output instead, so this
+//     tests reads the book's own rendered `<CnIcon>` output instead, so this
 //     class of divergence cannot recur silently.
 const ICON_STYLE =
   'display:inline-flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden;width:var(--cn-icon-size);height:var(--cn-icon-size);';
@@ -139,7 +139,7 @@ const targetBox = (locator: ReturnType<typeof button>) =>
     return { inline: style.width, block: style.height };
   });
 
-/** The Icon probe's own computed geometry. */
+/** The CnIcon probe's own computed geometry. */
 const iconBox = (locator: ReturnType<typeof button>) =>
   locator.locator('.cn-icon').evaluate((node) => {
     const style = getComputedStyle(node);
@@ -243,7 +243,7 @@ test("the probe mounts outside the book page's own specimen copy of the styleshe
  * The `figure` a `<Composition>` wraps a specimen in, found by a distinctive
  * substring of its own caption — the only thing on the page that names one
  * `ChromeActionSpecimens` group/presentation pair uniquely. This deliberately
- * reads the book's own rendered `<Icon>` output, not a mounted probe: the
+ * reads the book's own rendered `<CnIcon>` output, not a mounted probe: the
  * probe-location guard above keeps probes outside `.chrome-action-specimen`
  * because the specimen's injected, selector-rewritten state-rule copy would
  * corrupt a *geometry* read — it has no bearing on an accessible name, which
@@ -330,7 +330,7 @@ test.describe('geometry and the accessible name', () => {
     }
   });
 
-  test('a labelled action too narrow for its label keeps the Icon at the full medium step, square, while the label truncates instead', async ({
+  test('a labelled action too narrow for its label keeps the CnIcon at the full medium step, square, while the label truncates instead', async ({
     page,
   }) => {
     const medium = await resolveLength(page, 'width', 'var(--cn-icon-size)');
@@ -340,7 +340,7 @@ test.describe('geometry and the accessible name', () => {
       'calc(var(--cn-grid) * 7)',
     );
     // Narrow enough to force truncation rather than icon compression — the
-    // real risk the guardrail exists for: a flex child (the Icon) giving
+    // real risk the guardrail exists for: a flex child (the CnIcon) giving
     // way under pressure instead of the label truncating as designed.
     const NARROW_INLINE_SIZE = '82px';
     const markup = `
@@ -361,7 +361,7 @@ test.describe('geometry and the accessible name', () => {
       expect(box.block).toBe(targetBlock); // unchanged by the narrow width
 
       // Confirms the container really is narrow enough to force the crunch
-      // this test exists for — the label, not the Icon, gives way.
+      // this test exists for — the label, not the CnIcon, gives way.
       const labelTruncates = await locator
         .locator('span:not(.cn-icon)')
         .evaluate((node) => node.scrollWidth > node.clientWidth);

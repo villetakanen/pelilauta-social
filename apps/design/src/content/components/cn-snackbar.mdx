@@ -6,7 +6,7 @@ runtime: interactive
 ---
 
 import SnackbarSpecimen from '@design-system/books/specimens/SnackbarSpecimen.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 Use a snackbar to tell a reader how an operation went without moving them off what
 they were doing.
@@ -24,9 +24,9 @@ no storage and listens to no event.
 
 ## Example
 
-<Composition caption="A message-only snack, in Light and Dark">
+<DsComposition caption="A message-only snack, in Light and Dark">
   <SnackbarSpecimen client:load />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
@@ -53,9 +53,9 @@ is an offer they did not get, so it stands until they take it or something
 replaces it. Activating it runs the callback once and starts the exit, whatever
 the callback does.
 
-<Composition caption="A snack offering an undo, in Light and Dark">
+<DsComposition caption="A snack offering an undo, in Light and Dark">
   <SnackbarSpecimen client:load group="action" />
-</Composition>
+</DsComposition>
 
 ```svelte
 <CnSnackbar
@@ -76,9 +76,9 @@ The snackbar reports on the operation, so it stands above whatever the operation
 was run from — including a modal surface. The panel behind the bar below stands at
 the modal layer.
 
-<Composition caption="A snack over the modal layer, in Light and Dark">
+<DsComposition caption="A snack over the modal layer, in Light and Dark">
   <SnackbarSpecimen client:load group="modal" />
-</Composition>
+</DsComposition>
 
 ## Reference
 

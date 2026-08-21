@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
 import type { BskyPost } from '@utils/server/bsky/fetchBskyPost';
 
@@ -23,25 +23,25 @@ const { post, postUrl } = Astro.props;
       class="button text"
       aria-label={t("threads:info.viewOnBluesky")}
     >
-      <Icon noun="bsky" size="small" />
+      <CnIcon noun="bsky" size="small" />
     </a>
   </div>
 
   <div class="flex flex-row items-center">
     <div class="flex flex-row items-start border-t p-1">
-      <Icon noun="love" size="small" />
+      <CnIcon noun="love" size="small" />
       <span>
         {post.likeCount}
       </span>
     </div>
     <div class="flex flex-row items-start border-t p-1">
-      <Icon noun="discussion" size="small" />
+      <CnIcon noun="discussion" size="small" />
       <span>
         {post.replyCount}
       </span>
     </div>
     <div class="flex flex-row items-start border-t p-1">
-      <Icon noun="send" size="small" />
+      <CnIcon noun="send" size="small" />
       <span>
         {post.repostCount}
       </span>

@@ -4,7 +4,7 @@ description: The filled surface a reader types into, a text input and a textarea
 order: 4.5
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import RoleTable from '@design-system/books/specimens/RoleTable.astro'
 import theme from '@design-system/tokens/themes/default.json'
 import semanticColor from '@design-system/tokens/semantic-color.json'
@@ -21,13 +21,13 @@ Every specimen stands at elevation 1, which is where a field is expected.
 Each state of a text input, one after another, named by its own label. Hover and
 focus need a pointer or a keyboard to reach; the rest stand as they render.
 
-<Composition themes elevation={1} caption="Every state of a text input, one per label">
+<DsComposition themes elevation={1} caption="Every state of a text input, one per label">
   <label>rest <input type="text" placeholder="Placeholder text" /></label>
   <label>rest, with a value <input type="text" value="The words a reader typed" /></label>
   <label>hover <input type="text" value="Hover me with a pointer" /></label>
   <label>focus <input type="text" value="Tab to me, or tap into me" /></label>
   <label>disabled <input type="text" value="A field a reader cannot use" disabled /></label>
-</Composition>
+</DsComposition>
 
 ```html
 <label>rest <input type="text" placeholder="Placeholder text" /></label>
@@ -39,10 +39,10 @@ focus need a pointer or a keyboard to reach; the rest stand as they render.
 
 ## Rest and placeholder
 
-<Composition themes elevation={1} caption="A field at rest, with its placeholder">
+<DsComposition themes elevation={1} caption="A field at rest, with its placeholder">
   <input type="text" placeholder="Placeholder text" />
   <textarea placeholder="Placeholder text"></textarea>
-</Composition>
+</DsComposition>
 
 ```html
 <input type="text" placeholder="Placeholder text" />
@@ -63,10 +63,10 @@ mono at the 17px reading step would stand about 4% taller than the prose beside
 it. At 16.3px the two lowercases stand equal, which is the height a reader
 measures a line by.
 
-<Composition themes elevation={1} caption="A field against the reading step it sits beside">
+<DsComposition themes elevation={1} caption="A field against the reading step it sits beside">
   <p>The prose around a field is set at the reading step.</p>
   <input type="text" value="The words a reader types into the field." />
-</Composition>
+</DsComposition>
 
 ```html
 <p>The prose around a field is set at the reading step.</p>
@@ -118,9 +118,9 @@ the label crosses to the primary scale at the step it rests on. Focus moves both
 keyboard to reach: hover the field below with a pointer, then tab to it or tap
 into it, in both colour schemes.
 
-<Composition themes elevation={1} caption="Hover this field with a pointer, then tab to it or tap into it">
+<DsComposition themes elevation={1} caption="Hover this field with a pointer, then tab to it or tap into it">
   <input type="text" placeholder="Hover, then focus me" />
-</Composition>
+</DsComposition>
 
 ```html
 <input type="text" placeholder="Hover, then focus me" />
@@ -180,10 +180,10 @@ geometry, is AAA, and a filled field does not target it.
 
 ## Disabled
 
-<Composition themes elevation={1} caption="A disabled field">
+<DsComposition themes elevation={1} caption="A disabled field">
   <input type="text" placeholder="Disabled" disabled />
   <textarea placeholder="Disabled" disabled></textarea>
-</Composition>
+</DsComposition>
 
 ```html
 <input type="text" placeholder="Disabled" disabled />
@@ -213,9 +213,9 @@ Light and off the near-white it takes in Dark. The surface steps are saturated a
 hue 242, so the name carries a hint of colour where the value keeps the body
 foreground — the system's word beside the reader's.
 
-<Composition themes elevation={1} caption="A field named by a wrapping label">
+<DsComposition themes elevation={1} caption="A field named by a wrapping label">
   <label>my awesome field <input type="text" placeholder="hello!"/></label>
-</Composition>
+</DsComposition>
 
 ```html
 <label>my awesome field <input type="text" placeholder="hello!"/></label>

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Channel } from '@schemas/ChannelSchema';
 import { uid } from '@stores/session';
 import { t } from '@utils/i18n';
@@ -70,13 +70,13 @@ function getRedirectUrl(): string {
     disabled={!isAuthenticated || !searchQuery.trim()}
     aria-label={isAuthenticated ? 'Search' : 'Sign in to search'}
   >
-    <Icon noun="search" size="small" />
+    <CnIcon noun="search" size="small" />
   </button>
 </form>
 
 {#if !isAuthenticated}
   <div class="text-caption text-low mt-1 flex items-center gap-1">
-    <Icon noun="info" size="small" />
+    <CnIcon noun="info" size="small" />
     <span>
       <a href="/login?redirect={encodeURIComponent(getRedirectUrl())}" class="text-link">
         {t('login:title')}

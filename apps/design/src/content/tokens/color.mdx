@@ -4,7 +4,7 @@ description: "Declared color custom properties: semantic theme roles, elevation 
 order: 10
 ---
 
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import theme from '@design-system/tokens/themes/default.json'
 import semanticColor from '@design-system/tokens/semantic-color.json'
 import elevation from '@design-system/tokens/elevation.json'
@@ -23,14 +23,14 @@ color scheme.
 Component-facing color tokens, declared in `tokens/semantic-color.json`. Each role
 defines light and dark values in a single `light-dark()` declaration.
 
-<TokenTable source={roleDeclarations(semanticColor)} without="shadow" swatch caption="Semantic roles" />
+<DsTokenTable source={roleDeclarations(semanticColor)} without="shadow" swatch caption="Semantic roles" />
 
 ## Elevation shadows
 
 Elevation shadow tokens declared in `tokens/elevation.json`. Shadow geometry scales
 with `--cn-grid` as defined in [Units and grid](/tokens/units).
 
-<TokenTable source={roleDeclarations(elevation)} prefix="--cn-shadow" caption="Elevation shadows" />
+<DsTokenTable source={roleDeclarations(elevation)} prefix="--cn-shadow" caption="Elevation shadows" />
 
 ## Reference palette
 
@@ -38,7 +38,7 @@ Primitive OKLCH color scales, declared in `tokens/themes/default.json`. UI compo
 consume semantic roles rather than referencing primitive palette tokens directly; the
 exceptions are documented decorative uses, stated in each component's specification.
 
-<TokenTable source={chromaDeclarations(theme)} prefix="--chroma-" swatch caption="Reference palette" />
+<DsTokenTable source={chromaDeclarations(theme)} prefix="--chroma-" swatch caption="Reference palette" />
 
 ## Cyan 4 aliases
 

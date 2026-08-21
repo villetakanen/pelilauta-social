@@ -7,7 +7,7 @@
  * v18 kept these in the administration tray, beside its navigation. They are
  * tools rather than places, so they stand on administration's front page.
  */
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import SentryTestButton from '@pelilauta/components/svelte/admin/SentryTestButton.svelte';
 import { authedPost } from 'src/firebase/client/apiClient';
 import { logDebug } from 'src/utils/logHelpers';
@@ -38,11 +38,11 @@ async function testSSRNoAuth() {
 
 <div class="flex flex-wrap">
   <button type="button" class="text" onclick={testSSRAuth}>
-    <Icon noun="adventurer" decorative />
+    <CnIcon noun="adventurer" decorative />
     <span>Test SSR Auth</span>
   </button>
   <button type="button" class="text" onclick={testSSRNoAuth}>
-    <Icon noun="adventurer" decorative />
+    <CnIcon noun="adventurer" decorative />
     <span>Test SSR No Auth</span>
   </button>
   <SentryTestButton />

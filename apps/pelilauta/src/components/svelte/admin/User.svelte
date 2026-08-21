@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnToggle from '@design-system/components/CnToggle.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { setFrozen } from 'src/firebase/client/account/setFrozen';
 import type { Account } from 'src/schemas/AccountSchema';
 import { appMeta } from 'src/stores/metaStore/metaStore';
@@ -28,7 +28,7 @@ const toggleFrozen = async (e: Event & { currentTarget: HTMLInputElement }) => {
 
   {#if adminStatus()}
   <div style="justify-content: center; display: flex;">
-    <Icon noun="admin" />
+    <CnIcon noun="admin" />
     </div>
   {:else}
     <p></p>

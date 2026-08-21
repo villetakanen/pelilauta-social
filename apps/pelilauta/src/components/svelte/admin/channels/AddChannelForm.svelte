@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import { forumTopics } from '@stores/admin/ChannelsAdminStore';
 import { t } from 'src/utils/i18n';
@@ -97,7 +97,7 @@ function handleSubmit(event: SubmitEvent) {
 {#if success}
   <div class="p-4 border border-success radius-s bg-success-low mb-4">
     <p class="text-success">
-      <Icon noun="check" size="small" />
+      <CnIcon noun="check" size="small" />
       {t('admin:channels.add.success', { name: channelName })}
     </p>
   </div>
@@ -106,7 +106,7 @@ function handleSubmit(event: SubmitEvent) {
     {#if error}
       <div class="p-4 border border-error radius-s bg-error-low">
         <p class="text-error">
-          <Icon noun="info" size="small" />
+          <CnIcon noun="info" size="small" />
           {error}
         </p>
       </div>
@@ -189,7 +189,7 @@ function handleSubmit(event: SubmitEvent) {
         onclick={resetForm}
         disabled={isSaving}
       >
-        <Icon noun="spiral" />
+        <CnIcon noun="spiral" />
         {t('admin:channels.add.form.actions.reset')}
       </button>
       
@@ -201,7 +201,7 @@ function handleSubmit(event: SubmitEvent) {
         {#if isSaving}
           <CnLoader inline />
         {:else}
-          <Icon noun="add" />
+          <CnIcon noun="add" />
         {/if}
         <span>{t('admin:channels.add.form.actions.create')}</span>
       </button>

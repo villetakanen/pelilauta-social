@@ -1,6 +1,6 @@
 <script lang="ts">
 /**
- * Icon — server-rendered icon with tiered source resolution.
+ * CnIcon — server-rendered icon with tiered source resolution.
  *
  * Resolution precedence (v20 target model): open-source → managed
  * (@myrrys/proprietary) → bundled fallback → missing glyph. Monochrome artwork

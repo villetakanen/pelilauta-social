@@ -25,7 +25,7 @@
  * `pressed`, not on the click: the click is a request, and the landing is what
  * there is to celebrate. Its colour is the state the landing leaves behind.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   label,
@@ -79,11 +79,11 @@ $effect(() => {
   {onclick}
 >
   <span class="state-surface" aria-hidden="true">
-    <Icon noun="love" decorative size="small" />
+    <CnIcon noun="love" decorative size="small" />
     {#key activations}
       {#if activations}
         <span class="burst" class:love={pressed}>
-          <Icon noun="love" decorative size="small" />
+          <CnIcon noun="love" decorative size="small" />
         </span>
       {/if}
     {/key}

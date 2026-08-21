@@ -18,8 +18,8 @@
  * kept where it failed, so a failure costs the reader nothing they typed.
  */
 import CnChatBar from '@design-system/components/CnChatBar.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import { updateReply } from 'src/firebase/client/threads/updateReply';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -127,7 +127,7 @@ async function send() {
 {#snippet supporting()}
   {#if editing}
     <p class="editing-note">
-      <Icon noun="edit" decorative />
+      <CnIcon noun="edit" decorative />
       <span>{t("threads:discussion.editing")}</span>
       <button type="button" class="text" onclick={endEditing} disabled={sending}>
         {t("actions:cancel")}
@@ -136,7 +136,7 @@ async function send() {
   {/if}
   {#if error}
     <p class="error-message">
-      <Icon noun="info" decorative />
+      <CnIcon noun="info" decorative />
       <span>{error}</span>
     </p>
   {/if}
@@ -151,7 +151,7 @@ async function send() {
 
 {#snippet menu()}
   <button type="button" onclick={() => fileInput?.click()}>
-    <Icon noun="assets" decorative />
+    <CnIcon noun="assets" decorative />
     <span>{t("actions:upload")}</span>
   </button>
 {/snippet}
@@ -164,7 +164,7 @@ async function send() {
     disabled={!sendable}
     onclick={send}
   >
-    <Icon noun="send" decorative />
+    <CnIcon noun="send" decorative />
   </button>
 {/snippet}
 

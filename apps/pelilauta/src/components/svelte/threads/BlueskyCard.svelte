@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Thread } from '@schemas/ThreadSchema';
 import { uid } from '@stores/session';
 import { pushSnack } from '@utils/client/snackUtils';
@@ -66,7 +66,7 @@ async function handleShare() {
     </p>
 
     <button onclick={handleShare} disabled={isSharing}>
-      <Icon noun="share" />
+      <CnIcon noun="share" />
       <span>
         {isSharing ? t("threads:share.sharing") : t("threads:share.button")}
       </span>

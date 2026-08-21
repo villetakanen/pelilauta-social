@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import Base from '@layouts/Base.astro';
 import { logError } from '@utils/logHelpers';
 import type { Tag } from 'src/schemas/TagSchema';
@@ -119,7 +119,7 @@ function parseUrl(tag: Tag) {
         threads.length > 0 && (
           <section style="margin-bottom: calc(3 * var(--cn-grid))">
             <h2 class="text-title">
-              <Icon noun="discussion" size="small" />
+              <CnIcon noun="discussion" size="small" />
               {t("tag:discussions")} ({threads.length})
             </h2>
             <ul>
@@ -140,7 +140,7 @@ function parseUrl(tag: Tag) {
         pages.length > 0 && (
           <section>
             <h2 class="text-title">
-              <Icon noun="card" size="small" />
+              <CnIcon noun="card" size="small" />
               {t("tag:pages")} ({pages.length})
             </h2>
             <ul>

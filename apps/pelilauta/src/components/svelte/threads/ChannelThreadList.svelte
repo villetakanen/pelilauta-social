@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import type { Channel } from '@schemas/ChannelSchema';
 import type { Thread } from '@schemas/ThreadSchema';
 import { parseThread } from '@schemas/ThreadSchema';
@@ -104,7 +104,7 @@ async function loadMoreThreads() {
           {#if isLoading}
             <CnLoader inline noun={channel.icon} />
           {:else}
-            <Icon noun={channel.icon} />
+            <CnIcon noun={channel.icon} />
           {/if}
           <span>{isLoading ? t('actions:loading') : t('actions:loadMore')}</span>
         </button>
@@ -118,7 +118,7 @@ async function loadMoreThreads() {
           onclick={loadMoreThreads} 
           class="text border border-primary radius-s cursor-pointer text-caption"
         >
-          <Icon noun={channel.icon} />
+          <CnIcon noun={channel.icon} />
           <span>{t('actions:retry')}</span>
         </button>
       </div>
@@ -127,7 +127,7 @@ async function loadMoreThreads() {
 
   <aside>
     <article class="border surface">
-      <Icon noun={channel.icon} size="large" />
+      <CnIcon noun={channel.icon} size="large" />
       <h2 class="downscaled m-0 full-width">{channel.name}</h2>
       <p class="my-0 full-width">
         {t('threads:channel.threadCount', {count: channel.threadCount})}

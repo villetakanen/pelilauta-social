@@ -7,7 +7,7 @@ runtime: interactive
 
 import ReactionButtonSpecimens from '@design-system/books/specimens/ReactionButtonSpecimens.svelte'
 import ReactionButtonDemo from '@design-system/books/specimens/ReactionButtonDemo.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 Use a reaction button to let a reader toggle their love reaction on an entry, and to
 show every reader how many there are.
@@ -28,9 +28,9 @@ The consumer supplies the state. Pass the current `count`, `countLabel` and
 `pressed`, receive the native click, and supply the updated values once the change
 is real; the component keeps showing what it was given.
 
-<Composition caption="A consumer receiving the click and supplying the new count and pressed state">
+<DsComposition caption="A consumer receiving the click and supplying the new count and pressed state">
   <ReactionButtonDemo client:load />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
@@ -55,9 +55,9 @@ celebrates nothing.
 
 Two presentations ship. The default is an entry's; `small` is a reply's.
 
-<Composition themes caption="Both presentations: unpressed, pressed, disabled and a zero count, in Light and Dark">
+<DsComposition themes caption="Both presentations: unpressed, pressed, disabled and a zero count, in Light and Dark">
   <ReactionButtonSpecimens />
-</Composition>
+</DsComposition>
 
 ## Reference
 

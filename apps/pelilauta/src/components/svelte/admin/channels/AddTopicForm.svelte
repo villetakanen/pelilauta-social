@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch, authedPost } from '@firebase/client/apiClient';
 import { addTopicFormOpen } from '@stores/admin/ChannelsAdminStore';
 import { pushSnack } from '@utils/client/snackUtils';
@@ -72,7 +72,7 @@ function handleCancel() {
           {#if isSubmitting}
             <CnLoader inline />
           {:else}
-            <Icon noun="tag" />
+            <CnIcon noun="tag" />
           {/if}
           <span>{t('admin:topics.create.save')}</span>
         </button>

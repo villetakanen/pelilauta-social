@@ -9,7 +9,7 @@
  * cross-posts a link back into the original thread once the fork saves,
  * which is this route's one departure from `ThreadEditorForm`'s save path.
  */
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnEditorShell from '@editor/CnEditorShell.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import { CHANNEL_DEFAULT_SLUG, type Channels } from 'src/schemas/ChannelSchema';
@@ -158,7 +158,7 @@ function cancel() {
       {t('actions:cancel')}
     </button>
     <button type="submit" disabled={saving || !dirty}>
-      <Icon noun="send" />
+      <CnIcon noun="send" />
       <span>{t('actions:send')}</span>
     </button>
   </section>

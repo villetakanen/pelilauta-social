@@ -1,4 +1,5 @@
 ---
+import CnIcon from '@design-system/components/CnIcon.svelte';
 /**
  * The library application's rail: the design system's boxes, what stands in
  * them here.
@@ -8,7 +9,6 @@
  * application, which is what keeps the two separate.
  */
 import CnRail from '@design-system/components/CnRail.astro';
-import Icon from '@design-system/components/Icon.svelte';
 import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
 import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
 import { t } from 'src/utils/i18n';
@@ -27,7 +27,7 @@ function current(here: boolean) {
     href="/library"
     aria-current={current(path === "/library")}
   >
-    <Icon noun="d20" decorative />
+    <CnIcon noun="d20" decorative />
     <span>{t("library:rail.sites")}</span>
   </a>
 

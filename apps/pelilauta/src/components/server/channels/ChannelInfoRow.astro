@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
 import type { ChannelWithStats } from 'src/schemas/ChannelSchema';
 import ChannelListInfoCell from './ChannelListInfoCell.astro';
@@ -11,7 +11,7 @@ const { channelWithStats } = Astro.props;
 ---
 <article class="surface cols-2">
   <div class="flex flex-row">
-    <span class="flex-none"><Icon noun={channelWithStats.icon} /></span>
+    <span class="flex-none"><CnIcon noun={channelWithStats.icon} /></span>
     <div>
     <a href={`/channels/${channelWithStats.slug}`}>
       <h3 class="text-h5 m-0">

@@ -6,7 +6,7 @@ runtime: static
 poster: "https://picsum.photos/1920/1080"
 ---
 
-import Composition from "@design-system/books/specimens/Composition.astro";
+import DsComposition from "@design-system/books/specimens/DsComposition.astro";
 import PosterPinToggle from "@design-system/books/specimens/PosterPinToggle.astro";
 
 `CnPoster` replaces the document ground plane with an attenuated background image.
@@ -79,10 +79,10 @@ adapts transparency:
 | `.elevation-0` | 80% opacity |
 | `.elevation-1` to `.elevation-4` | Unmodified |
 
-<Composition caption="Elevation 0 (translucent) and elevation 2 (opaque) over background artwork">
+<DsComposition caption="Elevation 0 (translucent) and elevation 2 (opaque) over background artwork">
   <div class="surface elevation-0">Elevation 0: Ground plane (80% opacity)</div>
   <div class="surface elevation-2">Elevation 2: Raised surface (100% opacity)</div>
-</Composition>
+</DsComposition>
 
 ## Reference
 

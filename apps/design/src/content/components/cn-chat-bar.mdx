@@ -5,7 +5,7 @@ order: 27
 runtime: interactive
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import ChatBarSpecimens from '@design-system/books/specimens/ChatBarSpecimens.svelte'
 import ChatBarDemo from '@design-system/books/specimens/ChatBarDemo.svelte'
 
@@ -32,9 +32,9 @@ can add to a reply is a menu, so the bar renders the action and the surface — 
 [CnMenu](/components/cn-menu) trigger, with the platform's light dismissal, Escape and
 focus return — and the consumer writes the items through `menu`. Name it with `menuLabel`.
 
-<Composition caption="A consumer binding value, receiving a send intent, and rendering leading and trailing actions plus supporting content">
+<DsComposition caption="A consumer binding value, receiving a send intent, and rendering leading and trailing actions plus supporting content">
   <ChatBarDemo client:load />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
@@ -79,13 +79,13 @@ application bar. Two presentations ship, driven by the surrounding `app-chrome` 
 rather than the browser window: below the small breakpoint it spans the container, and
 past it the bar is inset and centred.
 
-<Composition themes stack caption="Empty, multiline, supporting content, a draft past the frame, and disabled, in the small band">
+<DsComposition themes stack caption="Empty, multiline, supporting content, a draft past the frame, and disabled, in the small band">
   <ChatBarSpecimens group="narrow" />
-</Composition>
+</DsComposition>
 
-<Composition themes stack caption="The same five compositions past the small breakpoint">
+<DsComposition themes stack caption="The same five compositions past the small breakpoint">
   <ChatBarSpecimens group="wide" />
-</Composition>
+</DsComposition>
 
 ## Reference
 

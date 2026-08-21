@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { ASSET_LICENSES_KEYS } from '@schemas/AssetSchema';
 import { systemToNounMapping } from '@schemas/nouns';
 import {
@@ -159,7 +159,7 @@ const descriptionLength = $derived($activeSite?.description?.length || 0);
         {#if $isSaving}
           <CnLoader inline noun="save" />
         {:else}
-          <Icon noun="save" />
+          <CnIcon noun="save" />
         {/if}
           <span>{t('actions:save')}</span>
       </button>

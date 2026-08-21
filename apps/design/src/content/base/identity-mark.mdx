@@ -4,19 +4,19 @@ description: The pictorial and textual marks for a profile, fallback states, der
 order: 6
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import IdentitySpecimens from '@design-system/books/specimens/IdentitySpecimens.svelte'
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import avatarSource from '@design-system/components/CnAvatar.svelte?raw'
 
 Identity marks represent user and system profiles. We provide two formats: the pictorial
 mark (`CnAvatar`) and the textual mark (`.cn-nick`). `CnAvatar` renders statically on the
 server with pure CSS fallback layering.
 
-<Composition themes caption="The pictorial mark and textual mark in Light and Dark">
+<DsComposition themes caption="The pictorial mark and textual mark in Light and Dark">
   <IdentitySpecimens group="basic" />
   <IdentitySpecimens group="nick" />
-</Composition>
+</DsComposition>
 
 ## Pictorial mark states and sizes
 
@@ -29,9 +29,9 @@ server with pure CSS fallback layering.
 Initials render beneath the image in DOM order, providing a scriptless fallback if image
 loading fails.
 
-<Composition themes caption="Image, initials, anonymous glyph, and failed image fallback">
+<DsComposition themes caption="Image, initials, anonymous glyph, and failed image fallback">
   <IdentitySpecimens group="states" />
-</Composition>
+</DsComposition>
 
 | State | Visual | Backdrop |
 | :--- | :--- | :--- |
@@ -44,9 +44,9 @@ The component supports three standard sizes aligned to layout line multiples:
 - **Medium (2 lines / 48px, default):** Section headers and feed items.
 - **Large (3 lines / 72px):** Profile pages and dedicated account views.
 
-<Composition themes caption="Small, medium, and large avatar sizes">
+<DsComposition themes caption="Small, medium, and large avatar sizes">
   <IdentitySpecimens group="sizes" />
-</Composition>
+</DsComposition>
 
 ## Dynamic backdrops and contrast
 
@@ -61,15 +61,15 @@ and are declared on the mark itself rather than on `:root`
 (`docs/ARCHITECTURE.md`). They still draw from the same public `--chroma-*` roles a
 palette revision changes.
 
-<Composition themes caption="Six distinct nicknames and resulting derived backdrops">
+<DsComposition themes caption="Six distinct nicknames and resulting derived backdrops">
   <IdentitySpecimens group="distinct" />
-</Composition>
+</DsComposition>
 
 All derived backdrop values maintain WCAG AA contrast:
 - 4.5:1 against `--_on-avatar` for the initials.
 - 3:1 against the page surface behind the mark.
 
-<TokenTable
+<DsTokenTable
   source={avatarSource}
   names={['--_avatar-backdrop-from', '--_avatar-backdrop-to', '--_on-avatar']}
   caption="Backdrop interpolation tokens and text color role, private to CnAvatar"
@@ -79,9 +79,9 @@ All derived backdrop values maintain WCAG AA contrast:
 
 Use `.cn-avatar-list` (typically on `<ul>`) to group multiple identity marks.
 
-<Composition themes caption="Linked avatars in an avatar list">
+<DsComposition themes caption="Linked avatars in an avatar list">
   <IdentitySpecimens group="list" />
-</Composition>
+</DsComposition>
 
 List avatars overlap horizontally. To preserve visual separation without depending on
 external surface backgrounds, avatars within a list inset their image, revealing a
@@ -89,15 +89,15 @@ perimeter rim of the derived backdrop color.
 
 All avatars in a single list should use the same size modifier.
 
-<Composition themes caption="Avatar lists in small and medium sizes">
+<DsComposition themes caption="Avatar lists in small and medium sizes">
   <IdentitySpecimens group="list-sizes" />
-</Composition>
+</DsComposition>
 
 When list content exceeds container width, the list wraps with aligned leading edges.
 
-<Composition themes caption="Avatar list wrapping in narrow containers">
+<DsComposition themes caption="Avatar list wrapping in narrow containers">
   <IdentitySpecimens group="list-wrapped" />
-</Composition>
+</DsComposition>
 
 ### Overflow count
 
@@ -105,15 +105,15 @@ To indicate additional profiles, append `<span class="cn-avatar-list__overflow">
 containing a plus prefix and count. The overflow badge uses anonymous mark styling and
 must match the list size modifier.
 
-<Composition themes caption="Avatar list with overflow counter">
+<DsComposition themes caption="Avatar list with overflow counter">
   <IdentitySpecimens group="list-overflow" />
-</Composition>
+</DsComposition>
 
 Marks with no nick derive no backdrop, so a run of them separates only by elevation.
 
-<Composition themes caption="An anonymous run: no nicks, no derived backdrops">
+<DsComposition themes caption="An anonymous run: no nicks, no derived backdrops">
   <IdentitySpecimens group="list-anonymous" />
-</Composition>
+</DsComposition>
 
 ```mdx
 <ul class="cn-avatar-list">
@@ -134,9 +134,9 @@ Identity marks are non-interactive by default. When wrapped in an `<a>` anchor:
 - The circular avatar suppresses default text underlines, lifts to elevation 2 on hover, and applies a circular keyboard focus ring.
 - The textual nick (`.cn-nick`) keeps its resting colour and applies `--cn-color-link-hover` and `--cn-color-link-active`.
 
-<Composition themes caption="Standalone vs anchor-wrapped identity marks">
+<DsComposition themes caption="Standalone vs anchor-wrapped identity marks">
   <IdentitySpecimens group="linked" />
-</Composition>
+</DsComposition>
 
 For link and focus state specifications, see [Links, Actions and Buttons](/base/links-actions-buttons).
 

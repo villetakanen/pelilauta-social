@@ -4,7 +4,7 @@ description: The standard content surface, its five elevation levels, and the ru
 order: 4
 ---
 
-import Composition from "@design-system/books/specimens/Composition.astro";
+import DsComposition from "@design-system/books/specimens/DsComposition.astro";
 
 `.surface` provides the standard container for bounded content, applying default inset
 and establishing a container query context. Five accompanying elevation utilities
@@ -41,46 +41,46 @@ that level. Elevation hierarchy is defined in [Colour & Surface principles](/pri
 | `.elevation-3` | `--cn-color-surface-3` | `--cn-shadow-elevation-3` | Floats over content |
 | `.elevation-4` | `--cn-color-surface-4` | `--cn-shadow-elevation-4` | A system interrupt |
 
-<Composition
+<DsComposition
   themes
   elevation={0}
   caption="Level 0, the application itself. Background luminance: Light OKLCH L 0.95, Dark OKLCH L 0.200."
 >
   A surface here claims no separation from the application.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={1}
   caption="Level 1, payload. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.267."
 >
   What the reader came to read or use. The default.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={2}
   caption="Level 2, payload inside payload. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.267."
 >
   The rise that keeps an inner thing distinguishable from what holds it. Reached
   by nesting rather than chosen.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={3}
   caption="Level 3, floats over content. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.333."
 >
   Covers a region of content without dimming it, whether it stays or is dismissed.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={4}
   caption="Level 4, a system interrupt. Background luminance: Light OKLCH L 0.99, Dark: primary step 40."
 >
   The application interrupting the reader.
-</Composition>
+</DsComposition>
 
 Elevation 0 renders an opaque ground plane, surface step 95 in Light and surface step
 20 in Dark. Elevations 0 and 1 are shadowless; elevations 2 through 4 apply
@@ -107,13 +107,13 @@ combine `.surface` with an explicit elevation class.
 <div class="surface elevation-3">A menu panel</div>
 ```
 
-<Composition
+<DsComposition
   themes
   caption="A surface at its default level and with an explicit elevation"
 >
   <div class="surface">Default surface, elevation 1</div>
   <div class="surface elevation-3">Surface at elevation 3</div>
-</Composition>
+</DsComposition>
 
 ## Nested elevation
 
@@ -133,7 +133,7 @@ difference between ancestor and child.
 An elevation difference of +1 is shadowless. Differences of +2 or +3 render shadows
 scaled to relative distance, preventing nested shadows from compounding into dark halos.
 
-<Composition
+<DsComposition
   themes
   caption="Elevation 4 relative to ancestors at elevations 1 and 3"
 >
@@ -145,7 +145,7 @@ scaled to relative distance, preventing nested shadows from compounding into dar
     Ancestor at elevation 3
     <div class="surface elevation-4">Child at elevation 4</div>
   </div>
-</Composition>
+</DsComposition>
 
 `.surface` evaluates as elevation 1 by default in nesting calculations. When combined
 with an explicit elevation class, the declared level applies.
@@ -161,10 +161,10 @@ matches the host element's corner radius and disables pointer events.
 <div class="surface has-notify">A row with unread content</div>
 ```
 
-<Composition themes caption="A surface with each attention state">
+<DsComposition themes caption="A surface with each attention state">
   <div class="surface has-notify">Notification</div>
   <div class="surface has-alert">Alert</div>
-</Composition>
+</DsComposition>
 
 Attention flags are utility classes rather than component-bound states. Components such
 as [CnCard](/components/cn-card) compose `.has-notify` and `.has-alert` directly.

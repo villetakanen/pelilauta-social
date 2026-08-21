@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
 import { logDebug, logError } from '@utils/logHelpers';
 import { algoliasearch } from 'algoliasearch';
@@ -219,7 +219,7 @@ function handleKeyDown(event: KeyboardEvent) {
         <!-- Channel filter indicator -->
         {#if channelFilter}
           <div class="flex items-center gap-2 mt-2 p-2 bg-surface-variant radius-s">
-            <Icon noun="filter" size="small" />
+            <CnIcon noun="filter" size="small" />
             <span class="text-caption">{t('search:channel.filterActive', { channel: channelFilter })}</span>
             <button 
               onclick={() => {

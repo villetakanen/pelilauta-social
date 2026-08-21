@@ -7,8 +7,8 @@
  * CnCard composes the shared elevation utilities and defines no background or shadow.
  */
 import type { Snippet } from 'svelte';
+import CnIcon from './CnIcon.svelte';
 import { COVER_PLACEHOLDER_URI } from './cover-placeholder';
-import Icon from './Icon.svelte';
 
 let {
   title,
@@ -80,7 +80,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     </div>
     {#if noun}
       <span class="cover-noun" aria-hidden="true">
-        <Icon {noun} size="large" />
+        <CnIcon {noun} size="large" />
       </span>
     {/if}
   {/if}
@@ -95,13 +95,13 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     {#if href}
       <a href={href}>
         {#if !cover && noun}
-          <span aria-hidden="true"><Icon {noun} size="small" /></span>
+          <span aria-hidden="true"><CnIcon {noun} size="small" /></span>
         {/if}
         {title}
       </a>
     {:else}
       {#if !cover && noun}
-        <span aria-hidden="true"><Icon {noun} size="small" /></span>
+        <span aria-hidden="true"><CnIcon {noun} size="small" /></span>
       {/if}
       {title}
     {/if}

@@ -8,7 +8,7 @@
  * are token roles, so a palette change recolours every avatar, and that is
  * allowed.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   src = '',
@@ -60,7 +60,7 @@ const imageLayer = $derived(
       {initials}
     </span>
   {:else}
-    <Icon noun="avatar" decorative />
+    <CnIcon noun="avatar" decorative />
   {/if}
   {#if src}
     <!-- The image is a background rather than an <img> so that recovery needs no

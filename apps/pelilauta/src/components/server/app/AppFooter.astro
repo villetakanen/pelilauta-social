@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 // The release the reader is on is the repository's, which the beta version
 // carries and CI tags.
 import { version } from '@root/package.json';
@@ -10,7 +10,7 @@ import ActiveUsersWidget from './ActiveUsersWidget.astro';
 <footer>
   <div class="content-columns">
     <section class="column-s flex flex-col items-center">
-      <span style="display:contents; color:var(--cn-color-text-low);"><Icon noun="fox" size="xlarge" /></span>
+      <span style="display:contents; color:var(--cn-color-text-low);"><CnIcon noun="fox" size="xlarge" /></span>
       <p class="text-center mb-0">
       {t('app:shortname')}<br>
       <a href="/docs/80-release-notes">{version}</a></p>

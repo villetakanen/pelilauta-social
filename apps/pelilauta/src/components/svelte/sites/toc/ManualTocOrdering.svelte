@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { CnListItem } from '@11thdeg/cyan-lit';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { updatePageRefsOrder } from '@firebase/client/site/updatePageRefsOrder';
 import type { PageRef, Site } from '@schemas/SiteSchema';
 import { pushSnack } from '@utils/client/snackUtils';
@@ -159,7 +159,7 @@ function createReorderHandler(categorySlug: string) {
 
 <section class="surface p-2">
   <h3 class="flex items-center gap-1">
-    <Icon noun="sort" />
+    <CnIcon noun="sort" />
     {t("site:toc.manualOrder.title")}
   </h3>
   <p class="downscaled text-low mb-2">

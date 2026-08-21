@@ -13,7 +13,7 @@
  *
  * Book: apps/design/src/content/principles/iconography.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 import { FallbackIcons } from '../../components/icon-fallback';
 import { getManagedNouns } from '../../components/managed-tier';
 import { getNouns as openSourceNouns } from '../../icons/open-source';
@@ -81,7 +81,7 @@ const sections = [
     <ul role="list">
       {section.nouns.map((noun) => (
         <li data-noun={noun} data-tier={isManaged(noun) ? 'managed' : 'open'}>
-          <Icon noun={noun} size="large" />
+          <CnIcon noun={noun} size="large" />
           <code>{noun}</code>
           {isManaged(noun) && <small>proprietary</small>}
         </li>

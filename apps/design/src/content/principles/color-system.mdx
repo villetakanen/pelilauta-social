@@ -5,7 +5,7 @@ order: 7
 ---
 
 import ColorRamp from "@design-system/books/specimens/ColorRamp.astro";
-import Composition from "@design-system/books/specimens/Composition.astro";
+import DsComposition from "@design-system/books/specimens/DsComposition.astro";
 import RoleTable from "@design-system/books/specimens/RoleTable.astro";
 import theme from "@design-system/tokens/themes/default.json";
 import ThemeSwapDemo from "@design-system/books/specimens/ThemeSwapDemo.svelte";
@@ -97,9 +97,9 @@ floors from the palette; this table cites them rather than restating a copy.
 
 ### A theme swap, live
 
-<Composition caption="Each toggle redeclares one core family's 13 steps on this container alone; the sample card and both ramps read them live">
+<DsComposition caption="Each toggle redeclares one core family's 13 steps on this container alone; the sample card and both ramps read them live">
   <ThemeSwapDemo client:load />
-</Composition>
+</DsComposition>
 
 A theme swap is not a filter over the rendered page — it is a core family's thirteen
 custom properties, redeclared. Primary and surface toggle independently, each
@@ -183,13 +183,13 @@ Elevation establishes depth across five distinct tiers:
 - **Level 3:** Floats over content, whether it stays or is dismissed.
 - **Level 4:** A system interrupt.
 
-<Composition themes caption="The five elevation tiers in Light and Dark">
+<DsComposition themes caption="The five elevation tiers in Light and Dark">
   <div class="surface elevation-0">Level 0: the application itself</div>
   <div class="surface elevation-1">Level 1: payload</div>
   <div class="surface elevation-2">Level 2: payload inside payload</div>
   <div class="surface elevation-3">Level 3: floats over content</div>
   <div class="surface elevation-4">Level 4: a system interrupt</div>
-</Composition>
+</DsComposition>
 
 ### Light and shadow interaction
 

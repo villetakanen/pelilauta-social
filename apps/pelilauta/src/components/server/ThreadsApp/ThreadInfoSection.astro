@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { isAdmin } from '@firebase/server/admin';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
@@ -59,7 +59,7 @@ if (thread.blueskyPostUri) {
     </p>
     <div class="toolbar items-center">
       <div class="flex align-center">
-        <Icon noun="send" size="small" />
+        <CnIcon noun="send" size="small" />
         <span class="text-caption decoration-none">
           {thread.replyCount}
         </span>

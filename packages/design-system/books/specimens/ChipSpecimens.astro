@@ -8,7 +8,7 @@
  *
  * Book: apps/design/src/content/base/chip.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 
 interface Props {
   /** Which axis to render. */
@@ -50,19 +50,19 @@ const TAGS = [
   {group === 'content' && (
     <div class="chip-list" data-variant="content">
       <a class="chip" href="/base/chip">
-        <Icon noun="label-tag" decorative />
+        <CnIcon noun="label-tag" decorative />
         Leading icon
       </a>
       <div class="chip promoted">
         <span>Removable label</span>
         <button type="button" aria-label="Remove Removable label">
-          <Icon noun="close" />
+          <CnIcon noun="close" />
         </button>
       </div>
       <div class="chip promoted">
         <span>Removal in flight</span>
         <button type="button" aria-label="Remove Removal in flight" disabled>
-          <Icon noun="close" />
+          <CnIcon noun="close" />
         </button>
       </div>
     </div>

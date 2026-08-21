@@ -1,6 +1,6 @@
 ---
 /**
- * TokenTable — a lexicon's table of declarations, read from a stylesheet.
+ * DsTokenTable — a lexicon's table of declarations, read from a stylesheet.
  *
  * A renderer over parseTokens, which holds the logic. It carries no styling:
  * books render plain until the design system owns typography and content grids.
@@ -47,7 +47,7 @@ const tokens = parseTokens(source, { names, prefix, without });
  */
 if (tokens.length === 0) {
   throw new Error(
-    `TokenTable matched no declarations (${
+    `DsTokenTable matched no declarations (${
       names ? `names: ${names.join(', ')}` : `prefix: ${prefix ?? 'none'}`
     }${
       without ? `, without: ${without}` : ''

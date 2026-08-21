@@ -1,8 +1,8 @@
 <script lang="ts">
 import CnBubble from '@design-system/components/CnBubble.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
@@ -95,16 +95,16 @@ $effect(() => {
       ></ReactionButton>
       <CnMenu inline label={t("actions:moreOptions")}>
         <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
-          <Icon noun="fork" decorative />
+          <CnIcon noun="fork" decorative />
           <span>{t("actions:fork")}</span>
         </a>
         {#if fromUser}
           <button type="button" onclick={() => editReply(reply)}>
-            <Icon noun="edit" decorative />
+            <CnIcon noun="edit" decorative />
             <span>{t("actions:edit")}</span>
           </button>
           <a href={`/threads/${reply.threadKey}/replies/${reply.key}/delete`}>
-            <Icon noun="delete" decorative />
+            <CnIcon noun="delete" decorative />
             <span>{t("actions:delete")}</span>
           </a>
         {/if}

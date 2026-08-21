@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
 import {
   type Site,
@@ -62,7 +62,7 @@ async function setSortOrder(e: Event) {
   <div class="content-prose">
     <section>
       <h2>
-        <Icon noun="tools" />
+        <CnIcon noun="tools" />
         {t("site:toc.admin.title")}
       </h2>
       <p>{t("site:toc.admin.info")}</p>

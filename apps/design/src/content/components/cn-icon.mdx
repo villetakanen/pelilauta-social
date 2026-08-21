@@ -1,18 +1,18 @@
 ---
-title: Icon
+title: CnIcon
 description: "Renders vector glyphs by semantic noun, resolving from open-source and managed proprietary registries."
 order: 10
 runtime: static
 ---
 
-import Icon from '@design-system/components/Icon.svelte'
+import CnIcon from '@design-system/components/CnIcon.svelte'
 import IconContext from '@design-system/books/specimens/IconContext.astro'
 import IconSizes from '@design-system/books/specimens/IconSizes.astro'
 import IconTiers from '@design-system/books/specimens/IconTiers.astro'
 import iconSource from '@design-system/styles/units.css?raw'
 import themeSource from '@design-system/styles/semantic.css?raw'
 
-`Icon` renders a single inline SVG vector glyph resolved from a semantic noun. Artwork
+`CnIcon` renders a single inline SVG vector glyph resolved from a semantic noun. Artwork
 inherits the surrounding text colour via `currentColor` for monochrome icons, while branded
 marks preserve source-encoded palette values.
 
@@ -21,25 +21,25 @@ marks preserve source-encoded palette values.
 - Visual reinforcement in buttons, navigation rails, list rows, and card headers.
 - Visual indexing of content categories and domain entities.
 
-Do not use `Icon` for user profile pictures; use [CnAvatar](/components/cn-avatar).
-Icon selection guidelines and catalogue vocabulary are documented in
+Do not use `CnIcon` for user profile pictures; use [CnAvatar](/components/cn-avatar).
+CnIcon selection guidelines and catalogue vocabulary are documented in
 [Iconography principles](/principles/iconography).
 
 ## Example
 
-<Icon noun="fox" />
+<CnIcon noun="fox" />
 
 ```svelte
 <script>
-  import Icon from '@design-system/components/Icon.svelte'
+  import CnIcon from '@design-system/components/CnIcon.svelte'
 </script>
 
-<Icon noun="fox" />
+<CnIcon noun="fox" />
 ```
 
 ## Variants and states
 
-`Icon` provides five size steps, contextual theme colouring, and tiered resolution fallbacks.
+`CnIcon` provides five size steps, contextual theme colouring, and tiered resolution fallbacks.
 
 ### Sizes
 
@@ -85,7 +85,7 @@ bundled essential fallbacks, and the missing glyph fallback.
 
 ## Composition
 
-`Icon` renders as an `inline-flex` container with `aspect-ratio: 1 / 1`. Spacing between
+`CnIcon` renders as an `inline-flex` container with `aspect-ratio: 1 / 1`. Spacing between
 an icon and adjacent text labels is managed by parent containers via CSS `gap`.
 
 ## Reference
@@ -101,12 +101,12 @@ an icon and adjacent text labels is managed by parent containers via CSS `gap`.
 
 ### Tokens
 
-Icon dimensions are declared in `styles/units.css` (`--cn-icon-size-*`). The component
+CnIcon dimensions are declared in `styles/units.css` (`--cn-icon-size-*`). The component
 declares no colour tokens, inheriting foreground colour via `currentColor`.
 
 ## Accessibility
 
-- By default, `Icon` emits `role="img"`, sets `aria-label={noun}`, and includes an SVG `<title>` tooltip.
+- By default, `CnIcon` emits `role="img"`, sets `aria-label={noun}`, and includes an SVG `<title>` tooltip.
 - Pass `aria-label` to provide localized or context-specific descriptions (such as brand names).
 - Set `decorative={true}` when an adjacent text label already conveys meaning, or when the icon is inside an icon-only button that declares its own `aria-label`.
 

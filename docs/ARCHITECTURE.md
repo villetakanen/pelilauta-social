@@ -8,7 +8,7 @@
 | :--- | :--- | :--- |
 | Public design system | `Cn{Name}` | `CnCard.svelte` |
 | Reusable design-system tooling | `Ds{Name}` | `DsComposition.astro` |
-| One-book private component | `{Name}` | `ContrastMatrix.astro` |
+| One-book private component | `{Name}` | `StepTable.astro` |
 | Application component | `{Name}` | `ThreadCard.astro` |
 | Astro route | Astro route grammar | `[threadKey]/index.astro` |
 

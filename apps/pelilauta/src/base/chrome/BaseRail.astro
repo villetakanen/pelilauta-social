@@ -1,10 +1,11 @@
 ---
+import CnIcon from '@design-system/components/CnIcon.svelte';
 /**
  * The base application's rail: the design system's boxes, what stands in
  * them here.
  *
  * Entries are the consumer's, so each is an ordinary chrome action — an anchor,
- * an Icon and a label — and this component states which of the base application's
+ * a CnIcon and a label — and this component states which of the base application's
  * own places the reader is on. Three entries read the session on the client and
  * stay islands.
  *
@@ -12,7 +13,6 @@
  * `specs/pelilauta/base/base-rail/spec.md`'s; this component states none of them.
  */
 import CnRail from '@design-system/components/CnRail.astro';
-import Icon from '@design-system/components/Icon.svelte';
 import AdminNavigationButton from '@pelilauta/components/svelte/admin/AdminNavigationButton.svelte';
 import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
 import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
@@ -40,17 +40,17 @@ function current(here: boolean) {
     home. Above that breakpoint the logomark carries it and this entry is absent.
   */}
   <a class="chrome-action only-on-small" href="/" aria-current={current(home)}>
-    <Icon noun="fox" decorative />
+    <CnIcon noun="fox" decorative />
     <span>{t("base:rail.home")}</span>
   </a>
 
   <a class="chrome-action" href="/channels" aria-current={current(threads)}>
-    <Icon noun="discussion" decorative />
+    <CnIcon noun="discussion" decorative />
     <span>{t("base:rail.channels")}</span>
   </a>
 
   <a class="chrome-action" href="/sites" aria-current={current(sites)}>
-    <Icon noun="d20" decorative />
+    <CnIcon noun="d20" decorative />
     <span>{t("base:rail.sites")}</span>
   </a>
 
@@ -61,12 +61,12 @@ function current(here: boolean) {
   */}
   {/* A door carries the name of what it opens, in that application's own words. */}
   <a class="chrome-action" href="/library">
-    <Icon noun="books" decorative />
+    <CnIcon noun="books" decorative />
     <span>{t("library:title")}</span>
   </a>
 
   <a class="chrome-action" href="/docs/01-index">
-    <Icon noun="design" decorative />
+    <CnIcon noun="design" decorative />
     <span>{t("docs:title")}</span>
   </a>
 

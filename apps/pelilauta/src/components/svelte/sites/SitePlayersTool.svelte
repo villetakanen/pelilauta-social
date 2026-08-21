@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnToggle from '@design-system/components/CnToggle.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { addNotification } from 'src/firebase/client/notifications';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
@@ -84,7 +84,7 @@ function setUsePlayers(e: Event & { currentTarget: HTMLInputElement }) {
       type="button"
       disabled={$uid === player}
       onclick={() => dropPlayer(player)}>
-      <Icon noun="delete" />
+      <CnIcon noun="delete" />
     </button>
   </div>
 {/each}

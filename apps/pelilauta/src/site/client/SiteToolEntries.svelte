@@ -8,7 +8,7 @@
  * role it needs, are `specs/pelilauta/site/site-rail/spec.md`'s; this
  * component states none of it.
  */
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../stores/session';
@@ -36,7 +36,7 @@ function current(here: boolean) {
     aria-disabled={isPlayer ? undefined : 'true'}
     tabindex={isPlayer ? undefined : -1}
   >
-    <Icon noun="hood" decorative />
+    <CnIcon noun="hood" decorative />
     <span>{t('site:handouts.title')}</span>
   </a>
 {/if}
@@ -47,7 +47,7 @@ function current(here: boolean) {
     href={`/sites/${site.key}/members`}
     aria-current={current(path === `/sites/${site.key}/members`)}
   >
-    <Icon noun="adventurer" decorative />
+    <CnIcon noun="adventurer" decorative />
     <span>{t('site:members.title')}</span>
   </a>
 
@@ -56,7 +56,7 @@ function current(here: boolean) {
     href={`/sites/${site.key}/options`}
     aria-current={current(path === `/sites/${site.key}/options`)}
   >
-    <Icon noun="gamepad" decorative />
+    <CnIcon noun="gamepad" decorative />
     <span>{t('site:options.title')}</span>
   </a>
 
@@ -65,7 +65,7 @@ function current(here: boolean) {
     href={`/sites/${site.key}/settings`}
     aria-current={current(path === `/sites/${site.key}/settings`)}
   >
-    <Icon noun="tools" decorative />
+    <CnIcon noun="tools" decorative />
     <span>{t('site:settings.title')}</span>
   </a>
 
@@ -74,7 +74,7 @@ function current(here: boolean) {
     href={`/sites/${site.key}/data`}
     aria-current={current(path === `/sites/${site.key}/data`)}
   >
-    <Icon noun="save" decorative />
+    <CnIcon noun="save" decorative />
     <span>{t('site:data.title')}</span>
   </a>
 {/if}

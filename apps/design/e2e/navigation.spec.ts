@@ -43,7 +43,7 @@ test('the navigation is reachable on a small viewport through the disclosure', a
   // must not keep focusable links behind the viewport edge.
   await expect(nav(page)).not.toBeVisible();
   await expect(
-    nav(page).getByRole('link', { name: 'Icon', exact: true }),
+    nav(page).getByRole('link', { name: 'CnIcon', exact: true }),
   ).not.toBeVisible();
 
   // The tray's trigger stands in the leading slot CnAppBar reserves for it at
@@ -54,12 +54,12 @@ test('the navigation is reachable on a small viewport through the disclosure', a
   await disclosure.click();
 
   await expect(nav(page)).toBeVisible();
-  const link = nav(page).getByRole('link', { name: 'Icon', exact: true });
+  const link = nav(page).getByRole('link', { name: 'CnIcon', exact: true });
   await expect(link).toBeVisible();
 
   // And it actually navigates.
   await link.click();
-  await expect(page).toHaveURL(/\/components\/icon\/?$/);
+  await expect(page).toHaveURL(/\/components\/cn-icon\/?$/);
 
   expect(errors).toEqual([]);
 });

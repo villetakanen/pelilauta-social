@@ -4,22 +4,22 @@ description: Semantic distinction between navigation and commands, button varian
 order: 5
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import LinkStateTable from '@design-system/books/specimens/LinkStateTable.astro'
 import ButtonSpecimens from '@design-system/books/specimens/ButtonSpecimens.astro'
 import FabSpecimens from '@design-system/books/specimens/FabSpecimens.astro'
 import FabTrayDemo from '@design-system/books/specimens/FabTrayDemo.astro'
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import linkSource from '@design-system/styles/links.css?raw'
 import unitsSource from '@design-system/styles/units.css?raw'
 
 We distinguish links from actions by outcome. A link navigates to a document,
 resource, or location. An action triggers a command, submits data, or modifies state.
 
-<Composition themes caption="Native links in prose and standalone in Light and Dark">
+<DsComposition themes caption="Native links in prose and standalone in Light and Dark">
   <p>Pelilauta's <a href="/principles/typography">typography principles</a> set the reading voice and scale.</p>
   <p><a href="/principles/color-system">Explore colour and surface roles</a></p>
-</Composition>
+</DsComposition>
 
 ## Semantic distinction
 
@@ -58,9 +58,9 @@ Button styling is purely presentation and does not alter element semantics: `<bu
 commands, and `<a class="button">` navigates destinations. Both elements support the same
 visual variants.
 
-<Composition themes caption="The four button variants in Light and Dark">
+<DsComposition themes caption="The four button variants in Light and Dark">
   <ButtonSpecimens group="variants" />
-</Composition>
+</DsComposition>
 
 | Variant | Purpose |
 | :--- | :--- |
@@ -72,9 +72,9 @@ visual variants.
 `.secondary` applies only when declared directly on the button element. Ancestor classes
 do not cascade secondary color tokens to child buttons.
 
-<Composition themes caption="Button variants as commands and destinations">
+<DsComposition themes caption="Button variants as commands and destinations">
   <ButtonSpecimens group="elements" />
-</Composition>
+</DsComposition>
 
 ### Button anatomy and content
 
@@ -87,9 +87,9 @@ A button supports:
 Buttons establish a scoped icon size, ensuring descendant `Icon` components automatically
 render at the standard button size (small).
 
-<Composition themes caption="Label, leading icon, icon-only, and loading state">
+<DsComposition themes caption="Label, leading icon, icon-only, and loading state">
   <ButtonSpecimens group="compositions" />
-</Composition>
+</DsComposition>
 
 An icon-only or loader-only button renders as a circular control. A command in flight uses a
 disabled native `<button>` containing an inline `CnLoader`; the button retains the command's
@@ -102,9 +102,9 @@ accessible name while the loader indicates progress. Link buttons do not support
 - **Keyboard focus:** Draws `--cn-color-focus-ring` around the control.
 - **Disabled:** Native `<button>` elements render at `--cn-disabled-opacity`. This capability publishes no disabled presentation for a link: a destination is navigable, or the control is not rendered.
 
-<Composition themes caption="Resting, disabled, and text link buttons">
+<DsComposition themes caption="Resting, disabled, and text link buttons">
   <ButtonSpecimens group="states" />
-</Composition>
+</DsComposition>
 
 Transitions use `--cn-duration-ui` and `--cn-easing-ui`, disabling animation under
 `prefers-reduced-motion: reduce`.
@@ -115,11 +115,11 @@ Labelled buttons size to content by default and stretch to fill parent flex or g
 when requested. When constrained, text labels truncate with an ellipsis while icons and
 loaders maintain fixed square dimensions.
 
-<Composition themes caption="Intrinsic width, stretched button, and truncated label">
+<DsComposition themes caption="Intrinsic width, stretched button, and truncated label">
   <ButtonSpecimens group="layout" />
-</Composition>
+</DsComposition>
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-color-button"
   caption="Button geometry tokens"
@@ -133,9 +133,9 @@ the space between an icon and its label is `--cn-grid` (0.5rem).
 A floating action button (FAB) exposes the primary contextual action for a view. Use
 `<button class="fab">` for commands and `<a class="fab">` for navigation.
 
-<Composition themes caption="The three FAB variants in Light and Dark">
+<DsComposition themes caption="The three FAB variants in Light and Dark">
   <FabSpecimens group="variants" />
-</Composition>
+</DsComposition>
 
 | Variant | Purpose |
 | :--- | :--- |
@@ -152,13 +152,13 @@ FABs support an icon alone or an icon with trailing label. Two sizes are availab
 Icon-only FABs are square. Labelled FABs expand inline; neither variant stretches to fill
 flex tracks.
 
-<Composition themes caption="Standard and small FAB sizes">
+<DsComposition themes caption="Standard and small FAB sizes">
   <FabSpecimens group="sizes" />
-</Composition>
+</DsComposition>
 
-<Composition themes caption="Icon-only, labelled, and in-flight FAB">
+<DsComposition themes caption="Icon-only, labelled, and in-flight FAB">
   <FabSpecimens group="compositions" />
-</Composition>
+</DsComposition>
 
 Icon-only FABs derive their accessible name from the button `aria-label`, never from the icon.
 In-flight commands use a disabled native button containing an inline `CnLoader`.
@@ -168,9 +168,9 @@ In-flight commands use a disabled native button containing an inline `CnLoader`.
 Hover lifts the FAB above its resting elevation, active settles between elevations, and
 keyboard focus applies `--cn-color-focus-ring`. Only native button FABs support the disabled state.
 
-<Composition themes caption="Resting, disabled, and navigable FABs">
+<DsComposition themes caption="Resting, disabled, and navigable FABs">
   <FabSpecimens group="states" />
-</Composition>
+</DsComposition>
 
 ### FAB tray container
 
@@ -179,18 +179,18 @@ that owns it, which is its containing block. The tray spans that composition's i
 and aligns its children to the inline end. It stacks at `--cn-z-fab` and clears block-end
 navigation through `--cn-block-end-chrome`.
 
-<Composition caption="App shell layout: FAB labels visible, actions stacked upward">
+<DsComposition caption="App shell layout: FAB labels visible, actions stacked upward">
   <FabTrayDemo shell="app" />
-</Composition>
+</DsComposition>
 
-<Composition themes caption="Handheld shell: FAB labels collapsed to icons in Light and Dark">
+<DsComposition themes caption="Handheld shell: FAB labels collapsed to icons in Light and Dark">
   <FabTrayDemo shell="handheld" />
-</Composition>
+</DsComposition>
 
 Below the small-screen container query threshold, the tray automatically collapses text
 labels and displays icon-only controls while preserving accessible names.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-fab"
   caption="FAB geometry tokens"

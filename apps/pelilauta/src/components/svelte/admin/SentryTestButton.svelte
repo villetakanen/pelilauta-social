@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { captureError } from '@utils/client/sentry';
 import { logDebug, logError } from '@utils/logHelpers';
 
@@ -58,7 +58,7 @@ async function handleTestError() {
 </script>
 
 <button onclick={handleTestError}>
-  <Icon noun="warning" /> Throw test error
+  <CnIcon noun="warning" /> Throw test error
 </button>
 {#if feedback}
   <div class="feedback {feedback.type}">

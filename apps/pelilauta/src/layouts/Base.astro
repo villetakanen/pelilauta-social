@@ -2,8 +2,8 @@
 import AuthManager from '@components/svelte/AuthManager.svelte';
 import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnShareAction from '@design-system/components/CnShareAction.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import BaseBar from '@pelilauta/base/chrome/BaseBar.astro';
 import BaseRail from '@pelilauta/base/chrome/BaseRail.astro';
 import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
@@ -43,7 +43,7 @@ const { title, description, image, noSharing, search } = Astro.props;
         {
           search && (
             <a href="/search" class="chrome-action">
-              <Icon noun="search" decorative />
+              <CnIcon noun="search" decorative />
               <span>{t("actions:search")}</span>
             </a>
           )

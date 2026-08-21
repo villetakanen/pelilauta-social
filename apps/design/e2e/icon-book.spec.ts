@@ -8,7 +8,7 @@ import { expect, type Page, test } from '@playwright/test';
  * packages/design-system/test/icon-registry.test.ts.
  */
 
-const COMPONENT_BOOK = '/components/icon';
+const COMPONENT_BOOK = '/components/cn-icon';
 const PRINCIPLES_BOOK = '/principles/iconography';
 
 // The square each size token produces at the default 16px root font size.
@@ -46,7 +46,7 @@ const color = (page: Page, selector: string) =>
 test('every size token renders its square', async ({ page }) => {
   await page.goto(COMPONENT_BOOK);
   await expect(
-    page.getByRole('heading', { name: 'Icon', level: 1 }),
+    page.getByRole('heading', { name: 'CnIcon', level: 1 }),
   ).toBeVisible();
 
   for (const [size, px] of Object.entries(SIZE_PX)) {

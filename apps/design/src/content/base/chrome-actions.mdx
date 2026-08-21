@@ -4,7 +4,7 @@ description: The command and destination control for application bars and rails,
 order: 5.5
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import ChromeActionSpecimens from '@design-system/books/specimens/ChromeActionSpecimens.astro'
 import BackActionSpecimen from '@design-system/books/specimens/BackActionSpecimen.svelte'
 import ShareActionSpecimen from '@design-system/books/specimens/ShareActionSpecimen.svelte'
@@ -21,26 +21,26 @@ presentations: no link underline, no button surface, no button elevation.
 
 ## Markup
 
-<Composition themes caption="A command and a destination, compact, in Light and Dark">
+<DsComposition themes caption="A command and a destination, compact, in Light and Dark">
   <ChromeActionSpecimens group="pair" presentation="compact" />
-</Composition>
+</DsComposition>
 
 ```html
 <button type="button" class="chrome-action">
-  <Icon noun="send" decorative />
+  <CnIcon noun="send" decorative />
   <span>Send</span>
 </button>
 
 <a class="chrome-action" href="/somewhere">
-  <Icon noun="home" decorative />
+  <CnIcon noun="home" decorative />
   <span>Home</span>
 </a>
 ```
 
-The Icon is the first child, the label `span` the second. The label is present
+The CnIcon is the first child, the label `span` the second. The label is present
 in both presentations and is the control's accessible name in both; neither
-element takes or needs an `aria-label`. The Icon must be passed `decorative`:
-the label already names the control, and without it the Icon's own noun
+element takes or needs an `aria-label`. The CnIcon must be passed `decorative`:
+the label already names the control, and without it the CnIcon's own noun
 pollutes the accessible name.
 
 `.chrome-action` composes with no Actions button variant. `.button`, `.cta`,
@@ -56,8 +56,8 @@ element's parent, so the action would be reading past its own declaration.
 
 | Value | Presentation |
 | :--- | :--- |
-| `compact` | The Icon alone, centred in a square target. |
-| `labelled` | The Icon and the label, filling the container's inline size. |
+| `compact` | The CnIcon alone, centred in a square target. |
+| `labelled` | The CnIcon and the label, filling the container's inline size. |
 | Absent, empty, or any other value | `compact`. |
 
 The mechanism is a CSS style container query, `@container style(--cn-chrome-presentation: labelled)`.
@@ -65,9 +65,9 @@ Every element is a style container, so a chrome action reads the value
 inherited onto its own parent and never selects on an ancestor by name.
 
 <div class="breakout">
-  <Composition themes caption="Labelled, on a command and a destination, in Light and Dark">
+  <DsComposition themes caption="Labelled, on a command and a destination, in Light and Dark">
     <ChromeActionSpecimens group="pair" presentation="labelled" />
-  </Composition>
+  </DsComposition>
 </div>
 
 Changing the declared presentation does not replace the element, its
@@ -80,32 +80,32 @@ and the target's inline size change.
 | :--- | :--- | :--- |
 | Target | `7 × --cn-grid` square. | Container's inline size, `7 × --cn-grid` block size. |
 | State surface | Centred circle, `6 × --cn-grid` diameter. | Centred pill, `6 × --cn-grid` block size, full target inline size. |
-| Content | Icon alone, centred. | Icon, `--cn-gap`, label, from a `--cn-grid` inline inset at the start edge. |
+| Content | CnIcon alone, centred. | CnIcon, `--cn-gap`, label, from a `--cn-grid` inline inset at the start edge. |
 
 The target is the element and owns hit testing and layout. The state surface
-is a `::before` pseudo-element behind the Icon and label, and owns the resting
-and transient surfaces. The label truncates rather than wrapping; the Icon
+is a `::before` pseudo-element behind the CnIcon and label, and owns the resting
+and transient surfaces. The label truncates rather than wrapping; the CnIcon
 keeps its square in both presentations. A chrome action is an icon-size
 context resolving to the medium step.
 
 A label too long for the rail truncates with an ellipsis rather than wrapping or overflowing.
 
 <div class="breakout">
-  <Composition themes caption="A labelled chrome action whose label overruns the rail, in Light and Dark">
+  <DsComposition themes caption="A labelled chrome action whose label overruns the rail, in Light and Dark">
     <ChromeActionSpecimens group="truncation" presentation="labelled" />
-  </Composition>
+  </DsComposition>
 </div>
 
 ## States
 
-<Composition themes caption="Compact chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
+<DsComposition themes caption="Compact chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
   <ChromeActionSpecimens group="states" presentation="compact" />
-</Composition>
+</DsComposition>
 
 <div class="breakout">
-  <Composition themes caption="Labelled chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
+  <DsComposition themes caption="Labelled chrome action, rest, hover, active, keyboard focus and disabled, in Light and Dark">
     <ChromeActionSpecimens group="states" presentation="labelled" />
-  </Composition>
+  </DsComposition>
 </div>
 
 The state surface is transparent at rest, takes `--cn-color-hover` on hover and
@@ -129,14 +129,14 @@ being pointed at.
 state surface takes `--cn-color-indicator` and the target's foreground becomes
 `--cn-color-on-indicator`, so the icon and the label follow.
 
-<Composition themes caption="Compact chrome action, current and not current, through every transient state, in Light and Dark">
+<DsComposition themes caption="Compact chrome action, current and not current, through every transient state, in Light and Dark">
   <ChromeActionSpecimens group="current" presentation="compact" />
-</Composition>
+</DsComposition>
 
 <div class="breakout">
-  <Composition themes caption="Labelled chrome action, current and not current, through every transient state, in Light and Dark">
+  <DsComposition themes caption="Labelled chrome action, current and not current, through every transient state, in Light and Dark">
     <ChromeActionSpecimens group="current" presentation="labelled" />
-  </Composition>
+  </DsComposition>
 </div>
 
 The indicator is persistent and the washes are transient, so they compose: hover
@@ -162,27 +162,27 @@ The default button for exiting a modal, whether that modal is a dialog or a page
 in for one. Activation dispatches `cn-back`, a bubbling `CustomEvent`, and does nothing
 else — the consuming application listens for it and decides where the reader goes.
 
-<Composition themes caption="CnBackAction, in Light and Dark">
+<DsComposition themes caption="CnBackAction, in Light and Dark">
   <CnBackAction client:load label="Takaisin" />
-</Composition>
+</DsComposition>
 
 `label` defaults to `<`, a placeholder rather than a name: replace it with a localised one.
 
 The control has no visible effect of its own. The specimen below mounts it beside a
 listener bound above it, counting each `cn-back` that arrives.
 
-<Composition caption="CnBackAction beside a listener mounted above it, counting each cn-back event">
+<DsComposition caption="CnBackAction beside a listener mounted above it, counting each cn-back event">
   <BackActionSpecimen client:load />
-</Composition>
+</DsComposition>
 
 ### Share action
 
 Passes the current page on. Where the browser has the Web Share API, activation opens its
 share sheet; where it has none, the page's URL goes to the clipboard instead.
 
-<Composition themes caption="CnShareAction, in Light and Dark">
+<DsComposition themes caption="CnShareAction, in Light and Dark">
   <CnShareAction client:load label="Jaa" />
-</Composition>
+</DsComposition>
 
 `label` has no default: a share button without one is an unnamed icon, which is what v18
 shipped.
@@ -193,9 +193,9 @@ reader is told. Activation dispatches `cn-share`, a bubbling `CustomEvent` whose
 sheet gets no event at all. The specimen below prints the outcome that arrived, which
 depends on the browser reading this page.
 
-<Composition caption="CnShareAction beside a listener mounted above it, printing each cn-share outcome">
+<DsComposition caption="CnShareAction beside a listener mounted above it, printing each cn-share outcome">
   <ShareActionSpecimen client:load />
-</Composition>
+</DsComposition>
 
 By default it shares the document's own URL and title; `url`, `title` and `text` state
 otherwise. An unstated `text` is not shared.
@@ -207,9 +207,9 @@ declares the compact presentation on itself, so it stays icon-only in every cont
 expanded rail cannot put its label in view. Its theme behaviour and its event are documented in
 [CnThemeSwitch](/components/cn-theme-switch).
 
-<Composition caption="CnThemeSwitch, which re-themes this page">
+<DsComposition caption="CnThemeSwitch, which re-themes this page">
   <CnThemeSwitch client:load />
-</Composition>
+</DsComposition>
 
 ## Notification action
 
@@ -218,6 +218,6 @@ badge reporting a count. Every measurement, state and rule stated above applies 
 unchanged. Its props, its counting rules and its accessible name are documented in
 [CnNotificationAction](/components/cn-notification-action).
 
-<Composition themes caption="CnNotificationAction, in Light and Dark">
+<DsComposition themes caption="CnNotificationAction, in Light and Dark">
   <CnNotificationAction href="/base/chrome-actions" noun="info" label="Ilmoitukset" count={3} />
-</Composition>
+</DsComposition>

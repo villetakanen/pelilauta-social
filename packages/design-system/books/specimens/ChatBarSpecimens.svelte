@@ -26,7 +26,7 @@
  * Book: apps/design/src/content/components/cn-chat-bar.mdx
  */
 import CnChatBar from '../../components/CnChatBar.svelte';
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 
 let {
   group,
@@ -58,18 +58,18 @@ Viimeksi unohdimme ne kotiin.`;
 
 {#snippet addMenu()}
   <button type="button">
-    <Icon noun="assets" decorative />
+    <CnIcon noun="assets" decorative />
     <span>Lisää kuva</span>
   </button>
   <button type="button">
-    <Icon noun="label-tag" decorative />
+    <CnIcon noun="label-tag" decorative />
     <span>Lisää linkki</span>
   </button>
 {/snippet}
 
 {#snippet sendAction()}
   <button type="button" class="chrome-action" aria-label="Lähetä">
-    <Icon noun="send" decorative />
+    <CnIcon noun="send" decorative />
   </button>
 {/snippet}
 
@@ -108,10 +108,10 @@ Viimeksi unohdimme ne kotiin.`;
       <CnChatBar label="Vastaa keskusteluun" placeholder="Kirjoita viesti..." menuLabel="Lisää">
         {#snippet supporting()}
           <span class="attachment-chip">
-            <Icon noun="assets" decorative />
+            <CnIcon noun="assets" decorative />
             <span>kartta.png</span>
             <button type="button" aria-label="Poista liite">
-              <Icon noun="delete" decorative />
+              <CnIcon noun="delete" decorative />
             </button>
           </span>
         {/snippet}
@@ -151,7 +151,7 @@ Viimeksi unohdimme ne kotiin.`;
         {#snippet menu()}{@render addMenu()}{/snippet}
         {#snippet trailing()}
           <button type="button" class="chrome-action" aria-label="Lähetä" disabled>
-            <Icon noun="send" decorative />
+            <CnIcon noun="send" decorative />
           </button>
         {/snippet}
       </CnChatBar>
