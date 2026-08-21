@@ -17,7 +17,8 @@
   `proposed`, and an operator makes it `live` by reading it. The status is a
   process gate, never a ceremony: do not request, await or announce approval.
 - `plans` contains transient epic scope; a plan carries behaviour only until a spec
-  takes it. `plans/debt` contains known unplanned gaps.
+  takes it. `plans/debt` contains known unplanned gaps;
+  `plans/debt-deferred-for-rc` holds the ones parked until the release candidate.
 - `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;
   `docs/ARCHITECTURE.md` holds the naming and what each artifact carries.
 

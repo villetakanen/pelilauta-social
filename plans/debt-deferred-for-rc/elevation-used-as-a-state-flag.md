@@ -1,6 +1,6 @@
 # An Unread Notification Claims The System Interrupt Level
 
-Status: Recorded 2026-08-20, while settling what each elevation level means
+Status: Recorded 2026-08-20, while settling what each elevation level means; deferred to the release-candidate cycle 2026-08-21
 
 `apps/pelilauta/src/components/svelte/inbox/NotificationItem.svelte:57,89-102` puts an
 unread notification at elevation 4, toggled by `notification.read`.

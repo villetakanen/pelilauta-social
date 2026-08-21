@@ -84,7 +84,8 @@ the content by the field's resting indicator.
 - The editor renders as the field: fill, indicator, mono face and states are
   the ones `fields.css` paints on a textarea, in both applications.
 - Every view with an editor resolves one shared, content-hashed chunk; a
-  production page without an editor contains no `@codemirror` module.
+  production page without an editor contains no `@codemirror` module. Verified
+  by hand at delivery review — no gate holds it between reviews.
 
 ### Regression Guardrails
 
