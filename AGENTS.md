@@ -30,6 +30,8 @@
   Later commits on the same branch do not bump, because the version is already ahead
   of main. CI tags the merge commit.
 - Stay on the current long-lived `feat/**` branch.
+- Run the gate whose question you are asking: `delivery.yaml` states the gates,
+  their cadence and their gaps.
 
 ## NEVER
 

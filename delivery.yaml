@@ -1,0 +1,40 @@
+# The delivery gates. `run: none` marks a question that has no gate: a stated gap, not an oversight.
+# Cadence: in-flight while working, pre-push via lefthook, pre-merge before the
+# pull request merges, release at delivery review of the merge.
+
+gates:
+  types:
+    question: the TypeScript types
+    run: astro check, in the app being changed
+    when: [in-flight]
+  lint:
+    question: conformance to the linters
+    run: pnpm lint
+    when: [in-flight, pre-merge]
+  unit:
+    question: a function, or a stylesheet's contract
+    run: pnpm test
+    when: [in-flight, pre-push, pre-merge]
+  component:
+    question: a design-system component's browser behaviour
+    run: pnpm --filter design test:e2e
+    when: [in-flight, pre-merge]
+  visual:
+    question: anything that can be seen
+    run: the book page, read by a human
+    when: [pre-merge]
+  verify:
+    question: the branch's mergeability
+    run: pnpm verify
+    when: [pre-merge]
+  uat:
+    question: release acceptance of a merge to main
+    run: pnpm test:uat
+    when: [release]
+    cost: resets Firestore, and takes ten minutes
+    see: docs/ACCEPTANCE_TESTING.md
+  app-e2e:
+    question: a pelilauta feature's browser behaviour
+    run: none
+    gap: no v21 suite exists; the inherited v18 suite is not evidence and is not run
+    see: docs/MIGRATION.md
