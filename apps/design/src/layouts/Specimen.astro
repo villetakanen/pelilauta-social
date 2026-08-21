@@ -1,0 +1,58 @@
+---
+/**
+ * Specimen.astro — the document shell for a standalone specimen: an entry
+ * whose subject is a full-viewport surface, so it cannot render inside
+ * Book.astro's prose column.
+ *
+ * The subject locks itself to the viewport and clears the fixed bar itself,
+ * so this shell holds only a modal bar above it and a `cn-back` handler
+ * deciding where leaving lands — no rail, no navigation, no article.
+ */
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import '@design-system/styles/ds.css';
+import ThemeScript from '../components/ThemeScript.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Where the bar's back action lands. */
+  backHref: string;
+}
+
+const { title, description, backHref } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex" />
+    <title>{title} / Pelilauta Design System</title>
+    <ThemeScript />
+  </head>
+  <body>
+    <CnAppChrome>
+      <CnAppBar title={title} shortTitle={title} modal backLabel="Back" />
+    </CnAppChrome>
+
+    <slot />
+
+    <!--
+      Where leaving lands is the consumer's. The shell stops a departure while
+      the document is dirty and asks; a departure it lets through — clean, or
+      confirmed — arrives here as the same event, so this handler is written
+      once either way.
+    -->
+    <script is:inline define:vars={{ backHref }}>
+      document.addEventListener('cn-back', () => {
+        window.location.href = backHref;
+      });
+    </script>
+  </body>
+</html>

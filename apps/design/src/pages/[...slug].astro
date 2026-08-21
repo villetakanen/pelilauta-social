@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import Book from '../layouts/Book.astro';
+import Specimen from '../layouts/Specimen.astro';
 import { GROUPS, type GroupId } from '../lib/books';
 
 /**
@@ -33,18 +34,30 @@ const { Content } = await render(entry);
 /* Only the components collection declares a runtime, so the union narrows on the
    field rather than on the group id. */
 const runtime = 'runtime' in entry.data ? entry.data.runtime : undefined;
+
+/*
+ * A standalone entry's subject is a full-viewport surface, so it renders
+ * through Specimen rather than Book's prose column — see
+ * src/layouts/Specimen.astro. It states where its back action lands; the index
+ * is the fallback, because a specimen with nowhere stated still has to leave
+ * somewhere.
+ */
+const standalone = entry.data.standalone ?? false;
+const Layout = standalone ? Specimen : Book;
+const backHref = entry.data.backHref ?? '/';
 ---
 
-<Book
+<Layout
   title={entry.data.title}
   description={entry.data.description}
   group={group}
   poster={entry.data.poster}
   runtime={runtime}
-  prose
+  backHref={backHref}
+  prose={!standalone}
 >
   <Content />
   <Fragment slot="footer-note">
     <span>Source: <code>apps/design</code></span>
   </Fragment>
-</Book>
+</Layout>

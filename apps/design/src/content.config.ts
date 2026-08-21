@@ -24,6 +24,19 @@ const bookSchema = z.object({
    * only way to declare it is here — the layout owns <body>, not the MDX.
    */
   poster: z.string().optional(),
+  /**
+   * An entry that renders as its own page, without the book shell, because
+   * its subject is a full-viewport surface Book.astro's prose column cannot
+   * host. See src/layouts/Specimen.astro and src/pages/[...slug].astro.
+   */
+  standalone: z.boolean().optional(),
+  /**
+   * Where a standalone entry's back action lands: the book documenting the
+   * surface it demonstrates. Stated rather than derived, because a page that
+   * reads its destination out of its own filename is a naming convention doing
+   * a route's work.
+   */
+  backHref: z.string().optional(),
 });
 
 /**
