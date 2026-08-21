@@ -66,6 +66,16 @@ alongside the debt pile and a retro.
 
 ## Done
 
+- Debt slices, 2026-08-21: `colour-token-naming` (the `--cn-color-*` sweep,
+  `4e8ffa44`), `loader-icon-announces-its-noun` (`4da98f01`),
+  `v20-component-name-conformance` (ADR 0002 carried out, `15577e05`),
+  `link-state-table-defeats-real-interaction` and `semantic-token-cycles`
+  (`21a502c2`). `editor-bundle-split-has-no-detector` dropped as
+  disproportionate (`eda444fa`); `elevation-used-as-a-state-flag` deferred to
+  `plans/debt-deferred-for-rc/`.
+- The annotated tag `before-cyan-removal` (`5e4f8c6d`, pushed) marks the state
+  before the removal step, as its rollback point.
+
 ## Open questions
 
 - Which debt entries this cycle takes is the operator's pick at each `next-task`.
