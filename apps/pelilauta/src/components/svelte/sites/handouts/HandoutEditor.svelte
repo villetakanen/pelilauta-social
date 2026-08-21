@@ -1,9 +1,20 @@
 <script lang="ts">
-import CnEditor from '@editor/CnEditor.svelte';
+/**
+ * Handout authoring, for the edit route.
+ *
+ * The view is a consumer of the editor shell: it slots the handout's
+ * frontmatter — the title — and the actions, and the shell decides the
+ * geometry and whether the document is dirty. The shell also asks before a
+ * dirty departure, so this form saves and navigates, and guards nothing
+ * itself.
+ */
+import CnEditorShell from '@editor/CnEditorShell.svelte';
 import type { Handout } from 'src/schemas/HandoutSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { update } from 'src/stores/site/handouts';
+import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
 
 interface Props {
   handout: Handout;
@@ -13,9 +24,15 @@ interface Props {
 const { site, handout }: Props = $props();
 let title = $state(handout.title);
 let markdownContent = $state(handout.markdownContent);
-const changed = $derived.by(() => {
-  return handout.title !== title || handout.markdownContent !== markdownContent;
-});
+
+/*
+ * Dirtiness is the shell's, reported here rather than tracked: the title is
+ * a native control inside the region it reads, so a title edited back to
+ * what it was leaves the save action disabled, which the view's diff
+ * used to manage by hand.
+ */
+let shell: CnEditorShell | undefined = $state();
+let dirty = $state(false);
 
 function titleChanged(e: Event) {
   title = (e.target as HTMLInputElement).value;
@@ -26,53 +43,81 @@ function markdownContentChanged(content: string) {
 
 async function handleSubmit(e: Event) {
   e.preventDefault();
-  if (!changed) return;
+  if (!dirty) return;
 
-  await update({
-    ...handout,
-    title,
-    markdownContent,
-  });
+  try {
+    await update({
+      ...handout,
+      title,
+      markdownContent,
+    });
+    /*
+     * Clean before leaving. The write has landed, so the document the shell
+     * is holding is saved — and navigating away from a shell that still
+     * reads dirty would raise the browser's guard over a departure the
+     * writer asked for.
+     */
+    shell?.markClean();
+    window.location.href = `/sites/${site.key}/handouts/${handout.key}`;
+  } catch (error) {
+    logError('HandoutEditor', 'handleSubmit', error);
+    pushSnack(t('common:error.generic'));
+  }
+}
 
-  window.location.href = `/sites/${site.key}/handouts/${handout.key}`;
+/*
+ * Cancel is a departure, so it asks the shell, which answers for whether the
+ * writer needs asking first and leaves through the route's one handler.
+ */
+function cancel() {
+  shell?.requestBack();
 }
 </script>
 
-<form class="editor-form" onsubmit={handleSubmit}>
-
-  <div class="toolbar">
-    <label class="grow">
-      {t('entries:handout.title')}
-      <input type="text" value={handout.title}  oninput={titleChanged}/>
-    </label>
-  </div>
-
-  <CnEditor
+<form id="handout-editor" onsubmit={handleSubmit}>
+  <CnEditorShell
+    bind:this={shell}
     bind:value={markdownContent}
+    name="markdownContent"
     onChange={markdownContentChanged}
+    onDirtyChange={(next) => {
+      dirty = next;
+    }}
+    confirmTitle={t('common:editor.unsaved.title')}
+    confirmBody={t('common:editor.unsaved.body')}
+    confirmLeave={t('common:editor.unsaved.leave')}
+    confirmStay={t('common:editor.unsaved.stay')}
+    frontmatter={frontmatter}
   />
-
-  <div class="toolbar justify-end">
-    <a href={`/sites/${site.key}/handouts/${handout.key}`} class="text button">
-      {t('actions:cancel')}
-    </a>
-    <button type="submit" class="button" disabled={!changed}>
-      {t('actions:save')}
-    </button>
-  </div>
-
 </form>
 
+{#snippet frontmatter()}
+  <label>
+    {t('entries:handout.title')}
+    <input
+      type="text"
+      name="title"
+      value={handout.title}
+      oninput={titleChanged}
+    />
+  </label>
+
+  <section class="actions">
+    <button type="button" class="text" onclick={cancel}>
+      {t('actions:cancel')}
+    </button>
+    <button type="submit" class="button" disabled={!dirty}>
+      {t('actions:save')}
+    </button>
+  </section>
+{/snippet}
+
 <style>
-  /*
-   * As `ThreadEditorForm`: a full-height flex column so `CnEditor` gets the
-   * space left over from the fixed-height rows around it.
-   */
-  .editor-form {
+  .actions {
     display: flex;
-    flex-direction: column;
-    block-size: 100%;
-    min-block-size: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: var(--cn-gap);
+    margin-block-start: var(--cn-line);
   }
 </style>

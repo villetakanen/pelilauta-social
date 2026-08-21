@@ -142,44 +142,22 @@ export function buildEditorTheme(isDark: boolean) {
 }
 
 /**
- * Markdown highlighting takes its sizes from the typography tokens, so a
- * heading the reader types is the size that heading will be. Nothing here
- * states a measurement of its own.
+ * A heading the reader types is the heading the page renders: each takes the
+ * design system's text-h class, so typography.css states the step once —
+ * size, weight, colour, and the downshift a narrow container asks for. An
+ * inline size here would hold the desktop step on a phone while the page
+ * around it stepped down.
  *
- * The mono face is the field's, and it stays the face at every step: these
- * rules change size, weight and colour, never the family. Inline code is the
- * one exception in reverse — already mono, so it is marked by a surface behind
- * it instead.
+ * The mono face is the field's, and it stays the face at every step: nothing
+ * here changes the family, and the text-h classes state none. Inline code is
+ * the one exception in reverse — already mono, so it is marked by a surface
+ * behind it instead.
  */
 export const markdownHighlightStyle = HighlightStyle.define([
-  {
-    tag: t.heading1,
-    fontSize: 'var(--cn-font-size-h1)',
-    fontWeight: 'var(--cn-font-weight-h1)',
-    lineHeight: 'var(--cn-line-height-h1)',
-    color: 'var(--cn-text-heading)',
-  },
-  {
-    tag: t.heading2,
-    fontSize: 'var(--cn-font-size-h2)',
-    fontWeight: 'var(--cn-font-weight-h2)',
-    lineHeight: 'var(--cn-line-height-h2)',
-    color: 'var(--cn-text-heading)',
-  },
-  {
-    tag: t.heading3,
-    fontSize: 'var(--cn-font-size-h3)',
-    fontWeight: 'var(--cn-font-weight-h3)',
-    lineHeight: 'var(--cn-line-height-h3)',
-    color: 'var(--cn-text-subheading)',
-  },
-  {
-    tag: t.heading4,
-    fontSize: 'var(--cn-font-size-h4)',
-    fontWeight: 'var(--cn-font-weight-h4)',
-    lineHeight: 'var(--cn-line-height-h4)',
-    color: 'var(--cn-text-subheading)',
-  },
+  { tag: t.heading1, class: 'text-h1' },
+  { tag: t.heading2, class: 'text-h2' },
+  { tag: t.heading3, class: 'text-h3' },
+  { tag: t.heading4, class: 'text-h4' },
   {
     tag: t.strong,
     fontWeight: 'var(--cn-font-weight-emphasis)',

@@ -36,28 +36,20 @@ const { title, shortTitle, description, backHref } = Astro.props;
         title={title ?? ''}
         shortTitle={shortTitle}
         modal
-        backLabel={t('common:back')}
+        backLabel={t('common:action.back')}
       />
     </CnAppChrome>
 
     <!--
-      The editor is a canvas that takes the screen, not flowing content in a
-      layout container, so `<main>` here is not `.app-main`: that host carries
-      content-container clearance (`content-containers.css`) for stacked prose
-      and grids, and would put a page-scrolling reader above the editor rather
-      than a fixed canvas below the bar.
-
-      This is the clearance decision `plans/debt/editor-page-keeps-the-cyan-bar.md`
-      was waiting on: an editor route gets its own local host, sized to the
-      viewport rather than to its content. `box-sizing: border-box` with
-      `padding-block-start: var(--cn-app-bar-height)` reserves the fixed bar's
-      depth inside a box already capped to the viewport, so the content area
-      left over is exactly the space below the bar — no separate subtraction to
-      keep in sync with it. `--cn-keyboard-inset` shortens that same box the way
-      `CnAppChrome` shortens itself, so an on-screen keyboard covers no more of
-      the editor than it already covers of the bar.
+      An editor route's geometry belongs to the shell the view mounts
+      (`packages/editor/CnEditorShell.svelte`): it locks itself to the viewport,
+      clears the fixed bar by the token that sizes it, and locks the page so the
+      canvas is what scrolls. So `<main>` here carries the landmark and nothing
+      else — not `.app-main`, whose clearance and rhythm are for stacked prose,
+      and no local geometry of its own, which would reserve the bar's depth a
+      second time inside a shell that already has.
     -->
-    <main class="editor-main">
+    <main>
       <!--
         A visually-hidden heading, so every editor route carries one without
         repeating it in each view: the bar already carries the same words as a
@@ -72,10 +64,9 @@ const { title, shortTitle, description, backHref } = Astro.props;
     {/*
       The design system's back action reports the reader's intent and navigates
       nothing, so where they land is decided here — the same contract
-      ModalPage's routes get. Leaving an editor with unsaved work leaves, as
-      v18 does: guarding the departure is application logic the design system
-      does not decide (`plans/editor.md`), and no editor view asks for a guard
-      today.
+      ModalPage's routes get. The shell stops this event while its document is
+      dirty and asks, then re-dispatches it once the writer has said to leave,
+      so this handler is the one place a departure lands either way.
     */}
     <script is:inline define:vars={{ backHref }}>
       document.addEventListener('cn-back', () => {
@@ -95,39 +86,18 @@ const { title, shortTitle, description, backHref } = Astro.props;
   </body>
 </html>
 
-<style is:global>
-  /*
-   * The editor owns the viewport: the page itself must not scroll, or the
-   * fixed chrome and the height-locked `.editor-main` below would disagree
-   * with what the browser actually lets the reader scroll to.
-   */
-  html,
-  body {
-    block-size: 100%;
-    overflow: hidden;
-  }
-</style>
-
 <style>
-  .editor-main {
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    block-size: calc(100dvh - var(--cn-keyboard-inset));
-    padding-block-start: var(--cn-app-bar-height);
-    overflow: hidden;
-  }
-
   /*
-   * The slotted view is a Svelte island, and the preflight renders it
-   * `display: contents` (`preflight.css`) — so the flex child the editor
-   * needs to reach through to is the island's one element, exactly as
-   * `content-containers.css` reaches through it for a content container.
+   * Cyan pads a bare `main`, and the design site — which carries no Cyan —
+   * does not, so the shell measured right in its book and stood inset by
+   * Cyan's padding here, overflowing the viewport it had sized itself to.
+   * The landmark states its own box rather than inheriting one: the shell
+   * sizes itself against the viewport, so anything between it and the
+   * viewport has to be nothing.
    */
-  .editor-main > :global(*),
-  .editor-main > :global(astro-island > *) {
-    flex: 1;
-    min-block-size: 0;
+  main {
+    margin: 0;
+    padding: 0;
   }
 
   .visually-hidden {

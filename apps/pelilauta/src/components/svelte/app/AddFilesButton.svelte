@@ -29,8 +29,14 @@ const handleButtonClick = () => {
 };
 </script>
 
+<!--
+  The name matters beyond the form: the editor shell's dirty diff records
+  every named control in its region, and an anonymous one collides with any
+  other anonymous control that later joins it.
+-->
 <input
   type="file"
+  name="files"
   onchange={handleFileChange}
   style="display: none"
   bind:this={fileInputRef}

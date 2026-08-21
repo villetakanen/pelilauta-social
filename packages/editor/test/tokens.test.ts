@@ -59,9 +59,15 @@ function customProperties(source: string): string[] {
   return stripComments(source).match(CUSTOM_PROPERTY) ?? [];
 }
 
+const editorShell = readFileSync(
+  join(packageRoot, 'CnEditorShell.svelte'),
+  'utf8',
+);
+
 describe.each([
   ['editorTheme.ts', editorTheme],
   ['styles/editor.css', editorCss],
+  ['CnEditorShell.svelte', editorShell],
 ])('%s', (_name, source) => {
   const properties = customProperties(source);
 
@@ -69,9 +75,12 @@ describe.each([
     expect(properties.length).toBeGreaterThan(0);
   });
 
-  test('every custom property is --cn-* or --_editor-*', () => {
+  test('every custom property is --cn-* or package-private', () => {
     const outliers = properties.filter(
-      (name) => !name.startsWith('--cn-') && !name.startsWith('--_editor-'),
+      (name) =>
+        !name.startsWith('--cn-') &&
+        !name.startsWith('--_editor-') &&
+        !name.startsWith('--_shell-'),
     );
     expect(outliers).toEqual([]);
   });

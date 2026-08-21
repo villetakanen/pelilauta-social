@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: live
 ---
 
 # Editor shell
@@ -30,8 +30,10 @@ The inline geometry is `content-golden`'s, taken from
 `specs/design-system/content-container-layouts/spec.md` rather than restated —
 the text column is the primary, the frontmatter region the secondary — with
 one stated addition: the gutter stands at the text column's inline start,
-outside the measure, so the canvas track is the measure plus the gutter and
-the text aligns where the published page's text lands. The block axis is the
+reaching outside the measure by the surplus the viewport offers, so the text
+aligns where the published page's text lands. What finds no surplus stands
+inside the track and narrows the text instead — a narrow viewport clips
+nothing. The block axis is the
 shell's: a content container sizes a region to its content, and this view
 does the opposite.
 
@@ -60,7 +62,9 @@ A consumer that slots no fields gets no region, and the canvas keeps its
 column.
 
 A departure while dirty through the bar's back asks on the shell's surface
-before it proceeds. Departure by the browser's means — closing, reloading,
+before it proceeds. A consumer control that means departure — a cancel —
+reports its intent to the shell and gets the same ask; a `cn-back` born
+inside the shell is a control dismissing itself, and passes untouched. Departure by the browser's means — closing, reloading,
 navigating away — gets the browser's native guard, whose form the shell cannot
 shape. A clean departure proceeds silently either way. Editing after marking
 clean makes the document dirty again.
@@ -72,9 +76,9 @@ canvas stays above it.
 
 ### Definition of Done
 
-- At every viewport width the text stands at the published page's column —
-  the measure, placed as `content-golden` places it — with the gutter outside
-  it.
+- At every viewport width the text stands at the published page's column,
+  placed as `content-golden` places it, and the gutter reaches outside the
+  measure wherever the viewport has the surplus for it.
 - A dirty document does not leave without the writer's say; a clean one leaves
   without a question.
 

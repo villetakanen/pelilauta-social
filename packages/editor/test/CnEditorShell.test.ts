@@ -33,6 +33,7 @@ let target: HTMLDivElement;
 let instance: {
   markClean: () => void;
   isDirty: () => boolean;
+  requestBack: () => void;
 } & Record<string, unknown>;
 
 beforeEach(() => {
@@ -117,6 +118,29 @@ test('a dirty document asks before leaving, and the consumer never sees the back
   expect(consumerSaw).toBe(false);
 });
 
+test('a cn-back born inside the shell passes a dirty document untouched', () => {
+  /*
+   * A control slotted into the frontmatter region — a lightbox closing
+   * itself — reports its dismissal with the same bubbling cn-back the bar
+   * uses for departure. Only the bar's is a departure: the shell must let
+   * the inside one pass to its own listeners, dirty or not.
+   */
+  instance = mount(ShellHarness, { target, props: { value: 'a' } });
+  flushSync();
+  editBody('b');
+
+  const inside = titleField();
+  let innerSaw = false;
+  inside.addEventListener('cn-back', () => {
+    innerSaw = true;
+  });
+  inside.dispatchEvent(new CustomEvent('cn-back', { bubbles: true }));
+  flushSync();
+
+  expect(innerSaw).toBe(true);
+  expect(confirmDialog().open).toBe(false);
+});
+
 test('a clean document leaves without asking, and the consumer sees the back action', () => {
   instance = mount(ShellHarness, { target, props: { value: 'a' } });
   flushSync();
@@ -187,6 +211,33 @@ test('confirming departure re-dispatches cn-back with confirmed: true, and the c
   document.removeEventListener('cn-back', consumerHandler);
 
   expect(seenDetail?.confirmed).toBe(true);
+});
+
+test('requestBack asks while dirty, and leaves as a confirmed cn-back when clean', () => {
+  instance = mount(ShellHarness, { target, props: { value: 'a' } });
+  flushSync();
+  editBody('b');
+
+  instance.requestBack();
+  flushSync();
+  expect(confirmDialog().open).toBe(true);
+  confirmDialog().close();
+
+  instance.markClean();
+  flushSync();
+  let consumerSaw = false;
+  const consumerHandler = (event: Event) => {
+    consumerSaw =
+      (event as CustomEvent<{ confirmed?: boolean }>).detail?.confirmed ===
+      true;
+  };
+  document.addEventListener('cn-back', consumerHandler);
+  instance.requestBack();
+  flushSync();
+  document.removeEventListener('cn-back', consumerHandler);
+
+  expect(consumerSaw).toBe(true);
+  expect(confirmDialog().open).toBe(false);
 });
 
 test('a consumer that slots no frontmatter renders no frontmatter region', () => {

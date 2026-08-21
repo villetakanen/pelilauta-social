@@ -31,6 +31,10 @@ export function markClean(): void {
 export function isDirty(): boolean {
   return shell?.isDirty() ?? false;
 }
+
+export function requestBack(): void {
+  shell?.requestBack();
+}
 </script>
 
 {#snippet frontmatter()}

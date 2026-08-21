@@ -6,7 +6,11 @@ interface Props {
   channels: Channel[];
   channelKey?: string;
   disabled?: boolean;
-  onchange: (event: Event) => void;
+  /**
+   * Optional: the editor shell derives dirtiness from this select's value, so a
+   * consumer that only wanted to know it changed no longer has to be told.
+   */
+  onchange?: (event: Event) => void;
 }
 
 const { channels, channelKey, disabled = false, onchange }: Props = $props();

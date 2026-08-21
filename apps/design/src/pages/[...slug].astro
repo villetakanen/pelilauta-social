@@ -40,7 +40,8 @@ const runtime = 'runtime' in entry.data ? entry.data.runtime : undefined;
  * through Specimen rather than Book's prose column — see
  * src/layouts/Specimen.astro. It states where its back action lands; the index
  * is the fallback, because a specimen with nowhere stated still has to leave
- * somewhere.
+ * somewhere. The props below are the union of the two layouts'; each reads
+ * its share and drops the rest.
  */
 const standalone = entry.data.standalone ?? false;
 const Layout = standalone ? Specimen : Book;

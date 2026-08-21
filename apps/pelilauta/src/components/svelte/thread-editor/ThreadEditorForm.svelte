@@ -1,8 +1,17 @@
 <script lang="ts">
+/**
+ * Thread authoring, for both the create and the edit route.
+ *
+ * The view is a consumer of the editor shell: it slots the thread's frontmatter
+ * — title, channel, attachments, the tags the content produced — and the
+ * actions, and the shell decides the geometry and whether the document is
+ * dirty. The shell also asks before a dirty departure, so this form saves and
+ * navigates, and guards nothing itself.
+ */
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import Icon from '@design-system/components/Icon.svelte';
-import CnEditor from '@editor/CnEditor.svelte';
+import CnEditorShell from '@editor/CnEditorShell.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
@@ -26,11 +35,18 @@ const { thread, channelKey, channels }: Props = $props();
 
 // Component level state
 let saving = $state(false);
-let changed = $state(false);
 let files = $state<File[]>([]);
 let existingImages = $state<Array<{ url: string; alt: string }>>([]);
 let tags = $state<string[]>(thread?.tags || []);
 let markdownContent = $state(thread?.markdownContent || '');
+
+/*
+ * Dirtiness is the shell's, reported here rather than tracked: the fields are
+ * native controls inside the region it reads, so a title edited back to what it
+ * was leaves the send action disabled, which a set-once flag never managed.
+ */
+let shell: CnEditorShell | undefined = $state();
+let dirty = $state(false);
 
 // Derived state
 const previews = $derived.by(() => {
@@ -56,6 +72,7 @@ onMount(() => {
 async function handleSubmit(event: Event) {
   logDebug('ThreadEditorForm', 'handleSubmit', event);
   event.preventDefault();
+  if (saving || !dirty) return;
   saving = true;
   const form = new FormData(event.target as HTMLFormElement);
   const data: Partial<Thread> = {
@@ -71,6 +88,13 @@ async function handleSubmit(event: Event) {
   try {
     const slug = await submitThreadUpdate(data, files);
     saving = false;
+    /*
+     * Clean before leaving. The write has landed, so the document the shell is
+     * holding is saved — and navigating away from a shell that still reads
+     * dirty would raise the browser's guard over a departure the writer
+     * asked for.
+     */
+    shell?.markClean();
     window.location.href = `/threads/${slug}`;
   } catch (error) {
     logError('Error saving thread', error);
@@ -78,24 +102,10 @@ async function handleSubmit(event: Event) {
     saving = false;
   }
 }
-async function handleChange() {
-  if (!changed) {
-    changed = true;
-  }
-}
 
 async function handleContentChange(content: string) {
   markdownContent = content;
   tags = extractTags(content);
-  handleChange();
-}
-
-function onChannelChange(event: Event) {
-  const select = event.target as HTMLSelectElement;
-  const selectedChannel = select.value;
-  if (selectedChannel !== channelKey) {
-    handleChange();
-  }
 }
 
 function onAddFiles(newFiles: File[]) {
@@ -103,45 +113,63 @@ function onAddFiles(newFiles: File[]) {
     return;
   }
   files = [...files, ...newFiles];
-  handleChange();
+}
+
+/*
+ * Cancel is a departure, so it asks the shell, which answers for whether the
+ * writer needs asking first and leaves through the route's one handler.
+ */
+function cancel() {
+  shell?.requestBack();
 }
 </script>
 
-<form
-  id="thread-editor"
-  class="editor-form"
-  onsubmit={handleSubmit}>
+<form id="thread-editor" onsubmit={handleSubmit}>
+  <CnEditorShell
+    bind:this={shell}
+    bind:value={markdownContent}
+    name="markdownContent"
+    disabled={saving}
+    placeholder={t('entries:thread.placeholders.content')}
+    onChange={handleContentChange}
+    onDirtyChange={(next) => {
+      dirty = next;
+    }}
+    confirmTitle={t('common:editor.unsaved.title')}
+    confirmBody={t('common:editor.unsaved.body')}
+    confirmLeave={t('common:editor.unsaved.leave')}
+    confirmStay={t('common:editor.unsaved.stay')}
+    frontmatter={frontmatter}
+  />
+</form>
 
-  <!-- Toolbar for title, channel, and add files button -->
-  <section class="toolbar">
-    <label class="grow">
+{#snippet frontmatter()}
+  <label>
     {t('entries:thread.title')}
-      <input
-        type="text"
-        name="title"
-        disabled={saving}
-        placeholder={t('entries:thread.placeholders.title')}
-        onchange={handleChange}
-        value={thread?.title || ''}
-      />
-    </label>
-    <ChannelSelect 
-      channels={channels}
-      channelKey={channelKey}
+    <input
+      type="text"
+      name="title"
       disabled={saving}
-      onchange={onChannelChange}
+      placeholder={t('entries:thread.placeholders.title')}
+      value={thread?.title || ''}
     />
-    <AddFilesButton
-      accept="image/*"
-      multiple={true}
-      addFiles={onAddFiles}
-      disabled={saving}
-    />
-  </section>
+  </label>
 
-  <!-- Lightbox for attachments like images -->
+  <ChannelSelect
+    channels={channels}
+    channelKey={channelKey}
+    disabled={saving}
+  />
+
+  <AddFilesButton
+    accept="image/*"
+    multiple={true}
+    addFiles={onAddFiles}
+    disabled={saving}
+  />
+
   {#if previews.length}
-    <section style="container: images / inline-size; width: min(420px,90vw); margin: 0 auto; margin-bottom: var(--cn-gap)">
+    <section class="attachments">
       <CnLightbox
         images={previews}
         openLabel={t('actions:openImage')}
@@ -149,15 +177,6 @@ function onAddFiles(newFiles: File[]) {
       />
     </section>
   {/if}
-
-    <CnEditor
-      bind:value={markdownContent}
-      name="markdownContent"
-      disabled={saving}
-      onChange={handleContentChange}
-      placeholder={t('entries:thread.placeholders.content')}
-    />
-
 
   {#if tags.length > 0}
     <section class="flex elevation-1 p-1">
@@ -167,17 +186,16 @@ function onAddFiles(newFiles: File[]) {
     </section>
   {/if}
 
-  <section class="toolbar">
+  <section class="actions">
     {#if thread?.key}
       <button type="button" disabled={saving} class="text">
         {t('actions:delete')}
       </button>
     {/if}
-    <button type="button" disabled={saving} class="text">
+    <button type="button" disabled={saving} class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
-    <div class="grow"></div>
-    <button type="submit" disabled={saving || !changed} data-testid="send-thread-button">
+    <button type="submit" disabled={saving || !dirty} data-testid="send-thread-button">
       {#if saving}
         <CnLoader inline noun="send" />
       {:else}
@@ -186,22 +204,23 @@ function onAddFiles(newFiles: File[]) {
       <span>{t('actions:send')}</span>
     </button>
   </section>
-</form>
+{/snippet}
 
 <style>
   /*
-   * The editor route's shell hands this form the full canvas
-   * (`EditorPage.astro`'s `.editor-main`); the form fills it as a flex
-   * column so `CnEditor` — the one child that grows, by its own CSS — gets
-   * the space left over from the toolbars around it, instead of the page
-   * scrolling past the form's natural height as `.content-editor` did.
+   * The previews answer the region holding them rather than a width of their
+   * own: the region is the small measure beside the canvas and the full page
+   * stacked above it, and a lightbox sized for one reads wrong in the other.
    */
-  .editor-form {
+  .attachments {
+    container: images / inline-size;
+  }
+
+  .actions {
     display: flex;
-    flex-direction: column;
-    block-size: 100%;
-    min-block-size: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: var(--cn-gap);
+    margin-block-start: var(--cn-line);
   }
 </style>
-

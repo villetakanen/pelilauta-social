@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: live
 ---
 
 # CnEditor
@@ -33,8 +33,10 @@ The editor is the field `specs/design-system/fields/spec.md` governs, rather tha
 a surface holding one: it reads that spec's colour roles, type size and
 indicator — in the mono face `specs/design-system/fonts/spec.md` decides — so
 the surface a reader types into is one surface across the system.
-Markdown structure is painted from the typography tokens, so a heading in the
-editor and a heading on the page agree. Selection paints
+Markdown structure takes the typography element classes — a heading the
+reader types wears the page's `text-h` step, the narrow-container downshift
+included — so a heading in the editor and a heading on the page agree at
+every width. Selection paints
 `--cn-color-selection`, because the editor draws its own selection layer and the
 browser's default cannot reach it.
 

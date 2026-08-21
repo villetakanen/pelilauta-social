@@ -33,6 +33,7 @@ export type ReaderRole = keyof typeof STORAGE_STATE_PATHS;
  */
 export async function openReaderPage(
   role: ReaderRole = 'existingUser',
+  options: { viewport?: { width: number; height: number } } = {},
 ): Promise<{
   browser: Browser;
   page: Page;
@@ -41,6 +42,7 @@ export async function openReaderPage(
   const context = await browser.newContext({
     baseURL: BASE_URL,
     storageState: STORAGE_STATE_PATHS[role],
+    ...(options.viewport ? { viewport: options.viewport } : {}),
   });
   const page = await context.newPage();
   return { browser, page };
