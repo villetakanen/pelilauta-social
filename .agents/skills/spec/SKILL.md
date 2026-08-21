@@ -14,21 +14,26 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
 
 ## Procedure
 
-1. Decide if a a spec, or an amendment to a spec is needed. Small changes
+1. Decide if a spec, or an amendment to a spec is needed. Small changes
    trivially inferrable from the codebase, and conforming to a spec
    do not need a spec change. If the work can be done, without a spec
    change, always vocalize the decision.
-2. Existing specs, implementation, and documents of the v20 act as
-   the primary source for design-system intent and vision, where
-   these have not been overridden with the local work.
+2. Existing specs, implementation, and documents of v20 are the primary
+   source for what the design system does. They carry intent only where
+   the human confirms it: v20 canonicalised its mistakes. Where they
+   carry nothing, or carry an implementation the human or a study calls
+   faulty, the intent comes from the human and the source search stops —
+   an absent or broken feature is not a settled decision. A value
+   repeated across the versions is one value in several copies, not
+   corroboration.
 3. Existing specs, implementation, and documents of the v18 act as
    the primary source for application, business and solution logic
    and features for the pelilauta app. Where these conflict with the
    v20 or current v21 design intent, ask the user for a clarification.
 4. Where the spec can not be proposed from the v20 and v18 sources,
-   always ask user for clarificatioons.
+   always ask the user for clarifications.
 5. Create or update `specs/<domain>/<capability>/spec.md` for the spec.
-   where the capabiity has sub-features, these are placed in sub-folder
+   where the capability has sub-features, these are placed in sub-folder
    of the capability: `specs/<domain>/<capability>/<sub-feature>/spec.md`. A spec can be split to multiple children, inside the folder, as
   long as these are listed in the parent
 6. Encode the status of the document in the frontmatter:
