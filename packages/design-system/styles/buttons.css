@@ -121,10 +121,10 @@ a.button[href]:not(
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-button-light),
-    var(--cn-button)
+    var(--cn-color-button-light),
+    var(--cn-color-button)
   );
-  color: var(--cn-on-button);
+  color: var(--cn-color-on-button);
 }
 
 :is(button, a.button[href]).cta:not(
@@ -139,10 +139,10 @@ a.button[href]:not(
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-button-cta),
-    var(--cn-button)
+    var(--cn-color-button-cta),
+    var(--cn-color-button)
   );
-  color: var(--cn-on-button-cta);
+  color: var(--cn-color-on-button-cta);
 }
 
 :is(button, a.button[href]).text:not(
@@ -155,8 +155,8 @@ a.button[href]:not(
     .cn-reaction-button
   ) {
   background-image: none;
-  background-color: var(--cn-button-text);
-  color: var(--cn-on-surface);
+  background-color: var(--cn-color-button-text);
+  color: var(--cn-color-on-surface);
   box-shadow: none;
 }
 
@@ -187,7 +187,7 @@ a.button[href]:not(
     var(--_button-secondary-light),
     var(--_button-secondary)
   );
-  color: var(--cn-on-button);
+  color: var(--cn-color-on-button);
 }
 
 /*
@@ -238,7 +238,7 @@ a.button[href]:not(
     .cn-lightbox *,
     .cn-reaction-button
   ):hover::after {
-  background-color: var(--cn-hover);
+  background-color: var(--cn-color-hover);
   transition-timing-function: var(--_enter-easing);
 }
 
@@ -260,7 +260,7 @@ a.button[href]:not(
     .cn-lightbox *,
     .cn-reaction-button
   ):active::after {
-  background-color: var(--cn-active);
+  background-color: var(--cn-color-active);
 }
 
 button:not(
@@ -303,7 +303,7 @@ a.button[href]:not(
     .cn-lightbox *,
     .cn-reaction-button
   ):focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 

@@ -30,7 +30,7 @@ html {
 }
 
 .book th {
-  color: var(--cn-text-low);
+  color: var(--cn-color-text-low);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -276,7 +276,7 @@ function keydown(event: KeyboardEvent) {
     display: grid;
     grid-template-rows: minmax(0, auto) minmax(min-content, 1fr);
     border-radius: 0;
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
     pointer-events: auto;
   }
 

@@ -203,11 +203,11 @@ describe('the rules that read it', () => {
   test('headings take the colour roles the theme declares', () => {
     const theme = declarations(read('../styles/semantic.css'));
     for (const [selector, role] of [
-      ['h1', '--cn-text-heading'],
-      ['h2', '--cn-text-heading'],
-      ['h3', '--cn-text-subheading'],
-      ['h4', '--cn-text-subheading'],
-      ['.text-title', '--cn-text-heading'],
+      ['h1', '--cn-color-text-heading'],
+      ['h2', '--cn-color-text-heading'],
+      ['h3', '--cn-color-text-subheading'],
+      ['h4', '--cn-color-text-subheading'],
+      ['.text-title', '--cn-color-text-heading'],
     ] as const) {
       expect(theme.has(role), `${role} is not a theme role`).toBe(true);
       expect(document.get(selector), selector).toContain(`color: var(${role})`);

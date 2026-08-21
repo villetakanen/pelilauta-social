@@ -48,10 +48,11 @@ needs it.
 `--cn-*` namespace: [ADR 0002](adrs/0002-preserve-v20-design-system-names.md)
 preserves it because a theme replaces a whole chroma family while keeping its
 lightness steps, so the contrast a semantic role depends on survives the swap.
-`--cn-*` names a semantic role that depends on chroma; it carries no numbered step.
-Do not introduce `--cyan-*`, undocumented `--color-*`, or a numbered
-`--cn-color-{family}-{step}` token — the accidental vocabulary that repeats
-`--chroma-*` inside the `--cn-*` namespace.
+`--cn-*` names a semantic role that depends on chroma; every colour role carries
+`--cn-color-{role}`, and no role carries a numbered step. Do not introduce
+`--cyan-*`, undocumented `--color-*`, or a numbered `--cn-color-{family}-{step}`
+token — the accidental vocabulary that repeats `--chroma-*` inside the `--cn-*`
+namespace.
 `styles/compat/cyan-4.css` declares the aliases Cyan itself reads, and leaves with it.
 
 ### CSS Classes
@@ -74,11 +75,11 @@ system changes how a state looks; it does not rename, merge or invent states.
 | Selector | Meaning | Token |
 | :--- | :--- | :--- |
 | `::selection` | Text the reader has selected. | `--cn-selection`, `--cn-on-selection` |
-| `:hover` | A pointer rests on the control. | `--cn-hover` |
-| `:active` | The control is being activated. | `--cn-active` |
-| `:focus-visible` | Keyboard focus rests on the control. | `--cn-focus-ring` |
-| `[aria-current]` | This is the current destination. | `--cn-indicator`, `--cn-on-indicator` |
-| `[aria-pressed]` | This toggle is on. | `--cn-indicator`, `--cn-on-indicator` |
+| `:hover` | A pointer rests on the control. | `--cn-color-hover` |
+| `:active` | The control is being activated. | `--cn-color-active` |
+| `:focus-visible` | Keyboard focus rests on the control. | `--cn-color-focus-ring` |
+| `[aria-current]` | This is the current destination. | `--cn-color-indicator`, `--cn-color-on-indicator` |
+| `[aria-pressed]` | This toggle is on. | `--cn-color-indicator`, `--cn-color-on-indicator` |
 | `[aria-expanded]` | This disclosure is open. | Indicator glyph; no surface. |
 
 A row reserves a name; its token is declared when a consumer first needs it.

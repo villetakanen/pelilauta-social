@@ -90,7 +90,7 @@
   padding-inline: var(--cn-grid);
   border: none;
   background: none;
-  color: var(--cn-on-surface);
+  color: var(--cn-color-on-surface);
   font-family: inherit;
   font-size: var(--cn-font-size-button);
   font-weight: var(--cn-font-weight-button);
@@ -130,11 +130,11 @@
  * gradient to preserve.
  */
 .cn-menu-container :is(a[href], button):hover {
-  background-color: var(--cn-hover);
+  background-color: var(--cn-color-hover);
 }
 
 .cn-menu-container :is(a[href], button):active {
-  background-color: var(--cn-active);
+  background-color: var(--cn-color-active);
 }
 
 /*
@@ -142,7 +142,7 @@
  * outside the container's rounded corner instead of around the row.
  */
 .cn-menu-container :is(a[href], button):focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: -2px;
 }
 

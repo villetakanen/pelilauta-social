@@ -50,17 +50,17 @@ describe('the colour maths', () => {
 
 describe('resolving a semantic token', () => {
   test('light-dark() yields a different colour per mode', () => {
-    const light = resolve('var(--cn-surface)', 'light', tokens);
-    const dark = resolve('var(--cn-surface)', 'dark', tokens);
+    const light = resolve('var(--cn-color-surface)', 'light', tokens);
+    const dark = resolve('var(--cn-color-surface)', 'dark', tokens);
     expect(light).toBeDefined();
     expect(dark).toBeDefined();
     expect(light).not.toEqual(dark);
   });
 
   test('an alias chain resolves through to the reference layer', () => {
-    // --cn-background is var(--cn-surface), which is light-dark() over two
+    // --cn-color-background is var(--cn-color-surface), which is light-dark() over two
     // reference tokens. Two hops, and the arm must survive both.
-    expect(resolve('var(--cn-background)', 'dark', tokens)).toEqual(
+    expect(resolve('var(--cn-color-background)', 'dark', tokens)).toEqual(
       resolve('var(--chroma-surface-20)', 'dark', tokens),
     );
   });
@@ -80,11 +80,11 @@ describe('resolving a semantic token', () => {
 
 describe('body text meets AA on every base surface', () => {
   const cases = [
-    ['--cn-text', '--cn-surface'],
-    ['--cn-text', '--cn-background'],
-    ['--cn-on-surface', '--cn-surface'],
-    ['--cn-text-low', '--cn-surface'],
-    ['--cn-link', '--cn-surface'],
+    ['--cn-color-text', '--cn-color-surface'],
+    ['--cn-color-text', '--cn-color-background'],
+    ['--cn-color-on-surface', '--cn-color-surface'],
+    ['--cn-color-text-low', '--cn-color-surface'],
+    ['--cn-color-link', '--cn-color-surface'],
   ] as const;
 
   for (const [foreground, background] of cases) {
@@ -148,13 +148,18 @@ describe('the step gap predicts contrast', () => {
 describe('the elevation-4 guardrail', () => {
   // Level 4 leaves the surface family, so it is the one level whose foreground
   // pairing cannot be read off the step gap. Surface sets no foreground, which
-  // means an elevation-4 element with no override inherits `--cn-text` from the
+  // means an elevation-4 element with no override inherits `--cn-color-text` from the
   // body. That inherited default is the pairing that has to hold: a consumer who
   // forgets to choose gets it, and no rule anywhere else catches them.
 
   test('the inherited body foreground is readable on it', () => {
     for (const mode of ['light', 'dark'] as const) {
-      const { ratio } = measure('--cn-text', '--cn-surface-4', mode, tokens);
+      const { ratio } = measure(
+        '--cn-color-text',
+        '--cn-color-surface-4',
+        mode,
+        tokens,
+      );
       expect(ratio, `${mode} at ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(
         4.5,
       );
@@ -163,8 +168,16 @@ describe('the elevation-4 guardrail', () => {
 
   test('the roles a consumer may raise to are readable on it', () => {
     for (const mode of ['light', 'dark'] as const) {
-      for (const foreground of ['--cn-text-high', '--cn-text-heading']) {
-        const { ratio } = measure(foreground, '--cn-surface-4', mode, tokens);
+      for (const foreground of [
+        '--cn-color-text-high',
+        '--cn-color-text-heading',
+      ]) {
+        const { ratio } = measure(
+          foreground,
+          '--cn-color-surface-4',
+          mode,
+          tokens,
+        );
         expect(
           ratio,
           `${foreground} in ${mode} at ${ratio.toFixed(2)}:1`,
@@ -177,8 +190,13 @@ describe('the elevation-4 guardrail', () => {
     // Asserted in both directions. A palette change that makes these pass means
     // the specs and books telling consumers to raise their foreground at this
     // level are out of date, and this test is where that is noticed.
-    for (const foreground of ['--cn-text-low', '--cn-link']) {
-      const { ratio } = measure(foreground, '--cn-surface-4', 'dark', tokens);
+    for (const foreground of ['--cn-color-text-low', '--cn-color-link']) {
+      const { ratio } = measure(
+        foreground,
+        '--cn-color-surface-4',
+        'dark',
+        tokens,
+      );
       expect(ratio, `${foreground} at ${ratio.toFixed(2)}:1`).toBeLessThan(4.5);
     }
   });
@@ -187,33 +205,38 @@ describe('the elevation-4 guardrail', () => {
 describe('the indicator marks persistent state legibly', () => {
   // The foreground identifies the current destination and the tint reinforces
   // it, so the foreground is what has to hold: opaque, and readable on every
-  // surface a chrome action stands on. `--cn-surface` is the resting chrome and
-  // `--cn-surface-4` is what a covering tray paints, which is the tighter of the
+  // surface a chrome action stands on. `--cn-color-surface` is the resting chrome and
+  // `--cn-color-surface-4` is what a covering tray paints, which is the tighter of the
   // two in Dark.
   //
   // The indicator surface is one neutral step off the surface it sits on, so it
   // is a reinforcement rather than the carrier and is not measured against a 3:1
   // threshold it was never asked to meet. A brand tint would not meet one
-  // either: composited over the dark `--cn-surface-4`, primary at 20% reaches
+  // either: composited over the dark `--cn-color-surface-4`, primary at 20% reaches
   // 1.3:1 and at 60% only 2.4:1, against a hover wash at 1.2:1 — and what
   // separates those is hue, which this luminance-only maths cannot see and a
   // reader with a colour-vision deficiency may not either.
 
   for (const mode of ['light', 'dark'] as const) {
-    for (const surface of ['--cn-surface', '--cn-surface-4']) {
-      test(`--cn-on-indicator reaches AA on ${surface}, ${mode}`, () => {
-        const { ratio } = measure('--cn-on-indicator', surface, mode, tokens);
+    for (const surface of ['--cn-color-surface', '--cn-color-surface-4']) {
+      test(`--cn-color-on-indicator reaches AA on ${surface}, ${mode}`, () => {
+        const { ratio } = measure(
+          '--cn-color-on-indicator',
+          surface,
+          mode,
+          tokens,
+        );
         expect(ratio, `${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
       });
     }
 
-    test(`--cn-on-indicator is not the foreground a non-current action inherits, ${mode}`, () => {
+    test(`--cn-color-on-indicator is not the foreground a non-current action inherits, ${mode}`, () => {
       // Identification cannot rest on the tint alone, so the foreground has to
       // actually change. Resolved colours, not declaration text, so two
       // spellings of one colour cannot pass.
-      const indicated = resolve('var(--cn-on-indicator)', mode, tokens);
+      const indicated = resolve('var(--cn-color-on-indicator)', mode, tokens);
       expect(indicated).toBeDefined();
-      for (const inherited of ['--cn-on-surface', '--cn-text']) {
+      for (const inherited of ['--cn-color-on-surface', '--cn-color-text']) {
         expect(indicated).not.toEqual(
           resolve(`var(${inherited})`, mode, tokens),
         );

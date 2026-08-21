@@ -22,7 +22,7 @@ const states = [
     attribute: undefined,
     label: 'Read the typography principles',
     href: '/principles/typography',
-    treatment: 'Underlined, using --cn-link.',
+    treatment: 'Underlined, using --cn-color-link.',
     purpose: 'Keeps navigation identifiable without relying on colour.',
   },
   {
@@ -38,7 +38,7 @@ const states = [
     attribute: 'hover',
     label: 'Explore colour and surface roles',
     href: '/principles/color-system',
-    treatment: 'Underlined, using --cn-link-hover.',
+    treatment: 'Underlined, using --cn-color-link-hover.',
     purpose: 'Confirms the pointer target.',
   },
   {
@@ -46,7 +46,7 @@ const states = [
     attribute: 'active',
     label: 'Review the font system',
     href: '/base/fonts',
-    treatment: 'Underlined, using --cn-link-active.',
+    treatment: 'Underlined, using --cn-color-link-active.',
     purpose: 'Confirms activation while it occurs.',
   },
   {
@@ -54,7 +54,8 @@ const states = [
     attribute: 'focus-visible',
     label: 'Study surface elevation',
     href: '/base/surface',
-    treatment: 'A --cn-focus-ring outline with the current link treatment.',
+    treatment:
+      'A --cn-color-focus-ring outline with the current link treatment.',
     purpose: 'Marks keyboard position with shape as well as colour.',
   },
 ] as const;
@@ -121,8 +122,8 @@ const MODES = ['light', 'dark'] as const;
   .specimen {
     min-inline-size: 15rem;
     padding-inline: var(--cn-gap);
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
     white-space: nowrap;
   }
 </style>

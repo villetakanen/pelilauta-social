@@ -106,7 +106,7 @@ function closeOnBackdrop(event: MouseEvent) {
      */
     --_scrim: color-mix(in oklch, var(--chroma-surface-10) 80%, transparent);
     --_on-scrim: var(--chroma-surface-99);
-    color: var(--cn-text);
+    color: var(--cn-color-text);
     padding: var(--cn-grid);
     border-radius: var(--cn-border-radius);
   }
@@ -193,7 +193,7 @@ function closeOnBackdrop(event: MouseEvent) {
   }
 
   .frame:focus-visible {
-    outline: 2px solid var(--cn-focus-ring);
+    outline: 2px solid var(--cn-color-focus-ring);
   }
 
   /*
@@ -219,7 +219,7 @@ function closeOnBackdrop(event: MouseEvent) {
    * states its own.
    *
    * Standing the exit control on that surface rather than over artwork is what
-   * keeps it simple: it takes --cn-hover, --cn-active and --cn-focus-ring exactly
+   * keeps it simple: it takes --cn-color-hover, --cn-color-active and --cn-color-focus-ring exactly
    * as styles/chrome-actions.css declares them, so nothing here recolours it, and
    * the private scrim above stays with the one thing that does sit on artwork.
    *
@@ -241,11 +241,11 @@ function closeOnBackdrop(event: MouseEvent) {
     max-block-size: 90dvh;
     padding: var(--cn-gap);
     border: none;
-    color: var(--cn-on-surface);
+    color: var(--cn-color-on-surface);
   }
 
   .cn-lightbox-dialog::backdrop {
-    background: var(--cn-scrim);
+    background: var(--cn-color-scrim);
   }
 
   /* Whole, never cropped, inside whatever the surface's inset leaves it. */

@@ -3,9 +3,9 @@
 `CnLoader.svelte:38` sets `color: var(--cn-loader-color)` on the root, so the loader
 imposes its own role instead of inheriting the control's foreground. The icon then draws
 `currentColor` at 0.44 opacity and the ring at 0.72 — both of that role, not of the
-button's `--cn-on-button`.
+button's `--cn-color-on-button`.
 
-`--cn-loader-color` is `light-dark(primary-60, surface-60)` and `--cn-on-button` is
+`--cn-loader-color` is `light-dark(primary-60, surface-60)` and `--cn-color-on-button` is
 surface-100. Inside a filled button the loader's noun is a mid-tone glyph at 0.44 opacity
 on a saturated ground: the ring survives, the icon effectively disappears. The `button`
 specimen in `/components/cn-loader` shows it.

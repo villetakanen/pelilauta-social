@@ -21,7 +21,7 @@ diagnosis:
 - The bar's box is 64px tall, and `--cn-app-bar-height` resolves to the same
   64px, so the token sizes the box.
 - The default bar at the top of a page paints no shadow. A modal bar paints
-  `--cn-surface-4` with `oklch(0.3 0.09 242) 6px 6px 24px 0px`, offset on both
+  `--cn-color-surface-4` with `oklch(0.3 0.09 242) 6px 6px 24px 0px`, offset on both
   axes.
 
 ## What needs asking

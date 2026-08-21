@@ -18,7 +18,7 @@ no hover, no resting affordance, no placeholder treatment and no field boundary.
 
 That is what v21 defines. `packages/design-system/styles/` carries no input stylesheet.
 `preflight.css:50-54,73-79` touches `textarea` for font inheritance and `resize` alone.
-`semantic.css:93-94` defines `--cn-input` and `--cn-on-input`, and stops there.
+`semantic.css:93-94` defines `--cn-color-input` and `--cn-color-on-input`, and stops there.
 
 Three independent reviews concluded that the epic needs neither forms nor form inputs.
 That conclusion holds. What it missed is that a component with no form still needs a
@@ -61,12 +61,12 @@ All values are OKLCH lightness at hue 242, from `chroma.css:27-39`. Placements a
 
 | Role | Light | L | Dark | L |
 | :--- | :--- | ---: | :--- | ---: |
-| Page, `--cn-surface` | surface-95 | .95 | surface-20 | .20 |
-| `--cn-surface-1`, `--cn-surface-2` | surface-100 | 1.0 | surface-30 | .30 |
-| `--cn-surface-3` | surface-100 | 1.0 | surface-40 | .40 |
-| `--cn-input` | surface-80 | .80 | surface-0 | 0 |
+| Page, `--cn-color-surface` | surface-95 | .95 | surface-20 | .20 |
+| `--cn-color-surface-1`, `--cn-color-surface-2` | surface-100 | 1.0 | surface-30 | .30 |
+| `--cn-color-surface-3` | surface-100 | 1.0 | surface-40 | .40 |
+| `--cn-color-input` | surface-80 | .80 | surface-0 | 0 |
 | `--cn-color-border` | surface-70 | .70 | surface-30 | .30 |
-| `--cn-on-input` | surface-10 | .10 | surface-90 | .90 |
+| `--cn-color-on-input` | surface-10 | .10 | surface-90 | .90 |
 
 The placement is consistent across schemes: a field is darker than the surface holding
 it.
@@ -79,7 +79,7 @@ resolve identically in both schemes. The token set cannot distinguish the two st
 **Dark mode has no room to move, and the direction is inverted.** Dark rest is
 surface-0, the end of the scale, and both state tokens resolve to surface-0 as well, so
 a dark field cannot change at all. Moving further down is the wrong direction in any
-case: `--cn-on-input` is surface-90 on a surface-0 field, which is already the widest
+case: `--cn-color-on-input` is surface-90 on a surface-0 field, which is already the widest
 contrast the scale offers. The light-mode move from surface-80 to surface-70 narrows the
 contrast between the text and the field rather than widening it.
 
@@ -198,7 +198,7 @@ Recorded from the product owner, 2026-08-19.
   element and a minimum height of `calc(var(--cn-grid) * 5 - 1px)`; `CnChatBar` sets
   `padding: 0` and no minimum. The spacing the first reading of this defect blamed has
   the same root cause as the missing states.
-- `--cn-input` has one other consumer in the wider line, the editor theme. A change to
+- `--cn-color-input` has one other consumer in the wider line, the editor theme. A change to
   the resting value reaches it.
 - Ruling 11 renames the prop and splits its treatment from the opacity drop `CnChatBar`
   applies today (`CnChatBar.svelte:224,285-287`).
@@ -251,7 +251,7 @@ Focus leaves the family: it is near-white-but-warm on a white surface, and
 near-black-but-teal on a cerulean one. The reader's words gain contrast against the field
 in both schemes, and the field separates from its surface by hue rather than by lightness.
 
-Light rest is where `--cn-input` already sits. The only value the port broke is the dark
+Light rest is where `--cn-color-input` already sits. The only value the port broke is the dark
 one, pinned to surface-0; it moves one step off the floor. That change reaches the editor
 theme, which reads the same role, and it should — ruling 17 governs the editor too.
 
@@ -284,6 +284,6 @@ neutral thing on a screen whose every other surface is tinted.
 The application does not show the same field. `BaseHead.astro:6` loads
 `@11thdeg/cyan-css` on every page, so Cyan 4's `textarea::placeholder` applies there:
 italic, at `--color-on-field-placeholder`, which `compat/cyan-4.css:109` maps to
-`--cn-on-surface-secondary`. A field therefore reads one way in the book and another in
+`--cn-color-on-surface-secondary`. A field therefore reads one way in the book and another in
 the product, and neither is the design system's. That divergence, rather than the grey
 itself, is what a field capability has to close.

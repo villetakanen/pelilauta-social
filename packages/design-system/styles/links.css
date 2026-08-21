@@ -8,7 +8,7 @@
 
 a:where([href]:not(.button, .fab, .chip)),
 a:where([href]:not(.button, .fab, .chip)):visited {
-  color: var(--cn-link);
+  color: var(--cn-color-link);
 }
 
 a:where([href]:not(.button, .fab, .chip)) {
@@ -17,14 +17,14 @@ a:where([href]:not(.button, .fab, .chip)) {
 }
 
 a:where([href]:not(.button, .fab, .chip)):hover {
-  color: var(--cn-link-hover);
+  color: var(--cn-color-link-hover);
 }
 
 a:where([href]:not(.button, .fab, .chip)):active {
-  color: var(--cn-link-active);
+  color: var(--cn-color-link-active);
 }
 
 a:where([href]:not(.button, .fab, .chip)):focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }

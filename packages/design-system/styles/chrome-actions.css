@@ -231,18 +231,18 @@ label.chrome-action[for]::before {
 button.chrome-action:hover::before,
 a.chrome-action[href]:not([aria-disabled="true"]):hover::before,
 label.chrome-action[for]:hover::before {
-  background-color: var(--cn-hover);
+  background-color: var(--cn-color-hover);
 }
 
 button.chrome-action:active::before,
 a.chrome-action[href]:not([aria-disabled="true"]):active::before,
 label.chrome-action[for]:active::before {
-  background-color: var(--cn-active);
+  background-color: var(--cn-color-active);
 }
 
 button.chrome-action:focus-visible,
 a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -254,7 +254,7 @@ a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
  * layers of one surface, not one property fought over: the wash keeps `::before`
  * and its `background-color` transition exactly as above, and the indicator
  * takes `::after` at `z-index: -2` — directly beneath it. That composition is why the
- * wash still reads over `--cn-indicator` where it too is translucent, letting artwork
+ * wash still reads over `--cn-color-indicator` where it too is translucent, letting artwork
  * show through the current destination as it already does through the washes beside it.
  *
  * `::after` is generated only here, so a non-current action carries no second
@@ -266,7 +266,7 @@ a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
  * rather than being undone by a later override.
  */
 a.chrome-action[href][aria-current]:not([aria-current="false"]) {
-  color: var(--cn-on-indicator);
+  color: var(--cn-color-on-indicator);
 }
 
 a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
@@ -279,7 +279,7 @@ a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
   inline-size: var(--_surface-inline);
   block-size: calc(var(--cn-grid) * 6);
   border-radius: calc(var(--cn-grid) * 3);
-  background-color: var(--cn-indicator);
+  background-color: var(--cn-color-indicator);
   pointer-events: none;
 }
 
@@ -309,8 +309,8 @@ a.chrome-action[href][aria-current]:not([aria-current="false"])::after {
   block-size: var(--_badge-size);
   padding-inline: calc(var(--cn-grid) / 2);
   border-radius: calc(var(--_badge-size) / 2);
-  background-color: var(--cn-info);
-  color: var(--cn-on-info);
+  background-color: var(--cn-color-info);
+  color: var(--cn-color-on-info);
   font-size: var(--cn-font-size-small);
   line-height: 1;
   pointer-events: none;

@@ -81,7 +81,7 @@ export function buildEditorTheme(isDark: boolean) {
        */
       '.cm-content': {
         padding: 'calc(var(--cn-grid) * 1.5) calc(var(--cn-grid) * 2)',
-        color: 'var(--cn-text)',
+        color: 'var(--cn-color-text)',
         /*
          * The field contract names no caret colour. The indicator's focus
          * colour is the field's answer to "where is the reader working",
@@ -123,8 +123,8 @@ export function buildEditorTheme(isDark: boolean) {
        */
       '.cm-gutters': {
         minInlineSize: 'calc(var(--cn-grid) * 4)',
-        backgroundColor: 'var(--cn-surface-2)',
-        color: 'var(--cn-text-low)',
+        backgroundColor: 'var(--cn-color-surface-2)',
+        color: 'var(--cn-color-text-low)',
         border: 'none',
         boxShadow:
           'inset calc(-1 * var(--_editor-indicator-width)) 0 0 0 var(--cn-color-field-border)',
@@ -134,7 +134,7 @@ export function buildEditorTheme(isDark: boolean) {
       },
       '.cm-activeLineGutter': {
         backgroundColor: 'transparent',
-        color: 'var(--cn-text)',
+        color: 'var(--cn-color-text)',
       },
     },
     { dark: isDark },
@@ -161,25 +161,25 @@ export const markdownHighlightStyle = HighlightStyle.define([
   {
     tag: t.strong,
     fontWeight: 'var(--cn-font-weight-emphasis)',
-    color: 'var(--cn-text-high)',
+    color: 'var(--cn-color-text-high)',
   },
   {
     tag: t.emphasis,
     fontStyle: 'italic',
-    color: 'var(--cn-text)',
+    color: 'var(--cn-color-text)',
   },
   {
     tag: t.link,
     textDecoration: 'underline',
-    color: 'var(--cn-link)',
+    color: 'var(--cn-color-link)',
   },
   {
     tag: t.monospace,
-    color: 'var(--cn-text-high)',
-    backgroundColor: 'var(--cn-surface-2)',
+    color: 'var(--cn-color-text-high)',
+    backgroundColor: 'var(--cn-color-surface-2)',
   },
   {
     tag: t.quote,
-    color: 'var(--cn-text-low)',
+    color: 'var(--cn-color-text-low)',
   },
 ]);

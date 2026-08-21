@@ -84,8 +84,8 @@ const { shell } = Astro.props;
   .frame {
     max-inline-size: 100%;
     overflow: hidden;
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
   }
 
   .shell {
@@ -93,7 +93,7 @@ const { shell } = Astro.props;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
-    background: var(--cn-surface);
+    background: var(--cn-color-surface);
   }
 
   [data-shell='app'] {
@@ -125,7 +125,7 @@ const { shell } = Astro.props;
     align-items: center;
     gap: var(--cn-gap);
     padding: var(--cn-gap);
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
     border-block-end: 1px solid var(--cn-color-border);
   }
 
@@ -142,7 +142,7 @@ const { shell } = Astro.props;
     inline-size: var(--rig-width, 100%);
     block-size: var(--cn-grid);
     border-radius: var(--cn-border-radius-small);
-    background: var(--cn-surface-2);
+    background: var(--cn-color-surface-2);
   }
 
   .rail {
@@ -153,7 +153,7 @@ const { shell } = Astro.props;
     align-items: center;
     justify-content: space-around;
     block-size: 4rem;
-    background: var(--cn-surface-1);
+    background: var(--cn-color-surface-1);
     border-block-start: 1px solid var(--cn-color-border);
   }
 </style>

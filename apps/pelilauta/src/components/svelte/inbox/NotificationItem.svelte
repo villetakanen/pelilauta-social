@@ -88,7 +88,7 @@ async function remove() {
 <style>
   .notification-item.elevation-4,
   .notification-item.elevation-4 :global(a) {
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .notification-item.elevation-4 :global(a:focus-visible) {
@@ -96,7 +96,7 @@ async function remove() {
   }
 
   .notification-item.elevation-4 button.text {
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .notification-item.elevation-4 button.text:focus-visible {

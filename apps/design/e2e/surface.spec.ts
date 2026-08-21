@@ -109,11 +109,11 @@ const references = (page: Page) =>
 
     const values = {
       surface: [
-        background('--cn-surface'),
-        background('--cn-surface-1'),
-        background('--cn-surface-2'),
-        background('--cn-surface-3'),
-        background('--cn-surface-4'),
+        background('--cn-color-surface'),
+        background('--cn-color-surface-1'),
+        background('--cn-color-surface-2'),
+        background('--cn-color-surface-3'),
+        background('--cn-color-surface-4'),
       ],
       shadow: [
         shadow('--cn-shadow-elevation-2'),
@@ -145,7 +145,7 @@ for (const scheme of ['light', 'dark'] as const) {
       for (const [level, probe] of probes.entries()) {
         expect(
           probe.backgroundColor,
-          `elevation-${level} does not paint --cn-surface${level === 0 ? '' : `-${level}`}`,
+          `elevation-${level} does not paint --cn-color-surface${level === 0 ? '' : `-${level}`}`,
         ).toBe(tokens.surface[level]);
         // A failed var() falls back to transparent, which would otherwise pass
         // against a role that also failed.
@@ -335,7 +335,7 @@ test('an attention class paints its flag on a surface rendered without one', asy
     const result = {
       notify: read('has-notify'),
       alert: read('has-alert'),
-      info: role('--cn-info'),
+      info: role('--cn-color-info'),
       warning: role('--cn-color-warning'),
     };
     host.remove();

@@ -30,7 +30,7 @@
 .surface {
   padding: var(--cn-gap);
   container: surface-area / inline-size;
-  background-color: var(--cn-surface-1);
+  background-color: var(--cn-color-surface-1);
   box-shadow: none;
 }
 
@@ -39,27 +39,27 @@
  * consumer's image or gradient survives the utility.
  */
 .elevation-0 {
-  background-color: var(--cn-surface);
+  background-color: var(--cn-color-surface);
   box-shadow: none;
 }
 
 .elevation-1 {
-  background-color: var(--cn-surface-1);
+  background-color: var(--cn-color-surface-1);
   box-shadow: none;
 }
 
 .elevation-2 {
-  background-color: var(--cn-surface-2);
+  background-color: var(--cn-color-surface-2);
   box-shadow: var(--cn-shadow-elevation-2);
 }
 
 .elevation-3 {
-  background-color: var(--cn-surface-3);
+  background-color: var(--cn-color-surface-3);
   box-shadow: var(--cn-shadow-elevation-3);
 }
 
 .elevation-4 {
-  background-color: var(--cn-surface-4);
+  background-color: var(--cn-color-surface-4);
   box-shadow: var(--cn-shadow-elevation-4);
 }
 
@@ -99,7 +99,7 @@
 }
 
 .has-notify::after {
-  background-color: var(--cn-info);
+  background-color: var(--cn-color-info);
 }
 
 .has-alert::after {

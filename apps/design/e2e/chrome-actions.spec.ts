@@ -198,7 +198,7 @@ const resolveLength = (page: Page, property: string, expr: string) =>
 /**
  * Resolve a colour reference — a custom-property token, or a literal CSS
  * colour keyword — on a throwaway element on this same page, the way
- * `links.spec.ts` resolves `--cn-link` and `--cn-focus-ring`.
+ * `links.spec.ts` resolves `--cn-color-link` and `--cn-color-focus-ring`.
  */
 const resolveColor = (page: Page, colorExpr: string) =>
   page.evaluate((colorExpr) => {
@@ -674,13 +674,19 @@ for (const scheme of ['light', 'dark'] as const) {
 
     for (const presentation of ['compact', 'labelled'] as const) {
       for (const role of ['button', 'anchor'] as const) {
-        test(`the ${presentation} ${role} state surface progresses transparent, --cn-hover, --cn-active, and the footprint never changes — through hover, active and keyboard focus`, async ({
+        test(`the ${presentation} ${role} state surface progresses transparent, --cn-color-hover, --cn-color-active, and the footprint never changes — through hover, active and keyboard focus`, async ({
           page,
         }) => {
           const transparent = await resolveColor(page, 'transparent');
-          const hoverColor = await resolveColor(page, 'var(--cn-hover)');
-          const activeColor = await resolveColor(page, 'var(--cn-active)');
-          const focusColor = await resolveColor(page, 'var(--cn-focus-ring)');
+          const hoverColor = await resolveColor(page, 'var(--cn-color-hover)');
+          const activeColor = await resolveColor(
+            page,
+            'var(--cn-color-active)',
+          );
+          const focusColor = await resolveColor(
+            page,
+            'var(--cn-color-focus-ring)',
+          );
           await mount(page, single(presentation, role));
           const target = mountedAction(page);
 
@@ -741,8 +747,11 @@ for (const scheme of ['light', 'dark'] as const) {
       test(`a ${presentation} current destination carries the indicator and its foreground, and matches a non-current action's geometry`, async ({
         page,
       }) => {
-        const indicator = await resolveColor(page, 'var(--cn-indicator)');
-        const onIndicator = await resolveColor(page, 'var(--cn-on-indicator)');
+        const indicator = await resolveColor(page, 'var(--cn-color-indicator)');
+        const onIndicator = await resolveColor(
+          page,
+          'var(--cn-color-on-indicator)',
+        );
         const markup = `
           <div class="wrapper" style="--cn-chrome-presentation: ${presentation}; inline-size: ${WRAPPER_INLINE_SIZE};">
             ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="page"')}
@@ -775,9 +784,9 @@ for (const scheme of ['light', 'dark'] as const) {
       page,
     }) => {
       const transparent = await resolveColor(page, 'transparent');
-      const hoverColor = await resolveColor(page, 'var(--cn-hover)');
-      const activeColor = await resolveColor(page, 'var(--cn-active)');
-      const indicator = await resolveColor(page, 'var(--cn-indicator)');
+      const hoverColor = await resolveColor(page, 'var(--cn-color-hover)');
+      const activeColor = await resolveColor(page, 'var(--cn-color-active)');
+      const indicator = await resolveColor(page, 'var(--cn-color-indicator)');
       const markup = `
         <div class="wrapper" style="--cn-chrome-presentation: compact; inline-size: ${WRAPPER_INLINE_SIZE};">
           ${action('anchor', '').replace('data-role="anchor"', 'data-role="anchor" aria-current="page"')}
@@ -787,7 +796,7 @@ for (const scheme of ['light', 'dark'] as const) {
       const target = anchor(page);
 
       // Three distinct paints on the wash layer, while the indicator layer
-      // beneath it never moves off --cn-indicator.
+      // beneath it never moves off --cn-color-indicator.
       const seen: string[] = [];
       for (const step of ['rest', 'hover', 'active'] as const) {
         if (step === 'hover') await target.hover();

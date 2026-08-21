@@ -78,7 +78,7 @@ h1,
   font-weight: var(--cn-font-weight-h1);
   line-height: var(--cn-line-height-h1);
   letter-spacing: var(--cn-letter-spacing-h1);
-  color: var(--cn-text-heading);
+  color: var(--cn-color-text-heading);
 }
 
 h2,
@@ -87,7 +87,7 @@ h2,
   font-weight: var(--cn-font-weight-h2);
   line-height: var(--cn-line-height-h2);
   letter-spacing: var(--cn-letter-spacing-h2);
-  color: var(--cn-text-heading);
+  color: var(--cn-color-text-heading);
 }
 
 h3,
@@ -96,7 +96,7 @@ h3,
   font-weight: var(--cn-font-weight-h3);
   line-height: var(--cn-line-height-h3);
   letter-spacing: var(--cn-letter-spacing-h3);
-  color: var(--cn-text-subheading);
+  color: var(--cn-color-text-subheading);
 }
 
 h4,
@@ -105,7 +105,7 @@ h4,
   font-weight: var(--cn-font-weight-h4);
   line-height: var(--cn-line-height-h4);
   letter-spacing: var(--cn-letter-spacing-h4);
-  color: var(--cn-text-subheading);
+  color: var(--cn-color-text-subheading);
 }
 
 /* Steps without an element of their own. */
@@ -115,7 +115,7 @@ h4,
   font-weight: var(--cn-font-weight-title);
   line-height: var(--cn-line-height-title);
   letter-spacing: var(--cn-letter-spacing-title);
-  color: var(--cn-text-heading);
+  color: var(--cn-color-text-heading);
 }
 
 .text-small {
@@ -160,11 +160,11 @@ h4,
 
 /* Emphasis, at any step. Text with neither class is the default emphasis. */
 .text-low {
-  color: var(--cn-text-low);
+  color: var(--cn-color-text-low);
 }
 
 .text-high {
-  color: var(--cn-text-high);
+  color: var(--cn-color-text-high);
 }
 
 /*

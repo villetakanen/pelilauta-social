@@ -73,7 +73,7 @@ capability.
 - Replacing a core family changes no semantic or component token and keeps
   every consumer resolvable.
 - No declaration or consumer names an info chroma family; information is the
-  semantic pair `--cn-info` and `--cn-on-info` over a core family.
+  semantic pair `--cn-color-info` and `--cn-color-on-info` over a core family.
 
 ### Scenarios
 

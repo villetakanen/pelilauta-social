@@ -125,8 +125,8 @@ const imageLayer = $derived(
   }
 
   .cn-avatar--anonymous {
-    background: var(--cn-surface-2);
-    color: var(--cn-on-surface);
+    background: var(--cn-color-surface-2);
+    color: var(--cn-color-on-surface);
   }
 
   /* The glyph is a proportion of the mark rather than a step on the icon scale:

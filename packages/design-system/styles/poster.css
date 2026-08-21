@@ -60,7 +60,7 @@
   body:has(#cn-poster) .elevation-0 {
     --_surface-over-poster: color-mix(
       in oklch,
-      var(--cn-surface),
+      var(--cn-color-surface),
       transparent 20%
     );
     background-color: var(--_surface-over-poster);
@@ -93,7 +93,7 @@
   /*
    * The lower-edge dissolve, as a mask rather than a gradient over the image.
    * The poster fades to nothing and reveals the canvas, which paints
-   * --cn-background: the same colour v20 painted on top to reach the same
+   * --cn-color-background: the same colour v20 painted on top to reach the same
    * result, without a third layer competing with the two blended ones below.
    *
    * A pinned poster has no lower edge to dissolve — the content scrolls over a
@@ -180,7 +180,7 @@
  * The withdrawals. After the stage, so they win on source order at equal
  * specificity. Only the poster and the sticky bar withdraw: the rail, tray
  * and ground-plane cessions are inert once nothing paints beneath them,
- * because the canvas paints --cn-background, which is the surface colour —
+ * because the canvas paints --cn-color-background, which is the surface colour —
  * withdrawing them would mean restating values Cyan owns, for no visible
  * change. Under forced-colors the user agent forces the backgrounds anyway.
  */

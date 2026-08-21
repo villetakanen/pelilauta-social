@@ -203,7 +203,7 @@ test('a flag class added on the client raises the flag on an unhydrated CnCard',
   expect((await flag()).content).toBe('none');
 
   for (const [state, role] of [
-    ['has-notify', '--cn-info'],
+    ['has-notify', '--cn-color-info'],
     ['has-alert', '--cn-color-warning'],
   ] as const) {
     const expected = await card.evaluate((element, token) => {
@@ -271,7 +271,7 @@ for (const mode of ['light', 'dark'] as const) {
       const theme = element.closest('[data-mode]');
       if (!theme) throw new Error('CnCard specimen has no theme context');
       const probe = document.createElement('span');
-      probe.style.color = 'var(--cn-text-high)';
+      probe.style.color = 'var(--cn-color-text-high)';
       theme.append(probe);
       const color = getComputedStyle(probe).color;
       probe.remove();

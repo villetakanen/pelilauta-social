@@ -204,7 +204,7 @@ test.describe('with a mode stored', () => {
 
     const cell = (mode: string) =>
       page
-        .locator(`.cell[data-mode="${mode}"][data-role="--cn-surface"]`)
+        .locator(`.cell[data-mode="${mode}"][data-role="--cn-color-surface"]`)
         .first()
         .evaluate((node) => getComputedStyle(node).backgroundColor);
 

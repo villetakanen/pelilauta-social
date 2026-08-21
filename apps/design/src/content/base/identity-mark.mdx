@@ -24,7 +24,7 @@ server with pure CSS fallback layering.
 
 1. **Image:** Profile picture clipped to a circle.
 2. **Initials:** First two characters of `nick` over a deterministic backdrop color derived from the nickname string.
-3. **Anonymous:** Default `avatar` icon on `--cn-surface-2` when no nickname is provided.
+3. **Anonymous:** Default `avatar` icon on `--cn-color-surface-2` when no nickname is provided.
 
 Initials render beneath the image in DOM order, providing a scriptless fallback if image
 loading fails.
@@ -37,7 +37,7 @@ loading fails.
 | :--- | :--- | :--- |
 | Image | Profile picture cropped to circle | Covered by image |
 | Initials | Two characters of `nick` | Derived from `nick` |
-| Anonymous | `avatar` icon | `--cn-surface-2` |
+| Anonymous | `avatar` icon | `--cn-color-surface-2` |
 
 The component supports three standard sizes aligned to layout line multiples:
 - **Small (1.5 lines / 36px):** Inline beside body text.
@@ -132,7 +132,7 @@ Marks with no nick derive no backdrop, so a run of them separates only by elevat
 
 Identity marks are non-interactive by default. When wrapped in an `<a>` anchor:
 - The circular avatar suppresses default text underlines, lifts to elevation 2 on hover, and applies a circular keyboard focus ring.
-- The textual nick (`.cn-nick`) keeps its resting colour and applies `--cn-link-hover` and `--cn-link-active`.
+- The textual nick (`.cn-nick`) keeps its resting colour and applies `--cn-color-link-hover` and `--cn-color-link-active`.
 
 <Composition themes caption="Standalone vs anchor-wrapped identity marks">
   <IdentitySpecimens group="linked" />
@@ -143,7 +143,7 @@ For link and focus state specifications, see [Links, Actions and Buttons](/base/
 ## Reference
 
 - **`CnAvatar` component:** See [CnAvatar component reference](/components/cn-avatar).
-- **`.cn-nick` class:** Applies emphasis weight and `--cn-text-high` on both `<span>` and `<a>`.
+- **`.cn-nick` class:** Applies emphasis weight and `--cn-color-text-high` on both `<span>` and `<a>`.
 
 ## Accessibility
 

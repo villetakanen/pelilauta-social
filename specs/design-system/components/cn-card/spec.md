@@ -280,7 +280,7 @@ Then it has a one-pixel border using `--cn-color-border`
 ```gherkin
 Given a CnCard at elevation 4 in Light or Dark
 When its title, nouns, eyebrow, description, inherited body and links render
-Then each CnCard foreground uses `--cn-text-high`
+Then each CnCard foreground uses `--cn-color-text-high`
 And meets WCAG 2.2 AA
 ```
 

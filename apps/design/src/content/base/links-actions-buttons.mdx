@@ -99,7 +99,7 @@ accessible name while the loader indicates progress. Link buttons do not support
 
 - **Hover:** Elevates the control and overlays a subtle tint.
 - **Active:** Deepens the tint while maintaining text contrast.
-- **Keyboard focus:** Draws `--cn-focus-ring` around the control.
+- **Keyboard focus:** Draws `--cn-color-focus-ring` around the control.
 - **Disabled:** Native `<button>` elements render at `--cn-disabled-opacity`. This capability publishes no disabled presentation for a link: a destination is navigable, or the control is not rendered.
 
 <Composition themes caption="Resting, disabled, and text link buttons">
@@ -121,7 +121,7 @@ loaders maintain fixed square dimensions.
 
 <TokenTable
   source={unitsSource}
-  prefix="--cn-button"
+  prefix="--cn-color-button"
   caption="Button geometry tokens"
 />
 
@@ -166,7 +166,7 @@ In-flight commands use a disabled native button containing an inline `CnLoader`.
 ### FAB interaction states
 
 Hover lifts the FAB above its resting elevation, active settles between elevations, and
-keyboard focus applies `--cn-focus-ring`. Only native button FABs support the disabled state.
+keyboard focus applies `--cn-color-focus-ring`. Only native button FABs support the disabled state.
 
 <Composition themes caption="Resting, disabled, and navigable FABs">
   <FabSpecimens group="states" />

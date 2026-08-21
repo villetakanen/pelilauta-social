@@ -10,6 +10,6 @@
  * given.
  */
 .cn-poster-credits {
-  color: var(--cn-text-low);
+  color: var(--cn-color-text-low);
   text-transform: none;
 }

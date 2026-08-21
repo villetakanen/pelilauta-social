@@ -108,9 +108,9 @@ A label too long for the rail truncates with an ellipsis rather than wrapping or
   </Composition>
 </div>
 
-The state surface is transparent at rest, takes `--cn-hover` on hover and
-`--cn-active` on activation, replacing hover rather than compounding it. A
-keyboard focus outline follows the target, using `--cn-focus-ring`. A disabled
+The state surface is transparent at rest, takes `--cn-color-hover` on hover and
+`--cn-color-active` on activation, replacing hover rather than compounding it. A
+keyboard focus outline follows the target, using `--cn-color-focus-ring`. A disabled
 chrome action renders at `--cn-disabled-opacity` and takes no hover or active
 feedback. A command carries `disabled`; a destination keeps its `href` and carries
 `aria-disabled="true"` and `tabindex="-1"`. Both stay in the accessibility tree.
@@ -126,8 +126,8 @@ reader is already on says so at rest, so navigation shows where they are without
 being pointed at.
 
 `[aria-current]` carries it, because that is what the platform calls it. The
-state surface takes `--cn-indicator` and the target's foreground becomes
-`--cn-on-indicator`, so the icon and the label follow.
+state surface takes `--cn-color-indicator` and the target's foreground becomes
+`--cn-color-on-indicator`, so the icon and the label follow.
 
 <Composition themes caption="Compact chrome action, current and not current, through every transient state, in Light and Dark">
   <ChromeActionSpecimens group="current" presentation="compact" />
@@ -141,7 +141,7 @@ state surface takes `--cn-indicator` and the target's foreground becomes
 
 The indicator is persistent and the washes are transient, so they compose: hover
 and active paint *over* the indicator rather than replacing it, and a current
-destination still answers a pointer. That is why `--cn-indicator` is an opaque
+destination still answers a pointer. That is why `--cn-color-indicator` is an opaque
 role rather than a wash — a translucent layer under a translucent layer reads as
 neither.
 

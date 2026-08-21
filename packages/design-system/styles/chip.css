@@ -24,9 +24,9 @@
   /* Past the block size of any chip, so the pill stays a pill at every type step. */
   border-radius: 9999px;
   vertical-align: middle;
-  background-color: var(--cn-button-text);
+  background-color: var(--cn-color-button-text);
   background-image: none;
-  color: var(--cn-on-surface);
+  color: var(--cn-color-on-surface);
   font-family: inherit;
   font-size: var(--cn-font-size-button);
   font-weight: var(--cn-font-weight-button);
@@ -55,7 +55,7 @@
  * surface carries, so the promotion reads as a shift in hue and the foreground stays
  * the on-surface role the plain chip resolves.
  *
- * The primary step sits one ramp step above the luminance `--cn-button` carries, in
+ * The primary step sits one ramp step above the luminance `--cn-color-button` carries, in
  * both schemes. The gradient replaces the flat surface rather than covering it, which
  * is why the background colour goes transparent.
  */
@@ -63,7 +63,7 @@
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-button-text),
+    var(--cn-color-button-text),
     color-mix(
       in oklab,
       light-dark(var(--chroma-primary-60), var(--chroma-primary-50)) 33%,
@@ -96,17 +96,17 @@ button.chip::after {
 
 a.chip:hover::after,
 button.chip:hover::after {
-  background-color: var(--cn-hover);
+  background-color: var(--cn-color-hover);
 }
 
 a.chip:active::after,
 button.chip:active::after {
-  background-color: var(--cn-active);
+  background-color: var(--cn-color-active);
 }
 
 a.chip:focus-visible,
 button.chip:focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -140,7 +140,7 @@ button.chip:disabled {
 }
 
 .chip > button:focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 

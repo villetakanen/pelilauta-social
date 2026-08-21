@@ -80,16 +80,16 @@ A disabled chrome action is announced as disabled, and does not act. A command c
 `tabindex="-1"`, and the class suppresses its pointer events. Neither takes hover or
 active feedback.
 
-`[aria-current]` displaces that transparent rest with `--cn-indicator`, and the
-foreground becomes `--cn-on-indicator` in every state. The indicator and the transient
+`[aria-current]` displaces that transparent rest with `--cn-color-indicator`, and the
+foreground becomes `--cn-color-on-indicator` in every state. The indicator and the transient
 wash occupy separate paint channels on the one surface, so neither suppresses the
 other. `aria-current="false"` is not a current destination; every other value presents
 the same. A `button` carries a command and takes no indicator, whatever `aria-current`
 it declares. The state adds no class, attribute or accessible state of its own.
 
-The foreground identifies the state and the surface reinforces it. `--cn-on-indicator`
+The foreground identifies the state and the surface reinforces it. `--cn-color-on-indicator`
 is opaque and meets AA against the surfaces a chrome action stands on, and is
-distinguishable from a non-current action's foreground. `--cn-indicator` is a tint of
+distinguishable from a non-current action's foreground. `--cn-color-indicator` is a tint of
 the same family, quiet enough that chrome does not read as a slab of brand colour, and
 therefore not asked to carry identification on its own. Both are declared in
 `packages/design-system/styles/semantic.css`.
@@ -100,7 +100,7 @@ therefore not asked to carry identification on its own. Both are declared in
 
 - One public design-system class renders both presentations on a native button and on
   a native anchor, outranking the default Actions button and link presentations.
-- `--cn-indicator` and `--cn-on-indicator` resolve in both schemes.
+- `--cn-color-indicator` and `--cn-color-on-indicator` resolve in both schemes.
 - A book specimen renders both presentations and both elements, forcing rest, hover,
   active, keyboard focus, a disabled button beside a disabled anchor, and a current
   destination beside a non-current one, in Light and Dark.
@@ -123,7 +123,7 @@ therefore not asked to carry identification on its own. Both are declared in
   destination is the only one this capability carries.
 - Hover and active feedback never replaces the indicator, and the indicator never
   suppresses hover or active feedback.
-- `--cn-indicator` remains distinct from `--cn-hover` and `--cn-active` in both schemes.
+- `--cn-color-indicator` remains distinct from `--cn-color-hover` and `--cn-color-active` in both schemes.
 - A disabled command and a disabled destination present the same, and each stays in
   the accessibility tree.
 
@@ -164,7 +164,7 @@ And its footprint does not change
 ```gherkin
 Given an anchor chrome action with aria-current, beside one without
 When the pointer rests on each in turn, and each is then activated
-Then the current destination carries --cn-indicator and --cn-on-indicator throughout
+Then the current destination carries --cn-color-indicator and --cn-color-on-indicator throughout
 And its resting, hovered and active surface paints are three distinct values
 And its target, state surface and bounding box match the other's
 ```

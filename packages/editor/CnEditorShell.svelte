@@ -428,7 +428,7 @@ $effect(() => {
   }
 
   .cn-editor-shell__confirm::backdrop {
-    background-color: var(--cn-scrim);
+    background-color: var(--cn-color-scrim);
   }
 
   .cn-editor-shell__confirm-actions {

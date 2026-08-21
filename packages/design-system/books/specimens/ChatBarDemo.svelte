@@ -87,8 +87,8 @@ const readout = $derived(
     container: app-chrome / inline-size;
     overflow: hidden;
     block-size: 16rem;
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
     border: 1px solid var(--cn-color-border);
   }
 
@@ -107,8 +107,8 @@ const readout = $derived(
     align-items: center;
     gap: var(--cn-grid);
     padding: var(--cn-grid) var(--cn-gap);
-    color: var(--cn-text);
-    background: var(--cn-surface-1);
+    color: var(--cn-color-text);
+    background: var(--cn-color-surface-1);
     border-radius: var(--cn-border-radius-medium);
   }
 

@@ -51,16 +51,16 @@ const tokens = (page: Page, scope: string): Promise<Tokens> =>
 
     const values = {
       buttonText: read(
-        'background-color: var(--cn-button-text);',
+        'background-color: var(--cn-color-button-text);',
         'background-color',
       ),
       promotedSurface: read(
-        'background-image: linear-gradient(in oklab 137deg, var(--cn-button-text), color-mix(in oklab, light-dark(var(--chroma-primary-60), var(--chroma-primary-50)) 33%, transparent));',
+        'background-image: linear-gradient(in oklab 137deg, var(--cn-color-button-text), color-mix(in oklab, light-dark(var(--chroma-primary-60), var(--chroma-primary-50)) 33%, transparent));',
         'background-image',
       ),
-      onButton: read('color: var(--cn-on-button);', 'color'),
-      onSurface: read('color: var(--cn-on-surface);', 'color'),
-      focusRing: read('color: var(--cn-focus-ring);', 'color'),
+      onButton: read('color: var(--cn-color-on-button);', 'color'),
+      onSurface: read('color: var(--cn-color-on-surface);', 'color'),
+      focusRing: read('color: var(--cn-color-focus-ring);', 'color'),
       grid: read('row-gap: var(--cn-grid);', 'row-gap'),
       disabledOpacity: read('opacity: var(--cn-disabled-opacity);', 'opacity'),
     };

@@ -83,8 +83,8 @@ function raise(mode: Mode) {
   }
 
   .pane {
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
   }
 
   .frame {
@@ -114,7 +114,7 @@ function raise(mode: Mode) {
     inset-inline: 0;
     block-size: calc(var(--cn-grid) * 12);
     padding: var(--cn-gap);
-    background-color: var(--cn-surface-2);
-    color: var(--cn-text-low);
+    background-color: var(--cn-color-surface-2);
+    color: var(--cn-color-text-low);
   }
 </style>

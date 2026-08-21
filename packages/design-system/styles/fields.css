@@ -156,7 +156,7 @@ label:has(> textarea):focus-within {
  */
 label:has(> input[type="text"]) > input[type="text"],
 label:has(> textarea) > textarea {
-  color: var(--cn-text);
+  color: var(--cn-color-text);
   margin: 0;
   padding: 0;
   background-color: transparent;

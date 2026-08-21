@@ -25,7 +25,7 @@ it back from the `change` event.
 
 The checked thumb reads `--chroma-primary-70` directly rather than through a
 semantic role: the checked track already carries the primary accent through
-`--cn-button-light`, and the thumb's step is a private contrast expression local to
+`--cn-color-button-light`, and the thumb's step is a private contrast expression local to
 this component.
 
 ### Documentation

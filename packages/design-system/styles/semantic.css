@@ -3,82 +3,101 @@
  * Do not edit: change the JSON source and run `pnpm generate:tokens` from the repository root.
  */
 :root {
-  --cn-surface: light-dark(var(--chroma-surface-95), var(--chroma-surface-20));
-  --cn-surface-1: light-dark(
+  --cn-color-surface: light-dark(
+    var(--chroma-surface-95),
+    var(--chroma-surface-20)
+  );
+  --cn-color-surface-1: light-dark(
     var(--chroma-surface-100),
     color-mix(in oklch, var(--chroma-surface-20), var(--chroma-surface-40) 33%)
   );
-  --cn-surface-2: light-dark(
+  --cn-color-surface-2: light-dark(
     var(--chroma-surface-100),
     color-mix(in oklch, var(--chroma-surface-20), var(--chroma-surface-40) 33%)
   );
-  --cn-surface-3: light-dark(
+  --cn-color-surface-3: light-dark(
     var(--chroma-surface-100),
     color-mix(in oklch, var(--chroma-surface-20), var(--chroma-surface-40) 67%)
   );
-  --cn-surface-4: light-dark(
+  --cn-color-surface-4: light-dark(
     var(--chroma-primary-99),
     var(--chroma-primary-40)
   );
-  --cn-on-surface: light-dark(
+  --cn-color-on-surface: light-dark(
     var(--chroma-surface-10),
     var(--chroma-surface-90)
   );
-  --cn-on-surface-secondary: light-dark(
+  --cn-color-on-surface-secondary: light-dark(
     var(--chroma-surface-40),
     var(--chroma-surface-60)
   );
-  --cn-background: var(--cn-surface);
-  --cn-text: light-dark(var(--chroma-surface-10), var(--chroma-surface-95));
-  --cn-text-high: light-dark(
+  --cn-color-background: var(--cn-color-surface);
+  --cn-color-text: light-dark(
+    var(--chroma-surface-10),
+    var(--chroma-surface-95)
+  );
+  --cn-color-text-high: light-dark(
     var(--chroma-surface-0),
     var(--chroma-surface-100)
   );
-  --cn-text-low: light-dark(var(--chroma-surface-30), var(--chroma-surface-60));
-  --cn-text-heading: light-dark(
+  --cn-color-text-low: light-dark(
+    var(--chroma-surface-30),
+    var(--chroma-surface-60)
+  );
+  --cn-color-text-heading: light-dark(
     var(--chroma-surface-30),
     var(--chroma-surface-99)
   );
-  --cn-text-subheading: light-dark(
+  --cn-color-text-subheading: light-dark(
     var(--chroma-surface-40),
     var(--chroma-surface-80)
   );
-  --cn-link: light-dark(var(--chroma-primary-40), var(--chroma-surface-80));
-  --cn-link-hover: light-dark(
+  --cn-color-link: light-dark(
+    var(--chroma-primary-40),
+    var(--chroma-surface-80)
+  );
+  --cn-color-link-hover: light-dark(
     var(--chroma-surface-50),
     var(--chroma-primary-80)
   );
-  --cn-link-active: light-dark(
+  --cn-color-link-active: light-dark(
     var(--chroma-primary-30),
     var(--chroma-surface-70)
   );
-  --cn-button: light-dark(var(--chroma-surface-50), var(--chroma-surface-40));
-  --cn-button-light: var(--chroma-primary-50);
-  --cn-button-cta: var(--chroma-error-40);
-  --cn-on-button: var(--chroma-surface-100);
-  --cn-on-button-cta: var(--chroma-surface-100);
-  /* The button colour at a third, so the text button reads as a tint of the page; the page shows through it, so it pairs with --cn-on-surface, not --cn-on-button. */
-  --cn-button-text: color-mix(in oklab, var(--cn-button) 33%, transparent);
-  --cn-hover: light-dark(
+  --cn-color-button: light-dark(
+    var(--chroma-surface-50),
+    var(--chroma-surface-40)
+  );
+  --cn-color-button-light: var(--chroma-primary-50);
+  --cn-color-button-cta: var(--chroma-error-40);
+  --cn-color-on-button: var(--chroma-surface-100);
+  --cn-color-on-button-cta: var(--chroma-surface-100);
+  /* The button colour at a third, so the text button reads as a tint of the page; the page shows through it, so it pairs with --cn-color-on-surface, not --cn-color-on-button. */
+  --cn-color-button-text: color-mix(
+    in oklab,
+    var(--cn-color-button) 33%,
+    transparent
+  );
+  --cn-color-hover: light-dark(
     color-mix(in oklch, var(--chroma-surface-50), transparent 90%),
     color-mix(in oklch, var(--chroma-surface-50), transparent 33%)
   );
-  --cn-active: light-dark(
+  --cn-color-active: light-dark(
     color-mix(in oklch, var(--chroma-surface-50), transparent 33%),
     color-mix(in oklch, var(--chroma-surface-50), transparent 70%)
   );
   /* Persistent state: one translucent neutral step, so artwork reads through; the foreground carries identification. Neutral, not brand — test/color-contrast.test.ts holds the ratios behind that choice. */
-  --cn-indicator: light-dark(
+  --cn-color-indicator: light-dark(
     color-mix(in oklch, var(--chroma-surface-100), transparent 33%),
     color-mix(in oklch, var(--chroma-surface-30), transparent 33%)
   );
-  --cn-on-indicator: var(--cn-text-high);
+  --cn-color-on-indicator: var(--cn-color-text-high);
   /* A veil over whatever is beneath a covering tray, so it darkens in both schemes rather than taking a surface role. */
-  --cn-scrim: light-dark(
+  --cn-color-scrim: light-dark(
     color-mix(in oklch, var(--chroma-surface-10), transparent 45%),
     color-mix(in oklch, var(--chroma-surface-10), transparent 30%)
   );
-  --cn-focus-ring: light-dark(
+  --cn-color-focus-ring: light-dark(
     var(--chroma-primary-60),
     var(--chroma-primary-40)
   );
@@ -91,10 +110,19 @@
     var(--chroma-warning-60)
   );
   --cn-color-error: light-dark(var(--chroma-error-40), var(--chroma-error-60));
-  --cn-info: light-dark(var(--chroma-primary-50), var(--chroma-primary-90));
-  --cn-on-info: light-dark(var(--chroma-primary-95), var(--chroma-primary-40));
-  --cn-input: light-dark(var(--chroma-surface-80), var(--chroma-surface-0));
-  --cn-on-input: var(--cn-on-surface);
+  --cn-color-info: light-dark(
+    var(--chroma-primary-50),
+    var(--chroma-primary-90)
+  );
+  --cn-color-on-info: light-dark(
+    var(--chroma-primary-95),
+    var(--chroma-primary-40)
+  );
+  --cn-color-input: light-dark(
+    var(--chroma-surface-80),
+    var(--chroma-surface-0)
+  );
+  --cn-color-on-input: var(--cn-color-on-surface);
   --cn-color-field: light-dark(
     var(--chroma-surface-95),
     color-mix(in oklch, var(--chroma-surface-20), var(--chroma-surface-40) 67%)
@@ -139,6 +167,6 @@
     color-mix(in oklch, var(--chroma-primary-60), transparent 70%),
     color-mix(in oklch, var(--chroma-primary-40), transparent 70%)
   );
-  --cn-lightbox-background: var(--chroma-surface-30);
-  --cn-lightbox-color: var(--chroma-surface-95);
+  --cn-color-lightbox-background: var(--chroma-surface-30);
+  --cn-color-lightbox-color: var(--chroma-surface-95);
 }

@@ -76,7 +76,7 @@ is why the scale is a partial 20/40/60/90, not the core families' 13 steps.
   intent="Likes, bookmarks, and community appreciation."
 />
 
-Information is not a fourth family. `--cn-info` and `--cn-on-info` are a semantic pair
+Information is not a fourth family. `--cn-color-info` and `--cn-color-on-info` are a semantic pair
 over primary — the v20 info scale named a chroma distinction the design never
 actually made.
 
@@ -123,18 +123,18 @@ overridden one at a time.
   roles={[semanticColor]}
   caption="Surface roles"
   names={[
-    "--cn-surface",
-    "--cn-surface-1",
-    "--cn-surface-2",
-    "--cn-surface-3",
-    "--cn-surface-4",
+    "--cn-color-surface",
+    "--cn-color-surface-1",
+    "--cn-color-surface-2",
+    "--cn-color-surface-3",
+    "--cn-color-surface-4",
   ]}
   intents={{
-    "--cn-surface": "The application itself",
-    "--cn-surface-1": "Payload, the default",
-    "--cn-surface-2": "Payload inside payload",
-    "--cn-surface-3": "Floats over content",
-    "--cn-surface-4": "A system interrupt",
+    "--cn-color-surface": "The application itself",
+    "--cn-color-surface-1": "Payload, the default",
+    "--cn-color-surface-2": "Payload inside payload",
+    "--cn-color-surface-3": "Floats over content",
+    "--cn-color-surface-4": "A system interrupt",
   }}
 />
 
@@ -143,20 +143,20 @@ overridden one at a time.
   roles={[semanticColor]}
   caption="Text, action, and edge roles"
   names={[
-    "--cn-text",
-    "--cn-text-low",
-    "--cn-text-high",
-    "--cn-link",
+    "--cn-color-text",
+    "--cn-color-text-low",
+    "--cn-color-text-high",
+    "--cn-color-link",
     "--cn-color-border",
-    "--cn-focus-ring",
+    "--cn-color-focus-ring",
   ]}
   intents={{
-    "--cn-text": "Primary body copy",
-    "--cn-text-low": "Secondary metadata and timestamps",
-    "--cn-text-high": "Maximum contrast headings",
-    "--cn-link": "Navigational links",
+    "--cn-color-text": "Primary body copy",
+    "--cn-color-text-low": "Secondary metadata and timestamps",
+    "--cn-color-text-high": "Maximum contrast headings",
+    "--cn-color-link": "Navigational links",
     "--cn-color-border": "Structural dividers and boundaries",
-    "--cn-focus-ring": "Keyboard focus indicators",
+    "--cn-color-focus-ring": "Keyboard focus indicators",
   }}
 />
 
@@ -206,7 +206,7 @@ excessive shadow accumulation.
 ### System layer surfaces
 
 Level 4 surfaces use primary step 99 in Light and primary step 40 in Dark. Default body
-text (`--cn-text`) meets WCAG 2.2 AA contrast on level 4 across both themes.
+text (`--cn-color-text`) meets WCAG 2.2 AA contrast on level 4 across both themes.
 
 For shadow measurements, see [Spatial System](/principles/spatial-system). For utility
 class usage, see [Surface reference](/base/surface).

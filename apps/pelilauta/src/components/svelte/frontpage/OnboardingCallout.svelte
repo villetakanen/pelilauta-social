@@ -33,7 +33,7 @@ import { uid } from '../../../stores/session';
   .onboarding-callout {
     padding: 0;
     overflow: hidden;
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .artwork {
@@ -61,7 +61,7 @@ import { uid } from '../../../stores/session';
   }
 
   .content h2 {
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .actions {

@@ -63,7 +63,7 @@ button.
 Every state preserves the chosen variant's surface and foreground identity; hover
 and active feedback composes over the surface without a brightness filter. State
 transitions use the shared UI duration and easing roles and resolve without motion
-when the reader requests reduced motion. Keyboard focus adds `--cn-focus-ring`
+when the reader requests reduced motion. Keyboard focus adds `--cn-color-focus-ring`
 without depending on colour change alone.
 
 A disabled control renders at `--cn-disabled-opacity`.
@@ -85,11 +85,11 @@ component-private icon size.
 
 | State | Presentation |
 | :--- | :--- |
-| Resting | Underlined, using `--cn-link`. |
+| Resting | Underlined, using `--cn-color-link`. |
 | Visited | The resting presentation; browsing history is not disclosed globally. |
-| Hover | Underlined, using `--cn-link-hover`. |
-| Active | Underlined, using `--cn-link-active`. |
-| Keyboard focus | A visible outline using `--cn-focus-ring`, in addition to the current colour and underline. |
+| Hover | Underlined, using `--cn-color-link-hover`. |
+| Active | Underlined, using `--cn-color-link-active`. |
+| Keyboard focus | A visible outline using `--cn-color-focus-ring`, in addition to the current colour and underline. |
 
 Link presentation does not introduce another colour value or change typography
 metrics. A component may replace the resting underline or colour when its
@@ -105,10 +105,10 @@ are mutually exclusive:
 
 | Variant | Intended prominence | Roles |
 | :--- | :--- | :--- |
-| Default | Standard action or navigation. | `--cn-button-light`, `--cn-button`, `--cn-on-button`. |
-| `.text` | Secondary or low-prominence action or navigation. | A translucent `--cn-button` wash and `--cn-on-surface`. |
-| `.cta` | The single most important action or destination in the current composition. | `--cn-button-cta`, `--cn-button`, `--cn-on-button-cta`. |
-| `.secondary` | The v20 alternate chroma treatment where that palette is explicitly required. It does not mean low prominence. | A colour pair scoped to the variant, and the shared `--cn-on-button` foreground. |
+| Default | Standard action or navigation. | `--cn-color-button-light`, `--cn-color-button`, `--cn-color-on-button`. |
+| `.text` | Secondary or low-prominence action or navigation. | A translucent `--cn-color-button` wash and `--cn-color-on-surface`. |
+| `.cta` | The single most important action or destination in the current composition. | `--cn-color-button-cta`, `--cn-color-button`, `--cn-color-on-button-cta`. |
+| `.secondary` | The v20 alternate chroma treatment where that palette is explicitly required. It does not mean low prominence. | A colour pair scoped to the variant, and the shared `--cn-color-on-button` foreground. |
 
 The `secondary` modifier applies only to the control itself; an unrelated
 `.secondary` ancestor does not recolour descendants. The scoped pair preserves
@@ -145,7 +145,7 @@ default angle. The variants are mutually exclusive:
 | :--- | :--- | :--- |
 | Default | The view's prominent contextual action. | Primary 70 blending to surface 50, with a surface-100 foreground. |
 | `.cta` | The contextual action requiring the strongest attention. | Error 60 blending to surface 50, with a surface-100 foreground. |
-| `.secondary` | A supporting action shown beside the prominent action. | The shared `--cn-button` blending toward `--cn-on-surface`, with the shared `--cn-on-button` foreground. |
+| `.secondary` | A supporting action shown beside the prominent action. | The shared `--cn-color-button` blending toward `--cn-color-on-surface`, with the shared `--cn-color-on-button` foreground. |
 
 The standard FAB has a minimum inline size and a fixed block size of seven grid
 units; the `small` modifier uses the regular button size for both measurements. A

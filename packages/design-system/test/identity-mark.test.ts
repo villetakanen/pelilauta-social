@@ -92,10 +92,10 @@ describe('the initials are legible on every backdrop a nick can derive', () => {
 
 describe('the mark reads as a shape against the page behind it', () => {
   for (const mode of ['light', 'dark'] as const) {
-    test(`the backdrop range against --cn-surface, ${mode}`, () => {
+    test(`the backdrop range against --cn-color-surface, ${mode}`, () => {
       const from = color('--_avatar-backdrop-from', mode);
       const to = color('--_avatar-backdrop-to', mode);
-      const surface = color('--cn-surface', mode);
+      const surface = color('--cn-color-surface', mode);
 
       const worst = percentages
         .map((percent) => ({
@@ -115,10 +115,10 @@ describe('the mark reads as a shape against the page behind it', () => {
 
 describe('the anonymous mark, which derives nothing', () => {
   for (const mode of ['light', 'dark'] as const) {
-    test(`--cn-on-surface over --cn-surface-2, ${mode}`, () => {
+    test(`--cn-color-on-surface over --cn-color-surface-2, ${mode}`, () => {
       const ratio = contrast(
-        color('--cn-on-surface', mode),
-        color('--cn-surface-2', mode),
+        color('--cn-color-on-surface', mode),
+        color('--cn-color-surface-2', mode),
       );
       expect(ratio, `${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(3);
     });

@@ -163,7 +163,7 @@ const containerStyle = $derived(
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--cn-text-low);
+    color: var(--cn-color-text-low);
   }
 
   .ramp {

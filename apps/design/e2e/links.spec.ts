@@ -76,9 +76,9 @@ const references = (page: Page) =>
       return value;
     };
     const values = {
-      link: resolve('--cn-link'),
-      hover: resolve('--cn-link-hover'),
-      focus: resolve('--cn-focus-ring'),
+      link: resolve('--cn-color-link'),
+      hover: resolve('--cn-color-link-hover'),
+      focus: resolve('--cn-color-focus-ring'),
     };
     host.remove();
     return values;

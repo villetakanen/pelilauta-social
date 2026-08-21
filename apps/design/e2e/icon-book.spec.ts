@@ -65,7 +65,11 @@ test('monochrome artwork takes the colour of the cell around it', async ({
     `[data-mode="${mode}"][data-role="${role}"]`;
 
   // The icon states no colour, so its computed colour is the cell's.
-  for (const role of ['--cn-text', '--cn-link', '--cn-color-error']) {
+  for (const role of [
+    '--cn-color-text',
+    '--cn-color-link',
+    '--cn-color-error',
+  ]) {
     expect(
       await color(page, `${cell('dark', role)} .cn-icon`),
       `${role} reaches the artwork`,
@@ -73,12 +77,12 @@ test('monochrome artwork takes the colour of the cell around it', async ({
   }
 
   // Two roles in the same theme differ, and one role differs between themes.
-  expect(await color(page, `${cell('dark', '--cn-text')} .cn-icon`)).not.toBe(
-    await color(page, `${cell('dark', '--cn-link')} .cn-icon`),
-  );
-  expect(await color(page, `${cell('dark', '--cn-link')} .cn-icon`)).not.toBe(
-    await color(page, `${cell('light', '--cn-link')} .cn-icon`),
-  );
+  expect(
+    await color(page, `${cell('dark', '--cn-color-text')} .cn-icon`),
+  ).not.toBe(await color(page, `${cell('dark', '--cn-color-link')} .cn-icon`));
+  expect(
+    await color(page, `${cell('dark', '--cn-color-link')} .cn-icon`),
+  ).not.toBe(await color(page, `${cell('light', '--cn-color-link')} .cn-icon`));
 });
 
 test('branded artwork keeps its own colours in both themes', async ({

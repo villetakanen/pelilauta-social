@@ -86,7 +86,7 @@ const Identity = href ? 'a' : 'div';
     block-size: var(--cn-app-bar-height);
     padding-inline: var(--cn-gap);
     background-color: transparent;
-    color: var(--cn-on-surface);
+    color: var(--cn-color-on-surface);
 
     /* A bar shows its actions as icons. */
     --cn-chrome-presentation: compact;
@@ -111,9 +111,9 @@ const Identity = href ? 'a' : 'div';
     block-size: calc(var(--cn-grid) * 16);
     background-image: linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--cn-surface), transparent 10%) 0%,
-      color-mix(in oklch, var(--cn-surface), transparent 30%) 33%,
-      color-mix(in oklch, var(--cn-surface), transparent 70%) 67%,
+      color-mix(in oklch, var(--cn-color-surface), transparent 10%) 0%,
+      color-mix(in oklch, var(--cn-color-surface), transparent 30%) 33%,
+      color-mix(in oklch, var(--cn-color-surface), transparent 70%) 67%,
       transparent 100%
     );
     opacity: 0;
@@ -143,7 +143,7 @@ const Identity = href ? 'a' : 'div';
 
   /* A modal bar rises off the page and paints it, so it needs no veil. */
   .cn-app-bar.modal {
-    background-color: var(--cn-surface-4);
+    background-color: var(--cn-color-surface-4);
     box-shadow: var(--cn-shadow-elevation-4);
   }
 
@@ -166,7 +166,7 @@ const Identity = href ? 'a' : 'div';
     text-decoration: none;
   }
   a.identity:focus-visible {
-    outline: 2px solid var(--cn-focus-ring);
+    outline: 2px solid var(--cn-color-focus-ring);
     outline-offset: 2px;
   }
 
