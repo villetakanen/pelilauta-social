@@ -17,6 +17,9 @@ export async function authedFetch(
   input: RequestInfo | URL,
   options?: RequestInit,
 ): Promise<Response> {
+  // Auth restores a persisted session asynchronously; a call racing that
+  // restore would read null from currentUser and fail a signed-in user.
+  await auth.authStateReady();
   const currentUser: User | null = auth.currentUser;
 
   // 1. Check if user is logged in client-side
