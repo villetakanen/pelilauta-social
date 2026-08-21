@@ -1,6 +1,6 @@
 /*
  * Generated from tokens/elevation.json by scripts/generate-tokens.mjs.
- * Do not edit: change the JSON source and run `pnpm generate:tokens`.
+ * Do not edit: change the JSON source and run `pnpm generate:tokens` from the repository root.
  */
 :root {
   --cn-shadow-color: light-dark(

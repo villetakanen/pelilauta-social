@@ -12,7 +12,7 @@ gates:
     run: pnpm lint
     when: [in-flight, pre-merge]
   unit:
-    question: a function, or a stylesheet's contract
+    question: a function, a stylesheet's contract, or generated CSS matching its tokens
     run: pnpm test
     when: [in-flight, pre-push, pre-merge]
   component:

@@ -12,6 +12,8 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "check:skills": "node .agents/check-skills-exposed.mjs",
+    "generate:tokens": "pnpm --filter @pelilauta/design-system generate:tokens",
+    "check:tokens": "pnpm --filter @pelilauta/design-system check:tokens",
     "verify": "pnpm check:skills && pnpm lint && pnpm test && pnpm -r --if-present run build",
     "test:uat": "vitest run"
   },

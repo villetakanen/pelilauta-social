@@ -1,29 +1,19 @@
-# The Token Generator Is Reachable From One Directory And Checked Nowhere
+# Editing A Token Does Not Refresh The Design Site
 
-Status: Recorded 2026-08-20, while spiking the field fill
+Status: Recorded 2026-08-20, while spiking the field fill; narrowed 2026-08-21 when the
+freshness gate landed
 
 `packages/design-system/scripts/generate-tokens.mjs` writes `styles/chroma.css`,
 `styles/units.css`, `styles/semantic.css` and `styles/elevation.css` from the JSON under
-`tokens/`. It is exposed as `generate:tokens` and `check:tokens` in
-`packages/design-system/package.json:13-14`, and nowhere else.
+`tokens/`. A stale stylesheet no longer reaches a merge: `check:tokens` runs inside the
+package's `test`, so `pnpm test` fails it at every cadence, and root `generate:tokens`
+regenerates.
 
-`pnpm generate:tokens` therefore works from `packages/design-system` and fails from the
-repository root, which is where the work happens. The generator's own failure message
-(`generate-tokens.mjs:264,366`) prints that command, so following the instruction the
-tool gives leads to an error.
-
-Nothing runs the check. `check:icons` guards a stale icon registry in both applications'
-builds (`apps/design/package.json:11`, `apps/pelilauta/package.json:13`); `check:tokens`
-has no caller in any script, workflow or test. A colour role edited in the JSON without a
-regeneration ships the previous value, and the build agrees.
-
-Neither `pnpm dev` nor any build regenerates. The stylesheets are served as a plain
-`@import` chain, so a designer editing a value sees the old one until they know the
-command and the directory it works in.
+What remains is the dev loop. Neither `pnpm dev` nor any build regenerates, and the
+stylesheets are served as a plain `@import` chain, so a designer editing a value sees
+the old one until they run the command.
 
 ## What done looks like
 
-Editing a token and reloading the design site shows the new value, without a command
-learned by reading a script. Whatever form that takes — a root script, a watch alongside
-`dev`, generation on demand — a stale generated stylesheet cannot reach a build: the same
-guard `check:icons` already gives the icon registry.
+Editing a token and reloading the design site shows the new value, without running a
+command — a watch alongside `dev`, or generation on demand.

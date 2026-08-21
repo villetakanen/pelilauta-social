@@ -261,7 +261,7 @@ const substitute = (value) =>
 
 const header = (source) => `/*
  * Generated from ${source} by scripts/generate-tokens.mjs.
- * Do not edit: change the JSON source and run \`pnpm generate:tokens\`.
+ * Do not edit: change the JSON source and run \`pnpm generate:tokens\` from the repository root.
  */
 `;
 
@@ -363,7 +363,7 @@ if (process.argv.includes('--check')) {
     if (committed !== css) {
       console.error(
         `${relative} differs from its token source. ` +
-          'The JSON is the writable source: edit it and run `pnpm generate:tokens`.',
+          'The JSON is the writable source: edit it and run `pnpm generate:tokens` from the repository root.',
       );
       clean = false;
     }
