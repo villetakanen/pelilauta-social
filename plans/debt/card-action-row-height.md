@@ -3,16 +3,16 @@
 `CnCard.svelte:317-321` gives `.actions` `block-size: calc(7 * var(--cn-grid))` — 56px, the
 button row Cyan 4 and v20 built from a 38px pill and 9px margins.
 
-The click area a control needs is six grid units, 48px
-(`plans/debt/button-touch-target.md`). A card's action row states the old number, so once
-the target lands the row is a unit taller than the thing it exists to hold, and card
-heights across every listing carry the difference.
+A control's click area is six grid units, 48px, and `specs/design-system/actions/spec.md`
+states it. A card's action row states seven, so the row is a unit taller than the thing it
+exists to hold, and card heights across every listing carry the difference.
 
 ## Remaining change
 
-Take the action row to `calc(6 * var(--cn-grid))` with the button target, not before: a
-48px row holding a 38px-target button is the same defect in a shorter box. Both belong to
-the same epic.
+Take the action row to `calc(6 * var(--cn-grid))`. What gates it is no longer the click
+area, which a control now has: it is the occupied row the Actions spec states, also seven
+units, built from the pill and the block margin that centres it. A 48px action row cannot
+hold a control that occupies 56, so the two move together or neither does.
 
 `specs/design-system/components/cn-card/spec.md` states the row, and the card book
 describes it, so both follow the change.
