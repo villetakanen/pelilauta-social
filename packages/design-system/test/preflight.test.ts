@@ -129,7 +129,7 @@ describe('preflight', () => {
 });
 
 describe('entry point', () => {
-  test('composes preflight, tokens, faces, typography, links, spatial utilities, containers and surfaces in that order', () => {
+  test('composes preflight, tokens, faces, typography, dividers, links, spatial utilities, containers and surfaces in that order', () => {
     const entry = withoutComments(read('../styles/ds.css'));
     const imports = [...entry.matchAll(/@import\s+"([^"]+)"/g)].map(
       (m) => m[1],
@@ -139,6 +139,7 @@ describe('entry point', () => {
       './tokens.css',
       './fonts.css',
       './typography.css',
+      './dividers.css',
       './links.css',
       './buttons.css',
       './chip.css',
