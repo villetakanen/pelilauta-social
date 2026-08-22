@@ -63,7 +63,6 @@ a.button[href]:not(
     2
   );
   padding-inline: var(--cn-gap);
-  overflow: hidden;
   border: none;
   border-radius: calc(var(--cn-button-size) / 2);
   vertical-align: middle;
@@ -215,9 +214,56 @@ a.button[href]:not(
   content: "";
   position: absolute;
   inset: 0;
+  /*
+   * The wash rounds itself. The control used to clip it with `overflow: hidden`,
+   * which also clipped the pointer target below back to the visible pill.
+   */
+  border-radius: inherit;
   background-color: transparent;
   pointer-events: none;
   transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * The pointer target, `specs/design-system/actions/spec.md`. The visible pill is
+ * smaller than the target in the block axis, and an icon-only control is smaller in
+ * both, so the target is a box of its own centred on the control: a pseudo-element's
+ * box hit-tests as the element that generated it. It paints nothing.
+ *
+ * The block margin above and below the pill is wider than the target's overhang, so the
+ * target sits inside the row the control already occupies and no button row moves.
+ *
+ * `::before` is free on these controls — the wash is the `::after` above, and
+ * the presentations that own a `::before` of their own are the ones the exclusion list
+ * already names.
+ */
+button:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *,
+    .cn-lightbox *,
+    .cn-reaction-button
+  )::before,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *,
+    .cn-lightbox *,
+    .cn-reaction-button
+  )::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  min-inline-size: calc(var(--cn-grid) * 6);
+  min-block-size: calc(var(--cn-grid) * 6);
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 button:not(

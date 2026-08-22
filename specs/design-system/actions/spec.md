@@ -121,9 +121,16 @@ Button geometry is grid-derived:
 | :--- | :--- |
 | Visible block size | `4.75 × --cn-grid`. |
 | Occupied row | `7 × --cn-grid`, with the visible control centred in the row. |
+| Pointer target | `6 × --cn-grid` in both axes, centred on the visible control. |
 | Inline padding | `--cn-gap`. |
 | Content gap | `--cn-grid`. |
 | Radius | Half the visible block size. |
+
+Every control has a pointer target, and the target is not the visible control: where a
+control paints smaller than the target in either axis, the target extends past what it
+paints. A control's own spacing is not its target, because margin receives no pointer
+events. The target fits within the occupied row, so a control's target does not decide
+the row it sits in.
 
 An icon-only or loader-only button renders as a circle. A labelled button may size
 intrinsically or stretch when its containing layout stretches it. Hover adds the
@@ -197,6 +204,8 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
 - The disabled state's only paint change is opacity from the shared token.
 - An icon-only or loader-only control never depends on its child for the control's
   accessible name.
+- A control that paints smaller than the pointer target keeps the full target in both
+  axes, an icon-only control and a small FAB included.
 
 ### Scenarios
 

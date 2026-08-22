@@ -128,6 +128,23 @@ loaders maintain fixed square dimensions.
 The corner radius equals half the visible block size, inline padding is `--cn-gap`, and
 the space between an icon and its label is `--cn-grid` (0.5rem).
 
+### The pointer target is larger than the pill
+
+A button paints at `--cn-button-size`, and it answers a pointer over six grid units in
+both directions. The two are not the same box: the target is centred on the pill and
+reaches past it, further on an icon-only control, which paints a circle narrower than the
+target in both axes.
+
+Nothing is painted to show it. The target is an empty box on the control, so a pointer
+landing just outside the pill still lands on the button — which is what a reader touching
+a phone, or aiming with a trackpad, actually needs.
+
+The target fits inside the row a button already occupies, so it changes no layout: the
+pill's own block spacing is wider than the amount the target reaches past it.
+
+A component that builds its own control from these rules — a chip, a chrome action, a
+reaction button — sets its own target and says so in its own book.
+
 ## Floating action buttons (FAB)
 
 A floating action button (FAB) exposes the primary contextual action for a view. Use
