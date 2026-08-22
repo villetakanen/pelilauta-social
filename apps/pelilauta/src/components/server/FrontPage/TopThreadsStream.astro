@@ -50,12 +50,10 @@ function getNoun(slug: string | undefined): string {
       {t('app:errors.fetchingThreads')}
     </div>
   )}
-  <div class="flex flex-col">
-    {threads.map((thread) => (
-      <ThreadCard {thread} noun={getNoun(thread.channel)}/>
-    ))} 
-  </div>
-  <div class="flex items-center mt-2">
+  {threads.map((thread) => (
+    <ThreadCard {thread} noun={getNoun(thread.channel)}/>
+  ))}
+  <div>
     <a href="/channels" class="button">
       {t('actions:showMore')}
     </a>

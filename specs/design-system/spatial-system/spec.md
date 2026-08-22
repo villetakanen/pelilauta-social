@@ -52,9 +52,9 @@ Spatial measurements use one of the three named measurements or another multiple
 of `--cn-grid`. Equivalent relationships repeated in one composition use the same
 interval.
 
-`--cn-line` remains both the prose rhythm and minimum-row-height measurement. Body
-text uses one line unit, allowing a control one line unit high to align with
-adjacent text.
+`--cn-line` remains both the rhythm between stacked blocks and the minimum-row-height
+measurement. Body text uses one line unit, allowing a control one line unit high to
+align with adjacent text.
 
 Radius steps derive from the grid at one-half, one, two, and four grid units. A
 rounded content container is a box that applies a radius and directly lays out

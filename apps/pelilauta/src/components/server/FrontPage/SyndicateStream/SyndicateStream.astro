@@ -40,33 +40,44 @@ try {
   logError('SyndicateStream', 'Failed to fetch RSS feeds', error);
 }
 ---
-<div class="flex flex-col">
-  <div>
+<!--
+  This region groups two feeds, so each feed declares itself a content area rather than
+  relying on the region, which spaces the two feeds and the mark between them.
+-->
+<div>
+  <div class="content-prose">
     <h2 class="text-h4">
       <CnIcon noun="myrrys-scarlet" aria-label="Myrrys.com logo" />
       Myrrys.com
     </h2>
-    <img src="/myrrys-proprietary/letl/letl_gm_screen_splash-690.webp" alt="Myrrys logo" class="w-16-9 poster" />
+    <!--
+      The image is wrapped because a content area gives each of its children an
+      inline-size query boundary, and size containment discards a replaced element's
+      intrinsic width — `plans/debt/prose-flow-collapses-a-replaced-child.md`.
+    -->
+    <div>
+      <img src="/myrrys-proprietary/letl/letl_gm_screen_splash-690.webp" alt="Myrrys logo" class="poster" />
+    </div>
     {posts.map((post:RSSItem) => <SyndicatePost post={post} /> )}
 
-    <div class="toolbar justify-center">
+    <div>
       <a href="https://myrrys.com" class="text button">
         {t('actions:readMore')}
       </a>
     </div>
   </div>
 
-  <div class="flex items-center my-2">
-    <CnIcon noun="d20" size="large" /><br/>
+  <div>
+    <CnIcon noun="d20" size="large" />
   </div>
 
-  <div>
-  <h2 class="text-h5">
-    <img src="/myrrys-proprietary/fair-use/srs-logo.webp" class="icon" alt="roolipelitiedotus.fi logo"/>
-    Roolipelitiedotus.fi</h2>
+  <div class="content-prose">
+    <h2 class="text-h5">
+      <img src="/myrrys-proprietary/fair-use/srs-logo.webp" class="icon" alt="roolipelitiedotus.fi logo"/>
+      Roolipelitiedotus.fi</h2>
     {posts2.map((post) => <SyndicatePost post={post} /> )}
 
-    <div class="toolbar justify-center">
+    <div>
       <a href="https://roolipelitiedotus.fi" class="text button">
         {t('actions:readMore')}
       </a>

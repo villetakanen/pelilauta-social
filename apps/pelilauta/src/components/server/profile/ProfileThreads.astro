@@ -55,12 +55,10 @@ function getNoun(slug: string | undefined): string {
   <h2>{t('profile:threadList.title')}</h2>
 
   { threads.length > 0 ? (
-    <div class="flex flex-col">
-      {threads.map((thread) => (
-       <ThreadCard {thread} noun={getNoun(thread.channel)}/>
-      ))}
-    </div>
+      threads.map((thread) => (
+        <ThreadCard {thread} noun={getNoun(thread.channel)}/>
+      ))
     ) : (
-        <p>{t('profile:threadList.empty')}</p>
+      <p>{t('profile:threadList.empty')}</p>
     )}
 </section>

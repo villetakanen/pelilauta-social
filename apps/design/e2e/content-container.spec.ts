@@ -9,6 +9,8 @@ import { expect, type Page, test } from '@playwright/test';
 const BOOK = '/base/content-containers';
 const MEASURE_STEPS = 83;
 const GAP_STEPS = 2;
+/** The rhythm: what a content area puts between its children, and stacked regions. */
+const LINE_STEPS = 3;
 const GRID_REM = 0.5;
 /** The triad's fixed tracks, and the width its row needs, in grid steps. */
 const TRIAD_TRACKS = [51, 32, 32];
@@ -349,14 +351,14 @@ for (const { name, mode, tracks, threshold } of MODES) {
 
       const width = (await steps(page, threshold)) - 1;
       const { host, regions } = await build(page, width);
-      const gap = await steps(page, GAP_STEPS);
+      const line = await steps(page, LINE_STEPS);
 
       for (const region of regions) {
         expect(region.width).toBeCloseTo(host.width, 0);
         expect(region.x).toBeCloseTo(host.x, 0);
       }
       expect(regions[1].y - (regions[0].y + regions[0].height)).toBeCloseTo(
-        gap,
+        line,
         0,
       );
     });

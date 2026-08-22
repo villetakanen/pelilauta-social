@@ -25,24 +25,15 @@ if (siteListResponse.ok) {
   });
 }
 ---
-<section class="site-stream">
+<section class="content-prose">
   <h2 class="text-h5">{t('frontPage:sites.title')}</h2>
   <OnboardingCallout client:only="svelte"/>
-  <div class="flex flex-col">
-    {sites.map((site) => (
-      site && <SiteCard site={site} client:load />
-    ))}
-  </div>
-  <div class="flex items-center">
+  {sites.map((site) => (
+    site && <SiteCard site={site} client:load />
+  ))}
+  <div>
     <a href="/sites" class="button">
       {t('actions:showMore')}
     </a>
   </div>
 </section>
-
-<style>
-  .site-stream {
-    display: grid;
-    gap: var(--cn-gap);
-  }
-</style>
