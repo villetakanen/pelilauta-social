@@ -30,24 +30,15 @@ flowchart LR
   Chroma["chroma tokens<br/>--chroma-{family}-{step}"]
   Semantic["semantic tokens<br/>--cn-*"]
   Consumers["design-system and application consumers"]
-  Compat["compat/cyan-4.css"]
 
   Chroma --> Semantic
   Semantic --> Consumers
   Chroma -. stated component exception .-> Consumers
-  Chroma --> Compat
-  Semantic --> Compat
 ```
 
 Semantic shadow declarations derive from the grid, so the token entry point
 composes the measurement and colour families and supplies every dependency
 together.
-
-Cyan 4 compatibility aliases are outside the permanent model. They keep legacy
-consumers testable while migration is incomplete. `compat/cyan-4.css` carries
-only the names its remaining Cyan consumers require. An alias is added when a
-remaining legacy consumer requires it and terminates in a chroma or semantic
-token.
 
 ### Constraints
 

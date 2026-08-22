@@ -151,8 +151,7 @@ A field paints no error or rejected-input state.
   both colour schemes.
 - The focus treatment reaches a reader who taps.
 - A labelled field shows its name inside the fill, above the reader's words.
-- A field renders the same way in `apps/design` and in `apps/pelilauta`, and removing
-  `@11thdeg/cyan-css` from a sampled surface leaves its fields unchanged.
+- A field renders the same way in `apps/design` and in `apps/pelilauta`.
 - The fields book renders every state in both schemes.
 - The disabled state reads both as a field and as unusable, in both schemes.
 

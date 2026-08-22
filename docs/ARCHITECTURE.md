@@ -53,7 +53,6 @@ lightness steps, so the contrast a semantic role depends on survives the swap.
 `--cyan-*`, undocumented `--color-*`, or a numbered `--cn-color-{family}-{step}`
 token — the accidental vocabulary that repeats `--chroma-*` inside the `--cn-*`
 namespace.
-`styles/compat/cyan-4.css` declares the aliases Cyan itself reads, and leaves with it.
 
 ### CSS Classes
 

@@ -15,11 +15,6 @@
  *   2. The nesting rules run from the lowest ancestor level to the highest. A
  *      descendant with several elevated ancestors matches several of them, and
  *      the nearest ancestor is always the last rule to match, so it wins.
- *
- * Pelilauta loads this after `@11thdeg/cyan-css`, which ships a `.surface` and an
- * `.elevation-*` family of its own at these same specificities. Equal specificity
- * resolves by order, so these rules win only while the design system's entry
- * point is imported second.
  */
 
 /*

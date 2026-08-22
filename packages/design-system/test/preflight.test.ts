@@ -120,7 +120,6 @@ describe('preflight', () => {
       '../styles/units.css',
       '../styles/fonts.css',
       '../styles/docs.css',
-      '../styles/compat/cyan-4.css',
     ];
     expect(withoutComments(preflight)).toMatch(/color-scheme\s*:/);
     for (const path of others) {
@@ -140,7 +139,6 @@ describe('entry point', () => {
       './tokens.css',
       './fonts.css',
       './typography.css',
-      './compat/cyan-typography.css',
       './links.css',
       './buttons.css',
       './chip.css',

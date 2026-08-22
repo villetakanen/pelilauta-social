@@ -88,7 +88,7 @@ a:focus-visible .cn-avatar {
   box-shadow: var(--cn-shadow-elevation-1);
   background: var(--cn-color-surface-2);
   color: var(--cn-color-on-surface);
-  font-family: var(--cn-font-family-ui);
+  font-family: var(--cn-font-family);
   font-weight: var(--cn-font-weight-emphasis);
   /* Below the initials' step: the count runs to three characters, they run to two. */
   font-size: calc(var(--cn-avatar-size-medium) * 0.3);

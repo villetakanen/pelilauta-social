@@ -137,16 +137,14 @@ describe('layer composition', () => {
     expect(referencing).toEqual([]);
   });
 
-  test('permanent stylesheets never read compatibility vocabulary', () => {
-    // Compat leans on the permanent system; the permanent system never leans
-    // back. The whole compat layer is deleted before rc.1, and this test with it.
-    const offenders = sheets
-      .filter((sheet) => !sheet.startsWith('compat'))
-      .flatMap((sheet) =>
-        varReferences(read(sheet))
-          .filter((usage) => /^--(color|background)-/.test(usage.name))
-          .map((usage) => `${sheet}: ${usage.name}`),
-      );
+  test('no stylesheet reads the legacy Cyan colour vocabulary', () => {
+    // The compat layer that declared these names left with Cyan's CSS. A read of
+    // one now resolves to nothing, so the name may not reappear.
+    const offenders = sheets.flatMap((sheet) =>
+      varReferences(read(sheet))
+        .filter((usage) => /^--(color|background)-/.test(usage.name))
+        .map((usage) => `${sheet}: ${usage.name}`),
+    );
 
     expect(offenders).toEqual([]);
   });
@@ -192,8 +190,7 @@ describe('resolvability', () => {
 
     // A property referenced without a fallback must exist, or everything
     // computed from it is invalid at use time. Consumers that intend an
-    // external or contextual value supply a fallback instead — which is why
-    // var(--color-on, currentColor) in compat/cyan-4.css is not counted here.
+    // external or contextual value supply a fallback instead.
     expect([...dangling].sort()).toEqual([]);
   });
 

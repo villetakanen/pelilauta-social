@@ -1,40 +1,13 @@
 /**
  * Parity tests for the unit and radius tokens.
  *
- * These tokens are forward-ported from v20 at values Cyan 4 already computes, so
- * that both sources may coexist while legacy consumers migrate. That claim is
- * only true while it stays true, so it is asserted here against the installed
- * cyan-css rather than trusted.
+ * These tokens are forward-ported from v20. The scale is asserted here so that a
+ * value may not drift from the 8px grid the documentation states.
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
 import { expect, test } from 'vitest';
 
 const read = (path: string) => readFileSync(path, 'utf8');
-
-const packageRoot = fileURLToPath(new URL('..', import.meta.url));
-const workspaceRoot = fileURLToPath(new URL('../../..', import.meta.url));
-
-/**
- * Installed dependencies live in the package's own node_modules or, under
- * node-linker=hoisted, only in the workspace root. Throw with both candidates
- * rather than returning nothing, which would let this test pass while comparing
- * against no installed source at all.
- */
-function installed(relative: string): string {
-  const candidates = [
-    join(packageRoot, 'node_modules', relative),
-    join(workspaceRoot, 'node_modules', relative),
-  ];
-  const found = candidates.find((candidate) => existsSync(candidate));
-  if (!found) {
-    throw new Error(
-      `Installed source not found for '${relative}'. Looked in:\n  ${candidates.join('\n  ')}`,
-    );
-  }
-  return found;
-}
 
 /** Custom-property declarations of a stylesheet, as name -> value. */
 function declarations(source: string): Map<string, string> {
@@ -91,28 +64,6 @@ function toRem(name: string, tokens: Map<string, string>): number {
 const ours = declarations(
   read(new URL('../styles/units.css', import.meta.url).pathname),
 );
-
-const cyan = declarations(
-  read(installed('@11thdeg/cyan-css/dist/tokens/units.css')),
-);
-
-const PORTED = [
-  '--cn-grid',
-  '--cn-gap',
-  '--cn-line',
-  '--cn-border-radius-small',
-  '--cn-border-radius-medium',
-  '--cn-border-radius-large',
-  '--cn-border-radius-xl',
-];
-
-test('every ported token computes to the value Cyan 4 computes', () => {
-  for (const name of PORTED) {
-    expect(toRem(name, ours), `${name} diverged from Cyan 4`).toBe(
-      toRem(name, cyan),
-    );
-  }
-});
 
 test('the grid is the documented 8px and the scale derives from it', () => {
   const grid = toRem('--cn-grid', ours);

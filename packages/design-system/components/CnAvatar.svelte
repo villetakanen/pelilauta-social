@@ -151,7 +151,7 @@ const imageLayer = $derived(
   }
 
   .cn-avatar__initials {
-    font-family: var(--cn-font-family-ui);
+    font-family: var(--cn-font-family);
     font-weight: var(--cn-font-weight-emphasis);
     font-size: calc(var(--cn-avatar-size) * 0.4);
     line-height: 1;
