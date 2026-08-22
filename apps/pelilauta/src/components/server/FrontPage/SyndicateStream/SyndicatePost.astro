@@ -27,7 +27,7 @@ type Props = {
 const { post } = Astro.props;
 ---
 <section class="border-t pt-1 mb-2">
-  <h4 class="text-h5"><a href={post.link} class="hoverable" style="text-decoration: none;">{post.title}</a></h4>
+  <h3 class="text-h5"><a href={post.link} class="hoverable" style="text-decoration: none;">{post.title}</a></h3>
   <p class="text-small">{post.contentSnippet}</p>
   <p class="text-caption text-right">
     <a href={post.link}>

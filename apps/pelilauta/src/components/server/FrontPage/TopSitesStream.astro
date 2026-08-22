@@ -26,6 +26,7 @@ if (siteListResponse.ok) {
 }
 ---
 <section class="site-stream">
+  <h2 class="text-h5">{t('frontPage:sites.title')}</h2>
   <OnboardingCallout client:only="svelte"/>
   <div class="flex flex-col">
     {sites.map((site) => (

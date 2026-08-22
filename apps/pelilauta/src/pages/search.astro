@@ -12,9 +12,9 @@ if (denied) return denied;
 <Base title={t('search:title')}>
   {/*
     The search app is client:only, so a heading inside it does not exist until
-    it hydrates. The document's outline states the page here instead, and the
-    app's own visible heading names its card.
+    it hydrates. The page names itself here instead, and the app's own heading
+    names its card.
   */}
-  <h1 class="sr-only">{t('search:title')}</h1>
+  <h1>{t('search:title')}</h1>
   <AlgoliaSearchApp client:only="svelte" />
 </Base>

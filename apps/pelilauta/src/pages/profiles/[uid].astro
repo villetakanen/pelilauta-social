@@ -35,6 +35,6 @@ Astro.response.headers.set(
 );
 ---
 <Base title={profile.nick} description={description}>
-  <h1 class="sr-only">{profile.nick}</h1>
+  <h1>{profile.nick}</h1>
   <ProfileApp profile={profile} />
 </Base>
