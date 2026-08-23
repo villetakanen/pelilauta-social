@@ -72,7 +72,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
     <CardSubscription thread={thread} client:only="svelte" />
 
     <Fragment slot="actions">
-      <p class="m-0 px-1 text-small">
+      <p class="text-small">
         <ProfileLink uid={thread.owners?.[0] || ""} client:only="svelte" />
         <br />
         {toDisplayString(thread.flowTime)}
@@ -86,10 +86,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
       />
 
       <!-- Link to discussion -->
-      <a
-        href={`/threads/${thread.key}?jumpTo=unread#discussion`}
-        class="px-1 flex"
-      >
+      <a href={`/threads/${thread.key}?jumpTo=unread#discussion`}>
         <CnIcon noun="discussion" size="small" />
         <span class="text-caption">{thread.replyCount || 0}</span>
       </a>

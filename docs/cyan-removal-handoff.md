@@ -57,6 +57,20 @@ flattens a writer's headings to `text-h4` rather than the dead `text-h5` (`a5989
 The login invitation opens the page instead of hiding in the sites stream, carrying the
 front page's first `h1` (`5d0a7871`).
 
+Fields paint every textual input type, not `input[type="text"]` alone, and the three
+forms that stood a sibling label beside their input wrap it instead (`359f4db5`). The
+fields spec went `proposed` with the widening and awaits its read. The footer settled
+on the content-columns defaults and the create-thread FAB keeps its label at every
+width (`ed24d046`).
+
+The front page's triage is done. Its census against the published stylesheets left
+three dead-class sites, and `ThreadCard.astro` dropped its atomics — the card's
+actions row already zeroes child margins and spaces by gap, so nothing replaced them.
+The card title's fixed `<h4>` and bespoke tokens are filed as
+`plans/debt/card-title-hardcodes-its-heading.md`. Still open on the page:
+`TopThreadsStream.astro`'s `.error` div declares nothing (reachable only when the
+thread fetch fails), and the untamed `h1` below. Login is the next screen.
+
 ## What the removal exposed and nobody has taken
 
 Cyan's atomics are gone, so around 450 call sites in `apps/pelilauta/src` name classes
