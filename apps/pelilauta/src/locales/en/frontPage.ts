@@ -5,6 +5,9 @@ export const frontPage = {
   sites: {
     title: 'Games',
   },
+  syndicate: {
+    title: 'Elsewhere',
+  },
   featuredTags: {
     title: 'Popular Topics',
     description: 'Browse discussions and sites about popular RPG systems',

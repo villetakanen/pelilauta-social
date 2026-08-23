@@ -141,3 +141,19 @@ tooling, with the API routes, stores, schemas, Firestore access, locale strings 
 `SiteSchema` fields behind them. No successor is planned.
 
 See [ADR 0003](adrs/0003-discontinue-characters.md).
+
+### Syndicated feeds
+
+v18 stacks one section per feed on the front page, each with its own heading, its own
+"read more" link, and — for one of the two — a promotional image the other does not
+get. A reader sees two lists, and how recent either one is against the other is
+something they have to work out. v21 merges every feed into one stream ordered by
+recency, and names its source on each post.
+
+The deviation is deliberate. The stream is for the ecosystem's activity, not each
+publisher's, and a section per publisher makes the page grow a section every time one
+is added. One stream ranks the whole community by when it last posted, and takes a new
+publisher as configuration.
+
+v21 also holds a place in the stream for a publisher declared guaranteed. v18 needs no
+such notion: a section per publisher cannot be excluded by another's activity.

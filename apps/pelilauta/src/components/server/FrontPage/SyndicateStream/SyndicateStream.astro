@@ -1,86 +1,43 @@
 ---
-import CnIcon from '@design-system/components/CnIcon.svelte';
-import { t } from 'src/utils/i18n';
-import { logError } from 'src/utils/logHelpers';
+/*
+ * The syndicated stream: `specs/pelilauta/syndicated-feeds/spec.md`.
+ *
+ * One stream, newest first, from every publisher the configuration names. The route is
+ * the only thing here that reaches the network, so this reads no feed address, imports
+ * no parser, and holds no publisher's name in its markup.
+ */
+import type { FeedData } from '@pages/api/rss-feeds.json';
+import { t } from '@utils/i18n';
+import { logError } from '@utils/logHelpers';
+import {
+  mergeSyndicateFeeds,
+  type SyndicatedPost,
+} from './mergeSyndicateFeeds';
 import SyndicatePost from './SyndicatePost.astro';
 
-type RSSItem = {
-  title: string;
-  link: string;
-  pubDate: string;
-  contentSnippet: string;
-};
-
-type FeedData = {
-  myrrys: RSSItem[];
-  roolipelitiedotus: RSSItem[];
-};
-
-let posts: RSSItem[] = [];
-let posts2: RSSItem[] = [];
+let posts: SyndicatedPost[] = [];
 
 try {
-  // Fetch from our cached API instead of external feeds directly
-  // Use AbortController to timeout the request after 5 seconds
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-  const response = await fetch(`${Astro.url.origin}/api/rss-feeds.json`, {
-    signal: controller.signal,
-  });
-
-  clearTimeout(timeoutId);
-
+  const response = await fetch(`${Astro.url.origin}/api/rss-feeds.json`);
   if (response.ok) {
-    const feedData: FeedData = await response.json();
-    posts = feedData.myrrys || [];
-    posts2 = feedData.roolipelitiedotus || [];
+    posts = mergeSyndicateFeeds((await response.json()) as FeedData);
+  } else {
+    logError(
+      'SyndicateStream',
+      `rss-feeds.json answered ${response.status} ${response.statusText}`,
+    );
   }
 } catch (error) {
-  logError('SyndicateStream', 'Failed to fetch RSS feeds', error);
+  logError('SyndicateStream', 'Failed to read the syndicated feeds', error);
 }
 ---
 <!--
-  This region groups two feeds, so each feed declares itself a content area rather than
-  relying on the region, which spaces the two feeds and the mark between them.
+  The stream itself carries no surface: the region rests in the page like its sibling
+  columns, and it is already an occupied Triad region, so it needs no `content-prose` to
+  give its children the rhythm. Each post below carries the surface instead, and the
+  gap between them is the column grid's, so nothing here states a line between posts.
 -->
-<div>
-  <div class="content-prose">
-    <h2 class="text-h4">
-      <CnIcon noun="myrrys-scarlet" aria-label="Myrrys.com logo" />
-      Myrrys.com
-    </h2>
-    <!--
-      The image is wrapped because a content area gives each of its children an
-      inline-size query boundary, and size containment discards a replaced element's
-      intrinsic width — `plans/debt/prose-flow-collapses-a-replaced-child.md`.
-    -->
-    <div>
-      <img src="/myrrys-proprietary/letl/letl_gm_screen_splash-690.webp" alt="Myrrys logo" class="poster" />
-    </div>
-    {posts.map((post:RSSItem) => <SyndicatePost post={post} /> )}
-
-    <div>
-      <a href="https://myrrys.com" class="text button">
-        {t('actions:readMore')}
-      </a>
-    </div>
-  </div>
-
-  <div>
-    <CnIcon noun="d20" size="large" />
-  </div>
-
-  <div class="content-prose">
-    <h2 class="text-h5">
-      <img src="/myrrys-proprietary/fair-use/srs-logo.webp" class="icon" alt="roolipelitiedotus.fi logo"/>
-      Roolipelitiedotus.fi</h2>
-    {posts2.map((post) => <SyndicatePost post={post} /> )}
-
-    <div>
-      <a href="https://roolipelitiedotus.fi" class="text button">
-        {t('actions:readMore')}
-      </a>
-    </div>
-  </div>
-</div>
+<section>
+  <h2 class="text-h3">{t('frontPage:syndicate.title')}</h2>
+  {posts.map((post) => <SyndicatePost {post} />)}
+</section>

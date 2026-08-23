@@ -5,6 +5,9 @@ export const frontPage = {
   sites: {
     title: 'Pelit',
   },
+  syndicate: {
+    title: 'Muualta',
+  },
   featuredTags: {
     title: 'Suositut aiheet',
     description:
