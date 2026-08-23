@@ -99,8 +99,8 @@ async function loginWithPassword(e: SubmitEvent) {
     contact the developers.
   </p>
   <form onsubmit={loginWithPassword}>
-    <div class="form-field">
-      <label for="password-email">Email</label>
+    <label>
+      Email
       <input
         id="password-email"
         type="email"
@@ -108,9 +108,9 @@ async function loginWithPassword(e: SubmitEvent) {
         bind:value={email}
         required
       />
-    </div>
-    <div class="form-field">
-      <label for="password-password">Password</label>
+    </label>
+    <label>
+      Password
       <input
         id="password-password"
         type="password"
@@ -118,7 +118,7 @@ async function loginWithPassword(e: SubmitEvent) {
         bind:value={password}
         required
       />
-    </div>
+    </label>
     <div class="toolbar justify-end">
       <button type="submit" disabled={loading}>
         {#if loading}

@@ -277,8 +277,8 @@ onMount(async () => {
     <!-- User needs to re-enter email for link verification -->
     <p>Please enter the email address you used to request the login link:</p>
     <form onsubmit={verifyWithEmail}>
-      <div class="form-field">
-        <label for="email-verify">{t("login:withEmail.label")}</label>
+      <label>
+        {t("login:withEmail.label")}
         <input
           id="email-verify"
           type="email"
@@ -286,7 +286,7 @@ onMount(async () => {
           bind:value={email}
           required
         />
-      </div>
+      </label>
       <div class="toolbar justify-end">
         <button type="submit" disabled={suspend}>
           {#if suspend}
@@ -299,8 +299,8 @@ onMount(async () => {
   {:else}
     <p>{t("login:withEmail.info")}</p>
     <form onsubmit={sendLink}>
-      <div class="form-field">
-        <label for="email-login">{t("login:withEmail.label")}</label>
+      <label>
+        {t("login:withEmail.label")}
         <input
           id="email-login"
           type="email"
@@ -308,7 +308,7 @@ onMount(async () => {
           bind:value={email}
           required
         />
-      </div>
+      </label>
       <div class="toolbar justify-end">
         <button type="submit" disabled={suspend}>
           {#if suspend}

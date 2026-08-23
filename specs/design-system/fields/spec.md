@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Fields
@@ -16,8 +16,9 @@ design site and in the application.
 
 ### Architecture
 
-An element style, `packages/design-system/styles/fields.css`, paints `input[type="text"]`
-and `textarea`. Select, checkbox, radio, range and file controls are not fields under this
+An element style, `packages/design-system/styles/fields.css`, paints the textual input
+types and `textarea` — the controls a reader types free text into, drawing no inner
+control. Select, checkbox, radio, range and file controls are not fields under this
 spec, and read-only is not settled here.
 
 A field takes the core idea of the Material Design 3 filled text field, and not its
@@ -147,7 +148,7 @@ A field paints no error or rejected-input state.
 
 ### Definition of Done
 
-- A reader distinguishes rest, hover and focus on `input[type="text"]` and `textarea` in
+- A reader distinguishes rest, hover and focus on textual inputs and `textarea` in
   both colour schemes.
 - The focus treatment reaches a reader who taps.
 - A labelled field shows its name inside the fill, above the reader's words.
@@ -178,14 +179,14 @@ A field paints no error or rejected-input state.
 ### Scenarios
 
 ```gherkin
-Given a text input or textarea at rest
+Given a textual input or textarea at rest
 When it renders in Light or Dark
 Then its fill and its indicator take the resting field roles
 And the inherited body foreground meets WCAG 2.2 AA on that fill
 ```
 
 ```gherkin
-Given a text input or textarea
+Given a textual input or textarea
 When a pointer rests on it
 Then its indicator takes the hover colour and doubles in width
 And its fill does not change
@@ -198,7 +199,7 @@ Then nothing about it changes
 ```
 
 ```gherkin
-Given a text input or textarea
+Given a textual input or textarea
 When a reader taps into it
 Then its fill and its indicator take the focus field roles
 And its indicator doubles in width without moving the field or its content
@@ -206,14 +207,14 @@ And the inherited body foreground meets WCAG 2.2 AA on that fill
 ```
 
 ```gherkin
-Given a text input or textarea
+Given a textual input or textarea
 When a reader reaches it with the keyboard
 Then it takes the focus field roles
 And it draws no ring
 ```
 
 ```gherkin
-Given a label wrapping a text input or textarea
+Given a label wrapping a textual input or textarea
 When it renders
 Then the label text stands inside the fill, above the value
 And the label takes the field label role while the value takes the body foreground

@@ -86,17 +86,15 @@ async function deRegister(e: SubmitEvent) {
   
     {#if showVerify}
       <form onsubmit={deRegister} class="elevation-2 p-2 mt-1">
-        <div class="form-field">
-          <label for="deregister-confirm">
-            {t('settings:profile.dangerZone.confirm')}
-          </label>
+        <label>
+          {t('settings:profile.dangerZone.confirm')}
           <input
             id="deregister-confirm"
             type="text"
-            bind:value={verifyText} 
-            placeholder="olen aivan varma" 
+            bind:value={verifyText}
+            placeholder="olen aivan varma"
           />
-        </div>
+        </label>
         <div class="toolbar flex justify-end">
           <button
             disabled={verifyText !== 'olen aivan varma' || loading}

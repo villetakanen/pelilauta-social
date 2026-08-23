@@ -1,5 +1,5 @@
 /*
- * Fields — the surface a reader types into: `input[type="text"]` and
+ * Fields — the surface a reader types into: the textual input types and
  * `textarea`. Not select, checkbox, radio, range or file; those are not
  * fields under this stylesheet.
  *
@@ -27,9 +27,9 @@
  * every control that answers a pointer shares, so a pointer passing over a
  * field does not flicker it.
  */
-input[type="text"],
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]),
 textarea,
-label:has(> input[type="text"]),
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])),
 label:has(> textarea) {
   --_field-indicator-width: calc(var(--cn-grid) / 8);
   --_field-margin-block: calc(var(--cn-grid) * 0.5);
@@ -60,7 +60,7 @@ label:has(> textarea) {
  * the row it occupies is 56 — the same visual-inside-physical pair a button
  * takes. Every line the field grows by lands back on the grid.
  */
-input[type="text"],
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]),
 textarea {
   font-size: 1.0186rem; /* 16.3px */
   line-height: var(--cn-line);
@@ -81,7 +81,7 @@ textarea {
  * is reachable. The label crosses to the primary scale with it, at the step it
  * rests on. A disabled field is not reachable, so it answers no pointer.
  */
-input[type="text"]:not(:disabled):hover,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):not(:disabled):hover,
 textarea:not(:disabled):hover {
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-hover);
@@ -93,7 +93,7 @@ textarea:not(:disabled):hover {
  * written on the control and on a label wrapping it, so a component that
  * composes its own label around a field still paints the state.
  */
-input[type="text"]:focus-within,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):focus-within,
 textarea:focus-within {
   background-color: var(--cn-color-field-focus);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
@@ -119,7 +119,7 @@ textarea:focus-within {
  * so the name carries a hint of colour where the value below it does not — the
  * system's word beside the reader's.
  */
-label:has(> input[type="text"]),
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])),
 label:has(> textarea) {
   display: grid;
   font-family: var(--cn-font-family);
@@ -135,14 +135,14 @@ label:has(> textarea) {
     var(--cn-color-field-border);
 }
 
-label:has(> input[type="text"]:not(:disabled)):hover,
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):not(:disabled)):hover,
 label:has(> textarea:not(:disabled)):hover {
   color: var(--cn-color-field-label-hover);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-hover);
 }
 
-label:has(> input[type="text"]):focus-within,
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])):focus-within,
 label:has(> textarea):focus-within {
   color: var(--cn-color-field-label-focus);
   background-color: var(--cn-color-field-focus);
@@ -154,7 +154,7 @@ label:has(> textarea):focus-within {
  * The wrapped field keeps its own type and its leading, and gives up every
  * measurement and every colour the container now carries.
  */
-label:has(> input[type="text"]) > input[type="text"],
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])) > input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]),
 label:has(> textarea) > textarea {
   color: var(--cn-color-text);
   margin: 0;
@@ -169,8 +169,8 @@ label:has(> textarea) > textarea {
  * those before it weighs elements. Without this, a wrapped field paints its
  * indicator inside the container's.
  */
-label:has(> input[type="text"]) > input[type="text"]:hover,
-label:has(> input[type="text"]) > input[type="text"]:focus-within,
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])) > input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):hover,
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])) > input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):focus-within,
 label:has(> textarea) > textarea:hover,
 label:has(> textarea) > textarea:focus-within {
   background-color: transparent;
@@ -182,15 +182,15 @@ label:has(> textarea) > textarea:focus-within {
  * faintest surface step at rest, and gone at the first touch of focus,
  * before the reader's first letter.
  */
-input[type="text"]::placeholder,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])::placeholder,
 textarea::placeholder {
   color: var(--cn-color-field-placeholder);
   font-style: italic;
 }
 
-input[type="text"]:focus-within::placeholder,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):focus-within::placeholder,
 textarea:focus-within::placeholder,
-label:focus-within input[type="text"]::placeholder,
+label:focus-within input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])::placeholder,
 label:focus-within textarea::placeholder {
   color: transparent;
 }
@@ -208,9 +208,9 @@ label:focus-within textarea::placeholder {
  * recolours. SC 2.4.13 Focus Appearance, which would ask for the ring's
  * geometry, is AAA, and a filled field does not target it.
  */
-input[type="text"]:focus,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):focus,
 textarea:focus,
-input[type="text"]:focus-visible,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):focus-visible,
 textarea:focus-visible {
   outline: none;
 }
@@ -222,23 +222,23 @@ textarea:focus-visible {
  * indicator, dimmed by the opacity every disabled control already shares,
  * rather than a colour of its own.
  */
-input[type="text"]:disabled,
+input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):disabled,
 textarea:disabled,
-label:has(> input[type="text"]:disabled),
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):disabled),
 label:has(> textarea:disabled) {
   opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
 }
 
-label:has(> input[type="text"]:disabled) > input[type="text"],
+label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]):disabled) > input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]),
 label:has(> textarea:disabled) > textarea {
   opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  input[type="text"],
+  input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"]),
   textarea,
-  label:has(> input[type="text"]),
+  label:has(> input:is([type="text"], [type="email"], [type="password"], [type="search"], [type="url"], [type="tel"])),
   label:has(> textarea) {
     transition: none;
   }
