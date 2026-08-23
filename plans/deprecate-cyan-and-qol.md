@@ -75,6 +75,13 @@ alongside the debt pile and a retro.
   `plans/debt-deferred-for-rc/`.
 - The annotated tag `before-cyan-removal` (`5e4f8c6d`, pushed) marks the state
   before the removal step, as its rollback point.
+- Cyan's CSS left `apps/pelilauta` (`04edce3a`), and the triage that followed it,
+  2026-08-22: hidden headings replaced by visible ones (`44adddb5`); the content
+  area rule stated for all three container modes (`f532ce68`, `3c4aae86`); the
+  Dividers capability, spec, stylesheet and book (`27179a87`); a control's click
+  area at six grid units (`75d8d2df`). `button-touch-target` retired
+  (`313359c5`); `prose-flow-collapses-a-replaced-child` filed.
+- `docs/cyan-removal-handoff.md` carries the epic's running state and its traps.
 
 ## Open questions
 
