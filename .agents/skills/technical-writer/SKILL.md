@@ -24,8 +24,7 @@ verdict.
 1. List the changed files that carry prose: `git diff --name-only` against the
    branch point, plus staged and unstaged changes, plus untracked files from
    `git ls-files --others --exclude-standard`.
-2. Apply the principle tests sentence by sentence — a semicolon-joined clause is a
-   sentence — then the mechanics.
+2. Apply the principle tests sentence by sentence, then the mechanics.
 3. Run the `docs/WRITING.md` word-list greps over the changed files.
 4. Report one line per removal or correction, and a word count per file, before and
    after. The report names every file read and carries the grep output; a report

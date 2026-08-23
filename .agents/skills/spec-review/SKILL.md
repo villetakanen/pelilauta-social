@@ -15,7 +15,7 @@ mandate only — no summary, no author vocabulary, no decisions restated from ch
 Anything settled belongs in the spec, where the critic can test it. If none is
 available, report `review incomplete`.
 
-As the critic: the brief is authored by the spec's author, so every characterization
+As the critic: the spec's author also writes the brief, so every characterization
 of the spec in it is untested — test it against the sources. A brief that supplies
 conclusions about the text under review makes the review incomplete; report it so.
 
