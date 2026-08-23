@@ -31,19 +31,6 @@ const measureSteps = Number(
   })[0]?.value.match(/calc\(var\(--cn-grid\) \* (\d+)\)/)?.[1],
 );
 
-describe('the measure', () => {
-  test('is 83 grid units', () => {
-    expect(measureSteps).toBe(83);
-  });
-
-  test('these containers read it rather than declaring it', () => {
-    // Golden's primary is the same width as a prose flow by design. A second
-    // declaration here would let one of them drift from the other.
-    expect(css).not.toMatch(/--cn-measure\s*:/);
-    expect(css).toContain('var(--cn-measure)');
-  });
-});
-
 /**
  * The wide composition of one mode: the condition it appears under, and its fixed
  * tracks in grid units. A track is either the measure or a count of grid steps.
@@ -76,40 +63,6 @@ describe.each([
     const units = tracks.reduce((sum, track) => sum + track, 0) + gaps;
 
     expect(condition).toBe(units * 0.5);
-  });
-});
-
-describe('replaced media', () => {
-  /** The `:where(img, video, …)` element list under a `property` declaration. */
-  const mediaRule = (property: string) => {
-    const match = css.match(
-      new RegExp(
-        String.raw`:where\(\.content-prose, \.content-golden, \.content-triad\)\s*:where\(([^)]+)\)\s*\{\s*${property}:\s*([^;]+);`,
-      ),
-    );
-    return {
-      elements: (match?.[1] ?? '').split(',').map((tag) => tag.trim()),
-      value: match?.[2].trim(),
-    };
-  };
-
-  test('caps every replaced element HTML has, except audio', () => {
-    // audio has no width to overflow the container with.
-    const { elements, value } = mediaRule('max-width');
-    expect([...elements].sort()).toEqual(
-      ['canvas', 'embed', 'iframe', 'img', 'object', 'picture', 'svg', 'video'].sort(),
-    );
-    expect(value).toBe('100%');
-  });
-
-  test('preserves the intrinsic ratio only where one exists', () => {
-    // iframe, embed and object carry no ratio to preserve: an author's height
-    // attribute is their only sizing, and this rule must not collapse it.
-    const { elements, value } = mediaRule('height');
-    expect([...elements].sort()).toEqual(
-      ['canvas', 'img', 'picture', 'svg', 'video'].sort(),
-    );
-    expect(value).toBe('auto');
   });
 });
 

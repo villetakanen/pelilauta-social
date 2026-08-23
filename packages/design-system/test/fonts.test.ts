@@ -119,13 +119,6 @@ describe('the face set', () => {
     }
   });
 
-  test('every face swaps, and states woff2 as its only format', () => {
-    for (const face of declared) {
-      expect(face.display, `${face.family} ${face.weight}`).toBe('swap');
-      expect(face.src).toContain('format("woff2")');
-      expect(face.src.match(/format\(/g)).toHaveLength(1);
-    }
-  });
 });
 
 describe('coverage', () => {
@@ -157,30 +150,6 @@ describe('the two families', () => {
     expect(stacks[1][2]).toMatch(/monospace\s*$/);
   });
 
-  test('are named nowhere else in the design system', () => {
-    for (const path of [
-      '../styles/preflight.css',
-      '../styles/tokens.css',
-      '../styles/units.css',
-      '../styles/color.css',
-      '../styles/chroma.css',
-      '../styles/semantic.css',
-      '../styles/elevation.css',
-      '../styles/content-containers.css',
-      '../styles/typography.css',
-      '../styles/docs.css',
-    ]) {
-      // `font-family: inherit` names nothing — it is the reset handing a control
-      // back to whatever the document decided, which is this stylesheet's decision.
-      const values = [
-        ...withoutComments(read(path)).matchAll(/font-family\s*:\s*([^;}]+)/g),
-      ].map(([, value]) => value.trim());
-      expect(
-        values.filter((value) => value !== 'inherit'),
-        path,
-      ).toEqual([]);
-    }
-  });
 });
 
 describe('neither application declares a face', () => {

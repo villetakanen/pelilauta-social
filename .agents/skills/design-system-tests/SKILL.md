@@ -32,3 +32,8 @@ level.
 
 A consistency check between two of our documents belongs at the Lint level.
 Where it does not fit there, one document generates the other.
+
+Never read a stylesheet to assert the form of a declaration. That is static
+analysis; where Biome cannot state the rule, it goes unenforced. Source is read
+only for what no browser reports — a `:visited` rule, a parse-guarded media
+split — or to compute what no reader checks by eye.

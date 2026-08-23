@@ -125,30 +125,6 @@ test('pbta-logo artwork matches the v18 front-page logo viewBox', () => {
   expect(getManagedIcon('pbta-logo')!.viewBox).toBe('0 0 256 256');
 });
 
-test('units.css declares exactly the five icon sizes with the v20 values', () => {
-  const css = readFileSync(
-    new URL('../styles/units.css', import.meta.url),
-    'utf8',
-  );
-  const rootBlock = css.match(/:root\s*\{([^}]*)\}/);
-  expect(rootBlock, ':root token block is present').toBeTruthy();
-  const expected: Record<string, string> = {
-    '--cn-icon-size-xsmall': '1rem',
-    '--cn-icon-size-small': '1.5rem',
-    '--cn-icon-size': '2.25rem',
-    '--cn-icon-size-large': '4.5rem',
-    '--cn-icon-size-xlarge': '8rem',
-  };
-  const found = [
-    ...rootBlock![1].matchAll(/(--cn-icon-size[\w-]*)\s*:\s*([^;]+);/g),
-  ].map((m) => [m[1], m[2].trim()]);
-  expect(Object.fromEntries(found)).toEqual(expected);
-  expect(
-    found.length,
-    'no unrelated icon sizing tokens are defined at :root',
-  ).toBe(5);
-});
-
 test('open-source registry generation is deterministic (--check passes)', () => {
   const script = fileURLToPath(
     new URL('../scripts/generate-icon-registry.mjs', import.meta.url),

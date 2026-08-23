@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { createRawSnippet } from 'svelte';
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
@@ -203,34 +201,3 @@ describe('the surface', () => {
   });
 });
 
-/**
- * Cascade and container queries are not readable at this level, but the
- * declarations that erase the field's own box are literal source: they hold
- * or they do not, independent of the browser applying them.
- */
-describe('the textarea rule, read as source', () => {
-  const source = readFileSync(
-    fileURLToPath(new URL('../components/CnChatBar.svelte', import.meta.url)),
-    'utf8',
-  );
-  /* The field's own rule, not the wider band's nested growth-limit override. */
-  const withoutContainerQueries = source.replace(
-    /@container[^{]*\{[\s\S]*?\n {2}\}\n/g,
-    '',
-  );
-  const rule =
-    withoutContainerQueries.match(/\n\s*textarea\s*\{([\s\S]*?)\n\s*\}/)?.[1] ??
-    '';
-
-  test('draws no border', () => {
-    expect(rule).toMatch(/border:\s*none/);
-  });
-
-  test('draws no background', () => {
-    expect(rule).toMatch(/background:\s*none/);
-  });
-
-  test('draws no radius', () => {
-    expect(rule).toMatch(/border-radius:\s*0/);
-  });
-});

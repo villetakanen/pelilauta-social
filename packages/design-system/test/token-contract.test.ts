@@ -30,28 +30,6 @@ function declarations(css: string) {
   }));
 }
 
-/**
- * The `@media` prelude enclosing an index, or '' outside any block. A property
- * declared twice under one prelude is drift; re-declared under another it is a
- * conditioned override, the shape poster.css uses to withdraw a cession.
- */
-function mediaContext(css: string, at: number) {
-  let context = '';
-  for (const match of css.matchAll(/@media\s+([^{]+)\{/g)) {
-    let depth = 1;
-    let index = match.index + match[0].length;
-    while (index < css.length && depth > 0) {
-      if (css[index] === '{') depth++;
-      if (css[index] === '}') depth--;
-      index++;
-    }
-    if (at > match.index && at < index) {
-      context = match[1].replace(/\s+/g, ' ').trim();
-    }
-  }
-  return context;
-}
-
 /** Split on commas that sit at depth zero, so nested calls stay intact. */
 function topLevelParts(inner: string) {
   const parts: string[] = [];
@@ -100,7 +78,6 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
   .filter((name) => name.endsWith('.css'))
   .sort();
 
-const chroma = read('chroma.css');
 const semantic = read('semantic.css');
 const elevation = read('elevation.css');
 
@@ -108,76 +85,6 @@ const elevation = read('elevation.css');
 const declaredInPackage = new Set(
   sheets.flatMap((sheet) => declarations(read(sheet)).map((d) => d.name)),
 );
-
-describe('layer composition', () => {
-  test('color.css composes the layers bottom-up', () => {
-    const imports = [...read('color.css').matchAll(/@import\s+"([^"]+)"/g)].map(
-      (match) => match[1],
-    );
-
-    expect(imports.slice(0, 2)).toEqual(['./chroma.css', './semantic.css']);
-  });
-
-  test('tokens.css supplies units and colour before elevation', () => {
-    const imports = [
-      ...read('tokens.css').matchAll(/@import\s+"([^"]+)"/g),
-    ].map((match) => match[1]);
-    const at = (name: string) =>
-      imports.findIndex((entry) => entry.endsWith(name));
-
-    // elevation.css reads --cn-grid from units and paints with a semantic
-    // colour, so both dependencies enter the cascade first.
-    expect(at('elevation.css')).toBeGreaterThan(at('units.css'));
-    expect(at('elevation.css')).toBeGreaterThan(at('color.css'));
-  });
-
-  test('chroma tokens are literal, so the stack has a bottom', () => {
-    const referencing = declarations(chroma)
-      .filter((declaration) => declaration.value.includes('var('))
-      .map((declaration) => declaration.name);
-
-    expect(referencing).toEqual([]);
-  });
-
-  test('no stylesheet reads the legacy Cyan colour vocabulary', () => {
-    // The compat layer that declared these names left with Cyan's CSS. A read of
-    // one now resolves to nothing, so the name may not reappear.
-    const offenders = sheets.flatMap((sheet) =>
-      varReferences(read(sheet))
-        .filter((usage) => /^--(color|background)-/.test(usage.name))
-        .map((usage) => `${sheet}: ${usage.name}`),
-    );
-
-    expect(offenders).toEqual([]);
-  });
-
-  test('semantic colours derive from the reference layer', () => {
-    const literalColours = declarations(semantic)
-      .filter((declaration) =>
-        /#[0-9a-fA-F]{3,8}\b|\b(?:black|white)\b|\b(?:oklch|rgba?|hsla?)\(/.test(
-          declaration.value,
-        ),
-      )
-      .map((declaration) => `${declaration.name}: ${declaration.value}`);
-
-    expect(literalColours).toEqual([]);
-  });
-
-  test('no stylesheet declares the same property twice in one media context', () => {
-    const duplicates = sheets.flatMap((sheet) => {
-      const css = read(sheet);
-      const keys = declarations(css).map(
-        (d) => `${d.name} @ "${mediaContext(css, d.index)}"`,
-      );
-      const seen = new Set<string>();
-      return keys
-        .filter((key) => seen.size === seen.add(key).size)
-        .map((key) => `${sheet}: ${key}`);
-    });
-
-    expect(duplicates).toEqual([]);
-  });
-});
 
 describe('resolvability', () => {
   test('every required property reference is defined by the package', () => {
@@ -223,49 +130,5 @@ describe('generation', () => {
     expect(() =>
       execFileSync('node', [script, '--check'], { stdio: 'pipe' }),
     ).not.toThrow();
-  });
-});
-
-describe('the transparency ladder', () => {
-  const transparency = read('transparency.css');
-  const rungs = declarations(transparency);
-
-  test('carries exactly the half step and steps 1 through 9', () => {
-    expect(rungs.map((rung) => rung.name)).toEqual([
-      '--cn-transparency-half',
-      '--cn-transparency-1',
-      '--cn-transparency-2',
-      '--cn-transparency-3',
-      '--cn-transparency-4',
-      '--cn-transparency-5',
-      '--cn-transparency-6',
-      '--cn-transparency-7',
-      '--cn-transparency-8',
-      '--cn-transparency-9',
-    ]);
-  });
-
-  test('every step is an eleven-percent multiple, and the half step is half of it', () => {
-    for (const rung of rungs) {
-      const step = rung.name.match(/^--cn-transparency-(\d+)$/)?.[1];
-      if (!step) continue;
-      expect(rung.value, rung.name).toBe(`${Number(step) * 11}%`);
-    }
-
-    const half = rungs.find((rung) => rung.name === '--cn-transparency-half');
-    const one = rungs.find((rung) => rung.name === '--cn-transparency-1');
-    expect(half?.value).toBe('5.5%');
-    expect(one?.value).toBe('11%');
-    expect(Number.parseFloat(half?.value ?? '')).toBe(
-      Number.parseFloat(one?.value ?? '') / 2,
-    );
-  });
-
-  test('a rung carries no colour and no scheme arm', () => {
-    // A rung is a plain percentage the layer mixing it supplies colour for, so
-    // it depends on nothing and never varies between Light and Dark.
-    for (const rung of rungs) {
-      expect(rung.value, rung.name).toMatch(/^[\d.]+%$/);
-    }
   });
 });
