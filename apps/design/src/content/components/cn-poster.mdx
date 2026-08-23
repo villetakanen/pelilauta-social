@@ -1,6 +1,6 @@
 ---
 title: CnPoster
-description: "Decorative background artwork layer with automatic tint attenuation and contrast preservation."
+description: "Decorative background artwork layer, with tint attenuation and surface cession."
 order: 50
 runtime: static
 poster: "https://picsum.photos/1920/1080"
@@ -10,8 +10,8 @@ import DsComposition from "@design-system/books/specimens/DsComposition.astro";
 import PosterPinToggle from "@design-system/books/specimens/PosterPinToggle.astro";
 
 `CnPoster` replaces the document ground plane with an attenuated background image.
-A multi-stop gradient wash overlays the image; foreground typography and
-surfaces target WCAG 2.2 AA contrast over arbitrary photography, where feasible.
+A multi-stop gradient wash overlays the image. Legibility comes from which surface
+levels cede to the artwork and how far; see [Under a poster](/base/surface#under-a-poster).
 
 ## When to use it
 
@@ -60,10 +60,12 @@ The artwork renders at 72% opacity under theme-specific colour overlay washes:
 ### Viewport and media query suppression
 
 The poster layer is automatically suppressed (rendering pure background surfaces) under:
-- Viewport widths below 620px (`@media (max-width: 620px)`).
+- Viewport widths below 620px (`@media screen and (min-width: 38.75rem)` guards the
+  stage; below it the poster never renders).
+- Print. The same guard names `screen`, which print is not, so the stage never applies
+  on paper and every cession inside it is inactive.
 - `prefers-reduced-transparency: reduce`.
 - `forced-colors: active`.
-- Print stylesheets (`@media print`).
 
 ## Composition
 
@@ -76,12 +78,17 @@ adapts transparency:
 | :--- | :--- |
 | `--cn-app-bar-background-sticky` | `transparent` |
 | `nav#rail`, `nav#tray` | `transparent` |
-| `.elevation-0` | 80% opacity |
-| `.elevation-1` to `.elevation-4` | Unmodified |
+| `.elevation-0` | cedes a wide share of the [transparency ladder](/tokens/color) (`--cn-transparency-6`) |
+| `.elevation-1`, `.elevation-2` | cede a narrow share (`--cn-transparency-2`) |
+| `.elevation-3`, `.elevation-4` | unmodified, opaque |
 
-<DsComposition caption="Elevation 0 (translucent) and elevation 2 (opaque) over background artwork">
-  <div class="surface elevation-0">Elevation 0: Ground plane (80% opacity)</div>
-  <div class="surface elevation-2">Elevation 2: Raised surface (100% opacity)</div>
+The shares are ladder rungs rather than raw percentages, so the table names the
+token; see [Under a poster](/base/surface#under-a-poster).
+
+<DsComposition caption="Elevation 0 and 2, each ceding its ladder share, against elevation 3, opaque">
+  <div class="surface elevation-0">Elevation 0: wide share</div>
+  <div class="surface elevation-2">Elevation 2: narrow share</div>
+  <div class="surface elevation-3">Elevation 3: opaque</div>
 </DsComposition>
 
 ## Reference

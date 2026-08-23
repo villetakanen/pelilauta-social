@@ -50,8 +50,9 @@ Tokens remain inputs to CSS calculations. Consumers compose final measurements
 from them instead of storing precomputed results that would stop responding when
 an input changes.
 
-Token JSON is the single writable source for every public colour, elevation and
-measurement token; typography tokens stay in their hand-written stylesheet.
+Token JSON is the single writable source for every public colour, elevation,
+transparency and measurement token; typography tokens stay in their hand-written
+stylesheet.
 Generated CSS is committed, and a check fails when it differs from
 its source. A book reads token JSON where a JSON source exists; it does not
 reparse generated CSS.

@@ -37,6 +37,67 @@ describe('the stage', () => {
   });
 });
 
+/** Every balanced `color-mix(...)` call, with its full argument text. */
+function colorMixCalls(source: string): string[] {
+  const calls: string[] = [];
+  for (const match of source.matchAll(/color-mix\(/g)) {
+    let depth = 1;
+    let index = (match.index ?? 0) + match[0].length;
+    let inner = '';
+    while (index < source.length && depth > 0) {
+      const char = source[index];
+      if (char === '(') depth++;
+      if (char === ')') depth--;
+      if (depth > 0) inner += char;
+      index++;
+    }
+    calls.push(inner);
+  }
+  return calls;
+}
+
+describe('surface cession', () => {
+  // The regression this guards: a ceded share written as a raw percentage
+  // (`transparent 20%`) instead of a rung of the transparency ladder
+  // (`var(--cn-transparency-2)`), which is exactly the defect that predated
+  // the ladder and the one it exists to prevent from returning. Scoped to
+  // color-mix() calls, so the unrelated `transparent 95%` mask-image stop
+  // that dissolves the poster's lower edge is not mistaken for a share.
+  const mixes = colorMixCalls(css);
+
+  test('at least one rule cedes a share', () => {
+    expect(mixes.length).toBeGreaterThan(0);
+  });
+
+  test('every ceded share is a transparency-ladder rung, never a raw percentage', () => {
+    const offenders = mixes.filter(
+      (mix) => !/transparent\s+var\(--cn-transparency-[\w-]+\)/.test(mix),
+    );
+
+    expect(offenders).toEqual([]);
+  });
+
+  test('elevation 0 cedes the wide share and elevations 1 and 2 the narrow share', () => {
+    const shareFor = (selector: string) => {
+      const rule = css.match(
+        new RegExp(
+          `body:has\\(#cn-poster\\)\\s+${selector.replace('.', '\\.')}\\s*\\{([^}]*)\\}`,
+        ),
+      );
+      return rule?.[1].match(/var\(--cn-transparency-[\w-]+\)/)?.[0];
+    };
+
+    expect(shareFor('.elevation-0')).toBe('var(--cn-transparency-6)');
+    expect(shareFor('.elevation-1')).toBe('var(--cn-transparency-2)');
+    expect(shareFor('.elevation-2')).toBe('var(--cn-transparency-2)');
+  });
+
+  test('elevations 3 and 4 keep no cession rule', () => {
+    expect(css).not.toMatch(/\.elevation-3\s*\{[^}]*color-mix/);
+    expect(css).not.toMatch(/\.elevation-4\s*\{[^}]*color-mix/);
+  });
+});
+
 describe('the withdrawals', () => {
   test('alone state the accessibility preferences', () => {
     expect(withdrawals).toEqual([

@@ -10,6 +10,8 @@ import RoleTable from "@design-system/books/specimens/RoleTable.astro";
 import theme from "@design-system/tokens/themes/default.json";
 import ThemeSwapDemo from "@design-system/books/specimens/ThemeSwapDemo.svelte";
 import semanticColor from "@design-system/tokens/semantic-color.json";
+import TransparencyLadder from "@design-system/books/specimens/TransparencyLadder.astro";
+import transparency from "@design-system/tokens/transparency.json";
 
 The colour system carries Pelilauta's identity coherently through every surface. A
 site owner replaces that identity by supplying a chroma family — a rebrand
@@ -173,6 +175,25 @@ throws — a component takes a palette step directly and needs no role for it. T
 the one place a component reaches past the semantic layer, and it is named exactly
 because it is the exception: a purpose the system has named always uses that role
 instead.
+
+## Transparency: the ladder of shares
+
+Before v19, a layer that let something through picked a share by eye, so two
+translucent layers on one page carried no relation to each other. The transparency
+ladder makes a share a choice from a fixed set instead: eleven-percent steps,
+`--cn-transparency-1` through `--cn-transparency-9`, with a half step below the
+smallest. A component that needs translucency takes a rung; it does not compute one.
+
+<DsComposition caption="Every rung, each mixing the primary role over a two-tone backdrop">
+  <TransparencyLadder source={transparency} />
+</DsComposition>
+
+A rung promises nothing about contrast: the layer beneath a translucent surface is not
+always the swatch backdrop above, and where it is unknown — artwork behind a poster —
+no percentage can guarantee a ratio. Opacity is the one share that could guarantee a
+ratio, and the ladder removes opacity as a choice. Legibility over unknown artwork
+comes from which levels cede and how far, a decision `specs/design-system/surface/spec.md`
+states; see [Surface reference](/base/surface).
 
 ## Surface and elevation
 

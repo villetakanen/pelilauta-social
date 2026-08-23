@@ -30,13 +30,19 @@ sets `background-color` and `box-shadow`, consuming the surface and shadow roles
 defined by `specs/design-system/design-tokens/spec.md`. Components such as Card
 compose these utilities rather than restating their declarations.
 
-| level | means | Light background | Dark background | standalone shadow |
-| :--- | :--- | :--- | :--- | :--- |
-| 0 | the application itself | surface 95 | surface 20 | none |
-| 1 | payload | surface 100 | surface 20, a third of the way to 40 | none |
-| 2 | payload inside payload | surface 100 | surface 20, a third of the way to 40 | `--cn-shadow-elevation-2` |
-| 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` |
-| 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` |
+| level | means | Light background | Dark background | standalone shadow | under a poster |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| — | the canvas | surface 95 | surface 20 | none | behind the artwork, opaque |
+| 0 | the application itself | surface 95 | surface 20 | none | a wide share |
+| 1 | payload | surface 100 | surface 20, a third of the way to 40 | none | a narrow share |
+| 2 | payload inside payload | surface 100 | surface 20, a third of the way to 40 | `--cn-shadow-elevation-2` | a narrow share |
+| 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` | opaque |
+| 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` | opaque |
+
+The canvas is not a level a consumer selects: it is the page's ground, painting level
+0's colour because level 0 is what the page is. A poster paints over it and dissolves its
+lower edge back into it, which is why the canvas stays opaque while a level 0 surface
+standing over the same artwork does not.
 
 A surface at level 0 claims no separation from the application. Level 1 holds what a
 reader came to read or use, and is the default. Level 2 is the rise that keeps payload
@@ -67,7 +73,20 @@ Without a positive-level elevated ancestor, the standalone shadow applies.
 
 ### Constraints
 
-`.elevation-0` paints the page background colour.
+`.elevation-0` paints the page background colour. Where a poster paints that background
+instead, the levels standing on the artwork cede to it. The ground plane takes a wide
+share, because a page standing over artwork is meant to show it. Payload takes a narrow
+one: enough of the artwork reaches through it to place it on the page, and it stays
+legible.
+
+Levels 3 and 4 keep their opacity. They float over content rather than over the page, so
+a share there would show whatever they cover rather than the artwork.
+
+Both shares are rungs of the transparency ladder
+(`specs/design-system/color-system/spec.md`). A ceding level keeps its own background
+colour and takes only the share, so ceding never moves a level to another level's colour.
+Which levels cede, and how far, is what the poster capability states
+(`specs/design-system/components/cn-poster/spec.md`).
 
 An action is not a surface. An action may take an elevation shadow to show that it lifts,
 and takes no level with it; `specs/design-system/actions/spec.md` governs what an action

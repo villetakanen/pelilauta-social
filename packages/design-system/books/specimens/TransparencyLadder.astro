@@ -1,0 +1,82 @@
+---
+/**
+ * TransparencyLadder — the shares a translucent layer may take, as something a
+ * reader can see rather than a column of percentages.
+ *
+ * Each rung paints one fixed tint through `color-mix()` over a two-tone
+ * backdrop, the same mechanism poster.css and the surface elevation cession
+ * use, so the swatch is the rung rather than a stand-in for it.
+ *
+ * Reads tokens/transparency.json: the writable source
+ * scripts/generate-tokens.mjs renders to styles/transparency.css
+ * (specs/design-system/design-tokens/spec.md).
+ *
+ * Book: apps/design/src/content/principles/color-system.mdx
+ */
+import type { RoleSource } from './tokenTable';
+
+interface Props {
+  /** tokens/transparency.json */
+  source: RoleSource;
+  /** The colour mixed at every rung. Defaults to the primary role. */
+  tint?: string;
+}
+
+const { source, tint = 'var(--cn-color-primary)' } = Astro.props;
+
+const rungs = Object.entries(source.tokens).map(([name, token]) => ({
+  name: `--${name}`,
+  value: token.value as string,
+}));
+---
+
+<ol class="ladder">
+  {rungs.map(({ name, value }) => (
+    <li>
+      <span class="backdrop">
+        <span
+          class="rung"
+          style={`background-color: color-mix(in oklch, ${tint}, transparent var(${name}));`}
+        ></span>
+      </span>
+      <span class="label"><code>{name}</code><br />{value}</span>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .ladder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cn-grid);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+  }
+  .backdrop {
+    position: relative;
+    display: block;
+    inline-size: 4rem;
+    block-size: 3rem;
+    border: 1px solid var(--cn-color-border);
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--cn-color-surface-2) 0 8px,
+      var(--cn-color-surface) 8px 16px
+    );
+  }
+  .rung {
+    position: absolute;
+    inset: 0;
+  }
+  .label {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+</style>

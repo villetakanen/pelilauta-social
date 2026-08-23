@@ -7,7 +7,9 @@
  * a resolved token differs between light and dark — belongs in the design-site
  * browser checks.
  */
+import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
 
 const styles = new URL('../styles/', import.meta.url);
@@ -208,5 +210,62 @@ describe('resolvability', () => {
       .map((declaration) => declaration.name);
 
     expect(incomplete).toEqual([]);
+  });
+});
+
+describe('generation', () => {
+  test('every committed stylesheet matches its token source (--check passes)', () => {
+    const script = fileURLToPath(
+      new URL('../scripts/generate-tokens.mjs', import.meta.url),
+    );
+    // Throws (non-zero exit) if a committed stylesheet is stale against its
+    // JSON source, per specs/design-system/design-tokens/spec.md.
+    expect(() =>
+      execFileSync('node', [script, '--check'], { stdio: 'pipe' }),
+    ).not.toThrow();
+  });
+});
+
+describe('the transparency ladder', () => {
+  const transparency = read('transparency.css');
+  const rungs = declarations(transparency);
+
+  test('carries exactly the half step and steps 1 through 9', () => {
+    expect(rungs.map((rung) => rung.name)).toEqual([
+      '--cn-transparency-half',
+      '--cn-transparency-1',
+      '--cn-transparency-2',
+      '--cn-transparency-3',
+      '--cn-transparency-4',
+      '--cn-transparency-5',
+      '--cn-transparency-6',
+      '--cn-transparency-7',
+      '--cn-transparency-8',
+      '--cn-transparency-9',
+    ]);
+  });
+
+  test('every step is an eleven-percent multiple, and the half step is half of it', () => {
+    for (const rung of rungs) {
+      const step = rung.name.match(/^--cn-transparency-(\d+)$/)?.[1];
+      if (!step) continue;
+      expect(rung.value, rung.name).toBe(`${Number(step) * 11}%`);
+    }
+
+    const half = rungs.find((rung) => rung.name === '--cn-transparency-half');
+    const one = rungs.find((rung) => rung.name === '--cn-transparency-1');
+    expect(half?.value).toBe('5.5%');
+    expect(one?.value).toBe('11%');
+    expect(Number.parseFloat(half?.value ?? '')).toBe(
+      Number.parseFloat(one?.value ?? '') / 2,
+    );
+  });
+
+  test('a rung carries no colour and no scheme arm', () => {
+    // A rung is a plain percentage the layer mixing it supplies colour for, so
+    // it depends on nothing and never varies between Light and Dark.
+    for (const rung of rungs) {
+      expect(rung.value, rung.name).toMatch(/^[\d.]+%$/);
+    }
   });
 });

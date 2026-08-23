@@ -46,6 +46,22 @@ this community's core signal. Info is a role over primary, not a family: the
 v20 info scale named a distinction the design never made.
 `docs/color-rationale-study.md` records the rationale in full.
 
+### Transparency
+
+v19 made translucency systemic. Before it, a layer that let something through picked its
+own share, so two translucent layers on one page were unrelated and a page over artwork
+was tuned surface by surface. From v19 on, a share comes off one ladder.
+
+The ladder is what makes translucency a property of the system rather than of the
+component that happened to need it.
+
+Translucency is a design decision and never a derived one. Where a layer sits over
+artwork the system has never seen, no share can promise a contrast ratio — the only one
+that could is opacity, which is the layer being removed. Legibility is guaranteed by
+which levels cede and how far, not by a number computed against an image.
+`specs/design-system/color-system/spec.md` governs the ladder, and
+`specs/design-system/surface/spec.md` states which surfaces cede.
+
 ### Spacing and responsiveness
 
 Spacing derives from one base grid; `specs/design-system/spatial-system/spec.md`

@@ -8,15 +8,16 @@ import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import theme from '@design-system/tokens/themes/default.json'
 import semanticColor from '@design-system/tokens/semantic-color.json'
 import elevation from '@design-system/tokens/elevation.json'
+import transparency from '@design-system/tokens/transparency.json'
 import { chromaDeclarations, roleDeclarations } from '@design-system/books/specimens/tokenTable'
 
 Declared color custom properties and values, read from their writable JSON sources —
-`tokens/themes/default.json`, `tokens/semantic-color.json`, and
-`tokens/elevation.json`. `scripts/generate-tokens.mjs` renders the same sources to
-`styles/chroma.css`, `styles/semantic.css`, and `styles/elevation.css`, which the
-application imports. Color selection and contrast rules are defined in
-[Colour System](/principles/color-system). Swatches resolve dynamically in the active
-color scheme.
+`tokens/themes/default.json`, `tokens/semantic-color.json`, `tokens/elevation.json`,
+and `tokens/transparency.json`. `scripts/generate-tokens.mjs` renders the same sources
+to `styles/chroma.css`, `styles/semantic.css`, `styles/elevation.css`, and
+`styles/transparency.css`, which the application imports. Color selection and contrast
+rules are defined in [Colour System](/principles/color-system). Swatches resolve
+dynamically in the active color scheme.
 
 ## Semantic roles
 
@@ -31,6 +32,15 @@ Elevation shadow tokens declared in `tokens/elevation.json`. Shadow geometry sca
 with `--cn-grid` as defined in [Units and grid](/tokens/units).
 
 <DsTokenTable source={roleDeclarations(elevation)} prefix="--cn-shadow" caption="Elevation shadows" />
+
+## Transparency ladder
+
+The shares a translucent layer may take, declared in `tokens/transparency.json`. A
+rung carries no colour and no scheme arm; the layer mixing it supplies both. See
+[Colour System](/principles/color-system) for the ladder as a specimen, and
+[Surface reference](/base/surface) for the levels that cede to a poster.
+
+<DsTokenTable source={roleDeclarations(transparency)} caption="Transparency ladder" />
 
 ## Reference palette
 

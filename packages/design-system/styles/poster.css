@@ -5,8 +5,8 @@
  * Component: components/CnPoster.astro
  *
  * The artwork is user material of unknown colour and contrast, so the image is
- * attenuated, a tint is blended over it, and the ground plane carrying body text
- * stays 80% opaque.
+ * attenuated, a tint is blended over it, and the levels standing on it cede a share
+ * of the transparency ladder rather than covering it.
  *
  * Two media blocks divide the file. The stage shows the poster and states only
  * baseline features: a rule that escaped it would leave the application bar
@@ -49,21 +49,42 @@
   }
 
   /*
-   * The ground plane is the one elevation a poster changes: it is the level
-   * that stands for the page itself. Levels 1 through 4 stay opaque, because
-   * content that has risen off the page is content the reader is meant to read.
+   * The levels that stand on the artwork cede to it. The ground plane is the page
+   * itself, and takes a wide share, because a page standing over artwork is meant to
+   * show it. Payload has risen off the page and takes a narrow one: it stays legible,
+   * and admits enough of the artwork to belong to the page it is on.
    *
-   * The share is the most transparent the plane can be while the inherited body
-   * foreground still reaches WCAG 2.2 AA over near-white artwork in Dark, the
-   * tightest of the combinations.
+   * Levels 3 and 4 keep their opacity. They float over content rather than over the
+   * page, so a share there would bleed whatever they cover — the cards under a menu —
+   * and not the artwork these rules are about.
+   *
+   * Both shares are rungs of the transparency ladder, and each level mixes its own
+   * colour so ceding never moves it to another level's. Why they are chosen rather
+   * than derived from a contrast floor:
+   * specs/design-system/components/cn-poster/spec.md.
    */
   body:has(#cn-poster) .elevation-0 {
-    --_surface-over-poster: color-mix(
+    background-color: color-mix(
       in oklch,
       var(--cn-color-surface),
-      transparent 20%
+      transparent var(--cn-transparency-6)
     );
-    background-color: var(--_surface-over-poster);
+  }
+
+  body:has(#cn-poster) .elevation-1 {
+    background-color: color-mix(
+      in oklch,
+      var(--cn-color-surface-1),
+      transparent var(--cn-transparency-2)
+    );
+  }
+
+  body:has(#cn-poster) .elevation-2 {
+    background-color: color-mix(
+      in oklch,
+      var(--cn-color-surface-2),
+      transparent var(--cn-transparency-2)
+    );
   }
 
   /*

@@ -1,0 +1,16 @@
+{
+  "name": "transparency",
+  "description": "The transparency ladder: the shares a translucent layer may take. Steps of eleven, plus a half step below the smallest. A rung is a plain percentage and depends on nothing, so it is legible wherever it is read and identical in both colour schemes.",
+  "tokens": {
+    "cn-transparency-half": { "value": "5.5%" },
+    "cn-transparency-1": { "value": "11%" },
+    "cn-transparency-2": { "value": "22%" },
+    "cn-transparency-3": { "value": "33%" },
+    "cn-transparency-4": { "value": "44%" },
+    "cn-transparency-5": { "value": "55%" },
+    "cn-transparency-6": { "value": "66%" },
+    "cn-transparency-7": { "value": "77%" },
+    "cn-transparency-8": { "value": "88%" },
+    "cn-transparency-9": { "value": "99%" }
+  }
+}
