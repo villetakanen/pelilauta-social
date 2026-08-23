@@ -171,3 +171,38 @@
       calc(var(--cn-grid) * 32);
   }
 }
+
+/*
+ * Replaced media never exceeds the content area holding it. The preflight leaves
+ * media unconstrained on purpose — "a reset cannot know which images are content
+ * and which are chrome, so whatever an image has to fit decides"
+ * (specs/design-system/preflight/spec.md) — a poster's `img` is chrome and needs
+ * its own uncapped sizing, so the fit cannot be a global rule. Here, the fit is
+ * the content area's own width.
+ *
+ * `img` and `picture` are placed directly today. `video`, `canvas`, `svg`,
+ * `iframe`, `embed` and `object` are not yet authored anywhere, but a thread,
+ * page or handout renders its author's markdown unsanitised
+ * (`set:html` in ThreadArticle.astro, PageArticle.astro, HandoutApp.astro), so any
+ * of them can land inside a content area without warning. That is every replaced
+ * element HTML has; `audio` carries no width to overflow with and stays out.
+ *
+ * The selector is unspecific by design: `:where()` keeps this at specificity
+ * zero, so a component that sizes its own replaced element — CnCard's cover,
+ * CnIcon's svg — keeps that sizing regardless of source order.
+ */
+:where(.content-prose, .content-golden, .content-triad)
+  :where(img, picture, video, canvas, svg, iframe, embed, object) {
+  max-width: 100%;
+}
+
+/*
+ * `height: auto` keeps an intrinsic-ratio element from being squashed once its
+ * width is capped. `iframe`, `embed` and `object` have no such ratio: an
+ * author's `height` attribute is the only sizing they carry, so it is left
+ * alone rather than collapsed to the browser default.
+ */
+:where(.content-prose, .content-golden, .content-triad)
+  :where(img, picture, video, canvas, svg) {
+  height: auto;
+}

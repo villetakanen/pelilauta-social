@@ -79,6 +79,40 @@ describe.each([
   });
 });
 
+describe('replaced media', () => {
+  /** The `:where(img, video, …)` element list under a `property` declaration. */
+  const mediaRule = (property: string) => {
+    const match = css.match(
+      new RegExp(
+        String.raw`:where\(\.content-prose, \.content-golden, \.content-triad\)\s*:where\(([^)]+)\)\s*\{\s*${property}:\s*([^;]+);`,
+      ),
+    );
+    return {
+      elements: (match?.[1] ?? '').split(',').map((tag) => tag.trim()),
+      value: match?.[2].trim(),
+    };
+  };
+
+  test('caps every replaced element HTML has, except audio', () => {
+    // audio has no width to overflow the container with.
+    const { elements, value } = mediaRule('max-width');
+    expect([...elements].sort()).toEqual(
+      ['canvas', 'embed', 'iframe', 'img', 'object', 'picture', 'svg', 'video'].sort(),
+    );
+    expect(value).toBe('100%');
+  });
+
+  test('preserves the intrinsic ratio only where one exists', () => {
+    // iframe, embed and object carry no ratio to preserve: an author's height
+    // attribute is their only sizing, and this rule must not collapse it.
+    const { elements, value } = mediaRule('height');
+    expect([...elements].sort()).toEqual(
+      ['canvas', 'img', 'picture', 'svg', 'video'].sort(),
+    );
+    expect(value).toBe('auto');
+  });
+});
+
 describe('scoping', () => {
   test('every rule sits below an opt-in class', () => {
     // A rule that escapes them reaches apps/pelilauta, which has not migrated
