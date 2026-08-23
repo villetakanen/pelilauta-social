@@ -1,0 +1,56 @@
+---
+import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
+import CnAppBar from '@design-system/components/CnAppBar.astro';
+import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
+import { t } from 'src/utils/i18n';
+
+// The route verifies the session on the server and redirects a signed-in
+// reader before the page renders, so no client-side session manager mounts
+// here (specs/pelilauta/login/spec.md, Architecture).
+
+export interface Props {
+  title?: string;
+  shortTitle?: string;
+  description?: string;
+}
+
+const { title, shortTitle, description } = Astro.props;
+---
+
+<html lang="fi">
+  <BaseHead {title} {description} noSharing={true} />
+  <body>
+    <CnAppChrome>
+      <CnAppBar
+        title={title ?? ''}
+        shortTitle={shortTitle}
+        modal
+        backLabel={t('common:back')}
+      />
+    </CnAppChrome>
+
+    <main class="app-main">
+      <slot />
+      <AppFooter>
+        <slot name="app-footer-credits" slot="app-footer-credits" />
+      </AppFooter>
+    </main>
+
+    <slot name="app-background-poster" />
+
+    {/*
+      A reader often arrives here from outside the service, so the back
+      action always leads to the front page rather than back through the
+      session (specs/pelilauta/login/spec.md, Constraints).
+    */}
+    <script is:inline>
+      document.addEventListener('cn-back', () => {
+        window.location.href = '/';
+      });
+    </script>
+
+    <SnackbarHost client:only="svelte" />
+  </body>
+</html>

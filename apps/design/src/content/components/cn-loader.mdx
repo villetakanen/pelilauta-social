@@ -106,11 +106,13 @@ explicitly position and centre the loader.
   caption="Loader geometry from styles/loader.css"
 />
 
-The ring and centred icon share a component-private colour, `--_loader-color`, declared
-on `CnLoader.svelte`'s root rather than published on `:root`: `light-dark(--chroma-primary-60,
---chroma-surface-60)`, chroma step 60 of the primary family in Light and step 60 of the
-surface family in Dark. The ring renders it at 0.72 opacity and the centred icon at 0.44
-opacity.
+The ring and centred icon share one colour. A standalone loader takes a component-private
+colour, `--_loader-color`, declared on `CnLoader.svelte`'s root rather than published on
+`:root`: `light-dark(--chroma-primary-60, --chroma-surface-60)`, chroma step 60 of the
+primary family in Light and step 60 of the surface family in Dark. An inline loader
+inherits its context's foreground instead — inside a button it is painted with the
+button's colour, as the composition above shows. The ring renders the colour at 0.72
+opacity and the centred icon at 0.44 opacity.
 
 ## Accessibility
 

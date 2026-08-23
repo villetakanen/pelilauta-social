@@ -78,7 +78,7 @@ test('auto-centers horizontally inside a section container', async ({
   }
 });
 
-test('paints the ring in the light-scheme --cn-loader-color role', async ({
+test('paints the standalone ring in the light-scheme loader role', async ({
   page,
 }) => {
   const colors = await page.evaluate(() => {
@@ -97,6 +97,30 @@ test('paints the ring in the light-scheme --cn-loader-color role', async ({
   });
   expect(colors).not.toBeNull();
   expect(colors?.ring).toBe(colors?.reference);
+});
+
+test('an inline loader inside a disabled button computes the button foreground', async ({
+  page,
+}) => {
+  const colors = await page.evaluate(() => {
+    const button = document.querySelector(
+      '[data-mode="light"] [data-variant="button"] button[disabled]',
+    );
+    const loader = button?.querySelector('.cn-loader');
+    const ring = button?.querySelector('.lds-dual-ring');
+    const icon = button?.querySelector('.cn-icon');
+    if (!button || !loader || !ring || !icon) return null;
+    return {
+      button: getComputedStyle(button).color,
+      loader: getComputedStyle(loader).color,
+      ring: getComputedStyle(ring, '::after').borderTopColor,
+      icon: getComputedStyle(icon).color,
+    };
+  });
+  expect(colors).not.toBeNull();
+  expect(colors?.loader).toBe(colors?.button);
+  expect(colors?.ring).toBe(colors?.button);
+  expect(colors?.icon).toBe(colors?.button);
 });
 
 test('ring animation resolves to none under prefers-reduced-motion: reduce', async ({
