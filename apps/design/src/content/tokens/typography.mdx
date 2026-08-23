@@ -4,6 +4,7 @@ description: "Declared typography tokens: font sizes, line heights, font weights
 order: 7
 ---
 
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import typographySource from '@design-system/styles/typography.css?raw'
 
@@ -58,6 +59,17 @@ Matching utility classes are provided for all steps: `.text-body`, `.text-h1` th
 `.text-caption` and `.text-label` share the caption font size and line height:
 - `.text-caption` applies uppercase transformation in Lato.
 - `.text-label` preserves source casing and renders in Roboto Mono for identifiers, technical codes, and metadata.
+
+## Alignment
+
+Two utilities, named after the `text-align` value each sets. `start` is the
+inherited default and needs no class.
+
+<DsComposition caption="The two alignment utilities, against the inherited default">
+  <p>No class: text starts where the reader's writing mode starts.</p>
+  <p class="text-center"><code>.text-center</code></p>
+  <p class="text-end"><code>.text-end</code></p>
+</DsComposition>
 
 ## Container-responsive heading downscaling
 

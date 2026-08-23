@@ -167,6 +167,15 @@ h4,
   color: var(--cn-color-text-high);
 }
 
+/* Alignment, at any step. Why `end` and not `right`: the Typography spec. */
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: end;
+}
+
 /*
  * The downshift: every heading renders one step down at small-screen width,
  * measured against its container rather than the window, so a heading in a

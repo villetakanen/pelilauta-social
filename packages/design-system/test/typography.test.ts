@@ -236,6 +236,16 @@ describe('the rules that read it', () => {
       'font-weight: var(--cn-font-weight-text)',
     );
   });
+
+  // An alignment utility states the `text-align` value its own name carries. The set
+  // is whatever has consumers; this asserts what is published, and forbids nothing.
+  test('each alignment utility sets the value in its own name', () => {
+    for (const value of ['center', 'end']) {
+      expect(document.get(`.text-${value}`), `.text-${value}`).toBe(
+        `text-align: ${value};`,
+      );
+    }
+  });
 });
 
 describe('the downshift', () => {
