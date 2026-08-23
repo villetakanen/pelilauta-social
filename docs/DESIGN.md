@@ -77,3 +77,26 @@ v19 established one central model for responsive layout:
   (`specs/design-system/application-chrome/spec.md`); content container layouts
   handle widths as view modes internal to the component
   (`specs/design-system/content-container-layouts/spec.md`).
+
+### Modern CSS
+
+The design system is written in the CSS the platform offers now, and prefers a
+platform feature to a device measurement or a scripted equivalent wherever one
+exists. Container queries over media queries, `light-dark()` over a duplicated
+theme, `color-mix()` over a second declared colour, `:has()` over a class a script
+maintains.
+
+Geometry and direction are logical rather than physical: `inline-size` and
+`block-size`, `padding-inline` and `margin-block-end`, `border-block-start`,
+`text-align: end`. A physical property names a side of a screen; a logical one names
+a side of the reader's writing mode, and only the second survives a language that
+does not read left to right. Where a capability publishes something directional, it
+publishes the logical form and no physical alias.
+
+None of this belongs in a specification. A specification states what its own
+capability does, not how the system likes its CSS written — `.text-left` is as
+well-formed a name as `.text-end` under `ARCHITECTURE.md`, and what rules it out is
+this page, not a naming rule. Where a convention here is worth defending
+mechanically, it is defended once over every stylesheet, the way
+`packages/design-system/test/lengths.test.ts` defends grid multiples, rather than
+restated in each capability that happens to touch it.
