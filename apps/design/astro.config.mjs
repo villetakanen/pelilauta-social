@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import svelte from '@astrojs/svelte';
 import { defineConfig } from 'astro/config';
 import { optionalProprietary } from '../../packages/design-system/vite/optional-proprietary.mjs';
+import { tokenWatch } from '../../packages/design-system/vite/token-watch.mjs';
 
 const designSystem = fileURLToPath(
   new URL('../../packages/design-system', import.meta.url),
@@ -29,6 +30,9 @@ export default defineConfig({
       optionalProprietary(
         new URL('../../packages/myrrys-proprietary/index.ts', import.meta.url),
       ),
+      // Editing a token JSON regenerates styles/*.css while dev runs, so a
+      // reload shows the new value without a by-hand generate:tokens.
+      tokenWatch(),
     ],
   },
 });
