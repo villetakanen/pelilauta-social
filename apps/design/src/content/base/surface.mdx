@@ -184,7 +184,8 @@ with an explicit elevation class, the declared level applies.
 `has-notify` and `has-alert` render a triangular status flag in the upper-right corner
 of any container. `has-notify` applies the information role, `has-alert` applies the
 warning role, and `has-alert` takes precedence when both classes are present. The flag
-matches the host element's corner radius and disables pointer events.
+matches the host element's corner radius, paints its role at a share off the
+[transparency ladder](/tokens/color), and disables pointer events.
 
 ```html
 <div class="surface has-notify">A row with unread content</div>

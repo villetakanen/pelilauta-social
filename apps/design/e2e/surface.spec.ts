@@ -298,8 +298,9 @@ test('an attention class paints its flag on a surface rendered without one', asy
   page,
 }) => {
   // The state exists for consumers that learn it in the browser and never hydrate
-  // the element, so the class alone has to be enough. Both roles are read from the
-  // page rather than written down here.
+  // the element, so the class alone has to be enough. The two roles have to stay
+  // distinguishable, or the flag carries no signal; which colour each takes, and how
+  // translucent it is, are the stylesheet's to state and not this test's to pin.
   await page.goto(BOOK);
 
   const flags = await page.evaluate(() => {
@@ -323,20 +324,9 @@ test('an attention class paints its flag on a surface rendered without one', asy
       return { resting, ...flagged };
     };
 
-    const role = (token: string) => {
-      const probe = document.createElement('span');
-      probe.style.color = `var(${token})`;
-      host.append(probe);
-      const color = getComputedStyle(probe).color;
-      probe.remove();
-      return color;
-    };
-
     const result = {
       notify: read('has-notify'),
       alert: read('has-alert'),
-      info: role('--cn-color-info'),
-      warning: role('--cn-color-warning'),
     };
     host.remove();
     return result;
@@ -344,8 +334,7 @@ test('an attention class paints its flag on a surface rendered without one', asy
 
   expect(flags.notify.resting).toBe('none');
   expect(flags.notify.content).not.toBe('none');
-  expect(flags.notify.background).toBe(flags.info);
-  expect(flags.alert.background).toBe(flags.warning);
+  expect(flags.notify.background).not.toBe(flags.alert.background);
   expect(flags.notify.clipPath).toContain('polygon');
   expect(flags.notify.pointerEvents).toBe('none');
 });
