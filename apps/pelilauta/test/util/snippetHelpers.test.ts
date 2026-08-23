@@ -25,14 +25,14 @@ describe('snippetHelpers', () => {
       const result = await createRichSnippet('# Hello World');
       expect(result).toContain('<h1');
       expect(result).toContain('Hello World');
-      expect(result).toContain('text-h5');
+      expect(result).toContain('text-h4');
     });
 
-    it('should add text-h5 class to headers by default', async () => {
+    it('should add text-h4 class to headers by default', async () => {
       const result = await createRichSnippet('# H1\n## H2\n### H3');
-      expect(result).toContain('<h1 class="text-h5">H1</h1>');
-      expect(result).toContain('<h2 class="text-h5">H2</h2>');
-      expect(result).toContain('<h3 class="text-h5">H3</h3>');
+      expect(result).toContain('<h1 class="text-h4">H1</h1>');
+      expect(result).toContain('<h2 class="text-h4">H2</h2>');
+      expect(result).toContain('<h3 class="text-h4">H3</h3>');
     });
 
     it('should allow custom header classes', async () => {
@@ -128,7 +128,7 @@ This is a **bold** statement with *emphasis*.
 [Link](https://example.com)`;
 
       const result = await createRichSnippet(markdown);
-      expect(result).toContain('<h1 class="text-h5">Welcome</h1>');
+      expect(result).toContain('<h1 class="text-h4">Welcome</h1>');
       expect(result).toContain('<strong>bold</strong>');
       expect(result).toContain('<em>emphasis</em>');
       expect(result).toContain('<ul>');
@@ -274,8 +274,8 @@ This is **bold** and *italic* with [a link](https://example.com).
   describe('addHeaderClasses', () => {
     it('should add classes to h1 tags', () => {
       const html = '<h1>Title</h1>';
-      const result = addHeaderClasses(html, ['text-h5']);
-      expect(result).toBe('<h1 class="text-h5">Title</h1>');
+      const result = addHeaderClasses(html, ['text-h4']);
+      expect(result).toBe('<h1 class="text-h4">Title</h1>');
     });
 
     it('should add classes to all header levels', () => {
@@ -310,8 +310,8 @@ This is **bold** and *italic* with [a link](https://example.com).
 
     it('should handle case-insensitive tags', () => {
       const html = '<H1>Title</H1><H2>Subtitle</H2>';
-      const result = addHeaderClasses(html, ['text-h5']);
-      expect(result).toContain('class="text-h5"');
+      const result = addHeaderClasses(html, ['text-h4']);
+      expect(result).toContain('class="text-h4"');
     });
   });
 
@@ -509,7 +509,7 @@ Check out the [player guide](https://example.com/guide) for more info.`;
 
       const result = await createRichSnippet(markdown, { maxLength: 150 });
 
-      expect(result).toContain('text-h5');
+      expect(result).toContain('text-h4');
       expect(result).toContain('<strong>new campaign</strong>');
       expect(result).toContain('...');
 
@@ -541,8 +541,8 @@ Can't wait for next week!`;
       const markdown = '# Title\n## Subtitle\n### Section';
       const result = await createRichSnippet(markdown, { maxLength: 50 });
 
-      expect(result).toContain('<h1 class="text-h5">Title</h1>');
-      expect(result).toContain('<h2 class="text-h5">Subtitle</h2>');
+      expect(result).toContain('<h1 class="text-h4">Title</h1>');
+      expect(result).toContain('<h2 class="text-h4">Subtitle</h2>');
     });
 
     it('should handle markdown with special characters', async () => {
