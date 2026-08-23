@@ -1,6 +1,7 @@
 ---
 import { t } from 'src/utils/i18n';
 import { verifySession } from 'src/utils/server/auth/verifySession';
+import { sanitizeRedirect } from 'src/utils/shared/sanitizeRedirect';
 import EmailLoginSection from '../components/svelte/login/EmailLoginSection.svelte';
 import PasswordLoginSection from '../components/svelte/login/PasswordLoginSection.svelte';
 import SyndicatedLoginSection from '../components/svelte/login/SyndicatedLoginSection.svelte';
@@ -11,7 +12,7 @@ const session = await verifySession(Astro);
 
 if (session) {
   // If the user is logged in, redirect them to the redirect URL or the home page
-  return Astro.redirect(Astro.url.searchParams.get('redirect') || '/');
+  return Astro.redirect(sanitizeRedirect(Astro.url.searchParams.get('redirect')));
 }
 
 /* A server side rendered login page: we only provide client side session, as all
@@ -20,7 +21,7 @@ if (session) {
 const showPasswordLoginFlag =
   import.meta.env.SECRET_FEATURE_FLAG_PASSWORD_LOGIN === 'true';
 
-const redirect = Astro.url.searchParams.get('redirect') || '/';
+const redirect = sanitizeRedirect(Astro.url.searchParams.get('redirect'));
 ---
 <ModalPage title={t('login:title')} backHref="/">
   <div class="content-prose">

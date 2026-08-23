@@ -157,3 +157,11 @@ publisher as configuration.
 
 v21 also holds a place in the stream for a publisher declared guaranteed. v18 needs no
 such notion: a section per publisher cannot be excluded by another's activity.
+
+### Login
+
+v18 signs a reader in on a plain modal page, the same chrome as any other interruption,
+and follows the `redirect` parameter wherever it points. v21 gives login a bespoke
+layout — the sign-in choices stand over the background poster, with the artist's credit
+in the footer — and follows `redirect` only to a relative path inside the service.
+`specs/pelilauta/login/spec.md` governs the route.

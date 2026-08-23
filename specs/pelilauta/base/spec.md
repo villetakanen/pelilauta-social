@@ -26,10 +26,7 @@ files beside it. What runs in the browser goes under `@pelilauta/base/client`. A
 sub-application that follows takes the same shape under its own directory.
 
 Its layouts are the exception: every layout sits in `apps/pelilauta/src/layouts`,
-whichever application it belongs to. `Base.astro` is the base application's. `ModalPage.astro`
-beside it belongs to no application, and is there for any application to take for a page
-that interrupts a reader instead of being somewhere they are — signing in, or creating a
-game.
+whichever application it belongs to. `Base.astro` is the base application's.
 
 Its strings are the `base` locale namespace, `locales/<language>/base.ts`. A string
 another application would need is not one of them.
@@ -53,7 +50,6 @@ belongs to `base-bar/spec.md`.
 ### Regression Guardrails
 
 - The layout adds no navigation of its own.
-- A page taking `ModalPage.astro` carries no rail, whichever application it belongs to.
 
 ### Scenarios
 
@@ -62,10 +58,4 @@ Given any two pages of the base application
 When each renders
 Then both bars carry the same logomark and wordmark
 And both lead to the base application's root
-```
-
-```gherkin
-Given a page that interrupts a reader
-When it renders
-Then it carries no rail
 ```
