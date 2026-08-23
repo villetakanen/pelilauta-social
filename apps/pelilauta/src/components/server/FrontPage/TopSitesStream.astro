@@ -2,7 +2,6 @@
 import { type Site, SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
-import OnboardingCallout from '../../svelte/frontpage/OnboardingCallout.svelte';
 import SiteCard from '../../svelte/sites/SiteCard.svelte';
 
 const siteListResponse = await fetch(`${Astro.url.origin}/api/sites?limit=5`);
@@ -27,7 +26,6 @@ if (siteListResponse.ok) {
 ---
 <section class="content-prose">
   <h2 class="text-h3">{t('frontPage:sites.title')}</h2>
-  <OnboardingCallout client:only="svelte"/>
   {sites.map((site) => (
     site && <SiteCard site={site} client:load />
   ))}

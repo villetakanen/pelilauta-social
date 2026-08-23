@@ -45,8 +45,10 @@ export const app = {
     title: 'Asetukset',
   },
   onboarding: {
-    title: 'Tervetuloa!',
-    text: 'Voit luoda Pelilaudalle oman sivuston pelillesi, ja osallistautua keskusteluihin kirjautumalla ensin tästä.',
+    title: 'Tervetuloa Pelilaudalle',
+    about:
+      'Roolipeleistä pelaajilta pelaajille. Keskustelut, sivustot, ja kampanjat.',
+    text: 'Voit luoda Pelilaudalle oman sivuston pelillesi tai hahmoillesi, ja osallistautua keskusteluihin kirjautumalla alta.',
   },
   '404': {
     title: 'Hups!',

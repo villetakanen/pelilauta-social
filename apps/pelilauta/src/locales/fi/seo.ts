@@ -2,7 +2,7 @@ export const seo = {
   frontPage: {
     title: 'Pelilauta',
     description:
-      'Keskustele roolipeleistä, luo kampanjawikejä ja hallinnoi hahmojasi. Suomalainen roolipelisivusto pelaajilta pelaajille.',
+      'Keskustele roolipeleistä ja luo kampanjawikejä. Suomalainen roolipelisivusto pelaajilta pelaajille.',
   },
   channels: {
     title: 'Keskustelualueet',

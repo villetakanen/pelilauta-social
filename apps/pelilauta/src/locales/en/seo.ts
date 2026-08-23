@@ -2,7 +2,7 @@ export const seo = {
   frontPage: {
     title: 'Pelilauta - RPG Forum and Campaign Tools',
     description:
-      'Discuss role-playing games, create campaign wikis, and manage your characters. Finnish RPG site by players, for players.',
+      'Discuss role-playing games and create campaign wikis. Finnish RPG site by players, for players.',
   },
   channels: {
     title: 'Discussion Channels',

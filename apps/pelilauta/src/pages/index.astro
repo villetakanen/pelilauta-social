@@ -3,6 +3,7 @@ import FeaturedTags from '@components/server/FrontPage/FeaturedTags.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import Base from '@layouts/Base.astro';
+import OnboardingCallout from '../components/server/FrontPage/OnboardingCallout.astro';
 import SyndicateStream from '../components/server/FrontPage/SyndicateStream/SyndicateStream.astro';
 import SyndicateStreamFallback from '../components/server/FrontPage/SyndicateStream/SyndicateStreamFallback.astro';
 import TopSitesStream from '../components/server/FrontPage/TopSitesStream.astro';
@@ -19,6 +20,7 @@ const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikk
   {title}
   {description}
   {image}>
+    <OnboardingCallout />
     <div class="content-triad">
       <TopThreadsStream />
 
