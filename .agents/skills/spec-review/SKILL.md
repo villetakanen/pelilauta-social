@@ -10,8 +10,14 @@ asked.
 
 ## Independence
 
-Use a critic that did not author the text. Give a delegated critic the raw spec and
-sources without author conclusions. If none is available, report `review incomplete`.
+Use a critic that did not author the text. Give a delegated critic file paths and the
+mandate only — no summary, no author vocabulary, no decisions restated from chat.
+Anything settled belongs in the spec, where the critic can test it. If none is
+available, report `review incomplete`.
+
+As the critic: the brief is authored by the spec's author, so every characterization
+of the spec in it is untested — test it against the sources. A brief that supplies
+conclusions about the text under review makes the review incomplete; report it so.
 
 ## Boundary
 
