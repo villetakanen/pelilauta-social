@@ -16,7 +16,7 @@ const visible = $derived.by(() => {
     data-testid="createDiscussionFab">
 
     <CnIcon noun="send" size="small" />
-    <span class="sm-hidden">{t('actions:create.thread')}</span>
+    <span>{t('actions:create.thread')}</span>
 
   </a>
 {/if}
