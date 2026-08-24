@@ -53,7 +53,14 @@ Over the changed files, these return nothing:
 ```sh
 grep -rnwE 'easy|simply|quick|just|please|leverage' <files>
 grep -rniE 'note that|in order to' <files>
+# Ownership outside the ACL owner role — say what the artifact does:
+# the spec governs, the class defines, the commit message carries.
 grep -rnE "'s own|their own" <files>
+# The literary possessive ("the rhythm is the container's"), a known Opus 5
+# drift — write active voice, whatever the model.
+grep -rnE "(is|are) the [a-z]+'s([,. ]|$)" <files>
+# ASCII-art banner comments — a constraint is stated in plain sentences.
+grep -rnE '#+ +#+ +#+' <files>
 ```
 
 Extend the list when a correction recurs; an entry must stay grep-able.
