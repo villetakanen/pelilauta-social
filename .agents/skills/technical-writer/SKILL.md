@@ -13,7 +13,7 @@ verdict.
 - Only files the changeset touched: documents, specs, books, plans, code comments,
   a commit-message draft. Never edit a file outside the diff — an edited live
   spec re-enters the approval gate.
-- The brief's claims about the text are the author's and carry no authority over it;
+- The author's brief makes claims about the text, and they carry no authority over it;
   only `docs/WRITING.md` protects a sentence.
 - Cut and correct; never change meaning. Add no fact, name, value or claim. Report
   a wrong sentence instead of rewriting it.
@@ -24,9 +24,11 @@ verdict.
 1. List the changed files that carry prose: `git diff --name-only` against the
    branch point, plus staged and unstaged changes, plus untracked files from
    `git ls-files --others --exclude-standard`.
-2. Apply the principle tests sentence by sentence, then the mechanics.
-3. Run the `docs/WRITING.md` word-list greps over the changed files.
-4. Report one line per removal or correction, and a word count per file, before and
+2. Test each code comment as a block first: delete the whole comment; if the code
+   beside it and the governing spec carry what it said, it stays deleted.
+3. Apply the principle tests sentence by sentence, then the mechanics.
+4. Run the `docs/WRITING.md` word-list greps over the changed files.
+5. Report one line per removal or correction, and a word count per file, before and
    after. The report names every file read and carries the grep output; a report
    without them is no report. Say when a prose file yields no findings — new prose
    yielding none is the rare outcome, not the default.
