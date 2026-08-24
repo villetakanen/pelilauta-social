@@ -132,3 +132,44 @@ describe('generation', () => {
     ).not.toThrow();
   });
 });
+
+describe('debug utility (specs/design-system/debug/spec.md)', () => {
+  const roleSheets = ['semantic.css', 'elevation.css', 'transparency.css'];
+
+  test('every role stylesheet declares its tokens on both :root and .debug', () => {
+    // A custom property resolves its var() references where it is declared, so
+    // a chroma swap scoped to .debug only re-themes a subtree if the role
+    // stylesheets also compute their tokens there. The guardrail is the arm's
+    // presence, not the exact selector text the generator happens to emit.
+    for (const sheet of roleSheets) {
+      const selector = read(sheet).slice(0, read(sheet).indexOf('{'));
+      const arms = selector
+        .split(',')
+        .map((arm) => arm.trim())
+        .filter(Boolean);
+      expect(arms, sheet).toContain(':root');
+      expect(arms, sheet).toContain('.debug');
+    }
+  });
+
+  test('debug.css swaps the complete 13-step surface scale to rowan', () => {
+    const surfaceSteps = [
+      0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100,
+    ];
+    const debugTokens = new Map(
+      declarations(read('debug.css')).map((d) => [d.name, d.value]),
+    );
+    const rowanTokens = new Set(
+      declarations(read('chroma-themes.css')).map((d) => d.name),
+    );
+
+    // Every step of the surface family, and only every step: a step missing
+    // from either side half-themes the .debug subtree silently.
+    for (const step of surfaceSteps) {
+      const surfaceVar = `--chroma-surface-${step}`;
+      const rowanVar = `--chroma-rowan-${step}`;
+      expect(debugTokens.get(surfaceVar), surfaceVar).toBe(`var(${rowanVar})`);
+      expect(rowanTokens.has(rowanVar), rowanVar).toBe(true);
+    }
+  });
+});

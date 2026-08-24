@@ -2,7 +2,8 @@
  * Generated from tokens/semantic-color.json by scripts/generate-tokens.mjs.
  * Do not edit: change the JSON source and run `pnpm generate:tokens` from the repository root.
  */
-:root {
+:root,
+.debug {
   --cn-color-surface: light-dark(
     var(--chroma-surface-95),
     var(--chroma-surface-20)

@@ -69,7 +69,25 @@ actions row already zeroes child margins and spaces by gap, so nothing replaced 
 The card title's fixed `<h4>` and bespoke tokens are filed as
 `plans/debt/card-title-hardcodes-its-heading.md`. Still open on the page:
 `TopThreadsStream.astro`'s `.error` div declares nothing (reachable only when the
-thread fetch fails), and the untamed `h1` below. Login is the next screen.
+thread fetch fails), and the untamed `h1` below.
+
+The login page's triage is done. Its three sections stand on `.surface` in place of
+Cyan's `elevation-1 p-2` — and the password form's `debug` — each action row is a
+scoped `.actions` rule in its own component, and `SyndicatedLoginSection`'s scoped
+button layout went, since buttons.css states it. The removal exposed a poster gap:
+the level-1 cession in `poster.css` matched `.elevation-1` and never a surface at its
+default level, so a bare `.surface` stood opaque on the artwork. The selector now
+carries the unoverridden-surface arm surface.css already uses, and the poster spec's
+constraint says so.
+
+The debug utility is back, as its own capability rather than Cyan's painted box
+(`specs/design-system/debug/spec.md`, live). `.debug` swaps the surface family for
+rowan, a hand-authored demonstration scale in `styles/chroma-themes.css`; the swap
+reaches the semantic roles because the generated role stylesheets emit on
+`:root, .debug` — a scoped chroma override cannot re-resolve a role computed on
+`:root` alone. `styles/debug.css` is not in `ds.css`: BaseHead loads it behind
+`import.meta.env.DEV`, so no production bundle carries it. The class marks the
+password login section and `ChannelsAdmin.svelte:187`'s dump.
 
 ## What the removal exposed and nobody has taken
 

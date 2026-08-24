@@ -324,7 +324,12 @@ function roleCss(source, tokens) {
         : `light-dark(${substitute(token.light)}, ${substitute(token.dark)})`;
     lines.push(`  --${name}: ${value};`);
   }
-  return `${header(source)}:root {
+  // A custom property computes where it is declared, so a chroma swap scoped
+  // to an element cannot reach a role computed on :root. The .debug arm makes
+  // the marked element recompute every role from its own chroma
+  // (specs/design-system/debug/spec.md).
+  return `${header(source)}:root,
+.debug {
 ${lines.join('\n')}
 }
 `;

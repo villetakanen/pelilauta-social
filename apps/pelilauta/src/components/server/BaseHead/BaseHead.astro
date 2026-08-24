@@ -81,6 +81,13 @@ const ogImage = image || `${Astro.url.origin}favicons/fox-ico-512.png`;
   <!-- Service Worker -->
   <ServiceWorker />
 
+  <!-- The debug utility loads only under the dev server
+       (specs/design-system/debug/spec.md): the DEV branch is dead code in a
+       production build, so neither the utility nor the rowan scale ships. -->
+  <script>
+    if (import.meta.env.DEV) import("@design-system/styles/debug.css");
+  </script>
+
   <!-- Cyan Components -->
   <script>
     import "@11thdeg/cyan-lit";
