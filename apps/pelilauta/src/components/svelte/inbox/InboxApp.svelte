@@ -12,17 +12,14 @@ import NotificationItem from './NotificationItem.svelte';
 
 <div class="content-prose">
   <WithAuth allow={!!$uid}>
-    <section>
-      <h1>{t('social:inbox.title')}</h1>
-      <p>{t('social:inbox.description')}</p>
-      <div class="elevation-1 p-2">
-        {#each $notifications as note}
-          <NotificationItem notification={note} />
-        {/each}
-        <p class="mb-0 text-right">
-            {$newCount} {t('social:inbox.notificationCount')}
-        </p>
-      </div>
-    </section>
+    <h1>{t('social:inbox.title')}</h1>
+    <p>{t('social:inbox.description')}</p>
+
+      {#each $notifications as note}
+        <NotificationItem notification={note} />
+      {/each}
+      <p class="mb-0 text-right">
+        {$newCount} {t('social:inbox.notificationCount')}
+      </p>
   </WithAuth>
 </div>

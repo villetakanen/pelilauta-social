@@ -85,10 +85,13 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
         client:only="svelte"
       />
 
-      <!-- Link to discussion -->
-      <a href={`/threads/${thread.key}?jumpTo=unread#discussion`}>
-        <CnIcon noun="discussion" size="small" />
-        <span class="text-caption">{thread.replyCount || 0}</span>
+      <a
+        class="button text"
+        href={`/threads/${thread.key}?jumpTo=unread#discussion`}
+        aria-label={t("threads:info.replies", { count: thread.replyCount || 0 })}
+      >
+        <CnIcon noun="discussion" />
+        <span>{thread.replyCount || 0}</span>
       </a>
     </Fragment>
   </CnCard>

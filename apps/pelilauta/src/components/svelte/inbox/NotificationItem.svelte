@@ -54,52 +54,78 @@ async function remove() {
 </script>
 
 <article
-  class={`notification-item flex flex-no-wrap mb-1 p-1 border-radius ${notification.read ? "" : "elevation-4"}`}
+  class={`notification-item surface ${notification.read ? "" : "elevation-3"}`}
 >
-  <span class="mt-1 flex-none"><CnIcon {noun} size="small" /></span>
-  <div class="grow">
-    <p class="m-0">
+  <CnIcon {noun} size="small" />
+  <div>
+    <p>
       <ProfileLink uid={notification.from} />
       {t(`social:notification.${notification.targetType}`)}
     </p>
-    <p class="m-0">
-      <a {href}>{notification.targetTitle}</a>
+    <p>
+      {#if href}
+        <a {href}>{notification.targetTitle}</a>
+      {:else}
+        {notification.targetTitle}
+      {/if}
     </p>
-    <p class="m-0 text-caption">
+    <p class="text-caption">
       {displayTime}
     </p>
   </div>
 
   {#if !notification.read}
-    <button
-      class="text flex-none"
-      onclick={read}
-      aria-label={t("actions:markRead")}
-    >
+    <button class="text" onclick={read} aria-label={t("actions:markRead")}>
       <CnIcon noun="check" />
     </button>
   {:else}
-    <button class="text flex-none" aria-label="delete" onclick={remove}>
+    <button class="text" onclick={remove} aria-label={t("actions:delete")}>
       <CnIcon noun="delete" />
     </button>
   {/if}
 </article>
 
 <style>
-  .notification-item.elevation-4,
-  .notification-item.elevation-4 :global(a) {
-    color: var(--cn-color-text-high);
+  /* ======================================================================
+   *
+   *   ##   ##   #####   ######   ##   ##  ######   ##   ##   ######
+   *   ##   ##  ##   ##  ##   ##  ###  ##    ##     ###  ##  ##
+   *   ## # ##  #######  ######   ## # ##    ##     ## # ##  ##  ###
+   *   #######  ##   ##  ##  ##   ##  ###    ##     ##  ###  ##   ##
+   *   ##   ##  ##   ##  ##   ##  ##   ##  ######   ##   ##   ######
+   *
+   *   THIS IS NOT THE v19+ DESIGN LANGUAGE.
+   *
+   *   It is a v21 hotfix: the design system has no listing row yet, and this
+   *   page needs one to work. The layout below is this component's
+   *   invention; a design-system capability would publish it, and none does.
+   *
+   *   Do not copy it into another component, and do not read it as the
+   *   pattern for a row. Delete this block when the system publishes a
+   *   listing row, and let the row compose that instead.
+   *
+   * ====================================================================== */
+
+  /*
+   * The row: an icon, the message, and the one action the row's read state
+   * offers. Padding is the surface's, and the rhythm between rows is the
+   * content container's, so neither is restated here.
+   */
+  .notification-item {
+    display: flex;
+    align-items: start;
+    gap: var(--cn-gap);
+    border-radius: var(--cn-border-radius);
   }
 
-  .notification-item.elevation-4 :global(a:focus-visible) {
-    outline-color: currentColor;
+  /* The icon and the action keep their square; the message takes the rest. */
+  .notification-item > :global(.cn-icon),
+  .notification-item > button {
+    flex: none;
   }
 
-  .notification-item.elevation-4 button.text {
-    color: var(--cn-color-text-high);
-  }
-
-  .notification-item.elevation-4 button.text:focus-visible {
-    outline-color: currentColor;
+  .notification-item > div {
+    flex: 1;
+    min-inline-size: 0;
   }
 </style>
