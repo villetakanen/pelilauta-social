@@ -6,17 +6,17 @@
  * lightness its index states, the rule a real theme's family obeys.
  */
 :root {
-  --chroma-rowan-0: oklch(0% 0 0);
-  --chroma-rowan-10: oklch(10% 0.06 15);
-  --chroma-rowan-20: oklch(20% 0.11 20);
-  --chroma-rowan-30: oklch(30% 0.16 26);
-  --chroma-rowan-40: oklch(40% 0.2 32);
-  --chroma-rowan-50: oklch(50% 0.23 38);
-  --chroma-rowan-60: oklch(60% 0.22 45);
-  --chroma-rowan-70: oklch(70% 0.19 55);
-  --chroma-rowan-80: oklch(80% 0.16 68);
-  --chroma-rowan-90: oklch(90% 0.12 78);
-  --chroma-rowan-95: oklch(95% 0.08 85);
-  --chroma-rowan-99: oklch(99% 0.02 90);
-  --chroma-rowan-100: oklch(100% 0 0);
+  --chroma-rowan-0: oklch(0% 0.0033 355);
+  --chroma-rowan-10: oklch(10% 0.0476 355);
+  --chroma-rowan-20: oklch(20% 0.0872 1.7);
+  --chroma-rowan-30: oklch(30% 0.1344 16.5);
+  --chroma-rowan-40: oklch(40% 0.1743 31.3);
+  --chroma-rowan-50: oklch(50% 0.19 38);
+  --chroma-rowan-60: oklch(60% 0.1743 46.4);
+  --chroma-rowan-70: oklch(70% 0.1346 65);
+  --chroma-rowan-80: oklch(80% 0.1215 83.6);
+  --chroma-rowan-90: oklch(90% 0.1642 92);
+  --chroma-rowan-95: oklch(95% 0.0795 92);
+  --chroma-rowan-99: oklch(99% 0.023 92);
+  --chroma-rowan-100: oklch(100% 0 92);
 }
