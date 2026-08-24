@@ -118,7 +118,6 @@ describe('the face set', () => {
       expect(face.specifier, face.specifier).not.toMatch(/^[./]/);
     }
   });
-
 });
 
 describe('coverage', () => {
@@ -149,7 +148,6 @@ describe('the two families', () => {
     expect(stacks[0][2]).toMatch(/sans-serif\s*$/);
     expect(stacks[1][2]).toMatch(/monospace\s*$/);
   });
-
 });
 
 describe('neither application declares a face', () => {

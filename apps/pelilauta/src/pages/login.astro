@@ -16,7 +16,9 @@ const session = await verifySession(Astro);
 
 if (session) {
   // If the user is logged in, redirect them to the redirect URL or the home page
-  return Astro.redirect(sanitizeRedirect(Astro.url.searchParams.get('redirect')));
+  return Astro.redirect(
+    sanitizeRedirect(Astro.url.searchParams.get('redirect')),
+  );
 }
 
 /* A server side rendered login page: we only provide client side session, as all

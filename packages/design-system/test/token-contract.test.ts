@@ -153,9 +153,7 @@ describe('debug utility (specs/design-system/debug/spec.md)', () => {
   });
 
   test('debug.css swaps the complete 13-step surface scale to rowan', () => {
-    const surfaceSteps = [
-      0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100,
-    ];
+    const surfaceSteps = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
     const debugTokens = new Map(
       declarations(read('debug.css')).map((d) => [d.name, d.value]),
     );

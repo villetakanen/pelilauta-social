@@ -1,8 +1,12 @@
-import type { FeedData, FeedEnvelope, RSSItem } from '@pelilauta/pages/api/rss-feeds.json';
 import {
   mergeSyndicateFeeds,
   type SyndicatedPost,
 } from '@pelilauta/components/server/FrontPage/SyndicateStream/mergeSyndicateFeeds';
+import type {
+  FeedData,
+  FeedEnvelope,
+  RSSItem,
+} from '@pelilauta/pages/api/rss-feeds.json';
 import { describe, expect, it } from 'vitest';
 
 /*
@@ -60,7 +64,7 @@ describe('mergeSyndicateFeeds', () => {
   // Scenario: "Given a guaranteed publisher whose posts are all older than
   // five others, its most recent post appears, and the oldest post from a
   // publisher that is not guaranteed does not."
-  it('seats a guaranteed publisher absent from the natural top five, yielding the stream\'s oldest non-guaranteed post', () => {
+  it("seats a guaranteed publisher absent from the natural top five, yielding the stream's oldest non-guaranteed post", () => {
     const feedData: FeedData = {
       g: envelope([item('g1', day(1)), item('g2', day(2))], true, 'Guaranteed'),
       p: envelope([
@@ -96,8 +100,16 @@ describe('mergeSyndicateFeeds', () => {
       // Configuration order: g1 before g2 — the key order of this object is
       // the order the route's Object.fromEntries preserves and the function
       // reads back with Object.entries.
-      g1: envelope([item('g1-old', day(1)), item('g1-new', day(2))], true, 'G1'),
-      g2: envelope([item('g2-old', day(3)), item('g2-new', day(4))], true, 'G2'),
+      g1: envelope(
+        [item('g1-old', day(1)), item('g1-new', day(2))],
+        true,
+        'G1',
+      ),
+      g2: envelope(
+        [item('g2-old', day(3)), item('g2-new', day(4))],
+        true,
+        'G2',
+      ),
       p: envelope([
         item('p5', day(5)),
         item('p6', day(6)),
@@ -139,7 +151,7 @@ describe('mergeSyndicateFeeds', () => {
   // envelope with no items (see rss-feeds.json.ts's readFeed), costing only
   // its own posts. (The logging half of that scenario is the route's
   // concern, not this pure function's — it is not exercised here.)
-  it('renders the answering publisher\'s posts when another publisher has none', () => {
+  it("renders the answering publisher's posts when another publisher has none", () => {
     const feedData: FeedData = {
       down: envelope([]),
       up: envelope([item('u1', day(1)), item('u2', day(2))]),
@@ -210,7 +222,9 @@ describe('mergeSyndicateFeeds', () => {
 
     expect(stream).toHaveLength(2);
     expect(ids(stream)).toEqual(['p2', 'p1']);
-    expect(stream.every((post) => post !== undefined && post !== null)).toBe(true);
+    expect(stream.every((post) => post !== undefined && post !== null)).toBe(
+      true,
+    );
   });
 
   // Constraint: "Posts carry no date... recency orders the stream." Two
