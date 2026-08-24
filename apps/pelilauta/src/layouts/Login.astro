@@ -2,7 +2,7 @@
 import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
-import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseFooter from '@pelilauta/base/chrome/BaseFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 import { t } from 'src/utils/i18n';
 
@@ -33,9 +33,9 @@ const { title, shortTitle, description } = Astro.props;
 
     <main class="app-main">
       <slot />
-      <AppFooter>
+      <BaseFooter>
         <slot name="app-footer-credits" slot="app-footer-credits" />
-      </AppFooter>
+      </BaseFooter>
     </main>
 
     <slot name="app-background-poster" />

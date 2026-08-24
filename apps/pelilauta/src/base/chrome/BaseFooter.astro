@@ -1,0 +1,89 @@
+---
+/**
+ * BaseFooter — the application's periphery: who is active now, where else
+ * the community gathers, and what the platform is. Mounts CnFooter's three
+ * blocks with Pelilauta's content (specs/pelilauta/base/base-footer/spec.md).
+ */
+import CnFooter from '@design-system/components/CnFooter.astro';
+import CnIcon from '@design-system/components/CnIcon.svelte';
+import ActiveUsersWidget from '@pelilauta/components/server/app/ActiveUsersWidget.astro';
+import footerLinks from '@pelilauta/data/footer-links.json';
+// The release the reader is on is the repository's, which the beta version
+// carries and CI tags.
+import { version } from '@root/package.json';
+import { t } from 'src/utils/i18n';
+---
+
+<div class="base-footer">
+  <CnFooter>
+    <div class="region" slot="block-1">
+      <ActiveUsersWidget />
+      <ul role="list">
+        <li><a href="/docs">{t('docs:title')}</a></li>
+        <li><a href="/rss/threads.xml">RSS</a></li>
+      </ul>
+    </div>
+
+    <div class="region" slot="block-2">
+      <h4>{t('app:footer.links.title')}</h4>
+      <ul role="list">
+        {footerLinks.map((link: { text: string; href: string; description?: string }) => (
+          <li>
+            <a href={link.href}>{link.text}</a>
+            {link.description && <p class="text-caption">{link.description}</p>}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="region identity" slot="block-3">
+      <span class="logomark">
+        <CnIcon noun="fox" size="xlarge" />
+      </span>
+      <p>
+        {t('app:shortname')}<br />
+        <a href="/docs/80-release-notes">{version}</a>
+      </p>
+      <slot name="app-footer-credits" />
+    </div>
+  </CnFooter>
+</div>
+
+<style>
+  /*
+   * A content container in the app-main flow: capped at the triad composition's
+   * width (51 + 2 + 32 + 2 + 32 grid units) and centred in the host, so the
+   * footer aligns with the content areas above it rather than spanning the
+   * host's full width.
+   */
+  .base-footer {
+    max-inline-size: calc(var(--cn-grid) * 119);
+    margin-inline: auto;
+    margin-block-start: calc(var(--cn-grid) * 4);
+    padding-block: calc(var(--cn-grid) * 2) calc(var(--cn-grid) * 3);
+    border-block-start: 1px solid var(--cn-color-border);
+  }
+
+  /* The rhythm the preflight's zeroed margins would otherwise leave out. */
+  .region {
+    display: grid;
+    row-gap: var(--cn-line);
+    justify-items: start;
+  }
+
+  .identity {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .logomark {
+    display: contents;
+    color: var(--cn-color-text-low);
+  }
+
+  ul {
+    padding: 0;
+    display: grid;
+    row-gap: calc(var(--cn-grid) / 2);
+  }
+</style>
