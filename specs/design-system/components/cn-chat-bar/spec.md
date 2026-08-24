@@ -57,7 +57,7 @@ capped at `--cn-measure`.
 
 Where a rail stands in the same chrome, the placement cedes the strip the rail occupies,
 as the main region does, so the surface is centred on the content rather than on the
-viewport. What the strip is worth is the rail's to say; whether one stands is asked of the
+viewport. The rail decides what the strip is worth; whether one stands is asked of the
 chrome, because a bounded composition inherits the occupancy from the page around it.
 
 The surface grows until it reaches the application bar, and no further: a reader who
@@ -125,7 +125,7 @@ white space sends nothing.
 
 The disabled state makes the textarea, the `+` where there is one, and every supplied
 action inoperable, and suppresses send intent. Supplied actions are native buttons under
-`../../actions/spec.md`, and so are the menu's items.
+`../../actions/spec.md`, and the menu's items are too.
 
 ## Contract
 

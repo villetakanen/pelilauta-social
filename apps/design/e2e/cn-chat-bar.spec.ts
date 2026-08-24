@@ -27,7 +27,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * comment: "Static … with no client-side behaviour to demonstrate"), so it
  * carries no hydrated Svelte instance at all — geometry, cascade and native
  * `disabled`/`inert` enforcement are exactly what a browser gives it without
- * a script running. `ChatBarDemo` is the page's one `client:load` island,
+ * a script running. The page hydrates `ChatBarDemo` as its one `client:load` island,
  * and is the only fixture that can prove a send intent, a bound value or a
  * composition guard.
  */

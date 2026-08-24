@@ -46,7 +46,7 @@ let contentMigrated = $state(false);
 let saving = $state(false);
 
 /*
- * Dirtiness is the shell's, reported here rather than tracked: the fields are
+ * The shell tracks dirtiness; this component only reports it: the fields are
  * native controls inside the region it reads, so a name edited back to what it
  * was leaves the save action disabled, which a set-once flag never managed.
  */

@@ -85,4 +85,4 @@ alongside the debt pile and a retro.
 
 ## Open questions
 
-- Which debt entries this cycle takes is the operator's pick at each `next-task`.
+- The operator decides which debt entries this cycle takes, at each `next-task`.

@@ -9,7 +9,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  *
  * Locators read the book page. The static specimen grid mounts once per
  * colour scheme and the semantics and geometry under test resolve once, so
- * the first panel answers; the demo is the page's one hydrated consumer.
+ * the first panel answers; the page hydrates the demo as its one consumer.
  */
 
 const BOOK = '/components/cn-reaction-button';

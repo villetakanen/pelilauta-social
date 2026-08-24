@@ -82,12 +82,12 @@ With no frontmatter slotted the mode is `content-prose`, which is the mode that
 centres one column at the measure: a golden container has exactly two regions,
 so a canvas alone in one would stand beside the space a secondary never took.
 
-The dirty state is the shell's, derived from the document — body and
+The shell holds the dirty state, derived from the document — body and
 frontmatter together — against the point the consumer last marked clean.
 
 The split with the consumer is the whole design. The consumer slots the
 frontmatter region's fields, saves, and decides where leaving lands; the shell
-never saves. `markClean()` is the consumer's only lever on dirtiness.
+never saves. The consumer controls dirtiness only through `markClean()`.
 
 Departure through the bar's back action is stopped and asked about while the
 document is dirty. Confirming re-dispatches `cn-back` carrying

@@ -26,7 +26,7 @@ let title = $state(handout.title);
 let markdownContent = $state(handout.markdownContent);
 
 /*
- * Dirtiness is the shell's, reported here rather than tracked: the title is
+ * The shell tracks dirtiness; this component only reports it: the title is
  * a native control inside the region it reads, so a title edited back to
  * what it was leaves the save action disabled, which the view's diff
  * used to manage by hand.

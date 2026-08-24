@@ -8,7 +8,7 @@ import { t } from 'src/utils/i18n';
 
 /**
  * The theme switch as Pelilauta mounts it: signed-in readers only, because the
- * theme is the account's `lightMode`. An account-less reader gets no control —
+ * account's `lightMode` sets the theme. An account-less reader gets no control —
  * the document keeps `color-scheme: dark light` and the browser's preference
  * resolves it.
  *

@@ -21,7 +21,7 @@ of having one.
 DTCG is not the token source format, and no DTCG token data is introduced.
 
 Tokens are hand-authored CSS under `packages/design-system/styles/`, which is what
-ships today. The CSS custom property is the token's real name: the grid token is
+ships today. The CSS custom property carries the token's real name: the grid token is
 `--cn-grid`, not a projection of a `space.grid` path. DTCG's path grammar and the
 generated `--cn-space-grid` style of naming that came with it are both rejected.
 

@@ -8,7 +8,7 @@ status: live
 
 An icon is a noun standing in an expression. A reader who sees it receives
 artwork; a reader using assistive technology receives the noun itself. Both
-receive the same word, which is why the noun is the icon's label wherever a
+receive the same word, which is why the noun labels the icon wherever a
 consumer supplies no other.
 
 Icons give familiar actions, objects, systems, and identities a compact visual

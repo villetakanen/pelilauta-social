@@ -80,7 +80,7 @@ test.describe('the browser shares natively', () => {
 
     const calls = (await shareCalls(page)) as { url: string; title: string }[];
     expect(calls).toHaveLength(1);
-    // The specimen states no url or title, so both are the document's own.
+    // The specimen states no url or title, so the document supplies both.
     expect(calls[0].url).toBe(page.url());
     expect(calls[0].title).toBe(await page.title());
   });

@@ -42,7 +42,7 @@ let markdownContent = $state('');
 let saving = $state(false);
 
 /*
- * Dirtiness is the shell's, reported here rather than tracked: title and
+ * The shell tracks dirtiness; this component only reports it: title and
  * channel are native controls inside the region it reads, so a field edited
  * back to its original value leaves the send action disabled, which a
  * set-once flag never managed.

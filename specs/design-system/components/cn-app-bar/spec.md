@@ -54,7 +54,7 @@ line.
 A modal bar replaces the leading region with the back action and renders no actions. It is
 the bar's only variant.
 
-The title is not a heading — the document's outline is the page's. It renders at the h3
+The title is not a heading — the page states the document's outline. It renders at the h3
 step and truncates rather than wrapping, and a shorter form replaces it below
 `--cn-breakpoint-small`.
 

@@ -91,7 +91,7 @@ usable.
 The `hidden` attribute keeps elements out of layout, except for
 `hidden="until-found"`: that state remains the browser's so find-in-page can reveal it.
 
-Scrollbars are the browser's. Cyan 4 is the only source that styles them, and it is the
+The browser governs scrollbars. Cyan 4 is the only source that styles them, and it is the
 source being replaced. Styling them later would be a separate scrollbar and theming
 capability with its own tokens and spec, not a gap in this one or in Surface.
 

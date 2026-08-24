@@ -10,7 +10,8 @@ status: live
 
 The tray keeps a view's floating actions reachable at the lower inline-end corner of
 the composition that governs it. On the application canvas that composition is the full
-dynamic viewport; in a book specimen it is the specimen's bounded container. The
+dynamic viewport; in a book specimen, the specimen's bounded container is that
+composition. The
 governing composition, rather than the browser viewport, determines both placement and
 responsive presentation. The tray places; the controls inside it are FABs under
 `specs/design-system/actions/spec.md` and never position themselves.

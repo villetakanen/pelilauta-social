@@ -87,8 +87,8 @@ const { title, description, image, noSharing, search } = Astro.props;
     <AuthManager client:only="svelte" />
 
     {/*
-      The share action reports what it did and shows nothing, so telling the
-      reader is the application's. A native share needs no word — the browser
+      The share action reports what it did and shows nothing, so the
+      application tells the reader. A native share needs no word — the browser
       showed its own sheet — and a dismissal reports nothing at all.
     */}
     <script>

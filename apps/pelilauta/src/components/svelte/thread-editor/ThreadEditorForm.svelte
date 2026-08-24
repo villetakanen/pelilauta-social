@@ -42,7 +42,7 @@ let tags = $state<string[]>(thread?.tags || []);
 let markdownContent = $state(thread?.markdownContent || '');
 
 /*
- * Dirtiness is the shell's, reported here rather than tracked: the fields are
+ * The shell tracks dirtiness; this component only reports it: the fields are
  * native controls inside the region it reads, so a title edited back to what it
  * was leaves the send action disabled, which a set-once flag never managed.
  */

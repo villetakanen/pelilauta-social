@@ -107,8 +107,8 @@ export const GET: APIRoute = async () => {
   const envelopes = await Promise.all(RSS_FEEDS.map(readFeed));
 
   /*
-   * Insertion order is the configuration's order, and `Object.entries` preserves it for
-   * string keys. The guarantees are honoured in that order, so this is load-bearing.
+   * The configuration's order sets the insertion order, and `Object.entries` preserves
+   * it for string keys. The guarantees are honoured in that order, so this is load-bearing.
    */
   const feedData: FeedData = Object.fromEntries(envelopes);
 

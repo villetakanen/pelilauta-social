@@ -21,8 +21,8 @@ base or principles book that also carries it.
 
 ### Marks
 
-Three marks, and each names one thing. The **logomark** is the product's graphic —
-the fox. The **wordmark** is the product's name set in type. The **identity mark**
+Three marks, and each names one thing. The **logomark** carries the product's
+graphic — the fox. The **wordmark** carries the product's name set in type. The **identity mark**
 is a person's, and `specs/design-system/identity-mark/spec.md` governs it: a reader's
 avatar and their nick, never the product's.
 

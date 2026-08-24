@@ -117,8 +117,8 @@ flex container in both applications, so a display change is not what does it.
 
 The bar is not chased further while Cyan is loaded, because the row is right where the
 stylesheet is not. The terminal sweep re-measures it: a bar whose row is not 56 once
-Cyan is gone is the component's defect, and the eighteen pixels are a real finding either
-way.
+Cyan is gone means the component carries the defect, and the eighteen pixels are a real
+finding either way.
 
 ## The terminal sweep
 

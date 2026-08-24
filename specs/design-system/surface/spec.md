@@ -39,8 +39,8 @@ compose these utilities rather than restating their declarations.
 | 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` | opaque |
 | 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` | opaque |
 
-The canvas is not a level a consumer selects: it is the page's ground, painting level
-0's colour because level 0 is what the page is. A poster paints over it and dissolves its
+The canvas is not a level a consumer selects: it carries the page's ground, painting
+level 0's colour because level 0 is what the page is. A poster paints over it and dissolves its
 lower edge back into it, which is why the canvas stays opaque while a level 0 surface
 standing over the same artwork does not.
 

@@ -200,7 +200,7 @@ test('a breakout spans the width its prose container was offered', async ({
   if (!breakout) throw new Error('the breakout did not render');
 
   // Wider than the flow, and the whole width the host offered its container —
-  // the page-edge inset is the host's, so a breakout does not eat into it.
+  // the host sets the page-edge inset, so a breakout does not eat into it.
   expect(breakout.width).toBeGreaterThan(measure);
   expect(breakout.width).toBeCloseTo(main.width - 2 * gap, 0);
   const left = breakout.x - main.x;
@@ -547,7 +547,7 @@ for (const { name, mode, tracks, threshold } of MODES) {
 
     const nested = await page.locator('#nested').boundingBox();
     if (!nested) throw new Error('the nested prose did not render');
-    // The surface inset is the region's, not prose's, so measure inside it.
+    // The region, not prose, sets the surface inset, so measure inside it.
     const inset = await page.evaluate(() =>
       Number.parseFloat(
         getComputedStyle(document.querySelector('#region-1') as Element)

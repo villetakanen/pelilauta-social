@@ -24,5 +24,5 @@ output.
 **Fix:** add `pnpm --filter design test:e2e` to the root `verify` script, after
 `pnpm test`. That keeps the browser install and dev-server boot off every push
 while making the suite reachable from one command before a merge. The alternative —
-aliasing `test` to `test:e2e` in `apps/design` — puts both on every pre-push, which
-is the owner's cost to accept.
+aliasing `test` to `test:e2e` in `apps/design` — puts both on every pre-push, a cost
+the owner decides to accept.

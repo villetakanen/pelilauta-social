@@ -40,8 +40,8 @@ A reader who holds no tools is sent to `/403`, whichever page they open.
 
 A developer tool answers as a page that does not exist where the environment does not show
 the tools, because there it is not one of the service's pages at all. User management and
-the snackbar utility are developer tools; the forum's channels, the social media poster
-and the sites' activity are the service's.
+the snackbar utility are developer tools; the service carries the forum's channels, the
+social media poster and the sites' activity.
 
 ## Contract
 

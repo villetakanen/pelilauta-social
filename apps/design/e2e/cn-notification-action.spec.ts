@@ -101,7 +101,7 @@ test.describe('geometry and the accessibility tree', () => {
 
   // Removing the badge from a rendered control, rather than comparing against a
   // second control that never had one, keeps the measurement on one element:
-  // any difference is the badge's own contribution to the flow.
+  // the badge alone contributes any difference to the flow.
   test("the badge takes no space in the target's flow", async ({ page }) => {
     const root = specimenRoot(page, scheme, 'counts', 'compact');
     const theControl = control(rig(root, 'count-3-surface'));

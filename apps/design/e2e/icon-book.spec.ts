@@ -64,7 +64,7 @@ test('monochrome artwork takes the colour of the cell around it', async ({
   const cell = (mode: string, role: string) =>
     `[data-mode="${mode}"][data-role="${role}"]`;
 
-  // The icon states no colour, so its computed colour is the cell's.
+  // The icon states no colour, so the cell sets its computed colour.
   for (const role of [
     '--cn-color-text',
     '--cn-color-link',

@@ -118,8 +118,8 @@ half a unit of padding. Both land on the grid at every line count. A field draws
 control, so the box a reader sees is the box a reader taps.
 
 The label takes the label step's size and line, in Lato rather than the mono a field is
-otherwise set in: it is the field's name, written by the system, where the value below it
-is the reader's text. Its resting colour is a surface step in from the end of the
+otherwise set in: it states the field's name, written by the system, where the value
+below it carries the reader's text. Its resting colour is a surface step in from the end of the
 scale, off the near-black the body takes in Light and off the near-white it takes in Dark,
 and the steps are saturated at hue 242, so the name carries a hint of colour the value
 does not. Hover and focus move it to the primary family.

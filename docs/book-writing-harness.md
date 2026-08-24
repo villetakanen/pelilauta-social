@@ -73,7 +73,7 @@ is a decision, not a default." Both are constructions the owner banned for books
 
 **State each rule once.** Line 39 states the branch rule four times.
 
-**Keep explanation in the opening blockquote and nowhere else.** Lines 3–5 are the project's
+**Keep explanation in the opening blockquote and nowhere else.** Lines 3–5 carry the project's
 why, and a new agent needs them. Every line below is a rule. A line under the blockquote
 that says why is in the wrong place, which makes this checkable by reading.
 
@@ -172,7 +172,7 @@ The comment block is a fourth copy of the skill.
 
 **Cut the comment blocks to the slots.** `base.mdx` lines 8–26, `component.mdx` 8–30,
 `principles.mdx` 8–41. The skill instructs; a template is shape to fill. A comment the
-writer deletes on copy is an instruction delivered once, which is the skill's job.
+writer deletes on copy is an instruction delivered once, a job the skill governs.
 
 What the blocks currently duplicate: the three kinds and which template each takes, the
 specimen rule, the length limits, no `h1`, `docs.css` and `books/*.astro` are not patterns,
@@ -278,8 +278,8 @@ stay where they are and the book skill does not name them.
 
 `docs/DESIGN.md` does not exist. The skill names it regardless. Its own section is below.
 
-A book omits reasoning; it does not hand it off. Reasoning is the spec's and the commit
-message's, and neither is for a design-site reader. Diátaxis links reference to an
+A book omits reasoning; it does not hand it off. The spec and the commit
+message carry the reasoning, and neither is for a design-site reader. Diátaxis links reference to an
 explanation page, and that part does not port.
 
 #### As applied

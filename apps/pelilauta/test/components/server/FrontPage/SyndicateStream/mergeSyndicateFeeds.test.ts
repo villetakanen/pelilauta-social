@@ -149,8 +149,8 @@ describe('mergeSyndicateFeeds', () => {
   // The pure-function analogue of "one publisher's feed times out and
   // another answers": a timed-out publisher reaches this function as an
   // envelope with no items (see rss-feeds.json.ts's readFeed), costing only
-  // its own posts. (The logging half of that scenario is the route's
-  // concern, not this pure function's — it is not exercised here.)
+  // its own posts. (The route handles the logging half of that scenario,
+  // not this pure function — it is not exercised here.)
   it("renders the answering publisher's posts when another publisher has none", () => {
     const feedData: FeedData = {
       down: envelope([]),
