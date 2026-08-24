@@ -1,14 +1,14 @@
 ---
-title: TokenTable
+title: DsTokenTable
 description: "Renders custom property declarations parsed directly from source stylesheets at build time."
 order: 20
 runtime: static
 ---
 
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-`TokenTable` parses and renders CSS custom properties directly from raw stylesheet text
+`DsTokenTable` parses and renders CSS custom properties directly from raw stylesheet text
 at build time. Trailing inline comments in CSS declarations populate the table's note
 column.
 
@@ -17,22 +17,22 @@ column.
 - Render token declarations in lexicon books without manually transcribing values.
 - Display verified token subsets with live cascade colour swatches.
 
-Do not use `TokenTable` to explain design principles or token selection rationale;
+Do not use `DsTokenTable` to explain design principles or token selection rationale;
 refer to the appropriate principles book (such as [Spatial System](/principles/spatial-system)).
 
 ## Example
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   names={['--cn-grid', '--cn-gap', '--cn-line']}
   caption="The spacing tokens"
 />
 
 ```mdx
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import unitsSource from '@design-system/styles/units.css?raw'
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   names={['--cn-grid', '--cn-gap', '--cn-line']}
   caption="The spacing tokens"
@@ -41,7 +41,7 @@ import unitsSource from '@design-system/styles/units.css?raw'
 
 ## Variants and states
 
-`TokenTable` supports filtering by explicit names or name prefixes, and optional colour swatch rendering.
+`DsTokenTable` supports filtering by explicit names or name prefixes, and optional colour swatch rendering.
 
 ### Token filtering
 
@@ -67,7 +67,7 @@ Setting `swatch={true}` renders an inline colour chip per row evaluated against 
 
 ## Accessibility
 
-`TokenTable` emits standard semantic HTML `<table>` elements with accessible `<caption>`
+`DsTokenTable` emits standard semantic HTML `<table>` elements with accessible `<caption>`
 headers. Swatches are decorative elements hidden from assistive technology.
 
 ## Not shown here

@@ -72,11 +72,6 @@ export const threads: Locale = {
     message:
       'Oletko varma, että haluat poistaa tämän keskustelun pysyvästi. Keskustelua ei voi palauttaa.',
   },
-  onboarding: {
-    title: 'Tervetuloa Pelilaudalle!',
-    description:
-      'Pelilauta on roolipelaamiseen keskittynyt sovellus, jossa voit keskustella, jakaa ja dokumentoisa roolipelejä. Kirjautumalla sisään voit osallistua keskusteluihin, reagoida viesteihin ja aloittaa uusia aiheita.',
-  },
   snacks: {
     replyDeleted: 'Viesti poistettu',
   },

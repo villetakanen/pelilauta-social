@@ -77,7 +77,7 @@ carry them — the design language lives exactly here:
 7. **Info was primary in disguise.** Its role resolved to primary steps — the
    v20 info scale named a chroma distinction the design never actually made.
    The scale was removed; information survives as the semantic pair
-   `--cn-info`/`--cn-on-info` over primary.
+   `--cn-color-info`/`--cn-color-on-info` over primary.
 8. **The auxiliary steps are the four jobs a status colour has**: dark text on
    tint, strong fill for Light, bright fill for Dark, pale tint background.
    A status needs no more.

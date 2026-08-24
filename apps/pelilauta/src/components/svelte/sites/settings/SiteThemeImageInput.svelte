@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addAssetToSite } from 'src/firebase/client/site/addAssetToSite';
 import type { Site } from 'src/schemas/SiteSchema';
 import { resizeImage } from 'src/utils/client/resizeImage';
@@ -87,7 +87,7 @@ async function deleteImage() {
         class="flex-none"
         style="align-self: flex-start;justify-self: center;flex-grow: 0;"
       >
-        <Icon noun="assets" />
+        <CnIcon noun="assets" />
       </span>
     {/if}
 

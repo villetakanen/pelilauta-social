@@ -7,7 +7,7 @@ main > footer {
   text-shadow: 1px 1px 12px var(--color-background);
 }
 main > footer a {
-  color: var(--cn-link);
+  color: var(--cn-color-link);
 }
 main > footer h4 {
   margin-bottom: var(--cn-grid);

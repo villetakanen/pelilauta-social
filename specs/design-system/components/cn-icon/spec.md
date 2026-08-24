@@ -2,7 +2,7 @@
 status: live
 ---
 
-# Icon
+# CnIcon
 
 ## Intent
 
@@ -55,10 +55,10 @@ intentional artwork across Light and Dark modes.
   each icon's selection. This is a design-system rule that resolves against the
   local icon component, so it applies equally to migrated icons; sizing an icon
   for a context is not each consumer's responsibility.
-- Icon does not govern the surrounding control, layout, or typography rules that
+- CnIcon does not govern the surrounding control, layout, or typography rules that
   establish that context. While migrated icons coexist with Cyan contexts,
   reached cross-capability selectors must be preserved by minimal application
-  migration helpers, not by intrinsic Icon styling. The relevant local Button,
+  migration helpers, not by intrinsic CnIcon styling. The relevant local Button,
   Fab, layout, or typography capability must absorb the behavior and remove its
   helper when that context migrates.
 - Monochrome artwork inherits the surrounding foreground color, including
@@ -68,7 +68,7 @@ intentional artwork across Light and Dark modes.
   intent, not a new behavior.
 - Branded artwork preserves its approved internal colors, strokes, and
   opacity, as encoded in the reviewed source artwork.
-- Icon geometry and color do not shift when client-side behavior becomes
+- CnIcon geometry and color do not shift when client-side behavior becomes
   ready.
 
 ## Accessibility
@@ -155,7 +155,7 @@ intentional artwork across Light and Dark modes.
   behavior survives; it is not left to per-consumer hardcoding or silently
   dropped.
 - Until the governing local context exists, required cross-capability behavior is
-  isolated in an application migration helper. It does not enter stable Icon
+  isolated in an application migration helper. It does not enter stable CnIcon
   CSS, and the helper is removed when its named local capability takes it over.
 
 ## Acceptance

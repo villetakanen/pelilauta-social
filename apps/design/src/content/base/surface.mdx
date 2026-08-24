@@ -4,7 +4,7 @@ description: The standard content surface, its five elevation levels, and the ru
 order: 4
 ---
 
-import Composition from "@design-system/books/specimens/Composition.astro";
+import DsComposition from "@design-system/books/specimens/DsComposition.astro";
 
 `.surface` provides the standard container for bounded content, applying default inset
 and establishing a container query context. Five accompanying elevation utilities
@@ -33,58 +33,60 @@ must declare it explicitly.
 Each elevation utility applies the background color role and box shadow assigned to
 that level. Elevation hierarchy is defined in [Colour & Surface principles](/principles/color-system).
 
-| Class | Background | Shadow | Level means |
-| :--- | :--- | :--- | :--- |
-| `.elevation-0` | `--cn-surface` | none | The application itself |
-| `.elevation-1` | `--cn-surface-1` | none | Payload, the default |
-| `.elevation-2` | `--cn-surface-2` | `--cn-shadow-elevation-2` | Payload inside payload |
-| `.elevation-3` | `--cn-surface-3` | `--cn-shadow-elevation-3` | Floats over content |
-| `.elevation-4` | `--cn-surface-4` | `--cn-shadow-elevation-4` | A system interrupt |
+| Class | Background | Shadow | Level means | Under a poster |
+| :--- | :--- | :--- | :--- | :--- |
+| `.elevation-0` | `--cn-color-surface` | none | The application itself | a wide share |
+| `.elevation-1` | `--cn-color-surface-1` | none | Payload, the default | a narrow share |
+| `.elevation-2` | `--cn-color-surface-2` | `--cn-shadow-elevation-2` | Payload inside payload | a narrow share |
+| `.elevation-3` | `--cn-color-surface-3` | `--cn-shadow-elevation-3` | Floats over content | opaque |
+| `.elevation-4` | `--cn-color-surface-4` | `--cn-shadow-elevation-4` | A system interrupt | opaque |
 
-<Composition
+<DsComposition
   themes
   elevation={0}
   caption="Level 0, the application itself. Background luminance: Light OKLCH L 0.95, Dark OKLCH L 0.200."
 >
   A surface here claims no separation from the application.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={1}
   caption="Level 1, payload. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.267."
 >
   What the reader came to read or use. The default.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={2}
   caption="Level 2, payload inside payload. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.267."
 >
   The rise that keeps an inner thing distinguishable from what holds it. Reached
   by nesting rather than chosen.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={3}
   caption="Level 3, floats over content. Background luminance: Light OKLCH L 1.00, Dark OKLCH L 0.333."
 >
   Covers a region of content without dimming it, whether it stays or is dismissed.
-</Composition>
+</DsComposition>
 
-<Composition
+<DsComposition
   themes
   elevation={4}
   caption="Level 4, a system interrupt. Background luminance: Light OKLCH L 0.99, Dark: primary step 40."
 >
   The application interrupting the reader.
-</Composition>
+</DsComposition>
 
 Elevation 0 renders an opaque ground plane, surface step 95 in Light and surface step
-20 in Dark. Elevations 0 and 1 are shadowless; elevations 2 through 4 apply
-progressively larger box shadows when rendered without an elevated ancestor.
+20 in Dark, except where a poster paints the page's background instead; see
+[Under a poster](#under-a-poster). Elevations 0 and 1 are shadowless; elevations 2
+through 4 apply progressively larger box shadows when rendered without an elevated
+ancestor.
 
 Levels 1 and 2 share a background in both schemes and separate by their shadows alone.
 Level 1 stands away from the application: surface step 100 in Light, and in Dark a
@@ -94,9 +96,36 @@ level 2 as level 1 stands above the application — because a shadow carries les
 dark ground than on a light one. Level 4 leaves the surface family for primary, step 99
 in Light and step 40 in Dark.
 
-Every level carries the inherited body foreground at WCAG 2.2 AA in both themes. Surface
-sets no foreground: a consumer raises one to strengthen a role, not to repair it.
-De-emphasised roles are unsuitable at level 4.
+Every level carries the inherited body foreground at WCAG 2.2 AA in both themes when it
+paints its own background opaquely. Surface sets no foreground: a consumer raises one to
+strengthen a role, not to repair it. De-emphasised roles are unsuitable at level 4.
+Levels 0 through 2 lose that guarantee where a poster paints behind them, because
+nothing can promise a ratio against artwork the system has never seen; see
+[Under a poster](#under-a-poster).
+
+## Under a poster
+
+A poster replaces the page background with decorative artwork
+([CnPoster](/components/cn-poster)). The canvas beneath it — the page's ground —
+keeps painting level 0's colour opaquely, because the canvas is what the page is; the
+poster paints over it and dissolves its lower edge back into that colour. The levels
+standing on the artwork cede to it instead of staying opaque, each mixing its own
+surface colour with a share taken from the [transparency ladder](/tokens/color):
+
+- **Level 0**, the ground plane, takes a wide share (`--cn-transparency-6`), because a
+  page standing over artwork is meant to show it.
+- **Levels 1 and 2**, payload, take a narrow share (`--cn-transparency-2`): enough to
+  admit the artwork and belong to the page it is on, while staying legible.
+- **Levels 3 and 4** keep their opacity. They float over content rather than over the
+  page, so ceding there would bleed whatever they cover.
+
+Neither share responds to the artwork's contrast. [Colour System](/principles/color-system)
+explains why a rung cannot promise one.
+
+The cession applies only above the small-screen breakpoint, and withdraws — the poster
+disappears and every level returns to its opaque colour — under
+`prefers-reduced-transparency: reduce` or `forced-colors: active`. Below the breakpoint
+the poster never renders, so no level cedes there either.
 
 ## Level overrides
 
@@ -107,13 +136,13 @@ combine `.surface` with an explicit elevation class.
 <div class="surface elevation-3">A menu panel</div>
 ```
 
-<Composition
+<DsComposition
   themes
   caption="A surface at its default level and with an explicit elevation"
 >
   <div class="surface">Default surface, elevation 1</div>
   <div class="surface elevation-3">Surface at elevation 3</div>
-</Composition>
+</DsComposition>
 
 ## Nested elevation
 
@@ -133,7 +162,7 @@ difference between ancestor and child.
 An elevation difference of +1 is shadowless. Differences of +2 or +3 render shadows
 scaled to relative distance, preventing nested shadows from compounding into dark halos.
 
-<Composition
+<DsComposition
   themes
   caption="Elevation 4 relative to ancestors at elevations 1 and 3"
 >
@@ -145,7 +174,7 @@ scaled to relative distance, preventing nested shadows from compounding into dar
     Ancestor at elevation 3
     <div class="surface elevation-4">Child at elevation 4</div>
   </div>
-</Composition>
+</DsComposition>
 
 `.surface` evaluates as elevation 1 by default in nesting calculations. When combined
 with an explicit elevation class, the declared level applies.
@@ -155,16 +184,17 @@ with an explicit elevation class, the declared level applies.
 `has-notify` and `has-alert` render a triangular status flag in the upper-right corner
 of any container. `has-notify` applies the information role, `has-alert` applies the
 warning role, and `has-alert` takes precedence when both classes are present. The flag
-matches the host element's corner radius and disables pointer events.
+matches the host element's corner radius, paints its role at a share off the
+[transparency ladder](/tokens/color), and disables pointer events.
 
 ```html
 <div class="surface has-notify">A row with unread content</div>
 ```
 
-<Composition themes caption="A surface with each attention state">
+<DsComposition themes caption="A surface with each attention state">
   <div class="surface has-notify">Notification</div>
   <div class="surface has-alert">Alert</div>
-</Composition>
+</DsComposition>
 
 Attention flags are utility classes rather than component-bound states. Components such
 as [CnCard](/components/cn-card) compose `.has-notify` and `.has-alert` directly.

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addAssetToSite } from 'src/firebase/client/site/addAssetToSite';
 import type { Site } from 'src/schemas/SiteSchema';
 import { resizeImage } from 'src/utils/client/resizeImage';
@@ -68,7 +68,7 @@ function handleButtonClick() {
     accept="image/*,video/*,audio/*,application/pdf,application/zip"
   />
   <button class="fab" onclick={handleButtonClick} type="button">
-    <Icon noun="assets" />
+    <CnIcon noun="assets" />
     <span>{t("actions:upload")}</span>
   </button>
 {/if}

@@ -3,7 +3,7 @@ import { expect, type Page, test } from '@playwright/test';
 /**
  * What only a browser knows about `CnBackAction`: the accessible-name
  * algorithm over the control's real, rendered markup (does the decorative
- * `arrow-left` Icon leak a noun into the name), whether `cn-back` actually
+ * `arrow-left` CnIcon leak a noun into the name), whether `cn-back` actually
  * bubbles past the control to a listener attached above it, whether keyboard
  * activation dispatches the same event a pointer activation does, and
  * whether an activation is truly inert against the document and the session
@@ -126,7 +126,7 @@ test.describe('activation dispatches cn-back', () => {
 });
 
 test.describe('accessible name', () => {
-  test('is the label alone, exact, and the decorative Icon contributes nothing', async ({
+  test('is the label alone, exact, and the decorative CnIcon contributes nothing', async ({
     page,
   }) => {
     await page.goto(BOOK);
@@ -144,7 +144,7 @@ test.describe('accessible name', () => {
 
     // Confirmed against the accessibility tree the control's real, rendered
     // markup produces, rather than a hand-picked assumption about what
-    // "decorative" emits (Icon.svelte's decorative <svg> carries
+    // "decorative" emits (CnIcon.svelte's decorative <svg> carries
     // aria-hidden="true" and no role or label of its own). `ariaSnapshot`
     // renders the control as a single `button "<name>"` line with no
     // children at all when nothing else in it is exposed to the tree — an

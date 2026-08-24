@@ -3,7 +3,7 @@
  * CSS. Both use the design system's semantic tokens, plus the package's
  * private custom properties — never a raw palette token (`--color-*`),
  * never a chroma token, and never the input field's custom properties
- * (`--cn-input*`), which v20 used and this package deliberately does not.
+ * (`--cn-color-input*`), which v20 used and this package deliberately does not.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -92,15 +92,15 @@ describe.each([
     expect(undeclared).toEqual([]);
   });
 
-  test('carries no --color-*, --chroma-* or --cn-input* token', () => {
+  test('carries no --color-*, --chroma-* or --cn-color-input* token', () => {
     expect(properties.filter((name) => name.startsWith('--color-'))).toEqual(
       [],
     );
     expect(properties.filter((name) => name.startsWith('--chroma-'))).toEqual(
       [],
     );
-    expect(properties.filter((name) => name.startsWith('--cn-input'))).toEqual(
-      [],
-    );
+    expect(
+      properties.filter((name) => name.startsWith('--cn-color-input')),
+    ).toEqual([]);
   });
 });

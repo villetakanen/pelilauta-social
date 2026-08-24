@@ -77,11 +77,6 @@ export const threads: Locale = {
     message:
       'Are you sure you want to permanently delete this thread? The thread cannot be restored.',
   },
-  onboarding: {
-    title: 'Welcome to Pelilauta!',
-    description:
-      'Pelilauta is a role-playing focused application where you can discuss, share and document role-playing games. By logging in, you can participate in discussions, react to messages and start new topics.',
-  },
   snacks: {
     replyDeleted: 'Message deleted',
   },

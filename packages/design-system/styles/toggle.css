@@ -51,7 +51,7 @@
   border: none;
   /* Half the block size, so the track is a pill at either state. */
   border-radius: calc(var(--cn-grid) * 1.5);
-  background-color: var(--cn-button-text);
+  background-color: var(--cn-color-button-text);
   cursor: inherit;
   transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
 }
@@ -67,7 +67,7 @@
   inset-inline-start: 0;
   inline-size: calc(var(--cn-grid) * 3);
   border-radius: 50%;
-  background-color: var(--cn-on-surface-secondary);
+  background-color: var(--cn-color-on-surface-secondary);
   transition:
     inset-inline-start var(--cn-duration-ui) var(--cn-easing-ui),
     background-color var(--cn-duration-ui) var(--cn-easing-ui);
@@ -80,7 +80,7 @@
  * states the value — the colour repeats it.
  */
 .cn-toggle input:checked {
-  background-color: var(--cn-button-light);
+  background-color: var(--cn-color-button-light);
 }
 
 .cn-toggle input:checked::before {
@@ -89,7 +89,7 @@
 }
 
 .cn-toggle input:focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 

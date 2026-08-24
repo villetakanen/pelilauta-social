@@ -17,7 +17,8 @@
   `proposed`, and an operator makes it `live` by reading it. The status is a
   process gate, never a ceremony: do not request, await or announce approval.
 - `plans` contains transient epic scope; a plan carries behaviour only until a spec
-  takes it. `plans/debt` contains known unplanned gaps.
+  takes it. `plans/debt` contains known unplanned gaps;
+  `plans/debt-deferred-for-rc` holds the ones parked until the release candidate.
 - `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;
   `docs/ARCHITECTURE.md` holds the naming and what each artifact carries.
 
@@ -30,6 +31,8 @@
   Later commits on the same branch do not bump, because the version is already ahead
   of main. CI tags the merge commit.
 - Stay on the current long-lived `feat/**` branch.
+- Run the gate whose question you are asking: `delivery.yaml` states the gates,
+  their cadence and their gaps.
 
 ## NEVER
 

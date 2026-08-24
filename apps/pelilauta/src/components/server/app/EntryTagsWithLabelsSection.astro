@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Thread } from '@schemas/ThreadSchema';
 import { isLabel } from '@utils/shared/threadTagHelpers';
 
@@ -24,7 +24,7 @@ const allTags = getAllThreadTags(thread);
             class={`chip ${label ? "promoted" : ""}`}
             title={label ? "label" : undefined}
           >
-            {label && <Icon noun="label-tag" size="small" />}
+            {label && <CnIcon noun="label-tag" size="small" />}
             {tag}
           </a>
         );

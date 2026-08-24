@@ -6,8 +6,8 @@ runtime: static
 ---
 
 import CnRail from '@design-system/components/CnRail.astro'
-import Icon from '@design-system/components/Icon.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import CnIcon from '@design-system/components/CnIcon.svelte'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import RailSpecimens from '@design-system/books/specimens/RailSpecimens.astro'
 
 Use CnRail to hold the destinations a reader reaches from wherever they are in the
@@ -16,7 +16,7 @@ application.
 ## When to use it
 
 An entry inside it is an ordinary [Chrome Action](/base/chrome-actions) — an anchor or a
-button carrying an Icon and a label — and the rail states none of its measurements.
+button carrying a CnIcon and a label — and the rail states none of its measurements.
 
 Mount it for the application's own persistent destinations. For a single page's own
 contextual action, use a [floating action
@@ -35,34 +35,34 @@ and `|<` expanded, and turning the same way — counter-clockwise — whichever 
 leaving.
 
 <div class="breakout">
-  <Composition caption="CnRail, expanded, with a header, two destinations and a footer, in Light and Dark">
+  <DsComposition caption="CnRail, expanded, with a header, two destinations and a footer, in Light and Dark">
     <RailSpecimens group="canonical" />
-  </Composition>
+  </DsComposition>
 </div>
 
 ```astro
 ---
 import CnRail from '@design-system/components/CnRail.astro'
-import Icon from '@design-system/components/Icon.svelte'
+import CnIcon from '@design-system/components/CnIcon.svelte'
 ---
 
 <CnRail label="Kirjaston sivut">
   <a class="chrome-action" href="/haku" slot="header">
-    <Icon noun="search" decorative />
+    <CnIcon noun="search" decorative />
     <span>Haku</span>
   </a>
 
   <a class="chrome-action" href="/" aria-current="page">
-    <Icon noun="fox" decorative />
+    <CnIcon noun="fox" decorative />
     <span>Etusivu</span>
   </a>
   <a class="chrome-action" href="/kirjasto">
-    <Icon noun="books" decorative />
+    <CnIcon noun="books" decorative />
     <span>Kirjasto</span>
   </a>
 
   <a class="chrome-action" href="/ilmoitukset" slot="footer">
-    <Icon noun="send" decorative />
+    <CnIcon noun="send" decorative />
     <span>Ilmoitukset</span>
   </a>
 </CnRail>
@@ -74,9 +74,9 @@ main region cedes the rail's width. The bar's mark, the trigger and every entry 
 share one vertical axis and one 56px rhythm.
 
 <div class="breakout">
-  <Composition caption="CnAppBar over CnRail, sharing one axis and one 56px rhythm, in Light and Dark">
+  <DsComposition caption="CnAppBar over CnRail, sharing one axis and one 56px rhythm, in Light and Dark">
     <RailSpecimens group="alignment" />
-  </Composition>
+  </DsComposition>
 </div>
 
 A box is spacing, not a surface, and a header or a footer holding nothing does not
@@ -86,9 +86,9 @@ entry and a footer entry, the right carries neither. Narrower than the frame abo
 rest collapsed.
 
 <div class="breakout">
-  <Composition caption="The same rail with a header and a footer, and with neither, collapsed, in Light and Dark">
+  <DsComposition caption="The same rail with a header and a footer, and with neither, collapsed, in Light and Dark">
     <RailSpecimens group="boxes" />
-  </Composition>
+  </DsComposition>
 </div>
 
 Narrower still, past `--cn-breakpoint-small`, a rail rests absent, reachable through its

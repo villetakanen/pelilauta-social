@@ -52,6 +52,6 @@ records.
   `credentials.ts`, the example accounts' sign-ins.
 - The reset reads the project id from the service principal and refuses every
   project except the test project, so the suite cannot run against production.
-- The application runs as a local dev server. The runner uses the one already
-  answering, and starts its own — stopped again after the last spec — when none
-  is.
+- The runner starts no server. Start the application under acceptance before
+  the run; the setup fails unless the page at `BASE_URL` carries the
+  repository's version.

@@ -1,0 +1,58 @@
+---
+title: CnSeparator
+description: An ornamental break between two unrelated sections, an icon between two hairlines.
+order: 15
+runtime: static
+---
+
+import CnSeparator from '@design-system/components/CnSeparator.svelte'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+
+Use `CnSeparator` to mark an ornamental break between two sections that share no
+subject, so a reader sees an interval rather than a continuation.
+
+## When to use it
+
+`CnSeparator` is one of the [Dividers](/base/dividers) capability's two marks.
+
+Use it where the break carries no meaning. Use `<hr>` instead where the break is
+thematic, marking where one passage ends and the next begins.
+
+## Example
+
+<DsComposition themes caption="The default logomark between two sections">
+  <p>One section.</p>
+  <CnSeparator />
+  <p>An unrelated section.</p>
+</DsComposition>
+
+```svelte
+<script>
+  import CnSeparator from '@design-system/components/CnSeparator.svelte'
+</script>
+
+<CnSeparator />
+```
+
+<DsComposition themes caption="A given noun replacing the logomark">
+  <p>One section.</p>
+  <CnSeparator noun="d20" />
+  <p>An unrelated section.</p>
+</DsComposition>
+
+```svelte
+<CnSeparator noun="d20" />
+```
+
+## Reference
+
+### Props
+
+| Prop | Type | Default | Purpose |
+| :--- | :--- | :--- | :--- |
+| `noun` | `string` | `'fox'` | The icon between the hairlines. Defaults to the product's logomark; pass another noun to carry the break instead. |
+
+## Accessibility
+
+`CnSeparator` is decorative: it renders no accessible role or name, and its icon
+carries none either.

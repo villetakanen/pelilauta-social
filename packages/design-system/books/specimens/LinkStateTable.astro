@@ -3,8 +3,13 @@
  * LinkStateTable — every native-link state rendered in Light and Dark.
  *
  * Browsers cannot hold hover, active and keyboard focus at once. This specimen
- * scopes the shipped stylesheet and maps its pseudo-classes to documentation-
- * only attributes, so every cell still renders from the production rules.
+ * extracts, from the shipped stylesheet, only the selectors that name one of
+ * those pseudo-classes, scopes and remaps just those to a documentation-only
+ * `data-link-state` attribute — the technique `ChromeActionSpecimens.astro`
+ * uses. Copying the whole file would re-inject the resting rules with a class
+ * of extra specificity, and a real pointer over any link in the table would
+ * then show nothing; extraction leaves the resting treatment, and real
+ * interaction, to the stylesheet the design site already loads.
  *
  * Book: apps/design/src/content/base/links-actions-buttons.mdx
  */
@@ -22,7 +27,7 @@ const states = [
     attribute: undefined,
     label: 'Read the typography principles',
     href: '/principles/typography',
-    treatment: 'Underlined, using --cn-link.',
+    treatment: 'Underlined, using --cn-color-link.',
     purpose: 'Keeps navigation identifiable without relying on colour.',
   },
   {
@@ -38,7 +43,7 @@ const states = [
     attribute: 'hover',
     label: 'Explore colour and surface roles',
     href: '/principles/color-system',
-    treatment: 'Underlined, using --cn-link-hover.',
+    treatment: 'Underlined, using --cn-color-link-hover.',
     purpose: 'Confirms the pointer target.',
   },
   {
@@ -46,7 +51,7 @@ const states = [
     attribute: 'active',
     label: 'Review the font system',
     href: '/base/fonts',
-    treatment: 'Underlined, using --cn-link-active.',
+    treatment: 'Underlined, using --cn-color-link-active.',
     purpose: 'Confirms activation while it occurs.',
   },
   {
@@ -54,7 +59,8 @@ const states = [
     attribute: 'focus-visible',
     label: 'Study surface elevation',
     href: '/base/surface',
-    treatment: 'A --cn-focus-ring outline with the current link treatment.',
+    treatment:
+      'A --cn-color-focus-ring outline with the current link treatment.',
     purpose: 'Marks keyboard position with shape as well as colour.',
   },
 ] as const;
@@ -63,15 +69,58 @@ if (!source.includes(LINK_SELECTOR)) {
   throw new Error('LinkStateTable could not find the native-link selector.');
 }
 
-let specimenSource = source.replaceAll(
-  LINK_SELECTOR,
-  `.cn-link-state-specimen ${LINK_SELECTOR}`,
-);
-for (const state of states) {
-  if (!state.attribute) continue;
+const STATE_PSEUDOS = states
+  .filter((state) => state.attribute)
+  .map((state) => `:${state.attribute}`);
+
+// Keep only the selectors that name a mapped pseudo-class, filtering inside
+// each rule's selector list: the shipped file combines the resting selector
+// and :visited in one list, so a block-level copy would re-inject a resting
+// rule and defeat real interaction again.
+// Splitting a selector list on bare commas would cut inside a functional
+// pseudo-class — the link selector carries `:not(.button, .fab, .chip)` — so
+// the split honours parenthesis depth.
+const splitSelectorList = (list: string) => {
+  const selectors = [];
+  let depth = 0;
+  let start = 0;
+  for (let at = 0; at < list.length; at += 1) {
+    const character = list[at];
+    if (character === '(') depth += 1;
+    else if (character === ')') depth -= 1;
+    else if (character === ',' && depth === 0) {
+      selectors.push(list.slice(start, at));
+      start = at + 1;
+    }
+  }
+  selectors.push(list.slice(start));
+  return selectors.map((selector) => selector.trim());
+};
+
+const sourceWithoutComments = source.replace(/\/\*[\s\S]*?\*\//g, '');
+const ruleBlocks = sourceWithoutComments.match(/[^{}]+\{[^{}]*\}/g) ?? [];
+const stateRules = ruleBlocks.flatMap((block) => {
+  const braceAt = block.indexOf('{');
+  const selectors = splitSelectorList(block.slice(0, braceAt)).filter(
+    (selector) => STATE_PSEUDOS.some((pseudo) => selector.includes(pseudo)),
+  );
+  if (selectors.length === 0) return [];
+  return [`${selectors.join(',\n')} ${block.slice(braceAt)}`];
+});
+
+for (const pseudo of STATE_PSEUDOS) {
+  if (!stateRules.some((rule) => rule.includes(pseudo))) {
+    throw new Error(`LinkStateTable could not find a rule for ${pseudo}.`);
+  }
+}
+
+let specimenSource = stateRules
+  .join('\n')
+  .replaceAll(LINK_SELECTOR, `.cn-link-state-specimen ${LINK_SELECTOR}`);
+for (const pseudo of STATE_PSEUDOS) {
   specimenSource = specimenSource.replaceAll(
-    `:${state.attribute}`,
-    `[data-link-state="${state.attribute}"]`,
+    pseudo,
+    `[data-link-state="${pseudo.slice(1)}"]`,
   );
 }
 
@@ -121,8 +170,8 @@ const MODES = ['light', 'dark'] as const;
   .specimen {
     min-inline-size: 15rem;
     padding-inline: var(--cn-gap);
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
     white-space: nowrap;
   }
 </style>

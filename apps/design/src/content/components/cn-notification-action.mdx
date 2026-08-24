@@ -6,7 +6,7 @@ runtime: static
 ---
 
 import CnNotificationAction from '@design-system/components/CnNotificationAction.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import NotificationActionSpecimens from '@design-system/books/specimens/NotificationActionSpecimens.astro'
 
 Use a notification action to invite a reader back to something they are part of: someone
@@ -19,21 +19,21 @@ notification to be set.
 
 ## Example
 
-<Composition themes caption="CnNotificationAction, in Light and Dark">
+<DsComposition themes caption="CnNotificationAction, in Light and Dark">
   <CnNotificationAction href="/base/chrome-actions" noun="send" label="Ilmoitukset" count={3} />
-</Composition>
+</DsComposition>
 
 ```mdx
 <CnNotificationAction href="/notifications" noun="send" label="Ilmoitukset" count={3} />
 ```
 
-<Composition themes caption="Compact, at a single count, at the ceiling, and as the current destination, in Light and Dark">
+<DsComposition themes caption="Compact, at a single count, at the ceiling, and as the current destination, in Light and Dark">
   <NotificationActionSpecimens group="counts" presentation="compact" />
-</Composition>
+</DsComposition>
 
-<Composition themes caption="Labelled, at a single count, at the ceiling, and as the current destination, in Light and Dark">
+<DsComposition themes caption="Labelled, at a single count, at the ceiling, and as the current destination, in Light and Dark">
   <NotificationActionSpecimens group="counts" presentation="labelled" />
-</Composition>
+</DsComposition>
 
 ## Reference
 

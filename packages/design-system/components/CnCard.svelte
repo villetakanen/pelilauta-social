@@ -7,8 +7,8 @@
  * CnCard composes the shared elevation utilities and defines no background or shadow.
  */
 import type { Snippet } from 'svelte';
+import CnIcon from './CnIcon.svelte';
 import { COVER_PLACEHOLDER_URI } from './cover-placeholder';
-import Icon from './Icon.svelte';
 
 let {
   title,
@@ -80,7 +80,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     </div>
     {#if noun}
       <span class="cover-noun" aria-hidden="true">
-        <Icon {noun} size="large" />
+        <CnIcon {noun} size="large" />
       </span>
     {/if}
   {/if}
@@ -95,13 +95,13 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     {#if href}
       <a href={href}>
         {#if !cover && noun}
-          <span aria-hidden="true"><Icon {noun} size="small" /></span>
+          <span aria-hidden="true"><CnIcon {noun} size="small" /></span>
         {/if}
         {title}
       </a>
     {:else}
       {#if !cover && noun}
-        <span aria-hidden="true"><Icon {noun} size="small" /></span>
+        <span aria-hidden="true"><CnIcon {noun} size="small" /></span>
       {/if}
       {title}
     {/if}
@@ -136,7 +136,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     padding: var(--cn-grid) var(--cn-gap);
     overflow: hidden;
     container-type: inline-size;
-    color: var(--cn-text-low);
+    color: var(--cn-color-text-low);
     font-family: var(--cn-font-family);
     font-size: var(--cn-font-size-text);
     font-weight: var(--cn-font-weight-text);
@@ -224,13 +224,13 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     z-index: 2;
     inset-block-start: var(--cn-grid);
     inset-inline-end: var(--cn-grid);
-    color: var(--cn-text-heading);
+    color: var(--cn-color-text-heading);
     filter: drop-shadow(0 0 4px var(--cn-shadow-color));
   }
 
   .eyebrow {
     margin: 0;
-    color: var(--cn-text-low);
+    color: var(--cn-color-text-low);
   }
 
   .cover ~ .eyebrow {
@@ -243,14 +243,14 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
   }
 
   .eyebrow :global(a:hover) {
-    color: var(--cn-link-hover);
+    color: var(--cn-color-link-hover);
     text-decoration: underline;
   }
 
   .eyebrow :global(a:focus-visible),
   .title a:focus-visible {
     border-radius: 2px;
-    outline: 2px solid var(--cn-focus-ring);
+    outline: 2px solid var(--cn-color-focus-ring);
     outline-offset: 2px;
   }
 
@@ -259,7 +259,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    color: var(--cn-text-heading);
+    color: var(--cn-color-text-heading);
     font-size: var(--cn-font-size-h4);
     font-weight: var(--cn-font-weight-h4);
     line-height: var(--cn-line-height-h4);
@@ -290,13 +290,13 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
 
   .description {
     margin: 0;
-    color: var(--cn-text-low);
+    color: var(--cn-color-text-low);
   }
 
   .cn-card:is(.elevation-1, .elevation-2, .elevation-3, .elevation-4),
   .cn-card:is(.elevation-1, .elevation-2, .elevation-3, .elevation-4) .eyebrow,
   .cn-card:is(.elevation-1, .elevation-2, .elevation-3, .elevation-4) .description {
-    color: light-dark(var(--cn-text-low), var(--cn-text));
+    color: light-dark(var(--cn-color-text-low), var(--cn-color-text));
   }
 
   .cn-card.elevation-4,
@@ -305,7 +305,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
   .cn-card.elevation-4 .title,
   .cn-card.elevation-4 .cover-noun,
   .cn-card.elevation-4 :global(a) {
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .cn-card.elevation-4 :global(a:focus-visible) {

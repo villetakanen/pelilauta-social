@@ -1,6 +1,6 @@
 ---
 import CnCard from '@design-system/components/CnCard.svelte';
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -41,7 +41,7 @@ const posterSrcset = posterUrl
 
 const snippet = await createRichSnippet(thread.markdownContent || '', {
   maxLength: 220,
-  headerClasses: ['text-h5'],
+  headerClasses: ['text-h4'],
 });
 
 const channel = thread.channel || 'Yleinen';
@@ -72,7 +72,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
     <CardSubscription thread={thread} client:only="svelte" />
 
     <Fragment slot="actions">
-      <p class="m-0 px-1 text-small">
+      <p class="text-small">
         <ProfileLink uid={thread.owners?.[0] || ""} client:only="svelte" />
         <br />
         {toDisplayString(thread.flowTime)}
@@ -86,11 +86,8 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
       />
 
       <!-- Link to discussion -->
-      <a
-        href={`/threads/${thread.key}?jumpTo=unread#discussion`}
-        class="px-1 flex"
-      >
-        <Icon noun="discussion" size="small" />
+      <a href={`/threads/${thread.key}?jumpTo=unread#discussion`}>
+        <CnIcon noun="discussion" size="small" />
         <span class="text-caption">{thread.replyCount || 0}</span>
       </a>
     </Fragment>

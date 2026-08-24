@@ -137,9 +137,9 @@ function act() {
     );
 
     border-radius: var(--cn-border-radius);
-    background-color: var(--cn-surface-4);
+    background-color: var(--cn-color-surface-4);
     box-shadow: var(--cn-shadow-elevation-4);
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
 
     opacity: 0;
     transition: opacity var(--cn-duration-ui) var(--cn-easing-ui);

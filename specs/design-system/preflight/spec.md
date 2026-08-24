@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Preflight
@@ -38,8 +38,24 @@ here: islands appear anywhere in either application, which puts the rule out of 
 of any component or shell.
 
 The rule set is closed — a sixth concern changes this spec before it changes a
-stylesheet. The literal selector list lives in the stylesheet's test, because prose
-cannot settle whether `optgroup` or a WebKit search pseudo-element is inside it.
+stylesheet. Prose cannot settle whether `optgroup` or a WebKit search pseudo-element
+is inside it, so the selector list is written out, grouped as the stylesheet groups
+it. Selector lists are compared as written; reordering one is an edit here too.
+
+1. Box model: `*, ::before, ::after` —
+   `*, ::after, ::before, ::backdrop, ::file-selector-button`
+2. Document: `:root` — `html`
+3. Inheritance: `button, input, optgroup, select, textarea` — `button, select` —
+   `button, [role="button"]` — `button, [type="button"], [type="reset"],
+   [type="submit"]` — `textarea` — `textarea:not([rows])` — `::-moz-focus-inner` —
+   `:-moz-focusring` — `:-moz-ui-invalid` —
+   `::-webkit-inner-spin-button, ::-webkit-outer-spin-button` — `[type="search"]` —
+   `::-webkit-search-decoration`
+4. Element defaults: `hr` — `abbr[title]` — `b, strong` — `small` — `sub, sup` —
+   `sub` — `sup` — `code, kbd, samp, pre` — `summary` — `table` —
+   `[hidden]:where(:not([hidden="until-found"]))` —
+   `ol[role="list"], ul[role="list"], menu[role="list"]` — `[popover]` — `:target`
+5. Body and framework: `body` — `astro-island`
 
 ## Boundaries
 

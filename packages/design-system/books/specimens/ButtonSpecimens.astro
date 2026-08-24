@@ -1,5 +1,4 @@
 ---
-import CnLoader from '../../components/CnLoader.svelte';
 /**
  * ButtonSpecimens — real buttons and link buttons, one group per axis.
  *
@@ -9,7 +8,8 @@ import CnLoader from '../../components/CnLoader.svelte';
  *
  * Book: apps/design/src/content/base/links-actions-buttons.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
+import CnLoader from '../../components/CnLoader.svelte';
 
 interface Props {
   /** Which axis to render. */
@@ -40,11 +40,11 @@ const { group } = Astro.props;
     <div class="row" data-variant="compositions">
       <button type="button">Label only</button>
       <button type="button">
-        <Icon noun="send" />
+        <CnIcon noun="send" />
         <span>Leading icon</span>
       </button>
       <button type="button" aria-label="Send">
-        <Icon noun="send" />
+        <CnIcon noun="send" />
       </button>
       <button type="button" disabled>
         <CnLoader inline noun="send" />
@@ -72,7 +72,7 @@ const { group } = Astro.props;
       </div>
       <div class="narrow">
         <button type="button">
-          <Icon noun="send" />
+          <CnIcon noun="send" />
           <span>A label long enough to need truncating in a narrow control</span>
         </button>
       </div>

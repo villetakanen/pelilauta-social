@@ -46,6 +46,22 @@ this community's core signal. Info is a role over primary, not a family: the
 v20 info scale named a distinction the design never made.
 `docs/color-rationale-study.md` records the rationale in full.
 
+### Transparency
+
+v19 made translucency systemic. Before it, a layer that let something through picked its
+own share, so two translucent layers on one page were unrelated and a page over artwork
+was tuned surface by surface. From v19 on, a share comes off one ladder.
+
+The ladder is what makes translucency a property of the system rather than of the
+component that happened to need it.
+
+Translucency is a design decision and never a derived one. Where a layer sits over
+artwork the system has never seen, no share can promise a contrast ratio — the only one
+that could is opacity, which is the layer being removed. Legibility is guaranteed by
+which levels cede and how far, not by a number computed against an image.
+`specs/design-system/color-system/spec.md` governs the ladder, and
+`specs/design-system/surface/spec.md` states which surfaces cede.
+
 ### Spacing and responsiveness
 
 Spacing derives from one base grid; `specs/design-system/spatial-system/spec.md`
@@ -61,3 +77,26 @@ v19 established one central model for responsive layout:
   (`specs/design-system/application-chrome/spec.md`); content container layouts
   handle widths as view modes internal to the component
   (`specs/design-system/content-container-layouts/spec.md`).
+
+### Modern CSS
+
+The design system is written in the CSS the platform offers now, and prefers a
+platform feature to a device measurement or a scripted equivalent wherever one
+exists. Container queries over media queries, `light-dark()` over a duplicated
+theme, `color-mix()` over a second declared colour, `:has()` over a class a script
+maintains.
+
+Geometry and direction are logical rather than physical: `inline-size` and
+`block-size`, `padding-inline` and `margin-block-end`, `border-block-start`,
+`text-align: end`. A physical property names a side of a screen; a logical one names
+a side of the reader's writing mode, and only the second survives a language that
+does not read left to right. Where a capability publishes something directional, it
+publishes the logical form and no physical alias.
+
+None of this belongs in a specification. A specification states what its own
+capability does, not how the system likes its CSS written — `.text-left` is as
+well-formed a name as `.text-end` under `ARCHITECTURE.md`, and what rules it out is
+this page, not a naming rule. Where a convention here is worth defending
+mechanically, it is defended once over every stylesheet, the way
+`packages/design-system/test/lengths.test.ts` defends grid multiples, rather than
+restated in each capability that happens to touch it.

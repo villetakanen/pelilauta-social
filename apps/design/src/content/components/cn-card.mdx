@@ -7,7 +7,7 @@ runtime: progressive
 
 import CnCard from '@design-system/components/CnCard.svelte'
 import CardSpecimens from '@design-system/books/specimens/CardSpecimens.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 `CnCard` presents an independently meaningful content entity (such as a discussion thread,
 library article, or game system). It requires a `title` and supports optional cover images,
@@ -23,11 +23,11 @@ Do not use `CnCard` for untitled panels, modal dialogs, or transient banners; us
 
 ## Example
 
-<Composition themes caption="Standard CnCard preview in Light and Dark">
+<DsComposition themes caption="Standard CnCard preview in Light and Dark">
   <CnCard title="Aamunkoin vartijat" description="A concise preview with default elevation.">
     The next game is on Thursday.
   </CnCard>
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
@@ -52,9 +52,9 @@ When `href` is provided, the card remains passive while the `title` and cover im
 primary keyboard and pointer navigation targets. Secondary links and buttons within the
 eyebrow, body, or actions slot remain independently operable.
 
-<Composition themes caption="Passive and linked card variants">
+<DsComposition themes caption="Passive and linked card variants">
   <CardSpecimens group="basic" />
-</Composition>
+</DsComposition>
 
 ### Elevation and attention indicators
 
@@ -65,9 +65,9 @@ notification or alert states:
 - Elevation 4 applies high-contrast foreground text on primary background surfaces.
 - Attention flags (`notify`, `alert`) display visual corner indicators.
 
-<Composition themes caption="Elevation tiers (0–4) and attention indicator states">
+<DsComposition themes caption="Elevation tiers (0–4) and attention indicator states">
   <CardSpecimens group="elevation" />
-</Composition>
+</DsComposition>
 
 #### Dynamic client-side flag toggling
 
@@ -89,18 +89,18 @@ Cover images render with a 16:9 aspect ratio and an overlaid primary tint gradie
 When a cover image fails to load or resolves to an invalid URL, the card automatically displays
 the SVG fallback artwork beneath the transparent image box without requiring client-side error handlers.
 
-<Composition themes caption="Noun icon, loaded cover, missing cover fallback, and linked cover">
+<DsComposition themes caption="Noun icon, loaded cover, missing cover fallback, and linked cover">
   <CardSpecimens group="identity" />
-</Composition>
+</DsComposition>
 
 ### Container query behaviour
 
 `CnCard` declares `container-type: inline-size`. The heading title retains `h4` typography metrics
 across container widths and clamps to a maximum of 2 rendered lines with ellipsis truncation.
 
-<Composition themes caption="Long title in a compact 17rem card container">
+<DsComposition themes caption="Long title in a compact 17rem card container">
   <CardSpecimens group="narrow" />
-</Composition>
+</DsComposition>
 
 ## Composition
 
@@ -110,9 +110,9 @@ across container widths and clamps to a maximum of 2 rendered lines with ellipsi
 3. **Body:** Secondary description paragraph and arbitrary child slot elements.
 4. **Actions:** Fixed-height bottom bar (7x grid) for action buttons and metadata.
 
-<Composition themes caption="Card composition with eyebrow, description, body, and action buttons">
+<DsComposition themes caption="Card composition with eyebrow, description, body, and action buttons">
   <CardSpecimens group="content" />
-</Composition>
+</DsComposition>
 
 ## Reference
 

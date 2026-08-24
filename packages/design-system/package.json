@@ -9,7 +9,7 @@
   "scripts": {
     "generate:icons": "node scripts/generate-icon-registry.mjs",
     "check:icons": "node scripts/generate-icon-registry.mjs --check",
-    "test": "vitest run",
+    "test": "pnpm check:tokens && vitest run",
     "generate:tokens": "node scripts/generate-tokens.mjs",
     "check:tokens": "node scripts/generate-tokens.mjs --check"
   },

@@ -15,11 +15,6 @@
  *   2. The nesting rules run from the lowest ancestor level to the highest. A
  *      descendant with several elevated ancestors matches several of them, and
  *      the nearest ancestor is always the last rule to match, so it wins.
- *
- * Pelilauta loads this after `@11thdeg/cyan-css`, which ships a `.surface` and an
- * `.elevation-*` family of its own at these same specificities. Equal specificity
- * resolves by order, so these rules win only while the design system's entry
- * point is imported second.
  */
 
 /*
@@ -30,7 +25,7 @@
 .surface {
   padding: var(--cn-gap);
   container: surface-area / inline-size;
-  background-color: var(--cn-surface-1);
+  background-color: var(--cn-color-surface-1);
   box-shadow: none;
 }
 
@@ -39,27 +34,27 @@
  * consumer's image or gradient survives the utility.
  */
 .elevation-0 {
-  background-color: var(--cn-surface);
+  background-color: var(--cn-color-surface);
   box-shadow: none;
 }
 
 .elevation-1 {
-  background-color: var(--cn-surface-1);
+  background-color: var(--cn-color-surface-1);
   box-shadow: none;
 }
 
 .elevation-2 {
-  background-color: var(--cn-surface-2);
+  background-color: var(--cn-color-surface-2);
   box-shadow: var(--cn-shadow-elevation-2);
 }
 
 .elevation-3 {
-  background-color: var(--cn-surface-3);
+  background-color: var(--cn-color-surface-3);
   box-shadow: var(--cn-shadow-elevation-3);
 }
 
 .elevation-4 {
-  background-color: var(--cn-surface-4);
+  background-color: var(--cn-color-surface-4);
   box-shadow: var(--cn-shadow-elevation-4);
 }
 
@@ -76,7 +71,8 @@
  * The pseudo-element exists only while a class does, so the fade comes from an
  * animation rather than a transition: a state resolved in the browser, after the
  * server response, still arrives rather than snapping in. `--cn-flag-inset` lets a
- * host that clips its own overflow pull the flag over its border.
+ * host that clips its own overflow pull the flag over its border. Each role takes a
+ * rung of the transparency ladder, so what sits under the corner shows through it.
  */
 .has-notify,
 .has-alert {
@@ -99,11 +95,19 @@
 }
 
 .has-notify::after {
-  background-color: var(--cn-info);
+  background-color: color-mix(
+    in oklch,
+    var(--cn-color-info),
+    transparent var(--cn-transparency-2)
+  );
 }
 
 .has-alert::after {
-  background-color: var(--cn-color-warning);
+  background-color: color-mix(
+    in oklch,
+    var(--cn-color-warning),
+    transparent var(--cn-transparency-5)
+  );
 }
 
 @keyframes cn-flag-in {

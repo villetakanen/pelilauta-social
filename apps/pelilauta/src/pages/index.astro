@@ -3,8 +3,9 @@ import FeaturedTags from '@components/server/FrontPage/FeaturedTags.astro';
 import CnPoster from '@design-system/components/CnPoster.astro';
 import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import Base from '@layouts/Base.astro';
-import DeferredSection from '../components/server/app/DeferredSection.astro';
+import OnboardingCallout from '../components/server/FrontPage/OnboardingCallout.astro';
 import SyndicateStream from '../components/server/FrontPage/SyndicateStream/SyndicateStream.astro';
+import SyndicateStreamFallback from '../components/server/FrontPage/SyndicateStream/SyndicateStreamFallback.astro';
 import TopSitesStream from '../components/server/FrontPage/TopSitesStream.astro';
 import TopThreadsStream from '../components/server/FrontPage/TopThreadsStream.astro';
 import FrontpageFabs from '../components/svelte/frontpage/FrontpageFabs.svelte';
@@ -19,12 +20,12 @@ const image = `${Astro.url.origin}/myrrys-proprietary/juno-viinikka/juno-viinikk
   {title}
   {description}
   {image}>
-    <h1 class="sr-only">{title}</h1>
+    <OnboardingCallout />
     <div class="content-triad">
       <TopThreadsStream />
 
       <SyndicateStream server:defer>
-        <DeferredSection slot="fallback" />
+        <SyndicateStreamFallback slot="fallback" />
       </SyndicateStream>
 
       <section>

@@ -15,7 +15,7 @@ export interface SnippetOptions {
 
   /**
    * CSS classes to add to headers
-   * @default ['text-h5']
+   * @default ['text-h4']
    */
   headerClasses?: string[];
 
@@ -37,7 +37,7 @@ export interface SnippetOptions {
  * Creates a rich HTML snippet from markdown content.
  *
  * - Renders markdown using marked
- * - Adds styling classes (text-h5 to headers)
+ * - Adds styling classes (text-h4 to headers)
  * - Optionally adds styling classes to paragraphs (disabled by default)
  * - Intelligently truncates while preserving HTML structure
  * - Adds ellipsis when content is cut off
@@ -52,7 +52,7 @@ export interface SnippetOptions {
  *   '# Welcome\n\nThis is **bold** text.',
  *   { maxLength: 50, paragraphClasses: ['text-small'] }
  * );
- * // Returns: '<h1 class="text-h5">Welcome</h1><p class="text-small">This is <strong>bold</strong> text.</p>'
+ * // Returns: '<h1 class="text-h4">Welcome</h1><p class="text-small">This is <strong>bold</strong> text.</p>'
  * ```
  */
 export async function createRichSnippet(
@@ -62,7 +62,7 @@ export async function createRichSnippet(
   const {
     maxLength = 220,
     addEllipsis = true,
-    headerClasses = ['text-h5'],
+    headerClasses = ['text-h4'],
     paragraphClasses = [],
     respectSemanticBoundaries = true,
   } = options;

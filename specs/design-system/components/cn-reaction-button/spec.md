@@ -56,13 +56,13 @@ description from `countLabel`. The numeric count remains visible in every state.
 The circular state surface is centred in the button's block size. The count has one
 grid unit of inline padding. Neither presentation grows or shrinks in a flex row.
 
-At rest, the state surface uses `--cn-button-text` and `--cn-text-low`. Hover composes
-`--cn-hover` and the button hover shadow; active composes `--cn-active`. The pressed
+At rest, the state surface uses `--cn-color-button-text` and `--cn-color-text-low`. Hover composes
+`--cn-color-hover` and the button hover shadow; active composes `--cn-color-active`. The pressed
 surface is a 120-degree gradient from CnReactionButton's private love expression at
-11% to the shared `--cn-color-error` semantic role at 90%, with `--cn-surface` as its
+11% to the shared `--cn-color-error` semantic role at 90%, with `--cn-color-surface` as its
 foreground. The private love expression is a component-scoped token, not a
 customization surface, fixed to the `--chroma-love-*` scale. Keyboard focus uses
-`--cn-focus-ring`. The pressed gradient remains beneath hover and active feedback.
+`--cn-color-focus-ring`. The pressed gradient remains beneath hover and active feedback.
 Disabled presentation keeps the supplied pressed state beneath
 `--cn-disabled-opacity` and takes no hover or active feedback. A state change does
 not alter the control's dimensions or move the count.

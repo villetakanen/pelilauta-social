@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
@@ -40,7 +40,7 @@ async function regenPageRefs() {
     <p>{t('site:toc.regenerate.info')}</p>
     <div class="flex justify-center">
       <button type="button" class="button" onclick={regenPageRefs}>
-        <Icon noun="tools" />
+        <CnIcon noun="tools" />
         <span>{t('site:toc.regenerate.action')}</span>
       </button>
     </div>

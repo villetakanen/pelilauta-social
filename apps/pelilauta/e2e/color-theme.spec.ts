@@ -6,7 +6,7 @@ import { expect, test } from '@playwright/test';
  * design system intends.
  *
  * Alias chains are not checked here. A probe whose inline style is
- * `var(--cn-link)`, asserted against the reference token that `--cn-link` names,
+ * `var(--cn-color-link)`, asserted against the reference token that `--cn-color-link` names,
  * holds one artifact against itself; `packages/design-system/test/color-contrast.test.ts`
  * resolves those chains from source instead.
  */

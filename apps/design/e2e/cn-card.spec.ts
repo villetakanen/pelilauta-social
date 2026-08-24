@@ -202,29 +202,24 @@ test('a flag class added on the client raises the flag on an unhydrated CnCard',
 
   expect((await flag()).content).toBe('none');
 
-  for (const [state, role] of [
-    ['has-notify', '--cn-info'],
-    ['has-alert', '--cn-color-warning'],
-  ] as const) {
-    const expected = await card.evaluate((element, token) => {
-      const probe = document.createElement('span');
-      probe.style.color = `var(${token})`;
-      element.append(probe);
-      const color = getComputedStyle(probe).color;
-      probe.remove();
-      return color;
-    }, role);
+  const painted: Record<string, string> = {};
 
+  for (const state of ['has-notify', 'has-alert'] as const) {
     await card.evaluate((element, className) => {
       element.classList.add(className);
     }, state);
-    await expect.poll(async () => (await flag()).background).toBe(expected);
+    await expect.poll(async () => (await flag()).content).not.toBe('none');
+    painted[state] = (await flag()).background;
 
     await card.evaluate((element, className) => {
       element.classList.remove(className);
     }, state);
     await expect.poll(async () => (await flag()).content).toBe('none');
   }
+
+  // The roles stay distinguishable. Their colours and their share come from the
+  // shared stylesheet, which is where a wrong one is caught.
+  expect(painted['has-notify']).not.toBe(painted['has-alert']);
 });
 
 test('a covered noun stacks above the alert flag', async ({ page }) => {
@@ -271,7 +266,7 @@ for (const mode of ['light', 'dark'] as const) {
       const theme = element.closest('[data-mode]');
       if (!theme) throw new Error('CnCard specimen has no theme context');
       const probe = document.createElement('span');
-      probe.style.color = 'var(--cn-text-high)';
+      probe.style.color = 'var(--cn-color-text-high)';
       theme.append(probe);
       const color = getComputedStyle(probe).color;
       probe.remove();

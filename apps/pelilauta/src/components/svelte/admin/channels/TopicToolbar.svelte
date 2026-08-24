@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { authedFetch } from '@firebase/client/apiClient';
 import { forumTopics } from '@stores/admin/ChannelsAdminStore';
 import { t } from '../../../../utils/i18n';
@@ -178,7 +178,7 @@ async function moveTopicDown() {
     {#if isMoving}
       <CnLoader inline />
     {:else}
-      <Icon noun="arrow-up" />
+      <CnIcon noun="arrow-up" />
     {/if}
   </button>
   <button 
@@ -190,7 +190,7 @@ async function moveTopicDown() {
     {#if isMoving}
       <CnLoader inline />
     {:else}
-      <Icon noun="arrow-down" />
+      <CnIcon noun="arrow-down" />
     {/if}
   </button>
     <button 
@@ -203,7 +203,7 @@ async function moveTopicDown() {
       {#if isDeleting}
         <CnLoader inline />
       {:else}
-        <Icon noun="delete" />
+        <CnIcon noun="delete" />
       {/if}
     </button>
 

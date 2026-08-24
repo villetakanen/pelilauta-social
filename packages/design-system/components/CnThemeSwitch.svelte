@@ -2,7 +2,7 @@
 /**
  * CnThemeSwitch — flips the document's colour scheme between light and dark.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let { label = 'Switch theme' }: { label?: string } = $props();
 
@@ -45,12 +45,12 @@ function toggle() {
     class="chrome-action cn-theme-switch"
     onclick={toggle}
   >
-    <Icon noun="moon" decorative />
+    <CnIcon noun="moon" decorative />
     <span>{label}</span>
   </button>
   {#key activations}
     {#if activations}
-      <span class="burst" aria-hidden="true"><Icon noun="moon" decorative /></span>
+      <span class="burst" aria-hidden="true"><CnIcon noun="moon" decorative /></span>
     {/if}
   {/key}
 </span>

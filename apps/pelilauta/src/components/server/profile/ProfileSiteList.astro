@@ -36,11 +36,9 @@ try {
   <h2>{t("profile:siteList.title")}</h2>
   {
     sites.length > 0 ? (
-      <div class="flex flex-col">
-        {sites.map((site) => (
-          <SiteCard site={site} client:load />
-        ))}
-      </div>
+      sites.map((site) => (
+        <SiteCard site={site} client:load />
+      ))
     ) : (
       <p>{t("profile:siteList.empty")}</p>
     )

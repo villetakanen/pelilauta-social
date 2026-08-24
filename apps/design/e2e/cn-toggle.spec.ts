@@ -156,9 +156,9 @@ test.describe('the presentation', () => {
   });
 
   /**
-   * The resting track, not the checked one: `--cn-button-light` is a primary
+   * The resting track, not the checked one: `--cn-color-button-light` is a primary
    * step that resolves the same either way, and only the roles built on
-   * `--cn-button` swing with the scheme.
+   * `--cn-color-button` swing with the scheme.
    */
   test('the resting track resolves differently in Light and Dark', async ({
     page,

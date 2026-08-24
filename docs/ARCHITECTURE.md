@@ -8,7 +8,7 @@
 | :--- | :--- | :--- |
 | Public design system | `Cn{Name}` | `CnCard.svelte` |
 | Reusable design-system tooling | `Ds{Name}` | `DsComposition.astro` |
-| One-book private component | `{Name}` | `ContrastMatrix.astro` |
+| One-book private component | `{Name}` | `StepTable.astro` |
 | Application component | `{Name}` | `ThreadCard.astro` |
 | Astro route | Astro route grammar | `[threadKey]/index.astro` |
 
@@ -48,11 +48,11 @@ needs it.
 `--cn-*` namespace: [ADR 0002](adrs/0002-preserve-v20-design-system-names.md)
 preserves it because a theme replaces a whole chroma family while keeping its
 lightness steps, so the contrast a semantic role depends on survives the swap.
-`--cn-*` names a semantic role that depends on chroma; it carries no numbered step.
-Do not introduce `--cyan-*`, undocumented `--color-*`, or a numbered
-`--cn-color-{family}-{step}` token — the accidental vocabulary that repeats
-`--chroma-*` inside the `--cn-*` namespace.
-`styles/compat/cyan-4.css` declares the aliases Cyan itself reads, and leaves with it.
+`--cn-*` names a semantic role that depends on chroma; every colour role carries
+`--cn-color-{role}`, and no role carries a numbered step. Do not introduce
+`--cyan-*`, undocumented `--color-*`, or a numbered `--cn-color-{family}-{step}`
+token — the accidental vocabulary that repeats `--chroma-*` inside the `--cn-*`
+namespace.
 
 ### CSS Classes
 
@@ -74,11 +74,11 @@ system changes how a state looks; it does not rename, merge or invent states.
 | Selector | Meaning | Token |
 | :--- | :--- | :--- |
 | `::selection` | Text the reader has selected. | `--cn-selection`, `--cn-on-selection` |
-| `:hover` | A pointer rests on the control. | `--cn-hover` |
-| `:active` | The control is being activated. | `--cn-active` |
-| `:focus-visible` | Keyboard focus rests on the control. | `--cn-focus-ring` |
-| `[aria-current]` | This is the current destination. | `--cn-indicator`, `--cn-on-indicator` |
-| `[aria-pressed]` | This toggle is on. | `--cn-indicator`, `--cn-on-indicator` |
+| `:hover` | A pointer rests on the control. | `--cn-color-hover` |
+| `:active` | The control is being activated. | `--cn-color-active` |
+| `:focus-visible` | Keyboard focus rests on the control. | `--cn-color-focus-ring` |
+| `[aria-current]` | This is the current destination. | `--cn-color-indicator`, `--cn-color-on-indicator` |
+| `[aria-pressed]` | This toggle is on. | `--cn-color-indicator`, `--cn-color-on-indicator` |
 | `[aria-expanded]` | This disclosure is open. | Indicator glyph; no surface. |
 
 A row reserves a name; its token is declared when a consumer first needs it.
@@ -141,3 +141,27 @@ tooling, with the API routes, stores, schemas, Firestore access, locale strings 
 `SiteSchema` fields behind them. No successor is planned.
 
 See [ADR 0003](adrs/0003-discontinue-characters.md).
+
+### Syndicated feeds
+
+v18 stacks one section per feed on the front page, each with its own heading, its own
+"read more" link, and — for one of the two — a promotional image the other does not
+get. A reader sees two lists, and how recent either one is against the other is
+something they have to work out. v21 merges every feed into one stream ordered by
+recency, and names its source on each post.
+
+The deviation is deliberate. The stream is for the ecosystem's activity, not each
+publisher's, and a section per publisher makes the page grow a section every time one
+is added. One stream ranks the whole community by when it last posted, and takes a new
+publisher as configuration.
+
+v21 also holds a place in the stream for a publisher declared guaranteed. v18 needs no
+such notion: a section per publisher cannot be excluded by another's activity.
+
+### Login
+
+v18 signs a reader in on a plain modal page, the same chrome as any other interruption,
+and follows the `redirect` parameter wherever it points. v21 gives login a bespoke
+layout — the sign-in choices stand over the background poster, with the artist's credit
+in the footer — and follows `redirect` only to a relative path inside the service.
+`specs/pelilauta/login/spec.md` governs the route.

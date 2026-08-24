@@ -1,8 +1,8 @@
 <script lang="ts">
 // Import utilities and i18n function
 
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
 import { captureError } from 'src/utils/client/sentry';
@@ -69,7 +69,7 @@ async function loginWithGoogle(e: SubmitEvent) {
 }
 </script>
 
-<section class="elevation-1 p-2" style="position: relative">
+<section class="surface">
   <h2>{t("login:withProvider.title")}</h2>
   <p>{t("login:withProvider.info")}</p>
   <form onsubmit={loginWithGoogle}>
@@ -77,18 +77,10 @@ async function loginWithGoogle(e: SubmitEvent) {
       {#if loading}
         <CnLoader inline noun="google" />
       {:else}
-        <Icon noun="google" />
+        <CnIcon noun="google" />
       {/if}
       <span>{t("login:withGoogle.action")}</span>
     </button>
   </form>
 </section>
 
-<style>
-  button {
-    /* Ensure button content aligns nicely with the loader/icon */
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em; /* Adjust gap as needed */
-  }
-</style>

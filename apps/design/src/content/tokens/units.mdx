@@ -4,7 +4,7 @@ description: "Declared tokens for spatial grid units, radii, control dimensions,
 order: 5
 ---
 
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import units from '@design-system/tokens/units.json'
 import { unitDeclarations } from '@design-system/books/specimens/tokenTable'
 
@@ -22,7 +22,7 @@ Three base measurements govern component alignment, internal padding, and vertic
 - `--cn-gap` (1rem / 16px): Standard gap and surface inset (2x grid).
 - `--cn-line` (1.5rem / 24px): Standard line height and block spacing (3x grid).
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   names={['--cn-grid', '--cn-gap', '--cn-line']}
 />
@@ -32,7 +32,7 @@ Three base measurements govern component alignment, internal padding, and vertic
 Four progressive radius steps. The unsuffixed `--cn-border-radius` token resolves to the
 medium step (`8px`).
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-border-radius"
 />
@@ -41,12 +41,12 @@ medium step (`8px`).
 
 Declared dimensions for interactive buttons, floating action buttons, and identity marks.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-button"
 />
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-fab"
 />
@@ -54,7 +54,7 @@ Declared dimensions for interactive buttons, floating action buttons, and identi
 Avatar dimensions scale in line-height multiples (`--cn-line`), ensuring visual alignment
 with adjacent text leading.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-avatar-size"
 />
@@ -63,9 +63,9 @@ with adjacent text leading.
 
 Declared icon dimensions in `rem`. Values scale proportionally with browser font size
 settings. Icon selection and usage are defined in [Iconography principles](/principles/iconography)
-and [Icon component](/components/icon).
+and [CnIcon component](/components/cn-icon).
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-icon-size"
 />
@@ -75,7 +75,7 @@ and [Icon component](/components/icon).
 The application bar's depth. Chrome is fixed and paints over the document, so the first
 content container clears the bar by this much.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-app-bar"
 />
@@ -83,7 +83,7 @@ content container clears the bar by this much.
 The tray's two inline sizes: the rail it rests at, and the tray it opens to. The
 application bar and the main region cede whichever the tray currently stands in.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-width"
 />
@@ -93,7 +93,7 @@ application bar and the main region cede whichever the tray currently stands in.
 Application chrome ends where an on-screen keyboard begins. Chrome measures the depth and
 publishes it here; the declared value is what every browser gets until it does.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   names={['--cn-keyboard-inset']}
 />
@@ -102,7 +102,7 @@ publishes it here; the declared value is what every browser gets until it does.
 
 Global z-index scale for pinned and elevated UI layers.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-z"
 />
@@ -111,12 +111,12 @@ Global z-index scale for pinned and elevated UI layers.
 
 Standard transition durations and easing curves for interactive UI feedback.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-duration"
 />
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-easing"
 />
@@ -125,7 +125,7 @@ Standard transition durations and easing curves for interactive UI feedback.
 
 The opacity a disabled control renders at.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-disabled"
 />
@@ -135,7 +135,7 @@ The opacity a disabled control renders at.
 The widest a line of text is set: 67 characters of the base paragraph, rounded up to a
 whole grid step. A box of text caps its inline size with it.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   names={['--cn-measure']}
 />
@@ -145,7 +145,7 @@ whole grid step. A box of text caps its inline size with it.
 Breakpoints defined in `rem`, allowing responsive layout thresholds to scale with user
 browser font settings.
 
-<TokenTable
+<DsTokenTable
   source={unitsSource}
   prefix="--cn-breakpoint"
 />

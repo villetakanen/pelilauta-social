@@ -44,17 +44,16 @@ function getNoun(slug: string | undefined): string {
 }
 ---
 <section>
+  <h2 class="text-h3">{t('frontPage:threads.title')}</h2>
   {hasError && (
     <div class="error">
       {t('app:errors.fetchingThreads')}
     </div>
   )}
-  <div class="flex flex-col">
-    {threads.map((thread) => (
-      <ThreadCard {thread} noun={getNoun(thread.channel)}/>
-    ))} 
-  </div>
-  <div class="flex items-center mt-2">
+  {threads.map((thread) => (
+    <ThreadCard {thread} noun={getNoun(thread.channel)}/>
+  ))}
+  <div>
     <a href="/channels" class="button">
       {t('actions:showMore')}
     </a>

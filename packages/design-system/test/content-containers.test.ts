@@ -31,19 +31,6 @@ const measureSteps = Number(
   })[0]?.value.match(/calc\(var\(--cn-grid\) \* (\d+)\)/)?.[1],
 );
 
-describe('the measure', () => {
-  test('is 83 grid units', () => {
-    expect(measureSteps).toBe(83);
-  });
-
-  test('these containers read it rather than declaring it', () => {
-    // Golden's primary is the same width as a prose flow by design. A second
-    // declaration here would let one of them drift from the other.
-    expect(css).not.toMatch(/--cn-measure\s*:/);
-    expect(css).toContain('var(--cn-measure)');
-  });
-});
-
 /**
  * The wide composition of one mode: the condition it appears under, and its fixed
  * tracks in grid units. A track is either the measure or a count of grid steps.

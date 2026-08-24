@@ -1,9 +1,4 @@
 export const app = {
-  beta: {
-    title: 'β',
-    description:
-      'Tämä toiminto on kokeellinen - sen kautta luotu sisältö voi kadota tai rikkoontua milloin tahansa.',
-  },
   forbidden: {
     title: 'Hups!',
     message: 'Tämä sivu vaatii kirjautumisen pelilaudalle.',
@@ -29,7 +24,6 @@ export const app = {
     title: 'Pelilauta 2',
     description:
       'Pelilauta 2 - Versio 16 – Roolipelikeskustelut, sivustot, wikit ja muuta sellaista',
-    version: 'Versio',
     source: 'Koodi',
     dangerZone: 'Vaaravyöhyke',
   },
@@ -51,8 +45,10 @@ export const app = {
     title: 'Asetukset',
   },
   onboarding: {
-    title: 'Tervetuloa!',
-    text: 'Voit luoda Pelilaudalle oman sivuston pelillesi, ja osallistautua keskusteluihin kirjautumalla ensin tästä.',
+    title: 'Tervetuloa Pelilaudalle',
+    about:
+      'Roolipeleistä pelaajilta pelaajille. Keskustelut, sivustot, ja kampanjat.',
+    text: 'Voit luoda Pelilaudalle oman sivuston pelillesi tai hahmoillesi, ja osallistautua keskusteluihin kirjautumalla alta.',
   },
   '404': {
     title: 'Hups!',

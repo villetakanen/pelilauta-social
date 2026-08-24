@@ -188,8 +188,8 @@ menu[role="list"] {
 body {
   /* So a background covers the viewport on a page shorter than it. */
   min-block-size: 100dvh;
-  background: var(--cn-background);
-  color: var(--cn-text);
+  background: var(--cn-color-background);
+  color: var(--cn-color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

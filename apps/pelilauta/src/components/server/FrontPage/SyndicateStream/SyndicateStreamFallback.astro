@@ -1,0 +1,16 @@
+---
+/*
+ * What the region holds while the stream is deferred:
+ * `specs/pelilauta/syndicated-feeds/spec.md`.
+ *
+ * It carries the same heading in the same bare region, so the region keeps its track
+ * and its name while a publisher is still being waited on and the page does not jump
+ * when the posts arrive.
+ */
+import CnLoader from '@design-system/components/CnLoader.svelte';
+import { t } from '@utils/i18n';
+---
+<section>
+  <h2 class="text-h3">{t('frontPage:syndicate.title')}</h2>
+  <CnLoader noun="fox" />
+</section>

@@ -31,6 +31,12 @@ export const en: Locale = {
         'Failed to load threads. Please try refreshing the page.',
       themeNotSaved: 'Saving the theme failed.',
     },
+    onboarding: {
+      title: 'Welcome to Pelilauta',
+      about:
+        'Role-playing games, by players for players. Discussions, sites, and campaigns.',
+      text: 'Log in below to create your own site for your game or your characters, and to join the discussions.',
+    },
   },
   base,
   common,

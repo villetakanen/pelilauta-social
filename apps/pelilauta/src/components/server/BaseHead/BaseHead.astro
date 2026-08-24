@@ -3,10 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import { t } from 'src/utils/i18n';
 import ServiceWorker from './ServiceWorker.astro';
 import ThemeScript from './ThemeScript.astro';
-import '@11thdeg/cyan-css';
 import '@design-system/styles/ds.css';
-import '../../../styles/migrations/cyan-elements.css';
-import '../../../styles/migrations/cyan-icon.css';
 import '../../../overrides.css';
 
 export interface Props {
@@ -83,6 +80,13 @@ const ogImage = image || `${Astro.url.origin}favicons/fox-ico-512.png`;
 
   <!-- Service Worker -->
   <ServiceWorker />
+
+  <!-- The debug utility loads only under the dev server
+       (specs/design-system/debug/spec.md): the DEV branch is dead code in a
+       production build, so neither the utility nor the rowan scale ships. -->
+  <script>
+    if (import.meta.env.DEV) import("@design-system/styles/debug.css");
+  </script>
 
   <!-- Cyan Components -->
   <script>

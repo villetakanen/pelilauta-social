@@ -97,7 +97,14 @@
 .content-golden {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--cn-gap);
+  /*
+   * `--cn-gap` is the inline gap between the regions of a wide composition.
+   * `--cn-line` is the rhythm, here between stacked regions — the same interval a
+   * content area puts between its own children, so a stacked composition reads as one
+   * flow rather than as columns that happen to be above one another.
+   */
+  column-gap: var(--cn-gap);
+  row-gap: var(--cn-line);
   justify-content: center;
 
   /*
@@ -114,15 +121,28 @@
  * minimum, which a wide table or a long word would otherwise push the track past.
  * Overflow inside a region belongs to the region's content.
  *
- * The second selector reaches through `astro-island`, which the preflight sets to
- * `display: contents`: the island's one rendered element is the grid item.
+ * A region is also a content area, so it is a grid for the same reason the Prose flow
+ * root above is one: `row-gap` replaces the element margins the preflight removes, and
+ * it is the only rhythm that survives an `astro-island`. An island is
+ * `display: contents`, which drops the island's box but not its place in the DOM, so a
+ * margin on it paints nothing and a sibling combinator still matches the island rather
+ * than the card inside it. `row-gap` reads the box tree, where the island's one
+ * rendered element is the region's grid item.
+ *
+ * The second selector in each pair reaches through the island to that element, and the
+ * first excludes the island itself: `display` here would give it a box and take the
+ * region box back off the element it delegates to. `script`, `style` and `template` are
+ * excluded for the same reason — a `display` of any kind overrides the `none` they are
+ * rendered with, and a region that is not there would take a track.
  */
-.content-triad > *,
+.content-triad > :not(astro-island, script, style, template),
 .content-triad > astro-island > *,
-.content-golden > *,
+.content-golden > :not(astro-island, script, style, template),
 .content-golden > astro-island > * {
   container-type: inline-size;
   min-inline-size: 0;
+  display: grid;
+  row-gap: var(--cn-line);
 }
 
 /*
@@ -150,4 +170,39 @@
       var(--cn-measure)
       calc(var(--cn-grid) * 32);
   }
+}
+
+/*
+ * Replaced media never exceeds the content area holding it. The preflight leaves
+ * media unconstrained on purpose — "a reset cannot know which images are content
+ * and which are chrome, so whatever an image has to fit decides"
+ * (specs/design-system/preflight/spec.md) — a poster's `img` is chrome and needs
+ * its own uncapped sizing, so the fit cannot be a global rule. Here, the fit is
+ * the content area's own width.
+ *
+ * `img` and `picture` are placed directly today. `video`, `canvas`, `svg`,
+ * `iframe`, `embed` and `object` are not yet authored anywhere, but a thread,
+ * page or handout renders its author's markdown unsanitised
+ * (`set:html` in ThreadArticle.astro, PageArticle.astro, HandoutApp.astro), so any
+ * of them can land inside a content area without warning. That is every replaced
+ * element HTML has; `audio` carries no width to overflow with and stays out.
+ *
+ * The selector is unspecific by design: `:where()` keeps this at specificity
+ * zero, so a component that sizes its own replaced element — CnCard's cover,
+ * CnIcon's svg — keeps that sizing regardless of source order.
+ */
+:where(.content-prose, .content-golden, .content-triad)
+  :where(img, picture, video, canvas, svg, iframe, embed, object) {
+  max-width: 100%;
+}
+
+/*
+ * `height: auto` keeps an intrinsic-ratio element from being squashed once its
+ * width is capped. `iframe`, `embed` and `object` have no such ratio: an
+ * author's `height` attribute is the only sizing they carry, so it is left
+ * alone rather than collapsed to the browser default.
+ */
+:where(.content-prose, .content-golden, .content-triad)
+  :where(img, picture, video, canvas, svg) {
+  height: auto;
 }

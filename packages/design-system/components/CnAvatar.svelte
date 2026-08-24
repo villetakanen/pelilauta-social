@@ -8,7 +8,7 @@
  * are token roles, so a palette change recolours every avatar, and that is
  * allowed.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   src = '',
@@ -60,7 +60,7 @@ const imageLayer = $derived(
       {initials}
     </span>
   {:else}
-    <Icon noun="avatar" decorative />
+    <CnIcon noun="avatar" decorative />
   {/if}
   {#if src}
     <!-- The image is a background rather than an <img> so that recovery needs no
@@ -125,8 +125,8 @@ const imageLayer = $derived(
   }
 
   .cn-avatar--anonymous {
-    background: var(--cn-surface-2);
-    color: var(--cn-on-surface);
+    background: var(--cn-color-surface-2);
+    color: var(--cn-color-on-surface);
   }
 
   /* The glyph is a proportion of the mark rather than a step on the icon scale:
@@ -151,7 +151,7 @@ const imageLayer = $derived(
   }
 
   .cn-avatar__initials {
-    font-family: var(--cn-font-family-ui);
+    font-family: var(--cn-font-family);
     font-weight: var(--cn-font-weight-emphasis);
     font-size: calc(var(--cn-avatar-size) * 0.4);
     line-height: 1;

@@ -41,6 +41,8 @@ Small is not on the scale: the mathematical step is adjusted for legibility.
 
 Text emphasis can be low, [default], or high.
 
+The system also publishes utilities for common text alignment.
+
 A subtitle is a paragraph belonging to the heading above it: reading size at the
 emphasis weight, with no gap between the two.
 

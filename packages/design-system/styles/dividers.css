@@ -1,0 +1,19 @@
+/*
+ * The thematic break. A writer types `---` and the reader sees where one passage
+ * ends: `specs/design-system/dividers/spec.md`.
+ */
+
+/*
+ * A hairline on the block-start edge. `hr`'s browser presentation is an inset border on
+ * every edge, so the rule clears them and states the one it wants — uncleared, the
+ * browser's edges paint beside ours and the mark is two pixels in two colours. A
+ * hairline is a device length rather than a reader-scaled one: a divider holds the same
+ * weight at any text size.
+ *
+ * No margin: the space around a divider is the rhythm of the area holding it, which
+ * content-containers.css states.
+ */
+hr {
+  border: none;
+  border-block-start: 1px solid var(--cn-color-border);
+}

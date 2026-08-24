@@ -1,0 +1,54 @@
+---
+title: Dividers
+description: The thematic break, as a reader sees it when a writer types three dashes.
+order: 3.5
+---
+
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+
+An `<hr>` marks a thematic break: one passage has ended and the next begins. Pelilauta
+renders a writer's `---` as one, so the break someone typed is the break a reader gets.
+
+The rule ships in the design system stylesheet, which every application imports. There
+is nothing to apply — the element carries both the meaning and the mark.
+
+<DsComposition themes caption="A thematic break between two passages, in Light and Dark">
+  <p>Kaukasalon kartta on nyt ladattavissa kahtena versiona.</p>
+  <hr />
+  <p>Seuraava passage alkaa tästä.</p>
+</DsComposition>
+
+```html
+<p>One passage.</p>
+<hr />
+<p>The next.</p>
+```
+
+## The mark carries no space
+
+A divider states no margin of its own. The space above and below it is the rhythm of
+the content area holding it, the same interval that area puts between any two of its
+children — see [Content containers](/base/content-containers).
+
+This is where the rule departs from Cyan and from v20, which both gave `hr` a
+`--cn-line` margin. Those systems had no rhythm for an area to state, so the element
+had to carry its own; here it would be counted three times.
+
+## What it is made of
+
+A hairline border on the block-start edge, in the `--cn-color-border` role — the
+structural boundary, not a text or a surface colour.
+
+The hairline is one device pixel, not a reader-scaled length. Almost everything in the
+system is stated in units that grow with the reader's text size; a divider is one of the
+few things that should not, because it marks a boundary rather than carrying text, and
+it holds the same weight at any size.
+
+A divider spans the width it is given and asks for none.
+
+## Where it does not go
+
+Dividers publishes `<hr>` and one component, [CnSeparator](/components/cn-separator),
+the ornamental break for two sections that share no subject. A component that draws
+the same hairline inside its own box — a card edge, a rail's top rule — states that
+itself, and answers for it in its own book.

@@ -5,7 +5,7 @@ Status: Recorded 2026-08-13 while reviewing `specs/design-system/chrome-actions/
 ## What is wrong
 
 Interaction feedback across the Actions family is carried entirely by colour that a
-forced-colours mode discards. `--cn-hover` and `--cn-active`
+forced-colours mode discards. `--cn-color-hover` and `--cn-color-active`
 (`packages/design-system/styles/color-theme.css:93-100`) are translucent washes mixed
 over a surface, and the chrome action's resting state surface is transparent. Under
 `forced-colors: active` the user agent replaces author backgrounds with the reader's
@@ -19,7 +19,7 @@ inherits that silence rather than adding to it.
 
 The gap is no longer ahead: the navigation destination shipped, per
 `specs/design-system/chrome-actions/spec.md`, and it says "you are here" with
-`--cn-indicator` and `--cn-on-indicator` — two colours forced colours takes over.
+`--cn-color-indicator` and `--cn-color-on-indicator` — two colours forced colours takes over.
 
 ## Why it is not fixed here
 

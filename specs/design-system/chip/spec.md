@@ -20,14 +20,14 @@ announces nothing.
 `packages/design-system/styles/chip.css` and reach both applications through the
 stylesheet entry point. The chip is a button presentation: it consumes the button
 type role that `buttons.css` aliases onto `:root` and rests on the text-button
-surface `--cn-button-text`.
+surface `--cn-color-button-text`.
 
 v20 deferred coloured chips to composition with the button colour modifiers.
 `.promoted` replaces that deferral, and names the purpose rather than a button
 variant: a chip someone curated, against the free tags beside it. Its surface fades
 from the chip surface to the primary ramp at the weight the chip surface carries, so a
 promotion is a shift in hue and the foreground stays the on-surface role the plain chip
-resolves. The primary step sits one ramp step above the luminance `--cn-button`
+resolves. The primary step sits one ramp step above the luminance `--cn-color-button`
 carries, in both schemes: `--chroma-primary-60` in Light, `--chroma-primary-50` in
 Dark, read directly rather than through a semantic role, because the promotion is a
 decoration one ramp step removed from the button surface rather than a state

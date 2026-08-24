@@ -6,8 +6,9 @@
  *
  * 1. `reset-and-seed.ts`, as its own Node process, because it loads the
  *    application's zod schemas through a module-resolution hook (see that file);
- * 2. the dev server — reused when one already answers, started and stopped here
- *    when none does;
+ * 2. the subject check — this setup starts no server. The operator or CI starts
+ *    the application under acceptance, and the check fails the run unless the
+ *    page at BASE_URL carries the repository's version;
  * 3. existingUser's sign-in, through the login form, saved as Playwright storage
  *    state for every spec's browser context.
  *
@@ -15,8 +16,8 @@
  * authentication on a surface v21 shares with live v18, which
  * `plans/debt/e2e-signs-in-through-the-form.md` holds for its own epic.
  */
-import { type ChildProcess, spawn } from 'node:child_process';
-import { mkdirSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config as loadEnv } from 'dotenv';
@@ -29,21 +30,39 @@ const repoRoot = join(here, '../../..');
 
 loadEnv({ path: join(repoRoot, 'apps/pelilauta/.env') });
 
-/** Milliseconds to wait for a dev server this setup started to answer. */
-const SERVER_START_TIMEOUT = 180_000;
-
-let devServer: ChildProcess | undefined;
-
-async function isServerUp(): Promise<boolean> {
+/**
+ * Acceptance asserts about the merge candidate, so the server has to be the
+ * merge candidate: any process answering the port would otherwise do. The
+ * repository's version is on every front page, which makes the identity a
+ * substring check.
+ */
+async function requireServer(): Promise<void> {
+  let html: string;
   try {
     const response = await fetch(BASE_URL, {
-      redirect: 'manual',
-      signal: AbortSignal.timeout(3000),
+      signal: AbortSignal.timeout(5000),
     });
-    return response.status > 0;
+    html = await response.text();
   } catch {
-    return false;
+    throw new Error(
+      `[uat] nothing answers at ${BASE_URL} — start the application under acceptance, then rerun.`,
+    );
   }
+
+  const { version } = JSON.parse(
+    readFileSync(join(repoRoot, 'package.json'), 'utf8'),
+  ) as { version: string };
+  if (!html.includes(version)) {
+    throw new Error(
+      `[uat] the server at ${BASE_URL} does not serve ${version} — start the build you intend to accept.`,
+    );
+  }
+  console.log(
+    '[uat] accepting the application at',
+    BASE_URL,
+    'serving',
+    version,
+  );
 }
 
 function run(command: string, args: string[]): Promise<void> {
@@ -56,42 +75,6 @@ function run(command: string, args: string[]): Promise<void> {
         reject(new Error(`${command} ${args.join(' ')} exited with ${code}`));
     });
   });
-}
-
-async function startDevServer(): Promise<void> {
-  console.log('[uat] no application at', BASE_URL, '- starting a dev server');
-  devServer = spawn('pnpm', ['--filter', 'pelilauta', 'dev'], {
-    cwd: repoRoot,
-    stdio: 'inherit',
-    /*
-     * Astro 7 daemonises `astro dev` when it detects an agent environment, and
-     * the child then exits immediately. Setting this to any value turns the
-     * detection off and keeps the server in the foreground — the name reads
-     * backwards, because the variable's other job is to request the background
-     * explicitly. `apps/design/playwright.config.ts` carries the same note.
-     */
-    env: { ...process.env, ASTRO_DEV_BACKGROUND: '0' },
-  });
-
-  // A dev server that gives up says so and exits — Astro refuses to start a
-  // second one on the same project. Without this the wait would spin out the
-  // whole timeout on a server that is already gone.
-  let exitCode: number | null = null;
-  devServer.on('exit', (code) => {
-    exitCode = code;
-  });
-
-  const deadline = Date.now() + SERVER_START_TIMEOUT;
-  while (Date.now() < deadline) {
-    if (await isServerUp()) return;
-    if (exitCode !== null) {
-      throw new Error(
-        `The dev server exited with ${exitCode} before it answered.`,
-      );
-    }
-    await new Promise((resolve) => setTimeout(resolve, 500));
-  }
-  throw new Error(`The dev server did not answer at ${BASE_URL} in time.`);
 }
 
 async function signInUser(
@@ -152,16 +135,8 @@ export async function setup(): Promise<void> {
     './uat/pelilauta/e2e/reset-and-seed.ts',
   ]);
 
-  if (await isServerUp()) {
-    console.log('[uat] reusing the application already running at', BASE_URL);
-  } else {
-    await startDevServer();
-  }
+  await requireServer();
 
   await signInUser(existingUser, STORAGE_STATE_PATHS.existingUser);
   await signInUser(adminUser, STORAGE_STATE_PATHS.adminUser);
-}
-
-export async function teardown(): Promise<void> {
-  devServer?.kill();
 }

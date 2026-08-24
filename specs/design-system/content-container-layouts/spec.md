@@ -16,14 +16,18 @@ engagement.
 
 ### Architecture
 
-Content Container Layouts has three roles: host, container, and region. A host
-establishes an inline-size containment context and offers its full content-box width.
-A content container inside that host selects one layout mode and arranges its own
-regions. Each region holds the content assigned to one part of the composition.
+Content Container Layouts has four roles: host, container, region, and content area. A
+host establishes an inline-size containment context and offers its full content-box
+width. A content container inside that host selects one layout mode and arranges its own
+regions. Each region holds the content assigned to one part of the composition. A content
+area is where content is placed: an occupied Golden or Triad region, or a Prose flow
+root.
 
 The host governs the container's available width, placement, edge inset, and vertical
 rhythm between sibling containers. The content container governs the inline and block
-arrangement of its regions.
+arrangement of its regions. Every content area arranges its content the same way,
+whichever mode holds it. A mode differs in the width it offers a content area, not in
+how that area lays its content out.
 
 The application `<main>` bearing `.app-main` is the usual host for a sequence of
 content containers, and provides `--cn-gap` page-edge inset at narrow widths. Chrome is
@@ -49,9 +53,9 @@ The mode classes are the public selection mechanism. A content container bears
 exactly one. The container answers its responsive composition against its nearest
 host.
 
-Each occupied region and Prose flow establishes an inline-size query boundary for the
-components it contains. The boundary reports the area's usable content-box width
-rather than the width of the host or the complete content container.
+Each content area establishes an inline-size query boundary for the components it
+contains. The boundary reports the area's usable content-box width rather than the
+width of the host or the complete content container.
 
 The boundary is unnamed. A container query without a name resolves against the nearest
 ancestor container, so a component inside a region asks about the area holding it
@@ -76,11 +80,23 @@ The fixed measures form a phi family rounded to whole `--cn-grid` units, using
 The family treats Medium plus Small as Readable (51 + 32 = 83 grid units). Fixed
 regions retain their measures when excess width is available.
 
+A content area places its direct children in one source-ordered flow, one below the
+next, separated by `--cn-line`. It separates every child regardless of what the child
+is; a child that belongs to the one above it closes that line itself. Content Container
+Layouts adds no edge inset or padding to a content area.
+
+`--cn-line` is the rhythm between the children of a content area, between stacked
+regions, and between sibling content containers in a host. `--cn-gap` is the inline gap
+between the regions of a wide composition, and the host's page-edge inset.
+
+An `astro-island` child of a content area delegates its flow box and query boundary to
+its one rendered element. An island that renders zero or multiple elements is invalid
+authoring and has no layout guarantee.
+
 `.content-prose` fills the width offered by its host and has exactly one direct flow
-root (or is the flow root itself). Its ordinary direct children form one source-ordered
-flow at the smaller of Readable and the width offered by the host. The flow is centred
-and has no responsive mode change. Content Container Layouts adds no edge inset or
-padding.
+root (or is the flow root itself). That flow root is its content area, set at the
+smaller of Readable and the width offered by the host, centred, with no responsive mode
+change.
 
 Any number of direct flow children may carry `.breakout`. For each breakout, the
 nearest ancestor `.content-prose` determines its scope. The breakout receives
@@ -90,9 +106,12 @@ establishes the inline-size containment boundary. Arbitrary content
 may occupy it, and Prose, Golden, and Triad containers may stack inside it. A
 `.breakout` outside a Prose flow root has no layout guarantee.
 
-An `astro-island` flow child delegates its flow box and query boundary to its one
-rendered element, as a region island does. A flow island that renders zero or multiple
-elements is invalid authoring and has no layout guarantee.
+Breakout is Prose's alone, and is the one way a content area in one mode differs from a
+content area in another. Prose's content area sits inside a container that spans the
+width its host offered, so a breakout has a container width to span that its content
+area does not. A Golden or Triad region is itself one of its container's tracks, in
+either composition, so a breakout there could span only the width the region already
+has.
 
 A Prose container with zero or multiple flow roots, or a container placed in a host
 that narrows its content box below the host width, has no layout guarantee.
@@ -136,16 +155,14 @@ Golden and Triad region boxes remain within their assigned tracks, including whe
 descendant has an oversized intrinsic width or unbreakable content. Descendant
 overflow is governed by the region content. `.breakout` has no effect inside either mode
 unless it belongs to a nested Prose flow. Source order is both reading order and
-track order. Golden and Triad use `--cn-gap` between stacked regions. Prose uses
-`--cn-line` between the direct children of its flow root. Sibling content containers
-in a host are separated by `--cn-line`.
+track order.
 
 Not governed here: auto-fill card grid listings, standalone canvas editors, button
 action row geometry, and legacy `.content-columns` migration.
 
 Surface continues to govern a surface's inset, container type, and `surface-area` query
-boundary. An occupied region or flow that is also a Surface keeps that one boundary,
-under Surface's name, and it reports the post-inset content-box width.
+boundary. A content area that is also a Surface keeps that one boundary, under
+Surface's name, and it reports the post-inset content-box width.
 
 ## Contract
 
@@ -181,6 +198,10 @@ under Surface's name, and it reports the post-inset content-box width.
   width without requiring Content Container Layouts to contain descendant overflow.
 - In the wide Golden and Triad compositions, a Prose container nested in each fixed
   region fills that region without adding inset.
+- Playwright measures the rhythm between the children of a content area and finds
+  `--cn-line` in Prose, and in Golden and Triad in both their compositions. One fixture
+  gives a content area `astro-island` children, so the rhythm is measured where no child
+  has a box of its own.
 - A content area bearing `surface` answers an unnamed query and a `surface-area` query
   with the same post-inset width, and Content Container Layouts adds no second boundary
   that would shadow it.
@@ -194,9 +215,12 @@ under Surface's name, and it reports the post-inset content-box width.
 
 - Each wide-mode condition equals the independently derived sum of its fixed grid
   units and gaps after any measure or spacing change.
-- The query boundary remains on the individual region or prose flow item rather than on
-  the host; a query within a region must not resolve against host width.
+- The query boundary remains on the content area rather than on the host; a query
+  within a content area must not resolve against host width.
 - Stacked Golden and Triad regions fill the host width.
+- A content area's rhythm is `--cn-line` in every mode. A mode may differ in the width
+  it offers a content area; only Prose differs by supporting breakout. No mode carries
+  a rhythm of its own.
 - Breakouts inside Golden and Triad regions remain contained within their track box.
 
 ### Scenarios
@@ -255,7 +279,7 @@ Then Readable and Small appear side by side in source order
 Given a Golden host one pixel narrower than Readable plus one gap plus Small
 When the Golden container renders
 Then its two regions stack in source order
-And the regions are separated by --cn-gap
+And the regions are separated by --cn-line
 ```
 
 ```gherkin
@@ -268,7 +292,7 @@ Then Medium is followed by two equal Small regions
 Given a Triad host one pixel narrower than Medium plus two gaps plus two Small regions
 When the Triad container renders
 Then its three regions stack in source order
-And adjacent regions are separated by --cn-gap
+And adjacent regions are separated by --cn-line
 ```
 
 ```gherkin
@@ -290,6 +314,24 @@ And every region is wider than Readable
 Given script, style, or template children between valid Golden or Triad regions
 When the container renders in its wide composition
 Then each region occupies the track assigned by its ordinal among layout regions
+```
+
+```gherkin
+Given the same blocks placed in a Prose flow root, a Golden region, and a Triad region
+When each content container renders
+Then the blocks are separated by --cn-line in all three
+```
+
+```gherkin
+Given a content area whose children are astro-islands
+When the islands render
+Then each rendered element is a flow child separated by --cn-line
+```
+
+```gherkin
+Given a content area holding a child that belongs to the one above it
+When the content area renders
+Then that child closes the line the area put between them
 ```
 
 ```gherkin

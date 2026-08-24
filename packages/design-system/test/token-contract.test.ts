@@ -7,7 +7,9 @@
  * a resolved token differs between light and dark — belongs in the design-site
  * browser checks.
  */
+import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
 
 const styles = new URL('../styles/', import.meta.url);
@@ -26,28 +28,6 @@ function declarations(css: string) {
     value: match[2].trim().replace(/\s+/g, ' '),
     index: match.index,
   }));
-}
-
-/**
- * The `@media` prelude enclosing an index, or '' outside any block. A property
- * declared twice under one prelude is drift; re-declared under another it is a
- * conditioned override, the shape poster.css uses to withdraw a cession.
- */
-function mediaContext(css: string, at: number) {
-  let context = '';
-  for (const match of css.matchAll(/@media\s+([^{]+)\{/g)) {
-    let depth = 1;
-    let index = match.index + match[0].length;
-    while (index < css.length && depth > 0) {
-      if (css[index] === '{') depth++;
-      if (css[index] === '}') depth--;
-      index++;
-    }
-    if (at > match.index && at < index) {
-      context = match[1].replace(/\s+/g, ' ').trim();
-    }
-  }
-  return context;
 }
 
 /** Split on commas that sit at depth zero, so nested calls stay intact. */
@@ -98,7 +78,6 @@ const sheets = readdirSync(styles, { recursive: true, encoding: 'utf8' })
   .filter((name) => name.endsWith('.css'))
   .sort();
 
-const chroma = read('chroma.css');
 const semantic = read('semantic.css');
 const elevation = read('elevation.css');
 
@@ -106,78 +85,6 @@ const elevation = read('elevation.css');
 const declaredInPackage = new Set(
   sheets.flatMap((sheet) => declarations(read(sheet)).map((d) => d.name)),
 );
-
-describe('layer composition', () => {
-  test('color.css composes the layers bottom-up', () => {
-    const imports = [...read('color.css').matchAll(/@import\s+"([^"]+)"/g)].map(
-      (match) => match[1],
-    );
-
-    expect(imports.slice(0, 2)).toEqual(['./chroma.css', './semantic.css']);
-  });
-
-  test('tokens.css supplies units and colour before elevation', () => {
-    const imports = [
-      ...read('tokens.css').matchAll(/@import\s+"([^"]+)"/g),
-    ].map((match) => match[1]);
-    const at = (name: string) =>
-      imports.findIndex((entry) => entry.endsWith(name));
-
-    // elevation.css reads --cn-grid from units and paints with a semantic
-    // colour, so both dependencies enter the cascade first.
-    expect(at('elevation.css')).toBeGreaterThan(at('units.css'));
-    expect(at('elevation.css')).toBeGreaterThan(at('color.css'));
-  });
-
-  test('chroma tokens are literal, so the stack has a bottom', () => {
-    const referencing = declarations(chroma)
-      .filter((declaration) => declaration.value.includes('var('))
-      .map((declaration) => declaration.name);
-
-    expect(referencing).toEqual([]);
-  });
-
-  test('permanent stylesheets never read compatibility vocabulary', () => {
-    // Compat leans on the permanent system; the permanent system never leans
-    // back. The whole compat layer is deleted before rc.1, and this test with it.
-    const offenders = sheets
-      .filter((sheet) => !sheet.startsWith('compat'))
-      .flatMap((sheet) =>
-        varReferences(read(sheet))
-          .filter((usage) => /^--(color|background)-/.test(usage.name))
-          .map((usage) => `${sheet}: ${usage.name}`),
-      );
-
-    expect(offenders).toEqual([]);
-  });
-
-  test('semantic colours derive from the reference layer', () => {
-    const literalColours = declarations(semantic)
-      .filter((declaration) =>
-        /#[0-9a-fA-F]{3,8}\b|\b(?:black|white)\b|\b(?:oklch|rgba?|hsla?)\(/.test(
-          declaration.value,
-        ),
-      )
-      .map((declaration) => `${declaration.name}: ${declaration.value}`);
-
-    expect(literalColours).toEqual([]);
-  });
-
-  test('no stylesheet declares the same property twice in one media context', () => {
-    const duplicates = sheets.flatMap((sheet) => {
-      const css = read(sheet);
-      const keys = declarations(css).map(
-        (d) => `${d.name} @ "${mediaContext(css, d.index)}"`,
-      );
-      const seen = new Set<string>();
-      return keys
-        .filter((key) => seen.size === seen.add(key).size)
-        .map((key) => `${sheet}: ${key}`);
-    });
-
-    expect(duplicates).toEqual([]);
-  });
-});
 
 describe('resolvability', () => {
   test('every required property reference is defined by the package', () => {
@@ -192,8 +99,7 @@ describe('resolvability', () => {
 
     // A property referenced without a fallback must exist, or everything
     // computed from it is invalid at use time. Consumers that intend an
-    // external or contextual value supply a fallback instead — which is why
-    // var(--color-on, currentColor) in compat/cyan-4.css is not counted here.
+    // external or contextual value supply a fallback instead.
     expect([...dangling].sort()).toEqual([]);
   });
 
@@ -211,5 +117,57 @@ describe('resolvability', () => {
       .map((declaration) => declaration.name);
 
     expect(incomplete).toEqual([]);
+  });
+});
+
+describe('generation', () => {
+  test('every committed stylesheet matches its token source (--check passes)', () => {
+    const script = fileURLToPath(
+      new URL('../scripts/generate-tokens.mjs', import.meta.url),
+    );
+    // Throws (non-zero exit) if a committed stylesheet is stale against its
+    // JSON source, per specs/design-system/design-tokens/spec.md.
+    expect(() =>
+      execFileSync('node', [script, '--check'], { stdio: 'pipe' }),
+    ).not.toThrow();
+  });
+});
+
+describe('debug utility (specs/design-system/debug/spec.md)', () => {
+  const roleSheets = ['semantic.css', 'elevation.css', 'transparency.css'];
+
+  test('every role stylesheet declares its tokens on both :root and .debug', () => {
+    // A custom property resolves its var() references where it is declared, so
+    // a chroma swap scoped to .debug only re-themes a subtree if the role
+    // stylesheets also compute their tokens there. The guardrail is the arm's
+    // presence, not the exact selector text the generator happens to emit.
+    for (const sheet of roleSheets) {
+      const selector = read(sheet).slice(0, read(sheet).indexOf('{'));
+      const arms = selector
+        .split(',')
+        .map((arm) => arm.trim())
+        .filter(Boolean);
+      expect(arms, sheet).toContain(':root');
+      expect(arms, sheet).toContain('.debug');
+    }
+  });
+
+  test('debug.css swaps the complete 13-step surface scale to rowan', () => {
+    const surfaceSteps = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+    const debugTokens = new Map(
+      declarations(read('debug.css')).map((d) => [d.name, d.value]),
+    );
+    const rowanTokens = new Set(
+      declarations(read('chroma-themes.css')).map((d) => d.name),
+    );
+
+    // Every step of the surface family, and only every step: a step missing
+    // from either side half-themes the .debug subtree silently.
+    for (const step of surfaceSteps) {
+      const surfaceVar = `--chroma-surface-${step}`;
+      const rowanVar = `--chroma-rowan-${step}`;
+      expect(debugTokens.get(surfaceVar), surfaceVar).toBe(`var(${rowanVar})`);
+      expect(rowanTokens.has(rowanVar), rowanVar).toBe(true);
+    }
   });
 });

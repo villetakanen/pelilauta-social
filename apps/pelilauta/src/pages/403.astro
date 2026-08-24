@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import Base from '@layouts/Base.astro';
 import { t } from 'src/utils/i18n';
 ---
@@ -7,18 +7,18 @@ import { t } from 'src/utils/i18n';
 <Base title={t('seo:error403.title')} noSharing>
   <section class="content-prose">
     <div class="flex flex-col items-center p-4">
-      <Icon noun="admin" size="large" />
+      <CnIcon noun="admin" size="large" />
       <h1>{t('seo:error403.title')}</h1>
       <p class="text-center text-low pb-4">
         You don't have the necessary permissions to access this resource.
       </p>
       <div class="toolbar">
         <a href="/" >
-          <Icon noun="arrow-left" size="small" />
+          <CnIcon noun="arrow-left" size="small" />
           Back to Home
         </a>
         <a href="/profile" >
-          <Icon noun="avatar" size="small" />
+          <CnIcon noun="avatar" size="small" />
           My Profile
         </a>
       </div>

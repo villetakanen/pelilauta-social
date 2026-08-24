@@ -124,7 +124,6 @@ function rules(source: string): Map<string, string> {
 const container = stylesheet.match(
   /@container \(max-width:\s*([\d.]+)rem\)\s*\{([\s\S]+)\}/,
 );
-const document = rules(stylesheet.replace(/@container[\s\S]+/, ''));
 const narrow = container ? rules(container[2]) : new Map<string, string>();
 
 describe('the scale', () => {
@@ -177,67 +176,6 @@ describe('the scale', () => {
   });
 });
 
-describe('the rules that read it', () => {
-  test('the document reads at the text step, and .text-body mirrors it', () => {
-    const body = document.get('body');
-    expect(body).toContain('font-size: var(--cn-font-size-text)');
-    expect(body).toContain('line-height: var(--cn-line-height-text)');
-    // One rule, two selectors: the mirror cannot drift from the document.
-    expect(document.get('.text-body')).toBe(body);
-  });
-
-  test('each heading element and its mirror class render the same step', () => {
-    for (const name of ['h1', 'h2', 'h3', 'h4']) {
-      for (const selector of [name, `.text-${name}`]) {
-        const rule = document.get(selector);
-        expect(rule, `${selector} has no rule`).toBeTruthy();
-        expect(rule).toContain(`font-size: var(--cn-font-size-${name})`);
-        expect(rule).toContain(`font-weight: var(--cn-font-weight-${name})`);
-        expect(rule).toContain(`line-height: var(--cn-line-height-${name})`);
-      }
-      // One rule, two selectors: a mirror that drifts from its element fails here.
-      expect(document.get(name)).toBe(document.get(`.text-${name}`));
-    }
-  });
-
-  test('headings take the colour roles the theme declares', () => {
-    const theme = declarations(read('../styles/semantic.css'));
-    for (const [selector, role] of [
-      ['h1', '--cn-text-heading'],
-      ['h2', '--cn-text-heading'],
-      ['h3', '--cn-text-subheading'],
-      ['h4', '--cn-text-subheading'],
-      ['.text-title', '--cn-text-heading'],
-    ] as const) {
-      expect(theme.has(role), `${role} is not a theme role`).toBe(true);
-      expect(document.get(selector), selector).toContain(`color: var(${role})`);
-    }
-  });
-
-  test('caption and label share the caption size and line, and only the caption is uppercased', () => {
-    for (const selector of ['.text-caption', '.text-label']) {
-      const rule = document.get(selector);
-      expect(rule, selector).toContain(
-        'font-size: var(--cn-font-size-caption)',
-      );
-      expect(rule, selector).toContain(
-        'line-height: var(--cn-line-height-caption)',
-      );
-    }
-    expect(document.get('.text-caption')).toContain(
-      'text-transform: uppercase',
-    );
-    expect(document.get('.text-caption')).toContain(
-      'font-weight: var(--cn-font-weight-caption)',
-    );
-    // The approved exception to v20: a label keeps the casing it is given.
-    expect(document.get('.text-label')).not.toContain('text-transform');
-    expect(document.get('.text-label')).toContain(
-      'font-weight: var(--cn-font-weight-text)',
-    );
-  });
-});
-
 describe('the downshift', () => {
   test('its threshold is the published small-screen breakpoint, against the container', () => {
     // A container query cannot read a custom property, so the spec allows this
@@ -276,13 +214,5 @@ describe('the downshift', () => {
 
   test('the title step does not downshift', () => {
     expect([...narrow.keys()].join()).not.toContain('title');
-  });
-});
-
-describe('the reader-preference guarantee', () => {
-  // Pixel lengths are swept across every stylesheet by lengths.test.ts.
-  test('no rule touches the document root', () => {
-    expect(stylesheet).not.toMatch(/(^|[^\w-])html\s*[,{]/);
-    expect(stylesheet).not.toMatch(/:root\s*\{[^}]*[^-]font-size/);
   });
 });

@@ -63,7 +63,9 @@ through it. A veil fades in as content passes beneath: `16 × --cn-grid` deep, t
 bar, so text dissolves before it reaches the title, and its own lower edge ends fully
 transparent, so it leaves no seam across the page. Scroll position drives it, without
 script. Firefox ships no scroll timeline and shows the veil at rest, losing the fade and
-nothing else. A modal bar rests at elevation 4 and carries no veil.
+nothing else. A modal bar rests at elevation 3 and carries no veil: it stays over the
+page's content, and level 4 belongs to the transient covers the application puts in
+front of a reader.
 
 The bar is `8 × --cn-grid` in block size, which admits a chrome action's target and
 centres it, so half of what the bar is deeper than that target stands as padding at each

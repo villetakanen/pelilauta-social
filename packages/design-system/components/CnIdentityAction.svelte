@@ -7,7 +7,7 @@
  * present.
  */
 import CnAvatar from './CnAvatar.svelte';
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   href,
@@ -38,7 +38,7 @@ let {
   {#if signedIn}
     <CnAvatar {nick} {src} size="small" aria-hidden />
   {:else}
-    <Icon noun="login" decorative />
+    <CnIcon noun="login" decorative />
   {/if}
   <span>{label}</span>
 </a>

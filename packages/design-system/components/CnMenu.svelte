@@ -28,7 +28,7 @@ let mounted = 0;
  * Presentation is styles/menu.css, which both applications receive.
  */
 import type { Snippet } from 'svelte';
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   label = 'More options',
@@ -89,7 +89,7 @@ function closeAfterItem(event: MouseEvent) {
     aria-controls={containerId}
     aria-label={label}
   >
-    <Icon noun={noun ?? (inline ? 'dots' : 'kebab')} decorative />
+    <CnIcon noun={noun ?? (inline ? 'dots' : 'kebab')} decorative />
   </button>
 
   <!--

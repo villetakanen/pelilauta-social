@@ -1,8 +1,8 @@
 <script lang="ts">
 // Import utilities, stores, and lifecycle functions
 
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { FirebaseError } from 'firebase/app';
 import { completeAuthFlow } from 'src/utils/client/authUtils';
 import { captureError } from 'src/utils/client/sentry';
@@ -268,7 +268,7 @@ onMount(async () => {
 });
 </script>
 
-<section class="elevation-1 p-2" style="position: relative">
+<section class="surface">
   <h2>{t("login:withEmail.title")}</h2>
 
   {#if view === "sent"}
@@ -277,8 +277,8 @@ onMount(async () => {
     <!-- User needs to re-enter email for link verification -->
     <p>Please enter the email address you used to request the login link:</p>
     <form onsubmit={verifyWithEmail}>
-      <div class="form-field">
-        <label for="email-verify">{t("login:withEmail.label")}</label>
+      <label>
+        {t("login:withEmail.label")}
         <input
           id="email-verify"
           type="email"
@@ -286,8 +286,8 @@ onMount(async () => {
           bind:value={email}
           required
         />
-      </div>
-      <div class="toolbar justify-end">
+      </label>
+      <div class="actions">
         <button type="submit" disabled={suspend}>
           {#if suspend}
             <CnLoader inline />
@@ -299,8 +299,8 @@ onMount(async () => {
   {:else}
     <p>{t("login:withEmail.info")}</p>
     <form onsubmit={sendLink}>
-      <div class="form-field">
-        <label for="email-login">{t("login:withEmail.label")}</label>
+      <label>
+        {t("login:withEmail.label")}
         <input
           id="email-login"
           type="email"
@@ -308,13 +308,13 @@ onMount(async () => {
           bind:value={email}
           required
         />
-      </div>
-      <div class="toolbar justify-end">
+      </label>
+      <div class="actions">
         <button type="submit" disabled={suspend}>
           {#if suspend}
             <CnLoader inline />
           {:else}
-            <Icon noun="send" />
+            <CnIcon noun="send" />
           {/if}
           <span>{t("login:withEmail.sendAction")}</span>
         </button>
@@ -322,3 +322,14 @@ onMount(async () => {
     </form>
   {/if}
 </section>
+
+<style>
+  /* A view's layout for its one action row, stated here rather than
+     published: the third consumer is the point at which a class earns
+     a stylesheet. */
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--cn-gap);
+  }
+</style>

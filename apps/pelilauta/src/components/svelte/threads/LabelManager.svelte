@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Thread } from '@schemas/ThreadSchema';
 import { t } from '@utils/i18n';
 import { logDebug, logError } from '@utils/logHelpers';
@@ -128,9 +128,9 @@ function handleKeydown(event: KeyboardEvent) {
             aria-label={t("admin:labels.removeLabel")}
           >
             {#if isRemoving === label}
-              <Icon noun="loader" size="small" />
+              <CnIcon noun="loader" size="small" />
             {:else}
-              <Icon noun="close" size="small" />
+              <CnIcon noun="close" size="small" />
             {/if}
           </button>
         </div>
@@ -156,7 +156,7 @@ function handleKeydown(event: KeyboardEvent) {
       class="button ml-1"
     >
       {#if isAdding}
-        <Icon noun="loader" size="small" />
+        <CnIcon noun="loader" size="small" />
       {:else}
         {t("admin:labels.addLabel")}
       {/if}

@@ -6,7 +6,7 @@ runtime: interactive
 ---
 
 import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 An activation writes `color-scheme` to the document root, so every `light-dark()` value
 on the page resolves against the new scheme, and browser chrome — scrollbars, native
@@ -32,9 +32,9 @@ what is already there.
 
 The switch below re-themes this page.
 
-<Composition caption="The control, mounted with a client directive">
+<DsComposition caption="The control, mounted with a client directive">
   <CnThemeSwitch client:load />
-</Composition>
+</DsComposition>
 
 ```mdx
 import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte'
@@ -58,7 +58,7 @@ The control is a chrome action helper, and appears among them in
 ### Tokens
 
 `CnThemeSwitch` declares no custom properties. Its geometry and colour come from
-[Chrome Actions](/base/chrome-actions), and its icon from [Icon](/components/icon).
+[Chrome Actions](/base/chrome-actions), and its icon from [CnIcon](/components/cn-icon).
 
 ## Accessibility
 

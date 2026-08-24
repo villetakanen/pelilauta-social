@@ -1,8 +1,15 @@
+/*
+ * What the service is, in one line. The front page and the login page make the
+ * same claim — a login page describes the service a reader is about to join,
+ * not a page of its own — so they read one string rather than two that drift.
+ */
+const service =
+  'Keskustele roolipeleistä ja luo kampanjawikejä. Suomalainen roolipelisivusto pelaajilta pelaajille.';
+
 export const seo = {
   frontPage: {
     title: 'Pelilauta',
-    description:
-      'Keskustele roolipeleistä, luo kampanjawikejä ja hallinnoi hahmojasi. Suomalainen roolipelisivusto pelaajilta pelaajille.',
+    description: service,
   },
   channels: {
     title: 'Keskustelualueet',
@@ -39,8 +46,7 @@ export const seo = {
   },
   login: {
     title: 'Kirjaudu',
-    description:
-      'Kirjaudu Pelilautaan keskustellaksesi, luodaksesi sivustoja ja hallitaksesi hahmojasi.',
+    description: service,
   },
   eula: {
     title: 'Käyttöehdot',

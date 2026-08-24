@@ -5,11 +5,13 @@ order: 7
 ---
 
 import ColorRamp from "@design-system/books/specimens/ColorRamp.astro";
-import Composition from "@design-system/books/specimens/Composition.astro";
+import DsComposition from "@design-system/books/specimens/DsComposition.astro";
 import RoleTable from "@design-system/books/specimens/RoleTable.astro";
 import theme from "@design-system/tokens/themes/default.json";
 import ThemeSwapDemo from "@design-system/books/specimens/ThemeSwapDemo.svelte";
 import semanticColor from "@design-system/tokens/semantic-color.json";
+import TransparencyLadder from "@design-system/books/specimens/TransparencyLadder.astro";
+import transparency from "@design-system/tokens/transparency.json";
 
 The colour system carries Pelilauta's identity coherently through every surface. A
 site owner replaces that identity by supplying a chroma family — a rebrand
@@ -76,7 +78,7 @@ is why the scale is a partial 20/40/60/90, not the core families' 13 steps.
   intent="Likes, bookmarks, and community appreciation."
 />
 
-Information is not a fourth family. `--cn-info` and `--cn-on-info` are a semantic pair
+Information is not a fourth family. `--cn-color-info` and `--cn-color-on-info` are a semantic pair
 over primary — the v20 info scale named a chroma distinction the design never
 actually made.
 
@@ -97,9 +99,9 @@ floors from the palette; this table cites them rather than restating a copy.
 
 ### A theme swap, live
 
-<Composition caption="Each toggle redeclares one core family's 13 steps on this container alone; the sample card and both ramps read them live">
+<DsComposition caption="Each toggle redeclares one core family's 13 steps on this container alone; the sample card and both ramps read them live">
   <ThemeSwapDemo client:load />
-</Composition>
+</DsComposition>
 
 A theme swap is not a filter over the rendered page — it is a core family's thirteen
 custom properties, redeclared. Primary and surface toggle independently, each
@@ -123,18 +125,18 @@ overridden one at a time.
   roles={[semanticColor]}
   caption="Surface roles"
   names={[
-    "--cn-surface",
-    "--cn-surface-1",
-    "--cn-surface-2",
-    "--cn-surface-3",
-    "--cn-surface-4",
+    "--cn-color-surface",
+    "--cn-color-surface-1",
+    "--cn-color-surface-2",
+    "--cn-color-surface-3",
+    "--cn-color-surface-4",
   ]}
   intents={{
-    "--cn-surface": "The application itself",
-    "--cn-surface-1": "Payload, the default",
-    "--cn-surface-2": "Payload inside payload",
-    "--cn-surface-3": "Floats over content",
-    "--cn-surface-4": "A system interrupt",
+    "--cn-color-surface": "The application itself",
+    "--cn-color-surface-1": "Payload, the default",
+    "--cn-color-surface-2": "Payload inside payload",
+    "--cn-color-surface-3": "Floats over content",
+    "--cn-color-surface-4": "A system interrupt",
   }}
 />
 
@@ -143,20 +145,20 @@ overridden one at a time.
   roles={[semanticColor]}
   caption="Text, action, and edge roles"
   names={[
-    "--cn-text",
-    "--cn-text-low",
-    "--cn-text-high",
-    "--cn-link",
+    "--cn-color-text",
+    "--cn-color-text-low",
+    "--cn-color-text-high",
+    "--cn-color-link",
     "--cn-color-border",
-    "--cn-focus-ring",
+    "--cn-color-focus-ring",
   ]}
   intents={{
-    "--cn-text": "Primary body copy",
-    "--cn-text-low": "Secondary metadata and timestamps",
-    "--cn-text-high": "Maximum contrast headings",
-    "--cn-link": "Navigational links",
+    "--cn-color-text": "Primary body copy",
+    "--cn-color-text-low": "Secondary metadata and timestamps",
+    "--cn-color-text-high": "Maximum contrast headings",
+    "--cn-color-link": "Navigational links",
     "--cn-color-border": "Structural dividers and boundaries",
-    "--cn-focus-ring": "Keyboard focus indicators",
+    "--cn-color-focus-ring": "Keyboard focus indicators",
   }}
 />
 
@@ -174,6 +176,25 @@ the one place a component reaches past the semantic layer, and it is named exact
 because it is the exception: a purpose the system has named always uses that role
 instead.
 
+## Transparency: the ladder of shares
+
+Before v19, a layer that let something through picked a share by eye, so two
+translucent layers on one page carried no relation to each other. The transparency
+ladder makes a share a choice from a fixed set instead: eleven-percent steps,
+`--cn-transparency-1` through `--cn-transparency-9`, with a half step below the
+smallest. A component that needs translucency takes a rung; it does not compute one.
+
+<DsComposition caption="Every rung, each mixing the primary role over a two-tone backdrop">
+  <TransparencyLadder source={transparency} />
+</DsComposition>
+
+A rung promises nothing about contrast: the layer beneath a translucent surface is not
+always the swatch backdrop above, and where it is unknown — artwork behind a poster —
+no percentage can guarantee a ratio. Opacity is the one share that could guarantee a
+ratio, and the ladder removes opacity as a choice. Legibility over unknown artwork
+comes from which levels cede and how far, a decision `specs/design-system/surface/spec.md`
+states; see [Surface reference](/base/surface).
+
 ## Surface and elevation
 
 Elevation establishes depth across five distinct tiers:
@@ -183,13 +204,13 @@ Elevation establishes depth across five distinct tiers:
 - **Level 3:** Floats over content, whether it stays or is dismissed.
 - **Level 4:** A system interrupt.
 
-<Composition themes caption="The five elevation tiers in Light and Dark">
+<DsComposition themes caption="The five elevation tiers in Light and Dark">
   <div class="surface elevation-0">Level 0: the application itself</div>
   <div class="surface elevation-1">Level 1: payload</div>
   <div class="surface elevation-2">Level 2: payload inside payload</div>
   <div class="surface elevation-3">Level 3: floats over content</div>
   <div class="surface elevation-4">Level 4: a system interrupt</div>
-</Composition>
+</DsComposition>
 
 ### Light and shadow interaction
 
@@ -206,7 +227,7 @@ excessive shadow accumulation.
 ### System layer surfaces
 
 Level 4 surfaces use primary step 99 in Light and primary step 40 in Dark. Default body
-text (`--cn-text`) meets WCAG 2.2 AA contrast on level 4 across both themes.
+text (`--cn-color-text`) meets WCAG 2.2 AA contrast on level 4 across both themes.
 
 For shadow measurements, see [Spatial System](/principles/spatial-system). For utility
 class usage, see [Surface reference](/base/surface).

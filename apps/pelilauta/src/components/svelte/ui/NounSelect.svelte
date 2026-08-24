@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 
 interface Props {
   value: string;
@@ -170,12 +170,12 @@ function handleKeydown(event: KeyboardEvent) {
     aria-label={placeholder}
   >
     {#if value}
-      <Icon noun={value} size={size === 'small' ? 'small' : size === 'large' ? 'large' : 'medium'} />
+      <CnIcon noun={value} size={size === 'small' ? 'small' : size === 'large' ? 'large' : 'medium'} />
       <span class="icon-name">{value}</span>
     {:else}
       <span class="placeholder">{placeholder}</span>
     {/if}
-    <Icon noun="open-down" size="small" />
+    <CnIcon noun="open-down" size="small" />
   </button>
   
   <!-- Dropdown content -->
@@ -190,7 +190,7 @@ function handleKeydown(event: KeyboardEvent) {
             class="search-input"
             autocomplete="off"
           />
-          <Icon noun="search" size="small" />
+          <CnIcon noun="search" size="small" />
         </div>
       {/if}
       
@@ -210,7 +210,7 @@ function handleKeydown(event: KeyboardEvent) {
               role="option"
               aria-selected={value === icon}
             >
-              <Icon noun={icon} size="small" />
+              <CnIcon noun={icon} size="small" />
               <span>{icon}</span>
             </button>
           {/each}
@@ -322,7 +322,7 @@ function handleKeydown(event: KeyboardEvent) {
 
 /*
  * The search affordance is positioned against the input, not sized by it. The
- * local Icon renders its own element, so this component's scoped selector has
+ * local CnIcon renders its own element, so this component's scoped selector has
  * to reach the child component's class explicitly — a scoped `.cn-icon` rule
  * would never match (migration guide: a class does not match a tag rule, and
  * Svelte scoping does not cross a component boundary).

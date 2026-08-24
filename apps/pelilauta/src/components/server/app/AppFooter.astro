@@ -1,7 +1,7 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 // The release the reader is on is the repository's, which the beta version
-// carries and CI tags. This app's own package version is v18's and stands still.
+// carries and CI tags.
 import { version } from '@root/package.json';
 import { t } from 'src/utils/i18n';
 import ActiveUsersWidget from './ActiveUsersWidget.astro';
@@ -9,19 +9,19 @@ import ActiveUsersWidget from './ActiveUsersWidget.astro';
 
 <footer>
   <div class="content-columns">
-    <section class="column-s flex flex-col items-center">
-      <span style="display:contents; color:var(--cn-text-low);"><Icon noun="fox" size="xlarge" /></span>
-      <p class="text-center mb-0">
+    <section class="text-center">
+      <span style="display:contents; color:var(--cn-color-text-low);"><CnIcon noun="fox" size="xlarge" /></span>
+      <p class="text-center">
       {t('app:shortname')}<br>
       <a href="/docs/80-release-notes">{version}</a></p>
-      <p class="caption text-center mt-0">
+      <p class="text-caption text-center">
         <a href="/rss/threads.xml">RSS</a>
       </p>
       <div class="text-caption">
         <slot name="app-footer-credits" />
       </div>
   </section>
-  <section class="column-s">
+  <section>
     <h4>{t('app:footer.links.title')}</h4>
     <ul>
       <li>
@@ -42,7 +42,7 @@ import ActiveUsersWidget from './ActiveUsersWidget.astro';
     </ul>
   </section>
 
-  <section class="column-s">
+  <section>
     <ActiveUsersWidget /> 
   </section>
   </div>

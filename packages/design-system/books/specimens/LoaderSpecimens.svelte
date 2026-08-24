@@ -1,7 +1,8 @@
 <script lang="ts">
 /** CnLoader book specimens. */
+
+import CnIcon from '../../components/CnIcon.svelte';
 import CnLoader from '../../components/CnLoader.svelte';
-import Icon from '../../components/Icon.svelte';
 
 let {
   group,
@@ -26,7 +27,7 @@ let {
   {:else if group === 'button'}
     <div class="row" data-variant="button">
       <button type="button">
-        <Icon noun="send" />
+        <CnIcon noun="send" />
         <span>Send</span>
       </button>
       <button type="button" disabled>

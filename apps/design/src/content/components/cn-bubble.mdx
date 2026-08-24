@@ -6,7 +6,7 @@ runtime: static
 ---
 
 import BubbleSpecimen from '@design-system/books/specimens/BubbleSpecimen.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 Use a bubble to present one message of an exchange — a thread reply, a comment, a
 line of chat — and set `reply` where the reader wrote the message.
@@ -27,9 +27,9 @@ The bubble presents whatever the composition renders. A leading `header` and a
 trailing `footer` reach its edges, which is where a byline and a timestamp row
 belong.
 
-<Composition themes stack breakout caption="Two messages of one conversation, the second the reader's, in Light and Dark">
+<DsComposition themes stack breakout caption="Two messages of one conversation, the second the reader's, in Light and Dark">
   <BubbleSpecimen client:load />
-</Composition>
+</DsComposition>
 
 The mark is what the tail points at. Give the bubble a `nick`, and an `avatar` where the
 participant has a picture, and it builds the mark itself — decoration, announcing
@@ -39,9 +39,9 @@ Where the column is narrower than the small breakpoint, the mark leaves and the 
 takes the whole row. The bubble reads its own row, so the column decides this and the
 window does not.
 
-<Composition narrow caption="The same conversation in a narrow column: the mark leaves, the message stays">
+<DsComposition narrow caption="The same conversation in a narrow column: the mark leaves, the message stays">
   <BubbleSpecimen client:load />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>

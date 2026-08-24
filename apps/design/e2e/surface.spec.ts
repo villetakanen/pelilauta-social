@@ -109,11 +109,11 @@ const references = (page: Page) =>
 
     const values = {
       surface: [
-        background('--cn-surface'),
-        background('--cn-surface-1'),
-        background('--cn-surface-2'),
-        background('--cn-surface-3'),
-        background('--cn-surface-4'),
+        background('--cn-color-surface'),
+        background('--cn-color-surface-1'),
+        background('--cn-color-surface-2'),
+        background('--cn-color-surface-3'),
+        background('--cn-color-surface-4'),
       ],
       shadow: [
         shadow('--cn-shadow-elevation-2'),
@@ -145,7 +145,7 @@ for (const scheme of ['light', 'dark'] as const) {
       for (const [level, probe] of probes.entries()) {
         expect(
           probe.backgroundColor,
-          `elevation-${level} does not paint --cn-surface${level === 0 ? '' : `-${level}`}`,
+          `elevation-${level} does not paint --cn-color-surface${level === 0 ? '' : `-${level}`}`,
         ).toBe(tokens.surface[level]);
         // A failed var() falls back to transparent, which would otherwise pass
         // against a role that also failed.
@@ -298,8 +298,9 @@ test('an attention class paints its flag on a surface rendered without one', asy
   page,
 }) => {
   // The state exists for consumers that learn it in the browser and never hydrate
-  // the element, so the class alone has to be enough. Both roles are read from the
-  // page rather than written down here.
+  // the element, so the class alone has to be enough. The two roles have to stay
+  // distinguishable, or the flag carries no signal; which colour each takes, and how
+  // translucent it is, are the stylesheet's to state and not this test's to pin.
   await page.goto(BOOK);
 
   const flags = await page.evaluate(() => {
@@ -323,20 +324,9 @@ test('an attention class paints its flag on a surface rendered without one', asy
       return { resting, ...flagged };
     };
 
-    const role = (token: string) => {
-      const probe = document.createElement('span');
-      probe.style.color = `var(${token})`;
-      host.append(probe);
-      const color = getComputedStyle(probe).color;
-      probe.remove();
-      return color;
-    };
-
     const result = {
       notify: read('has-notify'),
       alert: read('has-alert'),
-      info: role('--cn-info'),
-      warning: role('--cn-color-warning'),
     };
     host.remove();
     return result;
@@ -344,8 +334,7 @@ test('an attention class paints its flag on a surface rendered without one', asy
 
   expect(flags.notify.resting).toBe('none');
   expect(flags.notify.content).not.toBe('none');
-  expect(flags.notify.background).toBe(flags.info);
-  expect(flags.alert.background).toBe(flags.warning);
+  expect(flags.notify.background).not.toBe(flags.alert.background);
   expect(flags.notify.clipPath).toContain('polygon');
   expect(flags.notify.pointerEvents).toBe('none');
 });

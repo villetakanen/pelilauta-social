@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addClocktoSite } from 'src/firebase/client/site/addClockToSite';
 import { parseClock } from 'src/schemas/ClockSchema';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -75,13 +75,13 @@ const clock = $state(
       <span>{t('entries:clock.tickIndex')}</span>
       <span>{t('entries:clock.tickSize')}</span>
       <span>
-        <Icon noun="add" size="small" />
+        <CnIcon noun="add" size="small" />
       </span>
       <span>
-        <Icon noun="reduce" size="small" />
+        <CnIcon noun="reduce" size="small" />
       </span>
       <span>
-        <Icon noun="delete" size="small" />
+        <CnIcon noun="delete" size="small" />
       </span>
     
     {#each clock.ticks as tick, i}
@@ -89,15 +89,15 @@ const clock = $state(
       <span>{tick}</span>
         <button type="button" class="text" onclick={() => increaseTick(i)}
             aria-label={t('actions:increase.tick')}>
-          <Icon noun="add" size="small" />
+          <CnIcon noun="add" size="small" />
         </button>
         <button type="button" class="text" onclick={() => decreaseTick(i)}
             aria-label={t('actions:decrease.tick')}>
-          <Icon noun="reduce" size="small" />
+          <CnIcon noun="reduce" size="small" />
         </button>
         <button type="button" class="text" onclick={() => clock.ticks.splice(i, 1)}
             aria-label={t('actions:delete.tick')}>
-          <Icon noun="delete" size="small" />
+          <CnIcon noun="delete" size="small" />
         </button>
     {/each}
     </div>
@@ -105,7 +105,7 @@ const clock = $state(
     <hr>
     <div class="toolbar justify-end">
     <button onclick={addTick} class="text" type="button">
-        <Icon noun="add" size="small" />
+        <CnIcon noun="add" size="small" />
         <span>{t('actions:create.tick')}</span>
     </button>
   </div>
@@ -113,7 +113,7 @@ const clock = $state(
 
   <div class="toolbar">
   <button type="submit">
-    <Icon noun="clock" />
+    <CnIcon noun="clock" />
     <span>{t('actions:save')}</span></button>
     </div>
   </form>

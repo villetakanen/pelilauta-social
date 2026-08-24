@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
 
@@ -14,12 +14,12 @@ const visible = $derived.by(() => {
 </script>
 {#if visible}
   <a href={`/create/thread?channel=${channel}`} class="fab">
-    <Icon noun="send" />
+    <CnIcon noun="send" />
     <span class="sm-hidden">{t('actions:create.thread')}</span>
   </a>
 {:else}
   <a href="/login" class="fab button">
-    <Icon noun="avatar" />
+    <CnIcon noun="avatar" />
     <span class="sm-hidden">{t('actions:login')}</span>
   </a>
 {/if}

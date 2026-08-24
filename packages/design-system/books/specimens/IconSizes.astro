@@ -8,7 +8,7 @@
  *
  * Book: apps/design/src/content/components/icon.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 import { parseTokens } from './tokenTable';
 
 interface Props {
@@ -73,7 +73,7 @@ if (unknown.length > 0) {
         {Object.keys(usage).length > 0 && <td>{usage[row.size] ?? ''}</td>}
         {/* Named so a browser check can measure the box the token produced. */}
         <td data-size={row.size}>
-          <Icon noun={noun} size={row.size as Size} />
+          <CnIcon noun={noun} size={row.size as Size} />
         </td>
       </tr>
     ))}

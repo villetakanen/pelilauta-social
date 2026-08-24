@@ -5,7 +5,8 @@
 @import "./tokens.css";
 @import "./fonts.css";
 @import "./typography.css";
-@import "./compat/cyan-typography.css";
+/* After typography: both correct an element the preflight reset stripped. */
+@import "./dividers.css";
 @import "./links.css";
 @import "./buttons.css";
 @import "./chip.css";

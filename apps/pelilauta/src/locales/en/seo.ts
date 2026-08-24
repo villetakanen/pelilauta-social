@@ -1,8 +1,15 @@
+/*
+ * What the service is, in one line. The front page and the login page make the
+ * same claim — a login page describes the service a reader is about to join,
+ * not a page of its own — so they read one string rather than two that drift.
+ */
+const service =
+  'Discuss role-playing games and create campaign wikis. Finnish RPG site by players, for players.';
+
 export const seo = {
   frontPage: {
     title: 'Pelilauta - RPG Forum and Campaign Tools',
-    description:
-      'Discuss role-playing games, create campaign wikis, and manage your characters. Finnish RPG site by players, for players.',
+    description: service,
   },
   channels: {
     title: 'Discussion Channels',
@@ -39,8 +46,7 @@ export const seo = {
   },
   login: {
     title: 'Log In',
-    description:
-      'Log in to Pelilauta to discuss, create sites, and manage your characters.',
+    description: service,
   },
   eula: {
     title: 'Terms of Use',

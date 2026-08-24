@@ -1,0 +1,28 @@
+/*
+ * The debug utility — specs/design-system/debug/spec.md.
+ *
+ * Not imported by ds.css: a consumer loads this only under its dev server, so
+ * a production build carries neither the utility nor the rowan scale.
+ *
+ * The substitution is chroma-to-chroma and complete. The generated role
+ * stylesheets emit on `:root, .debug`, so the marked element recomputes every
+ * role from the swapped chroma; a step missing here would half-theme the
+ * subtree silently.
+ */
+@import "./chroma-themes.css";
+
+.debug {
+  --chroma-surface-0: var(--chroma-rowan-0);
+  --chroma-surface-10: var(--chroma-rowan-10);
+  --chroma-surface-20: var(--chroma-rowan-20);
+  --chroma-surface-30: var(--chroma-rowan-30);
+  --chroma-surface-40: var(--chroma-rowan-40);
+  --chroma-surface-50: var(--chroma-rowan-50);
+  --chroma-surface-60: var(--chroma-rowan-60);
+  --chroma-surface-70: var(--chroma-rowan-70);
+  --chroma-surface-80: var(--chroma-rowan-80);
+  --chroma-surface-90: var(--chroma-rowan-90);
+  --chroma-surface-95: var(--chroma-rowan-95);
+  --chroma-surface-99: var(--chroma-rowan-99);
+  --chroma-surface-100: var(--chroma-rowan-100);
+}

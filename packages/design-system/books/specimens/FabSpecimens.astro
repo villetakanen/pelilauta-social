@@ -1,5 +1,4 @@
 ---
-import CnLoader from '../../components/CnLoader.svelte';
 /**
  * FabSpecimens — real floating action buttons, one group per axis.
  *
@@ -9,7 +8,8 @@ import CnLoader from '../../components/CnLoader.svelte';
  *
  * Book: apps/design/src/content/base/links-actions-buttons.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
+import CnLoader from '../../components/CnLoader.svelte';
 
 interface Props {
   /** Which axis to render. */
@@ -23,15 +23,15 @@ const { group } = Astro.props;
   {group === 'variants' && (
     <div class="row">
       <button type="button" class="fab">
-        <Icon noun="card" />
+        <CnIcon noun="card" />
         <span>Default</span>
       </button>
       <button type="button" class="fab cta">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
         <span>Call to action</span>
       </button>
       <button type="button" class="fab secondary">
-        <Icon noun="search" />
+        <CnIcon noun="search" />
         <span>Secondary</span>
       </button>
     </div>
@@ -40,20 +40,20 @@ const { group } = Astro.props;
   {group === 'sizes' && (
     <div class="row">
       <button type="button" class="fab" aria-label="Add, standard size">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
       </button>
       <button type="button" class="fab small" aria-label="Add, small size">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
       </button>
       <a class="fab" href="/base/links-actions-buttons" aria-label="Destination">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
       </a>
       <a
         class="button fab small"
         href="/base/links-actions-buttons"
         aria-label="Destination, small size"
       >
-        <Icon noun="add" />
+        <CnIcon noun="add" />
       </a>
     </div>
   )}
@@ -61,10 +61,10 @@ const { group } = Astro.props;
   {group === 'compositions' && (
     <div class="row">
       <button type="button" class="fab" aria-label="Add a thread">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
       </button>
       <button type="button" class="fab">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
         <span>Add a thread</span>
       </button>
       <button type="button" class="fab" disabled aria-label="Sending">
@@ -80,15 +80,15 @@ const { group } = Astro.props;
   {group === 'states' && (
     <div class="row">
       <button type="button" class="fab">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
         <span>Resting</span>
       </button>
       <button type="button" class="fab" disabled>
-        <Icon noun="add" />
+        <CnIcon noun="add" />
         <span>Disabled</span>
       </button>
       <a class="fab secondary" href="/base/links-actions-buttons">
-        <Icon noun="add" />
+        <CnIcon noun="add" />
         <span>Navigable</span>
       </a>
     </div>

@@ -5,7 +5,7 @@
  * It shows nothing either way: the outcome travels as `cn-share`, and a
  * consumer decides whether the reader is told.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   label,
@@ -63,6 +63,6 @@ async function share() {
   class="chrome-action cn-share-action"
   onclick={share}
 >
-  <Icon noun="share" decorative />
+  <CnIcon noun="share" decorative />
   <span>{label}</span>
 </button>

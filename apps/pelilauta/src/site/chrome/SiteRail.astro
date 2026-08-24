@@ -1,4 +1,5 @@
 ---
+import CnIcon from '@design-system/components/CnIcon.svelte';
 /**
  * The site application's rail: the design system's boxes, what stands in them
  * here.
@@ -8,7 +9,6 @@
  * owner tools — arrives as an island.
  */
 import CnRail from '@design-system/components/CnRail.astro';
-import Icon from '@design-system/components/Icon.svelte';
 import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
 import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
 import SiteToolEntries from '@pelilauta/site/client/SiteToolEntries.svelte';
@@ -37,7 +37,7 @@ function current(here: boolean) {
     href={root}
     aria-current={current(path === root)}
   >
-    <Icon noun={systemToNoun(site.system)} decorative />
+    <CnIcon noun={systemToNoun(site.system)} decorative />
     <span>{site.name}</span>
   </a>
 
@@ -46,7 +46,7 @@ function current(here: boolean) {
     href={`${root}/toc`}
     aria-current={current(path.startsWith(`${root}/toc`))}
   >
-    <Icon noun="books" decorative />
+    <CnIcon noun="books" decorative />
     <span>{t("site:toc.title")}</span>
   </a>
 
@@ -55,7 +55,7 @@ function current(here: boolean) {
     href={`${root}/assets`}
     aria-current={current(path.startsWith(`${root}/assets`))}
   >
-    <Icon noun="assets" decorative />
+    <CnIcon noun="assets" decorative />
     <span>{t("site:assets.title")}</span>
   </a>
 
@@ -66,7 +66,7 @@ function current(here: boolean) {
         href={`${root}/clocks`}
         aria-current={current(path === `${root}/clocks`)}
       >
-        <Icon noun="clock" decorative />
+        <CnIcon noun="clock" decorative />
         <span>{t("site:clocks.title")}</span>
       </a>
     )
@@ -80,7 +80,7 @@ function current(here: boolean) {
     in every rail.
   */}
   <a class="chrome-action" href="/" slot="footer">
-    <Icon noun="fox" decorative />
+    <CnIcon noun="fox" decorative />
     <span>{t("app:shortname")}</span>
   </a>
 

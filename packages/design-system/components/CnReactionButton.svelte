@@ -25,7 +25,7 @@
  * `pressed`, not on the click: the click is a request, and the landing is what
  * there is to celebrate. Its colour is the state the landing leaves behind.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   label,
@@ -79,11 +79,11 @@ $effect(() => {
   {onclick}
 >
   <span class="state-surface" aria-hidden="true">
-    <Icon noun="love" decorative size="small" />
+    <CnIcon noun="love" decorative size="small" />
     {#key activations}
       {#if activations}
         <span class="burst" class:love={pressed}>
-          <Icon noun="love" decorative size="small" />
+          <CnIcon noun="love" decorative size="small" />
         </span>
       {/if}
     {/key}
@@ -107,7 +107,7 @@ $effect(() => {
     padding: 0;
     border: none;
     background: none;
-    color: var(--cn-text-low);
+    color: var(--cn-color-text-low);
     cursor: pointer;
   }
 
@@ -116,7 +116,7 @@ $effect(() => {
   }
 
   .cn-reaction-button:focus-visible {
-    outline: 2px solid var(--cn-focus-ring);
+    outline: 2px solid var(--cn-color-focus-ring);
     outline-offset: 2px;
   }
 
@@ -135,7 +135,7 @@ $effect(() => {
     inline-size: calc(var(--cn-line) * 2 - var(--cn-grid) * 0.5);
     block-size: calc(var(--cn-line) * 2 - var(--cn-grid) * 0.5);
     border-radius: 50%;
-    background: var(--cn-button-text);
+    background: var(--cn-color-button-text);
     /* A zero-size shadow at rest, so hover spreads the elevation — see
        styles/buttons.css. */
     box-shadow: 0 0 0 var(--cn-shadow-color);
@@ -153,7 +153,7 @@ $effect(() => {
       var(--_love) 11%,
       var(--cn-color-error) 90%
     );
-    color: var(--cn-surface);
+    color: var(--cn-color-surface);
   }
 
   /*
@@ -176,11 +176,11 @@ $effect(() => {
   }
 
   .cn-reaction-button:enabled:hover .state-surface::after {
-    background-color: var(--cn-hover);
+    background-color: var(--cn-color-hover);
   }
 
   .cn-reaction-button:enabled:active .state-surface::after {
-    background-color: var(--cn-active);
+    background-color: var(--cn-color-active);
   }
 
   .count {

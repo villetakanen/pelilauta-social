@@ -5,7 +5,7 @@ order: 28
 runtime: progressive
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import LightboxSpecimens from '@design-system/books/specimens/LightboxSpecimens.svelte'
 
 Use CnLightbox to carry a poster's media inside their message and let their audience
@@ -22,18 +22,18 @@ instead.
 
 A single image renders as one 16:9 figure, its caption below it.
 
-<Composition themes caption="One image, in Light and Dark">
+<DsComposition themes caption="One image, in Light and Dark">
   <LightboxSpecimens group="single" client:load />
-</Composition>
+</DsComposition>
 
 Several images render as a strip of square thumbnails in supplied order, each
 caption overlaid on its thumbnail. The strip overflows on the inline axis through
 the platform's scrolling, and a fade at its trailing edge signals the thumbnails
 still off screen.
 
-<Composition themes stack breakout caption="Five images, overflowing a panel, in Light and Dark">
+<DsComposition themes stack breakout caption="Five images, overflowing a panel, in Light and Dark">
   <LightboxSpecimens group="strip" client:load />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
@@ -57,15 +57,15 @@ An image can carry an empty caption — live data does, and CnLightbox supports 
 rather than treating it as an authoring mistake. The image control still needs an
 accessible name, so `openLabel` supplies it in place of the missing caption.
 
-<Composition themes caption="An image with an empty caption, in Light and Dark">
+<DsComposition themes caption="An image with an empty caption, in Light and Dark">
   <LightboxSpecimens group="uncaptioned" client:load />
-</Composition>
+</DsComposition>
 
 An empty `images` renders nothing at all.
 
-<Composition themes caption="An empty images array, in Light and Dark: nothing renders">
+<DsComposition themes caption="An empty images array, in Light and Dark: nothing renders">
   <LightboxSpecimens group="empty" client:load />
-</Composition>
+</DsComposition>
 
 ## Reference
 

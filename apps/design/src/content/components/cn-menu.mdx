@@ -6,7 +6,7 @@ runtime: interactive
 ---
 
 import MenuSpecimen from '@design-system/books/specimens/MenuSpecimen.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 Use a menu to move a surface's secondary commands off it, so a toolbar shows its
 primary actions and nothing else.
@@ -28,23 +28,23 @@ has one destination for it.
 The items are authored, not passed as data. Write the anchor that navigates and the
 button that commands, and the menu lays them out as rows.
 
-<Composition themes caption="CnMenu with an anchor and two commands, in Light and Dark">
+<DsComposition themes caption="CnMenu with an anchor and two commands, in Light and Dark">
   <MenuSpecimen client:load />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
   import CnMenu from '@design-system/components/CnMenu.svelte'
-  import Icon from '@design-system/components/Icon.svelte'
+  import CnIcon from '@design-system/components/CnIcon.svelte'
 </script>
 
 <CnMenu label="Lisää toimintoja">
   <a href={`/threads/${key}/fork`}>
-    <Icon noun="card" decorative />
+    <CnIcon noun="card" decorative />
     <span>Haarauta</span>
   </a>
   <button type="button" onclick={remove}>
-    <Icon noun="delete" decorative />
+    <CnIcon noun="delete" decorative />
     <span>Poista</span>
   </button>
 </CnMenu>
@@ -58,9 +58,9 @@ trigger renders and opens nothing.
 `inline` turns the glyph on its side, for a menu that sits in a row of text rather
 than at the end of a toolbar.
 
-<Composition themes caption="The inline trigger, in Light and Dark">
+<DsComposition themes caption="The inline trigger, in Light and Dark">
   <MenuSpecimen client:load inline />
-</Composition>
+</DsComposition>
 
 ## Reference
 
@@ -73,7 +73,7 @@ than at the end of a toolbar.
 | `noun` | `string` | The trigger's glyph, where the menu is not the more-options one — a chat bar's `add`. Defaults to the pair `inline` selects. |
 | `opens` | `'block-end' \| 'block-start'` | Which side of the trigger the surface opens toward. Defaults to `block-end`, below it; `block-start` suits a trigger at its container's block end. |
 | `chrome` | `boolean` | Gives the trigger the chrome action's presentation instead of the text button's, for a menu standing beside other chrome actions. |
-| `children` | `Snippet` | The items. Each is an anchor with a destination or a button, holding a leading `Icon` and a `span` label. |
+| `children` | `Snippet` | The items. Each is an anchor with a destination or a button, holding a leading `CnIcon` and a `span` label. |
 
 An item keeps the element it was written as, so a command that navigates on success
 stays a button and a destination stays an anchor. Activating either one closes the

@@ -7,8 +7,9 @@
  *
  * Book: apps/design/src/content/components/cn-menu.mdx
  */
+
+import CnIcon from '../../components/CnIcon.svelte';
 import CnMenu from '../../components/CnMenu.svelte';
-import Icon from '../../components/Icon.svelte';
 
 let { inline = false }: { inline?: boolean } = $props();
 
@@ -18,15 +19,15 @@ let performed = $state('—');
 <div class="menu-specimen" data-trigger={inline ? 'dots' : 'kebab'}>
   <CnMenu {inline}>
     <a href="/components/cn-menu">
-      <Icon noun="card" decorative />
+      <CnIcon noun="card" decorative />
       <span>Haarauta</span>
     </a>
     <button type="button" onclick={() => (performed = 'Muokkaa')}>
-      <Icon noun="font" decorative />
+      <CnIcon noun="font" decorative />
       <span>Muokkaa</span>
     </button>
     <button type="button" onclick={() => (performed = 'Poista')}>
-      <Icon noun="delete" decorative />
+      <CnIcon noun="delete" decorative />
       <span>Poista</span>
     </button>
   </CnMenu>

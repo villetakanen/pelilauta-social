@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Handout } from 'src/schemas/HandoutSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { update } from 'src/stores/site/handouts';
@@ -83,7 +83,7 @@ async function onSubmit(e: Event) {
             <button
               aria-label={t('actions:delete')} 
               onclick={() => dropReader(reader)}>
-              <Icon noun="delete" />
+              <CnIcon noun="delete" />
             </button>
           </div>  
         {/each}

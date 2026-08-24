@@ -10,7 +10,7 @@
  * Book: apps/design/src/content/components/cn-chat-bar.mdx
  */
 import CnChatBar from '../../components/CnChatBar.svelte';
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 
 let value = $state('');
 let sent = $state<string[]>([]);
@@ -41,31 +41,31 @@ const readout = $derived(
       {#if attached}
         {#snippet supporting()}
           <span class="attachment-chip">
-            <Icon noun="assets" decorative />
+            <CnIcon noun="assets" decorative />
             <span>kartta.png</span>
             <button
               type="button"
               aria-label="Poista liite"
               onclick={() => (attached = false)}
             >
-              <Icon noun="delete" decorative />
+              <CnIcon noun="delete" decorative />
             </button>
           </span>
         {/snippet}
       {/if}
       {#snippet menu()}
         <button type="button" onclick={() => (attached = true)}>
-          <Icon noun="assets" decorative />
+          <CnIcon noun="assets" decorative />
           <span>Lisää kuva</span>
         </button>
         <button type="button" onclick={() => (attached = false)}>
-          <Icon noun="delete" decorative />
+          <CnIcon noun="delete" decorative />
           <span>Poista liite</span>
         </button>
       {/snippet}
       {#snippet trailing()}
         <button type="button" class="chrome-action" aria-label="Lähetä" onclick={() => onsend(value)}>
-          <Icon noun="send" decorative />
+          <CnIcon noun="send" decorative />
         </button>
       {/snippet}
     </CnChatBar>
@@ -87,8 +87,8 @@ const readout = $derived(
     container: app-chrome / inline-size;
     overflow: hidden;
     block-size: 16rem;
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
     border: 1px solid var(--cn-color-border);
   }
 
@@ -107,8 +107,8 @@ const readout = $derived(
     align-items: center;
     gap: var(--cn-grid);
     padding: var(--cn-grid) var(--cn-gap);
-    color: var(--cn-text);
-    background: var(--cn-surface-1);
+    color: var(--cn-color-text);
+    background: var(--cn-color-surface-1);
     border-radius: var(--cn-border-radius-medium);
   }
 

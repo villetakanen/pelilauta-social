@@ -5,7 +5,7 @@ order: 10
 runtime: interactive
 ---
 
-import Composition from '@design-system/books/specimens/Composition.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import EditorSpecimen from '@editor/books/EditorSpecimen.svelte'
 
 Use CnEditor where writing is the whole screen: a thread, a page, a handout. Give the
@@ -22,9 +22,9 @@ their place in a layout the way this component does not.
 
 ## Example
 
-<Composition caption="The editor at rest, with markdown already in it">
+<DsComposition caption="The editor at rest, with markdown already in it">
   <EditorSpecimen client:only="svelte" />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>

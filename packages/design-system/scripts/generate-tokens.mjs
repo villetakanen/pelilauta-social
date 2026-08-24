@@ -8,6 +8,7 @@
  * - tokens/units.json               → styles/units.css
  * - tokens/semantic-color.json      → styles/semantic.css
  * - tokens/elevation.json           → styles/elevation.css
+ * - tokens/transparency.json        → styles/transparency.css
  *
  * The theme contract (specs/design-system/color-system/spec.md):
  * - a core family carries the complete 13-step scale, an auxiliary family
@@ -89,6 +90,9 @@ const semantic = JSON.parse(
 const elevation = JSON.parse(
   readFileSync(path('tokens/elevation.json'), 'utf8'),
 );
+const transparency = JSON.parse(
+  readFileSync(path('tokens/transparency.json'), 'utf8'),
+);
 
 /* ----- units ----- */
 
@@ -157,6 +161,11 @@ const layers = [
     source: 'tokens/elevation.json',
     tokens: elevation.tokens ?? {},
     units: true,
+  },
+  {
+    source: 'tokens/transparency.json',
+    tokens: transparency.tokens ?? {},
+    units: false,
   },
 ];
 const layerOf = new Map(); // token name → layer index
@@ -261,7 +270,7 @@ const substitute = (value) =>
 
 const header = (source) => `/*
  * Generated from ${source} by scripts/generate-tokens.mjs.
- * Do not edit: change the JSON source and run \`pnpm generate:tokens\`.
+ * Do not edit: change the JSON source and run \`pnpm generate:tokens\` from the repository root.
  */
 `;
 
@@ -315,7 +324,12 @@ function roleCss(source, tokens) {
         : `light-dark(${substitute(token.light)}, ${substitute(token.dark)})`;
     lines.push(`  --${name}: ${value};`);
   }
-  return `${header(source)}:root {
+  // A custom property computes where it is declared, so a chroma swap scoped
+  // to an element cannot reach a role computed on :root. The .debug arm makes
+  // the marked element recompute every role from its own chroma
+  // (specs/design-system/debug/spec.md).
+  return `${header(source)}:root,
+.debug {
 ${lines.join('\n')}
 }
 `;
@@ -351,6 +365,10 @@ const outputs = [
     roleCss('tokens/semantic-color.json', semantic.tokens),
   ],
   ['styles/elevation.css', roleCss('tokens/elevation.json', elevation.tokens)],
+  [
+    'styles/transparency.css',
+    roleCss('tokens/transparency.json', transparency.tokens),
+  ],
 ].map(([relative, css]) => [relative, format(relative, css)]);
 
 if (process.argv.includes('--check')) {
@@ -363,7 +381,7 @@ if (process.argv.includes('--check')) {
     if (committed !== css) {
       console.error(
         `${relative} differs from its token source. ` +
-          'The JSON is the writable source: edit it and run `pnpm generate:tokens`.',
+          'The JSON is the writable source: edit it and run `pnpm generate:tokens` from the repository root.',
       );
       clean = false;
     }

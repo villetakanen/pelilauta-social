@@ -33,8 +33,8 @@
  * Book: apps/design/src/content/components/cn-rail.mdx
  */
 import CnAppBar from '../../components/CnAppBar.astro';
+import CnIcon from '../../components/CnIcon.svelte';
 import CnRail from '../../components/CnRail.astro';
-import Icon from '../../components/Icon.svelte';
 
 interface Props {
   /** Which axis to render. */
@@ -53,21 +53,21 @@ const MODES = ['light', 'dark'] as const;
         <div class="frame expanded">
           <CnRail id={`rail-canonical-${mode}`} label="Kirjaston sivut">
             <a class="chrome-action" href="/haku" slot="header">
-              <Icon noun="search" decorative />
+              <CnIcon noun="search" decorative />
               <span>Haku</span>
             </a>
 
             <a class="chrome-action" href="/" aria-current="page">
-              <Icon noun="fox" decorative />
+              <CnIcon noun="fox" decorative />
               <span>Etusivu</span>
             </a>
             <a class="chrome-action" href="/kirjasto">
-              <Icon noun="books" decorative />
+              <CnIcon noun="books" decorative />
               <span>Kirjasto</span>
             </a>
 
             <a class="chrome-action" href="/ilmoitukset" slot="footer">
-              <Icon noun="send" decorative />
+              <CnIcon noun="send" decorative />
               <span>Ilmoitukset</span>
             </a>
           </CnRail>
@@ -81,21 +81,21 @@ const MODES = ['light', 'dark'] as const;
             <div class="frame collapsed">
               <CnRail id={`rail-boxes-full-${mode}`} label="Kirjaston sivut">
                 <a class="chrome-action" href="/haku" slot="header">
-                  <Icon noun="search" decorative />
+                  <CnIcon noun="search" decorative />
                   <span>Haku</span>
                 </a>
 
                 <a class="chrome-action" href="/" aria-current="page">
-                  <Icon noun="fox" decorative />
+                  <CnIcon noun="fox" decorative />
                   <span>Etusivu</span>
                 </a>
                 <a class="chrome-action" href="/kirjasto">
-                  <Icon noun="books" decorative />
+                  <CnIcon noun="books" decorative />
                   <span>Kirjasto</span>
                 </a>
 
                 <a class="chrome-action" href="/ilmoitukset" slot="footer">
-                  <Icon noun="send" decorative />
+                  <CnIcon noun="send" decorative />
                   <span>Ilmoitukset</span>
                 </a>
               </CnRail>
@@ -107,11 +107,11 @@ const MODES = ['light', 'dark'] as const;
             <div class="frame collapsed">
               <CnRail id={`rail-boxes-body-${mode}`} label="Kirjaston sivut">
                 <a class="chrome-action" href="/" aria-current="page">
-                  <Icon noun="fox" decorative />
+                  <CnIcon noun="fox" decorative />
                   <span>Etusivu</span>
                 </a>
                 <a class="chrome-action" href="/kirjasto">
-                  <Icon noun="books" decorative />
+                  <CnIcon noun="books" decorative />
                   <span>Kirjasto</span>
                 </a>
               </CnRail>
@@ -125,11 +125,11 @@ const MODES = ['light', 'dark'] as const;
           <CnAppBar title="Kirjaston sivut" noun="fox" />
           <CnRail id={`rail-alignment-${mode}`} label="Kirjaston sivut">
             <a class="chrome-action" href="/haku" slot="header">
-              <Icon noun="search" decorative />
+              <CnIcon noun="search" decorative />
               <span>Haku</span>
             </a>
             <a class="chrome-action" href="/" aria-current="page">
-              <Icon noun="fox" decorative />
+              <CnIcon noun="fox" decorative />
               <span>Etusivu</span>
             </a>
           </CnRail>
@@ -149,8 +149,8 @@ const MODES = ['light', 'dark'] as const;
     display: grid;
     row-gap: var(--cn-line);
     padding: var(--cn-gap);
-    color: var(--cn-text);
-    background: var(--cn-background);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
   }
 
   .comparison {
@@ -214,7 +214,7 @@ const MODES = ['light', 'dark'] as const;
       1px +
       var(--cn-gap)
     );
-    background: var(--cn-surface);
+    background: var(--cn-color-surface);
     border: 1px solid var(--cn-color-border);
   }
 

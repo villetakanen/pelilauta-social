@@ -7,8 +7,8 @@
  * collection stands here without anything else changing.
  */
 import { getCollection } from 'astro:content';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnRail from '@design-system/components/CnRail.astro';
-import Icon from '@design-system/components/Icon.svelte';
 import SettingNavigationButton from '@pelilauta/components/svelte/app/SettingNavigationButton.svelte';
 import InboxNavigationButton from '@pelilauta/components/svelte/inbox/InboxNavigationButton.svelte';
 import { t } from 'src/utils/i18n';
@@ -27,7 +27,7 @@ const path = Astro.url.pathname;
         href={`/docs/${article.id}`}
         aria-current={path === `/docs/${article.id}` ? 'page' : undefined}
       >
-        <Icon noun={article.data.noun ?? "info"} decorative />
+        <CnIcon noun={article.data.noun ?? "info"} decorative />
         <span>{article.data.shortname ?? article.data.name}</span>
       </a>
     ))
@@ -36,7 +36,7 @@ const path = Astro.url.pathname;
   {/* The way to Pelilauta stands here because this application's bar names the
       documentation instead. */}
   <a class="chrome-action" href="/" slot="footer">
-    <Icon noun="fox" decorative />
+    <CnIcon noun="fox" decorative />
     <span>{t("app:shortname")}</span>
   </a>
 

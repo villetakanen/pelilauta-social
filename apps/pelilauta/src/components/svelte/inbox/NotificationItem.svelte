@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { deleteNotification } from 'src/firebase/client/inbox/deleteNotification';
 import { markRead } from 'src/firebase/client/inbox/markRead';
 import type { Notification } from 'src/schemas/NotificationSchema';
@@ -56,7 +56,7 @@ async function remove() {
 <article
   class={`notification-item flex flex-no-wrap mb-1 p-1 border-radius ${notification.read ? "" : "elevation-4"}`}
 >
-  <span class="mt-1 flex-none"><Icon {noun} size="small" /></span>
+  <span class="mt-1 flex-none"><CnIcon {noun} size="small" /></span>
   <div class="grow">
     <p class="m-0">
       <ProfileLink uid={notification.from} />
@@ -76,11 +76,11 @@ async function remove() {
       onclick={read}
       aria-label={t("actions:markRead")}
     >
-      <Icon noun="check" />
+      <CnIcon noun="check" />
     </button>
   {:else}
     <button class="text flex-none" aria-label="delete" onclick={remove}>
-      <Icon noun="delete" />
+      <CnIcon noun="delete" />
     </button>
   {/if}
 </article>
@@ -88,7 +88,7 @@ async function remove() {
 <style>
   .notification-item.elevation-4,
   .notification-item.elevation-4 :global(a) {
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .notification-item.elevation-4 :global(a:focus-visible) {
@@ -96,7 +96,7 @@ async function remove() {
   }
 
   .notification-item.elevation-4 button.text {
-    color: var(--cn-text-high);
+    color: var(--cn-color-text-high);
   }
 
   .notification-item.elevation-4 button.text:focus-visible {

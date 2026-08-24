@@ -1,0 +1,113 @@
+---
+/**
+ * DsTokenTable — a lexicon's table of declarations, read from a stylesheet.
+ *
+ * A renderer over parseTokens, which holds the logic. It carries no styling:
+ * books render plain until the design system owns typography and content grids.
+ *
+ * Book: apps/design/src/content/components/token-table.mdx
+ */
+import { parseTokens } from './tokenTable';
+
+interface Props {
+  /** The stylesheet, imported by the book with `?raw`. */
+  source: string;
+  /** Exact names to show. Mutually exclusive with `prefix`. */
+  names?: readonly string[];
+  /** Show every declaration whose name starts with this. */
+  prefix?: string;
+  /** Drop declarations whose name contains this, after the include filter. */
+  without?: string;
+  /** Column heading for the trailing-comment column. */
+  noteLabel?: string;
+  /** Names what the reader is looking at, as the table's caption. */
+  caption?: string;
+  /**
+   * Show each token as a colour chip. The chip resolves through the live
+   * cascade, so it shows the current theme's arm of a `light-dark()`.
+   */
+  swatch?: boolean;
+}
+
+const {
+  source,
+  names,
+  prefix,
+  without,
+  noteLabel = 'Resolves to',
+  caption,
+  swatch = false,
+} = Astro.props;
+
+const tokens = parseTokens(source, { names, prefix, without });
+
+/**
+ * A renamed or removed token would otherwise render an empty table and report no
+ * error. Failing the build surfaces it.
+ */
+if (tokens.length === 0) {
+  throw new Error(
+    `DsTokenTable matched no declarations (${
+      names ? `names: ${names.join(', ')}` : `prefix: ${prefix ?? 'none'}`
+    }${
+      without ? `, without: ${without}` : ''
+    }). The stylesheet no longer declares what this book claims it does.`,
+  );
+}
+
+const hasNotes = tokens.some((token) => token.note);
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr>
+      {/* The chip repeats the value beside it, so it is decorative and the
+          column needs no accessible name of its own. */}
+      {swatch && <th scope="col"><span class="visually-hidden">Swatch</span></th>}
+      <th scope="col">Token</th>
+      <th scope="col">Declared value</th>
+      {hasNotes && <th scope="col">{noteLabel}</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {tokens.map((token) => (
+      <tr>
+        {swatch && (
+          <td>
+            {/* Named so a browser check can target one role's resolved colour;
+                the cascade is the only place that fact exists. */}
+            <span
+              class="swatch"
+              data-swatch={token.name}
+              style={`background: var(${token.name});`}
+            ></span>
+          </td>
+        )}
+        <th scope="row"><code>{token.name}</code></th>
+        <td><code>{token.value}</code></td>
+        {hasNotes && <td>{token.note ?? ''}</td>}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  /* The chip has no meaning without a size, so it is stated here rather than
+     left to a stylesheet the design system does not own yet. */
+  .swatch {
+    display: block;
+    inline-size: 2.5rem;
+    block-size: 1.5rem;
+    border: 1px solid var(--cn-color-border);
+    border-radius: var(--cn-border-radius-small);
+  }
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+</style>

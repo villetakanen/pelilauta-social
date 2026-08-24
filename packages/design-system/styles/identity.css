@@ -9,16 +9,16 @@
 
 .cn-nick {
   font-weight: var(--cn-font-weight-emphasis);
-  color: var(--cn-text-high);
+  color: var(--cn-color-text-high);
   text-decoration: none;
 }
 
 a.cn-nick:hover {
-  color: var(--cn-link-hover);
+  color: var(--cn-color-link-hover);
 }
 
 a.cn-nick:active {
-  color: var(--cn-link-active);
+  color: var(--cn-color-link-active);
 }
 
 /* An anchor around the pictorial mark is the mark's own box: no underline
@@ -38,7 +38,7 @@ a:has(> .cn-avatar):focus-visible {
 }
 
 a:focus-visible .cn-avatar {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -86,9 +86,9 @@ a:focus-visible .cn-avatar {
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   box-shadow: var(--cn-shadow-elevation-1);
-  background: var(--cn-surface-2);
-  color: var(--cn-on-surface);
-  font-family: var(--cn-font-family-ui);
+  background: var(--cn-color-surface-2);
+  color: var(--cn-color-on-surface);
+  font-family: var(--cn-font-family);
   font-weight: var(--cn-font-weight-emphasis);
   /* Below the initials' step: the count runs to three characters, they run to two. */
   font-size: calc(var(--cn-avatar-size-medium) * 0.3);

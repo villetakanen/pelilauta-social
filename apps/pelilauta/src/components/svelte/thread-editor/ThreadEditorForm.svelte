@@ -8,9 +8,10 @@
  * dirty. The shell also asks before a dirty departure, so this form saves and
  * navigates, and guards nothing itself.
  */
+
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import CnEditorShell from '@editor/CnEditorShell.svelte';
 import type { Channel } from 'src/schemas/ChannelSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
@@ -199,7 +200,7 @@ function cancel() {
       {#if saving}
         <CnLoader inline noun="send" />
       {:else}
-        <Icon noun="send" />
+        <CnIcon noun="send" />
       {/if}
       <span>{t('actions:send')}</span>
     </button>

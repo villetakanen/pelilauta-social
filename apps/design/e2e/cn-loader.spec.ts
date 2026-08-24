@@ -23,6 +23,13 @@ test('renders standalone default CnLoader with ARIA role and noun icon', async (
 
   const icon = loader.locator('.cn-icon');
   await expect(icon).toHaveAttribute('data-noun', 'fox');
+
+  // Decorative: the status region announces only its label, and the glyph
+  // carries no tooltip.
+  const svg = icon.locator('svg');
+  await expect(svg).toHaveAttribute('aria-hidden', 'true');
+  await expect(svg).not.toHaveAttribute('role', 'img');
+  await expect(svg.locator('title')).toHaveCount(0);
 });
 
 test('renders inline variant with 24px dimensions matching var(--cn-line)', async ({
@@ -71,7 +78,7 @@ test('auto-centers horizontally inside a section container', async ({
   }
 });
 
-test('paints the ring in the light-scheme --cn-loader-color role', async ({
+test('paints the standalone ring in the light-scheme loader role', async ({
   page,
 }) => {
   const colors = await page.evaluate(() => {
@@ -90,6 +97,30 @@ test('paints the ring in the light-scheme --cn-loader-color role', async ({
   });
   expect(colors).not.toBeNull();
   expect(colors?.ring).toBe(colors?.reference);
+});
+
+test('an inline loader inside a disabled button computes the button foreground', async ({
+  page,
+}) => {
+  const colors = await page.evaluate(() => {
+    const button = document.querySelector(
+      '[data-mode="light"] [data-variant="button"] button[disabled]',
+    );
+    const loader = button?.querySelector('.cn-loader');
+    const ring = button?.querySelector('.lds-dual-ring');
+    const icon = button?.querySelector('.cn-icon');
+    if (!button || !loader || !ring || !icon) return null;
+    return {
+      button: getComputedStyle(button).color,
+      loader: getComputedStyle(loader).color,
+      ring: getComputedStyle(ring, '::after').borderTopColor,
+      icon: getComputedStyle(icon).color,
+    };
+  });
+  expect(colors).not.toBeNull();
+  expect(colors?.loader).toBe(colors?.button);
+  expect(colors?.ring).toBe(colors?.button);
+  expect(colors?.icon).toBe(colors?.button);
 });
 
 test('ring animation resolves to none under prefers-reduced-motion: reduce', async ({

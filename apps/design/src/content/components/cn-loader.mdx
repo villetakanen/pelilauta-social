@@ -7,8 +7,8 @@ runtime: static
 
 import CnLoader from '@design-system/components/CnLoader.svelte'
 import LoaderSpecimens from '@design-system/books/specimens/LoaderSpecimens.svelte'
-import Composition from '@design-system/books/specimens/Composition.astro'
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import loaderSource from '@design-system/styles/loader.css?raw'
 
 `CnLoader` combines two visual signals: a spinning dual ring indicating active background
@@ -20,7 +20,7 @@ processing, and a centred static icon identifying the entity or domain being loa
 - Pass the semantic noun corresponding to the subject being loaded (for example, `noun="fox"` for user feeds).
 - Use `inline` mode when placing the loader on a text line or beside an action label.
 
-In a button, render the command's `Icon` while the control is ready and an inline
+In a button, render the command's `CnIcon` while the control is ready and an inline
 `CnLoader` with the same noun while it processes. The glyph stays where it was and takes
 the ring around it, so the control reads as the same button, busy.
 [Links, Actions and Buttons](/base/links-actions-buttons) specifies the composition.
@@ -30,22 +30,22 @@ the ring around it, so the control reads as the same button, busy.
   {#if sending}
     <CnLoader inline noun="send" />
   {:else}
-    <Icon noun="send" />
+    <CnIcon noun="send" />
   {/if}
   <span>Send</span>
 </button>
 ```
 
-<Composition themes caption="The same noun and label: the button ready, and the button processing">
+<DsComposition themes caption="The same noun and label: the button ready, and the button processing">
   <LoaderSpecimens group="button" />
-</Composition>
+</DsComposition>
 
 ## Example
 
-<Composition themes caption="Standalone and inline loaders in Light and Dark">
+<DsComposition themes caption="Standalone and inline loaders in Light and Dark">
   <LoaderSpecimens group="basic" />
   <LoaderSpecimens group="inline" />
-</Composition>
+</DsComposition>
 
 ```svelte
 <script>
@@ -70,20 +70,20 @@ the ring around it, so the control reads as the same button, busy.
 
 ### Semantic noun assignment
 
-Any approved catalogue noun can be passed to `noun`. Unknown nouns fall back to the standard missing glyph via `Icon`.
+Any approved catalogue noun can be passed to `noun`. Unknown nouns fall back to the standard missing glyph via `CnIcon`.
 
-<Composition themes caption="Custom noun with accessible descriptive label">
+<DsComposition themes caption="Custom noun with accessible descriptive label">
   <LoaderSpecimens group="custom" />
-</Composition>
+</DsComposition>
 
 ## Composition
 
 A loader placed as a direct child of `<section>` or `<article>` is automatically centred
 horizontally with 1 line of vertical margin via `styles/loader.css`.
 
-<Composition themes caption="Standalone loader as direct child of a section">
+<DsComposition themes caption="Standalone loader as direct child of a section">
   <LoaderSpecimens group="section" />
-</Composition>
+</DsComposition>
 
 Within custom layout containers (such as inside a `CnCard`), the parent container must
 explicitly position and centre the loader.
@@ -100,17 +100,19 @@ explicitly position and centre the loader.
 
 ### Tokens
 
-<TokenTable
+<DsTokenTable
   source={loaderSource}
   prefix="--cn-loader"
   caption="Loader geometry from styles/loader.css"
 />
 
-The ring and centred icon share a component-private colour, `--_loader-color`, declared
-on `CnLoader.svelte`'s root rather than published on `:root`: `light-dark(--chroma-primary-60,
---chroma-surface-60)`, chroma step 60 of the primary family in Light and step 60 of the
-surface family in Dark. The ring renders it at 0.72 opacity and the centred icon at 0.44
-opacity.
+The ring and centred icon share one colour. A standalone loader takes a component-private
+colour, `--_loader-color`, declared on `CnLoader.svelte`'s root rather than published on
+`:root`: `light-dark(--chroma-primary-60, --chroma-surface-60)`, chroma step 60 of the
+primary family in Light and step 60 of the surface family in Dark. An inline loader
+inherits its context's foreground instead — inside a button it is painted with the
+button's colour, as the composition above shows. The ring renders the colour at 0.72
+opacity and the centred icon at 0.44 opacity.
 
 ## Accessibility
 

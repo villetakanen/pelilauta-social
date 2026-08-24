@@ -4,7 +4,8 @@ description: "Declared typography tokens: font sizes, line heights, font weights
 order: 7
 ---
 
-import TokenTable from '@design-system/books/specimens/TokenTable.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
 import typographySource from '@design-system/styles/typography.css?raw'
 
 Declared typography custom properties. Typeface assignments are defined in
@@ -17,7 +18,7 @@ Font sizes scale by an Augmented Fourth multiplier (1:1.414) from the 17px readi
 The `small` step sits outside the scale. The step set is closed: adding one is a spec change.
 All values use `rem` and scale with the user's browser font size settings.
 
-<TokenTable
+<DsTokenTable
   source={typographySource}
   prefix="--cn-font-size"
   noteLabel="At a 16px default"
@@ -28,7 +29,7 @@ All values use `rem` and scale with the user's browser font size settings.
 Line heights are multiples of `--cn-line` (24px). Each step takes the smallest multiple that
 clears its text, except h1, which takes four rather than three.
 
-<TokenTable
+<DsTokenTable
   source={typographySource}
   prefix="--cn-line-height"
   noteLabel="At a 16px default"
@@ -38,13 +39,13 @@ clears its text, except h1, which takes four rather than three.
 
 Declared font weights for body copy, headings, and emphasis.
 
-<TokenTable source={typographySource} prefix="--cn-font-weight" />
+<DsTokenTable source={typographySource} prefix="--cn-font-weight" />
 
 ## Letter spacing
 
 Tracking values applied to headings, body text, and captions.
 
-<TokenTable source={typographySource} prefix="--cn-letter-spacing" />
+<DsTokenTable source={typographySource} prefix="--cn-letter-spacing" />
 
 ## HTML element and utility mapping
 
@@ -58,6 +59,17 @@ Matching utility classes are provided for all steps: `.text-body`, `.text-h1` th
 `.text-caption` and `.text-label` share the caption font size and line height:
 - `.text-caption` applies uppercase transformation in Lato.
 - `.text-label` preserves source casing and renders in Roboto Mono for identifiers, technical codes, and metadata.
+
+## Alignment
+
+Two utilities, named after the `text-align` value each sets. `start` is the
+inherited default and needs no class.
+
+<DsComposition caption="The two alignment utilities, against the inherited default">
+  <p>No class: text starts where the reader's writing mode starts.</p>
+  <p class="text-center"><code>.text-center</code></p>
+  <p class="text-end"><code>.text-end</code></p>
+</DsComposition>
 
 ## Container-responsive heading downscaling
 

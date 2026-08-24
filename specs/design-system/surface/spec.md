@@ -30,13 +30,19 @@ sets `background-color` and `box-shadow`, consuming the surface and shadow roles
 defined by `specs/design-system/design-tokens/spec.md`. Components such as Card
 compose these utilities rather than restating their declarations.
 
-| level | means | Light background | Dark background | standalone shadow |
-| :--- | :--- | :--- | :--- | :--- |
-| 0 | the application itself | surface 95 | surface 20 | none |
-| 1 | payload | surface 100 | surface 20, a third of the way to 40 | none |
-| 2 | payload inside payload | surface 100 | surface 20, a third of the way to 40 | `--cn-shadow-elevation-2` |
-| 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` |
-| 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` |
+| level | means | Light background | Dark background | standalone shadow | under a poster |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| — | the canvas | surface 95 | surface 20 | none | behind the artwork, opaque |
+| 0 | the application itself | surface 95 | surface 20 | none | a wide share |
+| 1 | payload | surface 100 | surface 20, a third of the way to 40 | none | a narrow share |
+| 2 | payload inside payload | surface 100 | surface 20, a third of the way to 40 | `--cn-shadow-elevation-2` | a narrow share |
+| 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` | opaque |
+| 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` | opaque |
+
+The canvas is not a level a consumer selects: it is the page's ground, painting level
+0's colour because level 0 is what the page is. A poster paints over it and dissolves its
+lower edge back into it, which is why the canvas stays opaque while a level 0 surface
+standing over the same artwork does not.
 
 A surface at level 0 claims no separation from the application. Level 1 holds what a
 reader came to read or use, and is the default. Level 2 is the rise that keeps payload
@@ -67,7 +73,20 @@ Without a positive-level elevated ancestor, the standalone shadow applies.
 
 ### Constraints
 
-`.elevation-0` paints the page background colour.
+`.elevation-0` paints the page background colour. Where a poster paints that background
+instead, the levels standing on the artwork cede to it. The ground plane takes a wide
+share, because a page standing over artwork is meant to show it. Payload takes a narrow
+one: enough of the artwork reaches through it to place it on the page, and it stays
+legible.
+
+Levels 3 and 4 keep their opacity. They float over content rather than over the page, so
+a share there would show whatever they cover rather than the artwork.
+
+Both shares are rungs of the transparency ladder
+(`specs/design-system/color-system/spec.md`). A ceding level keeps its own background
+colour and takes only the share, so ceding never moves a level to another level's colour.
+Which levels cede, and how far, is what the poster capability states
+(`specs/design-system/components/cn-poster/spec.md`).
 
 An action is not a surface. An action may take an elevation shadow to show that it lifts,
 and takes no level with it; `specs/design-system/actions/spec.md` governs what an action
@@ -80,8 +99,8 @@ interrupt from the application.
 Elevation 1 and every one-level rise are shadowless. Their lift is conveyed by
 the change in surface colour where the theme provides one.
 
-The utilities use `background-color`, not the `background` shorthand, so they do
-not remove a consumer's background image or gradient.
+An elevation utility sets the level's surface colour and leaves a consumer's
+background image or gradient in place.
 
 Surface sets no foreground colour and does not make every foreground role suitable
 for every level. Its book specimens choose roles that meet WCAG 2.2 AA for their
@@ -102,11 +121,12 @@ elevation; an elevation utility alone adds no padding or containment.
 ### Attention states
 
 `has-notify` and `has-alert` are public state classes usable on any element. Each
-paints a triangular corner flag in the upper-right: notification takes the
-information role, alert the warning role, and alert wins when both are present.
-The flag is a seven-grid-unit square clipped to `polygon(100% 0, 0 0, 100% 100%)`,
-inherits its host's corner radius, and takes no pointer events. `--cn-flag-inset`
-offsets it, so a host that clips its own overflow can pull the flag over its border.
+paints a triangular flag in the upper-right: notification takes the information
+role, alert the warning role, and alert wins when both are present. The flag
+follows its host's corner, takes no pointer input, and carries its role at a share
+off the transparency ladder, so what sits under the corner still shows.
+`--cn-flag-inset` offsets it, so a host that clips its own overflow can pull the
+flag over its border.
 
 The flag is supplementary. A consumer that uses either state carries its meaning in
 text or another accessible state, because the classes announce nothing.
@@ -116,9 +136,9 @@ listing row are the same signal on different containers. Any capability that nee
 the flag composes these classes instead of restating the geometry.
 
 A state may be toggled after the server response, on an element that is never
-hydrated: the rules read the classes and nothing else. The pseudo-element exists
-only while a class does, so the fade is an animation rather than a transition,
-suppressed under `prefers-reduced-motion`.
+hydrated: the rules read the classes and nothing else. A flag that arrives that way
+fades in rather than snapping in, and appears without the fade under
+`prefers-reduced-motion`.
 
 ## Contract
 
@@ -235,7 +255,8 @@ And the child has the shadow for a two-level rise
 ```gherkin
 Given an element carrying `has-notify`
 When it renders
-Then a triangular flag in the information role fills its upper-right corner
+Then a triangular flag in the information role marks its upper-right corner
+And what the flag covers shows through it
 ```
 
 ```gherkin

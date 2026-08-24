@@ -1,5 +1,5 @@
 ---
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
 
 const featuredTags = [
@@ -26,14 +26,14 @@ const featuredTags = [
 ];
 ---
 
-<section class="mt-2 pt-2 border-t">
-  <h2 class="text-h5">{t('frontPage:featuredTags.title')}</h2>
+<section class="content-prose">
+  <h2 class="text-h3">{t('frontPage:featuredTags.title')}</h2>
   <p class="text-caption">{t('frontPage:featuredTags.description')}</p>
   
   <div class="chip-list">
     {featuredTags.map((item) => (
       <a href={`/tags/${encodeURIComponent(item.tag)}`} class="chip">
-        <Icon noun={item.icon} size="xsmall" />
+        <CnIcon noun={item.icon} size="xsmall" />
         <span>{item.displayName}</span>
       </a>
     ))}

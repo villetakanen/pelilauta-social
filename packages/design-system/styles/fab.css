@@ -44,13 +44,13 @@ a.button.fab[href] {
   --_fab-cta-blend: var(--chroma-surface-50);
   --_on-fab-cta: var(--chroma-surface-100);
   /* The secondary surface keeps the shared button roles, which stay public. */
-  --_fab-secondary: var(--cn-button);
+  --_fab-secondary: var(--cn-color-button);
   --_fab-secondary-blend: color-mix(
     in oklch,
-    var(--cn-button),
-    var(--cn-on-surface) 22%
+    var(--cn-color-button),
+    var(--cn-color-on-surface) 22%
   );
-  --_on-fab-secondary: var(--cn-on-button);
+  --_on-fab-secondary: var(--cn-color-on-button);
   background-image: linear-gradient(
     in oklab 137deg,
     var(--_fab),
@@ -107,7 +107,7 @@ a.button.fab[href] {
 }
 
 :is(button, a).fab:focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 

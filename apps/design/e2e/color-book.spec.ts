@@ -13,9 +13,9 @@ import { expect, test } from '@playwright/test';
  * declaration actually resolves to different colours under the two schemes. That
  * is a cascade fact, and the whole semantic layer rests on it.
  */
-// --cn-surface is the role the whole elevation scale is built on, and its two
+// --cn-color-surface is the role the whole elevation scale is built on, and its two
 // light-dark() arms are different reference steps.
-const swatch = '[data-swatch="--cn-surface"]';
+const swatch = '[data-swatch="--cn-color-surface"]';
 
 for (const scheme of ['light', 'dark'] as const) {
   test(`the colour lexicon renders under the ${scheme} scheme`, async ({

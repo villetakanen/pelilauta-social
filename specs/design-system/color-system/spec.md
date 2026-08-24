@@ -12,7 +12,9 @@ The colour system carries Pelilauta's identity coherently through every
 surface, and lets a site owner replace that identity with their own by
 supplying a chroma family — a rebrand without a redesign. Under any brand,
 readers get the same hierarchy, states, and readable contrast in Light and
-Dark; component authors take a role for a purpose the system has named. When
+Dark; component authors take a role for a purpose the system has named, and a
+rung of the transparency ladder wherever a layer is translucent, so two
+translucent layers on one page stay related rather than each tuned by eye. When
 purpose and expression collide, purpose wins: an expression changes without
 changing the meaning of any use.
 
@@ -29,7 +31,10 @@ Colour runs in one direction, on the token layers defined by
 2. **Semantic roles** under `--cn-*` name purpose. A scheme-dependent role
    expresses Light and Dark as two arms of one declaration; a scheme-invariant
    role uses one expression.
-3. **Components consume purpose.** A direct chroma reference — decorative or a
+3. **The transparency ladder** under `--cn-transparency-*` names the shares a
+   translucent layer may take. A rung carries no colour and no scheme arm: the
+   layer mixing it supplies both, so one ladder serves Light and Dark alike.
+4. **Components consume purpose.** A direct chroma reference — decorative or a
    status expression — is private to one component and stated in its
    specification.
 
@@ -48,6 +53,10 @@ persistence behaviour belongs to `specs/design-system/design-site-theme/spec.md`
 and each application.
 
 ### Constraints
+
+The ladder is eleven-percent steps, `--cn-transparency-1` through
+`--cn-transparency-9`, and `--cn-transparency-half` below the smallest. A layer
+that is translucent takes a rung.
 
 Where the system has named a purpose, a consumer uses that semantic role, never
 a chroma step. A purpose no role names is a component's private decision over
@@ -73,7 +82,7 @@ capability.
 - Replacing a core family changes no semantic or component token and keeps
   every consumer resolvable.
 - No declaration or consumer names an info chroma family; information is the
-  semantic pair `--cn-info` and `--cn-on-info` over a core family.
+  semantic pair `--cn-color-info` and `--cn-color-on-info` over a core family.
 
 ### Scenarios
 

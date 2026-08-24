@@ -57,7 +57,7 @@ const { title, shortTitle, description, backHref } = Astro.props;
         on. `shortTitle` is the plain phrase; `title` alone is usually that
         phrase behind the product name, which reads oddly as a heading.
       -->
-      <h1 class="visually-hidden">{shortTitle ?? title}</h1>
+      <h1 class="editor-outline-heading">{shortTitle ?? title}</h1>
       <slot />
     </main>
 
@@ -100,7 +100,13 @@ const { title, shortTitle, description, backHref } = Astro.props;
     padding: 0;
   }
 
-  .visually-hidden {
+  /*
+   * The clip that hides the heading above. Local to this layout, and the only
+   * hidden heading the application has: every other page names itself in view.
+   * Never `display: none` or `visibility: hidden` — either would take the
+   * heading out of the accessibility tree, which is the whole point of it.
+   */
+  .editor-outline-heading {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;

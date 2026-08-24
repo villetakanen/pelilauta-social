@@ -1,8 +1,8 @@
 <script lang="ts">
 // Import stores, utilities, and i18n function
 
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import { pushSessionSnack, pushSnack } from 'src/utils/client/snackUtils'; // For user feedback
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
@@ -86,17 +86,15 @@ async function deRegister(e: SubmitEvent) {
   
     {#if showVerify}
       <form onsubmit={deRegister} class="elevation-2 p-2 mt-1">
-        <div class="form-field">
-          <label for="deregister-confirm">
-            {t('settings:profile.dangerZone.confirm')}
-          </label>
+        <label>
+          {t('settings:profile.dangerZone.confirm')}
           <input
             id="deregister-confirm"
             type="text"
-            bind:value={verifyText} 
-            placeholder="olen aivan varma" 
+            bind:value={verifyText}
+            placeholder="olen aivan varma"
           />
-        </div>
+        </label>
         <div class="toolbar flex justify-end">
           <button
             disabled={verifyText !== 'olen aivan varma' || loading}
@@ -106,7 +104,7 @@ async function deRegister(e: SubmitEvent) {
             {#if loading}
               <CnLoader inline />
             {:else}
-              <Icon noun="check" />
+              <CnIcon noun="check" />
             {/if}
             <span>{t('actions:confirm.delete')}</span>
           </button>

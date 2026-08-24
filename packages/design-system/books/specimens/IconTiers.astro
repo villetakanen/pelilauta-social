@@ -12,7 +12,7 @@
  *
  * Book: apps/design/src/content/components/icon.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 import { FallbackIcons } from '../../components/icon-fallback';
 import { getManagedIcon } from '../../components/managed-tier';
 import { getIcon as getOpenSourceIcon } from '../../icons/open-source';
@@ -62,9 +62,9 @@ const rows = nouns.map((noun) => ({ noun, tier: tierOf(noun) }));
               class="cell"
               data-mode={mode}
               data-noun={noun}
-              style={`color-scheme: ${mode}; color: var(--cn-text); background: var(--cn-background);`}
+              style={`color-scheme: ${mode}; color: var(--cn-color-text); background: var(--cn-color-background);`}
             >
-              <Icon noun={noun} size="medium" />
+              <CnIcon noun={noun} size="medium" />
             </span>
           </td>
         ))}

@@ -217,7 +217,7 @@ const hasFooter = Astro.slots.has('footer');
     position: fixed;
     inset: 0;
     z-index: var(--cn-z-scrim);
-    background-color: var(--cn-scrim);
+    background-color: var(--cn-color-scrim);
     opacity: 0;
     pointer-events: none;
     cursor: pointer;
@@ -254,7 +254,7 @@ const hasFooter = Astro.slots.has('footer');
       inset-inline-start: 0;
       z-index: var(--cn-z-rail);
       inline-size: var(--cn-width-rail-expanded);
-      background-color: var(--cn-surface-4);
+      background-color: var(--cn-color-surface-4);
       box-shadow: var(--cn-shadow-elevation-4);
     }
     .cn-rail:has(.cn-rail-toggle.narrow:checked) .cn-rail-scrim {

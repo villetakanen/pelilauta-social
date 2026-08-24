@@ -41,7 +41,7 @@ concerns.
 - The message announces as a status. An action is a native button bearing its
   supplied label.
 - The component is fixed at the lower inline-start corner, inset by
-  `--cn-grid`. It uses `--cn-surface-4` and `--cn-text-high`.
+  `--cn-grid`. It uses `--cn-color-surface-4` and `--cn-color-text-high`.
 - Its private `--_snackbar-z-index` places the component above the
   design-system modal layer.
 

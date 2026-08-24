@@ -123,7 +123,7 @@ for (const scheme of ['light', 'dark'] as const) {
     });
 
     // The current-destination rule sets `color` on the anchor. A badge that did
-    // not declare its own would inherit `--cn-on-indicator` and change with the
+    // not declare its own would inherit `--cn-color-on-indicator` and change with the
     // state, so the two badges are compared against each other rather than
     // against the tokens they happen to name today.
     test("current-surface's badge fill and characters match the non-current badge", async ({

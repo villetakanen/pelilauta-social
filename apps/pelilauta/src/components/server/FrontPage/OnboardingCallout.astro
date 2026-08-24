@@ -1,0 +1,60 @@
+---
+/**
+ * OnboardingCallout — the front page naming itself, and inviting a reader in.
+ *
+ * It carries the page's `h1`. The front page has no other heading of its own: the
+ * application bar names it in a paragraph, so before this the document outline
+ * began at the streams' `h2`. A signed-in reader therefore gets no `h1` here,
+ * which is the accepted cost of the block being theirs to lose.
+ *
+ * The front page is cached at a shared edge with no `Vary: Cookie`, so the
+ * server-rendered HTML has to be identical for every reader and cannot branch on
+ * the session. The block is always in the markup, and the inline script below
+ * hides it before it is parsed for a reader whose persisted session says they are
+ * signed in. That reads `localStorage`, which can disagree with the real cookie
+ * session — acceptable here alone, because the stakes are an invitation and not
+ * access, and the failure falls open: a reader whose storage is denied sees the
+ * invitation rather than losing the page's heading.
+ *
+ * The section is both the content container and the surface, which Content
+ * Container Layouts allows: one boundary, under Surface's name. Its children are
+ * the content area's own flow, so the rhythm between the heading, the text and the
+ * action is the area's `--cn-line` and nothing states spacing here.
+ */
+import { t } from 'src/utils/i18n';
+---
+
+<script is:inline>
+  (() => {
+    try {
+      if (localStorage.getItem('session-uid')) {
+        document.documentElement.classList.add('has-session-uid');
+      }
+    } catch {
+      // Storage denied. The invitation stays.
+    }
+  })();
+</script>
+
+<section class="onboarding-callout content-prose surface elevation-0">
+  <h1>{t('app:onboarding.title')}</h1>
+  <p>{t('app:onboarding.about')}</p>
+  <p>{t('app:onboarding.text')}</p>
+  <div class="text-center">
+    <a href="/login" class="button cta">
+      {t('actions:login')}
+    </a>
+  </div>
+</section>
+
+<style>
+  /*
+   * The one rule this view owns. It reaches the document element because the
+   * class the script sets is the only thing outside this component's scope, and
+   * hiding the section rather than its content takes the container's rhythm with
+   * it — a hidden block leaves no gap above the streams.
+   */
+  :global(html.has-session-uid) .onboarding-callout {
+    display: none;
+  }
+</style>

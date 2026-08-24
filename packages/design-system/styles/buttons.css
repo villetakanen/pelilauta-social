@@ -63,7 +63,6 @@ a.button[href]:not(
     2
   );
   padding-inline: var(--cn-gap);
-  overflow: hidden;
   border: none;
   border-radius: calc(var(--cn-button-size) / 2);
   vertical-align: middle;
@@ -121,10 +120,10 @@ a.button[href]:not(
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-button-light),
-    var(--cn-button)
+    var(--cn-color-button-light),
+    var(--cn-color-button)
   );
-  color: var(--cn-on-button);
+  color: var(--cn-color-on-button);
 }
 
 :is(button, a.button[href]).cta:not(
@@ -139,10 +138,10 @@ a.button[href]:not(
   background-color: transparent;
   background-image: linear-gradient(
     in oklab 137deg,
-    var(--cn-button-cta),
-    var(--cn-button)
+    var(--cn-color-button-cta),
+    var(--cn-color-button)
   );
-  color: var(--cn-on-button-cta);
+  color: var(--cn-color-on-button-cta);
 }
 
 :is(button, a.button[href]).text:not(
@@ -155,8 +154,8 @@ a.button[href]:not(
     .cn-reaction-button
   ) {
   background-image: none;
-  background-color: var(--cn-button-text);
-  color: var(--cn-on-surface);
+  background-color: var(--cn-color-button-text);
+  color: var(--cn-color-on-surface);
   box-shadow: none;
 }
 
@@ -187,7 +186,7 @@ a.button[href]:not(
     var(--_button-secondary-light),
     var(--_button-secondary)
   );
-  color: var(--cn-on-button);
+  color: var(--cn-color-on-button);
 }
 
 /*
@@ -215,9 +214,56 @@ a.button[href]:not(
   content: "";
   position: absolute;
   inset: 0;
+  /*
+   * The wash rounds itself. The control used to clip it with `overflow: hidden`,
+   * which also clipped the pointer target below back to the visible pill.
+   */
+  border-radius: inherit;
   background-color: transparent;
   pointer-events: none;
   transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * The pointer target, `specs/design-system/actions/spec.md`. The visible pill is
+ * smaller than the target in the block axis, and an icon-only control is smaller in
+ * both, so the target is a box of its own centred on the control: a pseudo-element's
+ * box hit-tests as the element that generated it. It paints nothing.
+ *
+ * The block margin above and below the pill is wider than the target's overhang, so the
+ * target sits inside the row the control already occupies and no button row moves.
+ *
+ * `::before` is free on these controls — the wash is the `::after` above, and
+ * the presentations that own a `::before` of their own are the ones the exclusion list
+ * already names.
+ */
+button:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *,
+    .cn-lightbox *,
+    .cn-reaction-button
+  )::before,
+a.button[href]:not(
+    .fab,
+    .chrome-action,
+    .chip,
+    .chip *,
+    .cn-menu-container *,
+    .cn-lightbox *,
+    .cn-reaction-button
+  )::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  min-inline-size: calc(var(--cn-grid) * 6);
+  min-block-size: calc(var(--cn-grid) * 6);
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 button:not(
@@ -238,7 +284,7 @@ a.button[href]:not(
     .cn-lightbox *,
     .cn-reaction-button
   ):hover::after {
-  background-color: var(--cn-hover);
+  background-color: var(--cn-color-hover);
   transition-timing-function: var(--_enter-easing);
 }
 
@@ -260,7 +306,7 @@ a.button[href]:not(
     .cn-lightbox *,
     .cn-reaction-button
   ):active::after {
-  background-color: var(--cn-active);
+  background-color: var(--cn-color-active);
 }
 
 button:not(
@@ -303,7 +349,7 @@ a.button[href]:not(
     .cn-lightbox *,
     .cn-reaction-button
   ):focus-visible {
-  outline: 2px solid var(--cn-focus-ring);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 

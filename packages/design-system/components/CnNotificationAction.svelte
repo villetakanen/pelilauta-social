@@ -3,7 +3,7 @@
  * CnNotificationAction — a chrome action that is a destination, carrying a
  * count.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   href,
@@ -35,7 +35,7 @@ const name = $derived(badge ? `${label} ${badge}` : label);
   aria-current={ariaCurrent}
   aria-label={name}
 >
-  <Icon {noun} decorative />
+  <CnIcon {noun} decorative />
   <span>{label}</span>
   {#if badge}
     <span class="cn-notification-badge" aria-hidden="true">{badge}</span>

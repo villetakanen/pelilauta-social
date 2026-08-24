@@ -1,0 +1,17 @@
+/*
+ * Generated from tokens/transparency.json by scripts/generate-tokens.mjs.
+ * Do not edit: change the JSON source and run `pnpm generate:tokens` from the repository root.
+ */
+:root,
+.debug {
+  --cn-transparency-half: 5.5%;
+  --cn-transparency-1: 11%;
+  --cn-transparency-2: 22%;
+  --cn-transparency-3: 33%;
+  --cn-transparency-4: 44%;
+  --cn-transparency-5: 55%;
+  --cn-transparency-6: 66%;
+  --cn-transparency-7: 77%;
+  --cn-transparency-8: 88%;
+  --cn-transparency-9: 99%;
+}

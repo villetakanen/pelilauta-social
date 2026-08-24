@@ -2,7 +2,7 @@
 /**
  * CnLoader — canonical progress indicator combining a spinning dual ring over a static noun icon.
  */
-import Icon from './Icon.svelte';
+import CnIcon from './CnIcon.svelte';
 
 let {
   noun = 'fox',
@@ -22,10 +22,16 @@ let {
   aria-label={label}
 >
   <span class="lds-dual-ring" aria-hidden="true"></span>
-  <Icon {noun} size={inline ? 'small' : 'large'} />
+  <CnIcon {noun} size={inline ? 'small' : 'large'} decorative />
 </span>
 
 <style>
+  /*
+   * A standalone loader stands for a region and takes the loader role. An
+   * inline loader stands inside something else — an in-flight control, a FAB —
+   * so it inherits that context's foreground: the role's mid-tone glyph
+   * disappears against a filled button's saturated ground.
+   */
   .cn-loader {
     --_loader-color: light-dark(var(--chroma-primary-60), var(--chroma-surface-60));
     display: block;
@@ -41,6 +47,7 @@ let {
     width: var(--cn-line);
     height: var(--cn-line);
     display: inline-block;
+    color: inherit;
   }
 
   .cn-loader :global(.cn-icon) {
@@ -69,8 +76,9 @@ let {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: var(--cn-loader-line-width) solid var(--_loader-color);
-    border-color: var(--_loader-color) transparent var(--_loader-color) transparent;
+    /* currentColor, so the ring follows the root's colour in both variants. */
+    border: var(--cn-loader-line-width) solid currentColor;
+    border-color: currentColor transparent currentColor transparent;
     animation: lds-dual-ring 1.2s linear infinite;
     opacity: 0.72;
     box-sizing: border-box;

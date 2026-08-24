@@ -1,6 +1,6 @@
 /*
  * Generated from tokens/themes/default.json by scripts/generate-tokens.mjs.
- * Do not edit: change the JSON source and run `pnpm generate:tokens`.
+ * Do not edit: change the JSON source and run `pnpm generate:tokens` from the repository root.
  */
 :root {
   --chroma-error-20: oklch(0.2 0.15 318);

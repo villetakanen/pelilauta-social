@@ -5,8 +5,8 @@
  * Component: components/CnPoster.astro
  *
  * The artwork is user material of unknown colour and contrast, so the image is
- * attenuated, a tint is blended over it, and the ground plane carrying body text
- * stays 80% opaque.
+ * attenuated, a tint is blended over it, and the levels standing on it cede a share
+ * of the transparency ladder rather than covering it.
  *
  * Two media blocks divide the file. The stage shows the poster and states only
  * baseline features: a rule that escaped it would leave the application bar
@@ -49,21 +49,51 @@
   }
 
   /*
-   * The ground plane is the one elevation a poster changes: it is the level
-   * that stands for the page itself. Levels 1 through 4 stay opaque, because
-   * content that has risen off the page is content the reader is meant to read.
+   * The levels that stand on the artwork cede to it. The ground plane is the page
+   * itself, and takes a wide share, because a page standing over artwork is meant to
+   * show it. Payload has risen off the page and takes a narrow one: it stays legible,
+   * and admits enough of the artwork to belong to the page it is on.
    *
-   * The share is the most transparent the plane can be while the inherited body
-   * foreground still reaches WCAG 2.2 AA over near-white artwork in Dark, the
-   * tightest of the combinations.
+   * Levels 3 and 4 keep their opacity. They float over content rather than over the
+   * page, so a share there would bleed whatever they cover — the cards under a menu —
+   * and not the artwork these rules are about.
+   *
+   * Both shares are rungs of the transparency ladder, and each level mixes its own
+   * colour so ceding never moves it to another level's. Why they are chosen rather
+   * than derived from a contrast floor:
+   * specs/design-system/components/cn-poster/spec.md.
    */
   body:has(#cn-poster) .elevation-0 {
-    --_surface-over-poster: color-mix(
+    background-color: color-mix(
       in oklch,
-      var(--cn-surface),
-      transparent 20%
+      var(--cn-color-surface),
+      transparent var(--cn-transparency-6)
     );
-    background-color: var(--_surface-over-poster);
+  }
+
+  /*
+   * The second arm is a surface at its default level, which carries no elevation
+   * class to match. `:where()` zeroes it, mirroring surface.css, so the rule keeps
+   * the specificity of the class it extends.
+   */
+  body:has(#cn-poster)
+  :is(
+    .elevation-1,
+    :where(.surface:not(.elevation-0, .elevation-2, .elevation-3, .elevation-4))
+  ) {
+    background-color: color-mix(
+      in oklch,
+      var(--cn-color-surface-1),
+      transparent var(--cn-transparency-2)
+    );
+  }
+
+  body:has(#cn-poster) .elevation-2 {
+    background-color: color-mix(
+      in oklch,
+      var(--cn-color-surface-2),
+      transparent var(--cn-transparency-2)
+    );
   }
 
   /*
@@ -93,7 +123,7 @@
   /*
    * The lower-edge dissolve, as a mask rather than a gradient over the image.
    * The poster fades to nothing and reveals the canvas, which paints
-   * --cn-background: the same colour v20 painted on top to reach the same
+   * --cn-color-background: the same colour v20 painted on top to reach the same
    * result, without a third layer competing with the two blended ones below.
    *
    * A pinned poster has no lower edge to dissolve — the content scrolls over a
@@ -180,7 +210,7 @@
  * The withdrawals. After the stage, so they win on source order at equal
  * specificity. Only the poster and the sticky bar withdraw: the rail, tray
  * and ground-plane cessions are inert once nothing paints beneath them,
- * because the canvas paints --cn-background, which is the surface colour —
+ * because the canvas paints --cn-color-background, which is the surface colour —
  * withdrawing them would mean restating values Cyan owns, for no visible
  * change. Under forced-colors the user agent forces the backgrounds anyway.
  */

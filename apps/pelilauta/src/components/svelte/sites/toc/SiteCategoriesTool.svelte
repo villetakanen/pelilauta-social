@@ -1,6 +1,6 @@
 <script lang="ts">
 import { type CnListItem, CnSortableList } from '@11thdeg/cyan-lit';
-import Icon from '@design-system/components/Icon.svelte';
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
 import {
   type CategoryRef,
@@ -124,7 +124,7 @@ async function onsubmit(e: Event) {
     {/if}
 
     <div class="toolbar border">
-      <Icon noun="add" />
+      <CnIcon noun="add" />
       <input
         class="grow"
         type="text"

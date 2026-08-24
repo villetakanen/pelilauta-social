@@ -11,7 +11,7 @@
  * this specimen extracts, from the shipped stylesheet, only the rules whose
  * selector names one of those pseudo-classes, scopes and remaps just those
  * to a documentation-only `data-chrome-state` attribute — the technique
- * `LinkStateTable.astro` uses too, but on a copy of the whole file. Copying
+ * `LinkStateTable.astro` uses too. Copying
  * the whole file would also re-inject the resting rule
  * (`button.chrome-action::before { background-color: transparent }`), which
  * ties the shipped hover and active rules at specificity; source order would
@@ -24,7 +24,7 @@
  *
  * Book: apps/design/src/content/base/chrome-actions.mdx
  */
-import Icon from '../../components/Icon.svelte';
+import CnIcon from '../../components/CnIcon.svelte';
 import chromeActionsSource from '../../styles/chrome-actions.css?raw';
 
 interface Props {
@@ -66,7 +66,7 @@ const STATES = [
  *
  * Deliberately not clamped to the panel's own width: shrinking a labelled
  * target below its content's min-content reproduces the defect this book is
- * fixing, just from a different cause — the label and Icon stop fitting the
+ * fixing, just from a different cause — the label and CnIcon stop fitting the
  * rig, rather than the rig being the wrong size to begin with. A narrower
  * rig would show a compressed, unrealistic tray, which is the dishonesty
  * this fix was asked to remove, not a variant of it to keep. Below a tray's
@@ -134,7 +134,7 @@ for (const pseudo of STATE_PSEUDOS) {
         style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
       >
         <button type="button" class="chrome-action">
-          <Icon noun="send" decorative />
+          <CnIcon noun="send" decorative />
           <span>Send</span>
         </button>
       </div>
@@ -143,7 +143,7 @@ for (const pseudo of STATE_PSEUDOS) {
         style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
       >
         <a class="chrome-action" href="/base/chrome-actions">
-          <Icon noun="arrow-left" decorative />
+          <CnIcon noun="arrow-left" decorative />
           <span>Back</span>
         </a>
       </div>
@@ -160,7 +160,7 @@ for (const pseudo of STATE_PSEUDOS) {
         style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
       >
         <a class="chrome-action" href="/base/chrome-actions">
-          <Icon noun="clock" decorative />
+          <CnIcon noun="clock" decorative />
           <span>Pelinjohtajan ilmoitukset, tapahtumat ja aikataulumuutokset</span>
         </a>
       </div>
@@ -214,7 +214,7 @@ for (const pseudo of STATE_PSEUDOS) {
                       aria-current="page"
                       data-chrome-state={state.attribute}
                     >
-                      <Icon noun="discussion" decorative />
+                      <CnIcon noun="discussion" decorative />
                       <span>Keskustelut</span>
                     </a>
                   </div>
@@ -229,7 +229,7 @@ for (const pseudo of STATE_PSEUDOS) {
                       href="/base/chrome-actions"
                       data-chrome-state={state.attribute}
                     >
-                      <Icon noun="books" decorative />
+                      <CnIcon noun="books" decorative />
                       <span>Kirjasto</span>
                     </a>
                   </div>
@@ -260,7 +260,7 @@ for (const pseudo of STATE_PSEUDOS) {
                         aria-current={column.current ? 'page' : undefined}
                         data-chrome-state={state.attribute}
                       >
-                        <Icon
+                        <CnIcon
                           noun={column.current ? 'discussion' : 'books'}
                           decorative
                         />
@@ -290,7 +290,7 @@ for (const pseudo of STATE_PSEUDOS) {
               href="/base/chrome-actions"
               aria-current="false"
             >
-              <Icon noun="books" decorative />
+              <CnIcon noun="books" decorative />
               <span>Kirjasto</span>
             </a>
           </div>
@@ -302,7 +302,7 @@ for (const pseudo of STATE_PSEUDOS) {
             style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
           >
             <button type="button" class="chrome-action" aria-current="page">
-              <Icon noun="send" decorative />
+              <CnIcon noun="send" decorative />
               <span>Send</span>
             </button>
           </div>
@@ -337,7 +337,7 @@ for (const pseudo of STATE_PSEUDOS) {
                   class="chrome-action"
                   data-chrome-state={state.attribute}
                 >
-                  <Icon noun="send" decorative />
+                  <CnIcon noun="send" decorative />
                   <span>Send</span>
                 </button>
               </div>
@@ -352,7 +352,7 @@ for (const pseudo of STATE_PSEUDOS) {
                   href="/base/chrome-actions"
                   data-chrome-state={state.attribute}
                 >
-                  <Icon noun="arrow-left" decorative />
+                  <CnIcon noun="arrow-left" decorative />
                   <span>Back</span>
                 </a>
               </div>
@@ -367,7 +367,7 @@ for (const pseudo of STATE_PSEUDOS) {
               style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
             >
               <button type="button" class="chrome-action" disabled>
-                <Icon noun="send" decorative />
+                <CnIcon noun="send" decorative />
                 <span>Send</span>
               </button>
             </div>
@@ -383,7 +383,7 @@ for (const pseudo of STATE_PSEUDOS) {
                 aria-disabled="true"
                 tabindex="-1"
               >
-                <Icon noun="arrow-left" decorative />
+                <CnIcon noun="arrow-left" decorative />
                 <span>Back</span>
               </a>
             </div>
@@ -423,7 +423,7 @@ for (const pseudo of STATE_PSEUDOS) {
                   class="chrome-action"
                   data-chrome-state={state.attribute}
                 >
-                  <Icon noun="send" decorative />
+                  <CnIcon noun="send" decorative />
                   <span>Send</span>
                 </button>
               </div>
@@ -437,7 +437,7 @@ for (const pseudo of STATE_PSEUDOS) {
             style={`--cn-chrome-presentation: ${presentation}; inline-size: ${RIG_INLINE_SIZE[presentation]};`}
           >
             <button type="button" class="chrome-action" disabled>
-              <Icon noun="send" decorative />
+              <CnIcon noun="send" decorative />
               <span>Send</span>
             </button>
           </div>
@@ -459,7 +459,7 @@ for (const pseudo of STATE_PSEUDOS) {
                   href="/base/chrome-actions"
                   data-chrome-state={state.attribute}
                 >
-                  <Icon noun="arrow-left" decorative />
+                  <CnIcon noun="arrow-left" decorative />
                   <span>Back</span>
                 </a>
               </div>
@@ -478,7 +478,7 @@ for (const pseudo of STATE_PSEUDOS) {
               aria-disabled="true"
               tabindex="-1"
             >
-              <Icon noun="arrow-left" decorative />
+              <CnIcon noun="arrow-left" decorative />
               <span>Back</span>
             </a>
           </div>

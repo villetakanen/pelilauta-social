@@ -1,6 +1,6 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import Icon from '@design-system/components/Icon.svelte';
 import CnEditorShell from '@editor/CnEditorShell.svelte';
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
@@ -171,7 +171,7 @@ function cancel() {
 
   {#if contentMigrated}
     <div class="alert warning flex flex-row items-center px-1">
-      <Icon noun="info" />
+      <CnIcon noun="info" />
       <p>{t('site:page.editor.contentMigrateWarning')}</p>
     </div>
   {/if}
@@ -200,7 +200,7 @@ function cancel() {
       {#if saving}
         <CnLoader inline noun="save" />
       {:else}
-        <Icon noun="save" />
+        <CnIcon noun="save" />
       {/if}
       <span>{t('actions:save')}</span>
     </button>

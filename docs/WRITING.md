@@ -36,6 +36,7 @@ principles win.
 - Second person, imperative, for instructions.
 - Active voice, present tense; no future tense for product behaviour.
 - One idea per sentence.
+- A semicolon-joined clause is a sentence; every sentence test applies to it alone.
 - No anthropomorphism: code does not want, know or care.
 - Plain language; no colloquialisms or figurative metaphors.
 - No contractions in a book.

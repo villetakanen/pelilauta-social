@@ -1,17 +1,24 @@
 ---
+import CnPoster from '@design-system/components/CnPoster.astro';
+import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import { t } from 'src/utils/i18n';
 import { verifySession } from 'src/utils/server/auth/verifySession';
+import { sanitizeRedirect } from 'src/utils/shared/sanitizeRedirect';
 import EmailLoginSection from '../components/svelte/login/EmailLoginSection.svelte';
 import PasswordLoginSection from '../components/svelte/login/PasswordLoginSection.svelte';
 import SyndicatedLoginSection from '../components/svelte/login/SyndicatedLoginSection.svelte';
-import ModalPage from '../layouts/ModalPage.astro';
+// The binding avoids `Login`: astro check's generated module for login.astro
+// collides with it on a case-insensitive filesystem (TS2440).
+import LoginLayout from '../layouts/Login.astro';
 
 // Move session verification to the very top, before any other logic
 const session = await verifySession(Astro);
 
 if (session) {
   // If the user is logged in, redirect them to the redirect URL or the home page
-  return Astro.redirect(Astro.url.searchParams.get('redirect') || '/');
+  return Astro.redirect(
+    sanitizeRedirect(Astro.url.searchParams.get('redirect')),
+  );
 }
 
 /* A server side rendered login page: we only provide client side session, as all
@@ -20,9 +27,9 @@ if (session) {
 const showPasswordLoginFlag =
   import.meta.env.SECRET_FEATURE_FLAG_PASSWORD_LOGIN === 'true';
 
-const redirect = Astro.url.searchParams.get('redirect') || '/';
+const redirect = sanitizeRedirect(Astro.url.searchParams.get('redirect'));
 ---
-<ModalPage title={t('login:title')} backHref="/">
+<LoginLayout title={t('login:title')}>
   <div class="content-prose">
     <div>
       <h1>{t('login:title')}</h1>
@@ -41,4 +48,14 @@ const redirect = Astro.url.searchParams.get('redirect') || '/';
       <SyndicatedLoginSection client:only="svelte" redirect={redirect} />
     </div>
   </div>
-</ModalPage>
+  <CnPoster
+    slot="app-background-poster"
+    src="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2.webp"
+    md="/myrrys-proprietary/juno-viinikka/juno-viinikka-dragon-2-960.webp"
+  />
+  <CnPosterCredits
+    note="Taustakuva © Juno Viinikka"
+    href="https://linktr.ee/junowski"
+    slot="app-footer-credits"
+  />
+</LoginLayout>
