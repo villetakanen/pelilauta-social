@@ -90,7 +90,7 @@ async function loginWithPassword(e: SubmitEvent) {
 }
 </script>
 
-<section class="elevation-1 p-2 debug">
+<section class="surface debug">
   <h2>Test user login form</h2>
   <p>
     This feature is not usable at the production, as the password login option
@@ -119,7 +119,7 @@ async function loginWithPassword(e: SubmitEvent) {
         required
       />
     </label>
-    <div class="toolbar justify-end">
+    <div class="actions">
       <button type="submit" disabled={loading}>
         {#if loading}
           <CnLoader inline />
@@ -129,3 +129,14 @@ async function loginWithPassword(e: SubmitEvent) {
     </div>
   </form>
 </section>
+
+<style>
+  /* A view's layout for its one action row, stated here rather than
+     published: the third consumer is the point at which a class earns
+     a stylesheet. */
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--cn-gap);
+  }
+</style>

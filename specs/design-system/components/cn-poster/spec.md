@@ -46,7 +46,7 @@ The artwork is decorative and has no alternative text. The consuming application
 - `CnPoster.astro` renders `div#cn-poster` containing a picture and a decorative image, on the server, with no client-side JavaScript.
 - `pinned` switches between the scrolling and the fixed placement.
 - `poster.css` reaches both applications through the design system's stylesheet entry point.
-- `.elevation-0`, `.elevation-1` and `.elevation-2` cede their share while a poster paints, and are opaque otherwise. `.elevation-3` and `.elevation-4` are opaque throughout.
+- `.elevation-0`, `.elevation-1` and `.elevation-2` cede their share while a poster paints, and are opaque otherwise; a `.surface` at its default level cedes with level 1. `.elevation-3` and `.elevation-4` are opaque throughout.
 - The poster and its overrides are absent below the small-screen breakpoint and in print. Under `prefers-reduced-transparency` and under `forced-colors`, the poster paints nothing, the sticky bar recovers its surface, and the remaining cessions are inert.
 - Body text over the poster is legible in both schemes on the near-white, near-black and no-artwork cases. With no artwork it meets WCAG 2.2 AA, which is the case the design system controls.
 - The **CnPoster** Component book renders both placements across Light and Dark, over near-white artwork, near-black artwork and none, with content resting on the ground plane.

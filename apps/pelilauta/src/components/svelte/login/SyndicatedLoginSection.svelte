@@ -69,7 +69,7 @@ async function loginWithGoogle(e: SubmitEvent) {
 }
 </script>
 
-<section class="elevation-1 p-2" style="position: relative">
+<section class="surface">
   <h2>{t("login:withProvider.title")}</h2>
   <p>{t("login:withProvider.info")}</p>
   <form onsubmit={loginWithGoogle}>
@@ -84,11 +84,3 @@ async function loginWithGoogle(e: SubmitEvent) {
   </form>
 </section>
 
-<style>
-  button {
-    /* Ensure button content aligns nicely with the loader/icon */
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em; /* Adjust gap as needed */
-  }
-</style>

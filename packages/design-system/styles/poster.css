@@ -71,7 +71,16 @@
     );
   }
 
-  body:has(#cn-poster) .elevation-1 {
+  /*
+   * The second arm is a surface at its default level, which carries no elevation
+   * class to match. `:where()` zeroes it, mirroring surface.css, so the rule keeps
+   * the specificity of the class it extends.
+   */
+  body:has(#cn-poster)
+    :is(
+      .elevation-1,
+      :where(.surface:not(.elevation-0, .elevation-2, .elevation-3, .elevation-4))
+    ) {
     background-color: color-mix(
       in oklch,
       var(--cn-color-surface-1),

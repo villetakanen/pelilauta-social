@@ -268,7 +268,7 @@ onMount(async () => {
 });
 </script>
 
-<section class="elevation-1 p-2" style="position: relative">
+<section class="surface">
   <h2>{t("login:withEmail.title")}</h2>
 
   {#if view === "sent"}
@@ -287,7 +287,7 @@ onMount(async () => {
           required
         />
       </label>
-      <div class="toolbar justify-end">
+      <div class="actions">
         <button type="submit" disabled={suspend}>
           {#if suspend}
             <CnLoader inline />
@@ -309,7 +309,7 @@ onMount(async () => {
           required
         />
       </label>
-      <div class="toolbar justify-end">
+      <div class="actions">
         <button type="submit" disabled={suspend}>
           {#if suspend}
             <CnLoader inline />
@@ -322,3 +322,14 @@ onMount(async () => {
     </form>
   {/if}
 </section>
+
+<style>
+  /* A view's layout for its one action row, stated here rather than
+     published: the third consumer is the point at which a class earns
+     a stylesheet. */
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--cn-gap);
+  }
+</style>
