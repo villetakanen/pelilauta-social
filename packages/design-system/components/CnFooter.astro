@@ -1,0 +1,100 @@
+---
+/**
+ * CnFooter — the platform's periphery: what is active now, where else the
+ * community gathers, and what the platform is. Three regions, balanced
+ * geometrically; none outranks another, and no arrangement assigns meaning to
+ * a region's position.
+ */
+const hasBlock1 = Astro.slots.has('block-1');
+const hasBlock2 = Astro.slots.has('block-2');
+const hasBlock3 = Astro.slots.has('block-3');
+---
+
+{/* Inside `main` a bare footer is no landmark; the role keeps the
+    contentinfo contract wherever a layout places the footer. */}
+<footer class="cn-footer" role="contentinfo">
+  <div class="cn-footer-regions">
+    {hasBlock1 && (
+      <div class="cn-footer-region">
+        <slot name="block-1" />
+      </div>
+    )}
+    {hasBlock2 && (
+      <div class="cn-footer-region">
+        <slot name="block-2" />
+      </div>
+    )}
+    {hasBlock3 && (
+      <div class="cn-footer-region">
+        <slot name="block-3" />
+      </div>
+    )}
+  </div>
+</footer>
+
+<style>
+  /*
+   * The regions answer the footer's own inline size, never the viewport: a
+   * footer nested in a narrower ancestor still balances against what it is
+   * actually offered. The container-establishing element cannot answer its
+   * own query, so the flex layout lives on the inner `.cn-footer-regions`.
+   */
+  .cn-footer {
+    container: cn-footer / inline-size;
+  }
+
+  .cn-footer-regions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cn-line);
+  }
+
+  /*
+   * An omitted slot renders no region at all, so the flex tracks below split
+   * whatever regions remain rather than leaving a reserved, empty one.
+   */
+  .cn-footer-region {
+    min-inline-size: 0;
+  }
+
+  /*
+   * Intermediate: the first two regions share the first row, and a third
+   * stands alone, centered, on the row beneath them. `nth-child(3):last-child`
+   * reaches only that exact case — all three regions present — and any other
+   * combination falls through to the plain two-per-row wrap below it.
+   */
+  @container cn-footer (min-width: 38.0rem) and (max-width: 58.4999rem) {
+    .cn-footer-regions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      column-gap: var(--cn-gap);
+      row-gap: var(--cn-line);
+      /* A short region does not grow to the height of a tall neighbour. */
+      align-items: start;
+    }
+
+    .cn-footer-region {
+      flex: 0 0 calc(50% - var(--cn-gap) / 2);
+    }
+
+    .cn-footer-region:nth-child(3):last-child {
+      margin-inline: auto;
+    }
+  }
+
+  /*
+   * Wide: one row, and `flex: 1 1 0%` holds the tracks equal regardless of
+   * how much each region's own content asks for.
+   */
+  @container cn-footer (min-width: 58.5rem) {
+    .cn-footer-regions {
+      flex-direction: row;
+      column-gap: var(--cn-gap);
+      align-items: start;
+    }
+
+    .cn-footer-region {
+      flex: 1 1 0%;
+    }
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+title: CnFooter
+description: The platform's periphery, in three regions balanced across three container widths.
+order: 95
+runtime: static
+---
+
+import CnFooter from '@design-system/components/CnFooter.astro'
+import FooterSpecimens from '@design-system/books/specimens/FooterSpecimens.astro'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+
+Use `CnFooter` to close a view with what is active on the platform now, where else the
+community gathers, and what the platform is — three regions that balance across the
+footer's own width rather than ranking against one another.
+
+## When to use it
+
+- Mount it once, at the end of the view's content, never inside application chrome.
+- Fill `block-1`, `block-2` and `block-3` with independent content; leave any of them
+  empty and it takes no track at all, rather than leaving a gap.
+
+## Example
+
+<div class="breakout">
+  <DsComposition caption="CnFooter above 58.5rem: three equal tracks on one row, in Light and Dark">
+    <FooterSpecimens group="wide" />
+  </DsComposition>
+</div>
+
+```astro
+---
+import CnFooter from '@design-system/components/CnFooter.astro'
+---
+
+<CnFooter>
+  <p slot="block-1">Nyt käynnissä: Aamunkoin vartijat, kausi 3.</p>
+  <p slot="block-2"><a href="/discord">Discord</a></p>
+  <p slot="block-3">© Myrrys Publishing</p>
+</CnFooter>
+```
+
+<div class="breakout">
+  <DsComposition caption="Between 38.0rem and 58.5rem: the first two regions on one row, the third centered beneath, in Light and Dark">
+    <FooterSpecimens group="intermediate" />
+  </DsComposition>
+</div>
+
+<div class="breakout">
+  <DsComposition caption="Below 38.0rem: all three regions in one column, in Light and Dark">
+    <FooterSpecimens group="stacked" />
+  </DsComposition>
+</div>
+
+## Reference
+
+### Props
+
+`CnFooter` takes no props. It accepts content through three named slots.
+
+| Slot | Purpose |
+| :--- | :--- |
+| `block-1` | The first region. |
+| `block-2` | The second region. |
+| `block-3` | The third region. |
+
+## Accessibility
+
+`CnFooter` renders a `<footer>` with an explicit `contentinfo` role, so it stays a
+landmark wherever a layout places it — including inside `main`, where a bare
+`<footer>` is none. Mount one per page; assistive technology lists every
+`contentinfo` landmark it finds.

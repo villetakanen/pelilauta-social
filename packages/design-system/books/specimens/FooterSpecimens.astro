@@ -1,0 +1,70 @@
+---
+/**
+ * FooterSpecimens — CnFooter bounded in a frame the book can render inline.
+ *
+ * CnFooter establishes its own container, `cn-footer`, so the frame below
+ * only needs to constrain the inline size the footer measures itself
+ * against — unlike a chrome part that answers an ancestor's container, the
+ * footer needs no `container:` declaration of its own here.
+ *
+ * `group` selects one of the three arrangements the spec names. Each frame's
+ * width sits well inside its band rather than at the edge, so rounding
+ * cannot read it into the neighbouring band.
+ *
+ * Book: apps/design/src/content/components/cn-footer.mdx
+ */
+import CnFooter from '../../components/CnFooter.astro';
+
+interface Props {
+  /** Which container-query arrangement to render. */
+  group: 'wide' | 'intermediate' | 'stacked';
+}
+
+const { group } = Astro.props;
+
+const MODES = ['light', 'dark'] as const;
+
+const WIDTH: Record<Props['group'], string> = {
+  wide: 'calc(var(--cn-grid) * 130)', // 65rem, above the 58.5rem wide threshold
+  intermediate: 'calc(var(--cn-grid) * 96)', // 48rem, inside 38.0–58.5rem
+  stacked: 'calc(var(--cn-grid) * 60)', // 30rem, below the 38.0rem threshold
+};
+---
+
+<div class="footer-specimen" data-group={group}>
+  {MODES.map((mode) => (
+    <div class="pane" data-mode={mode} style={`color-scheme: ${mode};`}>
+      <div class="frame" style={`inline-size: ${WIDTH[group]};`}>
+        <CnFooter>
+          <p slot="block-1">Nyt käynnissä: Aamunkoin vartijat, kausi 3.</p>
+          <p slot="block-2">
+            <a href="#cn-footer">Discord</a> · <a href="#cn-footer">Mekanismi</a>
+          </p>
+          <p slot="block-3">© Myrrys Publishing · Pelilauta on osa suomalaista roolipeliyhteisöä.</p>
+        </CnFooter>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .footer-specimen {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .pane {
+    display: grid;
+    row-gap: var(--cn-line);
+    padding: var(--cn-gap);
+    color: var(--cn-color-text);
+    background: var(--cn-color-background);
+  }
+
+  .frame {
+    max-inline-size: 100%;
+    padding: var(--cn-gap);
+    background: var(--cn-color-surface);
+    border: 1px solid var(--cn-color-border);
+  }
+</style>
