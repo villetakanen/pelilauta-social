@@ -4,7 +4,7 @@ import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import AdminBar from '@pelilauta/admin/chrome/AdminBar.astro';
 import AdminRail from '@pelilauta/admin/chrome/AdminRail.astro';
-import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseFooter from '@pelilauta/base/chrome/BaseFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 
 // Every page taking this layout states the guard itself, and renders for a
@@ -33,7 +33,7 @@ const { title, description } = Astro.props;
 
     <main class="app-main">
       <slot />
-      <AppFooter />
+      <BaseFooter />
     </main>
 
     <AuthManager client:only="svelte" />

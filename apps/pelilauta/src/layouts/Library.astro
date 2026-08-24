@@ -3,7 +3,7 @@ import AuthManager from '@components/svelte/AuthManager.svelte';
 import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import BaseBar from '@pelilauta/base/chrome/BaseBar.astro';
-import AppFooter from '@pelilauta/components/server/app/AppFooter.astro';
+import BaseFooter from '@pelilauta/base/chrome/BaseFooter.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 import LibraryRail from '@pelilauta/library/chrome/LibraryRail.astro';
 import { t } from 'src/utils/i18n';
@@ -41,9 +41,9 @@ const { title, description } = Astro.props;
 
     <main class="app-main">
       <slot />
-      <AppFooter>
+      <BaseFooter>
         <slot name="app-footer-credits" slot="app-footer-credits" />
-      </AppFooter>
+      </BaseFooter>
     </main>
 
     <slot name="app-background-poster" />
