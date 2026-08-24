@@ -8,9 +8,6 @@ import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 import ProfileLink from '../app/ProfileLink.svelte';
 
-/**
- * A Line item in the notifications list.
- */
 interface Props {
   notification: Notification;
 }
@@ -86,30 +83,16 @@ async function remove() {
 </article>
 
 <style>
-  /* ======================================================================
-   *
-   *   ##   ##   #####   ######   ##   ##  ######   ##   ##   ######
-   *   ##   ##  ##   ##  ##   ##  ###  ##    ##     ###  ##  ##
-   *   ## # ##  #######  ######   ## # ##    ##     ## # ##  ##  ###
-   *   #######  ##   ##  ##  ##   ##  ###    ##     ##  ###  ##   ##
-   *   ##   ##  ##   ##  ##   ##  ##   ##  ######   ##   ##   ######
-   *
-   *   THIS IS NOT THE v19+ DESIGN LANGUAGE.
-   *
-   *   It is a v21 hotfix: the design system has no listing row yet, and this
-   *   page needs one to work. The layout below is this component's
-   *   invention; a design-system capability would publish it, and none does.
-   *
-   *   Do not copy it into another component, and do not read it as the
-   *   pattern for a row. Delete this block when the system publishes a
-   *   listing row, and let the row compose that instead.
-   *
-   * ====================================================================== */
+  /*
+   * Stopgap. The design system has no listing row yet, so this layout is
+   * local. Do not copy it; delete it when a listing row exists.
+   * plans/debt/the-design-system-has-no-listing-row.md tracks the gap.
+   */
 
   /*
    * The row: an icon, the message, and the one action the row's read state
-   * offers. Padding is the surface's, and the rhythm between rows is the
-   * content container's, so neither is restated here.
+   * offers. The surface carries the padding, and the content container
+   * carries the rhythm between rows, so neither is restated here.
    */
   .notification-item {
     display: flex;
