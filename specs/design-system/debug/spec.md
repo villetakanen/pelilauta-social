@@ -39,7 +39,7 @@ None.
 
 - Inside a `.debug` element the semantic roles resolve through rowan; outside
   it, through the theme.
-- A production build carries neither the class nor the scale.
+- In a production build, a `.debug` element renders like any other.
 
 ### Regression Guardrails
 
