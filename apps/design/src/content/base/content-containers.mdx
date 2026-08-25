@@ -1,152 +1,199 @@
 ---
 title: Content containers
-description: Stackable content containers, with a set of predefined layouts.
+description: Three layout modes that lay children out in rows of one, two or three columns.
 order: 2
 ---
 
+A content container lays its children out in rows of one, two or three columns, in
+source order. Put one mode class on the element holding the children.
 
-## The host
+## Modes
 
-A container asks the nearest ancestor that establishes an inline-size containment
-context, and takes the content-box width that ancestor offers. The application frame
-is the usual one; any element declaring `container-type: inline-size` serves.
+| Mode | Class | Columns | Column measures, in grid units |
+| :--- | :--- | :--- | :--- |
+| Prose | `content-prose` | 1 | 83, the measure |
+| Golden | `content-golden` | 2 | 83, 32 |
+| Triad | `content-triad` | 3 | 51, 32, 32 |
 
-| Token | Applies to |
-| :--- | :--- |
-| `--cn-line` | The separation a container states after itself, and between the top-level blocks inside one. |
+A container carries exactly one mode class. Golden's row needs 117 grid units and
+Triad's needs 119, counting the `--cn-gap` between adjacent columns. Below that width,
+and in Prose at any width, the mode is rows of one column filling the width offered.
 
-See [Units and grid](/tokens/units).
+The measure is published as `--cn-measure` in [Units and grid](/tokens/units), and
+[Spatial System](/principles/spatial-system) explains where it recurs. Prose centres its
+column at the measure when the container is offered more, and fills the width offered
+when it is offered less.
+
+## The box a container sits in
+
+A container resolves its columns against the nearest ancestor that establishes an
+inline-size containment context, and takes the content-box width that ancestor offers. The application frame is
+the usual one; any element declaring `container-type: inline-size` serves, down to a box
+the size of a card. Containers nest.
+
+A container adds no inset. State any page-edge inset on the box the container sits in.
 
 ```html
 <div style="container-type: inline-size">
-  <section>As wide as the host offered.</section>
+  <section>As wide as the box offered.</section>
   <article class="content-prose"><p>Centred at the measure.</p></article>
 </div>
 ```
 
-## The measure
+## Rows
 
-A prose flow caps at `--cn-measure`, and a golden primary takes the same width. It
-holds 67 characters of Lato at the reading size, and scales with the reader's browser
-font settings. The value is published in [Units and grid](/tokens/units), and
-[Spatial System](/principles/spatial-system) explains where it recurs.
+Children fill the columns of a row in source order and continue on the next row. A last
+row holding fewer children than the mode has columns leaves the remaining columns empty.
+No child count is invalid.
 
-The flow centres at the measure where the host offers more, and fills the host where it
-offers less.
-
-## Container query context
-
-Each item in the flow is an inline-size container, so a component asks about the column
-it sits in rather than the window. The container is unnamed: an unnamed query resolves
-against the nearest one, which is the area holding the component. Where a card sits
-between the two, the card answers, and the card is what constrains the component.
-
-```css
-@container (max-width: 30rem) { … }
-```
-
-## Breaking out of the measure
-
-Inside a prose container, a child marked `breakout` leaves the measure and takes the
-width the container itself was offered. Use it for a table, a diagram, or a specimen
-that a reading column would crop.
-
-<div class="breakout surface">
-  This block is a breakout. It is as wide as this page was offered, and it reports that
-  width to the components inside it.
-</div>
-
-```html
-<div class="breakout surface">
-  This block is a breakout. It is as wide as this page was offered, and it reports that
-  width to the components inside it.
-</div>
-```
-
-## Golden
-
-`content-golden` puts a readable primary and one small secondary in one row, in source
-order.
-
-| Region | Grid units |
+| Token | Applies to |
 | :--- | :--- |
-| Primary | 83, the measure |
-| Secondary | 32 |
+| `--cn-line` | The separation between the rows of a container, and after the container itself. |
+| `--cn-gap` | The inline gap between the columns of one row. |
 
-The row appears where the host offers 117 grid units — the two regions and the
-`--cn-gap` between them — or more. Below that the regions stack and fill the host.
-The row is centred in whatever the host offers beyond it, so the primary does not line
-up with a prose flow above it.
-
-The demonstration below sits in a breakout, which is its host. Narrow the window to
-stack it.
+The demonstration below sits in a breakout, and resolves its columns against it. Narrow
+the window to bring it down to one column.
 
 <div class="breakout">
   <div class="content-golden">
-    <div class="surface elevation-2">Primary. As wide as a prose flow.</div>
-    <div class="surface elevation-2">Secondary.</div>
+    <div class="surface elevation-2">First child. As wide as a prose column.</div>
+    <div class="surface elevation-2">Second child.</div>
+    <div class="surface elevation-2">Third child, on the next row.</div>
+    <div class="surface elevation-2">Fourth child.</div>
   </div>
 </div>
 
 ```html
 <div class="content-golden">
-  <div class="surface elevation-2">Primary. As wide as a prose flow.</div>
-  <div class="surface elevation-2">Secondary.</div>
+  <div class="surface elevation-2">First child. As wide as a prose column.</div>
+  <div class="surface elevation-2">Second child.</div>
+  <div class="surface elevation-2">Third child, on the next row.</div>
+  <div class="surface elevation-2">Fourth child.</div>
 </div>
 ```
 
-A golden container has exactly two regions.
-
-## Triad
-
-`content-triad` lays its three regions out in one row: a medium primary and two small
-secondaries, in source order.
-
-| Region | Grid units |
-| :--- | :--- |
-| Primary | 51 |
-| Secondary | 32 |
-| Secondary | 32 |
-
-The row appears where the host offers 119 grid units — the three regions and the two
-`--cn-gap` between them — or more. Below that the regions stack and fill the host.
-The row is centred in whatever the host offers beyond it.
-
-The demonstration below sits in a breakout, as the golden one does.
+A triad lays the same children out three to a row.
 
 <div class="breakout">
   <div class="content-triad">
-    <div class="surface elevation-2">Primary. The medium region.</div>
-    <div class="surface elevation-2">Secondary.</div>
-    <div class="surface elevation-2">Secondary.</div>
+    <div class="surface elevation-2">First child.</div>
+    <div class="surface elevation-2">Second child.</div>
+    <div class="surface elevation-2">Third child.</div>
+    <div class="surface elevation-2">Fourth child, alone on the last row.</div>
   </div>
 </div>
 
 ```html
 <div class="content-triad">
-  <div class="surface elevation-2">Primary. The medium region.</div>
-  <div class="surface elevation-2">Secondary.</div>
-  <div class="surface elevation-2">Secondary.</div>
+  <div class="surface elevation-2">First child.</div>
+  <div class="surface elevation-2">Second child.</div>
+  <div class="surface elevation-2">Third child.</div>
+  <div class="surface elevation-2">Fourth child, alone on the last row.</div>
 </div>
 ```
 
-A triad has exactly three regions.
+## Breaking out
 
-## What counts as a region
+A child marked `breakout` spans every column of its row, in every mode, and begins a row
+of its own. In Prose that span is the whole width offered to the container. Use it for a
+table, a diagram, or a specimen that a reading column would crop.
 
-A `script`, `style` or `template` child of a golden or triad container does not take a
-track. An `astro-island` counts as the single region it renders — including while a
-deferred island is still showing its fallback, which is why a deferred region renders
-one element in every one of its states.
+<div class="breakout surface">
+  This block is a breakout of the prose container holding this page. It is as wide as
+  the page was offered, and it reports that width to the components inside it.
+</div>
 
-A prose flow child follows the same rule: an island is the one element it renders, so a
-hydrated component may sit directly in a prose container and still take the measure, and
-carry `breakout` and receive breakout layout.
+```html
+<div class="breakout surface">
+  A breakout of the prose container holding this page.
+</div>
+```
 
-Each region reports its own track to the components inside it, and under `surface-area`
-as well where the region is a surface.
+In Golden and in Triad the row before a breakout ends wherever it had reached.
 
-A region is as tall as its own content, and the row is as tall as its tallest region.
-A short region that paints — a surface, a bordered aside — therefore ends where its
-content ends. A region that wants the height of the one beside it asks for that
-itself, with `align-self: stretch`.
+<div class="breakout">
+  <div class="content-golden">
+    <div class="surface elevation-2">First child.</div>
+    <div class="breakout surface elevation-2">A breakout, on a row of its own.</div>
+    <div class="surface elevation-2">The row after it starts at the first column.</div>
+  </div>
+</div>
+
+```html
+<div class="content-golden">
+  <div class="surface elevation-2">First child.</div>
+  <div class="breakout surface elevation-2">A breakout, on a row of its own.</div>
+  <div class="surface elevation-2">The row after it starts at the first column.</div>
+</div>
+```
+
+Containers stack inside a breakout as they stack anywhere, one `--cn-line` apart.
+
+<div class="breakout">
+  <div class="content-triad">
+    <div class="surface elevation-2">A triad.</div>
+    <div class="surface elevation-2">Second child.</div>
+    <div class="surface elevation-2">Third child.</div>
+  </div>
+  <div class="content-golden">
+    <div class="surface elevation-2">A golden below it.</div>
+    <div class="surface elevation-2">Second child.</div>
+  </div>
+</div>
+
+## A card-sized box
+
+The mode class states nothing about the width available, so the same three containers
+compose down to a box the size of a card. Each is rows of one column there.
+
+<div style="container-type: inline-size; inline-size: 22rem;">
+  <div class="content-prose">
+    <p>Prose fills the box, and adds no inset.</p>
+  </div>
+  <div class="content-golden">
+    <div class="surface elevation-2">Golden, first child.</div>
+    <div class="surface elevation-2">Second child.</div>
+  </div>
+  <div class="content-triad">
+    <div class="surface elevation-2">Triad, first child.</div>
+    <div class="surface elevation-2">Second child.</div>
+    <div class="surface elevation-2">Third child.</div>
+  </div>
+</div>
+
+```html
+<div style="container-type: inline-size; inline-size: 22rem;">
+  <div class="content-triad">…</div>
+</div>
+```
+
+## Container query context
+
+Each child of a container is an inline-size container reporting the width it occupies,
+which for a breakout is the whole width offered. A component inside queries the
+column it sits in rather than the window.
+
+The boundary is unnamed, so an unnamed query resolves against the nearest one. Where a
+card sits between the component and the column, the query resolves against the card,
+which is the box constraining the component.
+
+```css
+@container (max-width: 30rem) { … }
+```
+
+## What takes a column
+
+A `script`, `style` or `template` child takes no column. An `astro-island` takes none
+either: each element it renders is a child in the island's place, so a hydrated
+component sits directly in a container, takes a column, and carries `breakout` — in
+every state a deferred island moves through.
+
+## Height
+
+A child is as tall as its own content, and a row is as tall as its tallest child. A
+child that must match the height of the one beside it states that itself, with
+`align-self: stretch`.
+
+A child box stays within its column, including where a descendant has an oversized
+intrinsic width or unbreakable content. What a child holds, and how the child spaces it,
+belongs to the child.

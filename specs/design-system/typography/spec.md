@@ -46,6 +46,13 @@ The system also publishes utilities for common text alignment.
 A subtitle is a paragraph belonging to the heading above it: reading size at the
 emphasis weight, with no gap between the two.
 
+An element carries no margin; whatever holds it states the separation. A flowing-text
+region is the exception. Author-written markdown renders there: a wiki page, a thread
+post, a reply or a handout. Inside `.text-prose`, `--cn-line` separates every standard
+text block from the block after it, except where that block is the last child of its
+parent. The region reaches every descendant, so a block inside a quote or a list item
+takes the separation a block at the top level takes.
+
 Tracking is v20's for the steps v20 states; the steps v20 lacks derive from a
 neighbour — title takes h1's, small takes text's.
 
@@ -74,6 +81,29 @@ downshift included.
 `.text-label` is intended for caption-sized data whose casing carries meaning; a
 Finnish compound loses its word shape in capitals.
 
+A flowing-text region spaces the blocks a markdown renderer emits: `h1` through `h6`,
+`p`, `ul`, `ol`, `blockquote`, `pre`, `table` and `hr`. The list omits `li` on purpose:
+the items of a list sit against one another, and the list carries the separation from
+what follows it.
+
+A thematic break takes the one margin below, as every other block does. The block above
+states the space over it, so a break renders with one line on each side.
+`specs/design-system/dividers/spec.md` governs the mark.
+
+A region caps every image, picture, video, canvas, SVG, frame and embedded object
+inside it at the width offered, and everything carrying an intrinsic ratio keeps that
+ratio. A frame and an embedded object keep the height they are given, because neither
+carries a ratio to keep. `specs/design-system/preflight/spec.md` states why media is
+unconstrained everywhere else.
+
+The region states its element list at specificity zero, so its rules weigh one class.
+The stylesheet entry point loads typography before every component stylesheet, so a
+component inside a region that states its own spacing wins on source order.
+
+A subtitle closes one line of separation above it, so it belongs where one line
+separates it from the heading: as siblings in a content container, or inside a
+flowing-text region. Anywhere else it overlaps the heading.
+
 Heading wrap and table typography remain undecided here; the table in
 `specs/design-system/preflight/spec.md` lists them under Typography. Link presentation
 and the distinction between navigation and commands are specified in
@@ -92,6 +122,8 @@ and the distinction between navigation and commands are specified in
   renders on this system.
 - The design site's editorial text renders on it too, stating no size or leading of
   its own.
+- A reader of author-written markdown — a wiki page, a thread post, a reply, a handout
+  — sees its paragraphs, headings, lists, quotes and tables separated from one another.
 - No text styling reaches either application from the package v21 removes.
 - Human review accepts how both running applications look.
 
@@ -104,12 +136,61 @@ and the distinction between navigation and commands are specified in
 - A step resized without recomputing its line breaks the rhythm wherever it appears.
 - A downshift driven by window width instead of container width renders card and
   list-row headings at page sizes.
+- The element lists a region states stay inside `:where()`. Weighing more, they reach
+  past a component that states its own spacing or sizes its own replaced element.
+- A snippet renderer that shows one paragraph of markdown carries no region. A teaser
+  line with a block margin below it sits off the rhythm of the row holding it.
 - `container-type: inline-size` also applies layout containment, making the container
   a containing block for absolutely and fixed positioned descendants, and a new
   stacking context. A FAB, tray or dock positioned against the viewport inside one
   renders against the container instead: visible, correctly styled, wrongly placed.
 
 ### Scenarios
+
+`apps/design/e2e/typography.spec.ts` runs the downshift and flowing-text scenarios.
+
+```gherkin
+Given a flowing-text region holding paragraphs, headings, a list, a quote, a code
+  block, a table and a thematic break
+When it renders
+Then --cn-line separates each block from the one after it
+```
+
+```gherkin
+Given a block that is the last child of its parent inside a flowing-text region
+When it renders
+Then it adds no space below itself
+```
+
+```gherkin
+Given a list inside a flowing-text region
+When it renders
+Then nothing separates its items from one another
+```
+
+```gherkin
+Given a standard text block outside every flowing-text region
+When it renders
+Then it carries no margin
+```
+
+```gherkin
+Given an image wider than the region it is written in
+When the region renders
+Then the image fits the width offered and keeps its ratio
+```
+
+```gherkin
+Given a component that sizes its own replaced element inside a flowing-text region
+When the region renders
+Then the component's size holds
+```
+
+```gherkin
+Given a subtitle after a heading inside a flowing-text region
+When they render
+Then nothing separates them
+```
 
 ```gherkin
 Given an h1, h2, h3 or h4 in a container narrower than small-screen width

@@ -9,10 +9,7 @@ type Props = {
 const { profile }: Props = $props();
 </script>
 
-<article
-  class="flex"
-  style="flex-direction: column; align-items: center;"
->
+<article class="profile-section">
   <CnAvatar src={profile.avatarURL} nick={profile.nick} size="large" aria-hidden />
 
   <p class="m-0 text-center">
@@ -39,3 +36,14 @@ const { profile }: Props = $props();
     </div>
   {/if}
 </article>
+
+<style>
+  /*
+   * The Triad container places this article and reaches no deeper, so the interval
+   * between the avatar, the name, the bio and the links is stated here.
+   */
+  .profile-section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

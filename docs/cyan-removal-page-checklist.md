@@ -14,6 +14,58 @@ Firestore, or the e2e seed value where that is all the source names. A seeded ke
 resolves after `test:e2e` has seeded. That command does not run in flight, so
 substitute a live key.
 
+## How to patch a page
+
+The inbox (`010889aa`), the channel directory (`c90fe8bf`) and the channel page
+(`cea1240c`) settled the method. Follow it per page.
+
+1. **Census the markup.** Grep the page and every component it renders for class
+   names, and resolve each against the published stylesheets. A name that declares
+   nothing goes; it is not replaced by another atomic, because the vocabulary has
+   none. Cyan is the inventory of what goes, never a source for what replaces it.
+2. **Give each payload a content container, and let the page sequence them.** A
+   single flow takes `.content-prose`, a flow with one secondary beside it
+   `.content-golden`, three peers `.content-triad`: the channel directory is Prose,
+   the channel page Golden because its channel card is the secondary. A page may
+   stack containers in different modes — the spec calls `.app-main` the host for a
+   sequence of them, and the host states the `--cn-line` between siblings — so two
+   containers under one `<main>` is the composition working, never a defect to
+   collapse. What is a defect is a box between a container and its payload: the
+   inbox's `<section>` swallowed the rhythm the container states.
+3. **State the rhythm where it belongs.** A content container separates the payloads
+   it places by `--cn-line`, and reaches no deeper. Inside one payload, the component
+   states the interval between its blocks, in one scoped rule on the box that holds
+   them, so a list needs no rhythm class and a row no margin.
+4. **Check that the container's rules reach the payload.** An `astro-island` is
+   `display: contents`, so it has no box: a rule placed on it paints nothing, and
+   the island's own children are what the container must reach.
+   `content-containers.css` carries that arm for a Prose child (`:56`) and for a
+   Golden or Triad child (`:102,104`), so a container wrapping an island works. It
+   carries no such arm for `.app-main > *`, so a hydrated container gets no rhythm
+   from its host. Where a page hits a missing arm, fix the stylesheet rather than
+   the page.
+5. **Stand each payload box on `.surface`.** The surface carries the padding. Add
+   elevation only where a state calls for it — the inbox's unread row takes
+   `elevation-3` — never as decoration.
+6. **Write the missing layout locally, and mark it.** Where no published capability
+   offers the shape, write one scoped rule in the component, under a comment marking
+   it as a v21 stopgap, not the design language. Anchor it in a `plans/debt` file when
+   one covers the gap; listing rows anchor to
+   `plans/debt/the-design-system-has-no-listing-row.md`. Do not copy a stopgap into a
+   second component without adding it to the anchor.
+7. **Fix what the removal exposes, in the same commit.** Look for a missing i18n
+   key, an `<a>` with no `href`, a heading reaching for the dead `text-h5`, an
+   `<hr>` painting for the first time. E2e selectors follow the markup even though
+   the suite does not run.
+8. **Look at the page.** Run `astro check` and `pnpm test` first, then the page on the
+   dev server at 4321 in every state the row lists. A green suite is not evidence a
+   page renders.
+9. **Record it.** Set the row's Checked to `yes`, and add the page's paragraph to
+   `docs/cyan-removal-handoff.md` — what it now stands on, and what it left open.
+
+A JSX-style `{/* */}` comment inside a Svelte template parses as an expression and
+breaks the component; `astro check` catches it.
+
 ## Front and session
 
 | Page | Link | States to look at | Checked |

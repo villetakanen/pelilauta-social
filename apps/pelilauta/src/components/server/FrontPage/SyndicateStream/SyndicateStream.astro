@@ -32,12 +32,21 @@ try {
 }
 ---
 <!--
-  The stream itself carries no surface: the region rests in the page like its sibling
-  columns, and it is already an occupied Triad region, so it needs no `content-prose` to
-  give its children the rhythm. Each post below carries the surface instead, and the
-  gap between them is the column grid's, so nothing here states a line between posts.
+  The stream itself carries no surface: the column rests in the page like the columns
+  beside it, and each post below carries the surface instead.
 -->
 <section>
   <h2 class="text-h3">{t('frontPage:syndicate.title')}</h2>
   {posts.map((post) => <SyndicatePost {post} />)}
 </section>
+
+<style>
+  /*
+   * The Triad container places this section and reaches no deeper, so the rhythm
+   * between the heading and the posts is stated here.
+   */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

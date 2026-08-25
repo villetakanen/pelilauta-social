@@ -7,13 +7,14 @@ order: 6
 import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import StepTable from '@design-system/books/specimens/StepTable.astro'
 import typographySource from '@design-system/styles/typography.css?raw'
+import CnIcon from '@design-system/components/CnIcon.svelte'
 
 We rely on two complementary typeface families: **Lato** provides an approachable,
 high-legibility voice for interface controls, headings, and discussion content, while
 **Roboto Mono** provides structure, alignment, and disambiguation for code, technical
 metadata, and tabular figures.
 
-<div class="surface elevation-1">
+<div class="surface elevation-1 text-prose" id="type-pairing">
 
 ### Lato
 
@@ -76,6 +77,87 @@ breakpoint (`38.75rem`).
 
 - **Container-relative evaluation:** Headings downscale via CSS Container Queries (`@container`), rather than the viewport width.
 - **Proportional consistency:** Downscaling by a single modular step preserves the 1:1.414 ratio between heading levels while reducing line wrapping in narrow containers.
+
+## Flowing text
+
+Whatever holds interface text places it: a card states the space around its title, a
+form states the space around a label. Author-written markdown has no such holder. A
+wiki page, a thread post, a reply and a handout arrive as a run of paragraphs,
+headings, lists and tables. The markup says nothing about where one block ends and the
+next begins.
+
+We mark the region rather than the blocks. Inside `.text-prose`, one line
+(`--cn-line`, 24px) separates every standard text block from the block after it. The
+last block of each parent closes flush, so a region drops into a card or a column
+without adding space at the edge.
+
+<div class="surface elevation-1 text-prose" id="prose-region">
+
+### Aloitus
+
+Pelinjohtaja kuvaa tilanteen, ja ensimmäinen vuoro siirtyy aktiiviselle pelaajalle.
+
+- Valitse rooli
+- Valitse aloitusvarusteet
+
+> Aloite ratkaistaan kerran kohtausta kohti.
+>
+> Tasatuloksessa pelaaja toimii ensin.
+
+```text
+2d6 + kyky
+```
+
+| Heitto | Tulos |
+| :--- | :--- |
+| 10+ | Onnistuu |
+| 7–9 | Onnistuu, mutta |
+
+---
+
+Kohtaus päättyy, kun jokainen on toiminut kerran.
+
+</div>
+
+```html
+<article class="text-prose">
+  <!-- rendered markdown -->
+</article>
+```
+
+A list keeps its items together. The line separates blocks, and a list is one block, so
+its items sit against one another. The list carries the separation from what follows
+it.
+
+Outside a region an element carries no margin, and two paragraphs meet with nothing
+between them.
+
+<div class="surface elevation-1" id="plain-region">
+
+Ilman aluetta kappaleet asettuvat vastakkain.
+
+Tämä on toinen kappale.
+
+</div>
+
+### Media in a region
+
+An image an author wrote into a page has nothing to fit but the text around it, so we
+cap every replaced element in a region at the width offered and keep the ratio it
+arrived with. A component that sizes its own image or glyph keeps that size: the
+rules of the region weigh nothing against the rule the component states.
+
+<div class="surface elevation-1 text-prose" id="media-region">
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='400'%3E%3Crect width='1600' height='400' fill='%236b7f6b'/%3E%3C/svg%3E" width="1600" height="400" alt="An illustration wider than the column holding it" />
+
+<CnIcon noun="fox" />
+
+</div>
+
+A snippet renderer carries no region either. A listing row that shows the first
+sentence of a thread would take a block margin below that sentence, and the row would
+sit off the rhythm of the rows around it.
 
 ## Emphasis
 

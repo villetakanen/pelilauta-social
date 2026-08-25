@@ -40,3 +40,14 @@ const figures =
   <section set:html={htmlContent} />
   
 </article>
+
+<style>
+  /*
+   * The Golden container places this article and reaches no deeper, so the rhythm
+   * between the title, the quote, the images and the body is stated here.
+   */
+  article {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

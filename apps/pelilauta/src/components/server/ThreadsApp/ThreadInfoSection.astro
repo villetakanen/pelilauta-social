@@ -44,7 +44,7 @@ if (thread.blueskyPostUri) {
   it has no destination to preview and takes the same idiom rather than a card. It leads
   the column, so the separators below it are what divide the blocks.
 -->
-<section class="flex flex-col">
+<section class="thread-info">
   <section class="flex flex-col p-2">
     <h4 class="downscaled m-0">{t("threads:info.title")}</h4>
     <p>
@@ -94,3 +94,14 @@ if (thread.blueskyPostUri) {
 
   <ThreadInfoActions {thread} client:only="svelte" />
 </section>
+
+<style>
+  /*
+   * The Golden container places this column and reaches no deeper, so the interval
+   * between the blocks is stated on the column.
+   */
+  .thread-info {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

@@ -67,10 +67,10 @@ async function loadMoreThreads() {
 
 {#if !hasError}
 <!--
-  The page's Golden container reaches through the island, so the listing and
-  the channel card are this component's two top-level elements: the readable
-  primary and the small secondary. Each region is already a content area, so
-  the rows below need no rhythm of their own.
+  The Golden container of the page reaches through the island, so the listing and the
+  channel card are the two top-level elements here: the readable column and the small
+  one beside it. The container places each and reaches no deeper, so the rhythm inside
+  the listing is stated below.
 -->
 <section>
   <header class="surface">
@@ -141,6 +141,12 @@ async function loadMoreThreads() {
 {/if}
 
 <style>
+  /* The rhythm between the header, the rows and the load-more button. */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
   /*
    * Stopgap. The design system publishes no toolbar layout, so the header's
    * row — title block beside the search box — is local. Do not copy it.
