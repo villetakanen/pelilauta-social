@@ -80,6 +80,31 @@ default level, so a bare `.surface` stood opaque on the artwork. The selector no
 carries the unoverridden-surface arm surface.css already uses, and the poster spec's
 constraint says so.
 
+The channel directory's triage is done (`c90fe8bf`). Each row stands on `.surface`
+with a local stopgap layout — identity beside latest activity at the measure — and
+the category section states the rhythm between heading and rows; both are anchored
+in `plans/debt/the-design-system-has-no-listing-row.md`. The page wraps in
+`.content-prose`, the row link spans name and description as in v18, and the
+latest-is-newest note no longer renders on an empty channel. The stopgap's grid gap
+is `var(--cn-line) var(--cn-gap)` — line rhythm stacked, inline gap in columns —
+and the `38.75rem` container-query literal carries the comment naming
+`--cn-breakpoint-small`, both per review. `e2e/channels.spec.ts` selectors follow
+the markup (`main section article` for rows), though the suite is never run in
+flight.
+
+The channel page (`/channels/[key]`) followed the directory. The page wraps its one
+island in `.content-golden`, and the island renders the listing and the channel card
+as its two top-level elements, so Golden reaches through and each takes a region —
+the region's own grid then spaces the thread rows, so the list needs no rhythm class.
+`ThreadListItem.svelte` is the third local listing-row stopgap, in the same debt
+file; its tag spans wear `.chip` in place of the dead `pill`. The header — breadcrumb,
+title, search — is a local flex row marked as a stopgap with no debt anchor, since no
+toolbar layout is published; `ChannelSearchBox` dropped its dead atomics and lays its
+form out locally, and stays wrapped in one div inside the header so its login prompt
+stacks under the form rather than joining the flex row (a review catch). A JSX-style
+`{/* */}` comment in a Svelte template parses as an expression and breaks the whole
+component; `astro check` catches it.
+
 The debug utility is back, as its own capability rather than Cyan's painted box
 (`specs/design-system/debug/spec.md`, live). `.debug` swaps the surface family for
 rowan, a hand-authored demonstration scale in `styles/chroma-themes.css`; the swap
