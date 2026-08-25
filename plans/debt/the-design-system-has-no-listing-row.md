@@ -5,8 +5,14 @@ flex rules in its own `<style>` block, because no design-system capability publi
 a listing row. `specs/design-system/surface/spec.md` names a listing row as a surface
 consumer, so the gap has an anchor; no spec defines the row itself.
 
+The channel directory carries the same gap twice over: `ChannelInfoRow.astro` lays
+out its row — icon, channel identity, latest activity beside it at width — locally,
+and `ChannelsList.astro` states the rhythm between a category's heading and its rows
+locally, because no published class gives a section internal rhythm either.
+
 ## Remaining change
 
-Spec and publish a listing row, then delete `NotificationItem.svelte`'s local layout
-and compose the row. Until then the local block stands as a marked stopgap and is not
+Spec and publish a listing row, then delete the local layouts in
+`NotificationItem.svelte`, `ChannelInfoRow.astro` and `ChannelsList.astro` and
+compose the row. Until then each local block stands as a marked stopgap and is not
 a pattern to copy.

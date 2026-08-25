@@ -14,7 +14,7 @@ test.describe('Channels Page', () => {
     ).toBeVisible();
 
     // Verify that channel cards are present (at least the test channels we know about)
-    const channelCards = page.locator('article.cols-2');
+    const channelCards = page.locator('main section article');
     const channelCount = await channelCards.count();
     expect(channelCount).toBeGreaterThanOrEqual(3); // At least yleinen, roolipelit, tapahtumat
 
@@ -62,7 +62,7 @@ test.describe('Channels Page', () => {
     ).toBeVisible();
 
     // Find a channel with threads (like Pelilauta)
-    const pelilautaCard = page.locator('article.cols-2').filter({
+    const pelilautaCard = page.locator('main section article').filter({
       has: page.locator('a[href="/channels/yleinen"]'),
     });
 
@@ -95,7 +95,7 @@ test.describe('Channels Page', () => {
     ).toBeVisible();
 
     // Find the test channel which has no threads
-    const testChannelCard = page.locator('article.cols-2').filter({
+    const testChannelCard = page.locator('main section article').filter({
       has: page.locator('a[href="/channels/test-channel"]'),
     });
 
@@ -166,16 +166,16 @@ test.describe('Channels Page', () => {
 
     // Verify the category section exists
     const categorySection = page
-      .locator('section.content-listing')
+      .locator('main section')
       .filter({ hasText: 'Pelilauta' })
       .first();
     await expect(categorySection).toBeVisible();
 
-    // Verify the category header
-    await expect(categorySection.locator('header h2')).toHaveText('Pelilauta');
+    // Verify the category heading
+    await expect(categorySection.locator('h2')).toHaveText('Pelilauta');
 
     // Verify channels are grouped under the category
-    const channelsInCategory = categorySection.locator('article.cols-2');
+    const channelsInCategory = categorySection.locator('article');
     const channelCount = await channelsInCategory.count();
     expect(channelCount).toBeGreaterThanOrEqual(3); // At least pelilauta, yleinen, and test-channel
   });
