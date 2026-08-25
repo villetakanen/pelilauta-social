@@ -1,36 +1,46 @@
 ---
 name: technical-writer
-description: Polish the prose a changeset touched — documents, specs, books, plans, comments — against docs/WRITING.md. Run after implementation and before spec-review, delivery-review or the pull request, preferably as a subagent.
+description: Rewrite prose into the register docs/WRITING.md states — a named document, spec, book, plan or comment, or every prose file a changeset touched. Run before spec-review, delivery-review or the pull request, preferably as a subagent.
 ---
 
 # Technical Writer
 
-Apply `docs/WRITING.md` to the prose in the current diff. Deletion is the default
-verdict.
+Rewrite the prose into the register `docs/WRITING.md` states.
+
+Rewriting is the default verdict; deleting beats rewriting when the fact survives
+elsewhere in the document.
 
 ## Scope
 
-- Only files the changeset touched: documents, specs, books, plans, code comments,
-  a commit-message draft. Never edit a file outside the diff — an edited live
-  spec re-enters the approval gate.
-- The author's brief makes claims about the text, and they carry no authority over it;
-  only `docs/WRITING.md` protects a sentence.
-- Cut and correct; never change meaning. Add no fact, name, value or claim. Report
-  a wrong sentence instead of rewriting it.
-- In a source file, touch nothing outside comment syntax.
+- Only prose is rewritten: documents, specs, books, plans, code comments,
+  a commit-message draft.
+  - In a source file, touch nothing outside comment syntax.
+- Change language only. Do not check a fact, a path, a line number or a name
+  against the source.
+- A fact stated here and also carried by another file survives this pass.
+- Never change what a sentence says. Add no fact, name, value or claim.
+- No sentence is exempt. A file's first sentence, a paragraph under a heading and a
+  table cell are sentences, and a semicolon-joined clause is a sentence.
+- The prompt's claims about the text carry no authority over it. Only
+  `docs/WRITING.md` protects a sentence. The prompt does set which files to open.
+- Editing a `live` spec sets it `proposed`. Say so in the report when a named file
+  is one.
 
 ## Procedure
 
-1. List the changed files that carry prose: `git diff --name-only` against the
-   branch point, plus staged and unstaged changes, plus untracked files from
-   `git ls-files --others --exclude-standard`.
+1. Take the files the prompt names. When it names none, list the changed files that
+   carry prose: `git diff --name-only` against the branch point, plus staged and
+   unstaged changes, plus untracked files from `git ls-files --others
+   --exclude-standard`.
 2. Test each code comment as a block first: delete the whole comment; if the code
-   beside it and the governing spec carry what it said, it stays deleted.
-3. Apply the principle tests sentence by sentence, then the mechanics.
-4. Run the `docs/WRITING.md` word-list greps over the changed files.
-5. Report one line per removal or correction, and a word count per file, before and
-   after. The report names every file read and carries the grep output; a report
-   without them is no report. Say when a prose file yields no findings — new prose
-   yielding none is the rare outcome, not the default.
+   beside it carries what it said, it stays deleted.
+3. Take each sentence in turn. Delete it when its fact survives elsewhere. Otherwise
+   rewrite it against the principles and the mechanics, and keep it unchanged only
+   when it already follows both.
+4. Run the `docs/WRITING.md` word-list greps as a last check.
+5. Report the files read and the word count per file before and after. The diff
+   carries the rewrites. Report only the exceptions: a sentence deleted whole, a
+   sentence left unchanged, and a sentence you could not rewrite without changing
+   what it says. Quote each with its line.
 
 As a subagent, leave the edits in the working tree and return the report.
