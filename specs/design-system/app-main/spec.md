@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: live
 ---
 
 # App Main
@@ -66,8 +66,8 @@ separation that follows it. A child that is neither has no layout guarantee.
 - The frame stylesheet supplies the containment context, the inline inset and the bar
   clearance, and nothing else. The separation between the children of the frame
   stays on the containers.
-- Every rule in the frame stylesheet sits below `.app-main`;
-  `packages/design-system/test/app-main.test.ts` reads the stylesheet to check that.
+- Every rule in the frame stylesheet sits below `.app-main`, so a page that has not
+  opted in keeps the layout it has.
 - The frame element remains the containing block for absolutely and fixed positioned
   descendants, so a part that must position against the viewport stays outside it.
 

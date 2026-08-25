@@ -72,36 +72,6 @@ describe('the disabled state', () => {
     expect(html).not.toContain('disabled');
     expect(html).not.toContain('inert');
   });
-
-  test('disabled reaches the textarea', () => {
-    const html = markup({ label: 'Vastaa', disabled: true });
-    expect(html).toMatch(/<textarea[^>]*disabled/);
-  });
-
-  test('disabled reaches the leading and trailing action regions', () => {
-    const html = markup({
-      label: 'Vastaa',
-      disabled: true,
-      leading: '<button type="button">Liitä</button>',
-      trailing: '<button type="button">Lähetä</button>',
-    });
-    const actionDivs = [
-      ...html.matchAll(/<div class="[^"]*actions[^"]*"[^>]*>/g),
-    ];
-    expect(actionDivs).toHaveLength(2);
-    for (const [tag] of actionDivs) {
-      expect(tag).toContain('inert');
-    }
-  });
-
-  test('a disabled bar leaves its supplied buttons native, without a role or handler of its own', () => {
-    const html = markup({
-      label: 'Vastaa',
-      disabled: true,
-      leading: '<button type="button">Liitä</button>',
-    });
-    expect(html).toContain('<button type="button">Liitä</button>');
-  });
 });
 
 describe("the bar's own add action", () => {

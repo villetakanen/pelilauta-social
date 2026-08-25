@@ -21,7 +21,6 @@ import {
   resolve,
   tokenMap,
 } from '../books/specimens/color';
-import { parseTokens } from '../books/specimens/tokenTable';
 
 const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');

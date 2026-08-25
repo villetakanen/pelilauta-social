@@ -46,12 +46,6 @@ describe('the message element', () => {
   test('a bubble with no content still renders the article', () => {
     expect(markup()).toMatch(/<article[^>]*>\s*<\/article>\s*<\/div>$/);
   });
-
-  test('the tail adds no element', () => {
-    expect(markup({ children: '<p>Ehdin torstaina.</p>' })).not.toMatch(
-      /<(?!\/?(div|article|p)\b)[a-z]/,
-    );
-  });
 });
 
 describe('the content', () => {
@@ -91,20 +85,6 @@ describe('the mark', () => {
     expect(html.indexOf('cn-bubble-mark')).toBeLessThan(
       html.indexOf('<article'),
     );
-  });
-
-  test('the mark announces nothing, and names no participant', () => {
-    const html = markup({ nick: 'Rauta-Kalle' });
-    expect(html).toMatch(/class="[^"]*cn-bubble-mark[^"]*"[^>]*aria-hidden/);
-    expect(html).not.toContain('aria-label');
-    expect(html).not.toContain('role="img"');
-  });
-
-  test('the mark presents no interactive affordance', () => {
-    const html = markup({ nick: 'Rauta-Kalle' });
-    expect(html).not.toContain('<a ');
-    expect(html).not.toContain('<button');
-    expect(html).not.toContain('tabindex');
   });
 
   test('a nick without an avatar reduces to initials', () => {

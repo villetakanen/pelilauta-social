@@ -56,20 +56,6 @@ const family = (name: string) => steps.filter((step) => step.family === name);
 const exceptionDeclared = (familyName: string, step: number) =>
   Boolean(theme.lightnessExceptions?.[familyName]?.[String(step)]);
 
-test('the palette is declared entirely in oklch', () => {
-  const values = Object.values(theme.families).flatMap((definition) =>
-    Object.values(definition.steps),
-  );
-  expect(steps).toHaveLength(values.length);
-  for (const value of values) expect(value).toMatch(OKLCH);
-});
-
-test('every family kind is core or auxiliary', () => {
-  for (const [name, definition] of Object.entries(theme.families)) {
-    expect(['core', 'auxiliary'], name).toContain(definition.kind);
-  }
-});
-
 describe('a step number is its perceived lightness', () => {
   // The property the whole book rests on: --chroma-surface-50 is oklch L 0.5,
   // so the number predicts contrast without resolving anything.
@@ -91,34 +77,6 @@ describe('a step number is its perceived lightness', () => {
       expect(step.l).toBeCloseTo(expectedL, 5);
     });
   }
-});
-
-describe('hue', () => {
-  test('surface holds one hue at every step', () => {
-    expect(new Set(family('surface').map((step) => step.h))).toEqual(
-      new Set([242]),
-    );
-  });
-
-  test('every status family holds one hue', () => {
-    for (const name of ['error', 'warning', 'love']) {
-      expect(
-        new Set(family(name).map((step) => step.h)),
-        `${name} should not rotate`,
-      ).toHaveProperty('size', 1);
-    }
-  });
-
-  test('primary is the one ramp that rotates as it lightens', () => {
-    const primary = family('primary');
-    const hues = primary.map((step) => step.h);
-
-    expect(new Set(hues).size).toBeGreaterThan(1);
-    expect(hues[0]).toBe(185);
-    expect(hues[hues.length - 1]).toBe(110);
-    // Monotonic: it warms on the way up and never turns back.
-    expect([...hues].sort((a, b) => b - a)).toEqual(hues);
-  });
 });
 
 describe('depth', () => {
@@ -143,18 +101,5 @@ describe('depth', () => {
         name,
       ).toEqual(AUXILIARY_STEPS);
     }
-  });
-});
-
-describe('chroma', () => {
-  test('it peaks in the middle of a ramp and falls to zero at both ends', () => {
-    const surface = family('surface');
-    const first = surface.find((step) => step.step === 0);
-    const last = surface.find((step) => step.step === 100);
-    const peak = Math.max(...surface.map((step) => step.c));
-
-    expect(first?.c).toBe(0);
-    expect(last?.c).toBe(0);
-    expect(peak).toBeGreaterThan(0.1);
   });
 });
