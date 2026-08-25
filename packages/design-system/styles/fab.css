@@ -146,7 +146,7 @@ button.fab:disabled {
 nav.fab-tray {
   position: absolute;
   z-index: var(--cn-z-fab);
-  inset-block-end: calc(var(--cn-gap) + var(--cn-block-end-chrome, 0px));
+  inset-block-end: var(--cn-gap);
   inset-inline: var(--cn-gap);
   display: flex;
   flex-direction: column;
