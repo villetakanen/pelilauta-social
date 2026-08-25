@@ -38,6 +38,8 @@ principles win.
 - One idea per sentence.
 - A semicolon-joined clause is a sentence; every sentence test applies to it alone.
 - No anthropomorphism: code does not want, know or care.
+- A possessive that stands in for a clause is rewritten as the clause: not
+  "the removal's triage", but "the triage that removed Cyan".
 - Plain language; no colloquialisms or figurative metaphors.
 - No contractions in a book.
 - *Owner* names an access-control role: a person on an entity's `owners` list,
