@@ -139,7 +139,8 @@ Also open, and each visible on a rendered page rather than in a suite:
   are headings reaching for the smallest step, which post-v19 is `text-h4`.
 - Twelve `border-t` sites draw nothing, and `hr` now paints — five `<hr>` in the app
   paint for the first time and none has been looked at, all being behind a session.
-- `seo.ts:29`'s library description still promises characters, which ADR 0003 removed.
+- The library description in `locales/fi/seo.ts:36` and `locales/en/seo.ts:36` still
+  promises characters, which ADR 0003 removed.
   The front page's and the login page's now read one shared string; the library's needs
   a decision about what the library is without character sheets.
 - `.toolbar` and `.flex` need layout answers case by case. The action row's own geometry
