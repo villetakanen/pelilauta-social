@@ -1,0 +1,33 @@
+/*
+ * The application page frame.
+ *
+ * An application opts in with `app-main` on the element holding the page body.
+ * Nothing matches a page that has not opted in: a bare `main` selector would put
+ * every page in the frame, including a route whose shell places itself.
+ *
+ * The frame states where the page begins and nothing else. Its children should be
+ * content containers, or `astro-island`s rendering one, and the separation between
+ * them is stated by the containers themselves in content-containers.css.
+ */
+
+.app-main {
+  /*
+   * The page-edge inset. It is padding rather than a pair of grid tracks, so the
+   * width a container is offered is the width it has, with nothing to opt out of.
+   */
+  padding-inline: var(--cn-gap);
+
+  /*
+   * Chrome is fixed and paints over the document, so the first container clears
+   * the application bar here rather than in every application shell.
+   */
+  padding-block-start: var(--cn-app-bar-height);
+
+  /*
+   * A content container asks its nearest containment context for its width, without
+   * naming it, and the frame is that context. This also makes the frame a containing
+   * block for absolutely positioned descendants, which is why a fab tray is mounted
+   * outside it.
+   */
+  container-type: inline-size;
+}

@@ -45,8 +45,8 @@ All from `packages/design-system/styles/units.css` and
 | `--cn-width-rail-collapsed` | 10 | 5 | 80 | `units.css:101` |
 | `--cn-width-rail-expanded` | 32 | 16 | 256 | `units.css:102` |
 | Prose composition (`--cn-measure`) | 83 | 41.5 | 664 | `units.css:19` |
-| Golden composition (83 + 2 + 32) | 117 | 58.5 | 936 | `content-containers.css:167` |
-| Triad composition (51 + 2 + 32 + 2 + 32) | 119 | 59.5 | 952 | `content-containers.css:153` |
+| Golden composition (83 + 2 + 32) | 117 | 58.5 | 936 | `content-containers.css:153` |
+| Triad composition (51 + 2 + 32 + 2 + 32) | 119 | 59.5 | 952 | `content-containers.css:139` |
 | `--cn-breakpoint-small` | 77.5 | 38.75 | 620 | `units.css:115` |
 | `--cn-breakpoint-tablet` | 128 | 64 | 1024 | `units.css:116` |
 
@@ -56,9 +56,9 @@ The small breakpoint is the one value off the grid: 77.5 steps, inherited from C
 ## Derivation
 
 `.app-main` pads itself one gap each side and centres a composition in what remains
-(`content-containers.css:16-30`). The padding folds into the margin, so with the rail
-ceding nothing, the free space either side of a composition of width W in a viewport
-of width V is (V − W) / 2.
+(`app-main.css:14-19`). The padding folds into the margin, so with the rail ceding
+nothing, the free space either side of a composition of width W in a viewport of
+width V is (V − W) / 2.
 
 The rule asks that space to hold the expanded rail and one gap:
 
@@ -79,7 +79,7 @@ flip the rail's behaviour with the page under it, so the widest composition gove
 Every input is a grid multiple, so the threshold lands on the grid. A query cannot
 read a custom property, so the rule states the literal and a test derives it from the
 tokens — the same guard `content-containers.test.ts` places on 59.5rem
-(`content-containers.css:148-152`).
+(`content-containers.css:134-138`).
 
 Following the naming at `units.css:109-113` — a breakpoint names the band it ends —
 the token is `--cn-breakpoint-desktop: 93.5rem`.

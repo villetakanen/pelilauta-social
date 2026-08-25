@@ -245,6 +245,90 @@ test('stacked containers are one --cn-line apart', async ({ page }) => {
   expect(second.y - (first.y + first.height)).toBeCloseTo(line, 0);
 });
 
+test('a stack keeps its rhythm, and its last container closes it', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BOOK);
+
+  // The host states no separation of its own, so the measured interval is only what
+  // the containers state. `flow-root` only keeps the last child's margin inside the
+  // host box, where the test can read it — flow-root itself adds no separation.
+  await page.evaluate(() => {
+    const host = document.createElement('div');
+    host.id = 'stack-host';
+    host.style.display = 'flow-root';
+    host.innerHTML = `
+      <div id="stacked-1" class="content-prose"><p>first</p></div>
+      <astro-island>
+        <div id="stacked-2" class="content-golden"><div>second</div></div>
+      </astro-island>
+      <div id="stacked-3" class="content-triad"><div>third</div></div>
+    `;
+    document.querySelector('main#content')?.append(host);
+  });
+
+  const line = await steps(page, LINE_STEPS);
+  const host = await page.locator('#stack-host').boundingBox();
+  const stacked = await Promise.all(
+    [1, 2, 3].map((n) => page.locator(`#stacked-${n}`).boundingBox()),
+  );
+  if (!host || stacked.some((box) => !box)) {
+    throw new Error('the stack did not render');
+  }
+  const boxes = stacked as NonNullable<(typeof stacked)[number]>[];
+
+  // The middle container is reached through an island, which is display: contents
+  // and has no box to carry the interval.
+  expect(boxes[1].y - (boxes[0].y + boxes[0].height)).toBeCloseTo(line, 0);
+  expect(boxes[2].y - (boxes[1].y + boxes[1].height)).toBeCloseTo(line, 0);
+  expect(host.y + host.height - (boxes[2].y + boxes[2].height)).toBeCloseTo(
+    line,
+    0,
+  );
+});
+
+test("a content container among a content area's children adds its own separation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BOOK);
+
+  await page.evaluate(() => {
+    const area = document.querySelector('main#content > .content-prose');
+    const block = document.createElement('div');
+    block.innerHTML = `
+      <p id="child-1">before</p>
+      <div id="child-2" class="content-golden"><div>a nested container</div></div>
+      <astro-island>
+        <div id="child-3" class="content-triad"><div>another one</div></div>
+      </astro-island>
+      <p id="child-4">after</p>
+    `;
+    area?.append(...block.children);
+  });
+
+  const line = await steps(page, LINE_STEPS);
+  const children = await Promise.all(
+    [1, 2, 3, 4].map((n) => page.locator(`#child-${n}`).boundingBox()),
+  );
+  if (children.some((box) => !box)) {
+    throw new Error('the content area did not render');
+  }
+  const boxes = children as NonNullable<(typeof children)[number]>[];
+  const interval = (index: number) =>
+    boxes[index + 1].y - (boxes[index].y + boxes[index].height);
+
+  // Between two ordinary blocks the area's rhythm is the whole interval.
+  expect(interval(0)).toBeCloseTo(line, 0);
+
+  // A container states its own separation wherever it sits, and the area states
+  // its rhythm regardless of what the child is, so where a container precedes a
+  // sibling both apply — through an island as well, which has no box of its own.
+  expect(interval(1)).toBeCloseTo(2 * line, 0);
+  expect(interval(2)).toBeCloseTo(2 * line, 0);
+});
+
 /**
  * A container in a host of a known width. The host is built here rather than
  * measured off the book, so a composition can be put either side of its threshold

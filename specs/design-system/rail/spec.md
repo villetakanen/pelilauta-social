@@ -34,7 +34,7 @@ show their names, `compact` otherwise. The trigger
 composes that class for its target, state surface and transient states, stays compact
 in every presentation, and shows on itself the focus its toggle takes.
 
-The rail stands in the box `specs/design-system/application-chrome/spec.md` fixes over
+The rail stands in the box `specs/design-system/app-chrome/spec.md` fixes over
 the document, and spans its block size. It renders a navigation landmark, which the
 consumer names. The host marks its scope with `data-cn-rail-scope`.
 

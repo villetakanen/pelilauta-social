@@ -17,7 +17,7 @@ the reading area yields.
 ### Architecture
 
 A Svelte component, `packages/design-system/components/CnChatBar.svelte`, is a part of
-the application chrome governed by `../../application-chrome/spec.md`. Surface,
+the application chrome governed by `../../app-chrome/spec.md`. Surface,
 responsive placement, Markdown textarea and action composition form one public
 component; no separate anchor is a public capability.
 
@@ -47,7 +47,7 @@ CnChatBar has no standalone placement. Its placement root participates in
 browser window. A layout-transparent `astro-island` may stand between the two in the DOM.
 
 The surface stands at the chrome container's block end in every band, and grows toward
-the block start with its content. `../../application-chrome/spec.md` ends that container
+the block start with its content. `../../app-chrome/spec.md` ends that container
 above an on-screen keyboard, so the surface stands above the keyboard rather than behind
 it, and no band reserves space of its own for one.
 

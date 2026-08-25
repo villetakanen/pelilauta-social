@@ -7,26 +7,21 @@ order: 2
 
 ## The host
 
-`app-main` on a `<main>` makes it a host. It offers each direct child its full
-content-box width, with no intermediate wrappers.
+A container asks the nearest ancestor that establishes an inline-size containment
+context, and takes the content-box width that ancestor offers. The application frame
+is the usual one; any element declaring `container-type: inline-size` serves.
 
 | Token | Applies to |
 | :--- | :--- |
-| `--cn-gap` | The page-edge inset. |
-| `--cn-app-bar-height` | The block-start inset, clearing the fixed application bar. |
-| `--cn-line` | Between stacked containers, and between the top-level blocks inside one. |
+| `--cn-line` | The separation a container states after itself, and between the top-level blocks inside one. |
 
 See [Units and grid](/tokens/units).
 
-`content-prose` fills the width of whatever contains it — usually a `<main
-class="app-main">`, which adds the page-edge inset — and centres its children at the
-readable measure.
-
 ```html
-<main class="app-main">
+<div style="container-type: inline-size">
   <section>As wide as the host offered.</section>
   <article class="content-prose"><p>Centred at the measure.</p></article>
-</main>
+</div>
 ```
 
 ## The measure

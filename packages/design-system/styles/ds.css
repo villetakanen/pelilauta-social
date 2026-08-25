@@ -18,6 +18,7 @@
 @import "./fab.css";
 @import "./chrome-actions.css";
 @import "./rail.css";
+@import "./app-main.css";
 @import "./content-containers.css";
 @import "./surface.css";
 /* After surface.css: a menu container composes the floating elevation. */

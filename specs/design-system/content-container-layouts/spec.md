@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Content Container Layouts
@@ -16,27 +16,24 @@ engagement.
 
 ### Architecture
 
-Content Container Layouts has four roles: host, container, region, and content area. A
-host establishes an inline-size containment context and offers its full content-box
-width. A content container inside that host selects one layout mode and arranges its own
-regions. Each region holds the content assigned to one part of the composition. A content
-area is where content is placed: an occupied Golden or Triad region, or a Prose flow
-root.
+Content Container Layouts has four roles: host, container, region, and content area.
+The host is the box a content container sits in, and offers the container its
+content-box width. A content container inside that host selects one layout mode and
+arranges its regions. Each region holds the content assigned to one part of the
+composition. A content area is where content is placed: an occupied Golden or Triad
+region, or a Prose flow root.
 
-The host governs the container's available width, placement, edge inset, and vertical
-rhythm between sibling containers. The content container governs the inline and block
-arrangement of its regions. Every content area arranges its content the same way,
-whichever mode holds it. A mode differs in the width it offers a content area, not in
-how that area lays its content out.
+The content container governs the inline and block arrangement of its regions, and the
+separation after it. Every content area arranges its content the same way, whichever
+mode holds it. A mode differs in the width it offers a content area, not in how that
+area lays its content out.
 
-The application `<main>` bearing `.app-main` is the usual host for a sequence of
-content containers, and provides `--cn-gap` page-edge inset at narrow widths. Chrome is
-fixed and paints over the document, so the host also clears the application bar. The
-consumer applies that class; Content Container Layouts never matches a bare `<main>`,
-so a page that has not opted in keeps the layout it has. Any element that establishes
-an inline-size containment context may host containers. A
-content container may operate inside a smaller composition, including a card-sized
-host, and may be nested when each container has a distinct host.
+A content container requires an ancestor that establishes an inline-size containment
+context, and requires nothing else of what surrounds it. The nearest such ancestor
+answers the mode query. `../app-main/spec.md` governs the frame that usually holds a
+sequence of content containers. Any other element that establishes the context serves
+as a host. A content container may operate inside a smaller composition, including a
+card-sized host, and may be nested when each container has a distinct host.
 
 A Prose breakout may contain a source-ordered sequence of content containers and
 establishes their nearest host.
@@ -59,10 +56,10 @@ width of the host or the complete content container.
 
 The boundary is unnamed. A container query without a name resolves against the nearest
 ancestor container, so a component inside a region asks about the area holding it
-without naming anything, and a nearer boundary — a Surface between the component and
-the region — is the one that answers, which is the one constraining it. Content
-Container Layouts states no container name, and a component may not ask to skip a
-nearer boundary and reach its region.
+without naming anything. A nearer boundary — a Surface between the component and the
+region — answers instead, because that boundary is the one constraining the component.
+Content Container Layouts states no container name, and a component may not ask to
+skip a nearer boundary and reach its region.
 
 ### Constraints
 
@@ -85,9 +82,17 @@ next, separated by `--cn-line`. It separates every child regardless of what the 
 is; a child that belongs to the one above it closes that line itself. Content Container
 Layouts adds no edge inset or padding to a content area.
 
-`--cn-line` is the rhythm between the children of a content area, between stacked
-regions, and between sibling content containers in a host. `--cn-gap` is the inline gap
-between the regions of a wide composition, and the host's page-edge inset.
+`--cn-line` applies between the children of a content area, between stacked regions,
+and after a content container; `../spatial-system/spec.md` defines it. `--cn-gap` is
+the inline gap between the regions of a wide composition.
+
+A content container states the separation after itself on its own box, whatever the
+parent is. The last container in a stack states it as every earlier container does. A
+container reached through an `astro-island` keeps that separation. The island box does
+not state it.
+
+A content container placed in a content area states its separation as it does in any
+parent. Both the rhythm of the area and the separation of the container apply.
 
 An `astro-island` child of a content area delegates its flow box and query boundary to
 its one rendered element. An island that renders zero or multiple elements is invalid
@@ -106,15 +111,14 @@ establishes the inline-size containment boundary. Arbitrary content
 may occupy it, and Prose, Golden, and Triad containers may stack inside it. A
 `.breakout` outside a Prose flow root has no layout guarantee.
 
-Breakout is Prose's alone, and is the one way a content area in one mode differs from a
-content area in another. Prose's content area sits inside a container that spans the
-width its host offered, so a breakout has a container width to span that its content
-area does not. A Golden or Triad region is itself one of its container's tracks, in
-either composition, so a breakout there could span only the width the region already
-has.
+Only Prose supports breakout, and it is the one way a content area in one mode differs
+from a content area in another. The Prose content area sits inside a container that
+spans the width offered by its host, so a breakout has a container width to span that
+its content area does not. A Golden or Triad region is itself one track of its
+container, in either composition, so a breakout there could span only the width the
+region already has.
 
-A Prose container with zero or multiple flow roots, or a container placed in a host
-that narrows its content box below the host width, has no layout guarantee.
+A Prose container with zero or multiple flow roots has no layout guarantee.
 
 A Prose container nested in a Golden or Triad region adds no inset. When that region
 is no wider than Readable, the Prose flow fills it.
@@ -149,7 +153,7 @@ changes state.
 A Golden or Triad region is as tall as its own content, and the composition is as tall
 as its tallest region. A region does not stretch to the height of its neighbours, so a
 short region that paints — a Surface, a bordered aside — ends where its content ends. A
-region that wants its neighbour's height states that itself.
+region that must match its neighbour's height states that itself.
 
 Golden and Triad region boxes remain within their assigned tracks, including when a
 descendant has an oversized intrinsic width or unbreakable content. Descendant
@@ -219,8 +223,10 @@ Surface's name, and it reports the post-inset content-box width.
   within a content area must not resolve against host width.
 - Stacked Golden and Triad regions fill the host width.
 - A content area's rhythm is `--cn-line` in every mode. A mode may differ in the width
-  it offers a content area; only Prose differs by supporting breakout. No mode carries
-  a rhythm of its own.
+  it offers a content area; only Prose differs by supporting breakout.
+- The container states the separation after it, whatever the parent is and in every
+  mode. No host selector supplies it. No rule removes it from the last container in a
+  stack.
 - Breakouts inside Golden and Triad regions remain contained within their track box.
 
 ### Scenarios
@@ -376,4 +382,19 @@ And the container is as tall as its tallest region
 Given oversized intrinsic or unbreakable content in a fixed Golden or Triad region
 When the content container renders
 Then the region box retains its assigned track width
+```
+
+```gherkin
+Given content containers stacked in a parent that states no separation
+And one of them is reached through an astro-island
+When the containers render
+Then each is separated from the next by --cn-line
+And the last carries --cn-line after it
+```
+
+```gherkin
+Given a content container placed among the children of a content area
+When the content area renders
+Then the container states its separation as it does in any parent
+And no rule removes it
 ```

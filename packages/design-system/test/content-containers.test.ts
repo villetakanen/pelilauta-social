@@ -70,12 +70,7 @@ describe('scoping', () => {
   test('every rule sits below an opt-in class', () => {
     // A rule that escapes them reaches apps/pelilauta, which has not migrated
     // off Cyan's .content-columns.
-    const optIn = [
-      '.app-main',
-      '.content-prose',
-      '.content-triad',
-      '.content-golden',
-    ];
+    const optIn = ['.content-prose', '.content-triad', '.content-golden'];
     // An at-rule prelude becomes a closing brace, so the selectors nested inside
     // it are scanned too rather than silently skipped.
     const flattened = css.replace(/@[\w-]+[^{};]*\{/g, '}');

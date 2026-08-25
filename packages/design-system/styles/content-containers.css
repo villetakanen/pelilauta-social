@@ -1,39 +1,25 @@
 /*
  * Content container layouts.
  *
- * An application opts in with `app-main` on its <main>. Its direct children are
- * content containers, each choosing its own layout mode. Nothing matches a page that
- * has not opted in: most of the application is still on Cyan's `.content-columns`,
- * and a bare `main` selector would put every page on this grid at once.
+ * A content container selects one layout mode and arranges its own regions. It asks
+ * the nearest inline-size containment context for the width it was offered — usually
+ * the application frame in app-main.css, but any element establishing that context
+ * serves.
  *
- * The host offers its full content-box width. A container that wants the readable
- * measure asks for it with `content-prose`; a container that wants the whole width
- * simply takes it.
+ * A container that wants the readable measure asks for it with `content-prose`; a
+ * container that wants the whole width takes it.
  */
 
-.app-main {
-  /*
-   * The page-edge inset. It is padding rather than a pair of grid tracks, so a
-   * container's own width is the width it was offered, with nothing to opt out of.
-   */
-  padding-inline: var(--cn-gap);
-
-  /*
-   * Chrome is fixed and paints over the document, so the first container clears
-   * the application bar here rather than in every application's shell.
-   */
-  padding-block-start: var(--cn-app-bar-height);
-
-  /*
-   * A host answers its containers' width queries, and a container asks its nearest
-   * host without naming it. This also makes the host a containing block for
-   * absolutely positioned descendants, which is why a fab tray is mounted outside it.
-   */
-  container-type: inline-size;
-}
-
-/* Vertical rhythm between stacked containers, and below the last one. */
-.app-main > * {
+/*
+ * The separation after a content container is stated on the container itself, so it
+ * holds no matter what the parent is: a host that styles nothing still gets it, and so
+ * does a container reached through an `astro-island`, which is `display: contents` and
+ * has no box to carry it. Nothing removes it from the last container in a stack — the
+ * interval closes the container rather than dividing it from a sibling.
+ */
+.content-prose,
+.content-golden,
+.content-triad {
   margin-block-end: var(--cn-line);
 }
 
@@ -178,7 +164,7 @@
  * and which are chrome, so whatever an image has to fit decides"
  * (specs/design-system/preflight/spec.md) — a poster's `img` is chrome and needs
  * its own uncapped sizing, so the fit cannot be a global rule. Here, the fit is
- * the content area's own width.
+ * the content area's width.
  *
  * `img` and `picture` are placed directly today. `video`, `canvas`, `svg`,
  * `iframe`, `embed` and `object` are not yet authored anywhere, but a thread,

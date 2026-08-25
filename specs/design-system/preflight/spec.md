@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: live
 ---
 
 # Preflight
@@ -29,8 +29,7 @@ sizes, leading and heading wrap are therefore absent: each is a value typography
 not a default to correct.
 
 Margins and padding are removed from every element. Removal is explicit because there
-is no application-wide paragraph margin: whatever lays out the content states the
-spacing, and until typography states it that is each container.
+is no application-wide paragraph margin.
 
 One rule is not a browser correction at all. Astro's hydration wrapper is a box in the
 document that the author did not write, so `astro-island { display: contents }` belongs
@@ -67,7 +66,6 @@ it. Selector lists are compared as written; reordering one is an edit here too.
 | Which family any element renders in | fonts |
 | Type sizes, leading, heading wrap | typography |
 | Native link presentation and navigation-versus-command semantics | Links and Actions |
-| The spacing that replaces the removed margins | each container, until typography |
 | Constraining media width, and whether media is block-level | the container holding it |
 | Scrollbar appearance | nothing: browser default |
 | How a control looks | its component; the reset normalises, it does not style |
