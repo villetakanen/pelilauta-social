@@ -111,6 +111,11 @@
     var(--chroma-warning-60)
   );
   --cn-color-error: light-dark(var(--chroma-error-40), var(--chroma-error-60));
+  /* The error ground is dark in light mode and light in dark mode, so its foreground inverts with it. */
+  --cn-color-on-error: light-dark(
+    var(--chroma-surface-100),
+    var(--chroma-surface-0)
+  );
   --cn-color-info: light-dark(
     var(--chroma-primary-50),
     var(--chroma-primary-90)

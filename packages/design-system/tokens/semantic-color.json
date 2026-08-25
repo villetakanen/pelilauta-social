@@ -122,6 +122,11 @@
       "light": "{chroma:error-40}",
       "dark": "{chroma:error-60}"
     },
+    "cn-color-on-error": {
+      "comment": "The error ground is dark in light mode and light in dark mode, so its foreground inverts with it.",
+      "light": "{chroma:surface-100}",
+      "dark": "{chroma:surface-0}"
+    },
     "cn-color-info": {
       "light": "{chroma:primary-50}",
       "dark": "{chroma:primary-90}"

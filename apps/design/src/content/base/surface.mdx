@@ -210,3 +210,19 @@ Attention flags are purely visual indicators and provide no screen reader announ
 Applications must communicate unread or alert states through accessible text or ARIA live
 regions.
 
+## Error notice
+
+`.surface.error` publishes a short message about something that failed — a field that
+refused input, a form that could not send — as a ground rather than a text colour. It
+paints `--cn-color-error` as its background and `--cn-color-on-error` as its foreground,
+a pairing the colour guardrails hold at Light 10.18:1 and Dark 4.80:1, both above WCAG
+2.2 AA.
+
+```html
+<p class="surface error" role="alert">Saving failed. Try again.</p>
+```
+
+<DsComposition themes caption="An error notice, Light 10.18:1, Dark 4.80:1">
+  <p class="surface error" role="alert">Saving failed. Try again.</p>
+</DsComposition>
+

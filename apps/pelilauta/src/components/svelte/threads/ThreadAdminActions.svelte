@@ -74,10 +74,10 @@ async function handleChannelChange(event: Event) {
     </a>
 
     <label>
-      Move to channel:
+      {t("admin:thread.moveToChannel")}
       {#if $metaLoading}
         <select disabled>
-          <option>Loading channels...</option>
+          <option>{t("admin:thread.channelsLoading")}</option>
         </select>
       {:else if $meta?.topics && $meta.topics.length > 0}
         <select
@@ -94,12 +94,13 @@ async function handleChannelChange(event: Event) {
         </select>
       {:else}
         <select disabled>
-          <option>No channels available</option>
+          <option>{t("admin:thread.noChannels")}</option>
         </select>
       {/if}
     </label>
 
-    <div class="mt-3 pt-3 border-t">
+    <hr />
+    <div>
       <LabelManager {thread} />
     </div>
   </details>

@@ -1,7 +1,9 @@
 /*
- * Fields — the surface a reader types into: the textual input types and
- * `textarea`. Not select, checkbox, radio, range or file; those are not
- * fields under this stylesheet.
+ * Fields — the surface a reader types into, or chooses from: the textual
+ * input types, `textarea` and `select`. Not checkbox, radio, range or file;
+ * those are not settled under this stylesheet. The platform draws a select's
+ * disclosure control, and this stylesheet does not repaint it: the fill and
+ * the indicator wrap it alone.
  *
  * A field is a filled container closed by an active indicator along its
  * block end alone, not a Material text field's shape or icons. The indicator
@@ -36,6 +38,7 @@ input:is(
     [type="tel"]
   ),
 textarea,
+select,
 label:has(
     > input:is(
         [type="text"],
@@ -46,7 +49,8 @@ label:has(
         [type="tel"]
       )
   ),
-label:has(> textarea) {
+label:has(> textarea),
+label:has(> select) {
   --_field-indicator-width: calc(var(--cn-grid) / 8);
   --_field-margin-block: calc(var(--cn-grid) * 0.5);
 
@@ -55,6 +59,38 @@ label:has(> textarea) {
     color var(--cn-duration-ui) var(--cn-easing-ui),
     background-color var(--cn-duration-ui) var(--cn-easing-ui),
     box-shadow var(--cn-duration-ui) var(--cn-easing-ui);
+}
+
+/*
+ * A form control sizes itself from its own content, and a narrower container
+ * does not shrink it. Both declarations are needed: the first caps the field at
+ * the width offered, and the second releases the automatic minimum that would
+ * otherwise hold it at its content width inside a flex or grid track.
+ */
+input:is(
+    [type="text"],
+    [type="email"],
+    [type="password"],
+    [type="search"],
+    [type="url"],
+    [type="tel"]
+  ),
+textarea,
+select,
+label:has(
+    > input:is(
+        [type="text"],
+        [type="email"],
+        [type="password"],
+        [type="search"],
+        [type="url"],
+        [type="tel"]
+      )
+  ),
+label:has(> textarea),
+label:has(> select) {
+  max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
 /*
@@ -84,7 +120,8 @@ input:is(
     [type="url"],
     [type="tel"]
   ),
-textarea {
+textarea,
+select {
   font-size: 1.0186rem; /* 16.3px */
   line-height: var(--cn-line);
   padding-block: calc(var(--cn-grid) * 1.5);
@@ -112,7 +149,8 @@ input:is(
     [type="url"],
     [type="tel"]
   ):not(:disabled):hover,
-textarea:not(:disabled):hover {
+textarea:not(:disabled):hover,
+select:not(:disabled):hover {
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-hover);
 }
@@ -131,7 +169,8 @@ input:is(
     [type="url"],
     [type="tel"]
   ):focus-within,
-textarea:focus-within {
+textarea:focus-within,
+select:focus-within {
   background-color: var(--cn-color-field-focus);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-focus);
@@ -166,7 +205,8 @@ label:has(
         [type="tel"]
       )
   ),
-label:has(> textarea) {
+label:has(> textarea),
+label:has(> select) {
   display: grid;
   font-family: var(--cn-font-family);
   font-size: var(--cn-font-size-caption);
@@ -191,7 +231,8 @@ label:has(
         [type="tel"]
       ):not(:disabled)
   ):hover,
-label:has(> textarea:not(:disabled)):hover {
+label:has(> textarea:not(:disabled)):hover,
+label:has(> select:not(:disabled)):hover {
   color: var(--cn-color-field-label-hover);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
     var(--cn-color-field-border-hover);
@@ -207,7 +248,8 @@ label:has(
         [type="tel"]
       )
   ):focus-within,
-label:has(> textarea):focus-within {
+label:has(> textarea):focus-within,
+label:has(> select):focus-within {
   color: var(--cn-color-field-label-focus);
   background-color: var(--cn-color-field-focus);
   box-shadow: inset 0 calc(-2 * var(--_field-indicator-width)) 0 0
@@ -236,12 +278,15 @@ label:has(
   [type="url"],
   [type="tel"]
 ),
-label:has(> textarea) > textarea {
+label:has(> textarea) > textarea,
+label:has(> select) > select {
   color: var(--cn-color-text);
   margin: 0;
   padding: 0;
   background-color: transparent;
   box-shadow: none;
+  max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
 /*
@@ -287,7 +332,9 @@ label:has(
     [type="tel"]
   ):focus-within,
 label:has(> textarea) > textarea:hover,
-label:has(> textarea) > textarea:focus-within {
+label:has(> textarea) > textarea:focus-within,
+label:has(> select) > select:hover,
+label:has(> select) > select:focus-within {
   background-color: transparent;
   box-shadow: none;
 }
@@ -354,6 +401,7 @@ input:is(
     [type="tel"]
   ):focus,
 textarea:focus,
+select:focus,
 input:is(
     [type="text"],
     [type="email"],
@@ -362,7 +410,8 @@ input:is(
     [type="url"],
     [type="tel"]
   ):focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   outline: none;
 }
 
@@ -382,6 +431,7 @@ input:is(
     [type="tel"]
   ):disabled,
 textarea:disabled,
+select:disabled,
 label:has(
     > input:is(
         [type="text"],
@@ -392,7 +442,8 @@ label:has(
         [type="tel"]
       ):disabled
   ),
-label:has(> textarea:disabled) {
+label:has(> textarea:disabled),
+label:has(> select:disabled) {
   opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
 }
@@ -415,7 +466,8 @@ label:has(
     [type="url"],
     [type="tel"]
   ),
-label:has(> textarea:disabled) > textarea {
+label:has(> textarea:disabled) > textarea,
+label:has(> select:disabled) > select {
   opacity: 1;
 }
 
@@ -429,6 +481,7 @@ label:has(> textarea:disabled) > textarea {
       [type="tel"]
     ),
   textarea,
+  select,
   label:has(
       > input:is(
           [type="text"],
@@ -439,7 +492,8 @@ label:has(> textarea:disabled) > textarea {
           [type="tel"]
         )
     ),
-  label:has(> textarea) {
+  label:has(> textarea),
+  label:has(> select) {
     transition: none;
   }
 }

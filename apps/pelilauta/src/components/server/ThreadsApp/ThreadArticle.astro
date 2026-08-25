@@ -20,7 +20,7 @@ const figures =
   })) || [];
 ---
 <article>
-  <h1 class="downscaled">
+  <h1>
     {thread.title}
   </h1>
   { thread.quoteRef && (
@@ -37,7 +37,7 @@ const figures =
       client:load
     />
   )}
-  <section set:html={htmlContent} />
+  <section class="text-prose" set:html={htmlContent} />
   
 </article>
 

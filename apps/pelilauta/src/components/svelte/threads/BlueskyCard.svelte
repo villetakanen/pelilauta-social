@@ -54,14 +54,15 @@ async function handleShare() {
 
 <!--
   A prompt for one action, not a preview of a subject, so it is neither a CnCard nor a
-  Surface: it takes the thread info column's own idiom — a border-separated section with
-  a downscaled heading — which is what ThreadInfoActions below it and the Bluesky embed
+  Surface: it takes the thread info column's idiom — a border-separated section with
+  an h4 heading — which is what ThreadInfoActions below it and the Bluesky embed
   that replaces it in this slot both render.
 -->
 {#if bskyFeatureEnabled && isAuthorOrAdmin}
-  <section class="flex flex-col border-t p-2 mt-2">
-    <h4 class="downscaled m-0">{t("threads:info.blueskyTitle")}</h4>
-    <p class="text-caption mb-1">
+  <hr />
+  <section>
+    <h4>{t("threads:info.blueskyTitle")}</h4>
+    <p class="text-caption">
       {t("threads:share.description")}
     </p>
 
@@ -73,3 +74,16 @@ async function handleShare() {
     </button>
   </section>
 {/if}
+
+<style>
+  /*
+   * This section is a border-separated block in the thread info column; the
+   * hr above it paints the border and the column states no interval of its
+   * own, so the rhythm between the heading, the prompt and the button is
+   * stated here.
+   */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

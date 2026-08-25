@@ -12,8 +12,8 @@ const { post, postUrl } = Astro.props;
 ---
 
 <article>
-  <div class="toolbar items-center">
-    <h4 class="text-h5">
+  <div class="text-center">
+    <h4 class="text-h4">
       {t("threads:info.blueskyTitle")}
     </h4>
     <a
@@ -27,20 +27,21 @@ const { post, postUrl } = Astro.props;
     </a>
   </div>
 
-  <div class="flex flex-row items-center">
-    <div class="flex flex-row items-start border-t p-1">
+  <hr />
+  <div class="counts">
+    <div class="count">
       <CnIcon noun="love" size="small" />
       <span>
         {post.likeCount}
       </span>
     </div>
-    <div class="flex flex-row items-start border-t p-1">
+    <div class="count">
       <CnIcon noun="discussion" size="small" />
       <span>
         {post.replyCount}
       </span>
     </div>
-    <div class="flex flex-row items-start border-t p-1">
+    <div class="count">
       <CnIcon noun="send" size="small" />
       <span>
         {post.repostCount}
@@ -48,3 +49,31 @@ const { post, postUrl } = Astro.props;
     </div>
   </div>
 </article>
+
+<style>
+  /*
+   * The card is nested inside the info column, well below the container that
+   * placed the column, so nothing above it states the interval between the
+   * title row and the count rows. The card states it.
+   */
+  article {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  /*
+   * The hr above states the separation Cyan's border-t carried on each cell.
+   */
+  .counts {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .count {
+    display: flex;
+    flex-direction: row;
+    gap: var(--cn-gap);
+  }
+</style>

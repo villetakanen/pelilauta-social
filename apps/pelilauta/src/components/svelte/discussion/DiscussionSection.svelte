@@ -90,7 +90,7 @@ onMount(async () => {
 </script>
 
 <section class="content-prose">
-  <div class="flex flex-col">
+  <div class="replies">
     {#each discussion as reply}
       <ReplyArticle {reply} />
     {/each}
@@ -102,11 +102,11 @@ onMount(async () => {
     to the discussion instead, at the end of the replies, in the document.
   -->
   {#if isLoading}
-    <div class="toolbar items-center">
+    <div class="text-center">
       <CnLoader inline />
     </div>
   {:else if !isAuthenticated}
-    <div class="toolbar items-center">
+    <div class="text-center">
       <a href="/login" class="button">
         <CnIcon noun="discussion" />
         <span>{t("threads:discussion.join")}</span>
@@ -114,3 +114,14 @@ onMount(async () => {
     </div>
   {/if}
 </section>
+
+<style>
+  /*
+   * The Golden container places this section and reaches no deeper, so the
+   * interval between one reply and the next is stated here.
+   */
+  .replies {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

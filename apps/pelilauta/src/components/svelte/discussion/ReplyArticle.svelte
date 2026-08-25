@@ -110,7 +110,7 @@ $effect(() => {
         {/if}
       </CnMenu>
     </header>
-    <div>
+    <div class="text-prose">
       <CnLightbox
         {images}
         openLabel={t("actions:openImage")}

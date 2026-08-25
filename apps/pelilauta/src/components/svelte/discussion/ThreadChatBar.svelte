@@ -135,7 +135,7 @@ async function send() {
     </p>
   {/if}
   {#if error}
-    <p class="error-message">
+    <p class="error-message surface error">
       <CnIcon noun="info" decorative />
       <span>{error}</span>
     </p>
@@ -200,9 +200,5 @@ async function send() {
     align-items: center;
     gap: var(--cn-grid);
     margin: 0;
-  }
-
-  .error-message {
-    color: var(--cn-color-error);
   }
 </style>

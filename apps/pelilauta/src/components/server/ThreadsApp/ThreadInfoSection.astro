@@ -45,22 +45,22 @@ if (thread.blueskyPostUri) {
   the column, so the separators below it are what divide the blocks.
 -->
 <section class="thread-info">
-  <section class="flex flex-col p-2">
-    <h4 class="downscaled m-0">{t("threads:info.title")}</h4>
+  <section>
+    <h4>{t("threads:info.title")}</h4>
     <p>
       {toDisplayString(thread.flowTime)}
     </p>
-    <p class="mb-0">
-      <ProfileLink uid={author} client:only="svelte" />
-      {t("threads:info.inTopic")}
-      <a href={`/channels/${channel}`} class="link">
+    <p>
+      <ProfileLink uid={author} client:only="svelte" />{" "}
+      {t("threads:info.inTopic")}{" "}
+      <a href={`/channels/${channel}`}>
         {channel.charAt(0).toUpperCase() + channel.slice(1)}
       </a>
     </p>
-    <div class="toolbar items-center">
-      <div class="flex align-center">
+    <div class="text-center">
+      <div class="reply-count">
         <CnIcon noun="send" size="small" />
-        <span class="text-caption decoration-none">
+        <span class="text-caption">
           {thread.replyCount}
         </span>
       </div>
@@ -103,5 +103,15 @@ if (thread.blueskyPostUri) {
   .thread-info {
     display: grid;
     row-gap: var(--cn-line);
+  }
+
+  /*
+   * The reply count pairs an icon with a number, so the row states its own
+   * inline alignment rather than borrowing Cyan's `.flex.align-center`.
+   */
+  .reply-count {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
   }
 </style>

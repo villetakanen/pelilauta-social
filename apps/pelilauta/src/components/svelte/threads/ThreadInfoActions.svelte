@@ -33,23 +33,36 @@ async function onsubmit(e: Event) {
 }
 </script>
 {#if owns || $showAdminTools}
-  <section class="flex flex-col border-t p-2 mt-2">
+  <hr />
+  <section>
     {#if owns}
-      <h4 class="downscaled m-0">{t('threads:info.actions.title')}</h4> 
+      <h4>{t('threads:info.actions.title')}</h4>
       <a
         href={`/threads/${thread?.key}/edit`}
         class="button text-center text"
       >
-        {t('actions:edit')} 
+        {t('actions:edit')}
       </a>
       <a
         href={`/threads/${thread?.key}/confirmDelete`}
         class="button text-center text"
       >
-        {t('actions:delete')} 
+        {t('actions:delete')}
       </a>
     {/if}
     <ThreadAdminActions {thread}/>
   </section>
 {/if}
-  
+
+<style>
+  /*
+   * This section is a border-separated block in the thread info column; the
+   * hr above it paints the border and the column states no interval of its
+   * own, so the rhythm between the heading and the actions is stated here.
+   */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
+

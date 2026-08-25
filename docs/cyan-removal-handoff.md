@@ -105,6 +105,66 @@ stacks under the form rather than joining the flex row (a review catch). A JSX-s
 `{/* */}` comment in a Svelte template parses as an expression and breaks the whole
 component; `astro check` catches it.
 
+The thread page (`/threads/[threadKey]`) followed the channel page. Its frame was
+already right: `Base.astro:76` docks the composer in chrome, `index.astro:41-46` stacks
+a `.content-golden` holding the article and the info column over `.content-prose`
+replies, and `CnBubble`, `CnMenu`, `CnChatBar`, `CnReactionButton` and `CnLightbox`
+already carried the reply, with no
+`cn-*` Lit element left in the tree. The pass dropped the dangling atomics from nine
+components and put the layout each carried into one scoped rule per component.
+`border-t` became `<hr>`, which `dividers.css` now paints, so the info column reads as
+bands under one column rhythm rather than the padded boxes Cyan drew — the operator's
+ruling. `toolbar items-center` became `text-center`, since a button is an inline-block
+and the line box already centres it, and `text-h5` at `BlueskyPostCard.astro:16` became
+`text-h4`. `.text-prose` reached its first two call sites in the application, on the
+thread body (`ThreadArticle.astro:38`) and the reply body (`ReplyArticle.svelte:111`),
+the two regions that render author-written markdown. The pass also fixed a byline
+defect: `ThreadInfoSection.astro` ran the author, "aiheessa" and the channel link
+together with no space between them, because Astro drops the indentation whitespace
+around a `client:only` island and around a text expression; explicit `{" "}` restores
+it.
+
+Two local error rules on the page painted `--cn-color-error` as a text colour. In the
+v19 token scheme that role is a ground and `--cn-color-on-error` is its foreground, so
+error text on the page surface is not a shape this design language has: the dark arm
+measures 4.09:1 against the surface, under the AA floor. The system publishes
+`.surface.error` instead, a ground carrying the pair at 10.18:1 light and 4.80:1 dark,
+and `ThreadChatBar.svelte` and `LabelManager.svelte` take it.
+`plans/debt/text-h5-has-no-declaration.md`
+is deleted: post-v19's scale stops at h4, so there is no compact heading step left to
+specify, and the downshift covers what needs a smaller heading; the standing conversion
+is now in `docs/cyan-removal-page-checklist.md`.
+
+Two design-system gaps the thread page found. A `select` was not a field: the
+exclusion in `specs/design-system/fields/spec.md` was a build-order decision written as
+a design ruling, and the only reason behind it — that a field draws no inner control —
+described what is easy to paint. `fields.css` paints a `select` now, in every state, and
+leaves the platform-drawn disclosure alone. The same page then showed that no field fit
+a container narrower than its own content: a form control sizes itself from its content
+and a narrower parent does not shrink it. Every field takes at most the inline size
+offered, and the book renders one in a narrow container so the next change measures the
+fit rather than asserting it.
+
+Open on the thread page, and each visible on a rendered page:
+
+- A disclosure has no design-system treatment. `preflight.css:153-155` sets
+  `summary { display: list-item; }` and nothing else in the system names `details` or
+  `summary`, so the admin block on the thread page shows a browser marker and takes
+  `.surface` and a local `cursor: pointer` for the rest.
+- `specs/design-system/fields/spec.md` and `specs/design-system/surface/spec.md` are
+  both `proposed` and await a read.
+- `surface/spec.md:104` and `:117` state that surface sets no foreground colour, and
+  `.surface.error` sets one. The exception is written into the error-notice section and
+  the two constraints are not yet scoped to match.
+- `.surface.error` outweighs `.elevation-2` and above on background while their shadow
+  still applies, so an elevated notice keeps a shadow and loses its level colour. The
+  spec does not say whether the notice composes with elevation.
+- `semantic.css:119` declares `--cn-color-info`, which the colour rulings say must not
+  exist.
+- The Context of `specs/design-system/fields/spec.md` now says a reader is "typing or
+  choosing", and every example in front of that clause is a typing act. Moving a thread
+  to another channel is the choosing act the thread page shows.
+
 The debug utility is back, as its own capability rather than Cyan's painted box
 (`specs/design-system/debug/spec.md`, live). `.debug` swaps the surface family for
 rowan, a hand-authored demonstration scale in `styles/chroma-themes.css`; the swap

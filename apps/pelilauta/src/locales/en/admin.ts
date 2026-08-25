@@ -7,6 +7,9 @@ export const admin: Locale = {
   },
   thread: {
     tools: 'Admin tools',
+    moveToChannel: 'Move to channel:',
+    channelsLoading: 'Loading channels...',
+    noChannels: 'No channels available',
   },
   rail: {
     label: 'Administration',
