@@ -16,52 +16,62 @@ substitute a live key.
 
 ## How to patch a page
 
-The inbox (`010889aa`), the channel directory (`c90fe8bf`) and the channel page
-(`cea1240c`) settled the method. Follow it per page.
+The goal is the design language of v19 on the business logic of v18. The Cyan
+stylesheets are gone from the application — `BaseHead.astro` imports `ds.css` and Cyan's
+Lit components, and nothing else — so a page now renders without them and shows what is
+missing. Work in this order.
 
-1. **Census the markup.** Grep the page and every component it renders for class
-   names, and resolve each against the published stylesheets. A name that declares
-   nothing goes; it is not replaced by another atomic, because the vocabulary has
-   none. Cyan is the inventory of what goes, never a source for what replaces it.
-2. **Give each payload a content container, and let the page sequence them.** A
-   single flow takes `.content-prose`, a flow with one secondary beside it
-   `.content-golden`, three peers `.content-triad`: the channel directory is Prose,
-   the channel page Golden because its channel card is the secondary. A page may
-   stack containers in different modes — the spec calls `.app-main` the host for a
-   sequence of them, and the host states the `--cn-line` between siblings — so two
-   containers under one `<main>` is the composition working, never a defect to
-   collapse. What is a defect is a box between a container and its payload: the
-   inbox's `<section>` swallowed the rhythm the container states.
-3. **State the rhythm where it belongs.** A content container separates the payloads
-   it places by `--cn-line`, and reaches no deeper. Inside one payload, the component
-   states the interval between its blocks, in one scoped rule on the box that holds
-   them, so a list needs no rhythm class and a row no margin.
-4. **Check that the container's rules reach the payload.** An `astro-island` is
-   `display: contents`, so it has no box: a rule placed on it paints nothing, and
-   the island's own children are what the container must reach.
-   `content-containers.css` carries that arm for a Prose child (`:56`) and for a
-   Golden or Triad child (`:102,104`), so a container wrapping an island works. It
-   carries no such arm for `.app-main > *`, so a hydrated container gets no rhythm
-   from its host. Where a page hits a missing arm, fix the stylesheet rather than
-   the page.
-5. **Stand each payload box on `.surface`.** The surface carries the padding. Add
-   elevation only where a state calls for it — the inbox's unread row takes
-   `elevation-3` — never as decoration.
-6. **Write the missing layout locally, and mark it.** Where no published capability
-   offers the shape, write one scoped rule in the component, under a comment marking
-   it as a v21 stopgap, not the design language. Anchor it in a `plans/debt` file when
-   one covers the gap; listing rows anchor to
-   `plans/debt/the-design-system-has-no-listing-row.md`. Do not copy a stopgap into a
-   second component without adding it to the anchor.
-7. **Fix what the removal exposes, in the same commit.** Look for a missing i18n
-   key, an `<a>` with no `href`, a heading reaching for the dead `text-h5`, an
-   `<hr>` painting for the first time. E2e selectors follow the markup even though
-   the suite does not run.
-8. **Look at the page.** Run `astro check` and `pnpm test` first, then the page on the
-   dev server at 4321 in every state the row lists. A green suite is not evidence a
-   page renders.
-9. **Record it.** Set the row's Checked to `yes`, and add the page's paragraph to
-   `docs/cyan-removal-handoff.md` — what it now stands on, and what it left open.
+1. **Compose from the design system first.** Build the page out of what
+   `packages/design-system` publishes, and read the spec of a capability before using
+   it. Adjust the UX where a published capability takes a shape v18 did not; the
+   migration intends that difference. Keep these contracts unchanged: routes, Firestore
+   reads and writes, auth, event names, i18n keys, and e2e selectors.
+2. **Shim locally where the design system does not reach.** Write one scoped rule in the
+   component, under a `@todo` stating what is missing and whether it belongs in the
+   design system or stays bespoke here. Anchor the shim in a `plans/debt` file where one
+   covers the gap — a listing row anchors to
+   `plans/debt/the-design-system-has-no-listing-row.md`. Do not copy a shim into a
+   second component without adding that component to the anchor.
+3. **Remove the dangling Cyan names last.** Delete a class that declares nothing. Remove
+   these names last, because until the page stands on the design system they record the
+   layout the page had, and an early deletion loses that record.
+4. **Ask the operator on a severe doubt.** Ask, and wait, for a page that cannot be
+   composed without changing a contract, for a capability that is wrong rather than
+   missing, and for a shape v20 never settled. A guess here canonicalises a wrong model.
+
+State the plan before implementing it: a few technical lines on what to use, what to
+shim and what to remove.
+
+### What the layout capabilities provide
+
+A content container places its children in rows of one, two or three columns —
+`.content-prose`, `.content-golden`, `.content-triad` — and reaches no deeper than those
+children. It states `--cn-line` after itself, so a page may stack containers under one
+`<main>` and needs no separation between them. Inside one child, the component states
+the interval between its blocks in one scoped rule.
+
+`.app-main` is the page frame: the containment context a container resolves against, the
+page-edge inset and the clearance for the app bar. It states no separation.
+
+`.text-prose` is where author-written markdown renders — a thread body, a reply, a wiki
+page, a handout. It spaces every standard block at any depth and fits replaced media to
+the region. Interface text does not use it.
+
+`.surface` carries the padding under a payload box. Add elevation only where a state
+calls for it, never as decoration.
+
+An `astro-island` is `display: contents` and has no box, so a rule placed on it paints
+nothing. `content-containers.css` reaches through it to the element it renders.
+
+### Before recording a page
+
+Run `astro check` and `pnpm test`, then open the page on the dev server at 4321 in every
+state its row lists. A green suite is not evidence a page renders. Fix what the removal
+exposes in the same commit — a missing i18n key, an `<a>` with no `href`, a heading
+using the deleted `text-h5`, an `<hr>` that now paints.
+
+Then set the Checked column of the row to `yes`, and add a paragraph for the page to
+`docs/cyan-removal-handoff.md`: what it now stands on, and what it leaves open.
 
 A JSX-style `{/* */}` comment inside a Svelte template parses as an expression and
 breaks the component; `astro check` catches it.
@@ -104,7 +114,7 @@ breaks the component; `astro check` catches it.
 | --- | --- | --- | --- |
 | Site directory | `/sites` | Public listing, empty state | no |
 | Site home | `/sites/mekanismi` | Poster, homepage page body | no |
-| Site page | `/sites/mekanismi/<pageKey>` | Prose flow with a real writer's markup — headings, `---`, images | no |
+| Site page | `/sites/mekanismi/<pageKey>` | Prose flow with markup from a real writer — headings, `---`, images | no |
 | Page editor | `/sites/mekanismi/<pageKey>/edit` | Member required | no |
 | Page history | `/sites/mekanismi/<pageKey>/history` | `?revision=` variant | no |
 | Delete page | `/sites/mekanismi/<pageKey>/delete` | Modal | no |
@@ -138,7 +148,7 @@ breaks the component; `astro check` catches it.
 
 The `/admin` pages are behind `requireAdmin`; the snackbar and users pages additionally
 behind `PUBLIC_SHOW_DEVELOPER_TOOLS`. Session purge has no guard
-(`apps/pelilauta/src/pages/debug/purge.astro:6`). `ChannelsAdmin.svelte:187`'s dump
+(`apps/pelilauta/src/pages/debug/purge.astro:6`). The dump in `ChannelsAdmin.svelte:187`
 already has `.debug`.
 
 | Page | Link | States to look at | Checked |
