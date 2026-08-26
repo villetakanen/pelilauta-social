@@ -46,7 +46,7 @@ shim and what to remove.
 
 ### Standing conversions
 
-Two dangling names have a settled replacement. Apply it on every page.
+These dangling names have a settled replacement. Apply it on every page.
 
 - `text-h5` becomes `text-h4`, the smallest heading step the scale publishes
   (`packages/design-system/styles/typography.css`). Cyan's fifth step does not come back.
@@ -58,6 +58,14 @@ Two dangling names have a settled replacement. Apply it on every page.
   count inside the control rather than in a wrapper. A heading beside a control is not a
   toolbar. The element is `nav` where the row navigates, and `div` or `section` where
   the row acts on the page.
+- `toolbar justify-end` becomes `text-end`, and `toolbar justify-center` becomes
+  `text-center`, on the element already holding the controls directly, for the same
+  reason as the conversion above.
+- Any other dead `justify-*` — with or without `toolbar`, and including a scoped
+  `justify-content: flex-end` a component authored for itself — becomes `text-end` or
+  `text-center` on the element holding the controls directly, same reasoning. Where
+  that element holds a block-level child instead, text alignment cannot reach it: the
+  row loses its alignment rather than gaining a flex rule to keep it.
 
 ### What the layout capabilities provide
 
@@ -86,6 +94,10 @@ Run `astro check` and `pnpm test`, then open the page on the dev server at 4321 
 state its row lists. A green suite is not evidence a page renders. Fix what the removal
 exposes in the same commit — a missing i18n key, an `<a>` with no `href`, a heading
 using the deleted `text-h5`, an `<hr>` that now paints.
+
+Compare the rendered page against the live v18 page, not only against the published
+stylesheets: a page can pass a census of dead classes and still miss the v19-and-later
+look everywhere else.
 
 Then set the Checked column of the row to `yes`, and add a paragraph for the page to
 `docs/cyan-removal-handoff.md`: what it now stands on, and what it leaves open.
@@ -120,8 +132,8 @@ breaks the component; `astro check` catches it.
 | Create thread | `/create/thread` | Session required; `?channel=yleinen` prefill; `/channels?error=channels-unavailable` | no |
 | Thread | `/threads/test-thread` | Replies, quotes, reactions; a thread with no reply | yes |
 | Thread editor | `/threads/test-thread/edit` | Editor chrome, the widest form on the site | no |
-| Confirm delete thread | `/threads/test-thread/confirmDelete` | Modal; allowed, forbidden, and logged-out arms of `WithAuth` | no |
-| Delete reply | `/threads/test-thread/replies/<replyKey>/delete` | Modal; same three arms | no |
+| Confirm delete thread | `/threads/test-thread/confirmDelete` | Modal; allowed, forbidden, and logged-out arms of `WithAuth` | yes |
+| Delete reply | `/threads/test-thread/replies/<replyKey>/delete` | Modal; same three arms | yes |
 | Fork reply | `/threads/test-thread/replies/<replyKey>/fork` | Modal; channel picker | no |
 | Tag | `/tags/roolipelit` | Threads and pages sections, each hidden when empty; the no-entries caption | no |
 
@@ -134,7 +146,7 @@ breaks the component; `astro check` catches it.
 | Site page | `/sites/mekanismi/<pageKey>` | Prose flow with markup from a real writer — headings, `---`, images | no |
 | Page editor | `/sites/mekanismi/<pageKey>/edit` | Member required | no |
 | Page history | `/sites/mekanismi/<pageKey>/history` | `?revision=` variant | no |
-| Delete page | `/sites/mekanismi/<pageKey>/delete` | Modal | no |
+| Delete page | `/sites/mekanismi/<pageKey>/delete` | Modal | yes |
 | Table of contents | `/sites/mekanismi/toc` | Ordering, empty site | no |
 | ToC settings | `/sites/mekanismi/toc/settings` | Owner required | no |
 | Assets | `/sites/mekanismi/assets` | Grid, empty state | no |
@@ -144,7 +156,7 @@ breaks the component; `astro check` catches it.
 | Handout editor | `/sites/mekanismi/handouts/<id>/edit` | Owner required | no |
 | Clocks | `/sites/mekanismi/clocks` | Empty vs. populated | no |
 | Create clock | `/sites/mekanismi/create/clock` | Modal | no |
-| Delete clock | `/sites/mekanismi/delete/clock/<id>` | Modal | no |
+| Delete clock | `/sites/mekanismi/delete/clock/<id>` | Modal | yes |
 | Create handout | `/sites/mekanismi/create/handout` | Modal | no |
 | Create page | `/sites/mekanismi/create/page` | Modal; `?name=` prefill | no |
 | Members | `/sites/mekanismi/members` | Owner required | no |

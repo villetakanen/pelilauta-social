@@ -16,3 +16,6 @@ hold a control that occupies 56, so the two move together or neither does.
 
 `specs/design-system/components/cn-card/spec.md` states the row, and the card book
 describes it, so both follow the change.
+
+`plans/debt/the-design-system-has-no-actions-row.md` records the missing capability;
+publishing it would settle this measurement too.
