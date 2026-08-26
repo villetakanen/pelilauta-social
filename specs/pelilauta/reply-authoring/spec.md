@@ -37,7 +37,7 @@ change, on the path v18 already used.
 
 ### Documentation
 
-None. The capability is the application's, and `CnChatBar`'s book carries the surface.
+None. The application carries the capability, and `CnChatBar`'s book carries the surface.
 
 ### Constraints
 

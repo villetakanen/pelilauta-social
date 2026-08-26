@@ -34,7 +34,8 @@ and takes no space in the target's flow.
 
 The badge fills `--cn-color-info`, and its characters take a decorative colour of its
 own rather than a foreground role. It keeps both in every state the chrome action has,
-including the current destination, whose foreground is the action's and not the badge's.
+including the current destination, where the action defines the foreground and not the
+badge.
 The control stands on `--cn-color-surface`, and the badge reads as separate from it. The
 badge's characters are held to no text contrast ratio.
 

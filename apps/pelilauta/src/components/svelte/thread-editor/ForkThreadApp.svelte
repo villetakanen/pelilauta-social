@@ -42,7 +42,7 @@ let markdownContent = $state('');
 let saving = $state(false);
 
 /*
- * Dirtiness is the shell's, reported here rather than tracked: title and
+ * The shell tracks dirtiness; this component only reports it: title and
  * channel are native controls inside the region it reads, so a field edited
  * back to its original value leaves the send action disabled, which a
  * set-once flag never managed.
@@ -153,7 +153,7 @@ function cancel() {
     </div>
   </div>
 
-  <section class="actions">
+  <section class="actions text-end">
     <button type="button" disabled={saving} class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
@@ -166,10 +166,6 @@ function cancel() {
 
 <style>
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cn-gap);
     margin-block-start: var(--cn-line);
   }
 </style>

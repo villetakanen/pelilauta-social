@@ -9,17 +9,17 @@ status: proposed
 ### Context
 
 Pelilauta is a place people write to each other. Starting a thread, answering someone,
-naming a site, writing a handout, searching the library — each is a reader typing. Fields
-give that act a surface the design system paints, so a reader can tell a field is a field
-before touching it, knows the field has taken their input, and meets the same field in the
-design site and in the application.
+naming a site, writing a handout, searching the library — each is a reader typing or
+choosing. Fields give that act a surface the design system paints, so a reader can tell a
+field is a field before touching it, knows the field has taken their input, and meets the
+same field in the design site and in the application.
 
 ### Architecture
 
 An element style, `packages/design-system/styles/fields.css`, paints the textual input
-types and `textarea` — the controls a reader types free text into, drawing no inner
-control. Select, checkbox, radio, range and file controls are not fields under this
-spec, and read-only is not settled here.
+types, `textarea` and `select`. A reader chooses from a `select` rather than typing into
+it, and it takes the same fill, indicator and states as the rest. Checkbox, radio, range
+and file are not settled here, and neither is read-only.
 
 A field takes the core idea of the Material Design 3 filled text field, and not its
 letter: a filled container the reader types into, closed by an active indicator along its
@@ -117,15 +117,21 @@ stands the same six: half a unit of padding, the label's two units, the value's 
 half a unit of padding. Both land on the grid at every line count. A field draws no inner
 control, so the box a reader sees is the box a reader taps.
 
+A field takes at most the inline size its container offers, and shrinks below its
+intrinsic width rather than overflow it.
+
 The label takes the label step's size and line, in Lato rather than the mono a field is
-otherwise set in: it is the field's name, written by the system, where the value below it
-is the reader's text. Its resting colour is a surface step in from the end of the
+otherwise set in: it states the field's name, written by the system, where the value
+below it carries the reader's text. Its resting colour is a surface step in from the end of the
 scale, off the near-black the body takes in Light and off the near-white it takes in Dark,
 and the steps are saturated at hue 242, so the name carries a hint of colour the value
 does not. Hover and focus move it to the primary family.
 
 A field takes no radius. The indicator closes the fill rather than enclosing it, and a
 rounded corner would read as an enclosure.
+
+The platform draws a select's disclosure control, and this stylesheet does not repaint
+it: the fill and the indicator wrap it alone.
 
 A field draws its active indicator along the block end alone. Its resting width is
 `calc(var(--cn-grid) / 8)`, one device pixel at the default root size, growing with the

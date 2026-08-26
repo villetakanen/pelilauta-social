@@ -50,6 +50,15 @@ const revisionCount = diff.history.length || 0;
 </section>
 
 <style>
+/*
+ * The Golden container places this section and reaches no deeper, so the interval
+ * between the heading and the revision list is stated here.
+ */
+section {
+  display: grid;
+  row-gap: var(--cn-line);
+}
+
 .revision-list {
   display: grid;
   grid-template-columns: calc(var(--cn-grid) * 4) 1fr 1fr;

@@ -17,7 +17,7 @@ export interface Props {
 
 const { thread, noun } = Astro.props;
 
-// The poster is the thread's primary image. `parseThread` derives it from the first
+// The thread's poster holds its primary image. `parseThread` derives it from the first
 // image where a thread has none, so a card reads the one field.
 const posterUrl = thread.poster;
 
@@ -85,10 +85,13 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
         client:only="svelte"
       />
 
-      <!-- Link to discussion -->
-      <a href={`/threads/${thread.key}?jumpTo=unread#discussion`}>
-        <CnIcon noun="discussion" size="small" />
-        <span class="text-caption">{thread.replyCount || 0}</span>
+      <a
+        class="button text"
+        href={`/threads/${thread.key}?jumpTo=unread#discussion`}
+        aria-label={t("threads:info.replies", { count: thread.replyCount || 0 })}
+      >
+        <CnIcon noun="discussion" />
+        <span>{thread.replyCount || 0}</span>
       </a>
     </Fragment>
   </CnCard>

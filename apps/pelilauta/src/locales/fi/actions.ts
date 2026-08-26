@@ -25,6 +25,7 @@ export const actions: Locale = {
   import: 'Tuo',
   login: 'Kirjaudu sisään',
   logout: 'Kirjaudu ulos',
+  markRead: 'Merkitse luetuksi',
   moreOptions: 'Lisää toimintoja',
   openImage: 'Avaa kuva',
   next: 'Seuraava',

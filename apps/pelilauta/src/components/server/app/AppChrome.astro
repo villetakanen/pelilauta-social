@@ -9,20 +9,10 @@ import { t } from 'src/utils/i18n';
  * viewport. Pelilauta scrolls the document, so `body` cannot be that container — it
  * grows with its content, and the tray would pin to the bottom of the page. This layer
  * is that container instead, and scroll ownership stays where it is.
- *
- * Every selector here stays inside the component's scope. A rule reaching for
- * `nav#rail`, which AppRail renders, would be scoped to this component and match
- * nothing; the `rail` prop is how a layout states the chrome it keeps.
  */
-interface Props {
-  /** Does this layout keep the rail at the block end on handheld screens? */
-  rail?: boolean;
-}
-
-const { rail = false } = Astro.props;
 ---
 
-<div class:list={['app-chrome', { rail }]}>
+<div class="app-chrome">
   <nav class="fab-tray" aria-label={t('navigation:quickActions')}>
     <slot />
   </nav>
@@ -41,15 +31,5 @@ const { rail = false } = Astro.props;
     z-index: var(--cn-z-fab);
     container: app-chrome / inline-size;
     pointer-events: none;
-  }
-
-  /*
-   * The rail occupies the block end below the breakpoint, so the tray clears it. The
-   * height is Cyan's, which still draws the rail; it leaves with core/rail.css.
-   */
-  @media (max-width: 620px) {
-    .rail {
-      --cn-block-end-chrome: var(--cn-height-rail);
-    }
   }
 </style>

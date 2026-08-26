@@ -147,7 +147,7 @@ const descriptionLength = $derived($activeSite?.description?.length || 0);
       <LicenseSelect 
         value={$activeSite?.license || ''} 
         onchange={(e) => setLicense((e.target as HTMLSelectElement).value)}/>
-    <div class="toolbar justify-end">
+    <div class="text-end">
       <button 
         type="button" 
         onclick={reset} 

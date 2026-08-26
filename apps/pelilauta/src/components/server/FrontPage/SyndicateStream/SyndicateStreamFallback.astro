@@ -14,3 +14,14 @@ import { t } from '@utils/i18n';
   <h2 class="text-h3">{t('frontPage:syndicate.title')}</h2>
   <CnLoader noun="fox" />
 </section>
+
+<style>
+  /*
+   * The Triad container places this section and reaches no deeper, so the rhythm
+   * between the heading and the loader is stated here.
+   */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

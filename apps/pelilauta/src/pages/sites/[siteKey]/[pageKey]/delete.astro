@@ -40,6 +40,6 @@ const page = parsePage(
 <ModalPage title={site.name} backHref={`/sites/${siteKey}/${pageKey}`}>
   <div class="content-prose">
     <h1>{t('site:deletePage.title')}</h1>
+    <DeletePageView {site} {page} client:only="svelte" />
   </div>
-  <DeletePageView {site} {page} client:only="svelte" />
 </ModalPage>

@@ -39,31 +39,35 @@ if (thread.blueskyPostUri) {
 ---
 
 <!--
-  The column is a list of border-separated sections: tags, the Bluesky prompt or embed,
-  and the owner's actions. This block summarises the thread the reader is already on, so
-  it has no destination to preview and takes the same idiom rather than a card. It leads
-  the column, so the separators below it are what divide the blocks.
+  The column holds the thread's own boxes: this summary, the Bluesky prompt or embed, and
+  the owner's actions. Each is a surface in its own right; the column states no separator
+  of its own, only the interval between the boxes.
 -->
-<section class="flex flex-col">
-  <section class="flex flex-col p-2">
-    <h4 class="downscaled m-0">{t("threads:info.title")}</h4>
+<section class="thread-info">
+  <section class="surface summary">
+    <h2>
+      <CnIcon noun="discussion" size="small" decorative />
+      {t("threads:info.title")}
+    </h2>
     <p>
       {toDisplayString(thread.flowTime)}
     </p>
-    <p class="mb-0">
-      <ProfileLink uid={author} client:only="svelte" />
-      {t("threads:info.inTopic")}
-      <a href={`/channels/${channel}`} class="link">
+    <p>
+      <ProfileLink uid={author} client:only="svelte" />{" "}
+      {t("threads:info.inTopic")}{" "}
+      <a href={`/channels/${channel}`}>
         {channel.charAt(0).toUpperCase() + channel.slice(1)}
       </a>
     </p>
-    <div class="toolbar items-center">
-      <div class="flex align-center">
-        <CnIcon noun="send" size="small" />
-        <span class="text-caption decoration-none">
-          {thread.replyCount}
-        </span>
-      </div>
+    <div class="text-center">
+      <a
+        class="button text"
+        href="#discussion-title"
+        aria-label={t("threads:info.replies", { count: thread.replyCount || 0 })}
+      >
+        <CnIcon noun="discussion" />
+        <span>{thread.replyCount || 0}</span>
+      </a>
       <ReactionButton
         target="thread"
         key={thread.key}
@@ -94,3 +98,33 @@ if (thread.blueskyPostUri) {
 
   <ThreadInfoActions {thread} client:only="svelte" />
 </section>
+
+<style>
+  /*
+   * The Golden container places this column and reaches no deeper, so the interval
+   * between the blocks is stated on the column.
+   */
+  .thread-info {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  /*
+   * The heading carries its icon on the same line as its text.
+   */
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  /*
+   * No container reaches into this box, so it states the interval between its
+   * own blocks: the heading, the date, the byline and the actions row.
+   */
+  .summary {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+</style>

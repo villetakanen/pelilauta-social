@@ -6,6 +6,7 @@ export const snack: Locale = {
     failed: 'Jakaminen epäonnistui',
   },
   site: {
+    pageDeleted: 'Sivu {name} poistettu',
     sortOrderUpdated: 'Sivujen järjestys päivitetty',
     sortOrderUpdateFailed: 'Sivujen järjestyksen päivitys epäonnistui',
     tocOrderUpdated: 'Hakemiston järjestys päivitetty',

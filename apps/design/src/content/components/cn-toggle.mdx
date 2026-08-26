@@ -55,12 +55,12 @@ the switch renders and applies nothing.
 | `label` | `string` | Required. The switch's accessible name, and the row's visible text. Localise it. |
 | `checked` | `boolean` | The setting's current value. Leave it unwritten and the switch shows what the reader last did to it. |
 | `disabled` | `boolean` | Renders the row inert: it takes no pointer, no focus and no key. |
-| `onchange` | `(event) => void` | Runs on every flip. The input is the event's `currentTarget`, so the new value is `event.currentTarget.checked`. |
+| `onchange` | `(event) => void` | Runs on every flip. The event supplies the input as `currentTarget`, so the new value is `event.currentTarget.checked`. |
 
 ## Accessibility
 
 The control is a native checkbox announcing as a switch, named by the label around
-it. Its state, the Space key, focus and the disabled behaviour are the platform's —
+it. The platform provides its state, the Space key, focus and the disabled behaviour —
 the component adds no role, no tabindex and no key handler.
 
 There is no unlabelled variant. A switch whose meaning is carried by the setting

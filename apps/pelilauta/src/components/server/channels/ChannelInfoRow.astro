@@ -9,23 +9,70 @@ interface Props {
 }
 const { channelWithStats } = Astro.props;
 ---
-<article class="surface cols-2">
-  <div class="flex flex-row">
-    <span class="flex-none"><CnIcon noun={channelWithStats.icon} /></span>
+<article class="surface">
+  <div class="info">
+    <CnIcon noun={channelWithStats.icon} />
     <div>
-    <a href={`/channels/${channelWithStats.slug}`}>
-      <h3 class="text-h5 m-0">
-          {channelWithStats.name}
-      </h3>
-      <p class="text-small text-low">{channelWithStats.description}</p>
-    </a>
-    <p class="text-caption mt-1 mb-0">
-      {t('threads:channel.threadCount', { count: channelWithStats.threadCount })}
-    </p>
+      {/* The link spans the name and the description, as it did in v18. */}
+      <a href={`/channels/${channelWithStats.slug}`}>
+        <h3>{channelWithStats.name}</h3>
+        <p class="text-small text-low">{channelWithStats.description}</p>
+      </a>
+      <p class="text-caption">
+        {t('threads:channel.threadCount', { count: channelWithStats.threadCount })}
+      </p>
     </div>
   </div>
-  <div class="sm-only" style="height: var(--cn-line)"></div>
-  <div>
+  <div class="latest">
     <ChannelListInfoCell channelWithStats={channelWithStats} />
   </div>
 </article>
+
+<style>
+  /*
+   * Stopgap. The design system has no listing row yet, so this layout is
+   * local. Do not copy it; delete it when a listing row exists.
+   * plans/debt/the-design-system-has-no-listing-row.md tracks the gap.
+   */
+
+  /*
+   * The row: the channel's identity, and its latest activity beside it where
+   * the width allows. The surface carries the padding, and the category
+   * section carries the rhythm between rows, so neither is restated here.
+   */
+  article {
+    display: grid;
+    /* Stacked blocks keep the line rhythm; columns keep the inline gap. */
+    gap: var(--cn-line) var(--cn-gap);
+    border-radius: var(--cn-border-radius);
+  }
+
+  /*
+   * The nearest ancestor container is the category section, at the measure.
+   * A container query cannot read a custom property; the literal restates
+   * units.css's --cn-breakpoint-small.
+   */
+  @container (min-width: 38.75rem) {
+    article {
+      grid-template-columns: 1.618fr 1fr;
+    }
+  }
+
+  /* The icon keeps its square; the name, description and count take the rest. */
+  .info {
+    display: flex;
+    align-items: start;
+    gap: var(--cn-gap);
+  }
+
+  .info > div {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .latest {
+    display: grid;
+    row-gap: var(--cn-grid);
+    align-content: start;
+  }
+</style>

@@ -21,7 +21,6 @@ import {
   resolve,
   tokenMap,
 } from '../books/specimens/color';
-import { parseTokens } from '../books/specimens/tokenTable';
 
 const styles = (path: string) =>
   readFileSync(new URL(`../styles/${path}`, import.meta.url), 'utf8');
@@ -85,6 +84,7 @@ describe('body text meets AA on every base surface', () => {
     ['--cn-color-on-surface', '--cn-color-surface'],
     ['--cn-color-text-low', '--cn-color-surface'],
     ['--cn-color-link', '--cn-color-surface'],
+    ['--cn-color-on-error', '--cn-color-error'],
   ] as const;
 
   for (const [foreground, background] of cases) {

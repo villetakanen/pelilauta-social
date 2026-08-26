@@ -93,7 +93,7 @@ test regresses into mood:
 `spec` skill's "carries no rationale" line is rewritten under principle 1: a spec
 states the why nothing else carries — the reason the feature exists — and states no
 why that is derivable. A spec's non-derivable why is not an exception to the rule; it
-is the rule's best case.
+counts as the rule's best case.
 
 The current bans become *examples under* these principles — kept only where they stay
 grep-able and still catch live failures, and free to change without the principles

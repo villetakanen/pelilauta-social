@@ -20,7 +20,7 @@ notes and promotes actionable change concepts.
 - **Anyone may delete any note at any time.** A human who thinks a note is incidental
   or not worth keeping should delete it — no justification, no ceremony. Nothing in
   the list needs to survive branch close, and a note worth keeping is promoted out to
-  a plan, spec, or ADR first, which is the owner's decision.
+  a plan, spec, or ADR first — the owner decides that.
 - **A note names one instance and proposes one change.** Give the file and the line.
   The **Fix** must be something a person can do and then be done with, not a rule to
   follow. If the Fix cannot be written as a diff, do not file it — let the problem

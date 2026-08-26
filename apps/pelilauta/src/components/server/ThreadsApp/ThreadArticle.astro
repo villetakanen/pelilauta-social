@@ -20,7 +20,7 @@ const figures =
   })) || [];
 ---
 <article>
-  <h1 class="downscaled">
+  <h1>
     {thread.title}
   </h1>
   { thread.quoteRef && (
@@ -37,6 +37,17 @@ const figures =
       client:load
     />
   )}
-  <section set:html={htmlContent} />
+  <section class="text-prose" set:html={htmlContent} />
   
 </article>
+
+<style>
+  /*
+   * The Golden container places this article and reaches no deeper, so the rhythm
+   * between the title, the quote, the images and the body is stated here.
+   */
+  article {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

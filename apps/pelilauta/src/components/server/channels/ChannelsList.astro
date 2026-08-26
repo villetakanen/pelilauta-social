@@ -30,14 +30,23 @@ function inCategory(cat: string) {
 }
 ---
 { categories().map((cat: string) => (
-  <section class="content-listing">
-    <header class="border-b">
-      <h2 class="text-h4 m-0">{cat}</h2>
-    </header>
-    <div class="listing-items">
-      { inCategory(cat).map((channelWithStats: ChannelWithStats) => (
-        <ChannelInfoRow channelWithStats={channelWithStats} />
-      )) }
-    </div>
+  <section>
+    <h2>{cat}</h2>
+    { inCategory(cat).map((channelWithStats: ChannelWithStats) => (
+      <ChannelInfoRow channelWithStats={channelWithStats} />
+    )) }
   </section>
 ))}
+
+<style>
+  /*
+   * Stopgap. The design system has no listing row yet, so the rhythm between
+   * a category's heading and its rows is local. Do not copy it; delete it
+   * when a listing row exists.
+   * plans/debt/the-design-system-has-no-listing-row.md tracks the gap.
+   */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

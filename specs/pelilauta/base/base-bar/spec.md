@@ -26,8 +26,8 @@ identity, because the identity is not the consumer's to state.
 
 ### Constraints
 
-The identity is the product's logomark and wordmark, leading to the base application's
-root. It is the same on every page of every application that takes this bar.
+The bar carries the product's logomark and wordmark as its identity, leading to the base
+application's root. It is the same on every page of every application that takes this bar.
 
 The bar carries the page's name nowhere. A page names itself in the document's title
 and in its first heading.

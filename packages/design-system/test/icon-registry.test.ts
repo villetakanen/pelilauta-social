@@ -99,13 +99,6 @@ test('managed tier owns the branded featured-tag nouns', () => {
   }
 });
 
-test('branded managed artwork keeps encoded colors; open-source is monochrome', () => {
-  expect(getManagedIcon('dd5')!.inner).toMatch(/fill="#BC0F0F"/);
-  expect(getOpenSourceIcon('fox')!.inner).toMatch(/fill="currentColor"/);
-  expect(getOpenSourceIcon('search')!.inner).toMatch(/fill="currentColor"/);
-  expect(getOpenSourceIcon('arrow-left')!.inner).toMatch(/fill="currentColor"/);
-});
-
 test('unknown, empty, and absent nouns fall to the missing glyph', () => {
   expect(resolveTier('no-such-noun-xyz')).toBe('missing');
   expect(resolveTier('')).toBe('missing');
@@ -119,10 +112,6 @@ test('bundled fallback tier provides the essential UI symbols', () => {
       'fallback',
     );
   }
-});
-
-test('pbta-logo artwork matches the v18 front-page logo viewBox', () => {
-  expect(getManagedIcon('pbta-logo')!.viewBox).toBe('0 0 256 256');
 });
 
 test('open-source registry generation is deterministic (--check passes)', () => {

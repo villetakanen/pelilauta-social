@@ -17,7 +17,7 @@ the reading area yields.
 ### Architecture
 
 A Svelte component, `packages/design-system/components/CnChatBar.svelte`, is a part of
-the application chrome governed by `../../application-chrome/spec.md`. Surface,
+the application chrome governed by `../../app-chrome/spec.md`. Surface,
 responsive placement, Markdown textarea and action composition form one public
 component; no separate anchor is a public capability.
 
@@ -47,7 +47,7 @@ CnChatBar has no standalone placement. Its placement root participates in
 browser window. A layout-transparent `astro-island` may stand between the two in the DOM.
 
 The surface stands at the chrome container's block end in every band, and grows toward
-the block start with its content. `../../application-chrome/spec.md` ends that container
+the block start with its content. `../../app-chrome/spec.md` ends that container
 above an on-screen keyboard, so the surface stands above the keyboard rather than behind
 it, and no band reserves space of its own for one.
 
@@ -57,7 +57,7 @@ capped at `--cn-measure`.
 
 Where a rail stands in the same chrome, the placement cedes the strip the rail occupies,
 as the main region does, so the surface is centred on the content rather than on the
-viewport. What the strip is worth is the rail's to say; whether one stands is asked of the
+viewport. The rail decides what the strip is worth; whether one stands is asked of the
 chrome, because a bounded composition inherits the occupancy from the page around it.
 
 The surface grows until it reaches the application bar, and no further: a reader who
@@ -125,7 +125,7 @@ white space sends nothing.
 
 The disabled state makes the textarea, the `+` where there is one, and every supplied
 action inoperable, and suppresses send intent. Supplied actions are native buttons under
-`../../actions/spec.md`, and so are the menu's items.
+`../../actions/spec.md`, and the menu's items are too.
 
 ## Contract
 

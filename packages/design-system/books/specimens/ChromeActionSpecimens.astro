@@ -493,7 +493,7 @@ for (const pseudo of STATE_PSEUDOS) {
 <style>
   /*
    * The Composition panel this specimen sits in spans the breakout's full
-   * width (packages/design-system/styles/content-containers.css:85-87), and
+   * width (packages/design-system/styles/content-containers.css:68-70), and
    * a rig never fills that width by design — it is shown at its own real
    * size instead. Centring the rig within the panel is this specimen's job,
    * not the breakout's: a `.breakout` stretches by definition.
@@ -563,7 +563,7 @@ for (const pseudo of STATE_PSEUDOS) {
    * shrunken one — the same defect this book is fixing, from a different
    * cause. `.state-list`'s grid track has no equivalent shrink to guard
    * against: a grid item's automatic minimum width already defaults to its
-   * content's, which here is the rig's own declared, unshrinkable size.
+   * content's, which here the rig declares as its own unshrinkable size.
    */
   .slot {
     display: flex;

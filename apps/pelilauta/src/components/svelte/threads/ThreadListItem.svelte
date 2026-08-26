@@ -13,25 +13,25 @@ interface Props {
 const { thread }: Props = $props();
 </script>
 
-<article class="cols-2 surface" id={`thread-${thread.key}`}>
-  <div>
-    <h4 class="downscaled m-0">
+<article class="surface" id={`thread-${thread.key}`}>
+  <div class="info">
+    <h4>
       <a href={`/threads/${thread.key}`}>
         {thread.title}
       </a>
     </h4>
-    <div class="my-2">
+    <div>
       {#await createRichSnippet( thread.markdownContent || "", { paragraphClasses: ["text-small"] }, )}
         ...
       {:then snippet}
         {@html snippet}
       {/await}
     </div>
-    <p class="text-caption m-0">
+    <p class="text-caption">
       <ProfileLink uid={thread.author} />
       {#if thread.tags}
         {#each thread.tags as tag}
-          <span class="pill">
+          <span class="chip">
             {tag}
           </span>
         {/each}
@@ -39,8 +39,7 @@ const { thread }: Props = $props();
     </p>
   </div>
 
-  <!-- Grid col 2 -->
-  <div class="border-l pl-2">
+  <div class="meta">
     <a href={`/threads/${thread.key}?jumpTo=unread#discussion`}>
       {t("threads:info.flowTime", {
         time: toDisplayString(thread.flowTime),
@@ -51,3 +50,45 @@ const { thread }: Props = $props();
   <!-- new items highlight injection -->
   <ThreadSubscriber {thread} />
 </article>
+
+<style>
+  /*
+   * Stopgap. The design system has no listing row yet, so this layout is
+   * local. Do not copy it; delete it when a listing row exists.
+   * plans/debt/the-design-system-has-no-listing-row.md tracks the gap.
+   */
+
+  /*
+   * The row: the thread's identity, and its activity beside it where the
+   * width allows. The surface carries the padding, and the region carries
+   * the rhythm between rows, so neither is restated here.
+   */
+  article {
+    display: grid;
+    /* Stacked blocks keep the line rhythm; columns keep the inline gap. */
+    gap: var(--cn-line) var(--cn-gap);
+    border-radius: var(--cn-border-radius);
+  }
+
+  /*
+   * The nearest ancestor container is the Golden primary region.
+   * A container query cannot read a custom property; the literal restates
+   * units.css's --cn-breakpoint-small.
+   */
+  @container (min-width: 38.75rem) {
+    article {
+      grid-template-columns: 1.618fr 1fr;
+    }
+  }
+
+  .info {
+    display: grid;
+    row-gap: var(--cn-grid);
+    align-content: start;
+    min-inline-size: 0;
+  }
+
+  .meta {
+    align-self: start;
+  }
+</style>

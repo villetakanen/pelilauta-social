@@ -25,9 +25,9 @@ both applications receive the same presentation from `packages/design-system`.
 Each presentation's base selector states its geometry, type, surface, foreground and
 interaction states; variant classes modify that base directly. A component with its
 own action language may replace a presentation within its scope; toggle buttons,
-reaction buttons and tray buttons remain separate capabilities. Placement of floating
-actions is the tray's, defined by `specs/design-system/fab-tray/spec.md`; a FAB never
-positions itself.
+reaction buttons and tray buttons remain separate capabilities. The tray governs the
+placement of floating actions, defined by `specs/design-system/fab-tray/spec.md`; a FAB
+never positions itself.
 
 `styles/buttons.css` publishes the button type role — `--cn-font-size-button` and its
 weight, line-height and letter-spacing companions — as semantic aliases onto the

@@ -26,7 +26,7 @@ let title = $state(handout.title);
 let markdownContent = $state(handout.markdownContent);
 
 /*
- * Dirtiness is the shell's, reported here rather than tracked: the title is
+ * The shell tracks dirtiness; this component only reports it: the title is
  * a native control inside the region it reads, so a title edited back to
  * what it was leaves the save action disabled, which the view's diff
  * used to manage by hand.
@@ -102,7 +102,7 @@ function cancel() {
     />
   </label>
 
-  <section class="actions">
+  <section class="actions text-end">
     <button type="button" class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
@@ -114,10 +114,6 @@ function cancel() {
 
 <style>
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cn-gap);
     margin-block-start: var(--cn-line);
   }
 </style>

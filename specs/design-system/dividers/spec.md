@@ -32,7 +32,7 @@ The mark takes the `--cn-color-border` semantic role.
 consumer takes one.
 
 `packages/design-system/components/CnSeparator.svelte` draws the ornamental mark: a
-hairline, an icon, a hairline, static and never hydrated. Its icon is the product's
+hairline, an icon, a hairline, static and never hydrated. Its icon carries the product's
 logomark, `noun="fox"`, and a consumer passes a different `noun` to carry the break
 instead. Unlike `<hr>`, the mark is decorative: it carries no accessible role or name.
 

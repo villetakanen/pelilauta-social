@@ -1,21 +1,21 @@
 import { expect, type Page, test } from '@playwright/test';
 
 /**
- * The content container's behavioural scenarios. These need a browser: the
- * measure resolves against the root font size, and what a container query
- * reports cannot be read out of a stylesheet at all.
+ * The behavioural scenarios of the content containers. These need a browser:
+ * the measure resolves against the root font size, and a stylesheet does not
+ * state what a container query reports.
  */
 
 const BOOK = '/base/content-containers';
 const MEASURE_STEPS = 83;
 const GAP_STEPS = 2;
-/** The rhythm: what a content area puts between its children, and stacked regions. */
+/** The rhythm: what a content area puts between its children, and between containers. */
 const LINE_STEPS = 3;
 const GRID_REM = 0.5;
 /** The triad's fixed tracks, and the width its row needs, in grid steps. */
 const TRIAD_TRACKS = [51, 32, 32];
 const TRIAD_STEPS = 51 + GAP_STEPS + 32 + GAP_STEPS + 32;
-/** The golden's, the same way: the measure beside one small region. */
+/** The golden's, the same way: the measure beside one small column. */
 const GOLDEN_TRACKS = [MEASURE_STEPS, 32];
 const GOLDEN_STEPS = MEASURE_STEPS + GAP_STEPS + 32;
 
@@ -31,8 +31,8 @@ const steps = (page: Page, count: number) =>
 
 /**
  * What the tray takes from the page. The design site mounts one, so the window
- * is wider than the container by the tray's inline size — and a threshold is
- * about the container. Every viewport below adds this back.
+ * is wider than the container by the tray inline size, and a threshold applies
+ * to the container. Every viewport below adds this back.
  */
 const trayInset = (page: Page) =>
   page.evaluate(() => {
@@ -42,10 +42,9 @@ const trayInset = (page: Page) =>
   });
 
 /*
- * This file measures where things land, not how they travel. Since the tray
- * arrived, a resize animates the main region's inline margin as the tray's own
- * width follows, so a measurement taken straight after one catches it in
- * flight.
+ * These tests measure final positions. A resize animates the inline margin of
+ * the main element as the tray width follows, so a measurement taken straight
+ * after a resize catches that margin in flight.
  */
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
@@ -60,8 +59,8 @@ test.beforeEach(async ({ page }) => {
 
 const boxes = async (page: Page) => {
   const main = await page.locator('main#content').boundingBox();
-  // The article spans the page for breakouts; its blocks are the column, so a
-  // block's box is what we measure.
+  // The article spans the page for breakouts, and its blocks are the column, so
+  // measure the box of a block.
   const column = await page
     .locator('main#content > .content-prose > p')
     .first()
@@ -112,8 +111,8 @@ test('the content width does not jump across the threshold', async ({
   const above = (await boxes(page)).column.width;
 
   expect(above).toBeCloseTo(measure, 0);
-  // Continuous: just below the threshold the column is short by at most the
-  // window's own shortfall, never by a mode's worth of width.
+  // The narrowing is continuous: below the threshold the column is short by at
+  // most the shortfall of the window, and not by the width of a whole mode.
   expect(below).toBeLessThanOrEqual(measure);
   expect(measure - below).toBeLessThan(2 * gap + 40);
 });
@@ -125,8 +124,8 @@ test('an unnamed query resolves against the column, not the page', async ({
   await page.goto(BOOK);
 
   // The page is ~72rem and the column 41.5rem. A 50rem query is true of one and
-  // false of the other, which is what makes this discriminating: if the
-  // container element were the full-width wrapper, both probes would match.
+  // false of the other, so the two probes separate the column from the page: if
+  // the container element were the full-width wrapper, both would match.
   await page.addStyleTag({
     content: `
       #probe-narrow, #probe-wide { color: rgb(1, 1, 1); }
@@ -135,7 +134,7 @@ test('an unnamed query resolves against the column, not the page', async ({
     `,
   });
   await page.evaluate(() => {
-    // A block of the article is the container, so the probes live inside one.
+    // A block of the article is the container, so the probes sit inside one.
     const article = document.querySelector('main#content > .content-prose');
     const host = document.createElement('div');
     for (const id of ['probe-narrow', 'probe-wide']) {
@@ -160,8 +159,9 @@ test('a container that asks for nothing takes the width it is offered', async ({
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BOOK);
 
-  // The host offers its full content box. Only a container that asks for the
-  // measure is narrowed, so a plain one needs no class to stay wide.
+  // The box the container sits in offers its whole content box. Only a container
+  // that takes the measure is narrowed, so a plain element needs no class to stay
+  // wide.
   await page.evaluate(() => {
     const section = document.createElement('section');
     section.id = 'wide';
@@ -199,8 +199,8 @@ test('a breakout spans the width its prose container was offered', async ({
   const breakout = await page.locator('#breakout').boundingBox();
   if (!breakout) throw new Error('the breakout did not render');
 
-  // Wider than the flow, and the whole width the host offered its container —
-  // the page-edge inset is the host's, so a breakout does not eat into it.
+  // Wider than the flow, and the whole width the surrounding box offered the
+  // container. That box states the page-edge inset, so a breakout stays inside it.
   expect(breakout.width).toBeGreaterThan(measure);
   expect(breakout.width).toBeCloseTo(main.width - 2 * gap, 0);
   const left = breakout.x - main.x;
@@ -245,11 +245,131 @@ test('stacked containers are one --cn-line apart', async ({ page }) => {
   expect(second.y - (first.y + first.height)).toBeCloseTo(line, 0);
 });
 
+test('a stack keeps its rhythm, and its last container closes it', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BOOK);
+
+  // The parent states no separation, so the measured interval is only what the
+  // containers state. `flow-root` keeps the margin of the last child inside the
+  // parent box, where the test can read it, and adds no separation itself.
+  await page.evaluate(() => {
+    const host = document.createElement('div');
+    host.id = 'stack-host';
+    host.style.display = 'flow-root';
+    host.innerHTML = `
+      <div id="stacked-1" class="content-prose"><p>first</p></div>
+      <astro-island>
+        <div id="stacked-2" class="content-golden"><div>second</div></div>
+      </astro-island>
+      <div id="stacked-3" class="content-triad"><div>third</div></div>
+    `;
+    document.querySelector('main#content')?.append(host);
+  });
+
+  const line = await steps(page, LINE_STEPS);
+  const host = await page.locator('#stack-host').boundingBox();
+  const stacked = await Promise.all(
+    [1, 2, 3].map((n) => page.locator(`#stacked-${n}`).boundingBox()),
+  );
+  if (!host || stacked.some((box) => !box)) {
+    throw new Error('the stack did not render');
+  }
+  const boxes = stacked as NonNullable<(typeof stacked)[number]>[];
+
+  // The middle container is reached through an island, which is display: contents
+  // and has no box to carry the interval.
+  expect(boxes[1].y - (boxes[0].y + boxes[0].height)).toBeCloseTo(line, 0);
+  expect(boxes[2].y - (boxes[1].y + boxes[1].height)).toBeCloseTo(line, 0);
+  expect(host.y + host.height - (boxes[2].y + boxes[2].height)).toBeCloseTo(
+    line,
+    0,
+  );
+});
+
+test("a content container among a content area's children adds its own separation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BOOK);
+
+  await page.evaluate(() => {
+    const area = document.querySelector('main#content > .content-prose');
+    const block = document.createElement('div');
+    block.innerHTML = `
+      <p id="child-1">before</p>
+      <div id="child-2" class="content-golden"><div>a nested container</div></div>
+      <astro-island>
+        <div id="child-3" class="content-triad"><div>another one</div></div>
+      </astro-island>
+      <p id="child-4">after</p>
+    `;
+    area?.append(...block.children);
+  });
+
+  const line = await steps(page, LINE_STEPS);
+  const children = await Promise.all(
+    [1, 2, 3, 4].map((n) => page.locator(`#child-${n}`).boundingBox()),
+  );
+  if (children.some((box) => !box)) {
+    throw new Error('the content area did not render');
+  }
+  const boxes = children as NonNullable<(typeof children)[number]>[];
+  const interval = (index: number) =>
+    boxes[index + 1].y - (boxes[index].y + boxes[index].height);
+
+  // Between two ordinary blocks the area's rhythm is the whole interval.
+  expect(interval(0)).toBeCloseTo(line, 0);
+
+  // A container states the separation after it wherever it sits, and the area
+  // states its rhythm whatever the child is, so where a container precedes a
+  // sibling both apply, through an island as well, which has no box.
+  expect(interval(1)).toBeCloseTo(2 * line, 0);
+  expect(interval(2)).toBeCloseTo(2 * line, 0);
+});
+
+/** The markup of one numbered child. Each is a surface, so its box paints. */
+const child = (n: number) =>
+  `<div id="region-${n}" class="surface">Region ${n}</div>`;
+
 /**
- * A container in a host of a known width. The host is built here rather than
- * measured off the book, so a composition can be put either side of its threshold
- * without a viewport that also moves the navigation and the page inset.
+ * A container of the given children in a box of a known width. This builds the box
+ * rather than measuring one off the book, so a composition can sit either side of its
+ * threshold without a viewport that also moves the navigation and the page inset.
  */
+const compose = async (
+  page: Page,
+  mode: string,
+  children: string,
+  hostWidth: number,
+) => {
+  await page.evaluate(
+    ({ mode, children, width }) => {
+      document.querySelector('#container-host')?.remove();
+      const host = document.createElement('div');
+      host.id = 'container-host';
+      host.style.inlineSize = `${width}px`;
+      host.style.containerType = 'inline-size';
+      host.innerHTML = `<div class="${mode}">${children}</div>`;
+      document.querySelector('main#content')?.append(host);
+    },
+    { mode, children, width: hostWidth },
+  );
+
+  const host = await page.locator('#container-host').boundingBox();
+  if (!host) throw new Error(`the ${mode} did not render`);
+  return host;
+};
+
+/** The box of one element, by selector, or a failure naming what did not render. */
+const box = async (page: Page, selector: string) => {
+  const found = await page.locator(selector).boundingBox();
+  if (!found) throw new Error(`${selector} did not render`);
+  return found;
+};
+
+/** A container of `count` numbered children, and the box of each. */
 const container = async (
   page: Page,
   mode: string,
@@ -257,39 +377,24 @@ const container = async (
   hostWidth: number,
   between = '',
 ) => {
-  await page.evaluate(
-    ({ mode, count, width, between }) => {
-      document.querySelector('#container-host')?.remove();
-      const host = document.createElement('div');
-      host.id = 'container-host';
-      host.style.inlineSize = `${width}px`;
-      host.style.containerType = 'inline-size';
-      const region = (n: number) =>
-        `<div id="region-${n}" class="surface">Region ${n}</div>`;
-      // The extra markup goes after the first region, where an injected script
-      // sibling lands, and never last: a trailing one would take no track anyway.
-      const regions = Array.from({ length: count }, (_, i) => region(i + 1));
-      host.innerHTML = `<div class="${mode}">${regions[0]}${between}${regions.slice(1).join('')}</div>`;
-      document.querySelector('main#content')?.append(host);
-    },
-    { mode, count, width: hostWidth, between },
+  // The extra markup goes after the first child, where an injected script sibling
+  // lands, and never last: a trailing one would take no column anyway.
+  const children = Array.from({ length: count }, (_, i) => child(i + 1));
+  const host = await compose(
+    page,
+    mode,
+    `${children[0]}${between}${children.slice(1).join('')}`,
+    hostWidth,
   );
-
-  const host = await page.locator('#container-host').boundingBox();
   const regions = await Promise.all(
-    Array.from({ length: count }, (_, i) =>
-      page.locator(`#region-${i + 1}`).boundingBox(),
-    ),
+    Array.from({ length: count }, (_, i) => box(page, `#region-${i + 1}`)),
   );
-  if (!host || regions.some((box) => !box)) {
-    throw new Error(`the ${mode} did not render`);
-  }
-  return { host, regions: regions as NonNullable<(typeof regions)[number]>[] };
+  return { host, regions };
 };
 
 /**
  * The two row modes. Their compositions differ only in how many fixed tracks they
- * have and how wide those are, so their behaviour is asserted once for both.
+ * have and how wide those are, so one set of assertions covers both.
  */
 const MODES = [
   {
@@ -309,6 +414,9 @@ const MODES = [
 for (const { name, mode, tracks, threshold } of MODES) {
   const build = (page: Page, hostWidth: number, between = '') =>
     container(page, mode, tracks.length, hostWidth, between);
+  /** Two rows' worth of children, for the wrapping cases. */
+  const build2 = (page: Page, hostWidth: number) =>
+    container(page, mode, 2 * tracks.length, hostWidth);
   const last = tracks.length - 1;
 
   for (const root of [16, 20]) {
@@ -317,8 +425,8 @@ for (const { name, mode, tracks, threshold } of MODES) {
     }) => {
       await page.setViewportSize({ width: 1600, height: 900 });
       await page.goto(BOOK);
-      // The reader's own text size. The tracks are in rem, so the threshold moves
-      // with it — which is why the width comes from the page rather than a literal.
+      // The text size the reader sets. The tracks are in rem, so the threshold
+      // moves with it, and the width comes from the page rather than a literal.
       await page.addStyleTag({ content: `html { font-size: ${root}px; }` });
 
       const { host, regions } = await build(page, await steps(page, threshold));
@@ -379,8 +487,8 @@ for (const { name, mode, tracks, threshold } of MODES) {
     const left = regions[0].x - host.x;
     const right = host.x + host.width - (regions[last].x + regions[last].width);
     expect(left).toBeCloseTo(right, 0);
-    // Half the surplus, so a golden primary does not line up with a prose flow
-    // above it even though the two are the same width.
+    // Half the surplus, so the first golden column does not line up with a prose
+    // flow above it even though the two are the same width.
     expect(left).toBeCloseTo(surplus / 2, 0);
   });
 
@@ -395,7 +503,7 @@ for (const { name, mode, tracks, threshold } of MODES) {
 
     for (const region of regions) {
       expect(region.width).toBeCloseTo(host.width, 0);
-      // A stacked region does not inherit the prose cap.
+      // A stacked child does not take the prose cap.
       expect(region.width).toBeGreaterThan(measure);
     }
   });
@@ -425,7 +533,7 @@ for (const { name, mode, tracks, threshold } of MODES) {
     await page.goto(BOOK);
 
     // The hydration wrapper is display: contents, so the element it renders is the
-    // grid item. A deferred region moves through its states inside one of these.
+    // grid item. A deferred child moves through its states inside one of these.
     const { regions } = await build(page, await steps(page, threshold));
     await page.evaluate(() => {
       const region = document.querySelector('#region-2');
@@ -446,9 +554,9 @@ for (const { name, mode, tracks, threshold } of MODES) {
     await page.setViewportSize({ width: 1600, height: 900 });
     await page.goto(BOOK);
 
-    // Each region is also a surface, so Surface's name is the one it carries. An
+    // Each child is also a surface, so it carries the name the surface states. An
     // unnamed query finds that same nearest boundary. Both report the track after
-    // the surface inset, never the host.
+    // the surface inset, and not the surrounding box.
     await page.addStyleTag({
       content: `
         #probe-content, #probe-area, #probe-host { color: rgb(1, 1, 1); }
@@ -525,7 +633,7 @@ for (const { name, mode, tracks, threshold } of MODES) {
     // aside's surface down the whole of a long column beside it.
     expect(short.height).toBeCloseTo(regions[1].height, 0);
     expect(short.height).toBeLessThan(primary.height);
-    // The row is still as tall as the tallest region.
+    // The row is still as tall as its tallest child.
     expect(row.height).toBeCloseTo(primary.height, 0);
   });
 
@@ -535,8 +643,8 @@ for (const { name, mode, tracks, threshold } of MODES) {
     await page.setViewportSize({ width: 1600, height: 900 });
     await page.goto(BOOK);
 
-    // The primary is at most the measure, so the prose cap cannot narrow it. A
-    // nested prose flow therefore fills the region and adds no inset of its own.
+    // The first column is at most the measure, so the prose cap cannot narrow it.
+    // A nested prose flow therefore fills the child and adds no inset.
     const { regions } = await build(page, await steps(page, threshold));
     await page.evaluate(() => {
       const prose = document.createElement('div');
@@ -547,7 +655,8 @@ for (const { name, mode, tracks, threshold } of MODES) {
 
     const nested = await page.locator('#nested').boundingBox();
     if (!nested) throw new Error('the nested prose did not render');
-    // The surface inset is the region's, not prose's, so measure inside it.
+    // The child sets the surface inset, not the nested prose, so measure inside
+    // the child.
     const inset = await page.evaluate(() =>
       Number.parseFloat(
         getComputedStyle(document.querySelector('#region-1') as Element)
@@ -555,5 +664,101 @@ for (const { name, mode, tracks, threshold } of MODES) {
       ),
     );
     expect(nested.width).toBeCloseTo(regions[0].width - 2 * inset, 0);
+  });
+
+  test(`${name}: more children than columns fill successive rows`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.goto(BOOK);
+
+    const columns = tracks.length;
+    const { regions } = await build2(page, await steps(page, threshold));
+    const line = await steps(page, LINE_STEPS);
+
+    // Source order across the rows: each child keeps the column its ordinal
+    // assigns, and the second row starts again at the first column.
+    for (const [index, region] of regions.entries()) {
+      expect(region.width).toBeCloseTo(
+        await steps(page, tracks[index % columns]),
+        0,
+      );
+      expect(region.x).toBeCloseTo(regions[index % columns].x, 0);
+      expect(region.y).toBeCloseTo(regions[index - (index % columns)].y, 0);
+    }
+
+    const first = regions[0];
+    const second = regions[columns];
+    expect(second.y - (first.y + first.height)).toBeCloseTo(line, 0);
+  });
+
+  test(`${name}: a partial last row leaves its remaining columns empty`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.goto(BOOK);
+
+    const columns = tracks.length;
+    const { regions } = await container(
+      page,
+      mode,
+      columns + 1,
+      await steps(page, threshold),
+    );
+
+    // The one child of the last row keeps the first column's measure rather than
+    // spreading over the columns beside it, which stay empty.
+    const alone = regions[columns];
+    expect(alone.width).toBeCloseTo(await steps(page, tracks[0]), 0);
+    expect(alone.x).toBeCloseTo(regions[0].x, 0);
+    expect(alone.y).toBeGreaterThan(regions[0].y + regions[0].height);
+  });
+
+  test(`${name}: a breakout spans every column of its row`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.goto(BOOK);
+
+    const columns = tracks.length;
+    const filled = Array.from({ length: columns }, (_, i) => child(i + 1));
+    const host = await compose(
+      page,
+      mode,
+      `${filled.join('')}<div id="wide-child" class="breakout surface">Breakout</div>`,
+      await steps(page, threshold),
+    );
+
+    const first = await box(page, '#region-1');
+    const breakout = await box(page, '#wide-child');
+    expect(breakout.width).toBeCloseTo(host.width, 0);
+    expect(breakout.x).toBeCloseTo(host.x, 0);
+    expect(breakout.y).toBeGreaterThan(first.y + first.height);
+  });
+
+  test(`${name}: a breakout begins a row of its own`, async ({ page }) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.goto(BOOK);
+
+    const host = await compose(
+      page,
+      mode,
+      `${child(1)}<div id="wide-child" class="breakout surface">Breakout</div>${child(2)}`,
+      await steps(page, threshold),
+    );
+    const line = await steps(page, LINE_STEPS);
+
+    // The row holding the first child has a column to spare, and the breakout
+    // does not join it: a child forced to start at the first column ends the row
+    // before it, and the child after the breakout starts another.
+    const first = await box(page, '#region-1');
+    const breakout = await box(page, '#wide-child');
+    const after = await box(page, '#region-2');
+
+    expect(first.width).toBeCloseTo(await steps(page, tracks[0]), 0);
+    expect(breakout.width).toBeCloseTo(host.width, 0);
+    expect(breakout.y - (first.y + first.height)).toBeCloseTo(line, 0);
+    expect(after.x).toBeCloseTo(first.x, 0);
+    expect(after.y - (breakout.y + breakout.height)).toBeCloseTo(line, 0);
   });
 }

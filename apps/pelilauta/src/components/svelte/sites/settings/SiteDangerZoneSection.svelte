@@ -47,7 +47,7 @@ async function onSubmit(e: Event) {
           setDeleteConfirm((e.target as HTMLInputElement).value);
         }}
       />
-      <div class="toolbar justify-center">
+      <div class="text-center">
         <button
           class="cta notify"
           type="submit"

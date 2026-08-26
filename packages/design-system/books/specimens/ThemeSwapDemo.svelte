@@ -4,7 +4,7 @@
  * performed rather than described: toggling redeclares a core family's 13
  * `--chroma-{family}-*` custom properties on this component's own root, to a
  * zero-chroma ramp that keeps each step's OKLCH lightness (`primary-10`'s
- * exception included). Primary and surface are the system's only two core
+ * exception included). Primary and surface make up the system's only two core
  * families, and each swaps independently — every semantic role inside keeps
  * resolving through the same `--cn-*` declarations; only the literal layer
  * they read changed, and only inside this container.
@@ -17,7 +17,7 @@
  * Book: apps/design/src/content/principles/color-system.mdx
  */
 
-/** Family step → its OKLCH lightness. `primary-10` is the theme's declared exception. */
+/** Family step → its OKLCH lightness. The theme declares `primary-10` as its exception. */
 const STEPS: ReadonlyArray<[step: string, lightness: number]> = [
   ['0', 0],
   ['10', 0.12],

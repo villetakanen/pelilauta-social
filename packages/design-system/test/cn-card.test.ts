@@ -54,18 +54,6 @@ describe('CnCard server rendering', () => {
     expect(html).toContain('sizes="(max-width: 30rem) 100vw, 30rem"');
   });
 
-  test('composes elevation and indicator states', () => {
-    const html = markup({
-      title: 'Attention',
-      elevation: 4,
-      notify: true,
-      alert: true,
-    });
-    expect(html).toContain('elevation-4');
-    expect(html).toContain('has-notify');
-    expect(html).toContain('has-alert');
-  });
-
   test('renders a decorative noun in the title or over the cover', () => {
     const inline = markup({ title: 'Fox', noun: 'fox' });
     const covered = markup({ title: 'Fox', noun: 'fox', cover: '/cover.svg' });

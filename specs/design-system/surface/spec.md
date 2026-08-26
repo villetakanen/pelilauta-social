@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Surface
@@ -39,8 +39,8 @@ compose these utilities rather than restating their declarations.
 | 3 | floats over content | surface 100 | surface 20, two thirds of the way to 40 | `--cn-shadow-elevation-3` | opaque |
 | 4 | a system interrupt | primary 99 | primary 40 | `--cn-shadow-elevation-4` | opaque |
 
-The canvas is not a level a consumer selects: it is the page's ground, painting level
-0's colour because level 0 is what the page is. A poster paints over it and dissolves its
+The canvas is not a level a consumer selects: it carries the page's ground, painting
+level 0's colour because level 0 is what the page is. A poster paints over it and dissolves its
 lower edge back into it, which is why the canvas stays opaque while a level 0 surface
 standing over the same artwork does not.
 
@@ -140,6 +140,14 @@ hydrated: the rules read the classes and nothing else. A flag that arrives that 
 fades in rather than snapping in, and appears without the fade under
 `prefers-reduced-motion`.
 
+### Error notice
+
+`.surface.error` is a ground for a short message about something that failed — a
+field that refused input, a form that could not send. It paints `--cn-color-error`
+and states `--cn-color-on-error` over it, the one place surface names a foreground:
+the pair is legible only together, so a consumer choosing its own would have nothing
+to choose from.
+
 ## Contract
 
 ### Definition of Done
@@ -161,6 +169,7 @@ fades in rather than snapping in, and appears without the fade under
 - A Surface utilities book documents the attention states, and a browser check
   verifies that a class added on the client paints the flag in its role colour on a
   surface that rendered without it.
+- A Surface utilities book renders the error notice in both themes.
 - Human review accepts the hierarchy and foreground contrast of the principles and
   utility specimens in both themes.
 
@@ -181,6 +190,8 @@ fades in rather than snapping in, and appears without the fade under
   system two flags that can drift.
 - The flag rules read the state classes and nothing else, so a class toggled after
   the server response takes effect without hydration.
+- `--cn-color-on-error` meets WCAG 2.2 AA on `--cn-color-error` in both themes,
+  checked against the semantic tokens rather than a specimen.
 
 ### Scenarios
 

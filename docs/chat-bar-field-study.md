@@ -164,7 +164,7 @@ Recorded from the product owner, 2026-08-19.
 12. **The placeholder clears when the reader reaches the bar**, before the first letter.
 13. **The hint is cerulean**, from the surface family the bar itself is built from, not
     the primary family and not a neutral grey. One hue holds the whole surface.
-14. **The placeholder treatment is the system's, not the chat bar's.** Every field the
+14. **The system, not the chat bar, governs the placeholder treatment.** Every field the
     system grows inherits it, and nobody decides it a second time.
 15. **Focus is a warm tint from the primary family, not a step along the surface scale.**
     Light focus is `--chroma-primary-99`; dark focus is `--chroma-primary-10` on a
@@ -179,11 +179,11 @@ Recorded from the product owner, 2026-08-19.
 18. **A field rests as a dip below the surface holding it, and hover rises toward that
     surface.** Reaching for the field brings it up to meet the pointer; focus then
     changes hue rather than continuing the movement.
-19. **The family is named `--cn-color-field`.** `field` is the platform's own word — CSS
-    system colours pair `Field` with `FieldText`, and it covers a textarea and a select
-    as honestly as an input, which `input` does not. The `color` segment is the owner's
-    decision, and it puts the family out of step with the 33 unmarked colour roles in
-    `semantic.css`; `plans/debt/colour-token-naming.md` carries that.
+19. **The family is named `--cn-color-field`.** The platform defines `field` as its own
+    word — CSS system colours pair `Field` with `FieldText`, and `field` covers a
+    textarea and a select as honestly as an input, which `input` does not. The owner
+    decides the `color` segment, which puts the family out of step with the 33 unmarked
+    colour roles in `semantic.css`; `plans/debt/colour-token-naming.md` carries that.
 20. **`ARCHITECTURE.md` gains a `:focus-within` row.** Its state table
     (`ARCHITECTURE.md:74-82`) reserves a name for every state selector the system uses
     and has none for the reader being inside a field. The row names the selector, because
@@ -274,7 +274,7 @@ on the dark end of the scale will not agree with what a reader sees.
 ## The placeholder
 
 The hint is drawn from the cerulean surface family, at a step strong enough to read, and
-it is the system's treatment for every field rather than the chat bar's alone.
+the system governs that treatment for every field rather than the chat bar alone.
 
 The grey that started this study is not a decision anyone took. `CnChatBar` writes no
 `::placeholder` rule and `styles/` carries no placeholder colour, so in `apps/design` —

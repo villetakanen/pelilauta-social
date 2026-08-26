@@ -193,14 +193,14 @@ keyboard focus applies `--cn-color-focus-ring`. Only native button FABs support 
 
 Use `<nav class="fab-tray">` to pin FABs to the lower inline-end corner of the composition
 that owns it, which is its containing block. The tray spans that composition's inline size
-and aligns its children to the inline end. It stacks at `--cn-z-fab` and clears block-end
-navigation through `--cn-block-end-chrome`.
+and aligns its children to the inline end. It stacks at `--cn-z-fab`, inset from the
+composition's block end and inline end by `--cn-gap`.
 
 <DsComposition caption="App shell layout: FAB labels visible, actions stacked upward">
   <FabTrayDemo shell="app" />
 </DsComposition>
 
-<DsComposition themes caption="Handheld shell: FAB labels collapsed to icons in Light and Dark">
+<DsComposition themes caption="Narrow shell: FAB labels collapsed to icons in Light and Dark">
   <FabTrayDemo shell="handheld" />
 </DsComposition>
 

@@ -11,7 +11,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * stylesheet or the component source states on its own.
  *
  * `CnAppBar` answers the `app-chrome` container's own inline size, never the
- * window (`specs/design-system/application-chrome/spec.md`). Two kinds of
+ * window (`specs/design-system/app-chrome/spec.md`). Two kinds of
  * subject appear below, and only one of them may legitimately drive a bar by
  * resizing the Playwright viewport:
  *

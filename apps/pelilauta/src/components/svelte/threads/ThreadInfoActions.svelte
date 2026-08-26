@@ -33,23 +33,46 @@ async function onsubmit(e: Event) {
 }
 </script>
 {#if owns || $showAdminTools}
-  <section class="flex flex-col border-t p-2 mt-2">
+  <div class="thread-info-actions">
     {#if owns}
-      <h4 class="downscaled m-0">{t('threads:info.actions.title')}</h4> 
-      <a
-        href={`/threads/${thread?.key}/edit`}
-        class="button text-center text"
-      >
-        {t('actions:edit')} 
-      </a>
-      <a
-        href={`/threads/${thread?.key}/confirmDelete`}
-        class="button text-center text"
-      >
-        {t('actions:delete')} 
-      </a>
+      <section class="surface owner-actions">
+        <h2>{t('threads:info.actions.title')}</h2>
+        <a
+          href={`/threads/${thread?.key}/edit`}
+          class="button text-center text"
+        >
+          {t('actions:edit')}
+        </a>
+        <a
+          href={`/threads/${thread?.key}/confirmDelete`}
+          class="button text-center text"
+        >
+          {t('actions:delete')}
+        </a>
+      </section>
     {/if}
     <ThreadAdminActions {thread}/>
-  </section>
+  </div>
 {/if}
-  
+
+<style>
+  /*
+   * The owner's actions and the admin disclosure are separate surface boxes,
+   * not one nested in the other, so this wrapper states only the interval
+   * between them.
+   */
+  .thread-info-actions {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  /*
+   * No container reaches into this box, so it states the interval between
+   * its own blocks: the heading and the two actions.
+   */
+  .owner-actions {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
+

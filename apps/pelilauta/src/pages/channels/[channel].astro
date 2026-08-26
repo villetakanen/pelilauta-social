@@ -71,14 +71,20 @@ try {
   title={title}
   description={description}
 >
-  <!-- Single Svelte component handles everything -->
-  <ChannelThreadList
-    channel={channel}
-    initialThreads={threads}
-    initialLastFlowTime={lastThreadFlowTime}
-    hasError={hasError}
-    client:load
-  />
+  {/*
+    Golden reaches through the island: the listing and the channel card each
+    take a region. On a fetch error the island renders one note instead, and
+    the grid degrades to that one child.
+  */}
+  <div class="content-golden">
+    <ChannelThreadList
+      channel={channel}
+      initialThreads={threads}
+      initialLastFlowTime={lastThreadFlowTime}
+      hasError={hasError}
+      client:load
+    />
+  </div>
 
   <ChannelFabs channel={channelKey} client:only="svelte" slot="fab-tray" />
 

@@ -25,6 +25,6 @@ if (!threadKey) {
 <ModalPage title={thread.title} backHref={`/threads/${threadKey}`}>
   <div class="content-prose">
     <h1>{t('threads:confirmDelete.title')}</h1>
+    <ConfirmDeleteThread {thread} client:only="svelte" />
   </div>
-  <ConfirmDeleteThread {thread} client:only="svelte" />
 </ModalPage>

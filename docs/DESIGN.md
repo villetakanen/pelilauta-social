@@ -74,7 +74,7 @@ v19 established one central model for responsive layout:
   are deprecated.
 - The design system decides what shows or hides at a width. The application chrome
   carries a component-specific mechanism
-  (`specs/design-system/application-chrome/spec.md`); content container layouts
+  (`specs/design-system/app-chrome/spec.md`); content container layouts
   handle widths as view modes internal to the component
   (`specs/design-system/content-container-layouts/spec.md`).
 

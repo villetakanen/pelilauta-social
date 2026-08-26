@@ -7,6 +7,9 @@ export const admin: Locale = {
   },
   thread: {
     tools: 'Ylläpito',
+    moveToChannel: 'Siirrä kanavalle:',
+    channelsLoading: 'Ladataan kanavia...',
+    noChannels: 'Ei kanavia saatavilla',
   },
   rail: {
     label: 'Ylläpito',

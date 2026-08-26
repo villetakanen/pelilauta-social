@@ -108,7 +108,7 @@ $effect(() => {
 </script>
 
 <section>
-  <header class="surface mb-1 p-2">
+  <header class="surface p-2">
     <span>{t('site:page.history.revision', { index: revision })}</span>
     {#if revisionDetails}
       : <ProfileLink uid={revisionDetails.author} />
@@ -136,6 +136,15 @@ $effect(() => {
 </section>
 
 <style>
+
+/*
+ * The Golden container places this section and reaches no deeper, so the interval
+ * between the revision header and the diff is stated here.
+ */
+section {
+  display: grid;
+  row-gap: var(--cn-line);
+}
 
 .diff-indicator {
   flex: none;

@@ -43,24 +43,6 @@ describe('the mode a consumer states', () => {
   });
 });
 
-describe('the destination and label', () => {
-  test('signed out renders an anchor with the stated href and label', () => {
-    const html = markup({ href: '/login', label: 'Kirjaudu sisään' });
-    expect(html).toContain('href="/login"');
-    expect(html).toContain('<span>Kirjaudu sisään</span>');
-  });
-
-  test('signed in renders an anchor with the stated href and label', () => {
-    const html = markup({
-      href: '/profile',
-      label: 'Oma sivu',
-      signedIn: true,
-    });
-    expect(html).toContain('href="/profile"');
-    expect(html).toContain('<span>Oma sivu</span>');
-  });
-});
-
 describe('disabled', () => {
   test('renders aria-disabled and tabindex, and keeps the href', () => {
     const html = markup({

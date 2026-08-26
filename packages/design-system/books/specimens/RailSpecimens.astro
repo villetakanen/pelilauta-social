@@ -3,10 +3,10 @@
  * RailSpecimens — CnRail bounded in a frame the book can render inline.
  *
  * CnRail answers a container named `app-chrome`, per
- * `specs/design-system/application-chrome/spec.md`: `@container app-chrome
+ * `specs/design-system/app-chrome/spec.md`: `@container app-chrome
  * (...)`, matched against the nearest ancestor that establishes one. `.frame`
  * below is that ancestor — `container: app-chrome / inline-size` — so a
- * mounted rail reads the frame's own width for its band, rather than the
+ * mounted rail reads the frame's width for its band, rather than the
  * window's, and a frame sized into a band renders that band live. The same
  * declaration also makes the frame a containing block for a fixed-position
  * descendant, alongside the `position: relative` it already carries for an
@@ -162,21 +162,20 @@ const MODES = ['light', 'dark'] as const;
    * Test rig, not a design-system value: tall enough to hold what the
    * `canonical` and `boxes` specimens mount — a trigger, a header of one
    * entry, a body of two, and a footer of one — with the footer flush to the
-   * frame's own end, and named for the band its width selects.
+   * frame's end, and named for the band its width selects.
    *
    * The rail spans the frame's block size and its drawer scrolls what does
    * not fit, so a frame shorter than this hides the footer rather than
    * shrinking anything: a guessed height could clear it on one machine and
-   * clip it on another. Each term below is the rail's own formula, read from
+   * clip it on another. The rail's formula gives each term below, read from
    * `packages/design-system/components/CnRail.astro`, not a measurement of
    * this specimen's rendered output:
    *
    * - The rail begins where the application bar's target ends, not where the
    *   frame does: `--cn-app-bar-height − (--cn-app-bar-height − 7 ×
    *   --cn-grid) / 2`.
-   * - The trigger's own block size, `--cn-grid * 7`, carrying no margin of
-   *   its own.
-   * - The header, and the body that follows it, add no padding at their own
+   * - The trigger's block size, `--cn-grid * 7`, carrying no margin.
+   * - The header, and the body that follows it, add no padding at their
    *   start — the trigger already separates them from what is above — so a
    *   box holding one compact entry there is padding on one side plus the
    *   entry's block size: `(--cn-width-rail-collapsed − 7 × --cn-grid) / 2 +

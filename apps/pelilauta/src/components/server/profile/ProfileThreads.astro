@@ -62,3 +62,14 @@ function getNoun(slug: string | undefined): string {
       <p>{t('profile:threadList.empty')}</p>
     )}
 </section>
+
+<style>
+  /*
+   * The Triad container places this section and reaches no deeper, so the rhythm
+   * between the heading and the cards is stated here.
+   */
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

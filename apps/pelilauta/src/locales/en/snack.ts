@@ -6,6 +6,7 @@ export const snack: Locale = {
     failed: 'Sharing failed',
   },
   site: {
+    pageDeleted: 'Page {name} deleted',
     sortOrderUpdated: 'Page order updated',
     sortOrderUpdateFailed: 'Failed to update page order',
     tocOrderUpdated: 'Table of contents order updated',

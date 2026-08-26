@@ -25,6 +25,7 @@ export const actions: Locale = {
   import: 'Import',
   login: 'Sign in',
   logout: 'Sign out',
+  markRead: 'Mark as read',
   moreOptions: 'More options',
   openImage: 'Open image',
   send: 'Send',

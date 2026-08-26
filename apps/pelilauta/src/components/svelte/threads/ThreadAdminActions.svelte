@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Thread } from '@schemas/ThreadSchema';
 import { meta, metaLoading } from '@stores/admin/ChannelsAdminStore';
 import { showAdminTools } from '@stores/session';
@@ -65,7 +66,14 @@ async function handleChannelChange(event: Event) {
 
 {#if $showAdminTools && thread}
   <details class="surface">
-    <summary>{t("admin:thread.tools")}</summary>
+    <!--
+      The heading stands inside the control, because the disclosure is both the
+      box's own section heading and the thing a reader presses to open it.
+    -->
+    <summary>
+      <CnIcon noun="admin" size="small" decorative />
+      <h2>{t("admin:thread.tools")}</h2>
+    </summary>
     <a
       href={`/threads/${thread?.key}/confirmDelete`}
       class="button text-center text"
@@ -74,10 +82,10 @@ async function handleChannelChange(event: Event) {
     </a>
 
     <label>
-      Move to channel:
+      {t("admin:thread.moveToChannel")}
       {#if $metaLoading}
         <select disabled>
-          <option>Loading channels...</option>
+          <option>{t("admin:thread.channelsLoading")}</option>
         </select>
       {:else if $meta?.topics && $meta.topics.length > 0}
         <select
@@ -94,19 +102,56 @@ async function handleChannelChange(event: Event) {
         </select>
       {:else}
         <select disabled>
-          <option>No channels available</option>
+          <option>{t("admin:thread.noChannels")}</option>
         </select>
       {/if}
     </label>
 
-    <div class="mt-3 pt-3 border-t">
+    <hr />
+    <div>
       <LabelManager {thread} />
     </div>
   </details>
 {/if}
 
 <style>
+  /*
+   * No container reaches into this box, so it states the interval between
+   * its own blocks: the summary, the delete action, the channel select and
+   * the label manager.
+   */
+  details {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  /*
+   * @todo `preflight.css` gives `summary` only `display: list-item`; nothing
+   * else in the design system names `details` or `summary`, so this
+   * disclosure draws its own open/closed affordance. It belongs in the
+   * design system as a Disclosure capability, not bespoke here.
+   */
   summary {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
     cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The affordance stands at the row's end, where the reader's eye leaves it. */
+  summary::before {
+    order: 1;
+    margin-inline-start: auto;
+    content: "▾";
+    transition: rotate var(--cn-duration-ui) var(--cn-easing-ui);
+  }
+
+  details[open] > summary::before {
+    rotate: 180deg;
   }
 </style>

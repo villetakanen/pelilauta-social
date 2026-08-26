@@ -24,7 +24,11 @@ if (session) {
 /* A server side rendered login page: we only provide client side session, as all
  * reactive/interactive elements are handled by the client side solid apps.
  */
+// The flag serves the e2e suite, which runs against the local dev server.
+// The DEV guard keeps the section out of every deployed build, whatever the
+// deploy environment sets.
 const showPasswordLoginFlag =
+  import.meta.env.DEV &&
   import.meta.env.SECRET_FEATURE_FLAG_PASSWORD_LOGIN === 'true';
 
 const redirect = sanitizeRedirect(Astro.url.searchParams.get('redirect'));

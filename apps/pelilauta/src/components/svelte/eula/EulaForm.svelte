@@ -121,7 +121,7 @@ async function handleCancel(event: Event) {
         {/if}
       </div>
 
-      <div class="flex justify-end gap-2 pt-4 border-t mt-4">
+      <div class="text-end">
         <button type="button" class="text" onclick={handleCancel}>
           {t('login:eula.decline')}
         </button>

@@ -1,6 +1,6 @@
 # Typography — Porsche Design System (designsystem.porsche.com/v3/styles/typography/)
 
-> Captured 2026-08-03 via page extraction; the site is a SPA, so this is the page's
+> Captured 2026-08-03 via page extraction; the site is a SPA, so this carries the page's
 > text content, not its source file.
 
 ## Usage

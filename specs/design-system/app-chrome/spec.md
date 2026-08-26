@@ -2,7 +2,7 @@
 status: live
 ---
 
-# Application Chrome
+# App Chrome
 
 ## Blueprint
 
@@ -48,8 +48,8 @@ every browser, and every render before script runs, gets the full box.
 
 Content clears chrome by the tokens that size it, never by measuring what is present:
 `--cn-app-bar-height` at the block start, and at each other edge the width or depth of
-whatever stands there. `specs/design-system/content-container-layouts/spec.md` states the
-host's side of that.
+whatever stands there. `specs/design-system/app-main/spec.md` states the
+frame's side of that.
 
 Chrome renders on every page, including a modal one. The box paints nothing, so artwork
 behind it cedes nothing to it.

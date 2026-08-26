@@ -53,19 +53,17 @@ function getRedirectUrl(): string {
 }
 </script>
 
-<form onsubmit={handleSearch} class="flex border radius-m px-2 items-center">
+<form onsubmit={handleSearch}>
   <input
     type="text"
     bind:value={searchQuery}
     onkeypress={handleKeyPress}
-    placeholder={isAuthenticated 
+    placeholder={isAuthenticated
       ? t('search:channel.placeholder', { channel: channel.name })
       : t('search:channel.loginRequired')}
     disabled={!isAuthenticated}
-    class="flex-1 border-none bg-transparent text-body p-2 disabled:opacity-60 disabled:cursor-not-allowed"
-    class:disabled={!isAuthenticated}
   />
-  <button 
+  <button
     type="submit"
     disabled={!isAuthenticated || !searchQuery.trim()}
     aria-label={isAuthenticated ? 'Search' : 'Sign in to search'}
@@ -75,12 +73,32 @@ function getRedirectUrl(): string {
 </form>
 
 {#if !isAuthenticated}
-  <div class="text-caption text-low mt-1 flex items-center gap-1">
+  <p class="text-caption text-low">
     <CnIcon noun="info" size="small" />
     <span>
-      <a href="/login?redirect={encodeURIComponent(getRedirectUrl())}" class="text-link">
+      <a href="/login?redirect={encodeURIComponent(getRedirectUrl())}">
         {t('login:title')}
       </a> {t('search:channel.loginPrompt')}
     </span>
-  </div>
+  </p>
 {/if}
+
+<style>
+  /* The input takes the row; the icon button keeps its square. */
+  form {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+  }
+
+  input {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+  }
+</style>

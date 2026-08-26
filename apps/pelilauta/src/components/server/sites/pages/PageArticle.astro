@@ -21,3 +21,14 @@ const { site, page } = Astro.props as Props;
 </article>
 
  
+
+<style>
+  /*
+   * The Golden container places this article and reaches no deeper, so the interval
+   * between the page body and the footer is stated here.
+   */
+  article {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

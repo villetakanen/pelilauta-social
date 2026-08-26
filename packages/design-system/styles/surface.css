@@ -127,6 +127,17 @@
 }
 
 /*
+ * The error notice. A surface that is the error, not a container carrying one:
+ * `--cn-color-error` is its ground and `--cn-color-on-error` its foreground, the
+ * pair the colour guardrails hold to WCAG 2.2 AA. `.surface` still supplies the
+ * padding.
+ */
+.surface.error {
+  background-color: var(--cn-color-error);
+  color: var(--cn-color-on-error);
+}
+
+/*
  * Relative nesting. A descendant keeps the background of its own absolute level
  * and shows only the shadow of its rise above the nearest elevated ancestor, so
  * stacked shadows never compound.

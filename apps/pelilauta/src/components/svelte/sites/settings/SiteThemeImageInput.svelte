@@ -80,12 +80,12 @@ async function deleteImage() {
         src={preview}
         alt={t("app:meta.preview")}
         class="icon flex-none border"
-        style="align-self: flex-start;justify-self: center;flex-grow: 0;"
+        style="align-self: flex-start;flex-grow: 0;"
       />
     {:else}
       <span
         class="flex-none"
-        style="align-self: flex-start;justify-self: center;flex-grow: 0;"
+        style="align-self: flex-start;flex-grow: 0;"
       >
         <CnIcon noun="assets" />
       </span>

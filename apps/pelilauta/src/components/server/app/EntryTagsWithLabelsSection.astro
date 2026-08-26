@@ -15,7 +15,7 @@ const allTags = getAllThreadTags(thread);
 
 {
   allTags && allTags.length > 0 && (
-    <div class="chip-list mt-2">
+    <div class="chip-list">
       {allTags.map((tag) => {
         const label = isLabel(thread, tag);
         return (

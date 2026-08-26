@@ -26,5 +26,7 @@ try {
   logError('ChannelsApp', 'Error fetching channels with stats:', error);
 }
 ---
-<h1>{t('threads:forum.title')}</h1>
-<ChannelsList channelsWithStats={channelsWithStats} />
+<div class="content-prose">
+  <h1>{t('threads:forum.title')}</h1>
+  <ChannelsList channelsWithStats={channelsWithStats} />
+</div>

@@ -112,12 +112,12 @@ function handleKeydown(event: KeyboardEvent) {
 }
 </script>
 
-<div class="flex flex-col">
-  <h3 class="text-caption text-high mb-1">{t("admin:labels.title")}</h3>
-  <p class="text-small text-low mb-2">{t("admin:labels.legend")}</p>
+<div class="labels">
+  <h3 class="text-caption text-high">{t("admin:labels.title")}</h3>
+  <p class="text-small text-low">{t("admin:labels.legend")}</p>
 
   {#if thread.labels && thread.labels.length > 0}
-    <div class="chip-list mb-2">
+    <div class="chip-list">
       {#each thread.labels as label (label)}
         <div class="chip">
           <span>{label}</span>
@@ -137,23 +137,22 @@ function handleKeydown(event: KeyboardEvent) {
       {/each}
     </div>
   {:else}
-    <p class="text-small text-low mb-2">{t("admin:labels.noLabels")}</p>
+    <p class="text-small text-low">{t("admin:labels.noLabels")}</p>
   {/if}
 
-  <div class="flex items-center">
+  <div class="add-row">
     <input
       type="text"
       bind:value={newLabel}
       onkeydown={handleKeydown}
       placeholder={t("admin:labels.addPlaceholder")}
       disabled={isAdding}
-      class="grow"
     />
     <button
       type="button"
       onclick={addLabel}
       disabled={isAdding || !newLabel.trim()}
-      class="button ml-1"
+      class="button"
     >
       {#if isAdding}
         <CnIcon noun="loader" size="small" />
@@ -164,6 +163,50 @@ function handleKeydown(event: KeyboardEvent) {
   </div>
 
   {#if errorMessage}
-    <p class="text-small text-error mt-1">{errorMessage}</p>
+    <p class="text-small surface error">{errorMessage}</p>
   {/if}
 </div>
+
+<style>
+  /*
+   * This block has no container reaching into it, so its own interior
+   * rhythm — between the heading, the legend, the chip list and the add
+   * row — is stated here. It is an interval inside one block, not between
+   * blocks, so it takes --cn-grid rather than --cn-line.
+   */
+  .labels {
+    display: grid;
+    row-gap: var(--cn-grid);
+  }
+
+  /*
+   * The input stacks above the button by default: `.surface` gives this block a
+   * container to query, but at the narrow end of that range — the info column's
+   * pinned width — a row has no space for both. `surface-area` is the container
+   * `.surface` names; 20rem is 40 grid units, wide enough for the input, the gap
+   * and the button.
+   */
+  .add-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cn-gap);
+  }
+
+  @container surface-area (min-width: 20rem) {
+    .add-row {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  /*
+   * A flex item's automatic minimum is its content size, and an input carries a
+   * default width of twenty characters in the technical register — wider than the
+   * row it sits in once the row is horizontal. Without the override the row cannot
+   * shrink to the column and the button lands outside it.
+   */
+  .add-row input {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+</style>

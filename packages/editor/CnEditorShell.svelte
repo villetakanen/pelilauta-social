@@ -340,9 +340,17 @@ $effect(() => {
     min-block-size: 0;
   }
 
+  /*
+   * The container places this region and reaches no deeper, so the interval between
+   * the fields the caller slots in is stated here. `align-content: start` keeps them
+   * at the block start of a region as tall as the canvas beside it.
+   */
   .cn-editor-shell__frontmatter {
     min-block-size: 0;
     overflow-y: auto;
+    display: grid;
+    align-content: start;
+    row-gap: var(--cn-line);
   }
 
   /*

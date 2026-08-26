@@ -33,26 +33,26 @@ no hover response.
 Grouping is layout, so the list is the class `cn-avatar-list` rather than a
 component. A component would have to accept profiles, and the design system does
 not know what a profile is; the class lays out whatever marks and links the
-consumer composes into it, and how many of them there are is the consumer's.
+consumer composes into it, and the consumer decides how many of them there are.
 
 `CnAvatar` is a Svelte 5 component without a custom element or Shadow DOM,
 replacing Cyan's `cn-avatar` Lit element; its placeholder renders through the icon
 component (`specs/design-system/components/cn-icon`). The textual mark replaces
-Cyan's `.cn-nick` utility; whether it stays a class on native elements or becomes a
-component is the implementer's choice. Cyan's `elevation` and `alt` attributes and
+Cyan's `.cn-nick` utility; the implementer chooses whether it stays a class on native
+elements or becomes a component. Cyan's `elevation` and `alt` attributes and
 its `cn-avatar-button` element are not carried forward.
 
 ### Constraints
 
 The pictorial mark has three diameters, measured in lines because it stands beside
 text: one beside a single line, one heading a region, and one for a view that is
-about the profile itself. Which of them a mark takes is the consumer's, stated at
+about the profile itself. The consumer decides which of them a mark takes, stated at
 the call site rather than inferred from where the mark sits.
 
 A profile without an image gets a backdrop derived from its nick, so co-present
 profiles are visibly distinct. Deriving the same colour for the same nick across
 renders is desirable, not required; a recolour on page refresh or between releases
-is acceptable. The derivation method is the implementer's, judged on the result:
+is acceptable. The implementer chooses the derivation method, judged on the result:
 varied backdrops that sit in the surface palette, with initials legible against
 them in both Light and Dark.
 
@@ -61,9 +61,8 @@ the pictorial mark announces the bare nick to assistive technology. Inside a
 composition that already names the profile — a labelled anchor, an adjacent
 textual mark — it is decorative. A nick is missing when it is absent or empty;
 the anonymous placeholder a missing nick yields is decorative. A missing nick
-may stand for a deleted, an anonymous or a redacted profile, and naming the
-state, in visible text and to assistive technology, is the application's,
-localised where it is printed.
+may stand for a deleted, an anonymous or a redacted profile, and the application names the
+state, in visible text and to assistive technology, localised where it is printed.
 
 A list presents its marks in the inline direction and wraps them, each mark
 overlapping the one before it by a fixed length, and every line of a wrapped list
@@ -73,7 +72,7 @@ list neither sizes its marks nor mixes sizes within itself.
 Overlap costs the marks the separation that standing apart gave them, and a mark
 takes it back from its own backdrop: inside a list the image draws within the
 circle rather than filling it, leaving a rim of the colour the nick derived. The
-separation is the profile's identity, so a list needs to know nothing about
+separation carries the profile's identity, so a list needs to know nothing about
 what it sits on, and a mark outside a list is unchanged.
 
 A list may close with a count standing for the marks it does not show. The count

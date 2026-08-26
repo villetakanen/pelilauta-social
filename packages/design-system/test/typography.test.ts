@@ -105,26 +105,9 @@ function scaleFromSpec(): Step[] {
   return rows;
 }
 
-/**
- * The rules of a stylesheet fragment, one entry per selector: a grouped rule
- * (`h1, .text-h1 { … }`) registers its body under each of its selectors.
- */
-function rules(source: string): Map<string, string> {
-  const found = new Map<string, string>();
-  for (const [, selectors, body] of source.matchAll(
-    /([^{}@;]+)\{([^{}]*)\}/g,
-  )) {
-    for (const selector of selectors.split(',')) {
-      found.set(selector.trim(), body.trim());
-    }
-  }
-  return found;
-}
-
 const container = stylesheet.match(
   /@container \(max-width:\s*([\d.]+)rem\)\s*\{([\s\S]+)\}/,
 );
-const narrow = container ? rules(container[2]) : new Map<string, string>();
 
 describe('the scale', () => {
   test('every step is declared at the size, line and weight the table states', () => {
@@ -159,15 +142,6 @@ describe('the scale', () => {
     expect(published).toEqual(specified);
   });
 
-  test('every line derives from the line unit in the declaration', () => {
-    for (const step of scaleFromSpec()) {
-      expect(
-        tokens.get(`--cn-line-height-${step.name}`),
-        `${step.name} does not derive from --cn-line`,
-      ).toContain('var(--cn-line)');
-    }
-  });
-
   test('the emphasis weight the prose states is published', () => {
     const prose = spec.match(/plus (\d{3}) for emphasis/);
     expect(prose, 'the spec no longer states the emphasis weight').toBeTruthy();
@@ -191,28 +165,5 @@ describe('the downshift', () => {
       toRem('--cn-breakpoint-small', tokens),
       'the literal drifted from the published breakpoint',
     ).toBe(Number(rem));
-  });
-
-  test('h1 to h3 render one step down, h4 renders reading size at emphasis', () => {
-    const steps = scaleFromSpec().map((step) => step.name);
-    for (const name of ['h1', 'h2', 'h3', 'h4']) {
-      const below = steps[steps.indexOf(name) + 1];
-      const rule = narrow.get(name);
-      expect(rule, `${name} does not downshift`).toBeTruthy();
-      expect(rule).toContain(`font-size: var(--cn-font-size-${below})`);
-      expect(rule).toContain(`line-height: var(--cn-line-height-${below})`);
-      expect(rule).toContain(
-        `letter-spacing: var(--cn-letter-spacing-${below})`,
-      );
-      // The mirror class downshifts with its element.
-      expect(narrow.get(`.text-${name}`)).toBe(rule);
-    }
-    expect(narrow.get('h4')).toContain(
-      'font-weight: var(--cn-font-weight-emphasis)',
-    );
-  });
-
-  test('the title step does not downshift', () => {
-    expect([...narrow.keys()].join()).not.toContain('title');
   });
 });

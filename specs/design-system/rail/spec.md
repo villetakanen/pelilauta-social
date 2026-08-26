@@ -34,7 +34,7 @@ show their names, `compact` otherwise. The trigger
 composes that class for its target, state surface and transient states, stays compact
 in every presentation, and shows on itself the focus its toggle takes.
 
-The rail stands in the box `specs/design-system/application-chrome/spec.md` fixes over
+The rail stands in the box `specs/design-system/app-chrome/spec.md` fixes over
 the document, and spans its block size. It renders a navigation landmark, which the
 consumer names. The host marks its scope with `data-cn-rail-scope`.
 
@@ -78,8 +78,8 @@ pair and removes the other from view, from the tab order and from assistive tech
 so one trigger stands at each inline size. The narrower toggle rests unchecked and the
 wider checked, and a document states either in the markup it serves. Crossing between
 them leaves each toggle at the state it held, and leaves focus where the document puts it
-when the control holding it goes. The toggles' classes and ids are the action's published
-contract: they are what the rail, the scrim and the main region read.
+when the control holding it goes. The toggles' classes and ids define the action's
+published contract: they are what the rail, the scrim and the main region read.
 
 The toggle is the control: it takes the focus, carries the name, and reports whether it
 is checked, which is this capability's disclosure. It is hidden from view and from

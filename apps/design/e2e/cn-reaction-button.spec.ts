@@ -9,7 +9,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  *
  * Locators read the book page. The static specimen grid mounts once per
  * colour scheme and the semantics and geometry under test resolve once, so
- * the first panel answers; the demo is the page's one hydrated consumer.
+ * the first panel answers; the page hydrates the demo as its one consumer.
  */
 
 const BOOK = '/components/cn-reaction-button';
@@ -298,6 +298,63 @@ test.describe('the presentation', () => {
         (el) => getComputedStyle(el, '::after').transitionDuration,
       ),
     ).toBe('0s');
+  });
+});
+
+/*
+ * The specimen grid and the demo both lay their row out with a flex rule of
+ * their own, so a button read there is a flex item — CSS blockifies a flex
+ * item's own inline-level display for computed style, which would report
+ * "flex" for a correctly inline-flex control and hide a regression the other
+ * way just as well. The inline row composition states no flex rule, the way
+ * `ThreadInfoSection.astro` does not, so this is where the root's own
+ * display is the one under test.
+ */
+test.describe('the inline row composition', () => {
+  const inlineRow = (page: Page) =>
+    page.locator('.text-center').filter({
+      has: page.locator('.cn-reaction-button'),
+    });
+
+  test('the root is inline-level', async ({ page }) => {
+    await open(page);
+    const control = inlineRow(page).locator('.cn-reaction-button');
+
+    expect(await control.evaluate((el) => getComputedStyle(el).display)).toBe(
+      'inline-flex',
+    );
+  });
+
+  test('it shares one line with the control beside it, centred by the row', async ({
+    page,
+  }) => {
+    await open(page);
+    const row = inlineRow(page);
+    const link = row.locator('a.button');
+    const control = row.locator('.cn-reaction-button');
+
+    const rowBox = await row.boundingBox();
+    const linkBox = await link.boundingBox();
+    const controlBox = await control.boundingBox();
+    if (!rowBox || !linkBox || !controlBox) {
+      throw new Error('expected the row and both controls to be laid out');
+    }
+    // One line, not stacked: a block box beside another would show no
+    // vertical overlap at all, the way the pre-fix root did.
+    const overlap =
+      Math.min(linkBox.y + linkBox.height, controlBox.y + controlBox.height) -
+      Math.max(linkBox.y, controlBox.y);
+    expect(overlap).toBeGreaterThan(0);
+    // Centred: the pair's span is inset from both edges of the row by the
+    // same amount, not flush to the start the way an unstyled row would be.
+    const pairStart = Math.min(linkBox.x, controlBox.x);
+    const pairEnd = Math.max(
+      linkBox.x + linkBox.width,
+      controlBox.x + controlBox.width,
+    );
+    const startInset = pairStart - rowBox.x;
+    const endInset = rowBox.x + rowBox.width - pairEnd;
+    expect(Math.abs(startInset - endInset)).toBeLessThan(2);
   });
 });
 

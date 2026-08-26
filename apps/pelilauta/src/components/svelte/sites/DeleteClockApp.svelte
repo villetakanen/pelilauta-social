@@ -27,34 +27,57 @@ async function handleSubmit(event: Event) {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-prose">
-    <div>
-      <div class="border flex align-center p-1">
-        <cn-story-clock 
-          view
-          name={clock?.label} 
-          value={clock?.stage} 
-        >
-          {#each clock?.ticks || [] as tick}
-            <cn-tick size={tick}></cn-tick>
-          {/each}
-        </cn-story-clock>
-        <p class="grow">{clock?.label}</p>
-      </div>
-      <p>{t('site:deteteClock.info', { name: `${clock?.label}`})}</p>
-      <form onsubmit={handleSubmit}>
-        <div class="toolbar justify-end">
-          <button
-            type="button"
-            class="text"
-            onclick={() => window.history.back()}
-          >
-            {t('actions:cancel')}
-          </button>
-          <button type="submit">{t('actions:delete')}</button>
-        </div>
-      </form>
+  <section class="surface">
+    <div class="clock-preview">
+      <cn-story-clock
+        view
+        name={clock?.label}
+        value={clock?.stage}
+      >
+        {#each clock?.ticks || [] as tick}
+          <cn-tick size={tick}></cn-tick>
+        {/each}
+      </cn-story-clock>
+      <p>{clock?.label}</p>
     </div>
-  </div>
+    <p>{t('site:deteteClock.info', { name: `${clock?.label}`})}</p>
+    <form onsubmit={handleSubmit} class="text-end">
+      <button
+        type="button"
+        class="text"
+        onclick={() => window.history.back()}
+      >
+        {t('actions:cancel')}
+      </button>
+      <button type="submit">{t('actions:delete')}</button>
+    </form>
+  </section>
 </WithAuth>
+
+<style>
+  /*
+   * No container reaches into this box, so it states the interval between
+   * its own blocks: the clock preview, the info message and the action row.
+   */
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  /*
+   * @todo No design-system capability publishes a listing row — an icon (here
+   * the clock) beside a label — so this row states its own flex rule locally.
+   * Anchored at plans/debt/the-design-system-has-no-listing-row.md.
+   */
+  .clock-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .clock-preview p {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+</style>
 

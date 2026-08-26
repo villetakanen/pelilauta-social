@@ -1,7 +1,6 @@
 /*
  * typography.css — the scale, and the rules that read it.
  *
- *
  * An Augmented Fourth (1.414) from the reading size. Every size is a rem
  * proportion of the reader's default text size and every line derives from the
  * layout's line unit in the declaration, so the whole system follows a reader
@@ -69,8 +68,9 @@ body,
 /*
  * Headings, each with its mirror class — v20's "utilities mirroring semantic tag
  * behaviors" — for text that renders at a heading step without opening a section.
- * No margins: whatever owns the layout states the spacing, which in a content
- * container is the column's row-gap. Colour roles are semantic.css's.
+ * No margins: whatever holds the element states the spacing. In a content container
+ * that is the row gap; in a flowing-text region it is the margin below. semantic.css
+ * declares the colour roles.
  */
 h1,
 .text-h1 {
@@ -108,7 +108,7 @@ h4,
   color: var(--cn-color-text-subheading);
 }
 
-/* Steps without an element of their own. */
+/* Steps that no element carries. */
 
 .text-title {
   font-size: var(--cn-font-size-title);
@@ -147,8 +147,10 @@ h4,
 }
 
 /*
- * A subtitle belongs to the heading above it, so it closes the line of rhythm its
- * container puts between them.
+ * A subtitle belongs to the heading above it, so it closes the one line that separates
+ * the two: the row gap where both are children of a content container, and the margin a
+ * heading carries inside a flowing-text region. Placed where nothing separates them, it
+ * overlaps the heading by a line.
  */
 .text-subtitle {
   font-size: var(--cn-font-size-text);
@@ -167,13 +169,100 @@ h4,
   color: var(--cn-color-text-high);
 }
 
-/* Alignment, at any step. Why `end` and not `right`: the Typography spec. */
+/* Alignment, at any step. Why `end` and not `right`: docs/DESIGN.md's Modern CSS section. */
 .text-center {
   text-align: center;
 }
 
 .text-end {
   text-align: end;
+}
+
+/*
+ * The flowing-text region. The preflight removes every margin, so author-written
+ * markdown arrives as a run of blocks that state no separation. A region marks where
+ * standard text spacing applies. `.text-prose` reaches every descendant block rather
+ * than the children of the region alone: a paragraph inside a blockquote or a list item
+ * separates from the block after it as a top-level paragraph does.
+ *
+ * The element list covers what the markdown renderer emits as a block, and what a v18
+ * page carries as raw HTML. A definition list and a figure reach a wiki page that way,
+ * even though markdown emits neither. `li`, `dt`, `dd` and `figcaption` are absent: the
+ * parts of a list, a definition list and a figure sit against each other, and the block
+ * that holds them carries the separation from the block after it. A thematic break
+ * takes the same margin as any other block, and the block above states the space over
+ * it, so a break reads with one line on each side.
+ *
+ * `:where()` holds the element list at specificity zero, so the whole selector weighs
+ * one class. styles/ds.css imports every component stylesheet after this one, so a
+ * component inside a region that states its own spacing wins on source order.
+ *
+ * `:last-child` resolves against each parent, so the last paragraph of a blockquote
+ * closes flush against the edge of the quote while the quote separates from what
+ * follows it.
+ */
+.text-prose
+:where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ul,
+  ol,
+  dl,
+  blockquote,
+  pre,
+  table,
+  figure,
+  hr
+) {
+  margin-block-end: var(--cn-line);
+}
+
+.text-prose
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul,
+    ol,
+    dl,
+    blockquote,
+    pre,
+    table,
+    figure,
+    hr
+  ):last-child {
+  margin-block-end: 0;
+}
+
+/*
+ * Media in a region fits the region. specs/design-system/preflight/spec.md leaves media
+ * unconstrained on purpose: nothing in a reset distinguishes an image the author wrote
+ * from one a component placed, and a poster sizes its image past every region. Inside a
+ * region every replaced element is content the author wrote, and it has the width of
+ * the region to fit.
+ *
+ * `iframe`, `embed` and `object` keep the height they are given: they carry no
+ * intrinsic ratio, so the author's attribute is the only sizing they have.
+ *
+ * `:where()` holds both rules at specificity zero, so a component that sizes its own
+ * replaced element — the cover of a card, the glyph of an icon — wins wherever it is
+ * used.
+ */
+.text-prose :where(img, picture, video, canvas, svg, iframe, embed, object) {
+  max-inline-size: 100%;
+}
+
+.text-prose :where(img, picture, video, canvas, svg) {
+  block-size: auto;
 }
 
 /*

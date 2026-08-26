@@ -7,6 +7,7 @@ runtime: interactive
 
 import ReactionButtonSpecimens from '@design-system/books/specimens/ReactionButtonSpecimens.svelte'
 import ReactionButtonDemo from '@design-system/books/specimens/ReactionButtonDemo.svelte'
+import ReactionButtonInlineRow from '@design-system/books/specimens/ReactionButtonInlineRow.svelte'
 import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
 Use a reaction button to let a reader toggle their love reaction on an entry, and to
@@ -59,6 +60,15 @@ Two presentations ship. The default is an entry's; `small` is a reply's.
   <ReactionButtonSpecimens />
 </DsComposition>
 
+Its root is inline-level, so it takes its place in a line box beside another
+control the way any other published control does — no flex rule states the row
+that holds it, the way `ThreadInfoSection.astro`'s reply-count link and reaction
+button sit together.
+
+<DsComposition caption="The reply-count link and the reaction button in one text-flow row">
+  <ReactionButtonInlineRow />
+</DsComposition>
+
 ## Reference
 
 ### Props
@@ -77,9 +87,9 @@ Two presentations ship. The default is an entry's; `small` is a reply's.
 
 The control is one native toggle button: one focus stop, activated anywhere on its
 surface or count, announcing `label` as its name, the pressed state through
-`aria-pressed`, and `countLabel` as its description. Activation, the keyboard, focus
-and the disabled state are the platform's.
+`aria-pressed`, and `countLabel` as its description. The platform provides activation,
+the keyboard, focus and the disabled state.
 
-The heart is decoration and reaches no reader, so the name and the count's meaning
-are the consumer's to supply — the visible count is a bare numeral, and `countLabel`
+The heart is decoration and reaches no reader, so the consumer supplies the name and
+the count's meaning — the visible count is a bare numeral, and `countLabel`
 is what says what it counts.

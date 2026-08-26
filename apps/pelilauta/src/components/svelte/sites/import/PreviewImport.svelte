@@ -177,7 +177,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
     {#each pages as page, index}
       {@const exists = pageExists(page.name || '')}
       <article class="surface border p-2">
-        <div class="flex justify-between items-start">
+        <div>
           <div class="flex-1">
             <h4 class="mb-1">
               {page.name || page.fileName}

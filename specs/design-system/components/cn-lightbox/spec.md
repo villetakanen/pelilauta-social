@@ -26,7 +26,7 @@ The public inputs are:
 
 | Input | Type | Contract |
 | :--- | :--- | :--- |
-| `images` | `{ src: string; caption: string }[]` | The images in presentation order. A caption is the image's alt text and its visible caption; the component never separates the two. |
+| `images` | `{ src: string; caption: string }[]` | The images in presentation order. A caption doubles as the image's alt text and its visible caption; the component never separates the two. |
 | `openLabel` | `string` | Required localised accessible name for an image control whose caption is empty. |
 | `closeLabel` | `string` | Required localised accessible name CnLightbox gives the back action that exits the dialog. |
 
@@ -96,7 +96,7 @@ Then it renders nothing
 Given a CnLightbox with one image
 When its initial server response renders without client-side JavaScript
 Then one 16:9 figure presents the image
-And the caption is visible below the image and is the image's alt text
+And the caption is visible below the image and doubles as the image's alt text
 ```
 
 ```gherkin

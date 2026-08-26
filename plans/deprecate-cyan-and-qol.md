@@ -35,6 +35,9 @@ alongside the debt pile and a retro.
 - The removals gate the triage alone: a screen is judged for rework only after no
   legacy CSS paints it. Debt items and the retro do not wait on a removal, and no
   removal waits on them.
+- A screen's triage is judged against the rendered v19-and-later language, not a
+  class census: a census against the published stylesheets can pass while the
+  rendered page still misses the look, so compare it against the live v18 page.
 - A fix lands as a design-system pattern or a pelilauta style, never by restoring a
   Cyan import and never by moving a compat file somewhere else.
 - Broken is an acceptable state, in flight and at close. A screen the triage did not
@@ -44,7 +47,9 @@ alongside the debt pile and a retro.
 
 - Removing the `@11thdeg/cyan-lit` script import
 - Replacing the remaining Cyan custom elements
-- Re-designing the screens the removal exposes
+- Redesigning a screen's user journey or flow. Bringing a screen's styling up to the
+  v19-and-later design language is in scope, including reversing an earlier styling
+  ruling where the rendered page shows it wrong.
 
 ## Possible work (non-binding)
 
@@ -81,8 +86,12 @@ alongside the debt pile and a retro.
   Dividers capability, spec, stylesheet and book (`27179a87`); a control's click
   area at six grid units (`75d8d2df`). `button-touch-target` retired
   (`313359c5`); `prose-flow-collapses-a-replaced-child` filed.
+- The thread page triage is done, 2026-08-26: the `<hr>`-banded layout in the info
+  column reversed to `.surface` boxes, per the operator's later ruling; the reply
+  count turned from a bare icon-and-number into a real link; and the heading
+  outline corrected so each box in the column takes `h2`.
 - `docs/cyan-removal-handoff.md` carries the epic's running state and its traps.
 
 ## Open questions
 
-- Which debt entries this cycle takes is the operator's pick at each `next-task`.
+- The operator decides which debt entries this cycle takes, at each `next-task`.

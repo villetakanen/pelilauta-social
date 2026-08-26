@@ -22,8 +22,8 @@ const css = withoutComments(read('../styles/content-containers.css'));
 /**
  * The measure, in grid units, as the spatial tokens declare it. It is a length
  * on the grid, so specs/design-system/spatial-system/spec.md carries it and
- * these containers read it; the value is asserted here because the wide-mode
- * thresholds below are derived from it.
+ * these containers read it; this file reads the value because the wide-mode
+ * thresholds below derive from it.
  */
 const measureSteps = Number(
   parseTokens(unitDeclarations(units), {
@@ -63,32 +63,5 @@ describe.each([
     const units = tracks.reduce((sum, track) => sum + track, 0) + gaps;
 
     expect(condition).toBe(units * 0.5);
-  });
-});
-
-describe('scoping', () => {
-  test('every rule sits below an opt-in class', () => {
-    // A rule that escapes them reaches apps/pelilauta, which has not migrated
-    // off Cyan's .content-columns.
-    const optIn = [
-      '.app-main',
-      '.content-prose',
-      '.content-triad',
-      '.content-golden',
-    ];
-    // An at-rule prelude becomes a closing brace, so the selectors nested inside
-    // it are scanned too rather than silently skipped.
-    const flattened = css.replace(/@[\w-]+[^{};]*\{/g, '}');
-    const rules = [...flattened.matchAll(/(^|[};])\s*([^{}@]+?)\s*\{/g)].map(
-      (m) => m[2].replace(/\s+/g, ' ').trim(),
-    );
-
-    expect(rules.length).toBeGreaterThan(0);
-    for (const selector of rules) {
-      expect(
-        optIn.some((name) => selector.includes(name)),
-        `${selector} escapes ${optIn.join(' and ')}`,
-      ).toBe(true);
-    }
   });
 });

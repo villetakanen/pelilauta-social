@@ -1,49 +1,34 @@
 /*
  * Content container layouts.
  *
- * An application opts in with `app-main` on its <main>. Its direct children are
- * content containers, each choosing its own layout mode. Nothing matches a page that
- * has not opted in: most of the application is still on Cyan's `.content-columns`,
- * and a bare `main` selector would put every page on this grid at once.
+ * A content container lays its children out in rows of one, two or three columns, in
+ * source order. It resolves against the nearest inline-size containment context and
+ * takes the width that context offers — usually the application frame in app-main.css,
+ * but any element establishing that context serves.
  *
- * The host offers its full content-box width. A container that wants the readable
- * measure asks for it with `content-prose`; a container that wants the whole width
- * simply takes it.
+ * A container places and sizes its own children and reaches no deeper. What a child
+ * holds, and how the child spaces it, belongs to the child.
  */
 
-.app-main {
-  /*
-   * The page-edge inset. It is padding rather than a pair of grid tracks, so a
-   * container's own width is the width it was offered, with nothing to opt out of.
-   */
-  padding-inline: var(--cn-gap);
-
-  /*
-   * Chrome is fixed and paints over the document, so the first container clears
-   * the application bar here rather than in every application's shell.
-   */
-  padding-block-start: var(--cn-app-bar-height);
-
-  /*
-   * A host answers its containers' width queries, and a container asks its nearest
-   * host without naming it. This also makes the host a containing block for
-   * absolutely positioned descendants, which is why a fab tray is mounted outside it.
-   */
-  container-type: inline-size;
-}
-
-/* Vertical rhythm between stacked containers, and below the last one. */
-.app-main > * {
+/*
+ * A content container states the separation after itself on its own box, so the
+ * separation holds whatever the parent is: a parent that styles nothing still gets it,
+ * and so does a container reached through an `astro-island`, which is
+ * `display: contents` and has no box to carry it. No rule removes it from the last
+ * container in a stack: the separation closes the container rather than dividing it
+ * from a sibling.
+ */
+.content-prose,
+.content-golden,
+.content-triad {
   margin-block-end: var(--cn-line);
 }
 
 /*
- * Prose caps its flow at the measure and Golden gives it to its primary region:
- * the two are the same width by design, not by coincidence. The token is a
- * spatial length, declared in styles/units.css.
+ * Prose — rows of one column at the readable measure, centred. The outer tracks take
+ * the surplus, so a breakout can span all three. Golden's first column takes the same
+ * measure; the token is a spatial length, declared in styles/units.css.
  */
-
-/* Prose — one centred flow at the readable measure. */
 .content-prose {
   display: grid;
   grid-template-columns: 1fr min(var(--cn-measure), 100%) 1fr;
@@ -51,89 +36,67 @@
 }
 
 /*
- * The flow sits in the centre track, and each item reports its own width, so a
- * container query inside it is answered with the measure rather than the page.
+ * Each child sits in the centre track and reports the width it occupies, so a
+ * container query inside it resolves against the column rather than the page.
  *
  * The boundary is unnamed. A query with no name resolves against the nearest
- * container, which is what a component wants: whichever area holds it. Naming this
- * one would only add a way to ask past a nearer boundary — a card between the
- * component and the flow — and the card is the thing constraining it.
+ * container, which is whichever box holds the component. Naming this one would add a
+ * way to query past a nearer boundary, such as a card between the component and the
+ * column, and the card is the box constraining the component.
  *
- * It is a grid so `row-gap` replaces the element margins the preflight removes, and
- * so that spacing survives an `astro-island`, which the preflight sets to
- * `display: contents`.
+ * `min-inline-size: 0` overrides a grid item's automatic minimum, which a wide table
+ * or a long word would otherwise push the column past.
  *
- * The second selector reaches through that island: an element set to
- * `display: contents` is not laid out, so a rule placing it moves nothing and the
- * island's one rendered element is the flow item. Golden and Triad reach through the
- * same way for their regions.
+ * The second selector reaches through an `astro-island`, which the preflight sets to
+ * `display: contents`: such an element is not laid out, so a rule placing it moves
+ * nothing and the element the island renders is the child. Golden and Triad reach
+ * through the same way.
  */
 .content-prose > *,
 .content-prose > astro-island > * {
   grid-column: 2;
   container-type: inline-size;
+  min-inline-size: 0;
 }
 
 /*
- * A breakout spans the width offered to its Prose container, and reports that width
- * to the components inside it — it keeps the query boundary from the rule above. It stretches rather than fitting its content: an inline-size container is
- * sized independently of what it holds, so a fit-content breakout would measure zero.
- */
-.content-prose > .breakout,
-.content-prose > astro-island > .breakout {
-  grid-column: 1 / -1;
-}
-
-/*
- * Triad — a medium primary and two small secondaries. Golden — a readable primary
- * and one small secondary. Both stack below the width their row needs, and the two
- * stacked compositions are the same, so they are written once.
+ * Triad — a medium column and two small ones. Golden — a readable column and one
+ * small one. Below the width its row needs each is rows of one column, and the two
+ * narrow compositions are the same, so they are written once.
  *
- * The stacked column is `minmax(0, 1fr)` rather than the implicit `auto` track:
- * `justify-content: center` stops an `auto` track from stretching, and the
- * regions would shrink to their content instead of filling the host.
+ * The narrow column is `minmax(0, 1fr)` rather than the implicit `auto` track:
+ * `justify-content: center` stops an `auto` track from stretching, and each child
+ * would shrink to its content instead of filling the width offered.
  */
 .content-triad,
 .content-golden {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  /*
-   * `--cn-gap` is the inline gap between the regions of a wide composition.
-   * `--cn-line` is the rhythm, here between stacked regions — the same interval a
-   * content area puts between its own children, so a stacked composition reads as one
-   * flow rather than as columns that happen to be above one another.
-   */
+  /* `--cn-gap` separates the columns of a row; `--cn-line` separates the rows. */
   column-gap: var(--cn-gap);
   row-gap: var(--cn-line);
   justify-content: center;
 
   /*
-   * A region is as tall as its own content, and the row is as tall as the tallest
-   * of them. Without this a grid item stretches to the row, so a short aside
-   * beside a long column would paint its surface down the whole page.
+   * A child is as tall as its own content, and a row is as tall as the tallest of
+   * them. Without this a grid item stretches to its row, so a short aside beside a
+   * long column would paint its surface down the whole page.
    */
   align-items: start;
 }
 
 /*
- * Each region reports its own track, so a component inside one queries the track
- * rather than the host. `min-inline-size: 0` overrides a grid item's automatic
- * minimum, which a wide table or a long word would otherwise push the track past.
- * Overflow inside a region belongs to the region's content.
+ * Each child reports the column it occupies, so a component inside one queries that
+ * column rather than the box the container sits in. `min-inline-size: 0` overrides a
+ * grid item's automatic minimum, which a wide table or a long word would otherwise
+ * push the column past. Overflow inside a child belongs to the child.
  *
- * A region is also a content area, so it is a grid for the same reason the Prose flow
- * root above is one: `row-gap` replaces the element margins the preflight removes, and
- * it is the only rhythm that survives an `astro-island`. An island is
- * `display: contents`, which drops the island's box but not its place in the DOM, so a
- * margin on it paints nothing and a sibling combinator still matches the island rather
- * than the card inside it. `row-gap` reads the box tree, where the island's one
- * rendered element is the region's grid item.
- *
- * The second selector in each pair reaches through the island to that element, and the
- * first excludes the island itself: `display` here would give it a box and take the
- * region box back off the element it delegates to. `script`, `style` and `template` are
- * excluded for the same reason — a `display` of any kind overrides the `none` they are
- * rendered with, and a region that is not there would take a track.
+ * The second selector in each pair reaches through an `astro-island` to the element
+ * it renders, and the first excludes the island itself: `container-type` here would
+ * give the island a box and take the column off the element it delegates to.
+ * `script`, `style` and `template` are excluded for the same reason — the box a
+ * container type establishes overrides the `display: none` they are rendered with,
+ * and a child that is not there would take a column.
  */
 .content-triad > :not(astro-island, script, style, template),
 .content-triad > astro-island > *,
@@ -141,8 +104,6 @@
 .content-golden > astro-island > * {
   container-type: inline-size;
   min-inline-size: 0;
-  display: grid;
-  row-gap: var(--cn-line);
 }
 
 /*
@@ -160,9 +121,9 @@
 }
 
 /*
- * 83 + 2 + 32 = 117 grid units, the measure and a small secondary beside it. The
- * row is centred in the host, so the primary is not aligned with a prose flow
- * above it: the pair is one composition rather than a column with a margin.
+ * 83 + 2 + 32 = 117 grid units, the measure and a small column beside it. The row is
+ * centred in the width offered, so the first column is not aligned with a prose flow
+ * above it.
  */
 @container (min-width: 58.5rem) {
   .content-golden {
@@ -173,36 +134,20 @@
 }
 
 /*
- * Replaced media never exceeds the content area holding it. The preflight leaves
- * media unconstrained on purpose — "a reset cannot know which images are content
- * and which are chrome, so whatever an image has to fit decides"
- * (specs/design-system/preflight/spec.md) — a poster's `img` is chrome and needs
- * its own uncapped sizing, so the fit cannot be a global rule. Here, the fit is
- * the content area's own width.
+ * A breakout spans every column of its row, in every mode, and reports that width to
+ * the components inside it, keeping the query boundary the rules above establish. In
+ * Prose the outer tracks take the surplus, so the span is the whole width offered. It
+ * begins a row of its own: an item forced to start at the first column cannot join a
+ * row already holding children, so that row ends before it.
  *
- * `img` and `picture` are placed directly today. `video`, `canvas`, `svg`,
- * `iframe`, `embed` and `object` are not yet authored anywhere, but a thread,
- * page or handout renders its author's markdown unsanitised
- * (`set:html` in ThreadArticle.astro, PageArticle.astro, HandoutApp.astro), so any
- * of them can land inside a content area without warning. That is every replaced
- * element HTML has; `audio` carries no width to overflow with and stays out.
- *
- * The selector is unspecific by design: `:where()` keeps this at specificity
- * zero, so a component that sizes its own replaced element — CnCard's cover,
- * CnIcon's svg — keeps that sizing regardless of source order.
+ * It stretches rather than fitting its content: an inline-size container is sized
+ * independently of what it holds, so a fit-content breakout would measure zero.
  */
-:where(.content-prose, .content-golden, .content-triad)
-  :where(img, picture, video, canvas, svg, iframe, embed, object) {
-  max-width: 100%;
-}
-
-/*
- * `height: auto` keeps an intrinsic-ratio element from being squashed once its
- * width is capped. `iframe`, `embed` and `object` have no such ratio: an
- * author's `height` attribute is the only sizing they carry, so it is left
- * alone rather than collapsed to the browser default.
- */
-:where(.content-prose, .content-golden, .content-triad)
-  :where(img, picture, video, canvas, svg) {
-  height: auto;
+.content-prose > .breakout,
+.content-prose > astro-island > .breakout,
+.content-golden > .breakout,
+.content-golden > astro-island > .breakout,
+.content-triad > .breakout,
+.content-triad > astro-island > .breakout {
+  grid-column: 1 / -1;
 }

@@ -20,9 +20,20 @@ const { site, page } = Astro.props as Props;
     LatestPagesSection renders nothing unless the site enables recent changes, and a
     grid item that renders nothing still leaves its track reserved.
   -->
-  <div class="flex flex-col">
+  <div class="asides">
     <PageSidebar site={site} />
     <LatestPagesSection site={site} />
   </div>
 
 </div>
+
+<style>
+  /*
+   * The Golden container places this box and reaches no deeper, so the interval
+   * between the two asides is stated here.
+   */
+  .asides {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

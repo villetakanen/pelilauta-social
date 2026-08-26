@@ -299,8 +299,8 @@ test('an attention class paints its flag on a surface rendered without one', asy
 }) => {
   // The state exists for consumers that learn it in the browser and never hydrate
   // the element, so the class alone has to be enough. The two roles have to stay
-  // distinguishable, or the flag carries no signal; which colour each takes, and how
-  // translucent it is, are the stylesheet's to state and not this test's to pin.
+  // distinguishable, or the flag carries no signal; the stylesheet states which
+  // colour each takes and how translucent it is, and this test does not pin either.
   await page.goto(BOOK);
 
   const flags = await page.evaluate(() => {

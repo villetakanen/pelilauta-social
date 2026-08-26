@@ -10,7 +10,8 @@ status: live
 
 The tray keeps a view's floating actions reachable at the lower inline-end corner of
 the composition that governs it. On the application canvas that composition is the full
-dynamic viewport; in a book specimen it is the specimen's bounded container. The
+dynamic viewport; in a book specimen, the specimen's bounded container is that
+composition. The
 governing composition, rather than the browser viewport, determines both placement and
 responsive presentation. The tray places; the controls inside it are FABs under
 `specs/design-system/actions/spec.md` and never position themselves.
@@ -37,19 +38,17 @@ rather than shrinking to its widest FAB. Its width is the room a FAB has, which 
 what the responsive label omission resolves against; pointer events pass through the
 spanned area and resume on the FABs.
 
-The tray is inset from its container's block end and inline end by `--cn-gap`. When
-its governing application container also has persistent block-end navigation, that
-navigation's occupied block size is added to the tray's block-end inset through
-`--cn-block-end-chrome`. Multiple FABs form an inline-end-aligned vertical stack with
-`--cn-grid` between their occupied boxes.
+The tray is inset from its container's block end and inline end by `--cn-gap`.
+Multiple FABs form an inline-end-aligned vertical stack with `--cn-grid` between their
+occupied boxes.
 
-The tray remains above ordinary page content and persistent navigation, and below
-dialogs, modal surfaces and transient system messages, at `--cn-z-fab`.
+The tray remains above ordinary page content, and below dialogs, modal surfaces and
+transient system messages, at `--cn-z-fab`.
 
-The tray decides when a FAB's visible label is omitted: in a container narrower than
+The tray determines when a FAB's visible label is omitted: in a container narrower than
 the small-screen threshold the label is visually omitted, and in a wider container it
-is visible. The control's promise that omission never costs the accessible name is
-the actions capability's, and this specification does not restate it.
+is visible. The actions capability promises that omission never costs the accessible
+name; this specification does not restate that promise.
 
 ## Contract
 
@@ -59,15 +58,13 @@ the actions capability's, and this specification does not restate it.
   a component wrapper or hydration.
 - A tray occupies the lower inline-end corner of a dynamic-viewport-sized
   application container and of a bounded design-book specimen.
-- A tray avoids persistent block-end chrome and stacks multiple FABs upward without
-  overlap.
+- A tray stacks multiple FABs upward without overlap.
 - The **Links, Actions and Buttons** Base book renders a multi-action tray in a
-  window-sized shell and in a handheld-sized shell with persistent block-end
-  navigation, from shipped source in Light and Dark.
+  window-sized shell and in a narrow shell, from shipped source in Light and Dark.
 - Tray placement no longer comes from the design site's editorial stylesheet, Cyan,
   or an application migration bridge.
-- Human review accepts the responsive labels, stacking, chrome clearance and
-  container-relative placement in both colour schemes.
+- Human review accepts the responsive labels, stacking and container-relative
+  placement in both colour schemes.
 
 ### Regression Guardrails
 
@@ -77,8 +74,7 @@ the actions capability's, and this specification does not restate it.
 - Responsive label visibility resolves against the governing container rather than the
   browser window.
 - Page-specific FAB margins and positioning do not compete with tray placement.
-- The tray does not cover persistent block-end navigation and does not rise above a
-  dialog, modal surface, or transient system message.
+- The tray does not rise above a dialog, modal surface, or transient system message.
 - The spanned tray area does not intercept pointer events between its FABs.
 
 ### Scenarios
@@ -94,13 +90,6 @@ And it remains inside the container when the viewport outside it changes size
 Given the same FAB tray inside an application container sized to 100dvw by 100dvh
 When the application renders
 Then the tray is inset from the dynamic viewport's lower inline-end corner by --cn-gap
-```
-
-```gherkin
-Given a container with persistent chrome occupying its block-end edge
-When its FAB tray renders
-Then the tray's block-end edge is above the chrome
-And the tray remains inset from the container's inline-end edge by --cn-gap
 ```
 
 ```gherkin

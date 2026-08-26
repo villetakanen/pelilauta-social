@@ -1,5 +1,5 @@
 {
-  "$comment": "How the design system organises its own subject matter. Array order is presentation order. A group id is the book's URL group and its content-collection name. Add a group here, add the matching collection in apps/design/src/content.config.ts, and create its content directory — a declared group with no books warns on every build.",
+  "$comment": "How the design system organises its own subject matter. Array order is presentation order. A group id identifies the book's URL group and its content-collection name. Add a group here, add the matching collection in apps/design/src/content.config.ts, and create its content directory — a declared group with no books warns on every build.",
   "groups": [
     { "id": "principles", "label": "Principles" },
     { "id": "base", "label": "Base" },

@@ -38,7 +38,7 @@ shell's: a content container sizes a region to its content, and this view
 does the opposite.
 
 The shell stands under the modal bar
-`specs/design-system/application-chrome/spec.md` governs, and it is the
+`specs/design-system/app-chrome/spec.md` governs, and it is the
 surface that decides the fixed bar's clearance: the view locks to the
 viewport, the page never scrolls, and the canvas scrolls its document.
 

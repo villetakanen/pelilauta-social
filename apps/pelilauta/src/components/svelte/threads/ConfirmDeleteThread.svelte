@@ -54,22 +54,28 @@ async function onsubmit(e: Event) {
 }
 </script>
 <WithAuth {allow}>
-  <div class="content-prose">
+  <section class="surface">
+    <p>{t('threads:confirmDelete.message')}</p>
 
-    <section>
-    
-      <p>{t('threads:confirmDelete.message')}</p>
-    
-      <form class="toolbar" {onsubmit}>
-        <a href={`/threads/${thread.key}`} class="button text">
-          {t('actions:cancel')}
-        </a>
-        <button type="submit" class="button">
-          {t('actions:confirm.delete')}
-        </button>
-      </form>
-
-    </section>
-  </div>
+    <form class="text-end" {onsubmit}>
+      <a href={`/threads/${thread.key}`} class="button text">
+        {t('actions:cancel')}
+      </a>
+      <button type="submit" class="button">
+        {t('actions:confirm.delete')}
+      </button>
+    </form>
+  </section>
 </WithAuth>
- 
+
+<style>
+  /*
+   * No container reaches into this box, so it states the interval between
+   * its own blocks: the message and the action row.
+   */
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
+

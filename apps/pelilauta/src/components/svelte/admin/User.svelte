@@ -27,7 +27,7 @@ const toggleFrozen = async (e: Event & { currentTarget: HTMLInputElement }) => {
 <p class="m-0 p-2">{toDisplayString(account.lastLogin)}</p>
 
   {#if adminStatus()}
-  <div style="justify-content: center; display: flex;">
+  <div class="text-center">
     <CnIcon noun="admin" />
     </div>
   {:else}
