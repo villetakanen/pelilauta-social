@@ -141,15 +141,15 @@ function cancel() {
     disabled={saving}
   />
 
-  <div class="mb-2">
+  <div class="quoted-reply">
     <p>{t('threads:fork.quoted')}</p>
-    <div class="surface clip-after-3">
-      <p class="m-0">
+    <div class="surface clip-after-3 quote-preview">
+      <p>
         <ProfileLink uid={reply.owners[0]} />
       </p>
-      <p class="downscaled">
+      <div class="quote-content">
         <MarkdownContent content={`${reply.markdownContent}`} />
-      </p>
+      </div>
     </div>
   </div>
 
@@ -165,6 +165,17 @@ function cancel() {
 {/snippet}
 
 <style>
+  .quoted-reply {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+  }
+
+  .quote-preview {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+    font-size: var(--cn-font-size-small);
+  }
+
   .actions {
     margin-block-start: var(--cn-line);
   }

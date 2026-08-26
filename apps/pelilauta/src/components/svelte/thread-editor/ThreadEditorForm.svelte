@@ -180,18 +180,21 @@ function cancel() {
   {/if}
 
   {#if tags.length > 0}
-    <section class="flex elevation-1 p-1">
+    <div class="chip-list">
       {#each tags as tag}
-        <span class="cn-tag">{tag}</span>
+        <span class="chip">#{tag}</span>
       {/each}
-    </section>
+    </div>
   {/if}
 
   <section class="actions text-end">
     {#if thread?.key}
-      <button type="button" disabled={saving} class="text">
+      <a
+        href={`/threads/${thread.key}/confirmDelete`}
+        class="button text"
+      >
         {t('actions:delete')}
-      </button>
+      </a>
     {/if}
     <button type="button" disabled={saving} class="text" onclick={cancel}>
       {t('actions:cancel')}
