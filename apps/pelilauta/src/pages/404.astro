@@ -4,23 +4,40 @@ import Base from '@layouts/Base.astro';
 import { t } from 'src/utils/i18n';
 ---
 <Base title={t('seo:error404.title')} noSharing>
-  <article class="content-prose">
-    <div class="text-center">
-      <CnIcon noun="monsters" size="xlarge" />
-    </div>
-    <h1>{t("app:404.title")}</h1>
-    <p class="subtitle">{t("app:404.subtitle")}</p>
-    <p>{t("app:404.info")}</p>
-    <ul>
-      <li>
-        <a href="/">{t("app:404.go-home")}</a>
-      </li>
-      <li>
-        <a href="/sites">{t("app:404.go-sites")}</a>
-      </li>
-      <li>
-        <a href="/threads">{t("app:404.go-threads")}</a>
-      </li>
-    </ul>
-  </article>
+  <div class="content-prose">
+    <article class="surface not-found-page">
+      <div class="text-center">
+        <CnIcon noun="monsters" size="xlarge" />
+      </div>
+      <h1>{t('app:404.title')}</h1>
+      <p class="text-subtitle">{t('app:404.subtitle')}</p>
+      <p>{t('app:404.info')}</p>
+      <ul class="not-found-links">
+        <li>
+          <a href="/">{t('app:404.go-home')}</a>
+        </li>
+        <li>
+          <a href="/sites">{t('app:404.go-sites')}</a>
+        </li>
+        <li>
+          <a href="/threads">{t('app:404.go-threads')}</a>
+        </li>
+      </ul>
+    </article>
+  </div>
 </Base>
+
+<style>
+  .not-found-page {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .not-found-links {
+    display: grid;
+    row-gap: var(--cn-grid);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

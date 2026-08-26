@@ -5,23 +5,26 @@ import { t } from 'src/utils/i18n';
 ---
 
 <Base title={t('seo:error403.title')} noSharing>
-  <section class="content-prose">
-    <div class="flex flex-col items-center p-4">
-      <CnIcon noun="admin" size="large" />
+  <div class="content-prose">
+    <article class="surface error-page">
+      <div class="text-center">
+        <CnIcon noun="admin" size="large" />
+      </div>
       <h1>{t('seo:error403.title')}</h1>
-      <p class="text-center text-low pb-4">
-        You don't have the necessary permissions to access this resource.
-      </p>
-      <div class="toolbar">
-        <a href="/" >
+      <p>{t('seo:error403.description')}</p>
+      <div class="text-end">
+        <a href="/" class="button">
           <CnIcon noun="arrow-left" size="small" />
-          Back to Home
-        </a>
-        <a href="/profile" >
-          <CnIcon noun="avatar" size="small" />
-          My Profile
+          {t('app:404.go-home')}
         </a>
       </div>
-    </div>
-  </section>
+    </article>
+  </div>
 </Base>
+
+<style>
+  .error-page {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

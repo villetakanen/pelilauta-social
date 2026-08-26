@@ -1,23 +1,42 @@
 ---
+import CnLoader from '@design-system/components/CnLoader.svelte';
+import { t } from 'src/utils/i18n';
+import BaseHead from '../components/server/BaseHead/BaseHead.astro';
+
 // Clear any server-side session
 Astro.cookies.delete('session', { path: '/' });
 ---
 
-<script>
-  // Clear client-side auth and redirect
-  import('../stores/session').then(({ logout }) => {
-    logout().then(() => {
-      window.location.href = '/';
-    });
-  });
-</script>
+<html lang="fi">
+  <head>
+    <BaseHead title={t('actions:logout')} noSharing={true} />
+  </head>
+  <body>
+    <main class="app-main">
+      <div class="content-prose">
+        <article class="surface logout-page text-center">
+          <CnLoader noun="fox" label={t('actions:logout')} />
+          <p>{t('actions:logout')}...</p>
+        </article>
+      </div>
+    </main>
 
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Signing out...</title>
-</head>
-<body>
-  <p>Signing out...</p>
-</body>
+    <script>
+      // Clear client-side auth and redirect
+      import('../stores/session').then(({ logout }) => {
+        logout().then(() => {
+          window.location.href = '/';
+        });
+      });
+    </script>
+  </body>
 </html>
+
+<style>
+  .logout-page {
+    display: grid;
+    justify-items: center;
+    row-gap: var(--cn-line);
+    margin-block-start: var(--cn-line);
+  }
+</style>
