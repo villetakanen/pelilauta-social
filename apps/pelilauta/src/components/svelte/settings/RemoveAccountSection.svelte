@@ -77,39 +77,56 @@ async function deRegister(e: SubmitEvent) {
 }
 </script>
   
-  <section class="elevation-1 p-2 my-1">
-    <h4>{t('settings:profile.dangerZone.title')}</h4>
-    <p>{t('settings:profile.dangerZone.info')}</p>
+<section class="surface">
+  <h4>{t('settings:profile.dangerZone.title')}</h4>
+  <p>{t('settings:profile.dangerZone.info')}</p>
+  <div>
     <button type="button" class="text" onclick={() => showVerify = true} disabled={showVerify}>
       {t('actions:deregister')}
     </button>
-  
-    {#if showVerify}
-      <form onsubmit={deRegister} class="elevation-2 p-2 mt-1">
-        <label>
-          {t('settings:profile.dangerZone.confirm')}
-          <input
-            id="deregister-confirm"
-            type="text"
-            bind:value={verifyText}
-            placeholder="olen aivan varma"
-          />
-        </label>
-        <div class="text-end">
-          <button
-            disabled={verifyText !== 'olen aivan varma' || loading}
-            type="submit"
-            class="cta"
-          >
-            {#if loading}
-              <CnLoader inline />
-            {:else}
-              <CnIcon noun="check" />
-            {/if}
-            <span>{t('actions:confirm.delete')}</span>
-          </button>
-        </div>
-      </form>
-    {/if}
-  </section>
+  </div>
+
+  {#if showVerify}
+    <form onsubmit={deRegister} class="verify-form">
+      <label>
+        {t('settings:profile.dangerZone.confirm')}
+        <input
+          id="deregister-confirm"
+          type="text"
+          bind:value={verifyText}
+          placeholder="olen aivan varma"
+        />
+      </label>
+      <div class="text-end">
+        <button
+          disabled={verifyText !== 'olen aivan varma' || loading}
+          type="submit"
+          class="cta"
+        >
+          {#if loading}
+            <CnLoader inline />
+          {:else}
+            <CnIcon noun="check" />
+          {/if}
+          <span>{t('actions:confirm.delete')}</span>
+        </button>
+      </div>
+    </form>
+  {/if}
+</section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .verify-form {
+    display: grid;
+    row-gap: var(--cn-line);
+    padding: var(--cn-gap);
+    background-color: var(--cn-color-surface-2);
+    border-radius: var(--cn-border-radius-small);
+  }
+</style>
   

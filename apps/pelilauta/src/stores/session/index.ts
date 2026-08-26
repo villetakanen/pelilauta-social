@@ -47,6 +47,15 @@ export const $loadingState = sessionState;
 // Active user's UID, stored in localStorage for session persistence
 export const uid = persistentAtom<string>('session-uid', '');
 
+if (typeof document !== 'undefined') {
+  uid.subscribe((value) => {
+    document.documentElement.classList.toggle(
+      'has-session-uid',
+      Boolean(value),
+    );
+  });
+}
+
 // *** Computed stores ******************************************
 
 // Helper for the session state

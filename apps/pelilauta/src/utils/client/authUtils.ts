@@ -44,6 +44,14 @@ export async function completeAuthFlow(user: User, redirectPath = '/') {
     const { pushSessionSnack } = await import('./snackUtils');
     const { t } = await import('src/utils/i18n');
 
+    // Set client-side session hint in localStorage before redirecting
+    try {
+      localStorage.setItem('session-uid', user.uid);
+      localStorage.setItem('session-state', 'active');
+    } catch {
+      // Storage unavailable or restricted
+    }
+
     pushSessionSnack(t('login:snacks.success'));
 
     // Redirect on successful authentication

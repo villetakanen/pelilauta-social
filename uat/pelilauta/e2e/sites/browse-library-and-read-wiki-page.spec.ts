@@ -52,7 +52,7 @@ it('browses the library card grid, sorts sites, and reads a wiki page with prose
   await page.waitForURL('**/sites/gloamroad-company**', { timeout: 30_000 });
 
   // 4. Verify the page article is presented with .surface and .text-prose.
-  const pageArticle = page.locator('article.surface');
+  const pageArticle = page.locator('article.page-article');
   await expect
     .poll(() => pageArticle.isVisible(), { timeout: 30_000 })
     .toBe(true);

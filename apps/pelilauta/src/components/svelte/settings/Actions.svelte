@@ -8,9 +8,18 @@ async function logoutAction() {
 }
 </script>
 
-<article class="actions">
+<section class="surface actions">
   <h3>{t('settings:actions.title')}</h3>
-  <button class="button" type="button" onclick={logoutAction}>
-    {t('actions:logout')}
-  </button>
-</article>
+  <div>
+    <button class="button" type="button" onclick={logoutAction}>
+      {t('actions:logout')}
+    </button>
+  </div>
+</section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

@@ -55,48 +55,91 @@ async function updateAvatar() {
 }
 </script>
   
-  <section>
-    <h3>{t('settings:authz.title')}</h3>
-    <p class="text-low downscaled">{t('settings:authz.info')}</p>
-  
-    <div class="field-grid">
-      <p><strong>{t('settings:authz.fields.uid')}</strong></p>
-      <p>{$uid || '---'}</p> 
-  
-      <p><strong>{t('settings:authz.fields.displayName')}</strong></p>
-      <p>{displayName || '---'}</p>
-  
-      <p><strong>{t('settings:authz.fields.email')}</strong></p>
-      <p>{email || '---'}</p>
-  
-      <p><strong>{t('settings:authz.fields.avatarURL')}</strong></p>
+<section class="surface">
+  <h3>{t('settings:authz.title')}</h3>
+  <p class="text-small text-low">{t('settings:authz.info')}</p>
+
+  <div class="field-grid">
+    <div class="field-row">
+      <span class="text-label">{t('settings:authz.fields.uid')}</span>
+      <span class="text-small text-low">{$uid || '---'}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="text-label">{t('settings:authz.fields.displayName')}</span>
+      <span class="text-small text-low">{displayName || '---'}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="text-label">{t('settings:authz.fields.email')}</span>
+      <span class="text-small text-low">{email || '---'}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="text-label">{t('settings:authz.fields.avatarURL')}</span>
       <div>
-        <p>{avatarURL || '---'}</p>
+        <span class="text-small text-low avatar-url">{avatarURL || '---'}</span>
         {#if avatarURL && avatarURL !== $profile?.avatarURL}
-          <div class="flex flex-row items-center my-1">
+          <div class="avatar-migration">
             <CnAvatar src={$profile?.avatarURL} aria-hidden />
-            <span class="mx-1"><CnIcon noun="add" /></span>
+            <span class="icon-separator"><CnIcon noun="add" /></span>
             <CnAvatar src={avatarURL} aria-hidden />
           </div>
           <button
-          type="button"
-          class="button"
-          disabled={!avatarURL || avatarURL === $profile?.avatarURL || loadingAvatarUpdate}
-          onclick={updateAvatar}
-        >
-          {#if loadingAvatarUpdate}
-            <CnLoader inline />
-          {:else}
-            <CnIcon noun="avatar" />
-          {/if}
-          <span>{t('settings:authz.updateAvatar')}</span>
-        </button>
-        {/if} 
+            type="button"
+            class="button"
+            disabled={!avatarURL || avatarURL === $profile?.avatarURL || loadingAvatarUpdate}
+            onclick={updateAvatar}
+          >
+            {#if loadingAvatarUpdate}
+              <CnLoader inline />
+            {:else}
+              <CnIcon noun="avatar" />
+            {/if}
+            <span>{t('settings:authz.updateAvatar')}</span>
+          </button>
+        {/if}
       </div>
     </div>
-  
-    <p class="text-low downscaled mt-2">
-      <a href="/docs/04-authz">{t('actions:learnMore')}</a>
-    </p>
-  </section>
+  </div>
+
+  <p class="text-small text-low">
+    <a href="/docs/04-authz">{t('actions:learnMore')}</a>
+  </p>
+</section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .field-grid {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .field-row {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--cn-grid) * 0.25);
+  }
+
+  .avatar-url {
+    word-break: break-all;
+  }
+
+  .avatar-migration {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+    margin-block: var(--cn-grid);
+  }
+
+  .icon-separator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
   
