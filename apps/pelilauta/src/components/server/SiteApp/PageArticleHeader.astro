@@ -11,7 +11,7 @@ interface Props {
 const { page, site } = Astro.props as Props;
 ---
 
-<header class="downscaled flex justify-space-between border-b">
+<header class="downscaled border-b">
     <p class="m-0 p-0">
       <a href={`/sites/${site.key}`}>{site.name}</a> /
       <a href={`/sites/${site.key}/${page.key}`}>{page.name}</a>

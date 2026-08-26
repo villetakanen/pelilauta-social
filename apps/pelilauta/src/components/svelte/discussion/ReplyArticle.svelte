@@ -119,7 +119,7 @@ $effect(() => {
       {@html marked(reply.markdownContent || "")}
     </div>
     {#if reply.updatedAt}
-      <footer class="reply-band reply-band--end">
+      <footer class="text-end">
         <span class="text-small text-low">
           {displayTime}
         </span>
@@ -139,10 +139,6 @@ $effect(() => {
     display: flex;
     align-items: center;
     gap: var(--cn-gap);
-  }
-
-  .reply-band--end {
-    justify-content: flex-end;
   }
 
   .reply-author {

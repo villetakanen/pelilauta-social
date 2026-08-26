@@ -153,7 +153,7 @@ function cancel() {
     </div>
   </div>
 
-  <section class="actions">
+  <section class="actions text-end">
     <button type="button" disabled={saving} class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
@@ -166,10 +166,6 @@ function cancel() {
 
 <style>
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cn-gap);
     margin-block-start: var(--cn-line);
   }
 </style>

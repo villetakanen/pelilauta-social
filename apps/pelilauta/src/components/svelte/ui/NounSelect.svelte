@@ -227,6 +227,13 @@ function handleKeydown(event: KeyboardEvent) {
   width: 100%;
 }
 
+/* @todo A noun picker is a design-system capability; this trigger reproduces
+   what a painted `select` and its platform-drawn disclosure already do. The
+   one thing it does that a native select cannot is put an icon beside a
+   noun's label. Two-sided distribution — a value pinned to one edge, a
+   chevron pinned to the other — is the one shape text alignment cannot
+   serve, so this rule stays until the component moves into the design
+   system. See plans/debt/the-noun-picker-is-not-in-the-design-system.md. */
 .noun-select-trigger {
   display: flex;
   align-items: center;

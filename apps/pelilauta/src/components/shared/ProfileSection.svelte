@@ -28,7 +28,6 @@ const { profile }: Props = $props();
           target="_blank"
           rel="noopener noreferrer"
           class="button small w-full"
-          style="justify-content: center;"
         >
           {link.label}
         </a>

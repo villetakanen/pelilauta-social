@@ -146,7 +146,7 @@ function handleNickChange(newNick: string, exists: boolean) {
       <p class="text-caption">{t('login:eula.profileInfo')}</p>
     {/if}
     </section>
-    <div class="flex toolbar justify-end">
+    <div class="text-end">
       <button type="button" class="text" onclick={handleCancel}>
         {t('login:eula.decline')}
       </button>

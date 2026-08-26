@@ -163,7 +163,7 @@ async function logoutAction() {
 
     <ul class="flex flex-col gap-1 p-0 m-0 list-none mb-2">
       {#each links as link, index}
-        <li class="flex items-center justify-between p-2 surface-2 radius-s">
+        <li class="surface-2 radius-s">
           <div class="flex flex-col overflow-hidden" style="max-width: 80%">
             <span class="text-small text-high truncate">{link.label}</span>
             <span

@@ -287,7 +287,7 @@ onMount(async () => {
           required
         />
       </label>
-      <div class="actions">
+      <div class="text-end">
         <button type="submit" disabled={suspend}>
           {#if suspend}
             <CnLoader inline />
@@ -309,7 +309,7 @@ onMount(async () => {
           required
         />
       </label>
-      <div class="actions">
+      <div class="text-end">
         <button type="submit" disabled={suspend}>
           {#if suspend}
             <CnLoader inline />
@@ -322,14 +322,3 @@ onMount(async () => {
     </form>
   {/if}
 </section>
-
-<style>
-  /* A view's layout for its one action row, stated here rather than
-     published: the third consumer is the point at which a class earns
-     a stylesheet. */
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--cn-gap);
-  }
-</style>

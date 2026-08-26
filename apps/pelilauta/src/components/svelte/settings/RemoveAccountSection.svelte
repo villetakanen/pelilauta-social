@@ -95,7 +95,7 @@ async function deRegister(e: SubmitEvent) {
             placeholder="olen aivan varma"
           />
         </label>
-        <div class="toolbar flex justify-end">
+        <div class="text-end">
           <button
             disabled={verifyText !== 'olen aivan varma' || loading}
             type="submit"

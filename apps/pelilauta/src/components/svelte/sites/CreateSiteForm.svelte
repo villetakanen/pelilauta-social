@@ -179,7 +179,7 @@ function setUsePlainTextURLs(e: Event & { currentTarget: HTMLInputElement }) {
         </div>
         {/if}
 
-        <div class="toolbar justify-end">
+        <div class="text-end">
           <a href="/library" class="button text">
             {t('actions:cancel')}
           </a>

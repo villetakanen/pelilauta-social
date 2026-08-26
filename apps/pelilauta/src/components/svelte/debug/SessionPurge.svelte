@@ -162,7 +162,7 @@ async function purgeSession() {
       </div>
     </div>
 
-    <div class="toolbar justify-end mt-2">
+    <div class="text-end">
       <button onclick={purgeSession} disabled={isPurging} >
         {#if isPurging}
           <CnLoader inline />

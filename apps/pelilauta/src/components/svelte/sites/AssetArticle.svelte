@@ -45,7 +45,7 @@ async function copyMarkdown() {
       {asset.description}
     </p>
   </div>
-  <div class="flex m-0 p-0 justify-end">
+  <div class="text-end">
     <button
       onclick={copyMarkdown}
       type="button"

@@ -169,7 +169,7 @@ h4,
   color: var(--cn-color-text-high);
 }
 
-/* Alignment, at any step. Why `end` and not `right`: the Typography spec. */
+/* Alignment, at any step. Why `end` and not `right`: docs/DESIGN.md's Modern CSS section. */
 .text-center {
   text-align: center;
 }

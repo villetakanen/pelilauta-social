@@ -38,7 +38,7 @@ async function regenPageRefs() {
   <section class="border p-2 mt-2">
     <h2>{t('site:toc.regenerate.title')}</h2>
     <p>{t('site:toc.regenerate.info')}</p>
-    <div class="flex justify-center">
+    <div class="text-center">
       <button type="button" class="button" onclick={regenPageRefs}>
         <CnIcon noun="tools" />
         <span>{t('site:toc.regenerate.action')}</span>

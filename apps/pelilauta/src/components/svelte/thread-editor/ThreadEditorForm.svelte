@@ -187,7 +187,7 @@ function cancel() {
     </section>
   {/if}
 
-  <section class="actions">
+  <section class="actions text-end">
     {#if thread?.key}
       <button type="button" disabled={saving} class="text">
         {t('actions:delete')}
@@ -218,10 +218,6 @@ function cancel() {
   }
 
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cn-gap);
     margin-block-start: var(--cn-line);
   }
 </style>

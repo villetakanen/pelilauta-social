@@ -103,7 +103,7 @@ const clock = $state(
     </div>
 
     <hr>
-    <div class="toolbar justify-end">
+    <div class="text-end">
     <button onclick={addTick} class="text" type="button">
         <CnIcon noun="add" size="small" />
         <span>{t('actions:create.tick')}</span>
