@@ -17,13 +17,46 @@ const url = `/threads/${result.path.split('/').pop()}`;
 const snippet = createPlainSnippet(result.markdownContent || '', 150);
 </script>
 
-<div class="search-result mb-2 border-t">
-  <h3 class="text-h5 m-0">
+<article class="search-result">
+  <h4>
     <a href={url}>
       {result.title}
     </a>
-  </h3>
-  <p><ProfileLink uid={result.author} /></p>
-  <p class="text-small">{snippet}</p>
-  <a href={url} class="read-more">{t("actions:readMore")}</a>
-</div>
+  </h4>
+  <div class="result-author">
+    <ProfileLink uid={result.author} />
+  </div>
+  <p class="result-snippet">{snippet}</p>
+  <div>
+    <a href={url} class="read-more">{t('actions:readMore')}</a>
+  </div>
+</article>
+
+<style>
+  .search-result {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+    padding-block-start: var(--cn-gap);
+    border-block-start: 1px solid var(--cn-color-border);
+  }
+
+  .search-result:first-child {
+    border-block-start: none;
+    padding-block-start: 0;
+  }
+
+  .result-author {
+    font-size: var(--cn-font-size-caption);
+    line-height: var(--cn-line-height-caption);
+  }
+
+  .result-snippet {
+    font-size: var(--cn-font-size-small);
+    line-height: var(--cn-line-height-small);
+    color: var(--cn-color-text-low);
+  }
+
+  .read-more {
+    font-size: var(--cn-font-size-small);
+  }
+</style>

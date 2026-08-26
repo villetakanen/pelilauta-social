@@ -10,11 +10,13 @@ const { denied } = await requireSession(Astro);
 if (denied) return denied;
 ---
 <Base title={t('search:title')}>
-  {/*
-    The search app is client:only, so a heading inside it does not exist until
-    it hydrates. The page names itself here instead, and the app's own heading
-    names its card.
-  */}
-  <h1>{t('search:title')}</h1>
-  <AlgoliaSearchApp client:only="svelte" />
+  <div class="content-prose">
+    {/*
+      The search app is client:only, so a heading inside it does not exist until
+      it hydrates. The page names itself here instead, and the app's own heading
+      names its card.
+    */}
+    <h1>{t('search:title')}</h1>
+    <AlgoliaSearchApp client:only="svelte" />
+  </div>
 </Base>
