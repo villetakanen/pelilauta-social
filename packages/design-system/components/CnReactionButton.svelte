@@ -97,7 +97,7 @@ $effect(() => {
     /* Private: the pressed gradient and its burst are this component's only
        consumer, so the love hue stays out of the shared semantic layer. */
     --_love: light-dark(var(--chroma-love-40), var(--chroma-love-60));
-    display: flex;
+    display: inline-flex;
     flex-flow: row nowrap;
     align-items: center;
     /* An action row cannot squeeze the control or stretch it apart. */
