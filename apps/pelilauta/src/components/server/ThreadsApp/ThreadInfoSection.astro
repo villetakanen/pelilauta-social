@@ -39,14 +39,16 @@ if (thread.blueskyPostUri) {
 ---
 
 <!--
-  The column is a list of border-separated sections: tags, the Bluesky prompt or embed,
-  and the owner's actions. This block summarises the thread the reader is already on, so
-  it has no destination to preview and takes the same idiom rather than a card. It leads
-  the column, so the separators below it are what divide the blocks.
+  The column holds the thread's own boxes: this summary, the Bluesky prompt or embed, and
+  the owner's actions. Each is a surface in its own right; the column states no separator
+  of its own, only the interval between the boxes.
 -->
 <section class="thread-info">
-  <section>
-    <h4>{t("threads:info.title")}</h4>
+  <section class="surface summary">
+    <h2>
+      <CnIcon noun="discussion" size="small" decorative />
+      {t("threads:info.title")}
+    </h2>
     <p>
       {toDisplayString(thread.flowTime)}
     </p>
@@ -58,12 +60,14 @@ if (thread.blueskyPostUri) {
       </a>
     </p>
     <div class="text-center">
-      <div class="reply-count">
-        <CnIcon noun="send" size="small" />
-        <span class="text-caption">
-          {thread.replyCount}
-        </span>
-      </div>
+      <a
+        class="button text"
+        href="#discussion-title"
+        aria-label={t("threads:info.replies", { count: thread.replyCount || 0 })}
+      >
+        <CnIcon noun="discussion" />
+        <span>{thread.replyCount || 0}</span>
+      </a>
       <ReactionButton
         target="thread"
         key={thread.key}
@@ -106,12 +110,21 @@ if (thread.blueskyPostUri) {
   }
 
   /*
-   * The reply count pairs an icon with a number, so the row states its own
-   * inline alignment rather than borrowing Cyan's `.flex.align-center`.
+   * The heading carries its icon on the same line as its text.
    */
-  .reply-count {
+  h2 {
     display: flex;
     align-items: center;
     gap: var(--cn-gap);
   }
+
+  /*
+   * No container reaches into this box, so it states the interval between its
+   * own blocks: the heading, the date, the byline and the actions row.
+   */
+  .summary {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
 </style>

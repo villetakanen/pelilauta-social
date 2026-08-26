@@ -53,15 +53,16 @@ async function handleShare() {
 </script>
 
 <!--
-  A prompt for one action, not a preview of a subject, so it is neither a CnCard nor a
-  Surface: it takes the thread info column's idiom — a border-separated section with
-  an h4 heading — which is what ThreadInfoActions below it and the Bluesky embed
-  that replaces it in this slot both render.
+  A prompt for one action, not a preview of a subject, so it is neither a CnCard
+  nor a listing row: it takes the idiom every other box in the thread info column
+  takes, including the Bluesky embed that replaces it in this slot.
 -->
 {#if bskyFeatureEnabled && isAuthorOrAdmin}
-  <hr />
-  <section>
-    <h4>{t("threads:info.blueskyTitle")}</h4>
+  <section class="surface">
+    <h2>
+      <CnIcon noun="share" size="small" decorative />
+      {t("threads:info.blueskyTitle")}
+    </h2>
     <p class="text-caption">
       {t("threads:share.description")}
     </p>
@@ -77,13 +78,21 @@ async function handleShare() {
 
 <style>
   /*
-   * This section is a border-separated block in the thread info column; the
-   * hr above it paints the border and the column states no interval of its
-   * own, so the rhythm between the heading, the prompt and the button is
-   * stated here.
+   * This section is a surface box in the thread info column; the column states
+   * only the interval between boxes, so the rhythm between the heading, the
+   * prompt and the button is stated here.
    */
   section {
     display: grid;
     row-gap: var(--cn-line);
+  }
+
+  /*
+   * The heading carries its icon on the same line as its text.
+   */
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
   }
 </style>

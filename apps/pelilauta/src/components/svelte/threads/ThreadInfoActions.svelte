@@ -33,34 +33,44 @@ async function onsubmit(e: Event) {
 }
 </script>
 {#if owns || $showAdminTools}
-  <hr />
-  <section>
+  <div class="thread-info-actions">
     {#if owns}
-      <h4>{t('threads:info.actions.title')}</h4>
-      <a
-        href={`/threads/${thread?.key}/edit`}
-        class="button text-center text"
-      >
-        {t('actions:edit')}
-      </a>
-      <a
-        href={`/threads/${thread?.key}/confirmDelete`}
-        class="button text-center text"
-      >
-        {t('actions:delete')}
-      </a>
+      <section class="surface owner-actions">
+        <h2>{t('threads:info.actions.title')}</h2>
+        <a
+          href={`/threads/${thread?.key}/edit`}
+          class="button text-center text"
+        >
+          {t('actions:edit')}
+        </a>
+        <a
+          href={`/threads/${thread?.key}/confirmDelete`}
+          class="button text-center text"
+        >
+          {t('actions:delete')}
+        </a>
+      </section>
     {/if}
     <ThreadAdminActions {thread}/>
-  </section>
+  </div>
 {/if}
 
 <style>
   /*
-   * This section is a border-separated block in the thread info column; the
-   * hr above it paints the border and the column states no interval of its
-   * own, so the rhythm between the heading and the actions is stated here.
+   * The owner's actions and the admin disclosure are separate surface boxes,
+   * not one nested in the other, so this wrapper states only the interval
+   * between them.
    */
-  section {
+  .thread-info-actions {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  /*
+   * No container reaches into this box, so it states the interval between
+   * its own blocks: the heading and the two actions.
+   */
+  .owner-actions {
     display: grid;
     row-gap: var(--cn-line);
   }

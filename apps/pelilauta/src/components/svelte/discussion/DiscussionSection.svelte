@@ -89,12 +89,18 @@ onMount(async () => {
 });
 </script>
 
-<section class="content-prose">
-  <div class="replies">
-    {#each discussion as reply}
-      <ReplyArticle {reply} />
-    {/each}
-  </div>
+<section class="content-prose" aria-labelledby="discussion-title">
+  <h2 id="discussion-title">{t("threads:discussion.title")}</h2>
+
+  {#if discussion.length === 0}
+    <p>{t("threads:discussion.empty")}</p>
+  {:else}
+    <div class="replies">
+      {#each discussion as reply}
+        <ReplyArticle {reply} />
+      {/each}
+    </div>
+  {/if}
 
   <!--
     A signed-in reader writes in the chat bar the thread page mounts in chrome,

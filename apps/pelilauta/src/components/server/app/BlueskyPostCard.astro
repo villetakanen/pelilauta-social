@@ -11,11 +11,11 @@ interface Props {
 const { post, postUrl } = Astro.props;
 ---
 
-<article>
+<article class="surface">
   <div class="text-center">
-    <h4 class="text-h4">
+    <h2>
       {t("threads:info.blueskyTitle")}
-    </h4>
+    </h2>
     <a
       href={postUrl}
       target="_blank"

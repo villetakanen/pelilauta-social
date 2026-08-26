@@ -179,18 +179,31 @@ function handleKeydown(event: KeyboardEvent) {
     row-gap: var(--cn-grid);
   }
 
-  /* The input and the add button sit in one row. */
+  /*
+   * The input stacks above the button by default: `.surface` gives this block a
+   * container to query, but at the narrow end of that range — the info column's
+   * pinned width — a row has no space for both. `surface-area` is the container
+   * `.surface` names; 20rem is 40 grid units, wide enough for the input, the gap
+   * and the button.
+   */
   .add-row {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: var(--cn-gap);
+  }
+
+  @container surface-area (min-width: 20rem) {
+    .add-row {
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
   /*
    * A flex item's automatic minimum is its content size, and an input carries a
    * default width of twenty characters in the technical register — wider than the
-   * small column this block sits in. Without the override the row cannot shrink to
-   * the column and the button lands outside it.
+   * row it sits in once the row is horizontal. Without the override the row cannot
+   * shrink to the column and the button lands outside it.
    */
   .add-row input {
     flex: 1 1 auto;
