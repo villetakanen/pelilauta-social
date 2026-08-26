@@ -36,7 +36,7 @@ async function testSSRNoAuth() {
 }
 </script>
 
-<div class="flex flex-wrap">
+<div class="admin-tools-row">
   <button type="button" class="text" onclick={testSSRAuth}>
     <CnIcon noun="adventurer" decorative />
     <span>Test SSR Auth</span>
@@ -47,3 +47,12 @@ async function testSSRNoAuth() {
   </button>
   <SentryTestButton />
 </div>
+
+<style>
+  .admin-tools-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>
