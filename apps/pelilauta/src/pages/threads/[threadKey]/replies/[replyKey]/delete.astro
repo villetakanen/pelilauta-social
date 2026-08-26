@@ -34,10 +34,10 @@ const reply = ReplySchema.parse(
 <ModalPage title={t('threads:discussion.title')} backHref={`/threads/${threadKey}`}>
   <div class="content-prose">
     <h1>{t('threads:confirmDelete.title')}</h1>
+    <ReplyDeleteSection
+      threadKey={threadKey}
+      {reply}
+      client:only="svelte"
+    />
   </div>
-  <ReplyDeleteSection
-    threadKey={threadKey}
-    {reply}
-    client:only="svelte"
-  />
 </ModalPage>

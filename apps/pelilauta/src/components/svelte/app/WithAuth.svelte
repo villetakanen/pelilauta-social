@@ -18,21 +18,32 @@ const { allow, children, message }: Props = $props();
 {:else}
   <div class="content-prose">
     <article>
-      <div class="flex justify-center p-2">
+      <div class="text-center">
         <CnIcon noun="monsters" size="xlarge" />
       </div>
-      <div class="surface p-2 mt-2">
-      <h1>{t('app:forbidden.title')}</h1>
-      <p>{message || t('app:forbidden.message')}</p>
-      {#if !$uid}
-      <div class="toolbar justify-center">
-        <a href="/login" class="button">
-          {t('actions:login')}
-        </a>
-      </div>
-      {/if}
+      <div class="surface">
+        <h1>{t('app:forbidden.title')}</h1>
+        <p>{message || t('app:forbidden.message')}</p>
+        {#if !$uid}
+        <div class="text-center">
+          <a href="/login" class="button">
+            {t('actions:login')}
+          </a>
+        </div>
+        {/if}
       </div>
     </article>
   </div>
 {/if}
+
+<style>
+  /*
+   * No container reaches into this box, so it states the interval between
+   * its own blocks: the title, the message and the login action.
+   */
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
 
