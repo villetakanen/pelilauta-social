@@ -1,8 +1,9 @@
 <script lang="ts">
 import { logDebug } from '@utils/logHelpers';
+import { t } from 'src/utils/i18n';
 
-let nick = '';
-let bio = '';
+let nick = $state('');
+let bio = $state('');
 
 async function handleSubmit(event: Event) {
   event.preventDefault();
@@ -21,21 +22,31 @@ async function handleSubmit(event: Event) {
     window.location.href = '/';
   } else {
     logDebug('CreateProfileForm', 'Profile creation failed', response);
-    // Handle error
   }
 }
 </script>
 
-<form on:submit={handleSubmit}>
-  <div class="form-group">
-    <label for="nick">Nickname</label>
-    <input type="text" id="nick" bind:value={nick} required />
-  </div>
-  <div class="form-group">
-    <label for="bio">Bio</label>
-    <textarea id="bio" bind:value={bio}></textarea>
-  </div>
-  <div class="pt-4">
-    <button type="submit" >Save Profile</button>
+<form onsubmit={handleSubmit} class="surface profile-form">
+  <label>
+    {t('entries:profile.nick')}
+    <input type="text" bind:value={nick} required />
+  </label>
+  <label>
+    {t('entries:profile.bio')}
+    <textarea bind:value={bio}></textarea>
+  </label>
+  <div class="text-end">
+    <button type="submit">{t('actions:save')}</button>
   </div>
 </form>
+
+<style>
+  /*
+   * .surface publishes padding and containment only, so this form states
+   * the interval between its own field blocks.
+   */
+  .profile-form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
