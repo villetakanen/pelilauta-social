@@ -2,10 +2,14 @@
 import Admin from '@layouts/Admin.astro';
 import { requireAdmin } from '@pelilauta/admin/utils/requireAdmin';
 import SocialMediaPoster from '../../components/svelte/admin/SocialMediaPoster.svelte';
+import { t } from '../../utils/i18n';
 
 const denied = await requireAdmin(Astro);
 if (denied) return denied;
 ---
-<Admin title="Social media poster" description="Tool for sending messages to social media">
-  <SocialMediaPoster client:only="svelte"/>
+
+<Admin title={t('admin:title')} description="Tool for sending messages to social media">
+  <div class="content-prose">
+    <SocialMediaPoster client:only="svelte" />
+  </div>
 </Admin>
