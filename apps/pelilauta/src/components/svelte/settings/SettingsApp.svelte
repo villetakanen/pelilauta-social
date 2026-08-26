@@ -1,11 +1,23 @@
 <script lang="ts">
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import { profile, profileMissing } from '@stores/session/profile';
+import { uid } from '@stores/session';
+import {
+  profile,
+  profileMissing,
+  subscribeToProfile,
+} from '@stores/session/profile';
+import { onMount } from 'svelte';
 import ProfileSection from '../../shared/ProfileSection.svelte';
 import Actions from './Actions.svelte';
 import AuthnSection from './AuthnSection.svelte';
 import ProfileTool from './ProfileTool.svelte';
 import RemoveAccountSection from './RemoveAccountSection.svelte';
+
+onMount(() => {
+  if ($uid) {
+    subscribeToProfile($uid);
+  }
+});
 </script>
 
 {#if $profile}

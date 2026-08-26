@@ -12,7 +12,9 @@ const { Content } = await render(eulaDoc);
 ---
 
 <ModalPage title={t('login:eula.title')} backHref="/">
-  <EulaForm client:only="svelte">
-    <Content />
-  </EulaForm>
+  <div class="content-prose">
+    <EulaForm client:only="svelte">
+      <Content />
+    </EulaForm>
+  </div>
 </ModalPage>

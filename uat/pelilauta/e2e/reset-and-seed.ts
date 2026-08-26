@@ -143,6 +143,8 @@ async function main() {
 
   // Registration starts clean; this is the one Auth state a run writes.
   await auth.setCustomUserClaims(newUid, {});
+  await db.collection(ACCOUNTS_COLLECTION_NAME).doc(newUid).delete();
+  await db.collection(PROFILES_COLLECTION_NAME).doc(newUid).delete();
 
   console.log('Accounts ready:', {
     existingUser: existingUid,

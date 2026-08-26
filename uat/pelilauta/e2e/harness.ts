@@ -23,6 +23,7 @@ export const STORAGE_STATE_PATH = join(here, '.auth/existing-user.json');
 export const STORAGE_STATE_PATHS = {
   existingUser: join(here, '.auth/existing-user.json'),
   adminUser: join(here, '.auth/admin-user.json'),
+  newUser: join(here, '.auth/new-user.json'),
 } as const;
 
 export type ReaderRole = keyof typeof STORAGE_STATE_PATHS;
