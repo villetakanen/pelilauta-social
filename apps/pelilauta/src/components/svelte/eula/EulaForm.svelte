@@ -102,7 +102,7 @@ async function handleCancel(event: Event) {
   <div class="surface">
     <h1>{t('login:eula.title')}</h1>
     <form onsubmit={handleSubmit} class="surface">
-      <article class="prose">
+      <article class="text-prose">
         {#if children}
           {@render children()}
         {:else}

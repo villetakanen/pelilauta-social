@@ -182,81 +182,168 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 </script>
 
-<div class="content-prose">
-  <article class="surface">
-    <div class="search-container">
-      <div class="toolbar">
-        <h2 class="text-h4 m-0 grow">{t("search:title")}</h2>
-        <div>
-          <img
-            src={scheme === 'dark'
-              ? '/Algolia-logo-white.svg'
-              : '/Algolia-logo-blue.svg'}
-            alt="Algolia Logo"
-            style="height: var(--cn-line); display: block"
-          />
-        </div>
-      </div>
-      <div class="search-form">
-        <div class="toolbar">
-          <input
-            type="text"
-            bind:value={searchQuery}
-            onkeydown={handleKeyDown}
-            placeholder={t("search:searchPlaceholder")}
-            class="search-input"
-            disabled={isSearching}
-          />
-          <button
-            onclick={handleSearch}
-            disabled={isButtonDisabled}
-            class="search-button"
-          >
-            {isSearching ? 'Searching...' : 'Search'}
-          </button>
-        </div>
-        
-        <!-- Channel filter indicator -->
-        {#if channelFilter}
-          <div class="flex items-center gap-2 mt-2 p-2 bg-surface-variant radius-s">
-            <CnIcon noun="filter" size="small" />
-            <span class="text-caption">{t('search:channel.filterActive', { channel: channelFilter })}</span>
-            <button 
-              onclick={() => {
-                channelFilter = '';
-                if (typeof window !== 'undefined') {
-                  const url = new URL(window.location.href);
-                  url.searchParams.delete('channel');
-                  window.history.replaceState({}, '', url.toString());
-                }
-              }}
-              class="text-caption text-link border-none bg-transparent cursor-pointer"
-              aria-label="Clear channel filter"
-            >
-              {t('search:channel.clearFilter')}
-            </button>
-          </div>
-        {/if}
-        
-        {#if error}
-          <div class="error-message">
-            {error}
-          </div>
-        {/if}
-      </div>
-
-      {#if searchResults}
-        <div class="results-container">
-          <h2>{t("search:results", { count: searchResults[0].hits.length })}</h2>
-
-          
-
-          {#each searchResults[0].hits as hit}
-            <SearchResult result={hit} />
-          {/each}
-        </div>
-      {/if}
+<article class="surface">
+  <header class="search-header">
+    <h2>{t('search:title')}</h2>
+    <div>
+      <img
+        src={scheme === 'dark'
+          ? '/Algolia-logo-white.svg'
+          : '/Algolia-logo-blue.svg'}
+        alt="Algolia Logo"
+        style="height: var(--cn-line); display: block"
+      />
     </div>
-  </article>
-</div>
+  </header>
+
+  <form
+    class="search-form"
+    onsubmit={(event) => {
+      event.preventDefault();
+      handleSearch();
+    }}
+  >
+    <div class="search-controls">
+      <input
+        type="text"
+        bind:value={searchQuery}
+        onkeydown={handleKeyDown}
+        placeholder={t('search:searchPlaceholder')}
+        disabled={isSearching}
+      />
+      <button
+        type="submit"
+        disabled={isButtonDisabled}
+      >
+        {isSearching ? 'Searching...' : 'Search'}
+      </button>
+    </div>
+
+    <!-- Channel filter indicator -->
+    {#if channelFilter}
+      <div class="channel-filter">
+        <CnIcon noun="filter" size="small" />
+        <span class="filter-label">{t('search:channel.filterActive', { channel: channelFilter })}</span>
+        <button
+          type="button"
+          onclick={() => {
+            channelFilter = '';
+            if (typeof window !== 'undefined') {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('channel');
+              window.history.replaceState({}, '', url.toString());
+            }
+          }}
+          class="clear-filter"
+          aria-label="Clear channel filter"
+        >
+          {t('search:channel.clearFilter')}
+        </button>
+      </div>
+    {/if}
+
+    {#if error}
+      <div class="surface error">
+        {error}
+      </div>
+    {/if}
+  </form>
+
+  {#if searchResults}
+    <section class="results-container">
+      <h3>{t('search:results', { count: searchResults[0].hits.length })}</h3>
+
+      <div class="results-list">
+        {#each searchResults[0].hits as hit}
+          <SearchResult result={hit} />
+        {/each}
+      </div>
+    </section>
+  {/if}
+</article>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cn-gap);
+  }
+
+  .search-form {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .search-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+  }
+
+  .search-controls input {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .channel-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-grid);
+    padding: calc(var(--cn-grid) * 0.5) var(--cn-gap);
+    background-color: var(--cn-color-surface-2);
+    border-radius: var(--cn-border-radius);
+    font-size: var(--cn-font-size-caption);
+    line-height: var(--cn-line-height-caption);
+  }
+
+  .filter-label {
+    flex: 1;
+  }
+
+  .clear-filter {
+    background: none;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    block-size: auto;
+    min-block-size: auto;
+    min-inline-size: auto;
+    color: var(--cn-color-link);
+    font-family: inherit;
+    font-size: var(--cn-font-size-caption);
+    font-weight: var(--cn-font-weight-caption);
+    line-height: var(--cn-line-height-caption);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    cursor: pointer;
+  }
+
+  .clear-filter::before,
+  .clear-filter::after {
+    display: none;
+  }
+
+  .clear-filter:hover {
+    color: var(--cn-color-link-hover);
+    box-shadow: none;
+  }
+
+  .results-container {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .results-list {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+</style>
 

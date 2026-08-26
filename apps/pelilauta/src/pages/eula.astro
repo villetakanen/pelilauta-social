@@ -11,7 +11,7 @@ if (!eulaDoc) {
 const { Content } = await render(eulaDoc);
 ---
 
-<ModalPage title={t('app:docs.title')} backHref="/">
+<ModalPage title={t('login:eula.title')} backHref="/">
   <EulaForm client:only="svelte">
     <Content />
   </EulaForm>

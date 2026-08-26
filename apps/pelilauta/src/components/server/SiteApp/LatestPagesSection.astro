@@ -6,10 +6,16 @@ interface Props {
   site: Site;
 }
 const { site } = Astro.props as Props;
-const withPosterCSS = site.posterURL ? 'surface p-2' : 'p-1';
 ---
 {site.useRecentChanges && (
-<section class={withPosterCSS}>
+<section class="surface">
   <LatestChanges site={site} />
 </section>
 )}
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

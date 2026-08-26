@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnAvatar from '@design-system/components/CnAvatar.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { profile } from '@stores/session/profile';
 import { updateProfile } from 'src/firebase/client/profile/updateProfile';
@@ -7,7 +8,7 @@ import { type ProfileLink } from 'src/schemas/ProfileSchema';
 import { isValidUrl } from 'src/utils/client/isValidUrl';
 import { resizeImage } from 'src/utils/client/resizeImage';
 import { t } from 'src/utils/i18n';
-import { logout, uid } from '../../../stores/session';
+import { uid } from '../../../stores/session';
 
 let avatarURL = $state($profile?.avatarURL);
 let avatarFile = $state<File | null>(null);
@@ -20,11 +21,6 @@ $effect(() => {
   avatarURL = $profile?.avatarURL;
   bio = $profile?.bio;
 
-  // Only update links from profile if local changes match profile (initial load/reset)
-  // or simple check: if we haven't touched them?
-  // For simplicity in this patterns: always init, but we rely on 'changes' logic.
-  // Actually, we should only reset if profile changes externally.
-  // The pattern here seems to reset on every profile store update.
   if ($profile?.links) links = [...$profile.links];
 });
 
@@ -51,8 +47,6 @@ async function onFileChange(event: Event) {
   };
   reader.readAsDataURL(resizedFile);
 
-  document.getElementById('avatar-popover')?.removeAttribute('open');
-
   avatarFile = resizedFile;
 }
 
@@ -66,7 +60,7 @@ async function handleSubmit(event: Event) {
     avatarFile = null;
   }
 
-  const updates: Record<string, any> = {};
+  const updates: Record<string, unknown> = {};
   if (bio !== $profile?.bio) updates.bio = bio;
   if (JSON.stringify(links) !== JSON.stringify($profile?.links || []))
     updates.links = links;
@@ -96,126 +90,202 @@ function setNewLabel(event: Event) {
 function setNewUrl(event: Event) {
   newUrl = (event.target as HTMLInputElement).value;
 }
+
 function setBio(event: Event) {
   bio = (event.target as HTMLTextAreaElement).value;
-}
-async function logoutAction() {
-  await logout();
-  window.location.href = '/logout';
 }
 </script>
 
 <section class="surface">
   <h3>{t("settings:profile.title")}</h3>
 
-  <h4 class="text-h5 m-0">
-    {t("entries:profile.uid")}
-  </h4>
-  <p class="text-small text-low">{$uid}</p>
+  <div class="meta-field">
+    <span class="text-label">{t("entries:profile.uid")}</span>
+    <span class="text-small text-low">{$uid}</span>
+  </div>
 
-  <h4 class="text-h5 m-0">
-    {t("entries:profile.username")}
-  </h4>
-  <p class="text-small text-low">{$profile?.username}</p>
+  <div class="meta-field">
+    <span class="text-label">{t("entries:profile.username")}</span>
+    <span class="text-small text-low">{$profile?.username}</span>
+  </div>
 
   <hr />
 
-  <h4 class="mb-0">
-    {t("settings:profile.edit.title")}
-  </h4>
+  <h4>{t("settings:profile.edit.title")}</h4>
+  <p class="text-small text-low">{t("settings:profile.info")}</p>
 
-  <p class="text-small text-low">
-    {t("settings:profile.info")}
-  </p>
-
-  <form onsubmit={handleSubmit} class="flex flex-col">
-    <label for="avatar-file-input">
-      <span>{t("entries:profile.avatar")}</span><br />
+  <form onsubmit={handleSubmit}>
+    <label class="avatar-trigger">
+      <span class="text-label">{t("entries:profile.avatar")}</span>
       <input
         type="file"
         accept="image/*"
-        style="display: none;"
-        id="avatar-file-input"
+        class="visually-hidden"
         onchange={onFileChange}
       />
-      <cn-avatar-button
-        role="button"
-        tabindex="0"
-        src={avatarURL}
-        onkeydown={(e: KeyboardEvent) =>
-          e.key === "Enter" &&
-          document.getElementById("avatar-file-input")?.click()}
-        onclick={() => document.getElementById("avatar-file-input")?.click()}
-      ></cn-avatar-button>
+      <div class="avatar-wrapper">
+        <CnAvatar src={avatarURL} nick={$profile?.nick} size="large" aria-hidden />
+      </div>
     </label>
 
     <label>
       {t("entries:profile.bio")}
-      <textarea oninput={setBio} placeholder={t("entries:profile.bio")}
-        >{$profile?.bio}</textarea
-      >
+      <textarea
+        value={bio}
+        oninput={setBio}
+        placeholder={t("entries:profile.bio")}
+      ></textarea>
     </label>
 
-    <h4 class="mt-2 mb-0">Julkiset linkit</h4>
-    <p class="text-small text-low mt-0 mb-2">
-      Lisää linkkejä profiiliisi, esim. portfolio tai blogi.
-    </p>
+    <div class="links-section">
+      <h4>Julkiset linkit</h4>
+      <p class="text-small text-low">
+        Lisää linkkejä profiiliisi, esim. portfolio tai blogi.
+      </p>
 
-    <ul class="flex flex-col gap-1 p-0 m-0 list-none mb-2">
-      {#each links as link, index}
-        <li class="surface-2 radius-s">
-          <div class="flex flex-col overflow-hidden" style="max-width: 80%">
-            <span class="text-small text-high truncate">{link.label}</span>
-            <span
-              class="text-small text-low truncate"
-              style="font-size: 0.75rem">{link.url}</span
-            >
-          </div>
-          <button
-            type="button"
-            class="button-icon small"
-            onclick={() => removeLink(index)}
-            aria-label="Poista linkki"
-          >
-            <CnIcon noun="delete" size="small" />
-          </button>
-        </li>
-      {/each}
-    </ul>
+      {#if links.length > 0}
+        <ul class="links-list">
+          {#each links as link, index}
+            <li class="link-item">
+              <div class="link-info">
+                <span class="text-small text-high">{link.label}</span>
+                <span class="text-caption text-low">{link.url}</span>
+              </div>
+              <button
+                type="button"
+                class="text"
+                onclick={() => removeLink(index)}
+                aria-label="Poista linkki"
+              >
+                <CnIcon noun="delete" />
+              </button>
+            </li>
+          {/each}
+        </ul>
+      {/if}
 
-    <div class="flex flex-col gap-2 p-2 border radius-s">
-      <label class="text-small">
-        Otsikko
-        <input
-          type="text"
-          value={newLabel}
-          oninput={setNewLabel}
-          placeholder="Esim. Kotisivu"
-        />
-      </label>
-      <label class="text-small">
-        URL
-        <input
-          type="url"
-          value={newUrl}
-          oninput={setNewUrl}
-          placeholder="https://example.com"
-        />
-      </label>
-      <button
-        type="button"
-        class="button w-full"
-        onclick={addLink}
-        disabled={!newLabel || !newUrl || !isValidUrl(newUrl)}
-      >
-        Lisää linkki
-      </button>
+      <div class="add-link-box">
+        <label>
+          Otsikko
+          <input
+            type="text"
+            value={newLabel}
+            oninput={setNewLabel}
+            placeholder="Esim. Kotisivu"
+          />
+        </label>
+        <label>
+          URL
+          <input
+            type="url"
+            value={newUrl}
+            oninput={setNewUrl}
+            placeholder="https://example.com"
+          />
+        </label>
+        <button
+          type="button"
+          class="button"
+          onclick={addLink}
+          disabled={!newLabel || !newUrl || !isValidUrl(newUrl)}
+        >
+          Lisää linkki
+        </button>
+      </div>
     </div>
 
-    <div class="toolbar items-center mt-2">
+    <div class="text-end">
       <button type="submit" disabled={!changes}>
         {t("actions:save")}
       </button>
     </div>
   </form>
 </section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .meta-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .avatar-trigger {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--cn-grid) * 0.5);
+    cursor: pointer;
+  }
+
+  .avatar-wrapper {
+    display: inline-flex;
+    border-radius: 50%;
+  }
+
+  .avatar-trigger:focus-within .avatar-wrapper {
+    outline: 2px solid var(--cn-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .links-section {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+  }
+
+  .links-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--cn-grid) * 0.5);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .link-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--cn-grid) var(--cn-gap);
+    background-color: var(--cn-color-surface-2);
+    border-radius: var(--cn-border-radius-small);
+  }
+
+  .link-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-inline-size: 80%;
+  }
+
+  .link-info span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .add-link-box {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+    padding: var(--cn-gap);
+    background-color: var(--cn-color-surface-2);
+    border-radius: var(--cn-border-radius-small);
+  }
+</style>

@@ -5,15 +5,23 @@ import ProfileLink from '../../app/ProfileLink.svelte';
 import HandoutListItem from './HandoutListItem.svelte';
 </script>
 
-<section>
-
-  {#if $handouts.length === 0}
-    <p>No handouts available.</p>
-  {:else}
-    
-    {#each $handouts as handout}
+{#if $handouts.length === 0}
+  <p>No handouts available.</p>
+{:else}
+  <ul class="handouts-list">
+    {#each $handouts as handout (handout.key)}
       <HandoutListItem {handout} />     
     {/each}
-  {/if}
-</section>
+  </ul>
+{/if}
+
+<style>
+  .handouts-list {
+    display: grid;
+    row-gap: var(--cn-line);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>
 

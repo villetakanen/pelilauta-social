@@ -66,7 +66,7 @@ test.describe('Library Page - User Sites Store', () => {
 
     // Verify sorting buttons are present (text might be in Finnish)
     // Look for buttons in the toolbar
-    const toolbar = page.locator('nav.toolbar');
+    const toolbar = page.locator('nav.sort-controls');
     await expect(toolbar).toBeVisible();
 
     const sortButtons = toolbar.locator('button');
@@ -100,7 +100,7 @@ test.describe('Library Page - User Sites Store', () => {
 
     // The FilteredSites component filters based on filters.orderBy
     // Click the last button in toolbar to change sort (should be flowTime or name button)
-    const toolbar = page.locator('nav.toolbar');
+    const toolbar = page.locator('nav.sort-controls');
     const sortButton = toolbar.locator('button').last();
     await sortButton.click();
 

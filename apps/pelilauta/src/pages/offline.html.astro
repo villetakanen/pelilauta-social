@@ -9,36 +9,38 @@ const description = t('app:offline.description');
 ---
 
 <!doctype html>
-<html lang="en">
-  <BaseHead title={title} description={description} />
+<html lang="fi">
+  <BaseHead title={title} description={description} noSharing={true} />
   <body>
-    <main class="app-main" style="min-width: 100vw; min-height: 100vh;">
+    <main class="app-main">
       <div class="content-prose">
-      <section>
-        <div class="flex items-center">
-          <CnIcon noun="fox" size="large" />
-        </div>
-        
-        <h1 class="text-title mb-2">{title}</h1>
-        
-        <p class="text-body mb-3">
-          {t('app:offline.message') || 'Looks like you\'ve lost your connection to the realm! Don\'t worry, your adventure continues once you\'re back online.'}
-        </p>
-        
-        <div class="text-center">
-          <button 
-            onclick="window.location.reload()" 
-          >
-            {t('app:offline.tryAgain')}
-          </button>
+        <article class="surface offline-page">
+          <div class="text-center">
+            <CnIcon noun="fox" size="large" />
+          </div>
           
-          <button 
-            onclick="window.history.back()" 
-          >
-            {t('actions:cancel') || 'Go Back'}
-          </button>
-        </div>
-      </section>
+          <h1>{title}</h1>
+          
+          <p>
+            {t('app:offline.message')}
+          </p>
+          
+          <div class="actions text-end">
+            <button 
+              type="button"
+              class="text"
+              onclick="window.history.back()" 
+            >
+              {t('actions:cancel')}
+            </button>
+            <button 
+              type="button"
+              onclick="window.location.reload()" 
+            >
+              {t('app:offline.tryAgain')}
+            </button>
+          </div>
+        </article>
       </div>
     </main>
 
@@ -71,7 +73,7 @@ const description = t('app:offline.description');
       // Update page title based on connection status
       function updateConnectionStatus() {
         const isOnline = navigator.onLine;
-        document.title = isOnline ? 'Back Online - Pelilauta 16' : 'Offline - Pelilauta 16';
+        document.title = isOnline ? 'Back Online - Pelilauta' : 'Offline - Pelilauta';
       }
 
       window.addEventListener('online', updateConnectionStatus);
@@ -79,3 +81,10 @@ const description = t('app:offline.description');
     </script>
   </body>
 </html>
+
+<style>
+  .offline-page {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

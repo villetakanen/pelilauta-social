@@ -359,7 +359,12 @@ $effect(() => {
    * fields. Beside the canvas there is no order to choose.
    */
   .cn-editor-shell__frontmatter {
+    grid-row: 1;
     order: -1;
+  }
+
+  .cn-editor-shell__canvas {
+    grid-row: 2;
   }
 
   /*
@@ -379,7 +384,12 @@ $effect(() => {
     }
 
     .cn-editor-shell__frontmatter {
+      grid-row: 1;
       order: 0;
+    }
+
+    .cn-editor-shell__canvas {
+      grid-row: 1;
     }
   }
 

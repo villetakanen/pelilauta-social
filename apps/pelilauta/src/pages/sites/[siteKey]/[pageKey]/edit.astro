@@ -1,11 +1,10 @@
 ---
 import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
-import { PageSchema } from 'src/schemas/PageSchema';
-import { SiteSchema } from 'src/schemas/SiteSchema';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import PageEditorForm from '../../../../components/svelte/page-editor/PageEditorForm.svelte';
+import { getPageData, getSiteData } from '../../../../firebase/server/sites';
 import EditorPage from '../../../../layouts/EditorPage.astro';
 
 interface Props {
@@ -14,8 +13,6 @@ interface Props {
 }
 const { siteKey, pageKey } = Astro.params;
 
-// We want to fetch the site and the page server side - if we don't have
-// the siteKey or pageKey, we should redirect to a 404 page
 if (!siteKey || !pageKey) {
   logError('siteKey or pageKey not found', { siteKey, pageKey });
   return Astro.redirect('/404');
@@ -24,15 +21,13 @@ if (!siteKey || !pageKey) {
 const { uid, denied } = await requireSession(Astro);
 if (denied) return denied;
 
-// Fetch the site and page data from the api
-const siteResponse = await fetch(`${Astro.url.origin}/api/sites/${siteKey}`);
-const pageResponse = await fetch(
-  `${Astro.url.origin}/api/sites/${siteKey}/pages/${pageKey}.json`,
-);
+const [site, page] = await Promise.all([
+  getSiteData(siteKey),
+  getPageData(siteKey, pageKey, Astro.url),
+]);
 
-// If any of the requests fail, we should redirect to a 404 page
-if (!siteResponse.ok || !pageResponse.ok) {
-  if (!siteResponse.ok) {
+if (!site || !page) {
+  if (!site) {
     logError('site not found', { siteKey });
   } else {
     logError('page not found', { siteKey, pageKey });
@@ -44,14 +39,10 @@ if (!siteResponse.ok || !pageResponse.ok) {
  * A page is edited by a site member, owner or player: the same rule PageFabs uses
  * to offer the edit action, and the one `sites/[siteKey]/settings.astro` gates on.
  */
-const { isMember } = await verifySiteAccess(siteKey, uid);
+const { isMember } = await verifySiteAccess(site, uid);
 if (!isMember) {
   return Astro.redirect(`/sites/${siteKey}/${pageKey}`);
 }
-// Any client side conversions are already done in the API,
-// so we can just parse the the entities to typed objects
-const site = SiteSchema.parse(await siteResponse.json());
-const page = PageSchema.parse(await pageResponse.json());
 
 const title = `${t('app:shortname')} – ${t('site:editor.title')}`;
 const shortTitle = t('site:editor.title');

@@ -15,20 +15,47 @@ interface Props {
 const { handout }: Props = $props();
 </script>
 
-<li class="flex flex-row p-1">
-  <div class="grow">
+<li class="handout-row">
+  <div class="handout-title">
     <a href={`/sites/${handout.siteKey}/handouts/${handout.key}`}>
       {handout.title}
     </a>
   </div>
-  <span class="flex-none">
+  <span class="handout-readers">
     {#each handout?.readers || [] as reader}
-      <span style="padding-left: var(--cn-grid)">
+      <span class="reader-link">
         <ProfileLink uid={reader} />
       </span>
     {/each}
   </span>
-  <span class="flex-none">
+  <span class="handout-flowtime">
     {toDisplayString(handout.flowTime)}
   </span>
 </li>
+
+<style>
+  /*
+   * @todo No design-system capability publishes a listing row, so this row
+   * states its flex layout locally.
+   * Anchored at plans/debt/the-design-system-has-no-listing-row.md.
+   */
+  .handout-row {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .handout-title {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .handout-readers,
+  .handout-flowtime {
+    flex: 0 0 auto;
+  }
+
+  .reader-link {
+    padding-inline-start: var(--cn-grid);
+  }
+</style>

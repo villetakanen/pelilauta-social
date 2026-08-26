@@ -21,8 +21,19 @@ const currentSite = $derived.by(() => $site);
       <HandoutList />
     </article>
   {:else}
-    <div class="p-4">
+    <div>
       <p class="text-light">{t('common:loading')}</p>
     </div>
   {/if}
 </div>
+
+<style>
+  /*
+   * .surface publishes padding and containment only, so this box states
+   * the interval between its own child blocks.
+   */
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

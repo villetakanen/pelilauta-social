@@ -14,7 +14,7 @@ const debug = import.meta.env.SECRET_FEATURE_FLAG_DEBUG === 'true';
 <Library title={title} description={description}>
   <div class="content-prose">
     <h1>{t('app:settings.title')}</h1>
+    <SettingsAppT client:only="svelte" />
   </div>
-  <SettingsAppT client:only="svelte"/>
-  <div>{debug && <span>DEBUG MODE ACTIVE</span>}</div>
+  {debug && <div>DEBUG MODE ACTIVE</div>}
 </Library>

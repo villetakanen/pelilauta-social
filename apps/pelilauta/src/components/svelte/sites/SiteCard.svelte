@@ -12,8 +12,8 @@ interface Props {
   showPlayerIndicator?: boolean;
 }
 const { site, showPlayerIndicator = false }: Props = $props();
-const owns = $derived(() => site.owners.includes($uid));
-const plays = $derived(() => site.players?.includes($uid));
+const owns = $derived(site.owners.includes($uid));
+const plays = $derived(site.players?.includes($uid));
 
 // Generate optimized image URLs for the site poster
 // Cards are 170-450px wide, so we use appropriate sizes
@@ -45,10 +45,10 @@ const coverSrcset = $derived.by(() => {
 >
   {#snippet actions()}
     <span class="membership">
-      {#if owns()}
+      {#if owns}
         <CnIcon noun="avatar" size="small" />
       {/if}
-      {#if showPlayerIndicator && plays()}
+      {#if showPlayerIndicator && plays}
         <CnIcon noun="adventurer" size="small" />
       {/if}
     </span>

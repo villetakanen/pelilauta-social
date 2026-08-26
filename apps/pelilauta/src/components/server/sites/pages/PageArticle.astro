@@ -10,9 +10,10 @@ interface Props {
 const { site, page } = Astro.props as Props;
 ---
 
-<article class="surface">
+<article class="surface page-article">
 
   <div 
+    class="text-prose"
     style="min-height: 70dvh" 
     set:html={page.htmlContent}>
   </div>
