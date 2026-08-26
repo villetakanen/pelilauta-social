@@ -1,9 +1,13 @@
 ---
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { type Channel, ChannelSchema } from 'src/schemas/ChannelSchema';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import ThreadEditorForm from '../../../components/svelte/thread-editor/ThreadEditorForm.svelte';
 import EditorPage from '../../../layouts/EditorPage.astro';
+
+const { denied } = await requireSession(Astro);
+if (denied) return denied;
 
 const { threadKey } = Astro.params;
 const title = `${t('app:shortname')} – ${t('threads:edit.title')}`;
@@ -13,7 +17,7 @@ const shortTitle = t('threads:edit.title');
 const threadResponse = await fetch(
   `${Astro.url.origin}/api/threads/${threadKey}.json`,
 );
-if (threadResponse.status === 404) {
+if (!threadResponse.ok) {
   return Astro.redirect('/404');
 }
 const threadData = await threadResponse.json();

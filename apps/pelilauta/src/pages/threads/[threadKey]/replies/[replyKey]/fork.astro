@@ -1,10 +1,14 @@
 ---
+import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { ChannelsSchema } from 'src/schemas/ChannelSchema';
 import { ReplySchema } from 'src/schemas/ReplySchema';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import ForkThreadApp from '../../../../../components/svelte/thread-editor/ForkThreadApp.svelte';
 import EditorPage from '../../../../../layouts/EditorPage.astro';
+
+const { denied } = await requireSession(Astro);
+if (denied) return denied;
 
 // We want to fetch the thread and the reply server side, and pass those to
 // the client form. All authz for ui will happen on the client side, and for
@@ -14,7 +18,7 @@ const { threadKey, replyKey } = Astro.params;
 const origin = new URL(Astro.request.url).origin;
 
 if (!threadKey || !replyKey) {
-  Astro.redirect('/404');
+  return Astro.redirect('/404');
 }
 
 // Fetch the thread, the reply, and channnels server side
@@ -27,7 +31,7 @@ const channelsResponse = await fetch(`${origin}/api/meta/channels.json`);
 // If any of the requests fail, we should redirect to a 404 page
 if (!threadResponse.ok || !replyResponse.ok || !channelsResponse.ok) {
   //logDebug('thread or reply not found', { threadKey, replyKey });
-  Astro.redirect('/404');
+  return Astro.redirect('/404');
 }
 
 // Parse the responses using the schemas (these come from the API, so this is a bit of extra)

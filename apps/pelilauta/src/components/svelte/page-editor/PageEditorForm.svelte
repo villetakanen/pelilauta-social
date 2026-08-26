@@ -86,7 +86,7 @@ async function handleSubmission(event: Event) {
   const changes: Partial<Page> = Object.fromEntries(formData.entries());
   changes.markdownContent = editorValue;
   changes.tags = tags;
-  changes.owners = page.owners || [uid];
+  changes.owners = page.owners || [$uid];
   try {
     await submitPageUpdate(page, changes);
     pushSessionSnack(t('site:snacks.pageUpdated'));

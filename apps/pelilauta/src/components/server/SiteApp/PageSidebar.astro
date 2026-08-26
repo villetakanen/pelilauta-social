@@ -51,7 +51,7 @@ if (site.useSidebar && site.sidebarKey) {
   
   {sidebarPage ? (
     /* Custom sidebar page content */
-    <div set:html={sidebarPage.htmlContent} class="border-t"/>
+    <div set:html={sidebarPage.htmlContent} class="border-t text-prose"/>
     <div class="text-end text-small">
       <a 
         href={`/sites/${site.key}/pages/${sidebarPage.key}`}
