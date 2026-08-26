@@ -28,21 +28,47 @@ try {
 ---
 <section class="content-cards">
   <header>
-    <div class="toolbar">
-      <h1>{t('site:siteList.title')}</h1>
-      <MySitesButton client:only="svelte"/>
-    </div>
+    <h1>{t('site:siteList.title')}</h1>
+    <MySitesButton client:only="svelte" />
   </header>
 
-  {sites && sites.map((site) => (
-    <SiteCard site={site} client:load />
-  ))}
+  <div class="card-grid">
+    {sites && sites.map((site) => (
+      <SiteCard site={site} client:load />
+    ))}
+  </div>
 
   <footer>
-    <div class="toolbar">
-      <p>{t('site:siteList.footer', { count: sites.length })}</p>
-      <MySitesButton client:only="svelte"/>
-    </div>
+    <p>{t('site:siteList.footer', { count: sites.length })}</p>
+    <MySitesButton client:only="svelte" />
   </footer>
-
 </section>
+
+<style>
+  /*
+   * @todo No design-system capability publishes a card container layout,
+   * so this view states its own layout rules locally.
+   * Anchored at plans/debt/the-design-system-has-no-card-container-layout.md.
+   */
+  .content-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cn-line);
+    margin-block-end: var(--cn-line);
+  }
+
+  header,
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cn-gap);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--cn-grid) * 32), 1fr));
+    gap: var(--cn-gap);
+  }
+</style>
