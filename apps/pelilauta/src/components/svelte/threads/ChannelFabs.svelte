@@ -15,11 +15,11 @@ const visible = $derived.by(() => {
 {#if visible}
   <a href={`/create/thread?channel=${channel}`} class="fab">
     <CnIcon noun="send" />
-    <span class="sm-hidden">{t('actions:create.thread')}</span>
+    <span>{t('actions:create.thread')}</span>
   </a>
 {:else}
-  <a href="/login" class="fab button">
+  <a href="/login" class="fab">
     <CnIcon noun="avatar" />
-    <span class="sm-hidden">{t('actions:login')}</span>
+    <span>{t('actions:login')}</span>
   </a>
 {/if}

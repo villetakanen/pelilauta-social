@@ -17,11 +17,8 @@ const visible = $derived.by(() => {
 </script>
 
 {#if visible}
-  <a
-    href={`/sites/${site.key}/create/clock`}
-    class="fab button"
-  >
-    <CnIcon noun="add" size="small" />
-    <span class="sm-hidden">{t('actions:create.clock')}</span>
+  <a href={`/sites/${site.key}/create/clock`} class="fab">
+    <CnIcon noun="add" />
+    <span>{t('actions:create.clock')}</span>
   </a>
 {/if}
