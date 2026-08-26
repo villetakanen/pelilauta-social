@@ -35,7 +35,7 @@ for (const category of categories) {
 
 const categorySlugs = categories.map((category) => category.slug);
 
-// Pages without a category go to category 't('site:toc.other')' or 't('site:toc.all')'
+// Pages without a category go to category 't('site:toc.uncategorized')' or 't('site:toc.all')'
 // Depending if there are categories or not
 const pagesWithoutCategory =
   site.pageRefs?.filter(
@@ -43,7 +43,7 @@ const pagesWithoutCategory =
   ) || [];
 if (pagesWithoutCategory.length > 0) {
   const category =
-    categories.length > 0 ? t('site:toc.other') : t('site:toc.all');
+    categories.length > 0 ? t('site:toc.uncategorized') : t('site:toc.all');
   // Sort the pages in the category
   if (sortBy === 'name') {
     pagesWithoutCategory?.sort((a, b) => a.name.localeCompare(b.name));
@@ -55,14 +55,29 @@ if (pagesWithoutCategory.length > 0) {
 }
 ---
 { categories.map((category) => (
-  <section>
-    <h4 class="downscaled mb-1">{category.name}</h4>
-    <ul class="compact">
+  <section class="toc-category">
+    <h4>{category.name}</h4>
+    <ul class="toc-list">
       {pages.get(category.slug)?.map((page) => (
         <li>
-          <a href={`/sites/${site.key}/${page.key}`} class="hoverable">{page.name}</a>
+          <a href={`/sites/${site.key}/${page.key}`}>{page.name}</a>
         </li>
       ))}
     </ul>
   </section>
 ))}
+
+<style>
+  .toc-category {
+    display: grid;
+    row-gap: var(--cn-grid);
+  }
+
+  .toc-list {
+    display: grid;
+    row-gap: calc(var(--cn-grid) / 2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

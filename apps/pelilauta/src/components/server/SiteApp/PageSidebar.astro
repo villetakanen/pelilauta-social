@@ -10,7 +10,6 @@ interface Props {
   site: Site;
 }
 const { site } = Astro.props as Props;
-const withPosterCSS = site.posterURL ? 'surface p-2' : 'p-1';
 
 // If a sidebarKey is set, fetch the custom sidebar page
 let sidebarPage: Page | null = null;
@@ -36,8 +35,8 @@ if (site.useSidebar && site.sidebarKey) {
 }
 ---
 {site.useSidebar && (
-<article class={withPosterCSS}>
-  <h3 class="downscaled">{site.name}</h3>
+<article class="surface">
+  <h3>{site.name}</h3>
   {site.posterURL && (
     <img src={site.posterURL} alt={site.name} class="poster" />
   )}
@@ -51,10 +50,10 @@ if (site.useSidebar && site.sidebarKey) {
   
   {sidebarPage ? (
     /* Custom sidebar page content */
-    <div set:html={sidebarPage.htmlContent} class="border-t text-prose"/>
+    <div set:html={sidebarPage.htmlContent} class="text-prose"/>
     <div class="text-end text-small">
       <a 
-        href={`/sites/${site.key}/pages/${sidebarPage.key}`}
+        href={`/sites/${site.key}/${sidebarPage.key}`}
         >
         {t('site:navigation.sidebar', {name: sidebarPage.name})}
       </a>
@@ -65,3 +64,22 @@ if (site.useSidebar && site.sidebarKey) {
   )}
 </article>
 )}
+
+<style>
+  /*
+   * .surface publishes padding and containment only, so this box states
+   * the interval between its own child blocks.
+   */
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .poster {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--cn-border-radius-large);
+    object-fit: cover;
+  }
+</style>

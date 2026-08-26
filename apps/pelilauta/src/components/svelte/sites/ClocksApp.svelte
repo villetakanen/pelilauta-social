@@ -16,11 +16,13 @@ const empty = $derived.by(() => {
 </script>
 
 <div class="content-prose">
-  <article>
+  <article class="surface">
     <h2>{t('site:clocks.title')}</h2>
-    <ul>
-      {#each $clocks as clock, i}
-        <StoryClock {clock} />
+    <ul class="clocks-list">
+      {#each $clocks as clock (clock.key)}
+        <li>
+          <StoryClock {clock} />
+        </li>
       {/each}
     </ul>
     {#if empty}
@@ -28,3 +30,22 @@ const empty = $derived.by(() => {
     {/if}
   </article>
 </div>
+
+<style>
+  /*
+   * .surface publishes padding and containment only, so this box states
+   * the interval between its own child blocks.
+   */
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .clocks-list {
+    display: grid;
+    row-gap: var(--cn-line);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

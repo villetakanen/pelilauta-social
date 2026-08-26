@@ -39,7 +39,7 @@ const handoutResponse = await fetch(
   `${origin}/api/sites/${siteKey}/handouts/${id}.json`,
 );
 if (handoutResponse.status === 404) {
-  return Astro.redirect(`/sites/${siteKey}/handout/`);
+  return Astro.redirect(`/sites/${siteKey}/handouts`);
 }
 const handout = handoutFrom(
   toClientEntry(await handoutResponse.json()),

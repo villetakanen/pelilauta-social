@@ -1,10 +1,10 @@
 ---
 import { requireSession } from '@pelilauta/base/utils/requireSession';
 import { verifySiteAccess } from '@utils/server/auth/verifySiteAccess';
-import { getPageData, getSiteData } from '../../../../firebase/server/sites';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import PageEditorForm from '../../../../components/svelte/page-editor/PageEditorForm.svelte';
+import { getPageData, getSiteData } from '../../../../firebase/server/sites';
 import EditorPage from '../../../../layouts/EditorPage.astro';
 
 interface Props {
