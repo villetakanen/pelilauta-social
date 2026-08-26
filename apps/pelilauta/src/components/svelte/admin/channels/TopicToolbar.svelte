@@ -167,33 +167,39 @@ async function moveTopicDown() {
 }
 </script>
 
-<div class="toolbar border-b">
-  <h2 class="m-0 grow">{topic}</h2>
-  <button 
-    onclick={moveTopicUp}
-    class="icon"
-    disabled={!canMoveUp || isMoving}
-    aria-label={t('admin:topics.moveUp')}
-    >
-    {#if isMoving}
-      <CnLoader inline />
-    {:else}
-      <CnIcon noun="arrow-up" />
-    {/if}
-  </button>
-  <button 
-    onclick={moveTopicDown}
-    class="icon"
-    disabled={!canMoveDown || isMoving}
-    aria-label={t('admin:topics.moveDown')}
-    >
-    {#if isMoving}
-      <CnLoader inline />
-    {:else}
-      <CnIcon noun="arrow-down" />
-    {/if}
-  </button>
+<div class="topic-toolbar">
+  <h2>{topic}</h2>
+  <div class="topic-actions">
     <button 
+      type="button"
+      onclick={moveTopicUp}
+      class="text"
+      disabled={!canMoveUp || isMoving}
+      aria-label={t('admin:topics.moveUp')}
+      title={t('admin:topics.moveUp')}
+    >
+      {#if isMoving}
+        <CnLoader inline />
+      {:else}
+        <CnIcon noun="arrow-up" />
+      {/if}
+    </button>
+    <button 
+      type="button"
+      onclick={moveTopicDown}
+      class="text"
+      disabled={!canMoveDown || isMoving}
+      aria-label={t('admin:topics.moveDown')}
+      title={t('admin:topics.moveDown')}
+    >
+      {#if isMoving}
+        <CnLoader inline />
+      {:else}
+        <CnIcon noun="arrow-down" />
+      {/if}
+    </button>
+    <button 
+      type="button"
       onclick={deleteTopic}
       class="text"
       disabled={hasChannels || isDeleting}
@@ -206,5 +212,26 @@ async function moveTopicDown() {
         <CnIcon noun="delete" />
       {/if}
     </button>
-
+  </div>
 </div>
+
+<style>
+  .topic-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cn-gap);
+    border-block-end: 1px solid var(--cn-color-border);
+    padding-block: var(--cn-grid);
+  }
+
+  .topic-toolbar h2 {
+    margin: 0;
+  }
+
+  .topic-actions {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cn-grid) * 0.5);
+  }
+</style>

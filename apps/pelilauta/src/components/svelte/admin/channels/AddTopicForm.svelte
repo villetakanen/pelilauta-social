@@ -47,44 +47,53 @@ function handleCancel() {
 }
 </script>
 
-<div class="surface elevation-1 p-4 mb-2">
-  <form onsubmit={handleSubmit}>
-    <div class="flex gap-2 items-end">
-            <div class="grow">
-        <label for="topic-name-input" class="block text-caption mb-1">{t('admin:topics.create.name')}:</label>
-        <input
-          id="topic-name-input"
-          type="text"
-          bind:value={topicName}
-          placeholder={t('admin:topics.create.placeholder')}
-          class="w-full"
-          maxlength="50"
-          required
-          disabled={isSubmitting}
-        />
-      </div>
-      <div class="flex gap-1">
-        <button 
-          type="submit" 
-           
-          disabled={!topicName.trim() || isSubmitting}
-        >
-          {#if isSubmitting}
-            <CnLoader inline />
-          {:else}
-            <CnIcon noun="tag" />
-          {/if}
-          <span>{t('admin:topics.create.save')}</span>
-        </button>
-        <button 
-          type="button" 
-          onclick={handleCancel} 
-          
-          disabled={isSubmitting}
-        >
-          {t('actions:cancel')}
-        </button>
-      </div>
+<div class="surface add-topic-surface">
+  <form onsubmit={handleSubmit} class="add-topic-form">
+    <label>
+      {t('admin:topics.create.name')}
+      <input
+        type="text"
+        bind:value={topicName}
+        placeholder={t('admin:topics.create.placeholder')}
+        maxlength="50"
+        required
+        disabled={isSubmitting}
+      />
+    </label>
+    <div class="actions">
+      <button 
+        type="button" 
+        class="text"
+        onclick={handleCancel} 
+        disabled={isSubmitting}
+      >
+        <span>{t('actions:cancel')}</span>
+      </button>
+      <button 
+        type="submit" 
+        disabled={!topicName.trim() || isSubmitting}
+      >
+        {#if isSubmitting}
+          <CnLoader inline />
+        {:else}
+          <CnIcon noun="tag" />
+        {/if}
+        <span>{t('admin:topics.create.save')}</span>
+      </button>
     </div>
   </form>
 </div>
+
+<style>
+  .add-topic-form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>
