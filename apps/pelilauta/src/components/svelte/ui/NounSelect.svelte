@@ -239,39 +239,39 @@ function handleKeydown(event: KeyboardEvent) {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-s);
+  padding: calc(var(--cn-grid) * 1.5) var(--cn-gap);
+  background: var(--cn-color-field);
+  border: 1px solid var(--cn-color-field-border);
+  border-radius: var(--cn-border-radius-small);
   cursor: pointer;
-  transition: all 0.2s ease;
-  gap: 0.5rem;
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui), border-color var(--cn-duration-ui) var(--cn-easing-ui);
+  gap: var(--cn-grid);
 }
 
 .noun-select-trigger:hover:not(:disabled) {
-  background: var(--color-surface-hover);
-  border-color: var(--color-border-hover);
+  background: var(--cn-color-field-hover);
+  border-color: var(--cn-color-field-border-hover);
 }
 
 .noun-select-trigger:focus {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
-  border-color: var(--color-primary);
+  border-color: var(--cn-color-field-border-focus);
 }
 
 .noun-select-trigger:disabled {
-  opacity: 0.5;
+  opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
 }
 
 .noun-select-trigger.small {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  padding: var(--cn-grid) calc(var(--cn-grid) * 1.5);
+  font-size: var(--cn-font-size-small);
 }
 
 .noun-select-trigger.large {
-  padding: 1rem 1.25rem;
-  font-size: 1.125rem;
+  padding: var(--cn-gap) calc(var(--cn-grid) * 2.5);
+  font-size: var(--cn-font-size-text);
 }
 
 .icon-name {
@@ -281,7 +281,7 @@ function handleKeydown(event: KeyboardEvent) {
 }
 
 .placeholder {
-  color: var(--color-text-low);
+  color: var(--cn-color-text-low);
   font-style: italic;
   flex-grow: 1;
   text-align: left;
@@ -293,13 +293,13 @@ function handleKeydown(event: KeyboardEvent) {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-s);
+  background: var(--cn-color-surface-2);
+  border: 1px solid var(--cn-color-border);
+  border-radius: var(--cn-border-radius-small);
   /* light-dark, not a media query: the document's scheme decides, and the
      account's stored theme may force it against the OS preference. */
   box-shadow: 0 4px 12px light-dark(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.4));
-  margin-top: 0.25rem;
+  margin-top: calc(var(--cn-grid) * 0.5);
   max-height: 300px;
   overflow: hidden;
   display: flex;
@@ -308,23 +308,23 @@ function handleKeydown(event: KeyboardEvent) {
 
 .search-container {
   position: relative;
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--cn-grid);
+  border-bottom: 1px solid var(--cn-color-border);
 }
 
 .search-input {
   width: 100%;
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  font-size: 0.875rem;
+  padding: var(--cn-grid) calc(var(--cn-grid) * 4) var(--cn-grid) calc(var(--cn-grid) * 1.5);
+  border: 1px solid var(--cn-color-field-border);
+  border-radius: var(--cn-border-radius-small);
+  background: var(--cn-color-field);
+  font-size: var(--cn-font-size-small);
 }
 
 .search-input:focus {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
-  border-color: var(--color-primary);
+  border-color: var(--cn-color-field-border-focus);
 }
 
 /*
@@ -336,11 +336,11 @@ function handleKeydown(event: KeyboardEvent) {
  */
 .search-container :global(.cn-icon) {
   position: absolute;
-  right: 1rem;
+  right: var(--cn-gap);
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  opacity: 0.5;
+  opacity: var(--cn-disabled-opacity);
 }
 
 .icons-list {
@@ -352,40 +352,40 @@ function handleKeydown(event: KeyboardEvent) {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: calc(var(--cn-grid) * 1.5) var(--cn-gap);
   background: none;
   border: none;
   cursor: pointer;
-  gap: 0.75rem;
-  transition: background-color 0.2s ease;
+  gap: calc(var(--cn-grid) * 1.5);
+  transition: background-color var(--cn-duration-ui) var(--cn-easing-ui);
   text-align: left;
 }
 
 .icon-option:hover {
-  background: var(--color-surface-hover);
+  background: var(--cn-color-hover);
 }
 
 .icon-option.focused {
-  background: var(--color-surface-hover);
-  outline: 2px solid var(--color-focus);
+  background: var(--cn-color-hover);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: -2px;
 }
 
 .icon-option.selected {
-  background: var(--color-primary-low);
-  color: var(--color-primary);
+  background: var(--cn-color-selection);
+  color: var(--cn-color-text-high);
   font-weight: 500;
 }
 
 .icon-option:focus {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: -2px;
 }
 
 .empty-state {
-  padding: 2rem 1rem;
+  padding: var(--cn-line) var(--cn-gap);
   text-align: center;
-  color: var(--color-text-low);
+  color: var(--cn-color-text-low);
   font-style: italic;
 }
 

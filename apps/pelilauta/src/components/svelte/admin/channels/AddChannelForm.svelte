@@ -95,46 +95,42 @@ function handleSubmit(event: SubmitEvent) {
 </script>
 
 {#if success}
-  <div class="p-4 border border-success radius-s bg-success-low mb-4">
-    <p class="text-success">
+  <div class="surface info">
+    <p>
       <CnIcon noun="check" size="small" />
       {t('admin:channels.add.success', { name: channelName })}
     </p>
   </div>
 {:else}
-  <form onsubmit={handleSubmit} class="space-y-4">
+  <form onsubmit={handleSubmit} class="surface add-channel-form">
     {#if error}
-      <div class="p-4 border border-error radius-s bg-error-low">
-        <p class="text-error">
+      <div class="surface error">
+        <p>
           <CnIcon noun="info" size="small" />
           {error}
         </p>
       </div>
     {/if}
 
-    <fieldset class="space-y-4">
-      <label class="block">
-        <span class="text-sm font-semibold">{t('admin:channels.add.form.name')} *</span>
+    <fieldset class="fields">
+      <label>
+        {t('admin:channels.add.form.name')} *
         <input
           type="text"
           bind:value={channelName}
           placeholder={t('admin:channels.add.form.namePlaceholder')}
-          class="w-full mt-1 px-3 py-2 border rounded-md"
           required 
           disabled={isSaving}
         />
-       
-          
       </label>
-      <p class="text-caption mt-1">
-            {t('admin:channels.add.form.urlSlugPrefix')} <code>{`[${window.location.origin}/channels/${channelSlug || '[slug]'}]`}</code>
+      <p class="text-caption">
+        {t('admin:channels.add.form.urlSlugPrefix')} <code>{typeof window !== 'undefined' ? `${window.location.origin}/channels/${channelSlug || '[slug]'}` : `/channels/${channelSlug || '[slug]'}`}</code>
       </p>
             
-      <label class="block">
-        <span class="text-sm font-semibold">{t('admin:channels.add.form.category')} *</span>
+      <label>
+        {t('admin:channels.add.form.category')} *
         <select
           bind:value={selectedCategory}
-          class="w-full mt-1 px-3 py-2 border rounded-md"
           required
           disabled={$forumTopics.length === 0 || isSaving}
         >
@@ -148,54 +144,51 @@ function handleSubmit(event: SubmitEvent) {
           {/if}
         </select>
         {#if $forumTopics.length === 0}
-          <p class="text-caption text-warning mt-1">
+          <p class="text-caption text-warning">
             {t('admin:channels.add.form.categoryEmptyHelper')}
           </p>
         {/if}
       </label>
 
-      <label class="block">
-        <span class="text-sm font-semibold">{t('admin:channels.add.form.icon')} *</span>
-        <div class="mt-1">
-          <NounSelect 
-            bind:value={icon}
-            defaultValue="discussion"
-            placeholder={t('admin:channels.add.form.iconPlaceholder')}
-            searchable
-            required
-            disabled={isSaving}
-          />
-        </div>
-        <p class="text-caption mt-1">
+      <div class="icon-field-row">
+        <span class="field-title">{t('admin:channels.add.form.icon')} *</span>
+        <NounSelect 
+          bind:value={icon}
+          defaultValue="discussion"
+          placeholder={t('admin:channels.add.form.iconPlaceholder')}
+          searchable
+          required
+          disabled={isSaving}
+        />
+        <p class="text-caption">
           {t('admin:channels.add.form.iconHelper')}
         </p>
-      </label>
+      </div>
     </fieldset>
 
     <!-- Action buttons -->
-    <div class="toolbar pt-4">
+    <div class="actions">
       <button 
         type="button" 
-         
-        onclick={handleCancel} 
-        disabled={isSaving}
-      >
-        {t('admin:channels.add.form.actions.cancel')}
-      </button>
-      
-      <button 
-        type="button"
         class="text"
         onclick={resetForm}
         disabled={isSaving}
       >
         <CnIcon noun="spiral" />
-        {t('admin:channels.add.form.actions.reset')}
+        <span>{t('admin:channels.add.form.actions.reset')}</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="text"
+        onclick={handleCancel} 
+        disabled={isSaving}
+      >
+        <span>{t('admin:channels.add.form.actions.cancel')}</span>
       </button>
       
       <button 
         type="submit" 
-         
         disabled={isSaving || !channelName || !selectedCategory}
       >
         {#if isSaving}
@@ -208,3 +201,35 @@ function handleSubmit(event: SubmitEvent) {
     </div>
   </form>
 {/if}
+
+<style>
+  .add-channel-form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  fieldset.fields {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .icon-field-row {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+  }
+
+  .field-title {
+    color: var(--cn-color-field-label);
+    font-size: var(--cn-font-size-small);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>

@@ -68,16 +68,16 @@ async function handleTestError() {
 
 <style>
 .feedback {
-  font-size: 0.75rem;
-  padding: 0.25rem 0;
-  margin-top: 0.25rem;
+  font-size: var(--cn-font-size-caption);
+  padding-block: calc(var(--cn-grid) * 0.5);
+  margin-block-start: calc(var(--cn-grid) * 0.5);
 }
 
 .feedback.success {
-  color: var(--color-success);
+  color: var(--cn-color-info);
 }
 
 .feedback.error {
-  color: var(--color-error);
+  color: var(--cn-color-error);
 }
 </style>

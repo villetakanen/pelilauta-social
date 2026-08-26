@@ -9,16 +9,14 @@ const denied = await requireAdmin(Astro);
 if (denied) return denied;
 ---
 
----
 <ModalPage
   title={t('admin:title')}
   shortTitle={t('admin:channels.add.shortTitle')}
   backHref="/admin/channels"
 >
   <section class="content-prose">
-    <article>
-
-      <header class="mb-2">
+    <article class="add-channel-article">
+      <header>
         <h1>{t('admin:channels.add.title')}</h1>
         <p class="text-small text-low">
           {t('admin:channels.add.description')}
@@ -27,10 +25,17 @@ if (denied) return denied;
       
       <AddChannelForm client:only="svelte" />
       
-      <aside class="surface mt-2">
+      <aside class="surface">
         <h3>{t('admin:channels.add.guidelines.title')}</h3>
         <p>{t('admin:channels.add.guidelines.items.unique')}</p>
       </aside>
     </article>
   </section>
 </ModalPage>
+
+<style>
+  .add-channel-article {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
