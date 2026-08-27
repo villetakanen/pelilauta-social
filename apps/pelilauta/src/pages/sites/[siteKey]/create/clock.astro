@@ -27,6 +27,10 @@ const site = SiteSchema.parse({
 <ModalPage title={site.name} backHref={`/sites/${site.key}/clocks`}>
   <div class="content-prose">
     <h1>{t('site:clocks.create.title')}</h1>
+    <CreateClockApp site={site} client:only="svelte" />
   </div>
-  <CreateClockApp site={site} client:only="svelte" />
 </ModalPage>
+
+<script>
+  import '@11thdeg/cn-story-clock';
+</script>
