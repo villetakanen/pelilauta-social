@@ -108,7 +108,7 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
 </script>
 
 <div class="nickname-input">
-  <CnAvatar {nick} src={avatarUrl} aria-hidden />
+  <CnAvatar nick={currentNick || nick} src={avatarUrl} aria-hidden />
   <fieldset>
     <label>
       {t("entries:profile.nick")}
@@ -123,7 +123,7 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
     {#if exists}
       <p class="nickname-error">{t("login:eula.nickTaken")}</p>
     {/if}
-    <p>
+    <p class="username-handle">
       <strong>{t("entries:profile.username")}: </strong>
       <span>{handle}</span>
     </p>
@@ -139,6 +139,8 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
   }
 
   fieldset {
+    display: grid;
+    gap: var(--cn-grid);
     min-inline-size: 0;
     margin: 0;
     padding: 0;
@@ -151,5 +153,12 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
 
   .nickname-error {
     color: var(--cn-color-error);
+    font-size: var(--cn-font-size-caption);
+    line-height: var(--cn-line-height-caption);
+  }
+
+  .username-handle {
+    font-size: var(--cn-font-size-small);
+    line-height: var(--cn-line-height-small);
   }
 </style>
