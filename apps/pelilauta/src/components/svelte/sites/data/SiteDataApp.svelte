@@ -16,7 +16,7 @@ $site = initialSite;
   <MembersOnly site={$site}>
     <section>
       <h1>{t('site:data.title')}</h1>
-      <p class="downscaled text-low">{t('site:data.description')}</p>
+      <p>{t('site:data.description')}</p>
     </section>
     <ExportAsMdSection />
     <section>
