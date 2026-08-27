@@ -33,36 +33,58 @@ function setSelectedUid(e: Event) {
 }
 </script>
 
-{#if $site }
-<div>
-  <h2>{t('site:owners.title')}</h2>
-  <p class="downscaled">{t('site:owners.description')}</p>
-  
-  {#each $site.owners as owner}
-  <div class="toolbar">
-    <ProfileLink uid={owner} />
-    <button
-      aria-label={t('actions:remove')}
-      type="button"
-      disabled={$uid === owner}
-      onclick={() => dropOwner(owner)}>
-      <CnIcon noun="delete" />
-    </button>
-  </div>
-{/each}
+{#if $site}
+  <section class="surface">
+    <h2>{t('site:owners.title')}</h2>
+    <p>{t('site:owners.description')}</p>
+    
+    {#each $site.owners as owner}
+      <div class="member-row">
+        <ProfileLink uid={owner} />
+        <button
+          aria-label={t('actions:remove')}
+          type="button"
+          class="button text"
+          disabled={$uid === owner}
+          onclick={() => dropOwner(owner)}>
+          <CnIcon noun="delete" />
+        </button>
+      </div>
+    {/each}
 
-<hr>
+    <hr>
 
-<form onsubmit={addOwner} class="toolbar">
-  <UserSelect
-    omit={$site.owners}
-    label={t('site:owners.add')}
-    value={selectedUid}
-    onchange={setSelectedUid}
-  />
-  <button type="submit" class="no-shrink"
-    disabled={$site.owners.includes(selectedUid) || selectedUid === '-'}
-  >{t('actions:add')}</button>
-</form>
-</div>
+    <form onsubmit={addOwner} class="add-form">
+      <UserSelect
+        omit={$site.owners}
+        label={t('site:owners.add')}
+        value={selectedUid}
+        onchange={setSelectedUid}
+      />
+      <button
+        type="submit"
+        disabled={$site.owners.includes(selectedUid) || selectedUid === '-'}
+      >{t('actions:add')}</button>
+    </form>
+  </section>
 {/if}
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .member-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .add-form {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--cn-gap);
+  }
+</style>

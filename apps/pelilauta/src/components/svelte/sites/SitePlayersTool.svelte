@@ -63,9 +63,9 @@ function setUsePlayers(e: Event & { currentTarget: HTMLInputElement }) {
 }
 </script>
 
-<div>
+<section class="surface">
   <h2>{t('site:players.title')}</h2>
-  <p class="downscaled">{t('site:players.description')}</p>
+  <p>{t('site:players.description')}</p>
 
   <CnToggle
     label={t('site:players.usePlayers')}
@@ -77,11 +77,12 @@ function setUsePlayers(e: Event & { currentTarget: HTMLInputElement }) {
 {#if $site.players?.length}
 
 {#each listedPlayers as player}
-  <div class="toolbar">
+  <div class="member-row">
     <ProfileLink uid={player} />
     <button
       aria-label={t('actions:remove')}
       type="button"
+      class="button text"
       disabled={$uid === player}
       onclick={() => dropPlayer(player)}>
       <CnIcon noun="delete" />
@@ -92,7 +93,7 @@ function setUsePlayers(e: Event & { currentTarget: HTMLInputElement }) {
 <hr>
 {/if}
 
-<form onsubmit={addPlayer} class="toolbar">
+<form onsubmit={addPlayer} class="add-form">
   <UserSelect
     omit={[...$site.owners, ...$site.players ?? []]}
     label={t('site:players.add')}
@@ -105,4 +106,24 @@ function setUsePlayers(e: Event & { currentTarget: HTMLInputElement }) {
 </form>
 
 {/if}
-</div>
+</section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .member-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .add-form {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--cn-gap);
+  }
+</style>
