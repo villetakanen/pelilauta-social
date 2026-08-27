@@ -25,6 +25,6 @@ if (denied) return denied;
 <Site {site} title={site.name}>
   <div class="content-prose">
     <h1>{t('site:options.title')}</h1>
+    <SiteOptionsApp site={site} client:only="svelte" />
   </div>
-  <SiteOptionsApp site={site} client:only="svelte" />
 </Site>
