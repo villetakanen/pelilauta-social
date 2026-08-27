@@ -5,7 +5,7 @@ export interface Props {
 const { tags } = Astro.props;
 ---
 {tags && tags.length > 0 &&
-  <div class="chip-list mt-2">
+  <div class="chip-list">
     {tags.map((tag) => (
       <a href={`/tags/${tag}`} class="chip">
         {tag}
