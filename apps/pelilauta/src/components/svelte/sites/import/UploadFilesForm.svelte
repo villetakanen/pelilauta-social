@@ -172,9 +172,9 @@ function clearUploads() {
 const hasFiles = $derived(uploadedFiles.length > 0);
 </script>
 
-<section class="surface p-2">
+<section class="surface">
   <h2>Upload Markdown Files</h2>
-  <p class="text-low">Select one or more .md files to import. Frontmatter will be parsed as page metadata.</p>
+  <p>Select one or more .md files to import. Frontmatter will be parsed as page metadata.</p>
   
   <input
     type="file"
@@ -185,22 +185,22 @@ const hasFiles = $derived(uploadedFiles.length > 0);
     style="display: none;"
   />
   
-  <div class="toolbar">
-    <button class="button" onclick={triggerFileSelect} disabled={isUploading}>
+  <div class="actions">
+    <button onclick={triggerFileSelect} disabled={isUploading} type="button">
       {isUploading ? 'Processing...' : 'Select Files'}
     </button>
     
     {#if hasFiles}
-      <button class="button" onclick={clearUploads}>
+      <button class="text" onclick={clearUploads} type="button">
         Clear ({uploadedFiles.length})
       </button>
     {/if}
   </div>
   
   {#if hasFiles}
-    <div class="mt-2">
-      <h3 class="downscaled">Files Ready for Import</h3>
-      <ul class="text-small">
+    <div>
+      <h3>Files Ready for Import</h3>
+      <ul>
         {#each uploadedFiles as file}
           <li>
             <strong>{file.name}</strong>
@@ -208,7 +208,7 @@ const hasFiles = $derived(uploadedFiles.length > 0);
               → "{file.frontmatter.title}"
             {/if}
             {#if file.frontmatter.category}
-              <span class="text-low">(category: {file.frontmatter.category})</span>
+              <span>(category: {file.frontmatter.category})</span>
             {/if}
           </li>
         {/each}
@@ -216,3 +216,16 @@ const hasFiles = $derived(uploadedFiles.length > 0);
     </div>
   {/if}
 </section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .actions {
+    display: flex;
+    gap: var(--cn-gap);
+    align-items: center;
+  }
+</style>

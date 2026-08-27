@@ -164,65 +164,66 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
 </script>
 
 {#if hasPages}
-<section class="surface p-2">
+<section class="surface">
   <h2>Import Preview</h2>
-  <p class="text-low">Review the files to be imported. Pages with matching names will automatically overwrite existing content. Remove any files you don't want to import.</p>
+  <p>Review the files to be imported. Pages with matching names will automatically overwrite existing content. Remove any files you don't want to import.</p>
   
-  <div class="toolbar mb-2">
-    <span class="text-small text-low">{pages.length} file{pages.length === 1 ? '' : 's'} ready</span>
-    <button class="button" onclick={clearAll}>Clear All</button>
+  <div class="preview-toolbar">
+    <p>{pages.length} file{pages.length === 1 ? '' : 's'} ready</p>
+    <button class="text" onclick={clearAll} type="button">Clear All</button>
   </div>
   
-  <div class="flex flex-col">
+  <div class="preview-list">
     {#each pages as page, index}
       {@const exists = pageExists(page.name || '')}
-      <article class="surface border p-2">
-        <div>
-          <div class="flex-1">
-            <h4 class="mb-1">
-              {page.name || page.fileName}
-              {#if page.category}
-                <span class="badge text-small ml-1">{page.category}</span>
-              {/if}
-            </h4>
-            <p class="text-small text-low mb-1">
-              Source: <code>{page.fileName}</code>
-            </p>
-            {#if page.markdownContent}
-              <p class="text-small text-low">
-                Content preview: {page.markdownContent.slice(0, 100)}{page.markdownContent.length > 100 ? '...' : ''}
-              </p>
+      <article class="surface elevation-1">
+        <div class="preview-item-header">
+          <h4>
+            {page.name || page.fileName}
+            {#if page.category}
+              <span class="chip">{page.category}</span>
             {/if}
-            
-            {#if exists}
-              <div class="flex items-center gap-2 mt-2">
-                {#if page.action === 'overwrite'}
-                  <span class="text-warning text-small">⚠️ Will overwrite existing page</span>
-                {:else}
-                  <span class="text-info text-small">ℹ️ Will create new page (with auto-generated name)</span>
-                {/if}
-              </div>
-            {:else}
-              <p class="text-success text-small mt-2">✅ Will create new page</p>
-            {/if}
-          </div>
-          
+          </h4>
           <button 
-            class="button"
+            class="text"
             onclick={() => removeFile(index)}
+            type="button"
           >
             Remove
           </button>
         </div>
+        <p>
+          Source: <code>{page.fileName}</code>
+        </p>
+        {#if page.markdownContent}
+          <p>
+            Content preview: {page.markdownContent.slice(0, 100)}{page.markdownContent.length > 100 ? '...' : ''}
+          </p>
+        {/if}
+        
+        {#if exists}
+          <div>
+            {#if page.action === 'overwrite'}
+              <p>⚠️ Will overwrite existing page</p>
+            {:else}
+              <p>ℹ️ Will create new page (with auto-generated name)</p>
+            {/if}
+          </div>
+        {:else}
+          <p>✅ Will create new page</p>
+        {/if}
       </article>
     {/each}
   </div>
   
-  <div class="toolbar mt-4">
+  <div class="text-end">
+    <button class="text" onclick={clearAll} disabled={importing} type="button">
+      Cancel
+    </button>
     <button 
-      class="button" 
       onclick={importPages}
       disabled={!canImport}
+      type="button"
     >
       {#if importing}
         Importing...
@@ -230,9 +231,32 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
         Import {pages.length} Page{pages.length === 1 ? '' : 's'}
       {/if}
     </button>
-    <button class="button" onclick={clearAll} disabled={importing}>
-      Cancel
-    </button>
   </div>
 </section>
 {/if}
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .preview-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .preview-list {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .preview-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>
