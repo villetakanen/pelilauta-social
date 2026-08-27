@@ -17,16 +17,21 @@ const previewContainerStyles = $derived.by(() => {
 </script>
 
 <section
-  class="surface elevation-1 radius-l" 
+  class="surface elevation-1" 
   style={previewContainerStyles}>
   <h2>{t('site:settings.theming.title')}</h2>
   
   <SiteCard {site} showPlayerIndicator />
-  
-  <br />
 
   <SiteThemeImageInput site={site} imageField="backgroundURL" />
   <SiteThemeImageInput site={site} imageField="posterURL" />
   <!--SiteThemeImageInput site={site} imageField="avatarURL" /-->
 
 </section>
+
+<style>
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

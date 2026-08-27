@@ -35,21 +35,23 @@ async function onSubmit(e: Event) {
 <details class="surface">
   <summary>{t('app:meta.dangerZone')}</summary>
 
-  <section class="surface radius-m warning">
+  <section class="surface error">
     <h3>{t('site:dangerZone.title')}</h3>
-    <p class="italic">{t('site:dangerZone.description')}</p>
+    <p>{t('site:dangerZone.description')}</p>
     <form onsubmit={onSubmit}>
-      <input
-        type="text"
-        name="deleteConfirm"
-        placeholder={deleteConfirmPhrase}
-        oninput={(e: Event) => {
-          setDeleteConfirm((e.target as HTMLInputElement).value);
-        }}
-      />
-      <div class="text-center">
+      <label>
+        <input
+          type="text"
+          name="deleteConfirm"
+          placeholder={deleteConfirmPhrase}
+          oninput={(e: Event) => {
+            setDeleteConfirm((e.target as HTMLInputElement).value);
+          }}
+        />
+      </label>
+      <div class="text-end">
         <button
-          class="cta notify"
+          class="cta"
           type="submit"
           disabled={deleteConfirm !== deleteConfirmPhrase}
         >
@@ -63,5 +65,12 @@ async function onSubmit(e: Event) {
 <style>
   summary {
     cursor: pointer;
+  }
+
+  details,
+  section,
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
   }
 </style>
