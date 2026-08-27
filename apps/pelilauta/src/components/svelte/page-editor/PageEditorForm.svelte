@@ -170,18 +170,18 @@ function cancel() {
   {/if}
 
   {#if contentMigrated}
-    <div class="alert warning flex flex-row items-center px-1">
+    <div class="surface notice">
       <CnIcon noun="info" />
       <p>{t('site:page.editor.contentMigrateWarning')}</p>
     </div>
   {/if}
 
   {#if tags && tags.length > 0}
-    <section class="tags py-1 elevation-1 flex">
+    <div class="chip-list">
       {#each tags as tag}
-        <span class="cn-tag">{tag}</span>
+        <span class="chip">{tag}</span>
       {/each}
-    </section>
+    </div>
   {/if}
 
   <section class="actions text-end">
@@ -208,6 +208,12 @@ function cancel() {
 {/snippet}
 
 <style>
+  .notice {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
   .actions {
     margin-block-start: var(--cn-line);
   }

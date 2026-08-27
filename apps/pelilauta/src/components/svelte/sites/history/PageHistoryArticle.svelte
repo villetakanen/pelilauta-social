@@ -108,7 +108,7 @@ $effect(() => {
 </script>
 
 <section>
-  <header class="surface p-2">
+  <header class="surface">
     <span>{t('site:page.history.revision', { index: revision })}</span>
     {#if revisionDetails}
       : <ProfileLink uid={revisionDetails.author} />
@@ -116,7 +116,7 @@ $effect(() => {
     {/if}
   </header>
 
-  <article class="surface p-2" style="overflow: auto;">
+  <article class="surface">
     {#if isLoading}
       <p>{t('site:page.history.loading')}</p>
     {:else if error}
@@ -126,8 +126,15 @@ $effect(() => {
     {:else}
       <div class="diff">
         {#each diffParts as part}
-          <div class:diff-added={part.added} class:diff-deletion={part.removed} class="flex flex-no-wrap">
-            {#if part.added}<span class="diff-indicator p-1">+</span>{/if}{#if part.removed}<span class="diff-indicator p-1">-</span>{/if}{part.value}
+          <div
+            class="diff-row"
+            class:diff-added={part.added}
+            class:diff-deletion={part.removed}
+          >
+            <span class="diff-indicator">
+              {#if part.added}+{/if}{#if part.removed}-{/if}
+            </span>
+            <span class="diff-content">{part.value}</span>
           </div>
         {/each}
       </div>
@@ -146,9 +153,40 @@ section {
   row-gap: var(--cn-line);
 }
 
+article {
+  overflow: auto;
+}
+
+.diff {
+  font-family: var(--cn-font-family-mono);
+  font-size: var(--cn-font-size-small, 0.875rem);
+  line-height: var(--cn-line);
+}
+
+.diff-row {
+  display: flex;
+  align-items: flex-start;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .diff-indicator {
   flex: none;
-  width: var(--cn-line);
-  align-items: flex-start;
+  inline-size: var(--cn-line);
+  user-select: none;
+}
+
+.diff-content {
+  flex: 1;
+}
+
+.diff-added {
+  background-color: color-mix(in oklch, var(--cn-color-info), transparent 85%);
+  color: var(--cn-color-text-high);
+}
+
+.diff-deletion {
+  background-color: color-mix(in oklch, var(--cn-color-error), transparent 85%);
+  color: var(--cn-color-text-high);
 }
 </style>
