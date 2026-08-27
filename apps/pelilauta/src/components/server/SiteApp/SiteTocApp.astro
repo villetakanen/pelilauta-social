@@ -71,21 +71,21 @@ if (pagesWithoutCategory.length > 0) {
 ---
 
 <div class="content-prose">
-  <article class="p-2 toolbar">
+  <header class="toc-header">
     <h1>
       {t("site:toc.title")}
     </h1>
     <SiteTocSettingsLink {site} client:only="svelte" />
-  </article>
+  </header>
 
   {
     categories.map((category) => (
-      <section class="surface p-2">
-        <h4 class="downscaled mb-1">{category.name}</h4>
-        <ul class="compact">
+      <section class="surface">
+        <h4>{category.name}</h4>
+        <ul class="toc-list">
           {pages.get(category.slug)?.map((page) => (
             <li>
-              <a href={`/sites/${site.key}/${page.key}`} class="hoverable">
+              <a href={`/sites/${site.key}/${page.key}`}>
                 {page.name}
               </a>
             </li>
@@ -95,3 +95,27 @@ if (pagesWithoutCategory.length > 0) {
     ))
   }
 </div>
+
+<style>
+  .toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+    margin-block-end: var(--cn-line);
+  }
+
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+    margin-block-end: var(--cn-line);
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    row-gap: var(--cn-grid);
+  }
+</style>

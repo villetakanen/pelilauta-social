@@ -1,6 +1,7 @@
 <script lang="ts">
 import { type CnListItem, CnSortableList } from '@11thdeg/cyan-lit';
 import CnIcon from '@design-system/components/CnIcon.svelte';
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
 import {
   type CategoryRef,
@@ -108,7 +109,7 @@ async function onsubmit(e: Event) {
 }
 </script>
 
-<section>
+<section class="surface">
   <h3>{t("site:toc.admin.categories.title")}</h3>
   <form {onsubmit}>
     {#if categories.length > 0}
@@ -123,10 +124,8 @@ async function onsubmit(e: Event) {
       <p class="info-text">{t("site:toc.admin.noCategories")}</p>
     {/if}
 
-    <div class="toolbar border">
-      <CnIcon noun="add" />
+    <div class="add-row">
       <input
-        class="grow"
         type="text"
         id="newCategory"
         name="newCategory"
@@ -135,16 +134,16 @@ async function onsubmit(e: Event) {
       />
 
       <button
-        class="no-shrink"
         disabled={!newCategory}
         type="button"
         onclick={addCategory}
       >
+        <CnIcon noun="add" />
         {t("actions:add")}
       </button>
     </div>
 
-    <div class="toolbar">
+    <div class="text-end">
       <button
         type="button"
         class="text"
@@ -155,10 +154,33 @@ async function onsubmit(e: Event) {
       </button>
       <button type="submit" disabled={!hasChanges || saving}>
         {#if saving}
-          <span class="spinner small"></span>
+          <CnLoader inline />
         {/if}
         {t("actions:save")}
       </button>
     </div>
   </form>
 </section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .add-row {
+    display: flex;
+    gap: var(--cn-gap);
+    align-items: center;
+  }
+
+  .add-row input {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+</style>
