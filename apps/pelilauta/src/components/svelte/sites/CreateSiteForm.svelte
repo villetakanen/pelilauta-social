@@ -109,62 +109,56 @@ function setUsePlainTextURLs(e: Event & { currentTarget: HTMLInputElement }) {
 </script>
 
 <WithAuth {allow}>
-  <div class="content-prose">
-    <section class="column">
-      <h1>{t('site:create.title')}</h1>
-      <p class="downscaled">
-        {t('site:create.description')}
-        <a href="/docs/31-create-site">{t('actions:learnMore')}</a>
-      </p>
-      <form onsubmit={onsubmit}>
-        <label>
-          {t('entries:site.name')}
-          <input
-            type="text"
-            name="name"
-            minlength="3"
-            required
-            onblur={onNameBlur}
-            data-error={reservedSiteName ? t('entries:site.errors.reserved') : undefined}
-            placeholder={t('entries:site.placeholders.name')}        
-          />
-        </label>
-        {#if reservedSiteName}
-          <p class="error p-1 downscaled">
-            {t('site:create.errors.reserved')}
-          </p>
-        {/if}
-        <p class="mt-1 break-all">
-          <code class="p-1">{`https://pelilauta.social/sites/${siteData.usePlainTextURLs ? siteData.key || '...' : '[auto]'}`}</code>
-        </p>
-
-        <label>
-          {t('entries:site.description')}
-          <textarea
-            name="description"
-            rows="3"
-            onblur={setDescription}
-            placeholder={t('entries:site.placeholders.description')}></textarea>
-        </label>
-
-        <SystemSelect system={siteData.system} {setSystem}/>
-        <p class="downscaled mt-0 pt-0">
-          {t('site:create.system.description')}
-        </p>
-
-        <CnToggle
-          label={t('actions:show.options')}
-          checked={options}
-          onchange={setOptions}
+  <section class="surface">
+    <form {onsubmit}>
+      <label>
+        {t('entries:site.name')}
+        <input
+          type="text"
+          name="name"
+          minlength="3"
+          required
+          onblur={onNameBlur}
+          data-error={reservedSiteName ? t('entries:site.errors.reserved') : undefined}
+          placeholder={t('entries:site.placeholders.name')}
         />
+      </label>
+      {#if reservedSiteName}
+        <p class="surface error">
+          {t('site:create.errors.reserved')}
+        </p>
+      {/if}
+      <p>
+        <code>{`https://pelilauta.social/sites/${siteData.usePlainTextURLs ? siteData.key || '...' : '[auto]'}`}</code>
+      </p>
 
-        {#if options}
-        <div class="border p-1">
+      <label>
+        {t('entries:site.description')}
+        <textarea
+          name="description"
+          rows="3"
+          onblur={setDescription}
+          placeholder={t('entries:site.placeholders.description')}></textarea>
+      </label>
+
+      <SystemSelect system={siteData.system} {setSystem}/>
+      <p>
+        {t('site:create.system.description')}
+      </p>
+
+      <CnToggle
+        label={t('actions:show.options')}
+        checked={options}
+        onchange={setOptions}
+      />
+
+      {#if options}
+        <div class="options">
           <CnToggle
             label={t('entries:site.hidden')}
             checked={siteData.hidden ?? false}
             onchange={setHidden} />
-          <p class="downscaled mt-0 pt-0 px-1">
+          <p>
             {t('site:create.hidden.description')}
           </p>
 
@@ -172,29 +166,32 @@ function setUsePlainTextURLs(e: Event & { currentTarget: HTMLInputElement }) {
             label={t('entries:site.customPageKeys')}
             checked={siteData.usePlainTextURLs ?? false}
             onchange={setUsePlainTextURLs} />
-
-          <p class="downscaled mt-0 pt-0 px-1">
+          <p>
             {t('site:create.plaintexturls.description')}
           </p>
         </div>
-        {/if}
+      {/if}
 
-        <div class="text-end">
-          <a href="/library" class="button text">
-            {t('actions:cancel')}
-          </a>
-          <button 
-            disabled={!valid}
-            type="submit" 
-            class="cta">
-            {t('actions:create.site')}
-          </button>
-        </div>
-
-      </form>
-      <!--div class="debug">
-        <pre>{JSON.stringify({ siteData }, null, 2)}</pre>
-      </div-->    
-    </section>
-  </div>
+      <div class="text-end">
+        <a href="/library" class="button text">
+          {t('actions:cancel')}
+        </a>
+        <button 
+          disabled={!valid}
+          type="submit" 
+          class="cta">
+          {t('actions:create.site')}
+        </button>
+      </div>
+    </form>
+  </section>
 </WithAuth>
+
+<style>
+  .surface,
+  form,
+  .options {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
