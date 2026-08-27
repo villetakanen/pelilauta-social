@@ -18,13 +18,25 @@ if (!assetData) {
 const asset = parseAsset(assetData);
 ---
 <div class="content-golden">
-  <article class="elevation-1 p-2">
+  <article class="surface elevation-1">
     <figure>
-        <img src={asset.url} alt={asset.name} />
-        <figcaption>{asset.name}</figcaption>
+      <img src={asset.url} alt={asset.name} />
+      <figcaption>{asset.name}</figcaption>
     </figure>
   </article>
-  <article>
+  <article class="surface">
     <AssetEditorComp {site} {asset} client:only="svelte" />
   </article>
 </div>
+
+<style>
+  figure {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  img {
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+</style>
