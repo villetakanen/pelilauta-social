@@ -1,5 +1,6 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
+import CnLoader from '@design-system/components/CnLoader.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
@@ -34,15 +35,27 @@ async function regenPageRefs() {
   }
 }
 </script>
+
 {#if visible}
-  <section class="border p-2 mt-2">
+  <section class="surface">
     <h2>{t('site:toc.regenerate.title')}</h2>
     <p>{t('site:toc.regenerate.info')}</p>
-    <div class="text-center">
-      <button type="button" class="button" onclick={regenPageRefs}>
-        <CnIcon noun="tools" />
+    <div class="text-end">
+      <button type="button" class="button" onclick={regenPageRefs} disabled={loading}>
+        {#if loading}
+          <CnLoader inline noun="tools" />
+        {:else}
+          <CnIcon noun="tools" />
+        {/if}
         <span>{t('site:toc.regenerate.action')}</span>
       </button>
     </div>
   </section>
 {/if}
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
