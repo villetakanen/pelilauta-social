@@ -27,6 +27,6 @@ const site = SiteSchema.parse({
 <ModalPage title={site.name} backHref={`/sites/${site.key}/handouts`}>
   <div class="content-prose">
     <h1>{t('site:handouts.create.title')}</h1>
+    <CreateHandout site={site} client:only="svelte" />
   </div>
-  <CreateHandout site={site} client:only="svelte" />
 </ModalPage>
