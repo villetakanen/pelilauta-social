@@ -33,6 +33,10 @@ level.
 A consistency check between two of our documents belongs at the Lint level.
 Where it does not fit there, one document generates the other.
 
+Check a generated stylesheet against its source using `generate-tokens.mjs --check` at the Lint level. Do not parse generated CSS in a unit test when the generator validates the token graph.
+
+Recompute derived container query geometry from track tokens in a unit test. A container query cannot read custom properties directly; the unit test verifies that the query literal matches the computed token sum.
+
 Never read a stylesheet to assert the form of a declaration. That is static
 analysis; where Biome cannot state the rule, it goes unenforced. Source is read
 only for what no browser reports — a `:visited` rule, a parse-guarded media
