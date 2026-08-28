@@ -91,7 +91,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     </div>
   {/if}
 
-  <h4 class="title">
+  <h4 class="title text-h4">
     {#if href}
       <a href={href}>
         {#if !cover && noun}
