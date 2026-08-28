@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # Content Container Layouts
@@ -79,11 +79,14 @@ holding children ends before it. Prose's column set fills the width offered, so 
 breakout there takes that whole width; a centred Golden or Triad row is narrower than
 the width offered, and a breakout spans the row.
 
-A container makes each of its children an inline-size query boundary reporting the
-width the child occupies, which for a breakout is the width of its container's
-columns. The boundary is unnamed, so a component inside queries
-the nearest box constraining it without naming anything: the child, or a nearer boundary
-such as a surface between the two.
+A container makes each of its non-replaced children an inline-size query boundary
+reporting the width the child occupies, which for a breakout is the width of its
+container's columns. The boundary is unnamed, so a component inside queries the
+nearest box constraining it without naming anything: the child, or a nearer boundary
+such as a surface between the two. Direct replaced elements (`img`, `picture`, `video`,
+`canvas`, `svg`, `iframe`, `embed`, `object`) are excluded: size containment collapses a
+replaced element's intrinsic width to zero, and a replaced element has no contents to
+query. Direct replaced elements take `max-inline-size: 100%`.
 
 `--cn-line` separates the rows of a container, and follows the container itself.
 `--cn-gap` is the inline gap between the columns of one row.

@@ -55,8 +55,6 @@
 .content-prose > *,
 .content-prose > astro-island > * {
   grid-column: 2;
-  container-type: inline-size;
-  min-inline-size: 0;
 }
 
 /*
@@ -91,6 +89,10 @@
  * grid item's automatic minimum, which a wide table or a long word would otherwise
  * push the column past. Overflow inside a child belongs to the child.
  *
+ * Replaced elements (img, picture, video, canvas, svg, iframe, embed, object) are
+ * excluded: size containment collapses a replaced element's intrinsic width to zero,
+ * and a replaced element has no contents that could query it.
+ *
  * The second selector in each pair reaches through an `astro-island` to the element
  * it renders, and the first excludes the island itself: `container-type` here would
  * give the island a box and take the column off the element it delegates to.
@@ -98,12 +100,23 @@
  * container type establishes overrides the `display: none` they are rendered with,
  * and a child that is not there would take a column.
  */
-.content-triad > :not(astro-island, script, style, template),
-.content-triad > astro-island > *,
-.content-golden > :not(astro-island, script, style, template),
-.content-golden > astro-island > * {
+.content-prose > :not(astro-island, script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
+.content-prose > astro-island > :not(script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
+.content-triad > :not(astro-island, script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
+.content-triad > astro-island > :not(script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
+.content-golden > :not(astro-island, script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
+.content-golden > astro-island > :not(script, style, template, img, picture, video, canvas, svg, iframe, embed, object) {
   container-type: inline-size;
   min-inline-size: 0;
+}
+
+.content-prose > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-prose > astro-island > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-golden > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-golden > astro-island > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-triad > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-triad > astro-island > :is(img, picture, video, canvas, svg, iframe, embed, object) {
+  max-inline-size: 100%;
 }
 
 /*
