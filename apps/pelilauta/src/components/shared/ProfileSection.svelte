@@ -12,22 +12,24 @@ const { profile }: Props = $props();
 <article class="profile-section">
   <CnAvatar src={profile.avatarURL} nick={profile.nick} size="large" aria-hidden />
 
-  <p class="m-0 text-center">
+  <p class="text-center">
     <strong>{profile.nick}</strong><br />
-    <span class="text-small">{profile.username}</span>
+    <span class="text-small text-low">{profile.username}</span>
   </p>
-  <p class="small">
-    {profile.bio}
-  </p>
+  {#if profile.bio}
+    <p class="text-small">
+      {profile.bio}
+    </p>
+  {/if}
 
   {#if profile.links && profile.links.length > 0}
-    <div class="flex flex-col gap-1 w-full mt-2">
+    <div class="links-list">
       {#each profile.links as link}
         <a
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="button small w-full"
+          class="button link-button"
         >
           {link.label}
         </a>
@@ -44,5 +46,22 @@ const { profile }: Props = $props();
   .profile-section {
     display: grid;
     row-gap: var(--cn-line);
+    justify-items: center;
+  }
+
+  .profile-section > p {
+    margin: 0;
+    inline-size: 100%;
+  }
+
+  .links-list {
+    display: grid;
+    row-gap: var(--cn-grid);
+    inline-size: 100%;
+  }
+
+  .link-button {
+    inline-size: 100%;
+    text-align: center;
   }
 </style>
