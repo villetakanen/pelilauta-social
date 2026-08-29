@@ -71,37 +71,83 @@ async function onSubmit(e: Event) {
 </script>
 
 {#if visible}
-  <section class="surface p-1">
+  <section class="surface">
     <h3>{t('site:handouts.metadata.title')}</h3>
-    {#if readers?.length }
-
-        {#each readers as reader}
-          <div class="toolbar">
-            <p class="p-0 grow">
+    {#if readers?.length}
+      <ul class="reader-list">
+        {#each readers as reader (reader)}
+          <li class="reader-row">
+            <span class="reader-link">
               <ProfileLink uid={reader} />
-            </p>
+            </span>
             <button
-              aria-label={t('actions:delete')} 
-              onclick={() => dropReader(reader)}>
+              type="button"
+              class="button text icon-only"
+              aria-label={t('actions:delete')}
+              onclick={() => dropReader(reader)}
+            >
               <CnIcon noun="delete" />
             </button>
-          </div>  
+          </li>
         {/each}
-
+      </ul>
     {/if}
 
     <form onsubmit={onSubmit}>
-      <hr>
-      <UserSelect 
-        value='-'
+      <hr />
+      <UserSelect
+        value="-"
         {omit}
         onchange={onUserSelect}
-        label={t('site:handouts.add.reader')}/>
-      <button 
-        disabled={!newReader || newReader === '-'}
-        type="submit">{t('actions:add')}</button>
+        label={t('site:handouts.add.reader')}
+      />
+      <div class="actions text-end">
+        <button
+          disabled={!newReader || newReader === '-'}
+          type="submit"
+        >
+          <CnIcon noun="add" />
+          <span>{t('actions:add')}</span>
+        </button>
+      </div>
     </form>
-
   </section>
 {/if}
+
+<style>
+  /*
+   * .surface publishes padding and containment only, so this box states
+   * the interval between its own child blocks.
+   */
+  .surface,
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .reader-list {
+    display: grid;
+    row-gap: var(--cn-line);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /*
+   * @todo No design-system capability publishes a listing row, so this row
+   * states its flex layout locally.
+   * Anchored at plans/debt/the-design-system-has-no-listing-row.md.
+   */
+  .reader-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cn-gap);
+  }
+
+  .reader-link {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+</style>
 

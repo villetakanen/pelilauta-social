@@ -107,13 +107,11 @@ function handleChannelDeleted(deletedSlug: string) {
 }
 </script>
 
-<section class="content-listing">
-  <header class="surface elevation-1">
-    <div class="toolbar px-0">
-      <div class="grow">
-        <h1>{t('admin:title')}</h1>
-      </div>
-      <div class="flex gap-2">
+<section class="content-prose channels-admin-view">
+  <header class="surface">
+    <div class="header-row">
+      <h1>{t('admin:title')}</h1>
+      <div class="header-actions">
         <button onclick={refreshAllChannels} class="text" disabled={isLoading}>
           {#if isLoading}
             <CnLoader inline />
@@ -129,26 +127,25 @@ function handleChannelDeleted(deletedSlug: string) {
         </a>
       </div>
     </div>
-    <p class="text-caption pb-1">
+    <p class="text-caption">
       {t('admin:description')}
     </p>
   </header>
 
-  <div class="listing-items">
-
+  <div class="channels-listing">
     {#if error}
-      <div class="p-4 border border-error radius-s bg-error-low">
-        <p class="text-error">
+      <div class="surface error">
+        <p>
           <CnIcon noun="info" size="small" />
           {error}
         </p>
-                <button onclick={() => error = null} class="mt-2">
+        <button onclick={() => error = null} class="text">
           <CnIcon noun="tools" />
-          {t('admin:errors.retry')}
+          <span>{t('admin:errors.retry')}</span>
         </button>
       </div>
     {:else if isLoading}
-      <div class="p-4 text-center">
+      <div class="surface text-center">
         <CnLoader />
         <p class="text-caption">{t('admin:channels.loading')}</p>
       </div>
@@ -168,20 +165,53 @@ function handleChannelDeleted(deletedSlug: string) {
             onRefresh={() => {/* Store will automatically update */}}
             onChannelDeleted={handleChannelDeleted}
           />
-            {/each}
+        {/each}
       {/each}
     {/if}
     {#if showNewTopicForm}
       <AddTopicForm />
     {:else}
-    <div class="toolbar items-center">
-      <button onclick={() => addTopicFormOpen.set(true)} data-add-topic-trigger>
-        <CnIcon noun="add" />
-        <span>{t('admin:topics.addTopic')}</span>
-      </button>
+      <div class="add-topic-row">
+        <button onclick={() => addTopicFormOpen.set(true)} data-add-topic-trigger>
+          <CnIcon noun="add" />
+          <span>{t('admin:topics.addTopic')}</span>
+        </button>
       </div>
     {/if}
   </div>
 </section>
 
-<pre class="debug">{JSON.stringify($meta, null, 2)}</pre>
+<style>
+  .channels-admin-view {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+    flex-wrap: wrap;
+  }
+
+  .header-row h1 {
+    margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .channels-listing {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .add-topic-row {
+    display: flex;
+    justify-content: flex-start;
+  }
+</style>

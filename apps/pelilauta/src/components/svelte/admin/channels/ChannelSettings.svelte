@@ -173,45 +173,50 @@ async function handleDelete() {
 }
 </script>
 
-<article class="surface cols-2">
-  <div class="flex flex-row items-start">
-    <span class="flex-none"><CnIcon noun={channel.icon} /></span>
-    <div class="grow">
+<article class="surface channel-settings-card">
+  <div class="channel-main-layout">
+    <div class="channel-icon-col">
+      <CnIcon noun={channel.icon} />
+    </div>
+
+    <div class="channel-fields-col">
       <label>
-        <span>{t('admin:channels.edit.name')}</span>
+        {t('admin:channels.edit.name')}
         <input type="text" bind:value={name} />
       </label>
       
       <p class="text-caption">/channels/{channel.slug}</p>
 
       <label>
-        <span>{t('threads:channel.description')}</span>
+        {t('threads:channel.description')}
         <textarea
           rows="3"
           bind:value={description}
         ></textarea>
       </label>
       <div class="text-small {isDescriptionLong ? 'text-warning' : 'text-low'}">
-          {descriptionLength}/160 {t('admin:channels.edit.characters')}
-          {#if isDescriptionLong}
-            <span class="text-warning">({t('admin:channels.edit.tooLong')})</span>
-          {/if}
-        </div>
+        {descriptionLength}/160 {t('admin:channels.edit.characters')}
+        {#if isDescriptionLong}
+          <span class="text-warning">({t('admin:channels.edit.tooLong')})</span>
+        {/if}
+      </div>
 
-      <div class="toolbar items-end">
+      <div class="save-action-row">
         <button 
+          type="button"
           onclick={saveChanges}
           disabled={!changes || isSaving}
         >
           {#if isSaving}
             <CnLoader inline />
           {/if}
-          {t('actions:save')}
+          <span>{t('actions:save')}</span>
         </button>
       </div>
     </div>
-    <div class="text-small flex-none">
-      <div class="m-0">
+
+    <div class="channel-stats-col text-small">
+      <div>
         <span class="text-high">{channel.threadCount}</span> 
         <span class="text-low">threads</span>
       </div>
@@ -221,12 +226,10 @@ async function handleDelete() {
     </div>
   </div>
 
-  <div class="toolbar">
-    <div class="grow"></div>
-    
+  <div class="channel-footer-actions">
     <button 
       type="button"
-      
+      class="text"
       onclick={forceRefresh}
       disabled={isRefreshing}
       title="Refresh channel statistics"
@@ -236,12 +239,12 @@ async function handleDelete() {
       {:else}
         <CnIcon noun="tools" />
       {/if}
-      {t('admin:channels.actions.refresh')}
+      <span>{t('admin:channels.actions.refresh')}</span>
     </button>
     
     <button 
       type="button" 
-      
+      class="text"
       onclick={handleDelete}
       disabled={isDeleting}
       title={t('admin:channels.actions.delete')}
@@ -251,7 +254,59 @@ async function handleDelete() {
       {:else}
         <CnIcon noun="delete" />
       {/if}
-      {t('admin:channels.actions.delete')}
+      <span>{t('admin:channels.actions.delete')}</span>
     </button>
   </div>
 </article>
+
+<style>
+  .channel-settings-card {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .channel-main-layout {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--cn-gap);
+    align-items: start;
+  }
+
+  .channel-icon-col {
+    padding-block-start: calc(var(--cn-grid) * 0.5);
+  }
+
+  .channel-fields-col {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .channel-stats-col {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .save-action-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .channel-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--cn-gap);
+    border-block-start: 1px solid var(--cn-color-border);
+    padding-block-start: var(--cn-grid);
+  }
+
+  @media (max-width: 640px) {
+    .channel-main-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .channel-stats-col {
+      text-align: left;
+    }
+  }
+</style>

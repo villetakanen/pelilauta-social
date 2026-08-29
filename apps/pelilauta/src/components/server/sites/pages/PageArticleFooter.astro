@@ -15,34 +15,52 @@ const { page, site } = Astro.props as Props;
 const showLicenseAsLink = site.license?.startsWith('cc') as boolean;
 const showLicenseAsText = !showLicenseAsLink && site.license !== '0';
 ---
-<footer class="mt-2 mb--2">
+
+<footer>
   {page.tags && page.tags.length > 0 && (
-    <section class="border-t">
-      <EntryTagsSection tags={page.tags} />
-    </section>
+    <EntryTagsSection tags={page.tags} />
   )}
 
-  <nav class="toolbar border-t mt-2">
-  <p class="m-0 p-0 text-small">
-    {toDisplayString(page.flowTime)}
-  </p>
-  
-  {showLicenseAsText && <p class="p-0 m-0 text-small">
-    {t('site:license.forText')} {t('site:license.' + site.license)} {site.license}
-  </p>}
-  {showLicenseAsLink && <p class="p-0 m-0 text-small">
-    <a href={t('site:license.links.' + site.license)} target="_blank" rel="noopener noreferrer">
-      {t('site:license.forText')} 
-      {t('site:license.' + site.license)}
-    </a>
-  </p>}
+  <nav class="meta-nav">
+    <p>
+      {toDisplayString(page.flowTime)}
+    </p>
 
-  
+    {showLicenseAsText && (
+      <p>
+        {t('site:license.forText')} {t('site:license.' + site.license)} {site.license}
+      </p>
+    )}
+    {showLicenseAsLink && (
+      <p>
+        <a href={t('site:license.links.' + site.license)} target="_blank" rel="noopener noreferrer">
+          {t('site:license.forText')} 
+          {t('site:license.' + site.license)}
+        </a>
+      </p>
+    )}
 
-  <p class="m-0 p-0 text-small">
-    <a href={`/sites/${site.key}/${page.key}/history`}>
-      {t('site:page.history.title')}
-    </a>
-  </p>
+    <p>
+      <a href={`/sites/${site.key}/${page.key}/history`}>
+        {t('site:page.history.title')}
+      </a>
+    </p>
   </nav>
 </footer>
+
+<style>
+  footer {
+    display: grid;
+    row-gap: var(--cn-line);
+    border-block-start: 1px solid var(--cn-color-border);
+    padding-block-start: var(--cn-line);
+  }
+
+  .meta-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cn-gap);
+  }
+</style>

@@ -15,14 +15,24 @@ let currentNick = $state(nick);
 let avatarUrl = $state('');
 
 onMount(async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  getUserInfo();
+  const { auth } = await import('../../../firebase/client');
+  if (auth.currentUser) {
+    getUserInfo(auth.currentUser);
+  } else {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        getUserInfo(user);
+        unsubscribe();
+      }
+    });
+  }
 });
 
-async function getUserInfo() {
-  const { auth } = await import('../../../firebase/client');
-  const user = auth.currentUser;
-  if (!user) return;
+function getUserInfo(user: {
+  photoURL: string | null;
+  displayName: string | null;
+  email: string | null;
+}) {
   avatarUrl = user.photoURL || '';
   const dpn = user.displayName;
   const username = dpn ?? user.email?.split('@')[0];
@@ -97,9 +107,9 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
 }
 </script>
 
-<div class="flex flex-no-wrap">
-  <CnAvatar {nick} src={avatarUrl} aria-hidden />
-  <fieldset class="grow">
+<div class="nickname-input">
+  <CnAvatar nick={currentNick || nick} src={avatarUrl} aria-hidden />
+  <fieldset>
     <label>
       {t("entries:profile.nick")}
       <input
@@ -111,11 +121,44 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
       />
     </label>
     {#if exists}
-      <p class="alert p-0 m-0">{t("login:eula.nickTaken")}</p>
+      <p class="nickname-error">{t("login:eula.nickTaken")}</p>
     {/if}
-    <p>
+    <p class="username-handle">
       <strong>{t("entries:profile.username")}: </strong>
       <span>{handle}</span>
     </p>
   </fieldset>
 </div>
+
+<style>
+  .nickname-input {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: var(--cn-gap);
+  }
+
+  fieldset {
+    display: grid;
+    gap: var(--cn-grid);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  input {
+    inline-size: 100%;
+  }
+
+  .nickname-error {
+    color: var(--cn-color-error);
+    font-size: var(--cn-font-size-caption);
+    line-height: var(--cn-line-height-caption);
+  }
+
+  .username-handle {
+    font-size: var(--cn-font-size-small);
+    line-height: var(--cn-line-height-small);
+  }
+</style>

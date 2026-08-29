@@ -1,5 +1,4 @@
 <script lang="ts">
-import CnAvatar from '@design-system/components/CnAvatar.svelte';
 import { createAccount } from 'src/firebase/client/account/createAccount';
 import { updateAccount } from 'src/firebase/client/account/updateAccount';
 import { createProfile } from 'src/firebase/client/profile/createProfile';
@@ -11,7 +10,6 @@ import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { logError, logWarn } from 'src/utils/logHelpers';
 import { toMekanismiURI } from 'src/utils/mekanismiUtils';
-import { toFid } from 'src/utils/toFid';
 import { onMount, type Snippet } from 'svelte';
 import { uid } from '../../../stores/session';
 import NickNameInput from './NickNameInput.svelte';
@@ -20,7 +18,7 @@ interface Props {
   children?: Snippet;
 }
 const { children }: Props = $props();
-let dialog: HTMLDialogElement | undefined;
+let dialog: HTMLDialogElement | undefined = $state();
 let nick = $state('');
 let avatarUrl = $state('');
 let nickExists = $state(false);
@@ -30,15 +28,7 @@ const valid = $derived.by(() => {
   return !!nick && !nickExists;
 });
 
-const handle = $derived.by(() => {
-  if ($profile?.nick) return toFid($profile.nick);
-  if (nick) return toFid(nick);
-  return '–';
-});
-
 onMount(() => {
-  const d = document.getElementById('eula-dialog');
-  if (d) dialog = d as HTMLDialogElement;
   getUserInfo();
 });
 
@@ -114,39 +104,30 @@ function handleNickChange(newNick: string, exists: boolean) {
 }
 </script>
 
-<dialog id="eula-dialog" class="eula-dialog">
+<dialog id="eula-dialog" class="eula-dialog" bind:this={dialog}>
   <h2>{t('login:eula.title')}</h2>
-  <section class="downscaled">
+  <section class="eula-content">
     {@render children?.()}
   </section>
   <form onsubmit={handleSubmit}>
-    <section class="elevation-3 p-2 mt-2">
-    {#if $profile?.nick}
-      <!-- LEGACY PROFILE UPGRADE -->
-      <h3 class="downscaled mt-0">
-        {t('login:eula.updateNotice.title')}
-      </h3>
-      <p class="text-small">
-        {t('login:eula.updateNotice.description')}
-      </p>
-    {:else}
-      <div class="flex flex-no-wrap">
-        <CnAvatar {nick} src={avatarUrl} aria-hidden />
-        <fieldset class="grow">
-          <NickNameInput
-            {nick}
-            onNickChange={handleNickChange}
-          />
-          <p>
-            <strong>{t('entries:profile.username')}: </strong>
-            <span>{handle}</span>
-          </p>
-        </fieldset>
-      </div>
-      <p class="text-caption">{t('login:eula.profileInfo')}</p>
-    {/if}
+    <section class="surface elevation-3">
+      {#if $profile?.nick}
+        <!-- LEGACY PROFILE UPGRADE -->
+        <h3>
+          {t('login:eula.updateNotice.title')}
+        </h3>
+        <p>
+          {t('login:eula.updateNotice.description')}
+        </p>
+      {:else}
+        <NickNameInput
+          {nick}
+          onNickChange={handleNickChange}
+        />
+        <p class="profile-info">{t('login:eula.profileInfo')}</p>
+      {/if}
     </section>
-    <div class="text-end">
+    <div class="actions">
       <button type="button" class="text" onclick={handleCancel}>
         {t('login:eula.decline')}
       </button>
@@ -154,9 +135,77 @@ function handleNickChange(newNick: string, exists: boolean) {
         class="cta"
         disabled={!valid}
         type="submit"
-        >
-      {t('login:eula.accept')}
-    </button>
-  </div>
+      >
+        {t('login:eula.accept')}
+      </button>
+    </div>
   </form>
 </dialog>
+
+<style>
+  dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    inline-size: min(var(--cn-measure), calc(100dvw - var(--cn-gap) * 2));
+    max-inline-size: var(--cn-measure);
+    max-block-size: calc(100dvh - var(--cn-gap) * 2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--cn-line);
+    padding: var(--cn-gap);
+    border: none;
+    border-radius: var(--cn-border-radius);
+    background-color: var(--cn-color-surface-1);
+    color: var(--cn-color-on-surface);
+    box-shadow: var(--cn-shadow-elevation-4);
+    overflow-y: auto;
+  }
+
+  dialog:not([open]) {
+    display: none;
+  }
+
+  dialog::backdrop {
+    background: var(--cn-color-scrim);
+  }
+
+  .eula-content {
+    max-block-size: 30dvh;
+    overflow-y: auto;
+    font-size: var(--cn-font-size-small);
+    line-height: var(--cn-line-height-small);
+  }
+
+  .eula-content :global(p) {
+    margin-block-end: var(--cn-gap);
+  }
+
+  .eula-content :global(p:last-child) {
+    margin-block-end: 0;
+  }
+
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .surface {
+    display: grid;
+    row-gap: var(--cn-gap);
+    border-radius: var(--cn-border-radius);
+  }
+
+  .profile-info {
+    font-size: var(--cn-font-size-caption);
+    line-height: var(--cn-line-height-caption);
+    color: var(--cn-color-text-low);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>

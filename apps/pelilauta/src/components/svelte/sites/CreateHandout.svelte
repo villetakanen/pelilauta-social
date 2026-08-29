@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnIcon from '@design-system/components/CnIcon.svelte';
 import {
   HANDOUTS_COLLECTION_NAME,
   handoutFrom,
@@ -9,25 +10,31 @@ import { toFirestoreEntry } from 'src/utils/client/toFirestoreEntry';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
 import { uid } from '../../../stores/session';
+import MembersOnly from './MembersOnly.svelte';
 
 interface Props {
   site: Site;
 }
 const { site }: Props = $props();
 
+let title = $state('');
+let saving = $state(false);
+
+const canSubmit = $derived.by(() => {
+  return title.trim().length > 0 && !saving;
+});
+
 async function handleSubmit(event: Event) {
   event.preventDefault();
+  if (!$uid || !canSubmit) return;
 
-  // get form data { title }
-  const form = event.target as HTMLFormElement;
-  const formData = new FormData(form);
-  const title = formData.get('title') as string;
+  saving = true;
 
   try {
     const { getFirestore, addDoc, collection } = await import(
       'firebase/firestore'
     );
-    const handout = handoutFrom({ title, owners: [$uid] }, '');
+    const handout = handoutFrom({ title: title.trim(), owners: [$uid] }, '');
     const entry = toFirestoreEntry(handout);
 
     const { id } = await addDoc(
@@ -44,21 +51,45 @@ async function handleSubmit(event: Event) {
   } catch (error) {
     logError(error);
     pushSnack(t('errors:handout.create'));
+  } finally {
+    saving = false;
   }
 }
 </script>
-<div class="content-prose">
-  <article>
+
+<MembersOnly {site}>
+  <section class="surface">
     <form onsubmit={handleSubmit}>
-      <label>{t('entries:handout.title')}
-        <input 
+      <label>
+        {t('entries:handout.title')}
+        <input
           name="title"
-        type="text" placeholder={t('site:handouts.create.title')} />
+          bind:value={title}
+          type="text"
+          placeholder={t('site:handouts.create.title')}
+        />
       </label>
-      <div class="toolbar">
-        <a href="/sites/{site.key}/handouts" class="text button">{t('actions:cancel')}</a>
-        <button type="submit">{t('actions:create.handout')}</button>
+      <div class="actions text-end">
+        <a href="/sites/{site.key}/handouts" class="button text">
+          {t('actions:cancel')}
+        </a>
+        <button type="submit" disabled={!canSubmit}>
+          <CnIcon noun="add" />
+          <span>{t('actions:create.handout')}</span>
+        </button>
       </div>
     </form>
-  </article>
-</div>
+  </section>
+</MembersOnly>
+
+<style>
+  /*
+   * .surface publishes padding and containment only, so this box states
+   * the interval between its own child blocks.
+   */
+  .surface,
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

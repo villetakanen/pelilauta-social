@@ -762,3 +762,22 @@ for (const { name, mode, tracks, threshold } of MODES) {
     expect(after.y - (breakout.y + breakout.height)).toBeCloseTo(line, 0);
   });
 }
+
+test('a direct replaced child in a content container keeps its intrinsic width', async ({
+  page,
+}) => {
+  await page.goto(BOOK);
+
+  const svg =
+    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60"></svg>';
+  await compose(
+    page,
+    'content-prose',
+    `<img id="direct-image" src='${svg}' alt="" />`,
+    await steps(page, MEASURE_STEPS),
+  );
+
+  const image = await box(page, '#direct-image');
+  expect(image.width).toBeCloseTo(120, 0);
+  expect(image.height).toBeCloseTo(60, 0);
+});

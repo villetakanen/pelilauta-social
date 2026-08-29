@@ -51,15 +51,9 @@ importers:
 
   apps/pelilauta:
     dependencies:
-      '@11thdeg/cn-d20-ability-score':
-        specifier: 4.0.0-beta.5
-        version: 4.0.0-beta.5
       '@11thdeg/cn-story-clock':
         specifier: 4.0.0-beta.10
         version: 4.0.0-beta.10
-      '@11thdeg/cyan-css':
-        specifier: 4.0.0-beta.39
-        version: 4.0.0-beta.39(lato-font@3.0.0)
       '@11thdeg/cyan-lit':
         specifier: 4.0.0-beta.30
         version: 4.0.0-beta.30
@@ -251,16 +245,8 @@ importers:
 
 packages:
 
-  '@11thdeg/cn-d20-ability-score@4.0.0-beta.5':
-    resolution: {integrity: sha512-rVuUVHFDJmhuWRYBDIWhv2y3HbimNXI+I3FlhTwddtaLKwvEneZqNIS3zzg7huweqdIp8SJ7IhW9+AGAdWZoHQ==}
-
   '@11thdeg/cn-story-clock@4.0.0-beta.10':
     resolution: {integrity: sha512-ata77Q0/AduOaFwy8iL3bYshETUihl7vV3qjiy7K2woHimA7JQtOtBdFElgKNAZ+3vqqGqcmqS7+XVBuTpiT9Q==}
-
-  '@11thdeg/cyan-css@4.0.0-beta.39':
-    resolution: {integrity: sha512-lOIgzumpX5err2n607i3D+b4cit01GuU8WqOmVKDkwzrIrCttyAE3qRck46emYXadns8T+gUl2oqy31J7ZZNNg==}
-    peerDependencies:
-      lato-font: '*'
 
   '@11thdeg/cyan-lit@4.0.0-beta.30':
     resolution: {integrity: sha512-Ahzt9nWw2rD1tWT++XOcuKXhJnGcROYd6RlSZdH/kCic7iHS9F8aX6KcPz23BZKLDrFj+G3zaEoeFVEchL9+2A==}
@@ -7712,18 +7698,10 @@ packages:
 
 snapshots:
 
-  '@11thdeg/cn-d20-ability-score@4.0.0-beta.5':
-    dependencies:
-      lit: 3.3.1
-
   '@11thdeg/cn-story-clock@4.0.0-beta.10':
     dependencies:
       lit: 3.3.1
       ts-key-enum: 3.0.13
-
-  '@11thdeg/cyan-css@4.0.0-beta.39(lato-font@3.0.0)':
-    dependencies:
-      lato-font: 3.0.0
 
   '@11thdeg/cyan-lit@4.0.0-beta.30':
     dependencies:

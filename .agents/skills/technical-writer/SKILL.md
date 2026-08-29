@@ -34,9 +34,10 @@ elsewhere in the document.
    --exclude-standard`.
 2. Test each code comment as a block first: delete the whole comment; if the code
    beside it carries what it said, it stays deleted.
-3. Take each sentence in turn. Delete it when its fact survives elsewhere. Otherwise
-   rewrite it against the principles and the mechanics, and keep it unchanged only
-   when it already follows both.
+3. Take each sentence in turn. Delete it when its fact survives elsewhere or when
+   it merely announces adjacent structure without adding facts. Otherwise rewrite
+   it against the principles, standards and mechanics in `docs/WRITING.md`, and
+   keep it unchanged only when it already satisfies all three.
 4. Run the `docs/WRITING.md` word-list greps as a last check.
 5. Report the files read and the word count per file before and after. The diff
    carries the rewrites. Report only the exceptions: a sentence deleted whole, a

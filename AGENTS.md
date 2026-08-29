@@ -16,9 +16,9 @@
   Any spec may be edited at any time — an agent edit to a `live` spec sets it
   `proposed`, and an operator makes it `live` by reading it. The status is a
   process gate, never a ceremony: do not request, await or announce approval.
-- `plans` contains transient epic scope; a plan carries behaviour only until a spec
-  takes it. `plans/debt` contains known unplanned gaps;
-  `plans/debt-deferred-for-rc` holds the ones parked until the release candidate.
+- An epic is a GitHub issue labeled `epic`; it carries transient scope, and
+  behaviour only until a spec takes it. A known unplanned gap is an issue labeled
+  `task` and `debt`. `docs/EPIC_TEMPLATE.md` states the epic body's structure.
 - `docs/DESIGN.md` holds the design intent; `docs/WRITING.md` holds the writing rules;
   `docs/ARCHITECTURE.md` holds the naming and what each artifact carries.
 

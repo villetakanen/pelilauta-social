@@ -10,6 +10,7 @@
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import SentryTestButton from '@pelilauta/components/svelte/admin/SentryTestButton.svelte';
 import { authedPost } from 'src/firebase/client/apiClient';
+import { pushSnack } from 'src/utils/client/snackUtils';
 import { logDebug } from 'src/utils/logHelpers';
 
 async function testSSRAuth() {
@@ -17,6 +18,7 @@ async function testSSRAuth() {
     text: 'Hello world',
   });
   logDebug(`SSR Auth response: ${response.status}`);
+  pushSnack(`SSR Auth status: ${response.status}`);
 }
 
 async function testSSRNoAuth() {
@@ -32,11 +34,12 @@ async function testSSRNoAuth() {
       linkDescription: 'Pelilauta test post',
     }),
   });
-  logDebug(`SSR Auth response: ${response.status}`);
+  logDebug(`SSR No Auth response: ${response.status}`);
+  pushSnack(`SSR No Auth status: ${response.status}`);
 }
 </script>
 
-<div class="flex flex-wrap">
+<div class="admin-tools-row">
   <button type="button" class="text" onclick={testSSRAuth}>
     <CnIcon noun="adventurer" decorative />
     <span>Test SSR Auth</span>
@@ -47,3 +50,12 @@ async function testSSRNoAuth() {
   </button>
   <SentryTestButton />
 </div>
+
+<style>
+  .admin-tools-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>

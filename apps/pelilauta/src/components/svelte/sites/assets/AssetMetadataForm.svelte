@@ -56,22 +56,31 @@ async function onsubmit(event: Event) {
       disabled
     />
   </label>
-    <label>
-        {t('entries:assets.description')}
-        <textarea
-        bind:value={description}
-        ></textarea>
-    </label>
+  <label>
+    {t('entries:assets.description')}
+    <textarea
+      bind:value={description}
+    ></textarea>
+  </label>
   <LicenseSelect 
     value={license}
     onchange={(e: Event) => {
       license = (e.target as HTMLSelectElement).value;
     }} />
-  <button
-    disabled={!hasChanges}
-    type="submit">
-    {t('actions:save')}
-  </button>
+  <div class="text-end">
+    <button
+      disabled={!hasChanges}
+      type="submit">
+      {t('actions:save')}
+    </button>
+  </div>
 </form>
+
+<style>
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>
 
 

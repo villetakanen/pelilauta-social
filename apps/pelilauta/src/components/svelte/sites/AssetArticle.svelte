@@ -37,16 +37,17 @@ async function copyMarkdown() {
     <span class="asset-icon"><CnIcon noun="assets" /></span>
   {/if}
   <div>
-    <p class="m-0">
+    <p>
       <a href={asset.url} target="_blank">{asset.name}</a>
     </p>
-    <p class="downscaled m-0">
+    <p>
       {asset.mimetype}
       {asset.description}
     </p>
   </div>
   <div class="text-end">
     <button
+      class="button text"
       onclick={copyMarkdown}
       type="button"
       aria-label={t("actions:copy-markdown")}
@@ -58,11 +59,12 @@ async function copyMarkdown() {
       <a
         aria-label={t("actions:edit")}
         href={`/sites/${site?.key}/assets/${asset.name}`}
-        class="button"
+        class="button text"
       >
         <CnIcon noun="edit" />
       </a>
       <button
+        class="button text"
         onclick={deleteAsset}
         aria-label={t("actions:delete")}
         onkeydown={(e) => e.key === "Enter" && deleteAsset()}
@@ -78,13 +80,12 @@ async function copyMarkdown() {
   .asset {
     display: grid;
     gap: var(--cn-gap);
-    grid-template-columns: calc(8 * var(--cn-grid)) 1fr calc(
-        20 * var(--cn-grid)
-      );
-    margin-bottom: var(--cn-gap);
+    grid-template-columns: calc(8 * var(--cn-grid)) 1fr auto;
+    align-items: center;
   }
   .asset img {
-    max-height: calc(8 * var(--cn-grid));
+    max-block-size: calc(8 * var(--cn-grid));
+    max-inline-size: 100%;
     justify-self: center;
   }
   .asset-icon {

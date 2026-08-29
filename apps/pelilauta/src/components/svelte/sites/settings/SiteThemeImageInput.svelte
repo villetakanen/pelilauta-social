@@ -73,49 +73,82 @@ async function deleteImage() {
 }
 </script>
 
-<form {onsubmit} class="elevation-1 radius-l mb-2">
-  <div class="flex flex-row p-2">
+<form {onsubmit} class="surface elevation-1">
+  <div class="image-field">
     {#if preview}
       <img
         src={preview}
-        alt={t("app:meta.preview")}
-        class="icon flex-none border"
-        style="align-self: flex-start;flex-grow: 0;"
+        alt={t('app:meta.preview')}
+        class="thumbnail"
       />
     {:else}
-      <span
-        class="flex-none"
-        style="align-self: flex-start;flex-grow: 0;"
-      >
+      <span class="thumbnail-placeholder">
         <CnIcon noun="assets" />
       </span>
     {/if}
 
-    <label
-      >{t(`entries:site.${imageField}`)}
+    <label>
+      {t(`entries:site.${imageField}`)}
       <input type="file" accept="image/*" onchange={fileChanged} />
     </label>
   </div>
-  <div class="toolbar">
+  <div class="actions text-end">
     <button
       type="button"
       disabled={!site[imageField]}
       onclick={deleteImage}
-      class="text"
+      class="button text"
     >
-      {t("actions:delete")}
+      {t('actions:delete')}
     </button>
 
     <button
       type="reset"
       disabled={file === null}
       onclick={resetPreview}
-      class="text"
+      class="button text"
     >
-      {t("actions:reset")}
+      {t('actions:reset')}
     </button>
     <button type="submit" disabled={file === null}>
-      {t("actions:upload")}
+      {t('actions:upload')}
     </button>
   </div>
 </form>
+
+<style>
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .image-field {
+    display: flex;
+    gap: var(--cn-gap);
+    align-items: flex-start;
+  }
+
+  .image-field label {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .thumbnail,
+  .thumbnail-placeholder {
+    inline-size: calc(var(--cn-grid) * 6);
+    block-size: calc(var(--cn-grid) * 6);
+    border-radius: var(--cn-border-radius-small);
+    flex-shrink: 0;
+  }
+
+  .thumbnail {
+    object-fit: cover;
+  }
+
+  .thumbnail-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cn-color-surface-2);
+  }
+</style>

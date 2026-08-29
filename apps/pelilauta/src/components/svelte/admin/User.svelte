@@ -20,23 +20,41 @@ const toggleFrozen = async (e: Event & { currentTarget: HTMLInputElement }) => {
 };
 </script>
 
-<p class="m-0 p-2">
-  <ProfileLink uid={account.uid} /><br>
-  <span class="text-caption">{account.uid}</span>
-</p>
-<p class="m-0 p-2">{toDisplayString(account.lastLogin)}</p>
+<div class="user-cell user-identity">
+  <ProfileLink uid={account.uid} />
+  <span class="text-caption text-low">{account.uid}</span>
+</div>
 
+<div class="user-cell text-small text-low">
+  {toDisplayString(account.lastLogin)}
+</div>
+
+<div class="user-cell text-center">
   {#if adminStatus()}
-  <div class="text-center">
-    <CnIcon noun="admin" />
-    </div>
-  {:else}
-    <p></p>
+    <span title="Administrator">
+      <CnIcon noun="admin" />
+    </span>
   {/if}
+</div>
+
+<div class="user-cell text-center">
   <CnToggle
     label="Frozen"
     disabled={adminStatus()}
     checked={frozenStatus() ?? false}
     onchange={toggleFrozen}
   />
+</div>
+
+<style>
+  .user-cell {
+    padding-block: calc(var(--cn-grid) * 0.5);
+  }
+
+  .user-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+</style>
 

@@ -18,12 +18,12 @@ const visible = $derived.by(() => {
 });
 </script>
     
-    {#if visible}
-      <a
-        href={`/sites/${site.key}/handouts/${handout.key}/edit`}
-        class="fab button"
-      >
-        <CnIcon noun="edit" size="small" />
-        <span class="sm-hidden">{t('actions:edit')}</span>
-      </a>
-    {/if}
+{#if visible}
+  <a
+    href={`/sites/${site.key}/handouts/${handout.key}/edit`}
+    class="fab"
+  >
+    <CnIcon noun="edit" />
+    <span>{t('actions:edit')}</span>
+  </a>
+{/if}

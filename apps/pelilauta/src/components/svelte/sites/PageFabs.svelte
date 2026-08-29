@@ -21,18 +21,18 @@ const visible = $derived.by(() => {
 {#if visible}
   <a
     href={`/sites/${site.key}/create/page`}
-    class="fab button small"
+    class="fab small"
     aria-label={t('actions:create.page')}
   >
-    <CnIcon noun="add" size="small" />
-    <span class="sm-hidden">{t('actions:create.page')}</span>
+    <CnIcon noun="add" />
+    <span>{t('actions:create.page')}</span>
   </a>
   <a
     href={`/sites/${site.key}/${pageKey}/edit`}
-    class="fab button"
+    class="fab"
     aria-label={t('actions:edit')}
   >
-    <CnIcon noun="edit" size="small" />
-    <span class="sm-hidden">{t('actions:edit')}</span>
+    <CnIcon noun="edit" />
+    <span>{t('actions:edit')}</span>
   </a>
 {/if}

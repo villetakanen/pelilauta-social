@@ -157,27 +157,27 @@ function createReorderHandler(categorySlug: string) {
 }
 </script>
 
-<section class="surface p-2">
-  <h3 class="flex items-center gap-1">
+<section class="surface">
+  <h3>
     <CnIcon noun="sort" />
     {t("site:toc.manualOrder.title")}
   </h3>
-  <p class="downscaled text-low mb-2">
+  <p>
     {t("site:toc.manualOrder.info")}
   </p>
 
   {#if saving}
-    <div class="flex items-center gap-1 mb-2">
+    <div class="saving-indicator">
       <CnLoader inline />
-      <span class="text-low">{t("site:toc.manualOrder.saving")}</span>
+      <span>{t("site:toc.manualOrder.saving")}</span>
     </div>
   {/if}
 
   {#each categories as category}
     {@const pages = pagesByCategory.get(category.slug) || []}
     {#if pages.length > 0}
-      <div class="mb-2">
-        <h4 class="downscaled mb-1">{category.name}</h4>
+      <div class="category-group">
+        <h4>{category.name}</h4>
         <SvelteSortableList
           items={pages.map(pageRefToListItem)}
           onItemsChanged={createReorderHandler(category.slug)}
@@ -187,8 +187,8 @@ function createReorderHandler(categorySlug: string) {
   {/each}
 
   {#if uncategorized.length > 0}
-    <div class="mb-2">
-      <h4 class="downscaled mb-1">{t("site:toc.uncategorized")}</h4>
+    <div class="category-group">
+      <h4>{t("site:toc.uncategorized")}</h4>
       <SvelteSortableList
         items={uncategorized.map(pageRefToListItem)}
         onItemsChanged={createReorderHandler("__uncategorized")}
@@ -196,3 +196,22 @@ function createReorderHandler(categorySlug: string) {
     </div>
   {/if}
 </section>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .category-group {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .saving-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>
+

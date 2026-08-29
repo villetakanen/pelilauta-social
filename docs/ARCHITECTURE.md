@@ -66,6 +66,15 @@ namespace.
 Consumers apply public classes, never component hooks. Remove `.cn-` from a public
 class when its capability migrates; retain it on component hooks.
 
+### Container Names
+
+| Scope | Name | Defined in |
+| :--- | :--- | :--- |
+| Surface containment | `surface-area` | `packages/design-system/styles/surface.css` |
+| Tray rail | `tray` | `packages/design-system/styles/fab.css` |
+
+A content container establishes inline-size containment without a container name.
+
 ### Interaction states
 
 A state's name comes from the platform selector that switches it on. The design

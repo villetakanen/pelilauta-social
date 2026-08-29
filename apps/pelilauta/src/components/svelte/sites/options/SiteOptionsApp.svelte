@@ -29,14 +29,13 @@ async function setSidebarKey(key: string) {
 }
 </script>
 
-<div class="content-prose">
-  <article>
-    <h2>{t('site:options.title')}</h2>
+<section class="surface">
+  <h2>{t('site:options.title')}</h2>
 
-    <p class="downscaled">{t('site:options.description')}</p>
+  <p>{t('site:options.description')}</p>
 
-    <fieldset>
-      <legend>{t('site:options.tools')}</legend>
+  <fieldset>
+    <legend>{t('site:options.tools')}</legend>
     <CnToggle
       label={t('site:options.useClocks')}
       checked={$site.useClocks ?? false}
@@ -54,12 +53,10 @@ async function setSidebarKey(key: string) {
       checked={$site.useRecentChanges ?? false}
       onchange={(e) => setOption('useRecentChanges', e.currentTarget.checked)}
     />
-    </fieldset>
+  </fieldset>
 
-    
-
-    <fieldset>
-      <legend>{t('site:options.extras')}</legend>
+  <fieldset>
+    <legend>{t('site:options.extras')}</legend>
 
     <CnToggle
       label={t('entries:site.customPageKeys')}
@@ -67,38 +64,57 @@ async function setSidebarKey(key: string) {
       onchange={(e) => setOption('usePlainTextURLs', e.currentTarget.checked)}
     />
 
-    <p class="downscaled text-low">{t('site:create.plaintexturls.description')}</p>
-    </fieldset>
-  </article>
-  <section>
-    <h2>{t('site:options.navigation.title')}</h2>
-    <p class="text-small">
-      {t('site:options.navigation.description')}
-    </p>
+    <p>{t('site:create.plaintexturls.description')}</p>
+  </fieldset>
+</section>
 
-    <fieldset>
-      <legend>{t('site:options.sidebar')}</legend>
-      <CnToggle
-        label={t('site:options.useSidebar')}
-        checked={$site.useSidebar ?? false}
-        onchange={(e) => setOption('useSidebar', e.currentTarget.checked)}
+<section class="surface">
+  <h2>{t('site:options.navigation.title')}</h2>
+  <p>{t('site:options.navigation.description')}</p>
+
+  <fieldset>
+    <legend>{t('site:options.sidebar')}</legend>
+    <CnToggle
+      label={t('site:options.useSidebar')}
+      checked={$site.useSidebar ?? false}
+      onchange={(e) => setOption('useSidebar', e.currentTarget.checked)}
+    />
+
+    {#if $site.useSidebar}
+      <SitePageSelect 
+        site={$site}
+        selectedPageKey={$site.sidebarKey || ''}
+        setSelectedPageKey={setSidebarKey}
+        label={t('site:options.sidebarPage')}
+        placeholder={t('site:options.useDefaultSidebar')}
       />
+      <p>{t('site:options.sidebarPageDescription')}</p>
+    {/if}
+  </fieldset>
 
-      {#if $site.useSidebar}
-        <SitePageSelect 
-          site={$site}
-          selectedPageKey={$site.sidebarKey || ''}
-          setSelectedPageKey={setSidebarKey}
-          label={t('site:options.sidebarPage')}
-          placeholder={t('site:options.useDefaultSidebar')}
-        />
-        <p class="text-small text-low">{t('site:options.sidebarPageDescription')}</p>
-      {/if}
-    </fieldset>
+  <fieldset>
+    <legend>{t('site:options.homepage')}</legend>
+    <SiteHomepageSelect />
+  </fieldset>
+</section>
 
-    <fieldset>
-      <legend>{t('site:options.homepage')}</legend>
-      <SiteHomepageSelect />
-    </fieldset>
-  </section>
-</div>
+<style>
+  .surface,
+  fieldset {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+  }
+
+  legend {
+    font-size: var(--cn-font-size-h3);
+    font-weight: var(--cn-font-weight-h3);
+    line-height: var(--cn-line-height-h3);
+    letter-spacing: var(--cn-letter-spacing-h3);
+    color: var(--cn-color-text-subheading);
+  }
+</style>

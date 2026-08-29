@@ -42,7 +42,7 @@ resets, seeds, and signs example accounts in through the login form once, saving
 browser states for each actor.
 
 The suite runs locally, on demand and before a release. It is not part of
-`pnpm verify`, by the decision `plans/debt/browser-tests-run-locally-only.md`
+`pnpm verify`, by the decision issue [#98](https://github.com/villetakanen/pelilauta-social/issues/98)
 records.
 
 ## Environment

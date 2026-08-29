@@ -37,6 +37,6 @@ const name = Astro.url.searchParams.get('name') || '';
 <ModalPage title={site?.name || 'Unknown Site'} backHref={`/sites/${siteKey}`}>
   <div class="content-prose">
     <h1>{t('site:create.page.title')}</h1>
+    {site && <CreatePageForm site={site} name={name} client:only="svelte"/> }
   </div>
-  {site && <CreatePageForm site={site} name={name} client:only="svelte"/> }
 </ModalPage>

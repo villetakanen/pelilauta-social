@@ -89,28 +89,25 @@ function cancel() {
 }
 </script>
 
-<div class="content-prose">
-  <MembersOnly {site}>
-    <section>
-      <h2>{t('site:create.page.title')}</h2>
+<MembersOnly {site}>
+  <section class="surface">
+    <form {onsubmit}>
+      {#if name}
+        <p>
+          <i>{t('site:create.page.missing', { name: `${name}` })}</i>
+        </p>
+      {:else}
+        <label>
+          {t('entries:page.name')}
+          <input
+            data-error={hasKeyClash || undefined}
+            data-testid="page-name-input"
+            bind:value={title}
+            type="text"
+            name="title">
+        </label>
 
-      <form {onsubmit}>
-        {#if name}
-          <p>
-            <i>{t('site:create.page.missing', { name: `${name}` })}</i>
-          </p>
-        {:else}
-          <label>
-            {t('entries:page.name')}
-            <input
-              data-error={hasKeyClash || undefined}
-              data-testid="page-name-input"
-              bind:value={title}
-              type="text"
-              name="title">
-          </label>
-
-          {#if site.pageCategories && site.pageCategories.length > 0}
+        {#if site.pageCategories && site.pageCategories.length > 0}
           <label>
             {t('entries:page.category')}
             <select bind:value={category} data-testid="page-category-select">
@@ -120,33 +117,39 @@ function cancel() {
               {/each}
             </select>
           </label>
-          {/if}
-          
-          {#if hasKeyClash}
-            <p class="error p-1">
-              {t('site:create.page.duplicateKey', { key: `${site.key}/${urlKey}` })}
-            </p>
-            <p class="downscaled">
-              <a href={`/sites/${site.key}/${urlKey}`}>{t('site:create.page.duplicateKeyLink')}</a>
-            </p>
-          {:else}
-            <p class="mt-1 break-all">
-              <code class="p-1">{previewUrl}</code>
-            </p>
-          {/if}
         {/if}
         
-        <div class="toolbar justify-end">
-          <button type="button" class="text" onclick={cancel}>
-            {t('actions:cancel')}
-          </button>
-          <button type="submit" data-testid="create-page-button">
-            <CnIcon noun="add" />
-            <span>{t('actions:create.page')}</span>
-          </button>
-        </div>
-      </form>
+        {#if hasKeyClash}
+          <p class="surface error">
+            {t('site:create.page.duplicateKey', { key: `${site.key}/${urlKey}` })}
+          </p>
+          <p>
+            <a href={`/sites/${site.key}/${urlKey}`}>{t('site:create.page.duplicateKeyLink')}</a>
+          </p>
+        {:else}
+          <p>
+            <code>{previewUrl}</code>
+          </p>
+        {/if}
+      {/if}
+      
+      <div class="text-end">
+        <button type="button" class="text" onclick={cancel}>
+          {t('actions:cancel')}
+        </button>
+        <button type="submit" data-testid="create-page-button">
+          <CnIcon noun="add" />
+          <span>{t('actions:create.page')}</span>
+        </button>
+      </div>
+    </form>
+  </section>
+</MembersOnly>
 
-    </section>
-  </MembersOnly>
-</div>
+<style>
+  .surface,
+  form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

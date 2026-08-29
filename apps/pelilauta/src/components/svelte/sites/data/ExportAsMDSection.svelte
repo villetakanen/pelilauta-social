@@ -21,7 +21,7 @@ async function exportSiteAsDoc() {
 }
 </script>
 
-<section class="elevation-1 p-2">
+<section class="surface elevation-1">
   <h2>{t('site:data.export.title')}</h2>
   <h3>{t('site:data.export.asMarkdown')}</h3>
     
@@ -30,12 +30,19 @@ async function exportSiteAsDoc() {
     <span>{t('actions:export.asZippedFolder')}</span>
   </button>
 
-  <p class="downscaled text-low">{t('site:toc.importExport.description')}</p>
+  <p>{t('site:toc.importExport.description')}</p>
 
   <button class="text" onclick={exportSiteAsDoc} type="button">
     <CnIcon noun="arrow-down" />
     <span>{t('site:data.actions.asMarkdonwDocument')}</span>
   </button>
 
-  <p class="downscaled text-low">{t('site:data.export.asMarkdownDocument')}</p>
+  <p>{t('site:data.export.asMarkdownDocument')}</p>
 </section>
+
+<style>
+  section {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

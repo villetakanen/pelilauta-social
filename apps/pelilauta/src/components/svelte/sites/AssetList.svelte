@@ -16,7 +16,7 @@ const assets = $derived.by(() => {
 </script>
 
 <div class="content-prose">
-  <section class="surface p-2">
+  <section class="surface">
     <h1>{t('site:assets.title')}</h1>
     <p>{t('site:assets.description')}</p>
 
@@ -26,3 +26,10 @@ const assets = $derived.by(() => {
       
   </section>
 </div>
+
+<style>
+  .surface {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+</style>

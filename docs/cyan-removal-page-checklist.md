@@ -30,9 +30,9 @@ without them and shows what is missing. Work in this order.
    design calls for it, and change its tests and locale files with it.
 2. **Shim locally where the design system does not reach.** Write one scoped rule in the
    component, under a `@todo` that states what is missing and whether it belongs in the
-   design system or stays bespoke here. Anchor the shim in the `plans/debt` file that
+   design system or stays bespoke here. Anchor the shim in the `debt` issue that
    covers the gap, where one exists: a listing row anchors to
-   `plans/debt/the-design-system-has-no-listing-row.md`. Do not copy a shim into a
+   issue #109. Do not copy a shim into a
    second component without adding that component to the anchor.
 3. **Remove the dangling Cyan names last.** Delete a class that declares nothing. Until
    the page stands on the design system, these names record the layout the page had, and

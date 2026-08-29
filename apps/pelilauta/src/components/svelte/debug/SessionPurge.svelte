@@ -123,66 +123,116 @@ async function purgeSession() {
 }
 </script>
 
-<section class="elevation-1 p-2">
-  <h2>Session Purge</h2>
+<article class="surface session-purge-card">
+  <header>
+    <h2>Session Purge</h2>
+    <p class="text-small text-low">Debug tool for clearing client-side state and caches</p>
+  </header>
 
   {#if isComplete}
-    <div class="text-center p-2">
-      <h3 class="text-high">Purge Complete</h3>
-      <p>All local session data has been cleared.</p>
-      <div class="p-2">
-        <a href="/" class="button">Return to Front Page</a>
-      </div>
-
-      <div
-        class="text-low text-left mt-2 p-1 border radius-s"
-        style="background: rgba(0,0,0,0.1); font-family: monospace; font-size: 0.8em;"
-      >
-        {#each logs as log}
-          <div>{log}</div>
-        {/each}
-      </div>
-    </div>
-  {:else}
-    <div>
-      <div>
-        <p class="text-high">Warning: This action is destructive.</p>
-        <p>It will:</p>
-        <ul class="list-disc pl-4">
-          <li>Log you out of the application</li>
-          <li>Clear all local settings and preferences</li>
-          <li>Remove all cached data and assets</li>
-          <li>Reset the application state entirely</li>
-        </ul>
-
-        <p class="mt-2">
-          Use this if you are experiencing persistent issues, loading loops, or
-          "white screens".
+    <div class="purge-complete-box">
+      <div class="surface info">
+        <p>
+          <CnIcon noun="info" size="small" />
+          <span><strong>Purge Complete:</strong> All local session data and caches have been cleared.</span>
         </p>
       </div>
+
+      <div class="actions">
+        <a href="/" class="button">
+          <CnIcon noun="fox" />
+          <span>Return to Front Page</span>
+        </a>
+      </div>
+
+      {#if logs.length > 0}
+        <div class="log-stream">
+          {#each logs as log}
+            <div class="log-line">{log}</div>
+          {/each}
+        </div>
+      {/if}
+    </div>
+  {:else}
+    <div class="purge-warning-content">
+      <p class="text-warning"><strong>Warning:</strong> This action is destructive.</p>
+      <p>It will:</p>
+      <ul class="warning-list">
+        <li>Log you out of the application</li>
+        <li>Clear all local settings and preferences</li>
+        <li>Remove all cached data and assets</li>
+        <li>Reset the application state entirely</li>
+      </ul>
+
+      <p class="text-caption text-low">
+        Use this if you are experiencing persistent loading loops, stale caches, or unrecoverable application state.
+      </p>
     </div>
 
-    <div class="text-end">
-      <button onclick={purgeSession} disabled={isPurging} >
+    <div class="actions">
+      <button type="button" onclick={purgeSession} disabled={isPurging}>
         {#if isPurging}
           <CnLoader inline />
+        {:else}
+          <CnIcon noun="delete" />
         {/if}
         <span>Purge Session & Reset</span>
       </button>
     </div>
 
     {#if logs.length > 0}
-      <div
-        class="text-low text-left mt-2 p-1 border radius-s"
-        style="background: rgba(0,0,0,0.1); font-family: monospace; font-size: 0.8em;"
-      >
+      <div class="log-stream">
         {#each logs as log}
-          <div>{log}</div>
+          <div class="log-line">{log}</div>
         {/each}
       </div>
     {/if}
   {/if}
-</section>
+</article>
 
 <style>
+  .session-purge-card {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .purge-warning-content {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .warning-list {
+    margin: 0;
+    padding-inline-start: var(--cn-line);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .purge-complete-box {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .log-stream {
+    display: grid;
+    row-gap: 2px;
+    padding: var(--cn-gap);
+    background: var(--cn-color-surface);
+    border: 1px solid var(--cn-color-border);
+    border-radius: var(--cn-border-radius-s);
+    font-family: monospace;
+    font-size: var(--cn-font-size-caption);
+    color: var(--cn-color-text-low);
+    max-height: calc(var(--cn-grid) * 30);
+    overflow-y: auto;
+  }
+
+  .log-line {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
 </style>

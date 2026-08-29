@@ -9,8 +9,8 @@
  * 2. the subject check — this setup starts no server. The operator or CI starts
  *    the application under acceptance, and the check fails the run unless the
  *    page at BASE_URL carries the repository's version;
- * 3. existingUser's sign-in, through the login form, saved as Playwright storage
- *    state for every spec's browser context.
+ * 3. each example reader's sign-in, through the login form, saved as Playwright
+ *    storage state for every spec's browser context.
  *
  * The sign-in drives the real login form. Minting a session instead would change
  * authentication on a surface v21 shares with live v18, which
@@ -22,7 +22,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config as loadEnv } from 'dotenv';
 import { chromium } from 'playwright';
-import { adminUser, existingUser } from '../../../credentials';
+import { adminUser, existingUser, newUser } from '../../../credentials';
 import { BASE_URL, STORAGE_STATE_PATHS } from './harness';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -102,11 +102,6 @@ async function signInUser(
   // A signed-in reader lands on the front page, and the login route redirects
   // them away from the form for as long as the session holds.
   await page.waitForURL(`${BASE_URL}/`, { timeout: 60_000 });
-  await page.goto(`${BASE_URL}/library`, {
-    waitUntil: 'domcontentloaded',
-    timeout: 60_000,
-  });
-  await page.waitForURL(`${BASE_URL}/library`, { timeout: 60_000 });
 
   /*
    * The client session activates when the AuthManager island hydrates and
@@ -139,4 +134,5 @@ export async function setup(): Promise<void> {
 
   await signInUser(existingUser, STORAGE_STATE_PATHS.existingUser);
   await signInUser(adminUser, STORAGE_STATE_PATHS.adminUser);
+  await signInUser(newUser, STORAGE_STATE_PATHS.newUser);
 }

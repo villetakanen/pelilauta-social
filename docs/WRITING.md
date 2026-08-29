@@ -28,6 +28,24 @@ readable from the technology's documentation; a restated sentence; an aphorism; 
 metaphor; a knowing aside. A failure of principle 2: "X, not Y" where Y is not a
 mistake the reader would likely make.
 
+## Standards
+
+A sentence meets these positive criteria before it survives:
+
+1. **Complete and assertive.** Every sentence is a grammatically complete statement
+   that directly asserts its fact or command. Do not use sentence fragments,
+   rhetorical questions, or introductory label phrases standing in for statements.
+2. **Direct subject-verb-object structure.** The entity performing or defining the
+   action is the subject, the active verb states the action, and the receiver
+   follows. Avoid passive voice unless the actor is entirely irrelevant to the
+   reader's action.
+3. **High information density.** Every word delivers distinct information. A sentence
+   that merely restates a heading, announces an adjacent table or list without adding
+   new facts, or splits one fact across symmetric clauses ("which have X, and which
+   have not") is pruned or deleted.
+4. **Concrete reference.** Name the exact entity, file, token, selector, or condition
+   rather than using placeholder abstractions.
+
 ## Mechanics
 
 Follow the Google guide by default. Where the principles above disagree with it, the
@@ -40,7 +58,9 @@ principles win.
 - No anthropomorphism: code does not want, know or care.
 - A possessive that stands in for a clause is rewritten as the clause: not
   "the removal's triage", but "the triage that removed Cyan".
-- Plain language; no colloquialisms or figurative metaphors.
+- Plain language: avoid colloquialisms, buzzwords and figurative metaphors. Keep
+  precise domain terms and formal words (such as *bespoke*) when they carry a
+  specific technical fact that shorter synonyms do not convey.
 - No contractions in a book.
 - *Owner* names an access-control role: a person on an entity's `owners` list,
   holding full rights to it. Use the word for that fact only. Any other relation

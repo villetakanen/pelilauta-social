@@ -64,10 +64,7 @@ async function handleSubmit(event: Event) {
 
     if (response.ok) {
       logDebug('EulaForm', 'EULA accepted and profile created, redirecting');
-      // Wait a bit for Firestore to propagate the new profile data
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 1000);
+      window.location.href = '/';
     } else {
       const errorText = await response.text();
       logError('EulaForm', 'EULA acceptance failed', {
@@ -98,37 +95,50 @@ async function handleCancel(event: Event) {
 }
 </script>
 
-<div class="content-prose">
-  <div class="surface">
-    <h1>{t('login:eula.title')}</h1>
-    <form onsubmit={handleSubmit} class="surface">
-      <article class="text-prose">
-        {#if children}
-          {@render children()}
-        {:else}
-          <p>EULA content should be provided via the children slot.</p>
-        {/if}
-      </article>
+<form onsubmit={handleSubmit} class="surface eula-form">
+  <article class="text-prose">
+    {#if children}
+      {@render children()}
+    {:else}
+      <p>EULA content should be provided via the children slot.</p>
+    {/if}
+  </article>
 
-      <div class="elevation-1 p-2">
-        {#if !hasProfile}
-          <NickNameInput {nick} onNickChange={handleNickChange} />
-        {:else}
-          <p>{nick}</p>
-          <p class="p-4">
-            {t('login:eula.updateNotice.description')}
-          </p>
-        {/if}
-      </div>
+  <section class="eula-profile">
+    {#if !hasProfile}
+      <NickNameInput {nick} onNickChange={handleNickChange} />
+    {:else}
+      <p>{nick}</p>
+      <p>{t('login:eula.updateNotice.description')}</p>
+    {/if}
+  </section>
 
-      <div class="text-end">
-        <button type="button" class="text" onclick={handleCancel}>
-          {t('login:eula.decline')}
-        </button>
-        <button type="submit"  disabled={!valid}>
-          {t('login:eula.accept')}
-        </button>
-      </div>
-    </form>
+  <div class="eula-actions">
+    <button type="button" class="text" onclick={handleCancel}>
+      {t('login:eula.decline')}
+    </button>
+    <button type="submit" disabled={!valid}>
+      {t('login:eula.accept')}
+    </button>
   </div>
-</div>
+</form>
+
+<style>
+  .eula-form {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .eula-profile {
+    display: grid;
+    row-gap: var(--cn-gap);
+    padding-block: var(--cn-gap);
+  }
+
+  .eula-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+</style>

@@ -11,27 +11,50 @@ interface Props {
 const { displayName, tagInfo } = Astro.props;
 ---
 
-<header class="mb-2 pb-2 border-b">
-  <h1 class="text-h2">
+<header class="tag-header">
+  <div class="tag-title-row">
     {tagInfo?.icon && <CnIcon noun={tagInfo.icon} />}
-    {displayName}
-  </h1>
+    <h1>#{displayName}</h1>
+  </div>
 
-  <!-- If we are on popular tag, we get a host of extra description -->
-  {tagInfo?.description && <p>{tagInfo.description}</p>}
+  {tagInfo?.description && <p class="text-low">{tagInfo.description}</p>}
 
   {
     tagInfo?.synonyms && tagInfo.synonyms.length > 0 && (
-      <>
-        <p class="text-low">
-          {t("tag:synonymsInfo", { count: tagInfo.synonyms.length })}:
+      <div class="tag-synonyms-block">
+        <p class="text-caption text-low">
+          {t('tag:synonymsInfo', { count: tagInfo.synonyms.length })}:
         </p>
         <div class="chip-list">
           {tagInfo.synonyms.map((syn) => (
             <span class="chip">#{syn}</span>
           ))}
         </div>
-      </>
+      </div>
     )
   }
 </header>
+
+<style>
+  .tag-header {
+    display: grid;
+    row-gap: var(--cn-gap);
+    border-block-end: 1px solid var(--cn-color-border);
+    padding-block-end: var(--cn-line);
+  }
+
+  .tag-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--cn-gap);
+  }
+
+  .tag-title-row h1 {
+    margin: 0;
+  }
+
+  .tag-synonyms-block {
+    display: grid;
+    row-gap: calc(var(--cn-grid) * 0.5);
+  }
+</style>

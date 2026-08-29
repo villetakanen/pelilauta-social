@@ -112,22 +112,20 @@ function parseUrl(tag: Tag) {
 
 <Base {title} {description}>
   <div class="content-prose">
-    <article>
+    <article class="surface tag-detail-card">
       <TagHeader {displayName} {tagInfo} />
 
       {
         threads.length > 0 && (
-          <section style="margin-bottom: calc(3 * var(--cn-grid))">
-            <h2 class="text-title">
+          <section class="tag-section">
+            <h2>
               <CnIcon noun="discussion" size="small" />
-              {t("tag:discussions")} ({threads.length})
+              <span>{t('tag:discussions')} ({threads.length})</span>
             </h2>
-            <ul>
+            <ul class="tag-entries-list">
               {threads.map((entry) => (
-                <li class="flex items-center">
-                  <span style="flex: 1">
-                    <a href={parseUrl(entry)}>{entry.title}</a>
-                  </span>
+                <li class="tag-entry-row">
+                  <a href={parseUrl(entry)} class="entry-link">{entry.title}</a>
                   <ProfileLink uid={entry.author} client:only="svelte" />
                 </li>
               ))}
@@ -138,17 +136,15 @@ function parseUrl(tag: Tag) {
 
       {
         pages.length > 0 && (
-          <section>
-            <h2 class="text-title">
+          <section class="tag-section">
+            <h2>
               <CnIcon noun="card" size="small" />
-              {t("tag:pages")} ({pages.length})
+              <span>{t('tag:pages')} ({pages.length})</span>
             </h2>
-            <ul>
+            <ul class="tag-entries-list">
               {pages.map((entry) => (
-                <li class="flex items-center">
-                  <span style="flex: 1">
-                    <a href={parseUrl(entry)}>{entry.title}</a>
-                  </span>
+                <li class="tag-entry-row">
+                  <a href={parseUrl(entry)} class="entry-link">{entry.title}</a>
                   <ProfileLink uid={entry.author} client:only="svelte" />
                 </li>
               ))}
@@ -157,7 +153,54 @@ function parseUrl(tag: Tag) {
         )
       }
 
-      {entries.length === 0 && <p class="text-caption">{t("tag:noEntries")}</p>}
+      {entries.length === 0 && <p class="text-caption text-low">{t('tag:noEntries')}</p>}
     </article>
   </div>
 </Base>
+
+<style>
+  .tag-detail-card {
+    display: grid;
+    row-gap: var(--cn-line);
+  }
+
+  .tag-section {
+    display: grid;
+    row-gap: var(--cn-gap);
+  }
+
+  .tag-section h2 {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--cn-grid) * 0.5);
+    margin: 0;
+    font-size: var(--cn-font-size-h3);
+  }
+
+  .tag-entries-list {
+    display: grid;
+    row-gap: var(--cn-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tag-entry-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--cn-gap);
+    padding-block: calc(var(--cn-grid) * 0.5);
+    border-block-end: 1px solid var(--cn-color-border);
+  }
+
+  .tag-entry-row:last-child {
+    border-block-end: none;
+  }
+
+  .entry-link {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
