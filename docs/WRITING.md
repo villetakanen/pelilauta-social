@@ -58,7 +58,9 @@ principles win.
 - No anthropomorphism: code does not want, know or care.
 - A possessive that stands in for a clause is rewritten as the clause: not
   "the removal's triage", but "the triage that removed Cyan".
-- Plain language; no colloquialisms or figurative metaphors.
+- Plain language: avoid colloquialisms, buzzwords and figurative metaphors. Keep
+  precise domain terms and formal words (such as *bespoke*) when they carry a
+  specific technical fact that shorter synonyms do not convey.
 - No contractions in a book.
 - *Owner* names an access-control role: a person on an entity's `owners` list,
   holding full rights to it. Use the word for that fact only. Any other relation
