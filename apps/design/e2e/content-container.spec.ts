@@ -781,4 +781,3 @@ test('a direct replaced child in a content container keeps its intrinsic width',
   expect(image.width).toBeCloseTo(120, 0);
   expect(image.height).toBeCloseTo(60, 0);
 });
-

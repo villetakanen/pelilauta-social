@@ -100,22 +100,112 @@
  * container type establishes overrides the `display: none` they are rendered with,
  * and a child that is not there would take a column.
  */
-.content-prose > :not(astro-island, script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
-.content-prose > astro-island > :not(script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
-.content-triad > :not(astro-island, script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
-.content-triad > astro-island > :not(script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
-.content-golden > :not(astro-island, script, style, template, img, picture, video, canvas, svg, iframe, embed, object),
-.content-golden > astro-island > :not(script, style, template, img, picture, video, canvas, svg, iframe, embed, object) {
+.content-prose
+> :not(
+  astro-island,
+  script,
+  style,
+  template,
+  img,
+  picture,
+  video,
+  canvas,
+  svg,
+  iframe,
+  embed,
+  object
+),
+.content-prose
+  > astro-island
+  > :not(
+    script,
+    style,
+    template,
+    img,
+    picture,
+    video,
+    canvas,
+    svg,
+    iframe,
+    embed,
+    object
+  ),
+.content-triad
+  > :not(
+    astro-island,
+    script,
+    style,
+    template,
+    img,
+    picture,
+    video,
+    canvas,
+    svg,
+    iframe,
+    embed,
+    object
+  ),
+.content-triad
+  > astro-island
+  > :not(
+    script,
+    style,
+    template,
+    img,
+    picture,
+    video,
+    canvas,
+    svg,
+    iframe,
+    embed,
+    object
+  ),
+.content-golden
+  > :not(
+    astro-island,
+    script,
+    style,
+    template,
+    img,
+    picture,
+    video,
+    canvas,
+    svg,
+    iframe,
+    embed,
+    object
+  ),
+.content-golden
+  > astro-island
+  > :not(
+    script,
+    style,
+    template,
+    img,
+    picture,
+    video,
+    canvas,
+    svg,
+    iframe,
+    embed,
+    object
+  ) {
   container-type: inline-size;
   min-inline-size: 0;
 }
 
 .content-prose > :is(img, picture, video, canvas, svg, iframe, embed, object),
-.content-prose > astro-island > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-prose
+  > astro-island
+  > :is(img, picture, video, canvas, svg, iframe, embed, object),
 .content-golden > :is(img, picture, video, canvas, svg, iframe, embed, object),
-.content-golden > astro-island > :is(img, picture, video, canvas, svg, iframe, embed, object),
+.content-golden
+  > astro-island
+  > :is(img, picture, video, canvas, svg, iframe, embed, object),
 .content-triad > :is(img, picture, video, canvas, svg, iframe, embed, object),
-.content-triad > astro-island > :is(img, picture, video, canvas, svg, iframe, embed, object) {
+.content-triad
+  > astro-island
+  > :is(img, picture, video, canvas, svg, iframe, embed, object) {
   max-inline-size: 100%;
 }
 

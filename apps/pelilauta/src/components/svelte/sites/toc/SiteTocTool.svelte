@@ -1,10 +1,7 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
-import {
-  type Site,
-  type SiteSortOrder,
-} from 'src/schemas/SiteSchema';
+import { type Site, type SiteSortOrder } from 'src/schemas/SiteSchema';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
