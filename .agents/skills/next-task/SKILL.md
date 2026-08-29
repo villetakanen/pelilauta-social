@@ -6,7 +6,8 @@ description: Briefly propose the next small, contained, atomic, deliverable and 
 # Next Task
 
 Read the named epic. If none is named, identify the active epic from the current
-branch and `plans/`. Read every Possible work entry, the domain's parent spec, the existing
+branch and the open issues labeled `epic` (`gh issue list --label epic`).
+Read every Possible work entry, the domain's parent spec, the existing
 specs for candidate capabilities, and v20's implementation and books for the
 surfaces in question.
 

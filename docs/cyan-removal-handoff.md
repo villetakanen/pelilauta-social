@@ -1,7 +1,8 @@
 # Deprecate Cyan — Working Log
 
 Where the epic stands, for the session that picks it up next. Scope, guardrails and
-step order are in `plans/deprecate-cyan-and-qol.md`; this file holds state and traps.
+step order were in `plans/deprecate-cyan-and-qol.md`, deleted at the epic's release
+and readable in git history; this file holds state and traps.
 Delete it when the epic closes.
 
 ## State
@@ -86,7 +87,7 @@ constraint says so.
 The channel directory's triage is done (`c90fe8bf`). Each row stands on `.surface`
 with a local stopgap layout — identity beside latest activity at the measure — and
 the category section states the rhythm between heading and rows; both are anchored
-in `plans/debt/the-design-system-has-no-listing-row.md`. The page wraps in
+in issue #109. The page wraps in
 `.content-prose`, the row link spans name and description as in v18, and the
 latest-is-newest note no longer renders on an empty channel. The stopgap's grid gap
 is `var(--cn-line) var(--cn-gap)` — line rhythm stacked, inline gap in columns —
@@ -227,7 +228,7 @@ container inside another; the spec permits nesting and the only cost is a second
 directly, with no wrapper `div` — the standing conversion recorded in
 `docs/cyan-removal-page-checklist.md`. `DeleteClockApp.svelte`'s clock-and-label row had
 no toolbar to convert; it keeps a local scoped flex rule, now anchored at
-`plans/debt/the-design-system-has-no-listing-row.md` alongside the other listing-row
+issue #109 alongside the other listing-row
 stopgaps, and its two Lit custom elements (`cn-story-clock`, `cn-tick`) are untouched per
 the epic's guardrail. What this leaves open: the eight form pages and
 `debug/purge.astro` in the same family are a later slice, and the `.content-prose`
@@ -249,7 +250,7 @@ file row, `PageArticleHeader.astro`'s breadcrumb header, and `admin/index.astro`
 banner. `NounSelect.svelte` keeps its one scoped rule under a `@todo`: pinning a value to
 one edge and a chevron to the other is the one shape `text-align` cannot serve, and the
 component belongs in the design system rather than staying an app-side shim forever —
-`plans/debt/the-noun-picker-is-not-in-the-design-system.md`.
+issue #110.
 
 `CnReactionButton`'s root is `inline-flex` now (`CnReactionButton.svelte:100`), joining
 every other published control, which was already inline-level. `ThreadInfoSection.astro`
@@ -287,7 +288,7 @@ Also open, and each visible on a rendered page rather than in a suite:
   promises characters, which ADR 0003 removed.
   The front page's and the login page's now read one shared string; the library's needs
   a decision about what the library is without character sheets.
-- `.toolbar` and `.flex` need layout answers case by case. `plans/debt/card-action-row-height.md` carries the
+- `.toolbar` and `.flex` need layout answers case by case. issue #99 carries the
   geometry of the action row, and it now turns on the seven-unit occupied row the
   Actions spec states rather than on the click area.
 

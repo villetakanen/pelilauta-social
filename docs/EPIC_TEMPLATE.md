@@ -1,9 +1,9 @@
 # <Epic>
 
-A plan coordinates an active epic. It is transient: it may carry behaviour while the
-epic runs — behaviour that outlives the epic lands in a spec — and it may be deleted
-after the epic closes. Its entries keep the goal and the remaining work legible, not
-a delivery record.
+An epic is a GitHub issue labeled `epic`, and this is its body's structure. It is
+transient: it may carry behaviour while the epic runs — behaviour that outlives the
+epic lands in a spec — and it closes with the epic. Its entries keep the goal and
+the remaining work legible, not a delivery record.
 
 ## Goal
 
