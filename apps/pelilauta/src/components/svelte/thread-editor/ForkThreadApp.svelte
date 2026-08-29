@@ -143,7 +143,7 @@ function cancel() {
 
   <div class="quoted-reply">
     <p>{t('threads:fork.quoted')}</p>
-    <div class="surface clip-after-3 quote-preview">
+    <div class="surface quote-preview">
       <p>
         <ProfileLink uid={reply.owners[0]} />
       </p>
@@ -174,6 +174,14 @@ function cancel() {
     display: grid;
     row-gap: calc(var(--cn-grid) * 0.5);
     font-size: var(--cn-font-size-small);
+  }
+
+  .quote-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .actions {
