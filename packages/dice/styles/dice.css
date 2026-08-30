@@ -1,0 +1,316 @@
+/*
+ * Dice — the face for the server-rendered span
+ * `specs/pelilauta/wiki-dice-notation/spec.md` emits:
+ *
+ *   <span class="dice" role="img" data-sides="20" data-value="20"
+ *         data-kind="die" aria-label="[20]">20</span>
+ *
+ * Dice is CSS-only, per specs/dice/spec.md: no custom element, no client
+ * code, no hydration boundary. The face number, and a target's `+`, are the
+ * span's own text content — a real text node, so it is selectable and
+ * copyable with the surrounding prose (the operator's ruling: generated
+ * content via `content: attr(data-value)` on `::after` cannot be selected in
+ * any browser, and `user-select: none` forbade it a second time; both are
+ * gone). `data-value` still carries the face number for styling and for
+ * `aria-label`, but nothing renders it as generated content any more.
+ *
+ * The silhouette lives on `::before` instead of on `.dice` itself:
+ * `clip-path` clips every descendant, pseudo-elements included, so a
+ * silhouette declared on the element would cut its own glyph. `::before` is
+ * absolutely positioned and carries the background and the clip-path.
+ *
+ * Now that the glyph is `.dice`'s own in-flow text rather than a pseudo-
+ * element, it can no longer carry its own `z-index` to paint above the
+ * silhouette — only a positioned box can. `.dice` instead gets
+ * `isolation: isolate`, giving it its own stacking context, and `::before`
+ * takes a *negative* stack level within it: in painting order, a stacking
+ * context's own in-flow inline content (the glyph) always paints above its
+ * negative-z-index descendants and below its zero-or-positive-z-index ones
+ * — so `::before` has to sit below zero for the text to sit above it.
+ *
+ * Dice is a decorative, extension-private direct-chroma consumer, in the
+ * spec's words: it reads a `--chroma-*` family's steps straight off the
+ * palette, bypassing the semantic layer, because a die's colour identifies
+ * its side count rather than carrying a themeable role — currently
+ * `--chroma-warning-*`, a trial swap from `--chroma-primary-*` at the
+ * operator's request; see the colour-ramp comment below. `--_dice-*` marks
+ * the package-private properties, declared on `.dice` itself —
+ * extension-private, so nothing outside the face reads them.
+ *
+ * There is no halo behind the glyph any more. A–C below (the larger box,
+ * the length-stepped glyph size, the `+` riding outside the face) keep
+ * every glyph inside its own silhouette, so there is no longer a case
+ * where the glyph crosses onto the page background and needs a halo to
+ * stay readable there — the operator's ruling that removed
+ * `--_dice-text-shadow-on-light` / `-on-dark` and every `text-shadow`.
+ *
+ * This is a port of the standalone `cn-dice` Lit element (its README:
+ * "renders a die with a height matching the line-height"). The silhouette
+ * geometry — polygons, per-die shape sizes, rotations — is taken from
+ * upstream verbatim; only the sizing mechanism changes, from a container
+ * query on a custom element's host to a percentage of this element's own
+ * box, because Dice has no host to query.
+ */
+
+.dice {
+  --_dice-text-white: white;
+  --_dice-text-black: black;
+  /* The box, per upstream's own tester: `cn-dice-size: 1.75rem` (28px)
+     against a 24px line — upstream's inline die is deliberately *larger*
+     than the line, not equal to it. Expressed as a ratio of `--cn-line`
+     rather than a fixed rem so it still tracks a `--cn-line` change:
+     7/6 of 24px is 28px, reproducing upstream's ratio exactly. The
+     silhouettes below are percentages of this box, so they scale with it. */
+  --_dice-box: calc(var(--cn-line) * 7 / 6);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* A local stacking context, so `::before`'s negative z-index (below) stays
+     scoped to this element instead of stacking against unrelated page
+     content. */
+  isolation: isolate;
+  inline-size: var(--_dice-box);
+  block-size: var(--_dice-box);
+  box-sizing: border-box;
+  overflow: visible;
+
+  /*
+   * The offset is tuned so the number's baseline lands on the surrounding
+   * text's baseline rather than the box's centre — against a 28px
+   * (`--_dice-box`) box, `--cn-line` at its current 24px. Tuned by
+   * rendering "Agx<die>Agx" at 17px/700 in a browser (Playwright +
+   * pixel-row scanning: the bottom-most dark pixel of "Agx", which has no
+   * descender, marks the text baseline; the bottom-most dark pixel of the
+   * glyph marks the die's) and adjusting until the two rows matched — they
+   * land within a hairline (measured 1px, screenshot antialiasing) of each
+   * other at -4px. Needs re-measuring the same way if `--cn-line` or the
+   * 7/6 ratio changes.
+   */
+  vertical-align: -4px;
+
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* One character (a single digit, or a die's own 2/4/6/8 label) reads at
+   prose size — the operator's ruling that the glyph is at least as large
+   as surrounding prose. */
+.dice[data-length="1"] {
+  font-size: var(--cn-font-size-text);
+}
+
+/*
+ * Two characters (10, 12, 20, or any two-digit result/target) step down.
+ * A two-digit value only ever lands on d10, d12 or d20 (the admitted
+ * denominations of two digits or more), so the narrowest silhouette it has
+ * to fit is the tightest of those three. Measured against the 28px box
+ * (`--_dice-box`, at a screenshot's pixel row through the glyph's own
+ * vertical centre): d10's six-sided gem is the narrowest at 25px, d20's
+ * tilted diamond next at 27px, d12's near-circular decagon widest at 28px.
+ *
+ * At prose size (17px) "20" already measures ~20.8px — technically inside
+ * d10's 25px, but with too thin a margin to read as sitting inside the
+ * shape rather than crowding its edge, and the operator's ruling asks for
+ * a visible step down from the one-character size, not a bare fit. 0.9375rem
+ * (15px) bold measures "20" at ~18.4px: a clear two-point step down from
+ * prose, and a comfortable ~6.6px (26%) margin inside d10's 25px waist —
+ * still well above upstream's own two-digit size (11px) for legibility.
+ */
+.dice[data-length="2"] {
+  font-size: 0.9375rem; /* 15px */
+}
+
+/*
+ * The colour ramp — a trial, at the operator's request, swapping the
+ * primary family for `--chroma-warning-*`.
+ *
+ * Known, licensed deviation: the rule for a direct-chroma consumer is that a
+ * die's colour is an exact declared chroma step. This ramp is a deliberate
+ * exception to that rule, taken by the operator, not an oversight — do not
+ * "fix" it back to the four raw steps below.
+ *
+ * Seven dice, one bespoke colour each, mixed along the warning scale rather
+ * than paired onto shared steps: `color-mix(in oklch, …)` between the two
+ * declared endpoints, `--chroma-warning-90` (L 0.90) and `--chroma-warning-40`
+ * (L 0.40) — a 0.50 span over six equal intervals, 0.0833 of lightness per
+ * step. Both endpoints carry the same chroma (0.2) and hue (65deg), so mixing
+ * the two interpolates lightness alone; the five intermediate dice take
+ * 1/6 through 5/6 of that mix. The midpoint step, `--chroma-warning-60`, is
+ * not one of the two mixed colours — its chroma differs from the endpoints'
+ * and routing through it would bend the ramp off a straight lightness line.
+ * Direction is light-to-dark as the side count rises, so it still reads with
+ * the silhouettes growing more complex: d2 is the lightest, d20 the darkest.
+ *
+ * Measured (`packages/dice/test/contrast.test.ts`, same OKLCH maths as
+ * `packages/design-system/test/color-contrast.test.ts`, resolving each
+ * `color-mix()` the same way the CSS cascade would):
+ *
+ *   die   L       vs black   vs white   vs light page   vs dark page
+ *   d2    0.9000  12.57:1    1.67:1     1.45:1           10.70:1
+ *   d4    0.8167  10.40:1    2.02:1     1.75:1            8.86:1
+ *   d6    0.7333   8.54:1    2.46:1     2.13:1            7.27:1
+ *   d8    0.6500   6.23:1    3.37:1     2.92:1            5.31:1
+ *   d10   0.5667   4.45:1    4.72:1     4.09:1            3.79:1
+ *   d12   0.4833   3.11:1    6.75:1     5.84:1            2.65:1
+ *   d20   0.4000   2.17:1    9.67:1     8.38:1             1.85:1
+ *
+ * Every die's better text colour clears the 4.5:1 AA floor except d8's: the
+ * measured boundary the table alone supports falls between d8 and d10, black
+ * on d8 at 6.23:1. The operator overruled that boundary — d8 takes white,
+ * 3.37:1, an operator-ruled deviation below the AA floor, not an oversight.
+ * White would need the face down near L 0.578 (close to d10's own 0.5667) to
+ * clear 4.5:1; d8 stays at L 0.65 by the ramp's own equal-interval rule, so
+ * the gap is taken deliberately. `contrast.test.ts` pins the exact ratio as a
+ * named exception, so any drift in it still fails, and every other face's
+ * text still asserts AA.
+ */
+.dice[data-sides="2"],
+.dice[data-sides="4"],
+.dice[data-sides="6"] {
+  color: var(--_dice-text-black);
+}
+
+/* d8 takes white, not the black the measured boundary above would give it:
+   an operator-ruled deviation, at 3.37:1, below the 4.5:1 AA floor — see the
+   colour-ramp comment above. */
+.dice[data-sides="8"],
+.dice[data-sides="10"],
+.dice[data-sides="12"],
+.dice[data-sides="20"] {
+  color: var(--_dice-text-white);
+}
+
+/*
+ * A target's `+`: the renderer wraps it in its own element,
+ * `<span class="dice-plus">`, rather than folding it into the face's
+ * text run — a third character competing with two digits for the same
+ * silhouette would force the glyph size down again for every target.
+ * `specs/dice/spec.md` permits the `+` to extend past the face
+ * background, so it is sized down and nudged past the box's own edge
+ * instead of sharing the digits' size and position. It stays real,
+ * selectable text — never `content` — so it is a styled inline element,
+ * not a pseudo-element.
+ */
+.dice-plus {
+  font-size: 0.6875rem; /* 11px */
+  margin-inline-start: -0.15em;
+  vertical-align: super;
+}
+
+/*
+ * The silhouette layer is absolutely positioned so `.dice`'s clip-path never
+ * reaches the face text, and carries a negative stack level so it always
+ * paints under `.dice`'s own text — see the file header — rather than
+ * depending on source order.
+ *
+ * It is centred with `inset: 0; margin: auto;` rather than upstream's
+ * container-query centring (upstream relies on its host being a flex
+ * container and the pseudo-element carrying no inset of its own) — `.dice`
+ * is not that host, so each die's `height` below sizes the shape as a
+ * percentage of this box, `aspect-ratio` derives its width, and the auto
+ * margins centre the result. Every silhouette carries the same base
+ * `rotate(2.25deg)`; d20 overrides it.
+ */
+.dice::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  z-index: -1;
+  aspect-ratio: 1;
+  transform: rotate(2.25deg);
+}
+
+/* d2 — round coin. Dice's own addition: `cn-dice` has no two-sided die, and
+   `specs/dice/spec.md` calls it a coin. Sized a touch larger than d6, the
+   next plainest silhouette, since a circle reads smaller than a square at
+   the same box height. The lightest die on the ramp — the light endpoint
+   itself, L 0.90 — see the colour-ramp comment above
+   `[data-sides="2"] ... { color }`. */
+.dice[data-sides="2"]::before {
+  height: 85%;
+  border-radius: 50%;
+  background: var(--chroma-warning-90);
+}
+
+/* d4 — triangle. 1/6 of the ramp toward the dark endpoint, L 0.8167. */
+.dice[data-sides="4"]::before {
+  height: 90%;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: color-mix(
+    in oklch,
+    var(--chroma-warning-90),
+    var(--chroma-warning-40) 16.6667%
+  );
+}
+
+/* d6 — plain square, no clip-path. 2/6 of the ramp, L 0.7333. */
+.dice[data-sides="6"]::before {
+  height: 80%;
+  background: color-mix(
+    in oklch,
+    var(--chroma-warning-90),
+    var(--chroma-warning-40) 33.3333%
+  );
+}
+
+/* d8 — diamond (a rotated square). 3/6 of the ramp, the midpoint, L 0.65. */
+.dice[data-sides="8"]::before {
+  height: 100%;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: color-mix(
+    in oklch,
+    var(--chroma-warning-90),
+    var(--chroma-warning-40) 50%
+  );
+}
+
+/* d10 — elongated six-sided gem. 4/6 of the ramp, L 0.5667. */
+.dice[data-sides="10"]::before {
+  height: 95%;
+  clip-path: polygon(50% 0%, 95% 40%, 95% 60%, 50% 100%, 5% 60%, 5% 40%);
+  background: color-mix(
+    in oklch,
+    var(--chroma-warning-90),
+    var(--chroma-warning-40) 66.6667%
+  );
+}
+
+/* d12 — ten-sided face. 5/6 of the ramp, L 0.4833. */
+.dice[data-sides="12"]::before {
+  height: 100%;
+  clip-path: polygon(
+    34.54915% 2.44717%,
+    65.45085% 2.44717%,
+    90.45085% 20.61074%,
+    100% 50%,
+    90.45085% 79.38926%,
+    65.45085% 97.55283%,
+    34.54915% 97.55283%,
+    9.54915% 79.38926%,
+    0% 50%,
+    9.54915% 20.61074%
+  );
+  background: color-mix(
+    in oklch,
+    var(--chroma-warning-90),
+    var(--chroma-warning-40) 83.3333%
+  );
+}
+
+/*
+ * d20 — a tilted diamond built from an equilateral-triangle aspect ratio
+ * (`1/cos(30deg)`), distinct from d8's upright one. `rotate(35deg)`
+ * overrides the shared base rotation. The darkest die on the ramp — the
+ * dark endpoint itself, L 0.40.
+ */
+.dice[data-sides="20"]::before {
+  height: 90%;
+  aspect-ratio: 1 / cos(30deg);
+  clip-path: polygon(50% -50%, 100% 50%, 50% 150%, 0 50%);
+  background: var(--chroma-warning-40);
+  transform: rotate(35deg);
+}

@@ -1,0 +1,114 @@
+---
+/**
+ * DiceSpecimen — admitted Dice faces, as the server would emit them.
+ *
+ * Dice is CSS-only (specs/dice/spec.md): the markup below is exactly the span
+ * `specs/pelilauta/wiki-dice-notation/spec.md` renders, with no script and no
+ * hydration boundary. `import '@dice/styles/dice.css'` is the only thing this
+ * file adds — everything visible comes from the stylesheet reading the
+ * span's `data-*` attributes.
+ *
+ * `group` selects which row renders, so the book can put each axis in its own
+ * <DsComposition themes> panel rather than showing every axis in one panel.
+ *
+ * Book: apps/design/src/content/extensions/dice.mdx
+ */
+import '@dice/styles/dice.css';
+
+interface Face {
+  sides: 2 | 4 | 6 | 8 | 10 | 12 | 20;
+  value: number;
+  kind: 'die' | 'result' | 'target';
+  label: string;
+}
+
+/** One die per admitted side count, its own denomination as the face. */
+const SIDES: Face[] = [2, 4, 6, 8, 10, 12, 20].map((sides) => ({
+  sides: sides as Face['sides'],
+  value: sides,
+  kind: 'die',
+  label: `[${sides}]`,
+}));
+
+/**
+ * A d20 die, a d20 result and a d20 target, side by side: the pair the
+ * spec's Definition of Done asks the book to show, and the pair that puts
+ * the target's `+` beside a bare result at the same side count.
+ */
+const D20: Face[] = [
+  { sides: 20, value: 20, kind: 'die', label: '[20]' },
+  { sides: 20, value: 14, kind: 'result', label: '[14]' },
+  { sides: 20, value: 20, kind: 'target', label: '[d20, 20+]' },
+];
+
+/**
+ * The two target faces the spec's Scenarios name: a d6 target reading `2+`
+ * on a large glyph, and a d20 target reading `20+` on a small one. Together
+ * they show the `+` at both glyph sizes.
+ */
+const TARGETS: Face[] = [
+  { sides: 6, value: 2, kind: 'target', label: '[d6, 2+]' },
+  { sides: 20, value: 20, kind: 'target', label: '[d20, 20+]' },
+];
+
+/**
+ * The former glyph-size comparison (a large-glyph face beside a small-glyph
+ * one) no longer applies: every die shares one of two sizes, stepped by
+ * `data-length` alone (`styles/dice.css`) — the tiered per-die hierarchy is
+ * gone. What is still worth checking by eye is legibility at those two
+ * sizes against the tightest silhouettes: d2, the smallest shape (85% of
+ * the box) at one character, and d10, the narrowest waist among the
+ * two-character faces. Neither needs a halo: A–D's larger box and
+ * length-stepped glyph keep every number inside its own silhouette.
+ */
+const GLYPHS: Face[] = [
+  { sides: 2, value: 2, kind: 'die', label: '[2]' },
+  { sides: 10, value: 10, kind: 'die', label: '[10]' },
+];
+
+const GROUPS = {
+  sides: SIDES,
+  d20: D20,
+  targets: TARGETS,
+  glyphs: GLYPHS,
+} as const;
+
+interface Props {
+  /** Which row to render. */
+  group: keyof typeof GROUPS;
+}
+
+const { group } = Astro.props;
+const faces = GROUPS[group];
+---
+
+<p class="dice-specimen__row">
+  {
+    faces.map((face) => (
+      <span
+        class="dice"
+        role="img"
+        data-sides={face.sides}
+        data-value={face.value}
+        data-kind={face.kind}
+        data-length={String(face.value).length}
+        aria-label={face.label}
+      >{face.kind === 'target' ? (
+        <>
+          {face.value}<span class="dice-plus">+</span>
+        </>
+      ) : (
+        face.value
+      )}</span>
+    ))
+  }
+</p>
+
+<style>
+  .dice-specimen__row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--cn-gap);
+    margin: 0;
+  }
+</style>

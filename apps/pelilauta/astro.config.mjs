@@ -26,6 +26,7 @@ export default defineConfig({
         '@editor': fileURLToPath(
           new URL('../../packages/editor', import.meta.url),
         ),
+        '@dice': fileURLToPath(new URL('../../packages/dice', import.meta.url)),
       },
     },
     plugins: [

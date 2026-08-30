@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@design-system/*": ["../../packages/design-system/*"],
-      "@editor/*": ["../../packages/editor/*"]
+      "@editor/*": ["../../packages/editor/*"],
+      "@dice/*": ["../../packages/dice/*"]
     }
   }
 }

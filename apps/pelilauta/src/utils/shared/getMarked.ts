@@ -1,6 +1,7 @@
 import { Marked, type MarkedExtension, type Tokens } from 'marked';
 import type { Site } from 'src/schemas/SiteSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import { createDiceExtension } from './marked/createDiceExtension';
 import { createProfileTagExtension } from './marked/createProfileTagExtension';
 
 /**
@@ -27,6 +28,10 @@ export function getMarkedInstance(
 
   // Use the profile tag extension
   marked.use(createProfileTagExtension(origin));
+
+  // Convert Dice notation in prose and link text. See
+  // specs/pelilauta/wiki-dice-notation/spec.md.
+  marked.use(createDiceExtension());
 
   if (references?.site) {
     // Use the single, comprehensive extension for all link types.
@@ -90,12 +95,10 @@ function createWikilinkExtension(
     // This renderer overrides the default behavior for standard [text](target) links
     renderer: {
       link(token: Tokens.Link): string {
-        const { href, title, text } = token;
+        const { href, title } = token;
         const rewrittenHref = rewriteUrl(href);
         const titleAttr = title ? ` title="${title}"` : '';
-        // Use `token.text` for the raw text, which marked will parse.
-        // If you manually parse `token.tokens`, you might get double-parsing.
-        return `<a href="${rewrittenHref}"${titleAttr}>${text}</a>`;
+        return `<a href="${rewrittenHref}"${titleAttr}>${this.parser.parseInline(token.tokens)}</a>`;
       },
     },
 

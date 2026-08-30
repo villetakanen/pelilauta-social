@@ -3,6 +3,10 @@ import type { Page } from '@schemas/PageSchema';
 import type { Site } from '@schemas/SiteSchema';
 import PageArticleFooter from './PageArticleFooter.astro';
 
+// The wiki renderer emits Dice spans into `page.htmlContent`; this stylesheet
+// is the only thing that draws them.
+import '@dice/styles/dice.css';
+
 interface Props {
   page: Page;
   site: Site;

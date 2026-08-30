@@ -6,6 +6,9 @@ import { logWarn } from 'src/utils/logHelpers';
 import ReactionButton from '../../svelte/app/ReactionButton.svelte';
 import SiteTocSection from './SiteTocSection.astro';
 
+// The sidebar renders wiki content, so it carries Dice spans too.
+import '@dice/styles/dice.css';
+
 interface Props {
   site: Site;
 }
