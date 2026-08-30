@@ -176,6 +176,21 @@ importers:
         specifier: ^7.4.1
         version: 7.4.1
 
+  packages/clock:
+    devDependencies:
+      '@sveltejs/vite-plugin-svelte':
+        specifier: ^7.3.0
+        version: 7.3.0(svelte@5.56.8(@typescript-eslint/types@8.46.3))(vite@8.2.1(@types/node@24.10.0)(esbuild@0.28.2)(jiti@2.6.1)(terser@5.49.0)(yaml@2.9.0))
+      jsdom:
+        specifier: ^29.0.1
+        version: 29.1.1
+      svelte:
+        specifier: ^5.56.8
+        version: 5.56.8(@typescript-eslint/types@8.46.3)
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@24.10.0)(jsdom@29.1.1)(vite@8.2.1(@types/node@24.10.0)(esbuild@0.28.2)(jiti@2.6.1)(terser@5.49.0)(yaml@2.9.0))
+
   packages/design-system:
     dependencies:
       '@fontsource/roboto-mono':

@@ -78,6 +78,9 @@ does: signed in, redirected to onboarding.
   both `seed/assets/bellweather-knives-hero.png`, and one matching entry in its
   `assets` array — one image gives a reading journey a hero, a background and a
   gallery entry already in place.
+- `sites/gloamroad-company` also carries `useClocks`, the site option the rail
+  reads before it offers the way to a site's clocks. A journey that creates a
+  clock reaches the page the way a reader does, rather than by its address.
 - `sites/seed-hidden-site` — a hidden site owned by `@existingUser`, with a front
   page. Every spec that asserts a listing omits hidden sites needs one that
   predates the spec's actions.

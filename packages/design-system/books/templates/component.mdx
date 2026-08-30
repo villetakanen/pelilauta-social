@@ -9,18 +9,19 @@ runtime: static
   COMPONENT BOOK — copy to apps/design/src/content/components/<slug>.mdx, delete
   these comments. Rules are the design-system-book skill's. Link books, never a spec.
 
-  A component book says what the component is for, where to use it, and what its API
-  is. A reader takes every other technical fact from the code, so this page carries
-  no geometry, no token table and no internal mechanism.
+  A component book explains what the component does, where to use it, its visual and
+  typographic integration, and its API. A reader takes internal implementation details
+  from the code, so this page carries no internal DOM mechanisms, CSS selector tricks,
+  or token tables.
 
   `runtime` is required: `static`, `progressive` or `interactive`, defined in
   books/runtimes.json. The shell renders its label as the subtitle. Never restate
   it in prose — say what an application must do, where that has a consequence.
 
-  The heading order below is fixed. Delete a section that has nothing that ships;
-  never reorder the ones that remain, because a reader scans this page against the
-  last component's. Keep every heading name unique within the page — the book tests
-  locate headings by name alone.
+  The section order below is fixed. Insert domain-appropriate design sections
+  (Visual encoding, Typographic integration, Anatomy) between 'When to use it' and
+  'Example' where applicable. Delete a section that has nothing that ships; never
+  reorder the rest. Keep every heading name unique within the page.
 
   This template is the model. No existing book is — read one to see how a heading is
   used, never to judge how much to write.

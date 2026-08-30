@@ -11,6 +11,7 @@ const designSystem = fileURLToPath(
 );
 const editor = fileURLToPath(new URL('../../packages/editor', import.meta.url));
 const dice = fileURLToPath(new URL('../../packages/dice', import.meta.url));
+const clock = fileURLToPath(new URL('../../packages/clock', import.meta.url));
 
 export default defineConfig({
   site: 'https://design.pelilauta.social',
@@ -26,6 +27,7 @@ export default defineConfig({
         '@design-system': designSystem,
         '@editor': editor,
         '@dice': dice,
+        '@clock': clock,
       },
     },
     plugins: [

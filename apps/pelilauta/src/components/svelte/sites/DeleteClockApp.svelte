@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnClock from '@clock/CnClock.svelte';
 import { deleteClock } from 'src/firebase/client/site/deleteClock';
 import type { Site } from 'src/schemas/SiteSchema';
 import { pushSessionSnack } from 'src/utils/client/snackUtils';
@@ -29,15 +30,12 @@ async function handleSubmit(event: Event) {
 <WithAuth {allow}>
   <section class="surface">
     <div class="clock-preview">
-      <cn-story-clock
-        view
-        name={clock?.label}
+      <CnClock
+        label={clock?.label || ''}
+        ticks={clock?.ticks}
         value={clock?.stage}
-      >
-        {#each clock?.ticks || [] as tick}
-          <cn-tick size={tick}></cn-tick>
-        {/each}
-      </cn-story-clock>
+        view
+      />
       <p>{clock?.label}</p>
     </div>
     <p>{t('site:deteteClock.info', { name: `${clock?.label}`})}</p>

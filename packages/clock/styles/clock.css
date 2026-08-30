@@ -1,0 +1,74 @@
+/*
+ * The clock's host box. `specs/clock/spec.md` fixes the dimension at 12 grid
+ * units (6rem, 96px) regardless of tick count, so a clock never reflows a
+ * layout when its slice count changes.
+ */
+
+.cn-clock {
+  display: block;
+  inline-size: calc(var(--cn-grid) * 12);
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.cn-clock:focus-visible {
+  outline: 2px solid var(--cn-color-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Disabled dims the whole dial and drops pointer handling to the platform,
+ * rather than to a handler that would have to re-check the flag on every
+ * event — the same shape `editor.css` uses for its own `aria-disabled`.
+ */
+.cn-clock[aria-disabled="true"] {
+  cursor: default;
+  opacity: var(--cn-disabled-opacity);
+  pointer-events: none;
+}
+
+/* View-only renders a picture, not a control: no pointer affordance. */
+.cn-clock[role="img"] {
+  cursor: default;
+}
+
+.cn-clock svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/*
+ * The dial is `role="slider"`, an input, so its lines take the field-border
+ * family other inputs use rather than the generic `--cn-color-border` — the
+ * resting shade here is what every field's rule box shows at rest.
+ */
+.cn-clock .cn-clock-slice {
+  fill: var(--cn-color-surface);
+  stroke: var(--cn-color-field-border);
+  stroke-width: calc(var(--cn-grid) / 4);
+  stroke-linejoin: round;
+}
+
+.cn-clock .cn-clock-slice[data-completed="true"] {
+  fill: var(--cn-color-info);
+}
+
+/*
+ * Hover and focus move the stroke only in interactive mode: disabled and
+ * view-only are not a control the reader can operate, so they keep the
+ * resting shade and the dial reads as one component across all three modes.
+ * Focus is `:focus-within`, matching `fields.css`'s rule for the same
+ * reason — most readers reach a control by touch, and `:focus-visible` does
+ * not fire for them. The host itself is the focusable element here, and
+ * `:focus-within` matches an element focused directly as well as one with a
+ * focused descendant, so no separate `:focus-visible` rule is needed.
+ */
+.cn-clock[role="slider"]:not([aria-disabled="true"]):hover .cn-clock-slice {
+  stroke: var(--cn-color-field-border-hover);
+}
+
+.cn-clock[role="slider"]:not([aria-disabled="true"]):focus-within
+  .cn-clock-slice {
+  stroke: var(--cn-color-field-border-focus);
+}

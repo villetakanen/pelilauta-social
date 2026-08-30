@@ -6,7 +6,8 @@
     "paths": {
       "@design-system/*": ["../../packages/design-system/*"],
       "@editor/*": ["../../packages/editor/*"],
-      "@dice/*": ["../../packages/dice/*"]
+      "@dice/*": ["../../packages/dice/*"],
+      "@clock/*": ["../../packages/clock/*"]
     }
   }
 }

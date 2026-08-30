@@ -27,6 +27,9 @@ export default defineConfig({
           new URL('../../packages/editor', import.meta.url),
         ),
         '@dice': fileURLToPath(new URL('../../packages/dice', import.meta.url)),
+        '@clock': fileURLToPath(
+          new URL('../../packages/clock', import.meta.url),
+        ),
       },
     },
     plugins: [

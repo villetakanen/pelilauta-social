@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { CnStoryClock } from '@11thdeg/cn-story-clock';
+import CnClock from '@clock/CnClock.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Clock } from 'src/schemas/ClockSchema';
 import { uid } from '../../../stores/session';
@@ -11,27 +11,21 @@ interface Props {
 }
 const { clock }: Props = $props();
 
-const view = $derived.by(() => !$site?.owners.includes($uid) || undefined);
+const view = $derived.by(() => !$site?.owners.includes($uid));
 
-async function handleChange(event: CustomEvent) {
-  const { value } = event.target as CnStoryClock;
+async function handleChange({ value }: { value: number }) {
   await updateClock({ ...clock, stage: value });
 }
 </script>
 
 <div class="clock-row">
-  <cn-story-clock 
+  <CnClock
+    label={clock.label}
+    ticks={clock.ticks}
+    value={clock.stage}
     {view}
     onchange={handleChange}
-    tabindex="0"
-    role="button"
-    name={clock.label} 
-    value={clock.stage} 
-    >
-    {#each clock.ticks as tick}
-      <cn-tick size={tick}></cn-tick>
-    {/each}
-  </cn-story-clock>
+  />
   <div class="clock-info">
     <p>{clock.label}</p>
     {#if !view}
