@@ -1,0 +1,110 @@
+---
+title: CnClock
+description: "A segmented circular dial for tracking countdowns, obstacles, or faction goals."
+order: 15
+runtime: interactive
+---
+
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+import ClockSpecimen from '@clock/books/ClockSpecimen.svelte'
+
+Use CnClock to track a countdown, an obstacle, or a faction goal as a segmented dial that advances one slice at a time during play.
+
+## When to use it
+
+Use CnClock where participants step the stage forward or backward during play — an escalating threat, a project milestone, or a heist countdown. Use view-only mode for observers who track the current stage without editing controls.
+
+Do not use CnClock as a general progress bar or a percentage meter. Its slices represent discrete stages rather than continuous fractions.
+
+## Visual encoding
+
+The dial divides into radial slices beginning at 12 o'clock (-90 degrees) and proceeding clockwise. Slices render as SVG arcs separated by a `--cn-color-border` stroke.
+
+Completed slices fill with `--cn-color-info`, while uncompleted slices take `--cn-color-surface`. In the default theme this maintains an opaque lightness separation of at least ΔL 0.40 between filled and unfilled slices in both light and dark colour schemes (ΔL 0.45 in light mode, ΔL 0.70 in dark mode).
+
+## Spatial sizing
+
+CnClock maintains a fixed box dimension of `6rem` (96px, 12 grid units) with a 1:1 aspect ratio.
+
+## Example
+
+<DsComposition themes caption="A four-slice clock, stepped by pointer or keyboard, in Light and Dark">
+  <ClockSpecimen group="canonical" client:load />
+</DsComposition>
+
+```svelte
+<script>
+  import CnClock from '@clock/CnClock.svelte'
+
+  let value = $state(2)
+</script>
+
+<CnClock label="Alarm" bind:value />
+```
+
+### Equal slices
+
+Pass an integer count to split the dial into equal slices. Omit `ticks` to default to 4 equal slices.
+
+<DsComposition themes stack caption="4, 6, and 8 equal slices, in Light and Dark">
+  <ClockSpecimen group="sizes" client:load />
+</DsComposition>
+
+### Weighted slices
+
+Pass an array of numbers to size each slice proportionally by its weight share.
+
+<DsComposition themes caption="Weights [1, 2, 1]: the second slice spans twice the arc of its neighbours, in Light and Dark">
+  <ClockSpecimen group="weighted" client:load />
+</DsComposition>
+
+### Step labels
+
+Pass slice descriptor objects (`{ label }`) to name a stage. The active slice's label replaces the numeric fraction in the announced step text.
+
+<DsComposition themes caption="Named stage: the announced step text reads its label rather than a fraction, in Light and Dark">
+  <ClockSpecimen group="labels" client:load />
+</DsComposition>
+
+### Empty, partial, and full stages
+
+`value` fills slices from index `0` through `value - 1`. `0` leaves all slices uncompleted, and the total slice count fills the entire dial.
+
+<DsComposition themes stack caption="The same four-slice clock at value 0, 2, and 4, in Light and Dark">
+  <ClockSpecimen group="stages" client:load />
+</DsComposition>
+
+### Presentation modes
+
+`view` renders a static graphic (`role="img"`), taking precedence over `disabled`. `disabled` renders a focusable, inert slider (`role="slider"` with `aria-disabled="true"`).
+
+<DsComposition themes stack caption="Interactive, view-only, and disabled, side by side, in Light and Dark">
+  <ClockSpecimen group="modes" client:load />
+</DsComposition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `label` | `string` | Required. The dial's accessible name. |
+| `ticks` | `number \| number[] \| { weight?: number; label?: string }[]` | Slice count, relative weights, or descriptors. Defaults to 4 equal slices. |
+| `value` | `number` | Bindable. Completed slice count. Truncated with `Math.trunc`; non-finite values resolve to 0. Defaults to 0. |
+| `view` | `boolean` | Renders a static graphic (`role="img"`). Takes precedence over `disabled`. |
+| `disabled` | `boolean` | Renders a focusable, inert slider with `aria-disabled="true"`. |
+| `name` | `string` | Renders a hidden input carrying `value` for `FormData` submission. Interactive mode only. |
+| `onchange` | `(event: { value: number }) => void` | Runs on every value change. Interactive mode only. |
+
+## Accessibility
+
+In interactive mode, the dial declares `role="slider"`, `tabindex="0"`, and `aria-label={label}` with `aria-valuemin="0"`, `aria-valuemax={totalSlices}`, `aria-valuenow={value}`, and `aria-valuetext` announcing the resolved step text (custom label or `"{value}/{totalSlices}"`).
+
+Stepping wraps at boundaries in both directions across all input modalities:
+- **Increment:** Pointer click / tap, `ArrowUp`, `ArrowRight`, `Enter`, and `Space`.
+- **Decrement:** Shift-click, long-press (500ms hold), `ArrowDown`, `ArrowLeft`, and `Shift+Enter`.
+- `Home` jumps to `0`; `End` jumps to full.
+
+In view-only mode, the dial declares `role="img"` with `aria-label="{label}: {stepText}"` and takes no tab index.
+
+In disabled mode, the dial keeps `role="slider"`, `tabindex="0"`, and its `aria-value*` attributes while adding `aria-disabled="true"`, remaining inert to all pointer and keyboard events.

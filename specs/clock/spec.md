@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: live
 ---
 
 # Clock
@@ -16,7 +16,7 @@ Clock is an interactive Svelte design-system extension located in `packages/cloc
 
 The component accepts a slice definition through the `ticks` prop — an integer slice count, an array of relative slice weights, or an array of slice descriptor objects — and a bindable `value` representing completed progress. The `view` prop selects between an interactive slider and a static visual presentation.
 
-Clock consumes design-system tokens: `--cn-color-surface` for uncompleted slices, `--cn-color-info` for completed slices, `--cn-color-border` for dividing strokes and the outer perimeter, and `--cn-color-focus-ring` for keyboard focus indication.
+Clock consumes design-system tokens: `--cn-color-surface` for uncompleted slices, `--cn-color-info` for completed slices, the `--cn-color-field-border` family for dividing strokes and the outer perimeter, and `--cn-color-focus-ring` for keyboard focus indication.
 
 ### Documentation
 
@@ -35,7 +35,7 @@ The total slice count is the length of the normalized slice array (or the intege
 
 The announced step text resolves from the active slice's declared `label`. When omitted, it defaults to the language-neutral fraction `"{value}/{totalSlices}"` (e.g. `0/4`, `1/4`, `4/11`).
 
-A completed slice takes `--cn-color-info` and an uncompleted slice takes `--cn-color-surface`. In the default theme this maintains an opaque lightness separation of at least ΔL 0.40 between filled and unfilled slices in both light and dark colour schemes (ΔL 0.45 in light mode, ΔL 0.70 in dark mode). Dividing lines and the perimeter stroke take `--cn-color-border`.
+A completed slice takes `--cn-color-info` and an uncompleted slice takes `--cn-color-surface`. In the default theme this maintains an opaque lightness separation of at least ΔL 0.40 between filled and unfilled slices in both light and dark colour schemes (ΔL 0.45 in light mode, ΔL 0.70 in dark mode). Dividing lines and the perimeter stroke take `--cn-color-field-border`, moving to `--cn-color-field-border-hover` and `--cn-color-field-border-focus` in interactive mode.
 
 The component maintains a fixed box dimension of `6rem` (96px, 12 grid units) and an `aspect-ratio: 1`.
 
@@ -54,14 +54,14 @@ In interactive mode (`view` is false and `disabled` is false):
 - Pressing `ArrowUp`, `ArrowRight`, `Enter`, or `Space` increments `value` by 1.
 - Pressing `ArrowDown`, `ArrowLeft`, or `Shift+Enter` decrements `value` by 1.
 - Pressing `Home` sets `value` to `0`; pressing `End` sets `value` to the total slice count.
-- Every value change updates `value` and dispatches a `change` event carrying `{ value }`.
+- Every value change updates `value` and calls the `onchange` prop with `{ value }`.
 - Given a `name` prop, the component renders a hidden input with the current `value` for `FormData` submission.
 
 In disabled mode (`view` is false and `disabled={true}`):
 - The host element remains focusable (`tabindex="0"`), retains `role="slider"`, and announces `aria-disabled="true"`.
 - It announces `aria-label={label}`, `aria-valuemin="0"`, `aria-valuemax={totalSlices}`, `aria-valuenow={value}`, and `aria-valuetext`.
 - The host dims by `--cn-disabled-opacity` with pointer events disabled (`pointer-events: none`).
-- It ignores all keyboard inputs, triggers no state changes, dispatches no events, and submits nothing into `FormData`.
+- It ignores all keyboard inputs, triggers no state changes, never calls `onchange`, and submits nothing into `FormData`.
 
 ## Contract
 
@@ -69,9 +69,9 @@ In disabled mode (`view` is false and `disabled={true}`):
 
 - Clock renders SVG radial slices matching the exact number and proportional weights of the declared ticks.
 - Clock fills slices from index `0` through `value - 1` with `--cn-color-info`, leaving subsequent slices in `--cn-color-surface`.
-- Slices separate with a `--cn-color-border` stroke.
+- Slices separate with a `--cn-color-field-border` stroke, taking the hover and focus shades of that family in interactive mode.
 - Completed slices separate from uncompleted slices by at least ΔL 0.40 in both light and dark colour schemes in the default theme.
-- Interactive mode updates the visible filled slices on click, tap, long-press, or arrow keys, wraps at boundaries in both directions, updates bound `value`, and dispatches `change`.
+- Interactive mode updates the visible filled slices on click, tap, long-press, or arrow keys, wraps at boundaries in both directions, updates bound `value`, and calls `onchange`.
 - View-only mode renders the current stage statically with `role="img"` and no interactive roles or focusability, taking precedence over `disabled`.
 - Disabled mode renders a focusable, inert slider with `aria-disabled="true"` that submits nothing to `FormData`.
 - Setting `value` to float or non-finite inputs resolves safely without NaN geometry in SVG output.
@@ -102,7 +102,7 @@ When the reader clicks the clock
 Then value becomes 3
 And slices 0, 1, and 2 show the completed info fill
 And aria-valuetext reads "3/4"
-And a change event fires with value 3
+And onchange is called with value 3
 ```
 
 ```gherkin
@@ -111,7 +111,7 @@ When the reader clicks or presses ArrowUp
 Then value wraps to 0
 And all slices show the uncompleted surface fill
 And aria-valuetext reads "0/4"
-And a change event fires with value 0
+And onchange is called with value 0
 ```
 
 ```gherkin
@@ -120,7 +120,7 @@ When the reader Shift-clicks, long-presses, or presses ArrowDown
 Then value wraps to 4
 And all 4 slices show the completed info fill
 And aria-valuetext reads "4/4"
-And a change event fires with value 4
+And onchange is called with value 4
 ```
 
 ```gherkin
@@ -128,7 +128,7 @@ Given an interactive Clock with 6 ticks and value 3
 When the reader presses ArrowDown or Shift+Enter
 Then value becomes 2
 And aria-valuetext reads "2/6"
-And a change event fires with value 2
+And onchange is called with value 2
 ```
 
 ```gherkin
