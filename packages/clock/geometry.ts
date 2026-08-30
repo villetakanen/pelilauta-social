@@ -1,18 +1,15 @@
 /**
- * Generates SVG slice paths and step labels from tick definitions and progress
- * values. `specs/clock/spec.md` governs dial geometry.
+ * `geometry.ts` generates SVG slice paths and step labels from tick definitions
+ * and progress values. `specs/clock/spec.md` governs dial geometry.
  */
 
-/** Declares one slice's weight and optional label before normalization. */
 export interface SliceDescriptor {
   weight?: number;
   label?: string;
 }
 
-/** Accepted tick inputs: a slice count, relative weights, or slice descriptors. */
 export type Ticks = number | number[] | SliceDescriptor[];
 
-/** Normalized slice with a positive weight and optional label. */
 export interface Slice {
   weight: number;
   label?: string;
@@ -28,10 +25,6 @@ function isDescriptor(entry: unknown): entry is SliceDescriptor {
   return typeof entry === 'object' && entry !== null;
 }
 
-/**
- * Normalizes tick definitions into positive-weight slices, falling back to 4
- * equal slices for invalid or empty inputs.
- */
 export function normalizeTicks(ticks?: Ticks): Slice[] {
   if (ticks == null) return defaultSlices();
 
@@ -59,18 +52,11 @@ export function normalizeTicks(ticks?: Ticks): Slice[] {
   return total > 0 ? slices : defaultSlices();
 }
 
-/**
- * Truncates `value` toward zero, resolves non-finite inputs to 0, and clamps the
- * result between 0 and `totalSlices`.
- */
 export function clampValue(value: number, totalSlices: number): number {
   const truncated = Number.isFinite(value) ? Math.trunc(value) : 0;
   return Math.min(Math.max(truncated, 0), totalSlices);
 }
 
-/**
- * Steps a value and wraps across boundaries between 0 and `totalSlices`.
- */
 export function wrapValue(
   value: number,
   delta: number,
@@ -83,8 +69,8 @@ export function wrapValue(
 }
 
 /**
- * Returns the label of the most recently completed slice, falling back to
- * `{value}/{totalSlices}`.
+ * `value` counts completed slices rather than indexing them, so `value - 1`
+ * identifies the active slice.
  */
 export function resolveStepText(value: number, slices: Slice[]): string {
   const active = slices[value - 1];
@@ -92,7 +78,6 @@ export function resolveStepText(value: number, slices: Slice[]): string {
   return `${value}/${slices.length}`;
 }
 
-/** Rendered SVG slice path and its optional label. */
 export interface SlicePath {
   d: string;
   label?: string;
@@ -113,8 +98,8 @@ function pointOnCircle(
 const FULL_TURN_EPSILON = 1e-9;
 
 /**
- * Generates an SVG path for a circular slice. Sweeps spanning a full turn draw
- * two semicircular arcs through the opposite point.
+ * Sweeps spanning a full turn draw two semicircular arcs through the opposite
+ * point.
  */
 function sliceArcPath(
   cx: number,
@@ -136,9 +121,6 @@ function sliceArcPath(
   return `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
 }
 
-/**
- * Builds SVG slice paths scaled proportionally to relative weights.
- */
 export function buildSlicePaths(
   slices: Slice[],
   radius: number,

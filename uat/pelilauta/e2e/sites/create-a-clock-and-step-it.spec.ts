@@ -67,4 +67,3 @@ it('creates a clock and steps its value', async () => {
     )
     .toBe('1');
 });
-

@@ -11,6 +11,7 @@
     "postinstall": "lefthook install",
     "lint": "biome check .",
     "format": "biome check --write .",
+    "technical-writer": "agents/technical-writer/run.sh",
     "check:skills": "node .agents/check-skills-exposed.mjs",
     "generate:tokens": "pnpm --filter @pelilauta/design-system generate:tokens",
     "check:tokens": "pnpm --filter @pelilauta/design-system check:tokens",

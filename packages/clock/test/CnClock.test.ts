@@ -7,7 +7,6 @@ import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import CnClock from '../CnClock.svelte';
 
-
 let target: HTMLDivElement;
 let instance: Record<string, never> | undefined;
 

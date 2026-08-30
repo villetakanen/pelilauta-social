@@ -1,6 +1,6 @@
 ---
 name: technical-writer
-description: Rewrite prose into the register docs/WRITING.md states — a named document, spec, book, plan or comment, or every prose file a changeset touched. Run before spec-review, delivery-review or the pull request, preferably as a subagent.
+description: Rewrite prose into the register docs/WRITING.md states — a named document, spec, book, plan or comment, or every prose file a changeset touched. Run before spec-review, delivery-review or the pull request. Run it with `pnpm technical-writer <paths>`, never in the calling session; name the paths, because given none the runner takes everything changed since the branch point.
 ---
 
 # Technical Writer

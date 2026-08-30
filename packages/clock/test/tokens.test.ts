@@ -18,7 +18,6 @@ const CUSTOM_PROPERTY = /--[A-Za-z0-9_-]+/g;
 
 const designSystemStyles = join(packageRoot, '..', 'design-system', 'styles');
 
-
 function declaredTokens(dir: string): Set<string> {
   const declarations = new Set<string>();
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
