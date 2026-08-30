@@ -1,16 +1,12 @@
 /**
- * Component-level coverage for CnClock: the three presentations
- * (interactive, disabled, view) and the input bindings interactive mode
- * takes, per `specs/clock/spec.md`'s Contract and Scenarios.
- *
- * Mounted with Svelte 5's `mount`/`unmount`/`flushSync`, the same way
- * `packages/editor/test/CnEditor.test.ts` mounts its host — no testing
- * library needed to render the real component into a real jsdom document
- * and read its DOM back.
+ * Verifies CnClock rendering, input bindings, and accessibility attributes
+ * across interactive, disabled, and view presentations against
+ * `specs/clock/spec.md`.
  */
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import CnClock from '../CnClock.svelte';
+
 
 let target: HTMLDivElement;
 let instance: Record<string, never> | undefined;
@@ -156,7 +152,7 @@ describe('interactive mode', () => {
     expect(host().getAttribute('aria-valuenow')).toBe('4');
   });
 
-  test('the click that follows a long press does not also apply its own increment', () => {
+  test('a click following a long press does not trigger an additional increment', () => {
     vi.useFakeTimers();
     let calls = 0;
     instance = mount(CnClock, {

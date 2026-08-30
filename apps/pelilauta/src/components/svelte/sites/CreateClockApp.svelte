@@ -13,13 +13,6 @@ interface Props {
 }
 const { site }: Props = $props();
 
-/**
- * A Simple form to create a new clock
- *
- * Clock labels are unique per site, so we'll need to mekanismiURI the label
- * and then check if it's unique before submitting the form
- */
-
 async function handleSubmit(event: Event) {
   event.preventDefault();
 
@@ -127,10 +120,6 @@ const clock = $state(
 </section>
 
 <style>
-  /*
-   * No container reaches into this box, so it states the interval between
-   * its own blocks: the clock preview and the form.
-   */
   .surface,
   form {
     display: grid;
@@ -138,9 +127,8 @@ const clock = $state(
   }
 
   /*
-   * @todo No design-system capability publishes a listing row — an icon (here
-   * the clock) beside a label — so this row states its own flex rule locally.
-   * Anchored at plans/debt/the-design-system-has-no-listing-row.md.
+   * @todo The design system provides no listing row component.
+   * Tracked in plans/debt/the-design-system-has-no-listing-row.md.
    */
   .clock-preview {
     display: flex;

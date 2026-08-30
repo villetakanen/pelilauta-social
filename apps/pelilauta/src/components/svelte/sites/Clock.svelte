@@ -41,9 +41,8 @@ async function handleChange({ value }: { value: number }) {
 
 <style>
   /*
-   * @todo No design-system capability publishes a listing row — an icon or clock
-   * beside a label and controls — so this row states its own flex rule locally.
-   * Anchored at plans/debt/the-design-system-has-no-listing-row.md.
+   * @todo The design system provides no listing row component.
+   * Tracked in plans/debt/the-design-system-has-no-listing-row.md.
    */
   .clock-row {
     display: flex;

@@ -1,18 +1,9 @@
 /**
- * Contrast guardrail for Clock, per `specs/clock/spec.md`'s Definition of
- * Done and Regression Guardrails: completed slices (`--cn-color-info`) and
- * uncompleted slices (`--cn-color-surface`) separate by at least ΔL 0.40 in
- * both colour schemes in the default theme (the spec names the exact figures
- * as ΔL 0.45 in light and ΔL 0.70 in dark).
- *
- * Clock carries no colour logic of its own — both tokens are consumed
- * directly by `styles/clock.css` — so this resolves the two semantic
- * declarations the same way `packages/dice/test/contrast.test.ts` resolves
- * dice's colour-mix chain: fold each token to a single OKLCH triplet and
- * compare lightness, rather than reading a contrast ratio (a different
- * metric, and not what the spec states).
+ * Verifies that `--cn-color-info` and `--cn-color-surface` maintain at least
+ * ΔL 0.40 lightness separation in light and dark schemes.
  */
 import { readFileSync } from 'node:fs';
+
 import { describe, expect, test } from 'vitest';
 import {
   type Oklch,

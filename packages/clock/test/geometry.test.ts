@@ -1,10 +1,6 @@
 /**
- * Geometry pin for Clock, per `specs/clock/spec.md`'s Constraints and
- * Definition of Done: `ticks` normalises to a positive-weight slice array
- * across every admitted form, `value` casts and clamps the way the spec
- * states, the announced step text resolves label-first, and every slice's
- * path stays free of NaN across the range — this is the geometry a rendered
- * SVG would otherwise only surface as a broken `d` attribute.
+ * Tests slice normalization, value clamping, step label resolution, and SVG
+ * path generation against `specs/clock/spec.md`.
  */
 import { describe, expect, test } from 'vitest';
 import {
@@ -124,7 +120,7 @@ describe('resolveStepText', () => {
 });
 
 describe('buildSlicePaths', () => {
-  /** The angle a slice's arc spans, recovered from its rendered path. */
+  /** Calculates the angle spanned by an SVG slice path. */
   function sweepOf(d: string, cx: number, cy: number): number {
     const match = d.match(
       /^M [\d.-]+ [\d.-]+ L ([\d.-]+) ([\d.-]+) A [\d.-]+ [\d.-]+ 0 \d [01] ([\d.-]+) ([\d.-]+) Z$/,
@@ -163,7 +159,7 @@ describe('buildSlicePaths', () => {
     expect(total).toBeCloseTo(Math.PI * 2, 5);
   });
 
-  /** Parses a two-arc full-turn path into its three named points. */
+  /** Extracts coordinates from a two-arc full-turn path. */
   function fullTurnPoints(d: string) {
     const match = d.match(
       /^M ([\d.-]+) ([\d.-]+) L ([\d.-]+) ([\d.-]+) A [\d.-]+ [\d.-]+ 0 1 1 ([\d.-]+) ([\d.-]+) A [\d.-]+ [\d.-]+ 0 1 1 ([\d.-]+) ([\d.-]+) Z$/,
@@ -179,9 +175,6 @@ describe('buildSlicePaths', () => {
     const [path] = buildSlicePaths(slices, 46, 48);
     const { cx, cy, x1, y1, xm, ym, x2, y2 } = fullTurnPoints(path.d);
 
-    // A single `A` command cannot express this sweep — its start and end
-    // angle are identical, so it must resolve through an intermediate point.
-    // That midpoint sits on the circle, diametrically opposite the start.
     expect(x1).toBe(x2);
     expect(y1).toBe(y2);
     expect(Math.hypot(xm - cx, ym - cy)).toBeCloseTo(46, 9);
@@ -194,7 +187,6 @@ describe('buildSlicePaths', () => {
     const paths = buildSlicePaths(slices, 46, 48);
     expect(paths).toHaveLength(3);
 
-    // The lone non-zero slice carries the whole circle.
     const { cx, cy, x1, y1, xm, ym, x2, y2 } = fullTurnPoints(paths[0].d);
     expect(x1).toBe(x2);
     expect(y1).toBe(y2);
@@ -202,8 +194,6 @@ describe('buildSlicePaths', () => {
     expect(xm).toBeCloseTo(2 * cx - x1, 9);
     expect(ym).toBeCloseTo(2 * cy - y1, 9);
 
-    // The two zero-weight slices remain degenerate points, unaffected by the
-    // full-turn split.
     expect(paths[1].d).not.toMatch(/A [\d.-]+ [\d.-]+ 0 1 1/);
     expect(paths[2].d).not.toMatch(/A [\d.-]+ [\d.-]+ 0 1 1/);
   });
