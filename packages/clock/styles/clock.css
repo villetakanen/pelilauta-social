@@ -58,7 +58,7 @@
  * Hover and focus move the stroke only in interactive mode: disabled and
  * view-only are not a control the reader can operate, so they keep the
  * resting shade and the dial reads as one component across all three modes.
- * Focus is `:focus-within`, matching `fields.css`'s own rule for the same
+ * Focus is `:focus-within`, matching `fields.css`'s rule for the same
  * reason — most readers reach a control by touch, and `:focus-visible` does
  * not fire for them. The host itself is the focusable element here, and
  * `:focus-within` matches an element focused directly as well as one with a

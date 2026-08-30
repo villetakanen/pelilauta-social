@@ -8,6 +8,7 @@
     "hidden": false,
     "sortOrder": "name",
     "usePlainTextURLs": true,
+    "useClocks": true,
     "owners": ["@existingUser"],
     "createdAt": "@now",
     "updatedAt": "@now",

@@ -2,12 +2,12 @@
  * Token hygiene for Clock, per `specs/clock/spec.md`'s Regression Guardrails:
  * "Clock references only declared `--cn-*` tokens for fills, borders, info
  * states, and focus rings." `packages/dice/test/tokens.test.ts` and
- * `packages/editor/test/tokens.test.ts` hold the same line for their own
+ * `packages/editor/test/tokens.test.ts` hold the same line for their
  * packages: every custom property either resolves against a token the design
- * system actually declares, or is package-private (`--_clock-*`).
+ * system declares, or is package-private (`--_clock-*`).
  *
- * Clock's component carries no custom properties of its own (checked below);
- * `styles/clock.css` is the only file that references any.
+ * `CnClock.svelte` carries no custom properties; `styles/clock.css` is the
+ * only file that references any.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

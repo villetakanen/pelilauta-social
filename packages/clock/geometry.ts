@@ -90,7 +90,7 @@ export function wrapValue(
 
 /**
  * The active slice is the last completed one — index `value - 1` — because a
- * step label names the stage the reader just reached, not the one ahead.
+ * step label names the stage the reader most recently reached, not the one ahead.
  * Absent a label, the fraction is the language-neutral fallback.
  */
 export function resolveStepText(value: number, slices: Slice[]): string {

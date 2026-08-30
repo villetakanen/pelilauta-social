@@ -59,6 +59,13 @@ const WEIGHTED: Dial[] = [
     view: true,
     caption: 'weights [1, 2, 1]',
   },
+  {
+    label: 'Full-turn clock',
+    ticks: [1],
+    value: 1,
+    view: true,
+    caption: 'a single slice, ticks=[1]',
+  },
 ];
 
 const LABELS: Dial[] = [

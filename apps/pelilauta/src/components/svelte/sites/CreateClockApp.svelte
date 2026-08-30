@@ -1,4 +1,5 @@
 <script lang="ts">
+import CnClock from '@clock/CnClock.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addClocktoSite } from 'src/firebase/client/site/addClockToSite';
 import { parseClock } from 'src/schemas/ClockSchema';
@@ -50,11 +51,7 @@ const clock = $state(
 
 <section class="surface">
   <div class="clock-preview">
-    <cn-story-clock name={clock.label} value="0">
-      {#each clock.ticks as tick}
-        <cn-tick size={tick}></cn-tick>
-      {/each}
-    </cn-story-clock>
+    <CnClock label={clock.label} ticks={clock.ticks} value={0} view />
     <p>{clock.label}</p>
   </div>
 

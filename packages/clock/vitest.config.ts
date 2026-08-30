@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config';
 
 /**
  * Geometry is pure and reads fine from a string in Node, as the design
- * system's own suite does. But Clock's interaction — pointer clicks, long-
+ * system's suite does. Clock's interaction — pointer clicks, long-
  * press timing, keyboard wrapping, focus — only exists once the component is
  * mounted, and mounting a Svelte component needs a document. So this suite
  * runs in jsdom, as the editor's does.

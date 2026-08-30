@@ -3,7 +3,7 @@
  * (interactive, disabled, view) and the input bindings interactive mode
  * takes, per `specs/clock/spec.md`'s Contract and Scenarios.
  *
- * Mounted with Svelte 5's own `mount`/`unmount`/`flushSync`, the same way
+ * Mounted with Svelte 5's `mount`/`unmount`/`flushSync`, the same way
  * `packages/editor/test/CnEditor.test.ts` mounts its host — no testing
  * library needed to render the real component into a real jsdom document
  * and read its DOM back.
