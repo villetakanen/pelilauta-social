@@ -16,6 +16,7 @@
       "@utils/*": ["src/utils/*"],
       "@design-system/*": ["../../packages/design-system/*"],
       "@editor/*": ["../../packages/editor/*"],
+      "@dice/*": ["../../packages/dice/*"],
       "@pelilauta/*": ["src/*"],
       "@root/*": ["../../*"],
       "@myrrys/proprietary": ["../../packages/myrrys-proprietary/index.ts"]

@@ -1,7 +1,6 @@
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
 import { renderAssetMarkup } from '../renderAssetMarkup';
-import { renderDice } from '../renderDice';
 import { renderTags } from '../renderTags';
 
 export async function renderWikiContent(page: Page, site: Site, url: URL) {
@@ -14,8 +13,7 @@ export async function renderWikiContent(page: Page, site: Site, url: URL) {
 
   const hashTags = renderTags(page.markdownContent, url.origin);
   const assetLinks = renderAssetMarkup(hashTags, site, url.origin);
-  const diceLinks = renderDice(assetLinks);
-  const htmlContent = await marked.parse(diceLinks || '');
+  const htmlContent = await marked.parse(assetLinks || '');
 
   return htmlContent;
 }

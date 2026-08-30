@@ -1,0 +1,96 @@
+---
+title: Dice
+description: "An inline die face for tabletop rules notation."
+order: 5
+runtime: static
+---
+
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+import DiceSpecimen from '@dice/books/DiceSpecimen.astro'
+
+Use Dice to render a die denomination, rolled result, or target number inline within running text.
+
+## When to use it
+
+Use Dice for inline tabletop rules notation in rules text, stat blocks, item descriptions, and difficulty checks. In wiki documents, write [wiki dice notation](/docs/10-wikisyntax) rather than hand-authoring raw markup.
+
+Do not use Dice for large standalone display dice, interactive dice rolling widgets, or non-polyhedral game dice.
+
+## Typographic integration
+
+A die face is a touch taller than the line it sits in — `--cn-line` × 7/6, the same ratio `cn-dice`'s own inline default uses — and aligns with the surrounding text baseline. It sits directly beside punctuation and inline links without disrupting paragraph leading or measure.
+
+## Visual encoding
+
+Every denomination has its own silhouette and its own colour. The seven dice run along the warning family, from `--chroma-warning-90` (d2) to `--chroma-warning-40` (d20), each mixed a fixed step further toward the dark endpoint — five equal lightness steps between the two, so no two dice share a colour:
+
+- **d2 (Coin):** Round silhouette, warning-90, dark text
+- **d4 (Triangle):** Triangle silhouette, 1/6 toward warning-40, dark text
+- **d6 (Square):** Square silhouette, 2/6 toward warning-40, dark text
+- **d8 (Diamond):** Diamond silhouette, 3/6 toward warning-40, light text
+- **d10 (Kite / Gem):** Six-sided gem silhouette, 4/6 toward warning-40, light text
+- **d12 (Decagon):** Ten-sided silhouette, 5/6 toward warning-40, light text
+- **d20 (Tilted Diamond):** Tilted diamond silhouette, warning-40, light text
+
+Text colour is the stronger of white or black per die, clearing WCAG 2.2 AA (4.5:1) against its face in the default warning family — except d8's: white on d8 measures 3.37:1, below the 4.5:1 floor, an operator-ruled exception rather than an oversight. Every other face clears AA. The ramp sits in the page's mid-tone band on purpose, so every face also separates from a light page and a dark one, not only from its own text.
+
+## Example
+
+<DsComposition caption="A d20 target">
+  <DiceSpecimen group="targets" />
+</DsComposition>
+
+```html
+<span
+  class="dice"
+  role="img"
+  data-sides="20"
+  data-value="20"
+  data-kind="target"
+  data-length="2"
+  aria-label="[d20, 20+]"
+>20<span class="dice-plus">+</span></span>
+```
+
+### Side counts
+
+<DsComposition themes caption="d2, d4, d6, d8, d10, d12, d20">
+  <DiceSpecimen group="sides" />
+</DsComposition>
+
+### Semantic modes
+
+Target faces append a superscript `+` that intentionally extends past the silhouette edge to indicate a threshold test.
+
+<DsComposition themes caption="Die denomination, rolled result, and target threshold at d20">
+  <DiceSpecimen group="d20" />
+</DsComposition>
+
+### Legibility against a tight silhouette
+
+The face glyph is sized to fit its silhouette, not the reverse: one character reads at prose size, two characters step down. d2 is the smallest shape (85% of the box) among the one-character faces, and d10 is the narrowest waist among the two-character ones — the tightest fit at each size.
+
+<DsComposition themes caption="d2 and d10, the tightest silhouette at each glyph size">
+  <DiceSpecimen group="glyphs" />
+</DsComposition>
+
+## Reference
+
+### Attributes
+
+| Attribute | Values | Purpose |
+| :--- | :--- | :--- |
+| `data-sides` | `2 \| 4 \| 6 \| 8 \| 10 \| 12 \| 20` | Required. Selects the die silhouette and colour step. |
+| `data-value` | string | Required. The numeric face value. |
+| `data-kind` | `die \| result \| target` | Required. Controls semantic styling and accessible naming. |
+| `data-length` | `1 \| 2` | Required. Selects single-digit or two-digit font scaling. |
+| `aria-label` | string | Required. The accessible name announced to assistive technology. |
+| `role` | `img` | Required. Identifies the span as an image. |
+
+Contrast guarantees meet WCAG 2.2 AA in the default warning family alone, except d8's operator-ruled exception below the floor: the ramp sits mid-tone so every face also separates from a light page and a dark one, and each die takes its own colour along it — the silhouette still identifies the die. Custom themes must verify contrast separately.
+
+## Accessibility
+
+The element emits `role="img"`. The author must supply `aria-label` with the full denomination and value (e.g. `[d20, 20+]`), as the element presents visual iconography.
+
+d8 is a known exception to the contrast guarantee: white text on its face measures 3.37:1, below the 4.5:1 AA floor, an operator-ruled deviation rather than an oversight. Every other die's text clears AA against its face.

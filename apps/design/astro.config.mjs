@@ -10,6 +10,7 @@ const designSystem = fileURLToPath(
   new URL('../../packages/design-system', import.meta.url),
 );
 const editor = fileURLToPath(new URL('../../packages/editor', import.meta.url));
+const dice = fileURLToPath(new URL('../../packages/dice', import.meta.url));
 
 export default defineConfig({
   site: 'https://design.pelilauta.social',
@@ -24,6 +25,7 @@ export default defineConfig({
       alias: {
         '@design-system': designSystem,
         '@editor': editor,
+        '@dice': dice,
       },
     },
     plugins: [

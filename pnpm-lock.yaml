@@ -195,6 +195,12 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@24.10.0)(jsdom@29.1.1)(vite@8.2.1(@types/node@24.10.0)(esbuild@0.28.2)(jiti@2.6.1)(terser@5.49.0)(yaml@2.9.0))
 
+  packages/dice:
+    devDependencies:
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@24.10.0)(jsdom@29.1.1)(vite@8.2.1(@types/node@24.10.0)(esbuild@0.28.2)(jiti@2.6.1)(terser@5.49.0)(yaml@2.9.0))
+
   packages/editor:
     dependencies:
       '@codemirror/commands':
