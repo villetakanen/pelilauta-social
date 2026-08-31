@@ -79,3 +79,8 @@ Before changing a migrated surface, inspect the v18 implementation. A design-sys
 capability requires a spec. An obvious `apps/pelilauta` feature does not require one
 when the migration preserves its established purpose and behaviour; write or update
 its spec when the work defines or changes either.
+
+Every design-system delivery requires a named open epic and a governing live spec.
+Do not change design-system code, tests or books until both are established. A minor
+spec amendment follows the inline path above; a staged proposed amendment ends the
+delivery before those artifacts change.

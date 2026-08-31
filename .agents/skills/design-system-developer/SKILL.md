@@ -10,6 +10,16 @@ implementation, and its book (`design-system-book` skill). What it has to verify
 its spec's Contract; where each level checks that, and how the check is written, is
 the `design-system-tests` skill. Load it with this one whenever a test file is open.
 
+## Delivery gate
+
+Before changing a design-system component, token, stylesheet, test or book, name the
+open epic that carries the delivery and the live spec that governs it. Do not change
+any of those artifacts when either is absent.
+
+When the governing spec needs an amendment, follow the `spec` skill before changing
+the delivery. A minor, accepted inline amendment remains live. A staged proposed
+amendment ends the delivery before its implementation, tests or book change.
+
 ## What the change has to be for
 
 v21 exists to remove Cyan. A design-system change moves the application off
