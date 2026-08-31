@@ -3,9 +3,9 @@
  *
  * A rendered page reports `margin: 0` on an unstyled div too, so the spec's "no
  * outer margin" claim only distinguishes the rule from an accident when the rule
- * itself is read. The same is true of `flex-wrap: nowrap` and `overflow: hidden`:
- * both hold as long as no control ever grows past the row, which nothing in the
- * book forces. The block size and gap are asserted as the token expressions they
+ * itself is read. The absence of an `overflow` declaration is the same kind of
+ * claim: a computed `visible` is also what a div reports when nobody decided, and
+ * here it was decided. The block size and gap are asserted as the token expressions they
  * are written against, not the lengths they resolve to, and the cascade winner
  * between `.actions` and the sortable list's row is import order in
  * `styles/ds.css`, which no computed style discloses. Everything else — where
@@ -44,9 +44,12 @@ describe('actions container', () => {
     expect(actions?.body).toMatch(/margin:\s*0\s*;/);
   });
 
-  test('never wraps and clips inline overflow', () => {
+  test('never wraps', () => {
     expect(actions?.body).toMatch(/flex-wrap:\s*nowrap\s*;/);
-    expect(actions?.body).toMatch(/overflow:\s*hidden\s*;/);
+  });
+
+  test('declares no overflow, so nothing in the row is hidden', () => {
+    expect(actions?.body).not.toMatch(/overflow/);
   });
 
   test('the block size is six grid units, on the token', () => {

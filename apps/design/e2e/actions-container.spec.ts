@@ -197,8 +197,7 @@ for (const mode of ['light', 'dark'] as const) {
 /**
  * Mount a probe `.actions` container, constrained narrower than its controls
  * need, at the top of the book's content. It is a real `.actions` container in
- * the real page, so the same overflow rule that governs a book specimen governs
- * this one.
+ * the real page, so the same rules that govern a book specimen govern this one.
  */
 const mountOverflowProbe = async (page: Page) => {
   await page.evaluate(() => {
@@ -224,7 +223,7 @@ test.describe('the row that cannot fit', () => {
     await page.goto(BOOK);
   });
 
-  test('clips its overflow instead of wrapping or growing', async ({
+  test('overflows visibly instead of wrapping, growing or hiding', async ({
     page,
   }) => {
     const roles = await tokens(page, 'main#content');
@@ -232,15 +231,20 @@ test.describe('the row that cannot fit', () => {
 
     const geo = await probe.evaluate((node) => {
       const box = node.getBoundingClientRect();
+      const last = node.lastElementChild?.getBoundingClientRect();
       return {
         height: box.bottom - box.top,
-        clientWidth: node.clientWidth,
-        scrollWidth: node.scrollWidth,
+        right: box.right,
+        lastRight: last?.right ?? 0,
+        overflowX: getComputedStyle(node).overflowX,
+        overflowY: getComputedStyle(node).overflowY,
       };
     });
 
     expect(geo.height).toBeGreaterThanOrEqual(6 * roles.grid - 1);
     expect(geo.height).toBeLessThanOrEqual(6 * roles.grid + 1);
-    expect(geo.scrollWidth).toBeGreaterThan(geo.clientWidth);
+    expect(geo.overflowX).toBe('visible');
+    expect(geo.overflowY).toBe('visible');
+    expect(geo.lastRight).toBeGreaterThan(geo.right);
   });
 });

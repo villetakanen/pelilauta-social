@@ -91,9 +91,9 @@ component-private icon size.
 
 An `.actions` container lays out related action controls in one non-wrapping row.
 The container has a block size of `calc(var(--cn-grid) * 6)` — the pointer target a
-button answers over — centres items along the block axis, and applies no outer margin. The container clips items that exceed its
-inline size. The Base book instructs consumers to include only controls whose visible
-control, focus ring and pointer target remain within the row.
+button answers over — centres items along the block axis, and applies no outer margin.
+The container hides nothing: an item that does not fit the row paints past it, so a
+control flush against the row's edge keeps its focus ring.
 
 The container separates adjacent items by `--cn-gap`. It distributes remaining inline
 space between the first and last item by default. `.justify-start`, `.justify-end`
@@ -227,8 +227,8 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
   accessible name.
 - A control that paints smaller than the pointer target keeps the full target in both
   axes, an icon-only control and a small FAB included.
-- An `.actions` container remains six grid units high, does not wrap, and clips
-  inline overflow when its items do not fit.
+- An `.actions` container remains six grid units high, does not wrap, and hides no
+  part of an item that does not fit.
 
 ### Scenarios
 
@@ -341,5 +341,5 @@ Then it uses inline flex layout
 Given an actions container whose controls exceed its inline size
 When it renders
 Then it keeps one row at its fixed block size
-And it clips the inline overflow
+And its controls remain visible past the row
 ```

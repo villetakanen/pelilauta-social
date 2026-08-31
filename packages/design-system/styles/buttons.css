@@ -437,14 +437,18 @@ button:not(
 /*
  * `specs/design-system/actions/spec.md` governs `.actions` layout. The row is six
  * grid units, which is the pointer target a button answers over, so a row of
- * buttons is exactly as tall as the area it responds to. Specific component
- * contexts such as `styles/sortable-list.css` override these rules through
- * cascade order.
+ * buttons is exactly as tall as the area it responds to.
+ *
+ * The row sets no overflow, so a control that does not fit paints past the row
+ * rather than disappearing into it. Hiding the overflow would also cut the focus
+ * ring off any control sitting flush against the row's edge.
+ *
+ * Specific component contexts such as `styles/sortable-list.css` override these
+ * rules through cascade order.
  */
 .actions {
   display: flex;
   flex-wrap: nowrap;
-  overflow: hidden;
   align-items: center;
   justify-content: space-between;
   block-size: calc(var(--cn-grid) * 6);

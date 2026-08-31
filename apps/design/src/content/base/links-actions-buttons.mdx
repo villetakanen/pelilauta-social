@@ -67,7 +67,7 @@ visual variants.
 | :--- | :--- |
 | Default | Standard priority actions and destinations. |
 | `.text` | Low-prominence secondary actions where filled styling would compete with body content. |
-| `.cta` | Primary call to action in a view (maximum one per region). |
+| `.cta` | The most important action or destination in the composition at hand. |
 | `.secondary` | The alternate chroma treatment, where it is explicitly required. Not the low-prominence variant. |
 
 `.secondary` applies only when declared directly on the button element. Ancestor classes
@@ -187,12 +187,12 @@ running text instead of on its own line.
   <ActionsSpecimens group="inline" />
 </DsComposition>
 
-### The row clips what does not fit
+### The row does not hide what does not fit
 
-The container never wraps to a second row, and it clips a control that runs past its
-inline size. Put only controls whose visible control, focus ring and pointer target
-fit inside the row — a control clipped at the edge loses its focus ring first, and
-the ring is what a keyboard reader has.
+The container never wraps to a second row, and it never clips. A control that runs
+past the row paints past it, where you can see the row is too small for what is in
+it. Hiding the overflow instead would cut the focus ring off any control sitting
+flush against the row's edge, and the ring is what a keyboard reader has.
 
 A component with its own action row — the card, the sortable list — governs that row
 in its own specification, and says so in its own book.
