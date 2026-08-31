@@ -1,12 +1,12 @@
 ---
 name: spec-review
-description: Adversarially review one Pelilauta living spec as an independent critic. Use after a spec is created or altered while it is `proposed`, or when asked whether a spec is precise, minimal and ready for implementation.
+description: Adversarially review one Pelilauta living spec as an independent critic. Use after the staged path creates or alters a `proposed` spec, or when asked whether a spec is precise, minimal and ready for implementation.
 ---
 
 # Spec Review
 
-Review the proposed spec, not its implementation. Report findings; edit only when
-asked.
+Review the staged proposed spec, not its implementation. Report findings; edit only
+when asked.
 
 ## Independence
 

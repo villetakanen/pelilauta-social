@@ -12,10 +12,11 @@
 - `packages/design-system` contains the components, styles, specs and books both use.
 - `specs` contains the system's behaviour, one capability per directory. A spec's
   `status` is `proposed`, `live` or `deprecated`: implementation follows `live`
-  specs; building on a `proposed` spec requires an explicit ask, and waiting.
-  Any spec may be edited at any time — an agent edit to a `live` spec sets it
-  `proposed`, and an operator makes it `live` by reading it. The status is a
-  process gate, never a ceremony: do not request, await or announce approval.
+  specs. For a minor, settled amendment, show its unapplied diff and reason in chat.
+  After the operator accepts it, apply the amendment while retaining `live`, then
+  continue. For a new, material or unsettled amendment, set the spec to `proposed`
+  and stop before implementation. An operator makes a proposed spec `live` by reading
+  it. The status is a process gate, never a ceremony.
 - An epic is a GitHub issue labeled `epic`; it carries transient scope, and
   behaviour only until a spec takes it. A known unplanned gap is an issue labeled
   `task` and `debt`. `docs/EPIC_TEMPLATE.md` states the epic body's structure.

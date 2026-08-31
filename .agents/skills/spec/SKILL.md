@@ -37,21 +37,20 @@ Anatomy of a spec is defined in `specs/TEMPLATE.md`.
   long as these are listed in the parent
 6. Encode the status of the document in the frontmatter:
    `status: proposed | live | deprecated`, nothing else. A `proposed`
-  spec carries agent edits an operator may not have read; implementing
-  against it requires an explicit ask, and waiting. A `live` spec has
-  been read through by an operator and portrays how the system is
-  supposed to work. A spec kept for its context or architecture as a
-  lesson or example is `deprecated`. The status is a process gate, not
-  protection: any spec may be edited at any time, an agent edit to a
-  `live` spec sets it `proposed`, and an operator makes it `live` by
-  reading it — never request, await or announce approval.
+  spec carries a new, material or unsettled amendment that the operator
+  has not read; do not implement it. For a minor, settled amendment to
+  a live spec, show an unapplied diff and its reason in chat. Do not edit
+  the file or change its status before the operator accepts the diff.
+  Apply an accepted amendment while retaining `live`, then continue.
+  A `live` spec portrays how the system is supposed to work. A spec kept
+  for its context or architecture as a lesson or example is `deprecated`.
 7. Large scale, or irreversible decisions require an additional ADR in
   `docs/adrs/`.
 8. Before presenting new spec text, apply the template's sentence tests to your
   own text. Delete what the code, another spec or a sibling sentence already
   carries.
-9. After creating or changing a spec, run the spec-review -skill, then report the
-  spec is `proposed` and move on.
+9. After a staged proposed spec changes, run the spec-review skill, report that the
+   spec is `proposed`, and stop. An accepted inline amendment remains `live`.
 
 ## Prose
 
