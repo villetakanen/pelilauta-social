@@ -214,6 +214,8 @@ function cancel() {
     gap: var(--cn-gap);
   }
 
+  /* TODO(#125): `.actions` layout comes from the design system; this margin does
+     not. Decide whether the spacing belongs to the row or to the form above it. */
   .actions {
     margin-block-start: var(--cn-line);
   }

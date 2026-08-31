@@ -223,6 +223,8 @@ const hasFiles = $derived(uploadedFiles.length > 0);
     row-gap: var(--cn-line);
   }
 
+  /* TODO(#125): the design system publishes this row as `.actions`. Delete this
+     rule and put `.actions.justify-start` on the element. */
   .actions {
     display: flex;
     gap: var(--cn-gap);

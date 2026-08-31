@@ -7,6 +7,7 @@ order: 5
 import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import LinkStateTable from '@design-system/books/specimens/LinkStateTable.astro'
 import ButtonSpecimens from '@design-system/books/specimens/ButtonSpecimens.astro'
+import ActionsSpecimens from '@design-system/books/specimens/ActionsSpecimens.astro'
 import FabSpecimens from '@design-system/books/specimens/FabSpecimens.astro'
 import FabTrayDemo from '@design-system/books/specimens/FabTrayDemo.astro'
 import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
@@ -144,6 +145,57 @@ pill's own block spacing is wider than the amount the target reaches past it.
 
 A component that builds its own control from these rules — a chip, a chrome action, a
 reaction button — sets its own target and says so in its own book.
+
+## The actions container
+
+The `.actions` container groups buttons and link buttons along the spatial baseline in
+one row that does not wrap.
+
+<DsComposition themes caption="Two controls in an actions container">
+  <ActionsSpecimens group="default" />
+</DsComposition>
+
+The container is six grid units high — `calc(var(--cn-grid) * 6)`, the same span a
+button answers a pointer over — and centres its controls in the block axis, so a
+control's height does not move the row. Adjacent
+controls sit at least `--cn-gap` apart. By default the container distributes remaining
+inline space between its first and last control.
+
+### Alignment modifiers
+
+A modifier replaces the default distribution with a named inline alignment:
+
+| Modifier | Inline alignment |
+| :--- | :--- |
+| `.justify-start` | Controls gather at the inline start. |
+| `.justify-end` | Controls gather at the inline end. |
+| `.justify-center` | Controls gather at the inline centre. |
+
+A row that was text-aligned takes the matching modifier: an end-aligned row becomes
+`.justify-end`.
+
+<DsComposition themes caption="The three alignment modifiers">
+  <ActionsSpecimens group="alignment" />
+</DsComposition>
+
+### Inline flow
+
+The `.inline` modifier makes the container `inline-flex`, so a row of controls sits in
+running text instead of on its own line.
+
+<DsComposition themes caption="An inline actions container within a paragraph">
+  <ActionsSpecimens group="inline" />
+</DsComposition>
+
+### The row clips what does not fit
+
+The container never wraps to a second row, and it clips a control that runs past its
+inline size. Put only controls whose visible control, focus ring and pointer target
+fit inside the row — a control clipped at the edge loses its focus ring first, and
+the ring is what a keyboard reader has.
+
+A component with its own action row — the card, the sortable list — governs that row
+in its own specification, and says so in its own book.
 
 ## Floating action buttons (FAB)
 

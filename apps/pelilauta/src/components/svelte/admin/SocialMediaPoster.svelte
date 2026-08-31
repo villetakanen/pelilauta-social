@@ -92,6 +92,8 @@ async function onsubmit(event: Event) {
     row-gap: var(--cn-line);
   }
 
+  /* TODO(#125): the design system publishes this row as `.actions`. Delete this
+     rule and put `.actions.justify-end` on the element. */
   .actions {
     display: flex;
     justify-content: flex-end;
