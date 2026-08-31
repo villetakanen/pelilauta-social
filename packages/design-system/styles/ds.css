@@ -1,19 +1,21 @@
 /*
- * The design system's CSS entry point. An application imports this and nothing else.
+ * This stylesheet is the CSS entry point for the design system. An application imports this stylesheet alone.
  */
 @import "./preflight.css";
 @import "./tokens.css";
 @import "./fonts.css";
 @import "./typography.css";
-/* After typography: both correct an element the preflight reset stripped. */
+/* Dividers and links follow typography because both correct elements stripped by the preflight reset. */
 @import "./dividers.css";
 @import "./links.css";
 @import "./buttons.css";
 @import "./chip.css";
+/* Sortable-list.css follows buttons.css so rules neutralizing button
+   presentation on the drag handle override earlier declarations. */
+@import "./sortable-list.css";
 @import "./toggle.css";
-/* After toggle.css: the last of the form controls, and the only one a reader
-   types into rather than triggers — it shares no gradient, elevation or
-   icon-size context with its neighbours for load order to carry. */
+/* Fields.css follows toggle.css as the final form control; text fields share no
+   gradient, elevation, or icon-size context with adjacent controls. */
 @import "./fields.css";
 @import "./fab.css";
 @import "./chrome-actions.css";
@@ -21,10 +23,10 @@
 @import "./app-main.css";
 @import "./content-containers.css";
 @import "./surface.css";
-/* After surface.css: a menu container composes the floating elevation. */
+/* Menu.css follows surface.css because menu containers compose floating elevation. */
 @import "./menu.css";
 @import "./loader.css";
 @import "./identity.css";
 @import "./poster-credits.css";
-/* Last: the poster overrides the ground plane surface.css declares. */
+/* Poster.css loads last to override the ground plane declared in surface.css. */
 @import "./poster.css";

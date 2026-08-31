@@ -87,6 +87,7 @@ Leave all edits directly in the working tree files."
 
 cd "$REPO_ROOT"
 exec agy -p "$prompt" \
+  --mode accept-edits \
   --print-timeout "$PRINT_TIMEOUT" \
   ${model:+--model "$model"} \
   ${effort:+--effort "$effort"}

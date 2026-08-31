@@ -1,0 +1,159 @@
+---
+title: CnSortableList
+description: "An ordered set of named blocks that an author rearranges in place."
+order: 46
+runtime: interactive
+---
+
+import SortableListSpecimen from '@design-system/books/specimens/SortableListSpecimen.svelte'
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+
+Use a sortable list where item order is the content: an author moves a named block into
+place with a pointer, finger, or keyboard, and the consumer stores the resulting order.
+
+## When to use it
+
+Use a sortable list for collections an author arranges manually, such as a table of
+contents, a category list, or a document sequence. Where data determines item order and
+the reader only reads it, render a plain list. Where the reader selects a single row
+rather than reordering items, use a [menu](/components/cn-menu).
+
+One list holds one collection. `CnSortableList` does not move items between lists and
+stores no state: it renders items in the order supplied by the consumer.
+
+## Example
+
+The consumer supplies item order. Pass current items to `items`, receive the reordered
+array from `onitemschange`, and pass the array back to `items` once stored.
+
+<DsComposition themes stack caption="Three items — a plain title, a content snippet, and a row carrying an action — in Light and Dark">
+  <SortableListSpecimen client:load />
+</DsComposition>
+
+```svelte
+<script>
+  import CnSortableList from '@design-system/components/CnSortableList.svelte'
+</script>
+
+<CnSortableList
+  items={pages.map((page) => ({ key: page.key, title: page.name }))}
+  label={t('site:toc.label')}
+  onitemschange={(items) => savePageOrder(items.map((item) => item.key))}
+  announcements={{
+    pickup: (title, position, length) =>
+      t('site:toc.pickup', { title, position, length }),
+    position: (title, position, length) =>
+      t('site:toc.position', { title, position, length }),
+    completion: (title, position, length) =>
+      t('site:toc.completion', { title, position, length }),
+    cancellation: (title, position, length) =>
+      t('site:toc.cancellation', { title, position, length }),
+  }}
+/>
+```
+
+The component is an interactive island: without `client:load` or a framework equivalent
+directive, the rows render statically without reordering.
+
+The first row supplies no content snippet and renders its title. The second row supplies
+a content snippet, and the third adds an action. Activating an action or selecting row
+text executes without triggering a reorder.
+
+The readouts below each list display what the consumer received: `Status region` shows
+the message announced by the component, `Order received` shows the array delivered by
+`onitemschange`, and `Action activated` shows the row whose action ran.
+
+Two paths reorder a row into the same position:
+
+- **Drag.** Press a drag handle and drag. The browser paints the whole row as the drag
+  image, the rows keep their positions, and a two-pixel line marks where the row lands:
+  before the target row while the pointer sits in its block-start half, and after it in
+  the block-end half. Release the pointer to drop. Dropping a row on itself, or ending
+  the drag outside the rows, reports nothing.
+- **Activation.** Activate a drag handle to pick the row up, then activate any row to
+  place the picked-up row at that row's position, or activate the handle again to drop
+  the row where it stands. The rendered order follows the row as it moves. Escape
+  restores the supplied order and ends the operation. Touch reaches this path by tapping
+  a handle; the keyboard reaches it with Space or Enter on a focused handle, and adds
+  ArrowUp and ArrowDown to move a picked-up row one position.
+
+Reorder a list three ways to review the whole model: drag a handle with a mouse and watch
+the insertion line; tap a handle and then tap another row; press Tab to a handle, then
+Space, then ArrowUp or ArrowDown, and Escape.
+
+A resting row shows its separator line alone. Hovering paints `--cn-color-hover` over the
+row background, a held handle and a moving row paint `--cn-color-active`, and a focused
+drag handle draws a focus ring. None of these states changes row dimensions, so none
+shifts the layout.
+
+<DsComposition themes stack caption="Two items, and an empty list, in Light and Dark">
+  <SortableListSpecimen size={2} client:load />
+  <SortableListSpecimen size={0} client:load />
+</DsComposition>
+
+A consumer that rejects the reported order restores the original order. Reordering a
+row in the specimen below demonstrates this: the reorder completes, `onitemschange`
+delivers the new order, and the list reverts to its original order.
+
+<DsComposition themes stack caption="A consumer that receives the order and does not store it, in Light and Dark">
+  <SortableListSpecimen accept={false} client:load />
+</DsComposition>
+
+## Reference
+
+### Props
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `items` | `readonly CnListItem[]` | `items` is required and supplies the rendered order. The array may be empty. `CnSortableList` never modifies the array. |
+| `label` | `string` | `label` is required and supplies the accessible name for the list, localized by the consumer. |
+| `onitemschange` | `(items: CnListItem[]) => void` | `onitemschange` is required and runs on each completed reorder that changes position, delivering a new array in the updated order. |
+| `announcements` | `CnSortableListAnnouncements` | `announcements` is required and supplies localized messages carried by the status region. |
+
+### Item
+
+`CnListItem` describes one row.
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `key` | `string` | `key` is required and uniquely identifies the item across renders and reorders within `items`. |
+| `title` | `string` | `title` is required and names the item and drag handle, rendering as row content when no content snippet is supplied. Localize the title. |
+| `content` | `Snippet` | `content` renders in the content region instead of the title. The title still names the drag handle. |
+| `actions` | `Snippet` | `actions` renders after the content region. Activating an action starts no reorder. |
+
+### Announcements
+
+`CnSortableListAnnouncements` defines four functions. Each function receives the item
+title, the one-based position, and the total item count, returning the message announced
+to assistive technology.
+
+| Prop | Type | Purpose |
+| :--- | :--- | :--- |
+| `pickup` | `(title, position, length) => string` | `pickup` is required and announces that the row was picked up. |
+| `position` | `(title, position, length) => string` | `position` is required and announces that the picked-up row moved to a new position. |
+| `completion` | `(title, position, length) => string` | `completion` is required and announces that the row was dropped, describing the completed input regardless of whether the consumer stored the order. |
+| `cancellation` | `(title, position, length) => string` | `cancellation` is required and announces that the operation ended and the supplied order stands. |
+
+## Accessibility
+
+The list renders a native `ul` named by `label`, and each drag handle is a native button
+named by the item title. Only the drag handle starts a reorder; focus remains on the
+handle throughout the operation and follows the row to the position stored by the
+consumer.
+
+The platform drag-and-drop API serves neither touch nor the keyboard, so activation
+serves both: a single-pointer path for WCAG 2.2 SC 2.5.7 Dragging Movements, and a
+keyboard path for SC 2.1.1 Keyboard. Space and Enter pick a row up and place it, ArrowUp
+and ArrowDown move a picked-up row one position, ArrowLeft and ArrowRight leave the row
+in place, and Escape cancels the operation. An arrow key at either boundary leaves the
+row in place and announces the current position.
+
+Every operation reports through a single visually hidden `role="status"` region that
+carries the message returned by the matching `announcements` function. While a row is
+picked up, `aria-describedby` references the status region so screen readers announce
+the active position. The consumer provides all message wording through `announcements`;
+`CnSortableList` supplies no default text.
+
+The `dragger` icon on the handle is decorative and hidden from assistive technology.
+The item title names the handle; a title that does not uniquely identify the row leaves
+assistive technology users with indistinguishable handles.
