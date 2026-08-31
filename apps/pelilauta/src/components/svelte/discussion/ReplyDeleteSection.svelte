@@ -36,7 +36,7 @@ async function onsubmit(e: Event) {
   <section class="surface">
     <p>{t('threads:discussion.confirmDelete.message')}</p>
 
-    <form class="text-end" {onsubmit}>
+    <form class="actions justify-end" {onsubmit}>
       <a href={`/threads/${threadKey}`} class="button text">
         {t('actions:cancel')}
       </a>

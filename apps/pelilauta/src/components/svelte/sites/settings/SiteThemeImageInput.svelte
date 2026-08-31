@@ -92,7 +92,7 @@ async function deleteImage() {
       <input type="file" accept="image/*" onchange={fileChanged} />
     </label>
   </div>
-  <div class="actions text-end">
+  <div class="actions justify-end">
     <button
       type="button"
       disabled={!site[imageField]}

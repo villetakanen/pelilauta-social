@@ -185,7 +185,7 @@ const hasFiles = $derived(uploadedFiles.length > 0);
     style="display: none;"
   />
   
-  <div class="actions">
+  <div class="actions justify-start">
     <button onclick={triggerFileSelect} disabled={isUploading} type="button">
       {isUploading ? 'Processing...' : 'Select Files'}
     </button>
@@ -221,13 +221,5 @@ const hasFiles = $derived(uploadedFiles.length > 0);
   .surface {
     display: grid;
     row-gap: var(--cn-line);
-  }
-
-  /* TODO(#125): the design system publishes this row as `.actions`. Delete this
-     rule and put `.actions.justify-start` on the element. */
-  .actions {
-    display: flex;
-    gap: var(--cn-gap);
-    align-items: center;
   }
 </style>

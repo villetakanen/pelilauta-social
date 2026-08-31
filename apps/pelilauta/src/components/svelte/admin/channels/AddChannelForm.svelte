@@ -167,7 +167,7 @@ function handleSubmit(event: SubmitEvent) {
     </fieldset>
 
     <!-- Action buttons -->
-    <div class="actions">
+    <div class="actions justify-end">
       <button 
         type="button" 
         class="text"
@@ -224,14 +224,5 @@ function handleSubmit(event: SubmitEvent) {
   .field-title {
     color: var(--cn-color-field-label);
     font-size: var(--cn-font-size-small);
-  }
-
-  /* TODO(#125): the design system publishes this row as `.actions`. Delete this
-     rule and put `.actions.justify-end` on the element. */
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: var(--cn-gap);
   }
 </style>

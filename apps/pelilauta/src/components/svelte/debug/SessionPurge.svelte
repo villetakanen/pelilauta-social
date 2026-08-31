@@ -138,7 +138,7 @@ async function purgeSession() {
         </p>
       </div>
 
-      <div class="actions">
+      <div class="actions justify-end">
         <a href="/" class="button">
           <CnIcon noun="fox" />
           <span>Return to Front Page</span>
@@ -169,7 +169,7 @@ async function purgeSession() {
       </p>
     </div>
 
-    <div class="actions">
+    <div class="actions justify-end">
       <button type="button" onclick={purgeSession} disabled={isPurging}>
         {#if isPurging}
           <CnLoader inline />
@@ -204,14 +204,6 @@ async function purgeSession() {
   .warning-list {
     margin: 0;
     padding-inline-start: var(--cn-line);
-  }
-
-  /* TODO(#125): the design system publishes this row as `.actions`. Delete this
-     rule and put `.actions.justify-end` on the element. */
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
   }
 
   .purge-complete-box {

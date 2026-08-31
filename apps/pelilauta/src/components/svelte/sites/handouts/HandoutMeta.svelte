@@ -101,7 +101,7 @@ async function onSubmit(e: Event) {
         onchange={onUserSelect}
         label={t('site:handouts.add.reader')}
       />
-      <div class="actions text-end">
+      <div class="actions justify-end">
         <button
           disabled={!newReader || newReader === '-'}
           type="submit"

@@ -153,7 +153,7 @@ function cancel() {
     </div>
   </div>
 
-  <section class="actions text-end">
+  <section class="actions justify-end">
     <button type="button" disabled={saving} class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
@@ -182,11 +182,5 @@ function cancel() {
     -webkit-line-clamp: 3;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  /* TODO(#125): `.actions` layout comes from the design system; this margin does
-     not. Decide whether the spacing belongs to the row or to the form above it. */
-  .actions {
-    margin-block-start: var(--cn-line);
   }
 </style>
