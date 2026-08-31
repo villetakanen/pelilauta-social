@@ -1,5 +1,5 @@
 ---
-status: live
+status: proposed
 ---
 
 # CnCard
@@ -82,12 +82,12 @@ links have no resting underline, restore it on hover, and receive a visible focu
 ring. The eyebrow does not replace the title or introduce another heading.
 
 The optional actions region renders in a neutral container rather than a navigation
-landmark because it accepts both links and command controls. The horizontal row is
-anchored to the bottom of the CnCard. It is seven grid units high, uses standard gap
-and horizontal padding, and bleeds through the CnCard's horizontal padding to its
-outer edges. Direct children are vertically centred and distributed with space
-between them. They supply typography, labels, destinations, and behavior.
-CnCard does not supply application actions or business logic.
+landmark because it accepts both links and command controls. It composes the
+`.actions` container defined in `specs/design-system/actions/spec.md`, which governs
+the row's height, centring and child distribution. CnCard adds only what is its own:
+the row is anchored to the bottom of the CnCard, and it bleeds through the CnCard's
+horizontal padding to its outer edges. CnCard does not supply application actions or
+business logic.
 
 A cover is decorative, lazily loaded, cropped to 16:9, and may receive native
 responsive image candidates and sizing hints. It bleeds through the CnCard's top and
@@ -255,7 +255,8 @@ And its links expose hover and keyboard-focus treatments
 ```gherkin
 Given a CnCard whose actions contain two direct children
 When it renders
-Then the actions form a seven-grid-unit horizontal row at the bottom edge
+Then the actions compose the `.actions` container at the CnCard's bottom edge,
+  bled to its outer edges
 And the first child is at the row start and the second is at the row end
 ```
 

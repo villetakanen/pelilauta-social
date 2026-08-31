@@ -312,15 +312,17 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     outline-color: currentColor;
   }
 
+  /*
+   * `.actions` here composes `specs/design-system/actions/spec.md`'s container,
+   * which already supplies layout, centring and the six-grid-unit row height.
+   * The card keeps only what is its own: the bottom pin against the card's
+   * other regions, and the bleed that carries the row through the card's
+   * horizontal padding to its outer edges.
+   */
   .actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    block-size: calc(7 * var(--cn-grid));
     margin-block-start: auto;
     margin-inline: calc(-1 * var(--cn-gap));
     padding-inline: var(--cn-gap);
-    gap: var(--cn-gap);
   }
 
   .actions :global(p),

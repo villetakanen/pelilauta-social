@@ -114,7 +114,7 @@ test('the cover is 16:9 and its primary tint occupies at most 44 percent', async
   expect((await styles(tint)).backgroundBlendMode).toBe('hard-light');
 });
 
-test('actions form a seven-grid-unit bottom row with split children', async ({
+test('actions compose the six-grid-unit actions container as a split bottom row', async ({
   page,
 }) => {
   const card = page.locator(
@@ -133,7 +133,7 @@ test('actions form a seven-grid-unit bottom row with split children', async ({
       : 0;
     const probe = document.createElement('span');
     probe.style.display = 'block';
-    probe.style.blockSize = 'calc(7 * var(--cn-grid))';
+    probe.style.blockSize = 'calc(6 * var(--cn-grid))';
     element.append(probe);
     const expectedHeight = probe.getBoundingClientRect().height;
     probe.remove();
