@@ -19,9 +19,6 @@ const { site: initialSite, handout }: Props = $props();
 let newReader = $state('');
 let readers = $state(handout.readers ?? ([] as string[]));
 
-/**
- * Handout Metadata editor
- */
 const visible = $derived.by(() => {
   if ($site?.owners?.includes($uid)) return true;
   return false;

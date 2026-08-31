@@ -188,9 +188,9 @@ test('the CnCard title retains v20 h4 metrics in a narrow container', async ({
 test('a flag class added on the client raises the flag on an unhydrated CnCard', async ({
   page,
 }) => {
-  // Holds CnCard against the shared attention states: the card draws no flag of its
-  // own, so a rename or a stray copy in the component's scoped styles would show up
-  // here rather than in a specimen.
+  // Holds CnCard against shared attention states: the card draws no custom flag,
+  // ensuring that renames or stray copies in component scoped styles fail here
+  // rather than in specimen visual checks.
   const card = page.locator(
     '[data-mode="light"] [data-variant="basic"] .cn-card',
   );

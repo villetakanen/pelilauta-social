@@ -1,14 +1,11 @@
 # agents/technical-writer
 
-Headless technical-writer runner for the repository. Runs the technical-writer
-skill across target files through a headless Antigravity CLI (`agy`) session,
-rewriting prose and code comments directly in the working tree to conform with
-`docs/WRITING.md`.
+This runner executes the technical-writer skill across target files through a headless Antigravity CLI (`agy`) session, rewriting prose and code comments directly in the working tree to conform with `docs/WRITING.md`.
 
 ## Prerequisites
 
-- `agy` on the PATH.
-- Machine-level tool permissions configured in `~/.gemini/antigravity-cli/settings.json`:
+- The environment requires `agy` on `PATH`.
+- Configure machine-level tool permissions in `~/.gemini/antigravity-cli/settings.json`:
   ```json
   {
     "permissions": {
@@ -19,12 +16,11 @@ rewriting prose and code comments directly in the working tree to conform with
     }
   }
   ```
-  Headless `agy` requires pre-approved permissions to run non-interactively without prompting.
-
+  Headless `agy` requires pre-approved tool permissions to execute non-interactively.
 
 ## Usage
 
-Any agent (Claude Code, Codex, Antigravity) or developer can run:
+Agents or developers run the tool using these commands:
 
 ```sh
 # Run on specific files
@@ -43,10 +39,8 @@ agents/technical-writer/run.sh [files...] [--model <id>] [--effort <low|medium|h
 
 ## Behaviour
 
-1. Targets the named files, or discovers modified and untracked prose and code
-   files across the working tree when invoked without arguments.
-2. Runs headless `agy` with `.agents/skills/technical-writer/SKILL.md` and
-   `docs/WRITING.md`.
-3. In code files, modifies comment syntax only.
-4. Applies all edits directly to the working tree.
-5. Prints the before-and-after word counts and list of exceptions.
+1. Targets named files, or discovers modified and untracked files containing prose across the working tree when invoked without arguments.
+2. Runs headless `agy` with `.agents/skills/technical-writer/SKILL.md` and `docs/WRITING.md`.
+3. In source files, modifies comment syntax only.
+4. Applies all edits directly to working tree files.
+5. Reports before-and-after word counts and lists exceptions.

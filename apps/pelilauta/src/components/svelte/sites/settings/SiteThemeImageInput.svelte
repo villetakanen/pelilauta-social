@@ -9,9 +9,7 @@ import { uid } from '../../../../stores/session';
 import { update } from '../../../../stores/site';
 
 /**
- * A file input for setting a site theme image. There are 3 different images we want to use
- * for the site theme: an avatar, a card image, and a background image. This component
- * allows the user to upload an image to the site Assets and adds that image to the site.
+ * Uploads an avatar, card, or background image to site assets and assigns the asset URL to the site theme.
  */
 
 interface Props {

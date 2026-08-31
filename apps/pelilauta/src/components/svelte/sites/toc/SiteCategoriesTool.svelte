@@ -28,8 +28,7 @@ let saving = $state(false);
 let hasChanges = $state(false);
 let newCategory = $state('');
 
-// Convert categories to list items for the sortable list, each carrying its
-// own delete action.
+// Map categories to list items for the sortable list, with each item defining a delete action.
 const categoryItems = $derived(
   categories.map((cat) => ({
     key: cat.slug,
@@ -39,7 +38,7 @@ const categoryItems = $derived(
 );
 
 /**
- * Adds a new category from a (non submititting) button
+ * Adds a new category.
  */
 function addCategory(e: Event) {
   e.preventDefault();
@@ -55,7 +54,7 @@ function addCategory(e: Event) {
 }
 
 /**
- * Updates category order based on drag-and-drop reordering
+ * Updates category order from sortable list events.
  */
 function reorderCategories(newOrder: Array<CnListItem>) {
   hasChanges = true;
@@ -67,7 +66,7 @@ function reorderCategories(newOrder: Array<CnListItem>) {
 }
 
 /**
- * Removes one category, keeping the rest in their current order
+ * Removes one category while preserving the remaining order.
  */
 function deleteCategory(slug: string) {
   hasChanges = true;
@@ -75,7 +74,7 @@ function deleteCategory(slug: string) {
 }
 
 /**
- * Reset to original categories
+ * Resets categories to initial values.
  */
 function reset() {
   hasChanges = false;
@@ -83,7 +82,7 @@ function reset() {
 }
 
 /**
- * Save categories to database
+ * Persists categories to the database.
  */
 async function onsubmit(e: Event) {
   e.preventDefault();

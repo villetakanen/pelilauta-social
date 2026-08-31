@@ -1,6 +1,6 @@
 <script lang="ts">
 /**
- * Forking a reply into its own thread — a quoted-reply variant of thread
+ * Forks a reply into a new thread as a quoted-reply variant of thread
  * authoring.
  *
  * As `ThreadEditorForm`, this view is a consumer of the editor shell: it

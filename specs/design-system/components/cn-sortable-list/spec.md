@@ -27,6 +27,8 @@ Authors arranging ordered sets, such as table-of-contents pages or categories, r
 
 The component renders a native unordered list with `role="list"` and `aria-label={label}`. Each item renders as a list item containing a drag handle, a content region, and an optional actions region in sequence. The drag handle renders as a native `button` with `type="button"` using the item title as its accessible name. The handle contains the `dragger` icon as a decorative element governed by `specs/design-system/components/cn-icon/spec.md`. A visually hidden `role="status"` region occupies no layout space and receives each message returned by `announcements`.
 
+Each mounted Sortable List instance gives its status region a page-unique identifier. A picked-up handle references the status region in its instance through `aria-describedby`.
+
 The drag handle defines a distinct action presentation and does not compose the button presentation from `specs/design-system/actions/spec.md`.
 
 The actions region composes the `.actions` container from `specs/design-system/actions/spec.md` and replaces its fixed row height. A row's height is what its contents need, the contents a consumer supplies included.

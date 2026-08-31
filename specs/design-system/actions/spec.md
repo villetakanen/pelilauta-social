@@ -149,7 +149,7 @@ Button geometry is grid-derived:
 
 Every control has a pointer target, and the target is not the visible control: where a
 control paints smaller than the target in either axis, the target extends past what it
-paints. A control's own spacing is not its target, because margin receives no pointer
+paints. Outer spacing around a control forms no part of the pointer target because margin receives no pointer
 events. The target fits within the occupied row, so a control's target does not decide
 the row it sits in.
 

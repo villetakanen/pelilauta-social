@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# run.sh — runs technical-writer on target files via headless agy.
+# Runs technical-writer across target files via headless agy.
 #
 # Usage:
 #   agents/technical-writer/run.sh [file ...] [--model <id>] [--effort <low|medium|high>]
 #
-# If no files are specified, it targets modified prose and source files in the current git changeset.
+# When given no file arguments, the script targets modified prose and source files in the current changeset.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

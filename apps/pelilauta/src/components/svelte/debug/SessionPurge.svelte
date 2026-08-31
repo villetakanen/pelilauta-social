@@ -107,7 +107,7 @@ async function purgeSession() {
           'Could not list IndexedDB databases (browser may not support it).',
         );
         // Fallback: Try to delete known databases if we knew them.
-        // For now, we'll just log the limitation.
+        // Log clearing limitation.
         // Common Firebase DBs: 'firebase-heartbeat-database', 'firebase-installations-database', 'firestore/[project-id]/[db-name]/main'
       }
     }

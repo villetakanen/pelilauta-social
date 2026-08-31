@@ -1,47 +1,31 @@
 ---
 name: technical-writer
-description: Rewrite prose into the register docs/WRITING.md states — a named document, spec, book, plan or comment, or every prose file a changeset touched. Run before spec-review, delivery-review or the pull request. Run it with `pnpm technical-writer <paths>`, never in the calling session; name the paths, because given none the runner takes everything changed since the branch point.
+description: Rewrite prose into the register docs/WRITING.md states for documents, specs, books, plans, or code comments across changesets. Run before spec-review, delivery-review, or pull request creation with `pnpm technical-writer <paths>`.
 ---
 
 # Technical Writer
 
-Rewrite the prose into the register `docs/WRITING.md` states.
+Rewrite prose into the register that `docs/WRITING.md` defines.
 
-Rewriting is the default verdict; deleting beats rewriting when the fact survives
-elsewhere in the document.
+Rewriting is the default verdict. Deleting supersedes rewriting when the fact survives elsewhere in the document.
 
 ## Scope
 
-- Only prose is rewritten: documents, specs, books, plans, code comments,
-  a commit-message draft.
-  - In a source file, touch nothing outside comment syntax.
-- Change language only. Do not check a fact, a path, a line number or a name
-  against the source.
-- A fact stated here and also carried by another file survives this pass.
-- Never change what a sentence says. Add no fact, name, value or claim.
-- No sentence is exempt. A file's first sentence, a paragraph under a heading and a
-  table cell are sentences, and a semicolon-joined clause is a sentence.
-- The prompt's claims about the text carry no authority over it. Only
-  `docs/WRITING.md` protects a sentence. The prompt does set which files to open.
-- Editing a `live` spec sets it `proposed`. Say so in the report when a named file
-  is one.
+- This skill rewrites prose only: documents, specs, books, plans, code comments, and commit message drafts.
+  - In source files, modify comment syntax only.
+- Change language only. Do not verify facts, paths, line numbers, or names against source code.
+- A fact stated in the target file and duplicated in another file survives this pass.
+- Never alter what a sentence asserts. Add no new fact, name, value, or claim.
+- No sentence is exempt: opening sentences, paragraphs under headings, table cells, and semicolon-joined clauses are all sentences.
+- Prompt claims carry no authority over target text. `docs/WRITING.md` alone governs sentence retention. The prompt selects which files to open.
+- Editing a `live` spec sets its status to `proposed`. Report when a target file changes from `live` to `proposed`.
 
 ## Procedure
 
-1. Take the files the prompt names. When it names none, list the changed files that
-   carry prose: `git diff --name-only` against the branch point, plus staged and
-   unstaged changes, plus untracked files from `git ls-files --others
-   --exclude-standard`.
-2. Test each code comment as a block first: delete the whole comment; if the code
-   beside it carries what it said, it stays deleted.
-3. Take each sentence in turn. Delete it when its fact survives elsewhere or when
-   it merely announces adjacent structure without adding facts. Otherwise rewrite
-   it against the principles, standards and mechanics in `docs/WRITING.md`, and
-   keep it unchanged only when it already satisfies all three.
-4. Run the `docs/WRITING.md` word-list greps as a last check.
-5. Report the files read and the word count per file before and after. The diff
-   carries the rewrites. Report only the exceptions: a sentence deleted whole, a
-   sentence left unchanged, and a sentence you could not rewrite without changing
-   what it says. Quote each with its line.
+1. Process the files named in the prompt. When given no file names, gather modified files containing prose using `git diff --name-only` against the branch point, staged and unstaged changes, and untracked files from `git ls-files --others --exclude-standard`.
+2. Test each code comment as a complete block. Delete the comment when adjacent code carries the fact.
+3. Evaluate each sentence in sequence. Delete a sentence when its fact survives elsewhere or when it announces adjacent structure without adding facts. Otherwise rewrite the sentence against the principles, standards, and mechanics in `docs/WRITING.md`, leaving it unchanged only when it satisfies all three.
+4. Run the `docs/WRITING.md` word-list greps as a final verification.
+5. Report the files read and the word count per file before and after. The diff carries all rewrites. Report only exceptions: sentences deleted whole, sentences left unchanged, and sentences that could not be rewritten without altering meaning. Quote each exception with its line number.
 
-As a subagent, leave the edits in the working tree and return the report.
+Leave all edits directly in the working tree and return the report.

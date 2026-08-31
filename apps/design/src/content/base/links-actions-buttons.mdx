@@ -136,15 +136,15 @@ both directions. The two are not the same box: the target is centred on the pill
 reaches past it, further on an icon-only control, which paints a circle narrower than the
 target in both axes.
 
-Nothing is painted to show it. The target is an empty box on the control, so a pointer
-landing just outside the pill still lands on the button — which is what a reader touching
-a phone, or aiming with a trackpad, actually needs.
+The target renders as a transparent box on the control without visible styling. A pointer
+landing outside the visible pill still activates the button, supporting touch input and
+coarse pointing devices.
 
-The target fits inside the row a button already occupies, so it changes no layout: the
-pill's own block spacing is wider than the amount the target reaches past it.
+The target fits within the row height allocated for buttons without modifying layout
+because the button block margin exceeds the target extension.
 
-A component that builds its own control from these rules — a chip, a chrome action, a
-reaction button — sets its own target and says so in its own book.
+A component defining a custom control from these rules — such as a chip, chrome action,
+or reaction button — defines a dedicated target documented in its specimen book.
 
 ## The actions container
 
