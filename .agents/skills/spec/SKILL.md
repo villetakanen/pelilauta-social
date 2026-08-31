@@ -1,72 +1,34 @@
 ---
 name: spec
-description: Creates specs before implementation. Use when starting a feature, or significant change, or no specification exists yet. Use when requirements are unclear, ambiguous, or only exist as a vague idea.
+description: Create specs before implementation. Use when introducing a feature, making a significant change, or clarifying ambiguous requirements.
 ---
 
 # Spec
 
-A Spec describes the why, and how, for a feature. It defines how the system works (Design) and how we expect it to work (Quality).
+A spec defines a feature's purpose and mechanics. It defines system operation and expected quality.
 
-Specs follow ASDLC.io Living Specs practice: a spec anchors the feature
-to its expected state.
+Specs follow ASDLC.io living specs practice and anchor features to expected states.
 
-Anatomy of a spec is defined in `specs/TEMPLATE.md`.
+`specs/TEMPLATE.md` defines spec anatomy.
 
 ## Procedure
 
-1. Decide if a spec, or an amendment to a spec is needed. Small changes
-   trivially inferrable from the codebase, and conforming to a spec
-   do not need a spec change. If the work can be done, without a spec
-   change, always vocalize the decision.
-2. Existing specs, implementation, and documents of v20 are the primary
-   source for what the design system does. They carry intent only where
-   the human confirms it. Where they carry nothing, or carry an
-   implementation the human or a study calls faulty, the intent comes
-   from the human and the source search stops. An absent or broken
-   feature is not a settled decision. A value repeated across the
-   versions is one value in several copies, not corroboration.
-3. Existing specs, implementation, and documents of the v18 act as
-   the primary source for application, business and solution logic
-   and features for the pelilauta app. Where these conflict with the
-   v20 or current v21 design intent, ask the user for a clarification.
-4. Where the spec can not be proposed from the v20 and v18 sources,
-   always ask the user for clarifications.
-5. Create or update `specs/<domain>/<capability>/spec.md` for the spec.
-   where the capability has sub-features, these are placed in sub-folder
-   of the capability: `specs/<domain>/<capability>/<sub-feature>/spec.md`. A spec can be split to multiple children, inside the folder, as
-  long as these are listed in the parent
-6. Encode the status of the document in the frontmatter:
-   `status: proposed | live | deprecated`, nothing else. A `proposed`
-  spec carries agent edits an operator may not have read; implementing
-  against it requires an explicit ask, and waiting. A `live` spec has
-  been read through by an operator and portrays how the system is
-  supposed to work. A spec kept for its context or architecture as a
-  lesson or example is `deprecated`. The status is a process gate, not
-  protection: any spec may be edited at any time, an agent edit to a
-  `live` spec sets it `proposed`, and an operator makes it `live` by
-  reading it — never request, await or announce approval.
-7. Large scale, or irreversible decisions require an additional ADR in
-  `docs/adrs/`.
-8. Before presenting new spec text, apply the template's sentence tests to your
-  own text. Delete what the code, another spec or a sibling sentence already
-  carries.
-9. After creating or changing a spec, run the spec-review -skill, then report the
-  spec is `proposed` and move on.
+1. Determine whether the task requires creating or amending a spec. Small changes inferable from the codebase and conforming to an existing spec require no spec change. State the decision explicitly when work proceeds without a spec change.
+2. Existing specs, implementation, and documents of v20 provide the primary source for design-system behavior. They carry intent only where the human confirms it. When they carry nothing, or carry an implementation identified as faulty, intent comes from the human and the source search stops. An absent or broken feature is not a settled decision. A value repeated across versions represents duplicated data rather than independent corroboration.
+3. Existing specs, implementation, and documents of v18 provide the primary source for application logic and features. When these conflict with v20 or current v21 design intent, request clarification.
+4. Request clarification when v20 and v18 sources cannot establish the proposed spec.
+5. Create or update `specs/<domain>/<capability>/spec.md`. Place sub-features in child directories as `specs/<domain>/<capability>/<sub-feature>/spec.md` and list them in the parent spec.
+6. Encode document status in the frontmatter as `status: proposed | live | deprecated`. A `proposed` spec carries a new, material, or unsettled amendment unread by the operator; do not implement it. For a minor, settled amendment to a live spec, show an unapplied diff and rationale in chat. Do not edit the file or change its status before the operator accepts the diff. Apply an accepted amendment while retaining `live`, then continue. A `live` spec portrays intended system operation. A spec kept for historical context or architectural reference is `deprecated`.
+7. Record large-scale or irreversible decisions in an ADR under `docs/adrs/`.
+8. Apply the template sentence tests to new spec text before presenting it. Delete text that code, another spec, or an adjacent sentence already carries.
+9. After modifying a staged proposed spec, run the spec-review skill, report that the spec is `proposed`, and stop. An accepted inline amendment remains `live`.
 
 ## Prose
 
-Follow `docs/WRITING.md`, read before drafting. A spec is direct, strict and
-technical.
+Follow `docs/WRITING.md`. A spec is direct, strict, and technical.
 
-## Recording the intent
+## Recording Intent
 
-The spec's context and architecture carry the why nothing else holds: the user or
-system need the capability exists for. State no why the reader can derive.
+The Context and Architecture sections carry the purpose that no other artifact holds: the user or system need the capability satisfies. State no rationale that the reader can derive.
 
-An implementation carries behaviour, logic and contracts — what the system does,
-never why. A why comes from a spec, an ADR, a plan or a human decision. Where the
-only why on record is v20's, confirm it with the human before carrying it, because
-v20 canonicalised its mistakes. Before settling the Context, interview the human
-as the product owner: who is served first, what they get, and what wins when goals
-collide. A why with no source remains a question to the human, not a sentence in
-the spec.
+Source code carries behavior, logic, and contracts — what the system does, never why. Purpose comes from a spec, an ADR, a plan, or a human decision. When the only recorded purpose comes from v20, verify it with the human because v20 canonicalized mistakes. Before settling the Context, interview the human regarding product priorities: who is served first, what they receive, and which priority prevails during conflicts. A purpose with no recorded source remains a question for the human rather than a claim in the spec.

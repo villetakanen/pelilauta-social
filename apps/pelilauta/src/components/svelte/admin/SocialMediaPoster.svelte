@@ -67,7 +67,7 @@ async function onsubmit(event: Event) {
         <input type="text" name="linkDescription" disabled={isSending} />
       </label>
 
-      <div class="actions">
+      <div class="actions justify-end">
         <button type="submit" disabled={isSending}>
           {#if isSending}
             <CnLoader inline />
@@ -90,11 +90,5 @@ async function onsubmit(event: Event) {
   .social-poster-form {
     display: grid;
     row-gap: var(--cn-line);
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
   }
 </style>

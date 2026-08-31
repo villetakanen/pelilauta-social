@@ -1,16 +1,7 @@
 <script lang="ts">
 /**
- * CnClock — a segmented circular dial for tracking a countdown, an obstacle
- * or a faction goal during play. `specs/clock/spec.md` governs it.
- *
- * The geometry — normalising `ticks`, clamping `value`, resolving the step
- * text, building each slice's path — lives in `geometry.ts`, pure and
- * DOM-free. This host owns the three presentations the spec names (view,
- * interactive, disabled) and the input bindings interactive mode takes:
- * pointer click, shift-click, long-press, and the keyboard.
- *
- * `view` takes precedence over `disabled` — a viewer who cannot edit a clock
- * does not need to know it would otherwise be locked.
+ * CnClock renders a segmented circular dial for tracking countdowns, obstacles
+ * or faction goals. `specs/clock/spec.md` governs the component.
  */
 import {
   buildSlicePaths,
@@ -23,19 +14,19 @@ import {
 import './styles/clock.css';
 
 interface Props {
-  /** The dial's accessible name. Required, and localised by the consumer. */
+  /** Sets the dial's accessible label. */
   label: string;
-  /** Slice count, relative weights, or descriptors. Defaults to 4 equal slices. */
+  /** Sets slice count, relative weights, or descriptors. Defaults to 4 equal slices. */
   ticks?: Ticks;
-  /** Completed slices, out of the total. Bindable. */
+  /** Number of completed slices. Bindable. */
   value?: number;
-  /** Presentation mode: a static picture rather than a control. */
+  /** Renders a static presentation dial rather than an interactive slider. */
   view?: boolean;
-  /** Renders an inert slider rather than a picture; `view` wins over this. */
+  /** Renders a disabled slider. `view` takes precedence. */
   disabled?: boolean;
-  /** Renders a hidden input, for a form that reads the value from FormData. */
+  /** Renders a hidden input for FormData form submission. */
   name?: string;
-  /** Runs on every value change, interactive mode only. */
+  /** Fires when the value changes in interactive mode. */
   onchange?: (event: { value: number }) => void;
 }
 
@@ -49,9 +40,6 @@ let {
   onchange,
 }: Props = $props();
 
-// The viewBox matches the host box in px (12 grid units), so an SVG user unit
-// is a device pixel and `stroke-width` lands at the width the stylesheet asks
-// for. The radius leaves the stroke's outer half room rather than clipping it.
 const RADIUS = 46;
 const CENTER = 48;
 
@@ -61,8 +49,6 @@ const resolvedValue = $derived(clampValue(value, totalSlices));
 const stepText = $derived(resolveStepText(resolvedValue, slices));
 const paths = $derived(buildSlicePaths(slices, RADIUS, CENTER));
 
-// `view` takes precedence: a viewer sees a picture even where `disabled` is
-// also set, so the two flags are never both live at once.
 const interactive = $derived(!view && !disabled);
 const inert = $derived(!view && disabled);
 
@@ -101,8 +87,6 @@ function handlePointerDown() {
 
 function handleClick(event: MouseEvent) {
   if (!interactive) return;
-  // A long press already applied its decrement; the click that follows the
-  // pointer's release must not also apply the plain-click increment.
   if (longPressFired) {
     longPressFired = false;
     return;

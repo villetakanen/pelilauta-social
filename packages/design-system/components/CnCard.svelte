@@ -148,7 +148,7 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
       var(--cn-border-radius-large)
     );
     /* The shared attention flag, pulled a pixel out so it covers the
-       elevation-0 border; the card's own clipping keeps it square with the
+       elevation-0 border; card boundary clipping keeps it square with the
        corner. Geometry and colour live in surface.css. */
     --cn-flag-inset: -1px;
   }
@@ -312,15 +312,17 @@ const coverFallback = `--cn-cover-fallback: url('${COVER_PLACEHOLDER_URI}')`;
     outline-color: currentColor;
   }
 
+  /*
+   * `.actions` here composes `specs/design-system/actions/spec.md`'s container,
+   * which already supplies layout, centring and the six-grid-unit row height.
+   * The card defines only local constraints: the bottom pin against other
+   * card regions, and the bleed carrying the row through card horizontal
+   * padding to outer edges.
+   */
   .actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    block-size: calc(7 * var(--cn-grid));
     margin-block-start: auto;
     margin-inline: calc(-1 * var(--cn-gap));
     padding-inline: var(--cn-gap);
-    gap: var(--cn-gap);
   }
 
   .actions :global(p),

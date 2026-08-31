@@ -1,0 +1,137 @@
+/*
+ * This stylesheet defines presentation rules for `CnSortableList`.
+ *
+ * Rows render directly on the consumer surface without an enclosing list
+ * surface, separated by single borders. Interaction states paint over the row
+ * background without modifying row geometry.
+ */
+
+.cn-sortable-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cn-sortable-list li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--cn-gap);
+  min-block-size: var(--cn-line);
+  padding-block: var(--cn-grid);
+  color: var(--cn-color-on-surface);
+}
+
+.cn-sortable-list li + li {
+  border-block-start: 1px solid var(--cn-color-border);
+}
+
+.cn-sortable-list li:hover {
+  background-color: var(--cn-color-hover);
+}
+
+.cn-sortable-list li[data-dragging],
+.cn-sortable-list li:has(.cn-sortable-list-handle:active) {
+  background-color: var(--cn-color-active);
+}
+
+.cn-sortable-list .content {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/*
+ * The actions region composes `.actions` from `styles/buttons.css`, and replaces
+ * its fixed row height: a row's height is what its contents need, including the
+ * contents a consumer supplies. The tighter gap keeps a cluster of row controls
+ * closer than a standalone action row.
+ */
+.cn-sortable-list .actions {
+  display: flex;
+  align-items: center;
+  gap: var(--cn-grid);
+  flex: none;
+  block-size: auto;
+}
+
+.cn-sortable-list li > .cn-sortable-list-handle {
+  flex: none;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: calc(var(--cn-grid) * 5);
+  block-size: auto;
+  min-block-size: var(--cn-line);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--cn-border-radius-small);
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  cursor: grab;
+  transition: none;
+}
+
+.cn-sortable-list li > .cn-sortable-list-handle::before,
+.cn-sortable-list li > .cn-sortable-list-handle::after {
+  content: none;
+}
+
+.cn-sortable-list li > .cn-sortable-list-handle:hover {
+  box-shadow: none;
+}
+
+.cn-sortable-list li > .cn-sortable-list-handle:focus-visible {
+  outline: 2px solid var(--cn-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.cn-sortable-list li[data-dragging] > .cn-sortable-list-handle {
+  cursor: grabbing;
+}
+
+/*
+ * The pseudo-element draws an insertion marker along the target edge without
+ * affecting list layout.
+ */
+.cn-sortable-list li[data-insert]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  block-size: 2px;
+  background-color: var(--cn-color-focus-ring);
+  pointer-events: none;
+}
+
+.cn-sortable-list li[data-insert="before"]::after {
+  inset-block-start: 0;
+}
+
+.cn-sortable-list li[data-insert="after"]::after {
+  inset-block-end: 0;
+}
+
+/* Visually hidden styles preserve the status element in the accessibility tree
+   for screen reader announcements. */
+.cn-sortable-list .status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-sortable-list li,
+  .cn-sortable-list li > .cn-sortable-list-handle {
+    transition: none;
+  }
+}

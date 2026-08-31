@@ -8,9 +8,9 @@ async function logoutAction() {
 }
 </script>
 
-<section class="surface actions">
+<section class="surface">
   <h3>{t('settings:actions.title')}</h3>
-  <div>
+  <div class="actions justify-end">
     <button class="button" type="button" onclick={logoutAction}>
       {t('actions:logout')}
     </button>

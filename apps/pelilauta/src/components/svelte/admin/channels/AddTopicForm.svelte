@@ -60,7 +60,7 @@ function handleCancel() {
         disabled={isSubmitting}
       />
     </label>
-    <div class="actions">
+    <div class="actions justify-end">
       <button 
         type="button" 
         class="text"
@@ -88,12 +88,5 @@ function handleCancel() {
   .add-topic-form {
     display: grid;
     row-gap: var(--cn-line);
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: var(--cn-gap);
   }
 </style>

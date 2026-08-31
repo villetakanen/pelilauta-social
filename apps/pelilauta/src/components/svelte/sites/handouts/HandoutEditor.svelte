@@ -102,7 +102,7 @@ function cancel() {
     />
   </label>
 
-  <section class="actions text-end">
+  <section class="actions justify-end">
     <button type="button" class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
@@ -111,9 +111,3 @@ function cancel() {
     </button>
   </section>
 {/snippet}
-
-<style>
-  .actions {
-    margin-block-start: var(--cn-line);
-  }
-</style>

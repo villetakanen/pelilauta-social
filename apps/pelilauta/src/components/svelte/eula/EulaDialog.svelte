@@ -127,7 +127,7 @@ function handleNickChange(newNick: string, exists: boolean) {
         <p class="profile-info">{t('login:eula.profileInfo')}</p>
       {/if}
     </section>
-    <div class="actions">
+    <div class="actions justify-end">
       <button type="button" class="text" onclick={handleCancel}>
         {t('login:eula.decline')}
       </button>
@@ -200,12 +200,5 @@ function handleNickChange(newNick: string, exists: boolean) {
     font-size: var(--cn-font-size-caption);
     line-height: var(--cn-line-height-caption);
     color: var(--cn-color-text-low);
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: var(--cn-gap);
   }
 </style>

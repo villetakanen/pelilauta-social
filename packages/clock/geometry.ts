@@ -1,21 +1,15 @@
 /**
- * Clock's pure geometry: normalising `ticks` into a slice array, clamping
- * `value`, resolving the announced step text, and building each slice's SVG
- * path. None of it touches the DOM, so a plain Node suite can assert every
- * shape `specs/clock/spec.md` admits, including the ones that would otherwise
- * only surface as a rendered NaN.
+ * `geometry.ts` generates SVG slice paths and step labels from tick definitions
+ * and progress values. `specs/clock/spec.md` governs dial geometry.
  */
 
-/** One slice's declared shape, before normalising against its siblings. */
 export interface SliceDescriptor {
   weight?: number;
   label?: string;
 }
 
-/** The three forms `ticks` accepts: a count, relative weights, or descriptors. */
 export type Ticks = number | number[] | SliceDescriptor[];
 
-/** A normalised slice: always a positive weight, optionally a label. */
 export interface Slice {
   weight: number;
   label?: string;
@@ -31,12 +25,6 @@ function isDescriptor(entry: unknown): entry is SliceDescriptor {
   return typeof entry === 'object' && entry !== null;
 }
 
-/**
- * Resolves `ticks` into slices with a positive weight each. Any input the
- * spec calls invalid — omitted, empty, a non-integer or sub-2 count, a
- * zero-weight total — falls back to 4 equal slices rather than propagating
- * toward a zero-weight geometry.
- */
 export function normalizeTicks(ticks?: Ticks): Slice[] {
   if (ticks == null) return defaultSlices();
 
@@ -64,19 +52,11 @@ export function normalizeTicks(ticks?: Ticks): Slice[] {
   return total > 0 ? slices : defaultSlices();
 }
 
-/**
- * Casts `value` the way the spec states: truncate toward zero, resolve a
- * non-finite input to 0, then clamp to the slice count on both ends.
- */
 export function clampValue(value: number, totalSlices: number): number {
   const truncated = Number.isFinite(value) ? Math.trunc(value) : 0;
   return Math.min(Math.max(truncated, 0), totalSlices);
 }
 
-/**
- * Applies one step and wraps at both boundaries: past the top end, the value
- * returns to 0; below 0, it returns to the slice count.
- */
 export function wrapValue(
   value: number,
   delta: number,
@@ -89,9 +69,8 @@ export function wrapValue(
 }
 
 /**
- * The active slice is the last completed one — index `value - 1` — because a
- * step label names the stage the reader most recently reached, not the one ahead.
- * Absent a label, the fraction is the language-neutral fallback.
+ * `value` counts completed slices rather than indexing them, so `value - 1`
+ * identifies the active slice.
  */
 export function resolveStepText(value: number, slices: Slice[]): string {
   const active = slices[value - 1];
@@ -99,13 +78,12 @@ export function resolveStepText(value: number, slices: Slice[]): string {
   return `${value}/${slices.length}`;
 }
 
-/** One slice's rendered path, alongside the label its arc represents. */
 export interface SlicePath {
   d: string;
   label?: string;
 }
 
-const START_ANGLE = -Math.PI / 2; // 12 o'clock; angle increases clockwise from here.
+const START_ANGLE = -Math.PI / 2;
 const FULL_TURN = Math.PI * 2;
 
 function pointOnCircle(
@@ -117,26 +95,11 @@ function pointOnCircle(
   return [cx + radius * Math.cos(angle), cy + radius * Math.sin(angle)];
 }
 
-// SVG's arc command cannot express a full turn: it identifies an arc by its
-// endpoints, so a start and end angle 2π apart describe the same point twice,
-// and the renderer treats that as a zero-length arc rather than a circle. A
-// single weight carrying the whole total (`ticks={[1]}`, or any array where
-// every other weight is 0) produces exactly this sweep, so it is handled by
-// splitting the turn rather than by hoping trig round-off keeps the two
-// angles distinct.
 const FULL_TURN_EPSILON = 1e-9;
 
 /**
- * One slice's pie-wedge path, as a triangle-ish `M L A Z`: centre out to the
- * start radius, an arc to the end radius, straight back to centre. The large-
- * arc flag only trips past a half turn; the sweep flag is fixed at 1 because
- * every slice here runs clockwise.
- *
- * A sweep at or past a full turn instead draws two semicircle arcs through
- * the point diametrically opposite the start — a genuine closed disc whose
- * two endpoints are computed independently, rather than one arc whose start
- * and end are the same angle carried through `cos`/`sin` twice and left to
- * land a floating-point epsilon apart.
+ * Sweeps spanning a full turn draw two semicircular arcs through the opposite
+ * point.
  */
 function sliceArcPath(
   cx: number,
@@ -158,11 +121,6 @@ function sliceArcPath(
   return `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
 }
 
-/**
- * Builds every slice's path around one circle, proportioning each arc to its
- * weight against the total. `normalizeTicks` guarantees a positive total, so
- * this never divides by zero.
- */
 export function buildSlicePaths(
   slices: Slice[],
   radius: number,

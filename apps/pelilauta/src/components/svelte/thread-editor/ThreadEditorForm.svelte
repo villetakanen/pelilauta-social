@@ -187,7 +187,7 @@ function cancel() {
     </div>
   {/if}
 
-  <section class="actions text-end">
+  <section class="actions justify-end">
     {#if thread?.key}
       <a
         href={`/threads/${thread.key}/confirmDelete`}
@@ -212,15 +212,11 @@ function cancel() {
 
 <style>
   /*
-   * The previews answer the region holding them rather than a width of their
-   * own: the region is the small measure beside the canvas and the full page
-   * stacked above it, and a lightbox sized for one reads wrong in the other.
+   * The previews adapt to their containing region rather than setting a fixed
+   * width: the region alternates between a compact rail beside the canvas and
+   * a full page stacked above it.
    */
   .attachments {
     container: images / inline-size;
-  }
-
-  .actions {
-    margin-block-start: var(--cn-line);
   }
 </style>

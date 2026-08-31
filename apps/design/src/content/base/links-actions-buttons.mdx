@@ -7,6 +7,7 @@ order: 5
 import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import LinkStateTable from '@design-system/books/specimens/LinkStateTable.astro'
 import ButtonSpecimens from '@design-system/books/specimens/ButtonSpecimens.astro'
+import ActionsSpecimens from '@design-system/books/specimens/ActionsSpecimens.astro'
 import FabSpecimens from '@design-system/books/specimens/FabSpecimens.astro'
 import FabTrayDemo from '@design-system/books/specimens/FabTrayDemo.astro'
 import DsTokenTable from '@design-system/books/specimens/DsTokenTable.astro'
@@ -66,7 +67,7 @@ visual variants.
 | :--- | :--- |
 | Default | Standard priority actions and destinations. |
 | `.text` | Low-prominence secondary actions where filled styling would compete with body content. |
-| `.cta` | Primary call to action in a view (maximum one per region). |
+| `.cta` | The most important action or destination in the composition at hand. |
 | `.secondary` | The alternate chroma treatment, where it is explicitly required. Not the low-prominence variant. |
 
 `.secondary` applies only when declared directly on the button element. Ancestor classes
@@ -135,15 +136,66 @@ both directions. The two are not the same box: the target is centred on the pill
 reaches past it, further on an icon-only control, which paints a circle narrower than the
 target in both axes.
 
-Nothing is painted to show it. The target is an empty box on the control, so a pointer
-landing just outside the pill still lands on the button — which is what a reader touching
-a phone, or aiming with a trackpad, actually needs.
+The target renders as a transparent box on the control without visible styling. A pointer
+landing outside the visible pill still activates the button, supporting touch input and
+coarse pointing devices.
 
-The target fits inside the row a button already occupies, so it changes no layout: the
-pill's own block spacing is wider than the amount the target reaches past it.
+The target fits within the row height allocated for buttons without modifying layout
+because the button block margin exceeds the target extension.
 
-A component that builds its own control from these rules — a chip, a chrome action, a
-reaction button — sets its own target and says so in its own book.
+A component defining a custom control from these rules — such as a chip, chrome action,
+or reaction button — defines a dedicated target documented in its specimen book.
+
+## The actions container
+
+The `.actions` container groups buttons and link buttons along the spatial baseline in
+one row that does not wrap.
+
+<DsComposition themes caption="Two controls in an actions container">
+  <ActionsSpecimens group="default" />
+</DsComposition>
+
+The container is six grid units high — `calc(var(--cn-grid) * 6)`, the same span a
+button answers a pointer over — and centres its controls in the block axis, so a
+control's height does not move the row. Adjacent
+controls sit at least `--cn-gap` apart. By default the container distributes remaining
+inline space between its first and last control.
+
+### Alignment modifiers
+
+A modifier replaces the default distribution with a named inline alignment:
+
+| Modifier | Inline alignment |
+| :--- | :--- |
+| `.justify-start` | Controls gather at the inline start. |
+| `.justify-end` | Controls gather at the inline end. |
+| `.justify-center` | Controls gather at the inline centre. |
+
+A row that was text-aligned takes the matching modifier: an end-aligned row becomes
+`.justify-end`.
+
+<DsComposition themes caption="The three alignment modifiers">
+  <ActionsSpecimens group="alignment" />
+</DsComposition>
+
+### Inline flow
+
+The `.inline` modifier makes the container `inline-flex`, so a row of controls sits in
+running text instead of on its own line.
+
+<DsComposition themes caption="An inline actions container within a paragraph">
+  <ActionsSpecimens group="inline" />
+</DsComposition>
+
+### The row does not hide what does not fit
+
+The container never wraps to a second row, and it never clips. A control that runs
+past the row paints past it, where you can see the row is too small for what is in
+it. Hiding the overflow instead would cut the focus ring off any control sitting
+flush against the row's edge, and the ring is what a keyboard reader has.
+
+A component with its own action row — the card, the sortable list — governs that row
+in its own specification, and says so in its own book.
 
 ## Floating action buttons (FAB)
 

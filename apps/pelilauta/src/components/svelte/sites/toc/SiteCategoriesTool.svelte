@@ -1,7 +1,11 @@
 <script lang="ts">
-import { type CnListItem, CnSortableList } from '@11thdeg/cyan-lit';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
+import type {
+  CnListItem,
+  CnSortableListAnnouncements,
+} from '@design-system/components/CnSortableList.svelte';
+import CnSortableList from '@design-system/components/CnSortableList.svelte';
 import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
 import {
   type CategoryRef,
@@ -11,8 +15,6 @@ import {
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { logDebug, logError } from 'src/utils/logHelpers';
-import { onMount } from 'svelte';
-import SvelteSortableList from '../../app/SvelteSortableList.svelte';
 
 interface Props {
   site: Site;
@@ -26,28 +28,17 @@ let saving = $state(false);
 let hasChanges = $state(false);
 let newCategory = $state('');
 
-// Convert categories to list items for the UI component
-const categoryItems = $derived.by(() =>
+// Map categories to list items for the sortable list, with each item defining a delete action.
+const categoryItems = $derived(
   categories.map((cat) => ({
     key: cat.slug,
     title: cat.name,
+    actions: rowActions,
   })),
 );
 
-onMount(() => {
-  const el = document.getElementById('sortable-page-category-list');
-  // Initialize the sortable list
-  if (el instanceof CnSortableList) {
-    el.addEventListener('items-changed', (event) => {
-      reorderCategories(
-        (event as CustomEvent<{ items: CnListItem[] }>).detail.items,
-      );
-    });
-  }
-});
-
 /**
- * Adds a new category from a (non submititting) button
+ * Adds a new category.
  */
 function addCategory(e: Event) {
   e.preventDefault();
@@ -63,7 +54,7 @@ function addCategory(e: Event) {
 }
 
 /**
- * Updates category order based on drag-and-drop reordering
+ * Updates category order from sortable list events.
  */
 function reorderCategories(newOrder: Array<CnListItem>) {
   hasChanges = true;
@@ -75,7 +66,15 @@ function reorderCategories(newOrder: Array<CnListItem>) {
 }
 
 /**
- * Reset to original categories
+ * Removes one category while preserving the remaining order.
+ */
+function deleteCategory(slug: string) {
+  hasChanges = true;
+  categories = categories.filter((cat) => cat.slug !== slug);
+}
+
+/**
+ * Resets categories to initial values.
  */
 function reset() {
   hasChanges = false;
@@ -83,7 +82,7 @@ function reset() {
 }
 
 /**
- * Save categories to database
+ * Persists categories to the database.
  */
 async function onsubmit(e: Event) {
   e.preventDefault();
@@ -107,18 +106,55 @@ async function onsubmit(e: Event) {
     saving = false;
   }
 }
+
+const announcements: CnSortableListAnnouncements = {
+  pickup: (title, position, length) =>
+    t('site:toc.admin.categories.announcements.pickup', {
+      title,
+      position,
+      length,
+    }),
+  position: (title, position, length) =>
+    t('site:toc.admin.categories.announcements.position', {
+      title,
+      position,
+      length,
+    }),
+  completion: (title, position, length) =>
+    t('site:toc.admin.categories.announcements.completion', {
+      title,
+      position,
+      length,
+    }),
+  cancellation: (title, position, length) =>
+    t('site:toc.admin.categories.announcements.cancellation', {
+      title,
+      position,
+      length,
+    }),
+};
 </script>
+
+{#snippet rowActions(item: CnListItem)}
+  <button
+    type="button"
+    class="text"
+    aria-label={t("site:toc.admin.categories.delete", { title: item.title })}
+    onclick={() => deleteCategory(item.key)}
+  >
+    <CnIcon noun="delete" decorative />
+  </button>
+{/snippet}
 
 <section class="surface">
   <h3>{t("site:toc.admin.categories.title")}</h3>
   <form {onsubmit}>
     {#if categories.length > 0}
-      <SvelteSortableList
+      <CnSortableList
         items={categoryItems}
-        onItemsChanged={(e) => {
-          reorderCategories(e);
-        }}
-        delete={true}
+        onitemschange={reorderCategories}
+        {announcements}
+        label={t("site:toc.admin.categories.label")}
       />
     {:else}
       <p class="info-text">{t("site:toc.admin.noCategories")}</p>

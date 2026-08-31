@@ -1,13 +1,6 @@
 /**
- * Token hygiene for Clock, per `specs/clock/spec.md`'s Regression Guardrails:
- * "Clock references only declared `--cn-*` tokens for fills, borders, info
- * states, and focus rings." `packages/dice/test/tokens.test.ts` and
- * `packages/editor/test/tokens.test.ts` hold the same line for their
- * packages: every custom property either resolves against a token the design
- * system declares, or is package-private (`--_clock-*`).
- *
- * `CnClock.svelte` carries no custom properties; `styles/clock.css` is the
- * only file that references any.
+ * Verifies that clock styles reference only declared design-system tokens and
+ * required `--cn-*` custom properties.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -23,7 +16,6 @@ const clockComponent = readFileSync(
 
 const CUSTOM_PROPERTY = /--[A-Za-z0-9_-]+/g;
 
-/** Every --cn-* declaration in the design system's stylesheets. */
 const designSystemStyles = join(packageRoot, '..', 'design-system', 'styles');
 
 function declaredTokens(dir: string): Set<string> {

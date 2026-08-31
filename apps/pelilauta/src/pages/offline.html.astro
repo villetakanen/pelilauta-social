@@ -1,5 +1,4 @@
 ---
-// filepath: /Users/ville.takanen/dev/pelilauta-16/src/pages/offline.astro
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from 'src/utils/i18n';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
@@ -25,7 +24,7 @@ const description = t('app:offline.description');
             {t('app:offline.message')}
           </p>
           
-          <div class="actions text-end">
+          <div class="actions justify-end">
             <button 
               type="button"
               class="text"
@@ -45,7 +44,6 @@ const description = t('app:offline.description');
     </main>
 
     <script is:inline>
-      // Auto-reload when connection returns
       function checkConnectivity() {
         if (navigator.onLine) {
           window.location.reload();
@@ -54,7 +52,6 @@ const description = t('app:offline.description');
 
       window.addEventListener('online', checkConnectivity);
 
-      // Periodic connectivity check with favicon
       setInterval(() => {
         fetch('/favicon.svg', { 
           method: 'HEAD',
@@ -66,11 +63,9 @@ const description = t('app:offline.description');
           }
         })
         .catch(() => {
-          // Still offline
         });
       }, 10000);
 
-      // Update page title based on connection status
       function updateConnectionStatus() {
         const isOnline = navigator.onLine;
         document.title = isOnline ? 'Back Online - Pelilauta' : 'Offline - Pelilauta';

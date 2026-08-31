@@ -1,16 +1,12 @@
 /*
- * Native buttons and link buttons.
- *
- * A command is a `button`; navigation that looks like a button is an
- * `a.button[href]`. Presentation never changes that choice, so every rule here
- * selects the element the consumer already picked.
+ * Rules in this stylesheet style native `button` commands and `a.button[href]`
+ * navigation without altering element semantics.
  */
 :root {
   /*
-   * The v20 button type role, aliased onto v21's scale so another button
-   * presentation — a fab, a toggle — consumes the role without restating its
-   * relationship to the type steps. The aliases live here rather than in
-   * typography.css: the scale there is a closed set of reading steps.
+   * These tokens alias button typography roles to scale steps for button
+   * presentations to consume. Typography aliases live here because
+   * `typography.css` defines a closed set of reading steps.
    */
   --cn-font-size-button: var(--cn-font-size-small);
   --cn-font-weight-button: var(--cn-font-weight-caption);
@@ -19,18 +15,14 @@
 }
 
 /*
- * Geometry, type and the interaction frame. `.fab`, `.chrome-action`, `.chip`, a
- * menu item, a lightbox image and `.cn-reaction-button` are excluded throughout: a
- * floating action button, a chrome action, a chip, a menu row, a cropped image and
- * a reaction toggle are each a capability with its own geometry and surface, so
- * none inherits the button's gradient, elevation or hover wash. A chip's
- * exclusion reaches its descendants too, because a chip's remove control is a
- * native button that the chip scales. A menu's exclusion is written as a
- * descendant selector because a menu item is an element the consumer wrote,
- * carrying no class of ours. The menu's trigger sits outside the container and
- * stays a text icon button. A lightbox's exclusion is a descendant selector for
- * the same reason a menu's is; its dialog needs none, because the control that
- * closes it is the back action, already excluded as a chrome action.
+ * Button selectors exclude `.fab`, `.chrome-action`, `.chip`, `.cn-menu-container *`,
+ * `.cn-lightbox *`, `.cn-reaction-button`, and `.cn-sortable-list-handle` to
+ * prevent custom surfaces from inheriting button gradients, elevation, or hover
+ * overlays. Descendant exclusions for `.chip` prevent scaling conflicts with
+ * embedded remove controls. Descendant exclusions for `.cn-menu-container` and
+ * `.cn-lightbox` protect unclassed consumer markup within those containers.
+ * The lightbox close control requires no separate exclusion because
+ * `.chrome-action` already covers it.
  */
 button:not(
     .fab,
@@ -39,7 +31,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ),
 a.button[href]:not(
     .fab,
@@ -48,7 +41,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ) {
   position: relative;
   display: inline-flex;
@@ -56,8 +50,8 @@ a.button[href]:not(
   justify-content: center;
   gap: var(--cn-grid);
   block-size: var(--cn-button-size);
-  /* The visible pill centres in a seven-unit row, so a button sits on the grid
-     whether or not it is the tallest thing in its line. */
+  /* Centering the visible pill within `--cn-button-physical-size` aligns
+     buttons with the baseline grid. */
   margin-block: calc(
     (var(--cn-button-physical-size) - var(--cn-button-size)) /
     2
@@ -66,9 +60,9 @@ a.button[href]:not(
   border: none;
   border-radius: calc(var(--cn-button-size) / 2);
   vertical-align: middle;
-  /* A zero-size shadow at rest, so hover spreads the elevation rather than
-     fading it in: interpolating from `none` keeps the full 8px blur and only
-     raises its alpha, which reads as sluggish at the shared UI duration. */
+  /* Buttons declare a zero-size shadow at rest so hover transitions spread
+     elevation instead of fading it in. Interpolating from `none` would retain
+     the full blur radius and raise alpha, slowing the transition. */
   box-shadow: 0 0 0 var(--cn-shadow-color);
   font-family: inherit;
   font-size: var(--cn-font-size-button);
@@ -79,10 +73,9 @@ a.button[href]:not(
   text-decoration: none;
   cursor: pointer;
   /*
-   * Elevation resolves faster than surface, and a state's arrival eases out while
-   * its departure keeps the neutral curve. Both are private to the button: one
-   * consumer, tuned by review, and no other capability may read them until one
-   * needs them (docs/ARCHITECTURE.md).
+   * Elevation transitions run faster than surface transitions; entering an
+   * interaction state eases out while exiting uses the neutral curve. Both
+   * custom properties remain private to this stylesheet.
    */
   --_elevation-duration: calc(var(--cn-duration-ui) / 2);
   --_enter-easing: ease-out;
@@ -91,10 +84,9 @@ a.button[href]:not(
     opacity var(--cn-duration-ui) var(--cn-easing-ui);
 
   /*
-   * The button is a context that requires one icon size, so it sets the size
-   * tokens in its own scope and every icon inside resolves to the small step
-   * without reading its own selection. The small token itself is
-   * left alone, which is what keeps the substitution from cycling.
+   * Local icon size declarations force descendant icons to render at
+   * `--cn-icon-size-small`. Omitting `--cn-icon-size-small` from the
+   * declarations prevents cyclic substitution.
    */
   --cn-icon-size-xsmall: var(--cn-icon-size-small);
   --cn-icon-size: var(--cn-icon-size-small);
@@ -103,10 +95,9 @@ a.button[href]:not(
 }
 
 /*
- * The variants are mutually exclusive, and each names its own surface and
- * foreground. The default excludes the other three by selector rather than by
- * load order, so a legacy ancestor cannot recolour a button that did not ask
- * for the alternate treatment.
+ * Button variants define mutually exclusive surface and foreground colors.
+ * The default selector explicitly excludes `.cta`, `.text`, and `.secondary`
+ * to prevent ancestor styles from cascading colors into buttons.
  */
 :is(button, a.button[href]):not(
     .fab,
@@ -115,7 +106,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):not(.cta):not(.text):not(.secondary) {
   background-color: transparent;
   background-image: linear-gradient(
@@ -133,7 +125,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ) {
   background-color: transparent;
   background-image: linear-gradient(
@@ -151,7 +144,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ) {
   background-image: none;
   background-color: var(--cn-color-button-text);
@@ -160,8 +154,8 @@ a.button[href]:not(
 }
 
 /*
- * v20's alternate chroma treatment, and only where the button itself asks. The
- * pair is private: no other capability reads it, so it is not a --cn-* contract.
+ * Buttons with `.secondary` apply the alternate chroma treatment through
+ * private custom properties that establish no public `--cn-*` contract.
  */
 :is(button, a.button[href]).secondary:not(
     .fab,
@@ -170,7 +164,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ) {
   --_button-secondary-light: light-dark(
     var(--chroma-primary-40),
@@ -190,8 +185,8 @@ a.button[href]:not(
 }
 
 /*
- * Hover and active wash over the variant's own surface, so the foreground keeps
- * its identity: an overlay rather than a brightness filter.
+ * Hover and active states render an overlay over the button surface,
+ * preserving foreground contrast without filter adjustments.
  */
 button:not(
     .fab,
@@ -200,7 +195,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )::after,
 a.button[href]:not(
     .fab,
@@ -209,14 +205,15 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )::after {
   content: "";
   position: absolute;
   inset: 0;
   /*
-   * The wash rounds itself. The control used to clip it with `overflow: hidden`,
-   * which also clipped the pointer target below back to the visible pill.
+   * The overlay inherits `border-radius` directly so the container avoids
+   * `overflow: hidden`, which would clip the expanded pointer target.
    */
   border-radius: inherit;
   background-color: transparent;
@@ -225,17 +222,12 @@ a.button[href]:not(
 }
 
 /*
- * The pointer target, `specs/design-system/actions/spec.md`. The visible pill is
- * smaller than the target in the block axis, and an icon-only control is smaller in
- * both, so the target is a box of its own centred on the control: a pseudo-element's
- * box hit-tests as the element that generated it. It paints nothing.
- *
- * The block margin above and below the pill is wider than the target's overhang, so the
- * target sits inside the row the control already occupies and no button row moves.
- *
- * `::before` is free on these controls — the wash is the `::after` above, and
- * the presentations that own a `::before` of their own are the ones the exclusion list
- * already names.
+ * `specs/design-system/actions/spec.md` governs the pointer target. The
+ * `::before` pseudo-element centers an expanded hit-test box over the smaller
+ * visible pill and icon-only shapes. Block margins contain the expanded target
+ * within the allocated row height. The `::after` pseudo-element carries the
+ * state overlay, and other components defining custom `::before` elements
+ * appear on the exclusion list.
  */
 button:not(
     .fab,
@@ -244,7 +236,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )::before,
 a.button[href]:not(
     .fab,
@@ -253,7 +246,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )::before {
   content: "";
   position: absolute;
@@ -273,7 +267,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):hover::after,
 a.button[href]:not(
     .fab,
@@ -282,7 +277,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):hover::after {
   background-color: var(--cn-color-hover);
   transition-timing-function: var(--_enter-easing);
@@ -295,7 +291,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):active::after,
 a.button[href]:not(
     .fab,
@@ -304,7 +301,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):active::after {
   background-color: var(--cn-color-active);
 }
@@ -316,7 +314,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):hover,
 a.button[href]:not(
     .fab,
@@ -325,7 +324,8 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):hover {
   box-shadow: var(--cn-shadow-button-hover);
   transition-timing-function: var(--_enter-easing);
@@ -338,7 +338,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):focus-visible,
 a.button[href]:not(
     .fab,
@@ -347,16 +348,16 @@ a.button[href]:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):focus-visible {
   outline: 2px solid var(--cn-color-focus-ring);
   outline-offset: 2px;
 }
 
 /*
- * Only a native button has a disabled state. A link button is either navigable
- * or absent, so no `disabled`, `aria-disabled` or `.disabled` presentation is
- * published for an anchor.
+ * Only native `button` elements define disabled styles. Link buttons remain
+ * navigable or omitted.
  */
 button:not(
     .fab,
@@ -365,17 +366,14 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):disabled {
   opacity: var(--cn-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
 
-/*
- * An icon or an inline loader on its own makes the control a circle: equal
- * inline and block size, and a radius already half of it.
- */
 :is(button, a.button[href]):not(
     .fab,
     .chrome-action,
@@ -383,13 +381,14 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   ):has(> :is(.cn-icon, .cn-loader):only-child) {
   inline-size: var(--cn-button-size);
   padding-inline: 0;
 }
 
-/* A leading icon or loader sits closer to the edge than the label does. */
+/* A negative inline-start margin balances optical spacing for leading icons and loaders. */
 :is(button, a.button[href]):not(
     .fab,
     .chrome-action,
@@ -397,16 +396,13 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )
   > :is(.cn-icon, .cn-loader):first-child:not(:only-child) {
   margin-inline-start: calc(-1 * var(--cn-grid));
 }
 
-/*
- * Truncation belongs to the label, not to the button: an icon or loader keeps
- * its square while the text gives way.
- */
 :is(button, a.button[href]):not(
     .fab,
     .chrome-action,
@@ -414,7 +410,8 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )
   > :is(.cn-icon, .cn-loader) {
   flex: none;
@@ -427,13 +424,52 @@ button:not(
     .chip *,
     .cn-menu-container *,
     .cn-lightbox *,
-    .cn-reaction-button
+    .cn-reaction-button,
+    .cn-sortable-list-handle
   )
   > :is(span, .label) {
   min-inline-size: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+/*
+ * `specs/design-system/actions/spec.md` governs `.actions` layout. The row is six
+ * grid units, which is the pointer target a button answers over, so a row of
+ * buttons is exactly as tall as the area it responds to.
+ *
+ * The row sets no overflow, so a control that does not fit paints past the row
+ * rather than disappearing into it. Hiding the overflow would also cut the focus
+ * ring off any control sitting flush against the row's edge.
+ *
+ * Specific component contexts such as `styles/sortable-list.css` override these
+ * rules through cascade order.
+ */
+.actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  block-size: calc(var(--cn-grid) * 6);
+  margin: 0;
+  gap: var(--cn-gap);
+}
+
+.actions.inline {
+  display: inline-flex;
+}
+
+.actions.justify-start {
+  justify-content: flex-start;
+}
+
+.actions.justify-end {
+  justify-content: flex-end;
+}
+
+.actions.justify-center {
+  justify-content: center;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -9,10 +9,11 @@ status: live
 ### Context
 
 Links take a reader to a destination. Actions submit data or run a command in the
-current task. Element semantics take precedence over presentation: the capability's
-presentations — the default link, the button, and the floating action button — share
-one grammar of variants, states and composition, and none of them changes what the
-element underneath is.
+current task. Design-system components and application screens use `.actions` to
+compose related controls on the spatial baseline. Element semantics take precedence
+over presentation: the capability's presentations — the default link, the button, and
+the floating action button — share one grammar of variants, states and composition,
+and none of them changes what the element underneath is.
 
 ### Architecture
 
@@ -37,6 +38,11 @@ CnLoader in the leading position, or standing alone, resolves to the small step
 through the contextual sizing contract in
 `specs/design-system/components/cn-icon/spec.md`, and CnLoader keeps the progress
 contract in `specs/design-system/components/cn-loader/spec.md`.
+
+`styles/buttons.css` also publishes `.actions` as a block flex container.
+`.actions.inline` applies inline flex layout. Alignment modifiers change only inline
+distribution. A component specification governs any component-specific actions
+region.
 
 ### Documentation
 
@@ -80,6 +86,21 @@ label node so a leading icon or loader keeps its fixed square size.
 Presentations read semantic colour roles; they do not select reference palette steps
 to reconstruct them, introduce a legacy token, a literal colour or a
 component-private icon size.
+
+#### The actions container
+
+An `.actions` container lays out related action controls in one non-wrapping row.
+The container has a block size of `calc(var(--cn-grid) * 6)` — the pointer target a
+button answers over — centres items along the block axis, and applies no outer margin.
+The container hides nothing: an item that does not fit the row paints past it, so a
+control flush against the row's edge keeps its focus ring.
+
+The container separates adjacent items by `--cn-gap`. It distributes remaining inline
+space between the first and last item by default. `.justify-start`, `.justify-end`
+and `.justify-center` replace default distribution with the named alignment.
+
+A consumer migrating a text-aligned action row uses the corresponding alignment
+modifier. A row that was end-aligned uses `.justify-end`.
 
 #### The default link
 
@@ -128,7 +149,7 @@ Button geometry is grid-derived:
 
 Every control has a pointer target, and the target is not the visible control: where a
 control paints smaller than the target in either axis, the target extends past what it
-paints. A control's own spacing is not its target, because margin receives no pointer
+paints. Outer spacing around a control forms no part of the pointer target because margin receives no pointer
 events. The target fits within the occupied row, so a control's target does not decide
 the row it sits in.
 
@@ -167,8 +188,8 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
 
 ### Definition of Done
 
-- Both applications receive link, button and FAB presentation from the design-system
-  CSS entry without a wrapper or hydration.
+- Both applications receive link, button and FAB presentation, and the `.actions`
+  container, from the design-system CSS entry without a wrapper or hydration.
 - Every variant of every presentation renders the v20 visual language in Light and
   Dark, as native buttons and as anchors with destinations.
 - Labelled, leading-icon, icon-only, labelled-loading and loader-only compositions
@@ -206,6 +227,8 @@ The resting FAB uses `--cn-shadow-elevation-1`; hover lifts to
   accessible name.
 - A control that paints smaller than the pointer target keeps the full target in both
   axes, an icon-only control and a small FAB included.
+- An `.actions` container remains six grid units high, does not wrap, and hides no
+  part of an item that does not fit.
 
 ### Scenarios
 
@@ -291,4 +314,32 @@ Then the component provides visible feedback for both states
 Given a reader who requests reduced motion
 When a control changes between interaction states
 Then its state feedback appears without a transition
+```
+
+```gherkin
+Given an actions container with two controls
+When it renders with enough inline space
+Then it is six grid units high and centres both controls in the block axis
+And it leaves an interval of at least `--cn-gap` between the controls
+And it distributes remaining inline space between the first and last control
+```
+
+```gherkin
+Given an actions container with two controls
+When it has the justify-start, justify-end or justify-center modifier
+Then its controls use the modifier's named inline alignment
+And it retains an interval of at least `--cn-gap` between them
+```
+
+```gherkin
+Given an actions container with the inline modifier
+When it renders
+Then it uses inline flex layout
+```
+
+```gherkin
+Given an actions container whose controls exceed its inline size
+When it renders
+Then it keeps one row at its fixed block size
+And its controls remain visible past the row
 ```

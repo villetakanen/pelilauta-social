@@ -45,6 +45,15 @@ export const site: Locale = {
       info: 'Manage the site table of contents. You can choose the order of pages and create and organize page categories.',
       categories: {
         title: 'Categories',
+        label: 'Category order',
+        announcements: {
+          pickup: 'Picked up {title}, position {position} of {length}.',
+          position: '{title} is now at position {position} of {length}.',
+          completion: '{title} dropped at position {position} of {length}.',
+          cancellation:
+            'Cancelled. {title} stays at position {position} of {length}.',
+        },
+        delete: 'Delete {title}',
       },
       noCategories: 'No categories, you can create a new category below.',
       categoryPlaceholder: 'Category name',
@@ -54,6 +63,14 @@ export const site: Locale = {
       title: 'Reorder Pages',
       info: 'Drag and drop pages to change their order in the table of contents.',
       saving: 'Saving order...',
+      label: 'Reorder pages: {category}',
+      announcements: {
+        pickup: 'Picked up {title}, position {position} of {length}.',
+        position: '{title} is now at position {position} of {length}.',
+        completion: '{title} dropped at position {position} of {length}.',
+        cancellation:
+          'Cancelled. {title} stays at position {position} of {length}.',
+      },
     },
   },
 };

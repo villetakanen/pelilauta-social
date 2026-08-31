@@ -1,0 +1,83 @@
+---
+/**
+ * ActionsSpecimens renders buttons and link buttons inside `.actions`
+ * containers. Container rules come from `styles/buttons.css`.
+ *
+ * Book: apps/design/src/content/base/links-actions-buttons.mdx
+ */
+interface Props {
+  group: 'default' | 'alignment' | 'inline';
+}
+
+const { group } = Astro.props;
+---
+
+<div class="actions-specimens" data-group={group}>
+  {group === 'default' && (
+    <div class="constrain">
+      <div class="actions">
+        <button type="button">First</button>
+        <a class="button" href="/base/links-actions-buttons">Last</a>
+      </div>
+    </div>
+  )}
+
+  {group === 'alignment' && (
+    <div class="stack">
+      <p class="label">justify-start</p>
+      <div class="constrain">
+        <div class="actions justify-start">
+          <button type="button">First</button>
+          <a class="button" href="/base/links-actions-buttons">Last</a>
+        </div>
+      </div>
+
+      <p class="label">justify-end</p>
+      <div class="constrain">
+        <div class="actions justify-end">
+          <button type="button">First</button>
+          <a class="button" href="/base/links-actions-buttons">Last</a>
+        </div>
+      </div>
+
+      <p class="label">justify-center</p>
+      <div class="constrain">
+        <div class="actions justify-center">
+          <button type="button">First</button>
+          <a class="button" href="/base/links-actions-buttons">Last</a>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {group === 'inline' && (
+    <p>
+      Text before an inline actions container
+      <span class="actions inline">
+        <button type="button">First</button>
+        <a class="button" href="/base/links-actions-buttons">Last</a>
+      </span>
+      text after it.
+    </p>
+  )}
+</div>
+
+<style>
+  /* The specimen constrains inline size to distinguish default distribution
+     from alignment modifiers. */
+  .actions-specimens .constrain {
+    inline-size: 20rem;
+    max-inline-size: 100%;
+  }
+
+  .actions-specimens .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cn-grid);
+  }
+
+  .actions-specimens .label {
+    margin: 0;
+    font-size: var(--cn-font-size-caption);
+  }
+</style>

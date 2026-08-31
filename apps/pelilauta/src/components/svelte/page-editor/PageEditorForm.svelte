@@ -184,7 +184,7 @@ function cancel() {
     </div>
   {/if}
 
-  <section class="actions text-end">
+  <section class="actions justify-end">
     <a href={`/sites/${site.key}/${page.key}/delete`} class="button text">
       {t('actions:delete')}
     </a>
@@ -212,9 +212,5 @@ function cancel() {
     display: flex;
     align-items: center;
     gap: var(--cn-gap);
-  }
-
-  .actions {
-    margin-block-start: var(--cn-line);
   }
 </style>

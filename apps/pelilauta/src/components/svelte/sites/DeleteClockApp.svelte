@@ -53,19 +53,14 @@ async function handleSubmit(event: Event) {
 </WithAuth>
 
 <style>
-  /*
-   * No container reaches into this box, so it states the interval between
-   * its own blocks: the clock preview, the info message and the action row.
-   */
   .surface {
     display: grid;
     row-gap: var(--cn-line);
   }
 
   /*
-   * @todo No design-system capability publishes a listing row — an icon (here
-   * the clock) beside a label — so this row states its own flex rule locally.
-   * Anchored at plans/debt/the-design-system-has-no-listing-row.md.
+   * @todo The design system provides no listing row component.
+   * Tracked in plans/debt/the-design-system-has-no-listing-row.md.
    */
   .clock-preview {
     display: flex;
@@ -78,4 +73,5 @@ async function handleSubmit(event: Event) {
     min-inline-size: 0;
   }
 </style>
+
 

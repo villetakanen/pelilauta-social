@@ -8,7 +8,7 @@
  * duplicate what the server already produced.
  *
  * Nothing here styles the target, the state surface, the Icon or the
- * identity mark; every rule comes from the component's own stylesheet. The
+ * identity mark; every rule comes from the component stylesheet. The
  * `.surface` and `.elevation-0` classes come from styles/surface.css, wrapped
  * around each rig.
  *
@@ -33,8 +33,9 @@ const RIG_INLINE_SIZE = {
   labelled: 'calc(var(--cn-grid) * 42)', // tray: 336px
 } as const;
 
-// The same image service the poster book draws its placeholder from.
-const AVATAR_IMAGE = 'https://picsum.photos/seed/aino/128';
+// A deterministic image keeps the static book independent of network access.
+const AVATAR_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' fill='%236f8f86'/%3E%3Ccircle cx='40' cy='42' r='28' fill='%23f0c987'/%3E%3Cpath d='M0 112 48 64l28 28 18-18 34 38v16H0Z' fill='%233e5f63'/%3E%3C/svg%3E";
 
 const HREF_SIGNED_OUT = '/kirjaudu';
 const HREF_SIGNED_IN = '/profiili';
@@ -210,8 +211,8 @@ const SURFACES = [
   }
 
   /*
-   * The rig's own inline size is set inline, per presentation, from
-   * RIG_INLINE_SIZE above, so a labelled target's own `inline-size: 100%`
+   * The rig inline size is set inline, per presentation, from
+   * RIG_INLINE_SIZE above, so a labelled target `inline-size: 100%`
    * always resolves against a real rail or tray width rather than a
    * percentage of the surrounding page.
    */

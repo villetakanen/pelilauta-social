@@ -167,7 +167,7 @@ function handleSubmit(event: SubmitEvent) {
     </fieldset>
 
     <!-- Action buttons -->
-    <div class="actions">
+    <div class="actions justify-end">
       <button 
         type="button" 
         class="text"
@@ -224,12 +224,5 @@ function handleSubmit(event: SubmitEvent) {
   .field-title {
     color: var(--cn-color-field-label);
     font-size: var(--cn-font-size-small);
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: var(--cn-gap);
   }
 </style>

@@ -69,7 +69,7 @@ async function handleSubmit(event: Event) {
           placeholder={t('site:handouts.create.title')}
         />
       </label>
-      <div class="actions text-end">
+      <div class="actions justify-end">
         <a href="/sites/{site.key}/handouts" class="button text">
           {t('actions:cancel')}
         </a>

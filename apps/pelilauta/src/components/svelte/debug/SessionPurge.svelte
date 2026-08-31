@@ -107,7 +107,7 @@ async function purgeSession() {
           'Could not list IndexedDB databases (browser may not support it).',
         );
         // Fallback: Try to delete known databases if we knew them.
-        // For now, we'll just log the limitation.
+        // Log clearing limitation.
         // Common Firebase DBs: 'firebase-heartbeat-database', 'firebase-installations-database', 'firestore/[project-id]/[db-name]/main'
       }
     }
@@ -138,7 +138,7 @@ async function purgeSession() {
         </p>
       </div>
 
-      <div class="actions">
+      <div class="actions justify-end">
         <a href="/" class="button">
           <CnIcon noun="fox" />
           <span>Return to Front Page</span>
@@ -169,7 +169,7 @@ async function purgeSession() {
       </p>
     </div>
 
-    <div class="actions">
+    <div class="actions justify-end">
       <button type="button" onclick={purgeSession} disabled={isPurging}>
         {#if isPurging}
           <CnLoader inline />
@@ -204,12 +204,6 @@ async function purgeSession() {
   .warning-list {
     margin: 0;
     padding-inline-start: var(--cn-line);
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
   }
 
   .purge-complete-box {

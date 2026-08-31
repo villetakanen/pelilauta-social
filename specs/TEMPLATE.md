@@ -7,15 +7,14 @@ status: proposed
 <!--
 Spec template. Copy to specs/<domain>/<capability>/spec.md.
 
-status is a process gate, not protection: `proposed` — the text carries agent
-edits an operator may not have read; implementing against it requires an
-explicit ask, and waiting for the answer. `live` — an operator has read it
-through; it portrays how the capability is supposed to work. `deprecated` —
-kept for its context or architecture as a lesson or example. Any spec may be
-edited at any time; an agent edit to a live spec sets it proposed. An operator
-makes a spec live by reading it — there is nothing to request.
+status is a process gate, not protection: `proposed` — the text carries a new,
+material or unsettled amendment the operator has not read; do not implement it.
+For a minor, settled amendment to a live spec, show an unapplied diff and its
+reason in chat. Apply an accepted amendment while retaining `live`. `live` — an
+operator has read it through; it portrays how the capability is supposed to
+work. `deprecated` — kept for its context or architecture as a lesson or example.
 
-When there is nothing left to add, stop.
+After a staged proposed amendment, stop before implementation.
 
 Prose rules: docs/WRITING.md. The spec-specific tests: can an agent derive this
 line from the code? If yes, delete it. Name the mistake a sentence prevents; if

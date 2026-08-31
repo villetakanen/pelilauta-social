@@ -1,6 +1,6 @@
 ---
 title: CnIdentityAction
-description: "A chrome action that invites a signed-out reader to sign in, and carries a signed-in reader to their own part of the application."
+description: "A chrome action that invites a signed-out reader to sign in, and navigates a signed-in reader to account features."
 order: 100
 runtime: static
 ---
@@ -9,21 +9,21 @@ import CnIdentityAction from '@design-system/components/CnIdentityAction.svelte'
 import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 import IdentityActionSpecimens from '@design-system/books/specimens/IdentityActionSpecimens.astro'
 
-Use the identity action to give the reader one destination for their own identity.
+Use the identity action to give the reader a single destination for account identity.
 
 ## When to use it
 
 CnIdentityAction is a [Chrome Action](/base/chrome-actions) that takes one of two
-modes: signing in, or the reader's own.
+modes: signing in, or viewing the active profile.
 
 ## Example
 
 <DsComposition themes caption="CnIdentityAction, signed in, in Light and Dark">
-  <CnIdentityAction href="/profiili" label="Oma profiili" signedIn nick="Aino Virtanen" src="https://picsum.photos/seed/aino/128" />
+  <CnIdentityAction href="/profiili" label="Oma profiili" signedIn nick="Aino Virtanen" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' fill='%236f8f86'/%3E%3Ccircle cx='40' cy='42' r='28' fill='%23f0c987'/%3E%3Cpath d='M0 112 48 64l28 28 18-18 34 38v16H0Z' fill='%233e5f63'/%3E%3C/svg%3E" />
 </DsComposition>
 
 ```mdx
-<CnIdentityAction href="/profiili" label="Oma profiili" signedIn nick="Aino Virtanen" src="https://picsum.photos/seed/aino/128" />
+<CnIdentityAction href="/profiili" label="Oma profiili" signedIn nick="Aino Virtanen" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' fill='%236f8f86'/%3E%3Ccircle cx='40' cy='42' r='28' fill='%23f0c987'/%3E%3Cpath d='M0 112 48 64l28 28 18-18 34 38v16H0Z' fill='%233e5f63'/%3E%3C/svg%3E" />
 ```
 
 <DsComposition themes caption="Signed out, signed in with and without an image, without a nick, and as the current destination, compact, in Light and Dark">

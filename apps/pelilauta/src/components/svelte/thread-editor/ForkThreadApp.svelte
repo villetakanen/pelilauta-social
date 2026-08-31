@@ -1,6 +1,6 @@
 <script lang="ts">
 /**
- * Forking a reply into its own thread — a quoted-reply variant of thread
+ * Forks a reply into a new thread as a quoted-reply variant of thread
  * authoring.
  *
  * As `ThreadEditorForm`, this view is a consumer of the editor shell: it
@@ -153,7 +153,7 @@ function cancel() {
     </div>
   </div>
 
-  <section class="actions text-end">
+  <section class="actions justify-end">
     <button type="button" disabled={saving} class="text" onclick={cancel}>
       {t('actions:cancel')}
     </button>
@@ -182,9 +182,5 @@ function cancel() {
     -webkit-line-clamp: 3;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .actions {
-    margin-block-start: var(--cn-line);
   }
 </style>

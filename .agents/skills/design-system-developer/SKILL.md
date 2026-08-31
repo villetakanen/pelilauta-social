@@ -1,40 +1,26 @@
 ---
 name: design-system-developer
-description: Building or changing a design-system component or token.
+description: Develop, debug, and maintain the design system, its tokens, and components. Use when modifying packages/design-system, tokens, components, or user-interface styles.
 ---
 
 # Design System Developer
 
-A design-system change ships three artifacts: its spec (`spec` skill), its
-implementation, and its book (`design-system-book` skill). What it has to verify is
-its spec's Contract; where each level checks that, and how the check is written, is
-the `design-system-tests` skill. Load it with this one whenever a test file is open.
+A task in this domain either migrates an existing component or CSS rule, or writes a new component.
 
-## What the change has to be for
+A design-system change requires a live governing spec before creating code, tests, or books. Do not begin implementation without a live spec. When the spec is absent or `proposed`, create or amend the spec, report that the spec is `proposed`, and stop.
 
-v21 exists to remove Cyan. A design-system change moves the application off
-`@11thdeg/cyan-css`, and the test is a dependency:
+## The migration test
 
-**With cyan-css absent, would the application render this correctly?**
+A migration is complete when the application functions identically with the legacy component or stylesheet deleted from the workspace.
 
-Correctly, not identically. A like-for-like claim against what the application renders
-today is a defect.
+Migrated components render correctly rather than identically to legacy defects. A like-for-like copy of current application rendering preserves defects.
 
-Declaring a token Cyan already declares fails this test. Cyan's value is shadowed in
-the cascade while Cyan still supplies the rule that reads it, so the application
-depends on Cyan as much as it did before. The surface moves when the design system carries
-the rule that reads the token.
+Declaring a token that Cyan already declares fails this test. Shadowing a Cyan token in the cascade while Cyan supplies the rule reading the token preserves application dependence on Cyan. A surface migrates when the design system carries the rule reading the token.
 
 ## Where design intent comes from
 
-Take the appearance from v20, at `~/dev/pelilauta-20/`. Where it disagrees with the
-shipped application, v20 wins: the application still renders v18, and appearance is not
-a compatibility contract.
+Source visual presentation from v20 at `~/dev/pelilauta-20/`. When v20 disagrees with the shipped application, v20 takes precedence because the shipped application renders v18 and appearance forms no compatibility contract.
 
-Find v20's answer before writing your own. Its CSS is in
-`packages/cyan/src/{tokens,core,layouts,utilities}` **and inline in `.astro` global
-style blocks** — search both. Its intent is in its books, under
-`app/cyan-ds/src/content/`.
+Find the v20 implementation before writing a replacement. Search CSS in `packages/cyan/src/{tokens,core,layouts,utilities}` and inline in `.astro` global style blocks. Inspect intent in specimen books under `app/cyan-ds/src/content/`.
 
-Where v20 is silent or contradicts itself, ask before deciding, and deliver everything
-that does not depend on the answer.
+When v20 provides no guidance or contradicts itself, request clarification before deciding and deliver changes independent of the decision.
