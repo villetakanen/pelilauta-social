@@ -87,11 +87,6 @@ const ogImage = image || `${Astro.url.origin}favicons/fox-ico-512.png`;
     if (import.meta.env.DEV) import("@design-system/styles/debug.css");
   </script>
 
-  <!-- Cyan Components -->
-  <script>
-    import "@11thdeg/cyan-lit";
-  </script>
-
   <!-- Client-side Sentry initialization -->
   <script>
     import { initSentry } from "@utils/client/sentry";

@@ -216,12 +216,28 @@ export const site: Locale = {
       errorSaving: 'Virhe tallennettaessa kategorioita',
       categories: {
         title: 'Aiheet',
+        label: 'Aiheiden järjestys',
+        announcements: {
+          pickup: 'Nostettiin {title}, sijainti {position}/{length}.',
+          position: '{title} on nyt sijainnissa {position}/{length}.',
+          completion: '{title} pudotettiin sijaintiin {position}/{length}.',
+          cancellation:
+            'Peruttu. {title} pysyy sijainnissa {position}/{length}.',
+        },
+        delete: 'Poista {title}',
       },
     },
     manualOrder: {
       title: 'Järjestä sivut',
       info: 'Vedä ja pudota sivuja muuttaaksesi niiden järjestystä hakemistossa.',
       saving: 'Tallennetaan järjestystä...',
+      label: 'Järjestä sivut: {category}',
+      announcements: {
+        pickup: 'Nostettiin {title}, sijainti {position}/{length}.',
+        position: '{title} on nyt sijainnissa {position}/{length}.',
+        completion: '{title} pudotettiin sijaintiin {position}/{length}.',
+        cancellation: 'Peruttu. {title} pysyy sijainnissa {position}/{length}.',
+      },
     },
     regenerate: {
       title: 'Hakemiston luonti',

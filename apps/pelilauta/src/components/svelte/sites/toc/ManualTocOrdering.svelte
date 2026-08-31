@@ -1,13 +1,16 @@
 <script lang="ts">
-import type { CnListItem } from '@11thdeg/cyan-lit';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
+import type {
+  CnListItem,
+  CnSortableListAnnouncements,
+} from '@design-system/components/CnSortableList.svelte';
+import CnSortableList from '@design-system/components/CnSortableList.svelte';
 import { updatePageRefsOrder } from '@firebase/client/site/updatePageRefsOrder';
 import type { PageRef, Site } from '@schemas/SiteSchema';
 import { pushSnack } from '@utils/client/snackUtils';
 import { t } from '@utils/i18n';
 import { logDebug, logError } from '@utils/logHelpers';
-import SvelteSortableList from '../../app/SvelteSortableList.svelte';
 
 interface Props {
   site: Site;
@@ -155,6 +158,29 @@ function createReorderHandler(categorySlug: string) {
     handleReorder(categorySlug, items);
   };
 }
+
+const announcements: CnSortableListAnnouncements = {
+  pickup: (title, position, length) =>
+    t('site:toc.manualOrder.announcements.pickup', { title, position, length }),
+  position: (title, position, length) =>
+    t('site:toc.manualOrder.announcements.position', {
+      title,
+      position,
+      length,
+    }),
+  completion: (title, position, length) =>
+    t('site:toc.manualOrder.announcements.completion', {
+      title,
+      position,
+      length,
+    }),
+  cancellation: (title, position, length) =>
+    t('site:toc.manualOrder.announcements.cancellation', {
+      title,
+      position,
+      length,
+    }),
+};
 </script>
 
 <section class="surface">
@@ -178,9 +204,11 @@ function createReorderHandler(categorySlug: string) {
     {#if pages.length > 0}
       <div class="category-group">
         <h4>{category.name}</h4>
-        <SvelteSortableList
+        <CnSortableList
           items={pages.map(pageRefToListItem)}
-          onItemsChanged={createReorderHandler(category.slug)}
+          onitemschange={createReorderHandler(category.slug)}
+          {announcements}
+          label={t("site:toc.manualOrder.label", { category: category.name })}
         />
       </div>
     {/if}
@@ -189,9 +217,13 @@ function createReorderHandler(categorySlug: string) {
   {#if uncategorized.length > 0}
     <div class="category-group">
       <h4>{t("site:toc.uncategorized")}</h4>
-      <SvelteSortableList
+      <CnSortableList
         items={uncategorized.map(pageRefToListItem)}
-        onItemsChanged={createReorderHandler("__uncategorized")}
+        onitemschange={createReorderHandler("__uncategorized")}
+        {announcements}
+        label={t("site:toc.manualOrder.label", {
+          category: t("site:toc.uncategorized"),
+        })}
       />
     </div>
   {/if}
