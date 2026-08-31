@@ -8,8 +8,8 @@ export interface CnListItem {
   title: string;
   /** `content` renders in the content region instead of the title. */
   content?: Snippet;
-  /** `actions` renders in the actions region, after the content. */
-  actions?: Snippet;
+  /** `actions` renders in the actions region, after the content, receiving its own item. */
+  actions?: Snippet<[CnListItem]>;
 }
 
 /**
@@ -432,7 +432,7 @@ $effect(() => {
           {#if item.content}{@render item.content()}{:else}{item.title}{/if}
         </div>
         {#if item.actions}
-          <div class="actions">{@render item.actions()}</div>
+          <div class="actions">{@render item.actions(item)}</div>
         {/if}
       </li>
     {/each}

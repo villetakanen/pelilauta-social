@@ -435,8 +435,9 @@ describe('markup', () => {
         content: createRawSnippet(() => ({
           render: () => '<span class="supplied">Chapter one</span>',
         })),
-        actions: createRawSnippet(() => ({
-          render: () => '<button type="button" class="remove">Remove</button>',
+        actions: createRawSnippet((item: () => CnListItem) => ({
+          render: () =>
+            `<button type="button" class="remove">Remove ${item().title}</button>`,
         })),
       },
     ]);
@@ -446,8 +447,28 @@ describe('markup', () => {
     expect(item.querySelector('.content .supplied')?.textContent).toBe(
       'Chapter one',
     );
-    expect(item.querySelector('.actions .remove')?.textContent).toBe('Remove');
+    expect(item.querySelector('.actions .remove')?.textContent).toBe(
+      'Remove Page',
+    );
     expect(item.querySelector('.content')?.textContent).not.toContain('Page');
+  });
+
+  test('one actions snippet, shared across items, receives the item it renders for', () => {
+    const identified: string[] = [];
+    const rowActions = createRawSnippet((item: () => CnListItem) => ({
+      render: () =>
+        `<button type="button" class="remove" data-key="${item().key}">Remove</button>`,
+      setup: (node: HTMLElement) => {
+        node.addEventListener('click', () => identified.push(item().key));
+      },
+    }));
+    open([
+      { key: 'a', title: 'A', actions: rowActions },
+      { key: 'b', title: 'B', actions: rowActions },
+      { key: 'c', title: 'C', actions: rowActions },
+    ]);
+    activate(row('B').querySelector('.remove') as Element);
+    expect(identified).toEqual(['b']);
   });
 
   test('the content region and the actions stay operable without a reorder', () => {
@@ -459,8 +480,9 @@ describe('markup', () => {
         content: createRawSnippet(() => ({
           render: () => '<span class="supplied">Chapter one</span>',
         })),
-        actions: createRawSnippet(() => ({
-          render: () => '<button type="button" class="remove">Remove</button>',
+        actions: createRawSnippet((item: () => CnListItem) => ({
+          render: () =>
+            `<button type="button" class="remove">Remove ${item().title}</button>`,
         })),
       },
     ]);

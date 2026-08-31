@@ -26,7 +26,7 @@ stores no state: it renders items in the order supplied by the consumer.
 The consumer supplies item order. Pass current items to `items`, receive the reordered
 array from `onitemschange`, and pass the array back to `items` once stored.
 
-<DsComposition themes stack caption="Three items — a plain title, a content snippet, and a row carrying an action — in Light and Dark">
+<DsComposition themes stack caption="Three items, each carrying an action bound to its own row, in Light and Dark">
   <SortableListSpecimen client:load />
 </DsComposition>
 
@@ -55,9 +55,10 @@ array from `onitemschange`, and pass the array back to `items` once stored.
 The component is an interactive island: without `client:load` or a framework equivalent
 directive, the rows render statically without reordering.
 
-The first row supplies no content snippet and renders its title. The second row supplies
-a content snippet, and the third adds an action. Activating an action or selecting row
-text executes without triggering a reorder.
+The first row supplies no content snippet and renders its title; the second and third add
+a content snippet. All three rows share one actions snippet, built from the `items` array
+rather than written per row, and each row's action reports the row it belongs to.
+Activating an action or selecting row text executes without triggering a reorder.
 
 The readouts below each list display what the consumer received: `Status region` shows
 the message announced by the component, `Order received` shows the array delivered by
@@ -119,7 +120,7 @@ delivers the new order, and the list reverts to its original order.
 | `key` | `string` | `key` is required and uniquely identifies the item across renders and reorders within `items`. |
 | `title` | `string` | `title` is required and names the item and drag handle, rendering as row content when no content snippet is supplied. Localize the title. |
 | `content` | `Snippet` | `content` renders in the content region instead of the title. The title still names the drag handle. |
-| `actions` | `Snippet` | `actions` renders after the content region. Activating an action starts no reorder. |
+| `actions` | `Snippet<[CnListItem]>` | `actions` renders after the content region, in an [actions container](/base/links-actions-buttons) that takes its height from what you put in it rather than the container's fixed row. The snippet receives its own item, so one snippet built from data can bind a control to the row it acts on. Activating an action starts no reorder. |
 
 ### Announcements
 

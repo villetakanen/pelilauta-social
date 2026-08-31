@@ -40,11 +40,18 @@
   min-inline-size: 0;
 }
 
+/*
+ * The actions region composes `.actions` from `styles/buttons.css`, and replaces
+ * its fixed row height: a row's height is what its contents need, including the
+ * contents a consumer supplies. The tighter gap keeps a cluster of row controls
+ * closer than a standalone action row.
+ */
 .cn-sortable-list .actions {
   display: flex;
   align-items: center;
   gap: var(--cn-grid);
   flex: none;
+  block-size: auto;
 }
 
 .cn-sortable-list li > .cn-sortable-list-handle {

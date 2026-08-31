@@ -13,6 +13,10 @@
  * whether the specimen writes the reported order back; when false, the supplied
  * order returns to demonstrate a consumer rejecting a reorder.
  *
+ * Every row shares one `rowActions` snippet, built from the `items` array rather
+ * than written per row in markup. The snippet receives its own item and reads
+ * its title, so the "Action activated" readout names the row whose action ran.
+ *
  * The specimen appears in `apps/design/src/content/components/cn-sortable-list.mdx`.
  */
 
@@ -49,17 +53,18 @@ const announcements: CnSortableListAnnouncements = {
 };
 
 const catalogue = $derived.by<Record<string, CnListItem>>(() => ({
-  overview: { key: 'overview', title: 'Overview' },
+  overview: { key: 'overview', title: 'Overview', actions: rowActions },
   characters: {
     key: 'characters',
     title: 'Characters',
     content: charactersContent,
+    actions: rowActions,
   },
   locations: {
     key: 'locations',
     title: 'Locations',
     content: locationsContent,
-    actions: locationsActions,
+    actions: rowActions,
   },
 }));
 
@@ -85,8 +90,8 @@ function onitemschange(next: CnListItem[]) {
   </span>
 {/snippet}
 
-{#snippet locationsActions()}
-  <button type="button" class="text" onclick={() => (activated = 'Locations')}>
+{#snippet rowActions(item: CnListItem)}
+  <button type="button" class="text" onclick={() => (activated = item.title)}>
     Edit
   </button>
 {/snippet}

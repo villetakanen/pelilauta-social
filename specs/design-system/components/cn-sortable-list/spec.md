@@ -21,13 +21,15 @@ Authors arranging ordered sets, such as table-of-contents pages or categories, r
 | `onitemschange` | `(items: CnListItem[]) => void` | `onitemschange` receives each completed item reorder. |
 | `announcements` | `CnSortableListAnnouncements` | `announcements` supplies required localized status announcement functions. |
 
-`CnListItem` defines a stable `key` string, a non-empty `title` string, and optional `content` and `actions` Svelte `Snippet` properties. Each key is unique within the `items` array. The title names the item and the drag handle. The content snippet renders in the content region. When `content` is absent, the title renders in the content region. The actions snippet renders in the actions region.
+`CnListItem` defines a stable `key` string, a non-empty `title` string, and optional `content` and `actions` Svelte `Snippet` properties. Each key is unique within the `items` array. The title names the item and the drag handle. The content snippet renders in the content region. When `content` is absent, the title renders in the content region. The actions snippet renders in the actions region, receiving the item it belongs to, so a consumer built from data can bind an action to the row it acts on.
 
 `CnSortableListAnnouncements` requires `pickup`, `position`, `completion`, and `cancellation` functions. Each function receives the item title, one-based position, and list length, and returns the localized announcement message. The `completion` message describes the completed input operation rather than consumer acceptance of the reported order. A successful drop passes the newly ordered array to `onitemschange`. The component resets to the supplied `items` order. The consumer accepts the reorder by supplying the updated `items` array.
 
 The component renders a native unordered list with `role="list"` and `aria-label={label}`. Each item renders as a list item containing a drag handle, a content region, and an optional actions region in sequence. The drag handle renders as a native `button` with `type="button"` using the item title as its accessible name. The handle contains the `dragger` icon as a decorative element governed by `specs/design-system/components/cn-icon/spec.md`. A visually hidden `role="status"` region occupies no layout space and receives each message returned by `announcements`.
 
 The drag handle defines a distinct action presentation and does not compose the button presentation from `specs/design-system/actions/spec.md`.
+
+The actions region composes the `.actions` container from `specs/design-system/actions/spec.md` and replaces its fixed row height. A row's height is what its contents need, the contents a consumer supplies included.
 
 Sortable List supports pointer, touch, and keyboard reordering across all consumer surfaces. A consumer migration never narrows this component contract.
 
@@ -174,6 +176,12 @@ When it renders
 Then the drag handle appears before the supplied content
 And the supplied actions appear after the content
 And the title does not render in the content region
+```
+
+```gherkin
+Given a Sortable List with items A, B and C, each with an actions Snippet that reports the item it received
+When the reader activates the action on row B
+Then the report identifies item B, not A or C
 ```
 
 ```gherkin
