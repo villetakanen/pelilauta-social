@@ -33,7 +33,7 @@
     var(--chroma-surface-60)
   );
   --cn-color-chrome-icon: light-dark(
-    var(--chroma-surface-10),
+    var(--chroma-surface-40),
     var(--chroma-surface-99)
   );
   --cn-color-background: var(--cn-color-surface);

@@ -144,8 +144,9 @@ const hasFooter = Astro.slots.has('footer');
        and it shares one axis with the entries below it. */
     align-items: flex-start;
     /* Chrome, not running text: the rail takes the foreground the bar
-       already takes, so the two read as one frame. */
-    color: var(--cn-color-on-surface);
+       already takes, so the two read as one frame — brighter on the
+       surface scale in light mode, the on-surface foreground in dark. */
+    color: light-dark(var(--chroma-surface-20), var(--chroma-surface-90));
 
     /* The rail declares its own presentation for the entries it holds. */
     --cn-chrome-presentation: labelled;

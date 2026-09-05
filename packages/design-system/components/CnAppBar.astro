@@ -86,7 +86,9 @@ const Identity = href ? 'a' : 'div';
     block-size: var(--cn-app-bar-height);
     padding-inline: var(--cn-gap);
     background-color: transparent;
-    color: var(--cn-color-on-surface);
+    /* Chrome text sits brighter on the surface scale in light mode;
+       dark mode keeps the on-surface foreground. Icons and actions are unaffected. */
+    color: light-dark(var(--chroma-surface-20), var(--chroma-surface-90));
 
     /* A bar shows its actions as icons. */
     --cn-chrome-presentation: compact;

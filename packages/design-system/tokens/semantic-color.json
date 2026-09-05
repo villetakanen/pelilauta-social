@@ -31,7 +31,7 @@
       "dark": "{chroma:surface-60}"
     },
     "cn-color-chrome-icon": {
-      "light": "{chroma:surface-10}",
+      "light": "{chroma:surface-40}",
       "dark": "{chroma:surface-99}"
     },
     "cn-color-background": {

@@ -97,6 +97,19 @@
   }
 
   /*
+   * Chrome icons stand on the artwork here — the bar, rail and tray cede their
+   * backgrounds above — so a white glow lifts the glyph off whatever the poster
+   * paints. Three stacked shadows at 2, 8 and 16px widen the halo without a hard
+   * edge. The SVG glyph only: the label and the action surface are untouched.
+   */
+  body:has(#cn-poster) :is(.chrome-action, .identity) > .cn-icon {
+    filter:
+      drop-shadow(0 0 2px rgb(255 255 255 / 0.2))
+      drop-shadow(0 0 8px rgb(255 255 255 / 0.2))
+      drop-shadow(0 0 16px rgb(255 255 255 / 0.2));
+  }
+
+  /*
    * Behind everything: a negative z-index paints above the canvas background
    * and below every in-flow box, which is also why the poster needs no rule to
    * stay clear of the content it sits under. It takes no pointer events and
