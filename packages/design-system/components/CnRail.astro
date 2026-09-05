@@ -143,6 +143,9 @@ const hasFooter = Astro.slots.has('footer');
        rather than being centred — centring would move it as the rail widens,
        and it shares one axis with the entries below it. */
     align-items: flex-start;
+    /* Chrome, not running text: the rail takes the foreground the bar
+       already takes, so the two read as one frame. */
+    color: var(--cn-color-on-surface);
 
     /* The rail declares its own presentation for the entries it holds. */
     --cn-chrome-presentation: labelled;

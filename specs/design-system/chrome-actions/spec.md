@@ -68,8 +68,10 @@ hides it from view without hiding it from assistive technology, so a chrome acti
 needs no separate accessible name. v20 hides the same label from both, and this
 capability does not.
 
-A chrome action takes its foreground from the container that places it, so the class
-displaces the default link colour and underline and the default button surface.
+A chrome action's label takes its foreground from the container that places it, so the
+class displaces the default link colour and underline and the default button surface.
+Its Icon reads one shade quieter than the label, so the glyph recedes behind the word
+that names it.
 
 The state surface is transparent at rest and carries the transient feedback;
 activation replaces hover rather than compounding it. The focus outline follows the

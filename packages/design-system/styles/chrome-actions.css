@@ -131,6 +131,17 @@ a.chrome-action[href] > :is(.cn-icon, .cn-loader) {
 }
 
 /*
+ * The Icon reads one surface step quieter than the label beside it, so it
+ * takes its own foreground rather than the target's `currentColor`. The
+ * current destination overrides this below, back onto the indicator's
+ * foreground, so its glyph and label read as one identified state.
+ */
+button.chrome-action > .cn-icon,
+a.chrome-action[href] > .cn-icon {
+  color: var(--cn-color-chrome-icon);
+}
+
+/*
  * The label: out of flow in compact so the Icon stays centred, but never
  * `display: none` — that would remove it from the accessibility tree too,
  * which the spec forbids explicitly. The clip technique matches the one
@@ -266,6 +277,12 @@ a.chrome-action[href]:not([aria-disabled="true"]):focus-visible {
  * rather than being undone by a later override.
  */
 a.chrome-action[href][aria-current]:not([aria-current="false"]) {
+  color: var(--cn-color-on-indicator);
+}
+
+/* The current destination's Icon keeps the indicator's foreground, not the
+   quieter chrome-icon colour every other action's glyph takes. */
+a.chrome-action[href][aria-current]:not([aria-current="false"]) > .cn-icon {
   color: var(--cn-color-on-indicator);
 }
 
