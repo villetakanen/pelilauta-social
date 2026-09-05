@@ -1,91 +1,92 @@
 ---
 name: next-task
-description: Briefly propose the next small, contained, atomic, deliverable and releasable task from a Pelilauta epic, with the fastest value first. Use when asked what to do next, to propose the next task from an epic, or to slice an epic into its next release-sized outcome.
+description: Propose the smallest deliverable increment that creates useful value within the active Pelilauta epic or an explicitly requested improvement scope. Use when asked what to do next or to propose the next task.
 ---
 
 # Next Task
 
-Read the named epic. If none is named, identify the active epic from the current
-branch and the open issues labeled `epic` (`gh issue list --label epic`).
-Read every Possible work entry, the domain's parent spec, the existing
-specs for candidate capabilities, and v20's implementation and books for the
-surfaces in question.
+Find the smallest change worth delivering next. Value may accrue to application
+users, developers, documentation readers, or agents working through the harness.
+A smaller diff is not necessarily a smaller useful increment.
 
-Treat a Possible work entry that leaves the relationship between elements, components or
-documents undecided as a candidate, not an automatic task. Split it until one
-decision directly enables one deliverable. Do not put a plan-wide classification
-question ahead of concrete work unless every smaller candidate depends on that exact
-decision.
+## Establish the basis
 
-Possible work is non-binding: an entry is a candidate, not a commitment, and the
-set is not closed. A task may split an entry or name newly discovered work absent
-from the plan when that work is necessary to the epic's Goal or Success criteria.
-Reject work outside the epic's Goal.
+Read the named epic. If none is named, identify it from the active branch and
+open GitHub issues labeled `epic`. When the operator explicitly names a different
+improvement scope, use that scope rather than assigning it to an unrelated epic.
 
-Choose exactly one task. Prefer the smallest vertical slice that produces observable,
-verifiable value and can ship on its own. Check the relevant specs before proposing
-implementation. If a required spec is missing, or the work needs a substantive change
-to its intent, propose completing and approving that spec first.
+Inspect the implementation, governing specs, and relevant documentation. Inspect
+v18 behavior and v20 presentation when the candidate changes a migrated surface.
+Identify what becomes possible, clearer, more reliable, or less costly after the
+change ships.
 
-Name the artifacts that define the deliverable. For a new or updated spec, plan or
-other document, put its exact repository path in `Task`; approval is part of
-completing a spec, not a substitute for naming it. For implementation, name the
-changed behaviour, where a user encounters it, and the few major artifacts needed to
-make the task boundary clear. If that cannot fit within the answer limits, split the
-candidate again.
+Treat the epic's Possible work entries as candidates. Consider discoveries within
+its goal and success criteria; do not assume every entry is necessary or correctly
+sized.
 
-A minor clarification or correction to an existing spec, including one needed by a
-bug fix, may stay inside the delivery slice. The slice must present the amendment to
-the spec approver and receive approval before continuing with work that relies on it.
-Account internally for its spec changes, implementation, tests, migration and
-documentation; do not expose that delivery plan before the task is accepted. Prefer
-existing paths and settled decisions over new infrastructure.
+## Find the increment
 
-Make the slice complete where its value is expected. When design-system work is meant
-for Pelilauta, include enough Pelilauta adoption for the result to be useful there. Do
-not propose only the underlying styles, component or book and leave their first real
-use for a later task. A missing or substantively incomplete spec is a complete task
-when implementation cannot begin without settling its intent.
+Compare plausible candidates internally. Choose one that:
 
-Reject a candidate that:
+- Creates a concrete benefit when delivered.
+- Requires no later task to make that benefit usable.
+- Includes the implementation, adoption, documentation, and evidence necessary
+  for its outcome.
+- Excludes improvements that can ship independently.
+- Fits the epic or the operator's stated scope.
 
-- starts implementation without a required spec, or relies on a `proposed` change
-  to one;
-- needs a later task before it is useful, verifiable or safe to release;
-- bundles an independent outcome;
-- changes behaviour outside the epic;
-- is cleanup or scaffolding that can wait until after the first useful slice.
+Prefer the smallest useful outcome that resolves a current need or enables
+valuable subsequent work. Include supporting changes when the outcome depends
+on them.
 
-Answer as exactly three unbulleted paragraphs, with one blank line between them:
+A documentation correction, a clarified spec, or a repaired skill can constitute
+a complete increment. Name who benefits and what changes for them.
 
-```text
-Task: <terse technical description of the task>
+## Check readiness
 
-Rationale: <why this task should be done now>
+Before proposing implementation, establish that the specs required to govern the
+intended work are live. Apply `AGENTS.md`'s rules for when a spec is required;
+do not invent a spec requirement for every task.
 
-Risks: <caveats and risks of taking this route>
-```
+If a required spec is missing or proposed, consider making its completion and
+operator clearance the next increment. Name the intent or decision it must
+establish and the work that decision enables.
 
-Limit the `Task` value to 73 characters. Limit the `Rationale` and `Risks` values
-to 221 characters each. The labels do not count toward these limits. Make the
-rationale compare the task's timing with its closest alternatives. State concrete
-evidence for that comparison and the dependency this task clears. State a failure
-mode or unknown specific to this task in risks, including adjacent specs or decisions
-that may still be missing. Do not substitute generic costs of specification,
-implementation or review. Say when no material risk exists.
+Starting from live specs does not freeze them. A task may uncover errors,
+missing constraints, or better implementation choices. Amend specs during the
+task through the workflow in `AGENTS.md`. The possibility of learning is not a
+reason to reject a candidate or demand advance approval of implementation details.
 
-Name artifacts when they make the deliverable or a dependency concrete. Do not give
-an exhaustive supporting-file or call-site inventory, commands, test procedures,
-implementation steps or acceptance criteria. Write for someone deciding whether the
-result is worth doing, not for its implementer. Use technical terms only when they
-identify the task or its tradeoffs more precisely. Avoid placeholder nouns such as
-ownership, capability, contract, boundary, surface and slice; name the affected
-elements, components, behaviour, artifact or decision instead. Do not add an
-introduction, conclusion or alternative candidate.
+Distinguish an unsettled starting objective from a detail the work can resolve.
 
-Before answering, replace `owns`, `owned`, `owner` and `ownership` with the concrete
-relationship: specifies, implements, imports, renders, references, provides or keeps.
-If none fits, inspect the artifacts until the relationship can be stated.
+## Explain the proposal
 
-Do not edit the epic, create task files, or begin implementation unless explicitly
-requested.
+Write for a technically experienced operator deciding what to implement next.
+Use a descriptive title and roughly 10–15 lines of concrete technical prose.
+Use paragraphs or a short list where they help; no mandatory response labels.
+
+Lead with the actual change: what is added, removed, or changed, and where.
+Name relevant files, components, commands, interfaces, or behaviors.
+Describe the resulting behavior precisely enough to distinguish this task
+from neighboring work.
+
+Connect the proposal to the source evidence: the current implementation,
+an observed failure, a governing spec, or an epic requirement. Explain why
+this is the next useful increment through that concrete relationship.
+
+Include the essential implementation boundary and how completion can be
+verified. Mention dependencies, compatibility concerns, or unresolved decisions
+only when they affect execution. State what needs settling before starting
+and what the task itself can resolve.
+
+Do not substitute phrases such as “improve consistency,” “align the contract,”
+or “ensure robustness” for the exact change. Do not spend lines announcing
+value or risk that the technical description already demonstrates.
+
+The proposal should contain enough technical detail to accept or correct its
+scope without requiring another turn to discover what work is being proposed.
+
+## Boundary
+
+Propose one increment. Do not edit the epic, amend specs, or begin implementation
+unless the operator also requests that work.

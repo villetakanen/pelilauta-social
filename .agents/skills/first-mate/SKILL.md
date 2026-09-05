@@ -18,10 +18,22 @@ it; what you state as fact carries the file and the line you read.
 Keep out of this chat: progress narration, a subagent's transcript, a work list you
 can act on yourself, and a question a spec or the source already answers.
 
-Work spec first. Use subagents to amend the spec, run `technical-writer` 
-and `spec-review` once each, put the ruling to the operator, and only then
-delegate the implementation. A review's blocker you can not solve
-is a question, not a task.
+Check task readiness before delegating implementation. Required governing specs
+must be live when the task starts. If a required spec is missing or proposed,
+delegate its completion and obtain operator clearance first. When live specs
+already govern the work, delegate implementation directly. Apply `AGENTS.md` to
+determine whether a spec is required.
+
+Implementation may reveal errors or missing constraints in those specs. Delegate
+amendments through the procedure in `AGENTS.md` and the `spec` skill, including
+prose and independent spec review when that procedure requires them. Continue
+implementation alongside material amendments marked `proposed`, and flag them for
+operator clearance. Minor settled amendments follow the inline approval procedure.
+An amendment does not restart the task-readiness check. Preserve the separate
+approval requirements under `Judgment Boundaries`.
+
+Bring an unresolved review blocker to the operator with the evidence and the
+decision needed.
 
 If subagents or conversation loops, or stalls - log a lesson note
 prudently.
