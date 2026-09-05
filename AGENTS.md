@@ -10,7 +10,7 @@
 
 - `apps/pelilauta` contains the v21 application; `apps/design` publishes the design system.
 - `packages/design-system` contains the shared components, styles, specs, and specimen books.
-- `specs` contains system behavior specifications, organized with one capability per directory. Spec status is `proposed`, `live`, or `deprecated`; implementation follows `live` specs. For a minor, settled amendment, present the unapplied diff and rationale in chat. Apply the accepted amendment while retaining `live` status after operator approval. For a new, material, or unsettled amendment, set the spec status to `proposed` and stop before implementation. An operator marks a proposed spec `live` after reviewing it. Spec status serves as a process gate.
+- `specs` contains system behavior specifications, organized with one capability per directory. Spec status is `proposed`, `live`, or `deprecated`; implementation follows `live` specs. For a minor, settled amendment, present the unapplied diff and rationale in chat. Apply the accepted amendment while retaining `live` status after operator approval. For a new, material, or unsettled amendment, set the spec status to `proposed`, continue the work, and flag the change in the delivery report. An operator clears a proposed spec to `live`, or turns it back, at review. Spec status records whether the operator has cleared the change; it does not halt the work.
 - An epic is a GitHub issue labeled `epic`, carrying transient scope and defining behavior until a spec governs it. A known unplanned gap is an issue labeled `task` and `debt`. `docs/EPIC_TEMPLATE.md` defines epic structure.
 - `docs/DESIGN.md` defines design intent, `docs/WRITING.md` defines writing rules, and `docs/ARCHITECTURE.md` defines naming conventions and artifact responsibilities.
 
@@ -51,4 +51,4 @@ Request clarification when v18 behavior or the Firebase contract cannot be deriv
 
 Inspect the v18 implementation before altering a migrated surface. A design-system capability requires a governing spec. An `apps/pelilauta` feature requires no new spec when migration preserves established behavior; create or update its spec when work introduces or alters behavior.
 
-Every design-system change requires a named open epic and a governing live spec. Do not alter design-system code, tests, or specimen books until establishing both. Minor spec amendments follow the inline workflow; staged proposed amendments halt delivery before modifying implementation artifacts.
+Every design-system change requires a named open epic and is governed by a spec. Create or amend that spec as part of the change, not as a gate before it: a proposed amendment does not halt the work, and the operator clears it to `live`, or turns it back, at delivery review. Minor spec amendments follow the inline workflow.

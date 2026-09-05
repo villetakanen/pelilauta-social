@@ -11,6 +11,8 @@ Specs follow ASDLC.io living specs practice and anchor features to expected stat
 
 `specs/TEMPLATE.md` defines spec anatomy.
 
+A design-system change is always governed by a spec. Pelilauta application work is not: where `specs/pelilauta/**` governs a feature, the same rule applies — amend when the work requires it and flag the change for the operator's clearance — but pelilauta work may proceed where no spec governs it yet.
+
 ## Procedure
 
 1. Determine whether the task requires creating or amending a spec. Small changes inferable from the codebase and conforming to an existing spec require no spec change. State the decision explicitly when work proceeds without a spec change.
@@ -18,10 +20,10 @@ Specs follow ASDLC.io living specs practice and anchor features to expected stat
 3. Existing specs, implementation, and documents of v18 provide the primary source for application logic and features. When these conflict with v20 or current v21 design intent, request clarification.
 4. Request clarification when v20 and v18 sources cannot establish the proposed spec.
 5. Create or update `specs/<domain>/<capability>/spec.md`. Place sub-features in child directories as `specs/<domain>/<capability>/<sub-feature>/spec.md` and list them in the parent spec.
-6. Encode document status in the frontmatter as `status: proposed | live | deprecated`. A `proposed` spec carries a new, material, or unsettled amendment unread by the operator; do not implement it. For a minor, settled amendment to a live spec, show an unapplied diff and rationale in chat. Do not edit the file or change its status before the operator accepts the diff. Apply an accepted amendment while retaining `live`, then continue. A `live` spec portrays intended system operation. A spec kept for historical context or architectural reference is `deprecated`.
+6. Encode document status in the frontmatter as `status: proposed | live | deprecated`. A `proposed` spec carries a new, material, or unsettled amendment the operator has not yet cleared; implement alongside it and flag the change for clearance in the delivery report, where the operator clears it to `live` or turns it back. For a minor, settled amendment to a live spec, show an unapplied diff and rationale in chat. Do not edit the file or change its status before the operator accepts the diff. Apply an accepted amendment while retaining `live`, then continue. A `live` spec portrays intended system operation. A spec kept for historical context or architectural reference is `deprecated`.
 7. Record large-scale or irreversible decisions in an ADR under `docs/adrs/`.
 8. Apply the template sentence tests to new spec text before presenting it. Delete text that code, another spec, or an adjacent sentence already carries.
-9. After modifying a staged proposed spec, run the spec-review skill, report that the spec is `proposed`, and stop. An accepted inline amendment remains `live`.
+9. After modifying a staged proposed spec, run the spec-review skill and flag the change for the operator's clearance in the delivery report; the work continues rather than stopping. An accepted inline amendment remains `live`.
 
 ## Prose
 

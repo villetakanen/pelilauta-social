@@ -7,7 +7,7 @@ description: Develop, debug, and maintain the design system, its tokens, and com
 
 A task in this domain either migrates an existing component or CSS rule, or writes a new component.
 
-A design-system change requires a live governing spec before creating code, tests, or books. Do not begin implementation without a live spec. When the spec is absent or `proposed`, create or amend the spec, report that the spec is `proposed`, and stop.
+Specs anchor the design system — why a feature exists and how it behaves, and they are not infallible. A design-system change is governed by a spec: create or amend one as part of the change. A bug, or a lesson development teaches, can force that amendment, and the work does not wait for the operator to make it. Mark the change `proposed`, carry on, and flag it in the delivery report, where the operator clears it to `live` or turns it back.
 
 ## The migration test
 
