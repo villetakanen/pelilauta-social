@@ -32,10 +32,9 @@
     var(--chroma-surface-40),
     var(--chroma-surface-60)
   );
-  /* Application chrome's icon foreground, one surface step quieter than the chrome label it stands beside. */
   --cn-color-chrome-icon: light-dark(
     var(--chroma-surface-10),
-    var(--chroma-surface-80)
+    var(--chroma-surface-99)
   );
   --cn-color-background: var(--cn-color-surface);
   --cn-color-text: light-dark(

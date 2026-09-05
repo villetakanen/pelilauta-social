@@ -83,7 +83,7 @@ published contract: they are what the rail, the scrim and the main region read.
 
 The toggle is the control: it takes the focus, carries the name, and reports whether it
 is checked, which is this capability's disclosure. It is hidden from view and from
-nothing else. Its trigger draws `=` collapsed and `|<` expanded, turning
+nothing else. Its trigger uses `--cn-color-chrome-icon` and draws `=` collapsed and `|<` expanded, turning
 counter-clockwise in both directions, and shows the focus the toggle takes. A
 transition has only two ends, so the resting pose cannot read `0deg` going out and
 `-180deg` coming back; the glyph is therefore drawn twice, one copy per direction, and

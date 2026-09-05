@@ -170,6 +170,10 @@ const Identity = href ? 'a' : 'div';
     outline-offset: 2px;
   }
 
+  .identity > :global(.cn-icon) {
+    color: var(--cn-color-chrome-icon);
+  }
+
   /*
    * Not a heading: the bar is chrome, and the document's outline is the page's.
    * The type step is the h3 one, without the element that would join the outline.

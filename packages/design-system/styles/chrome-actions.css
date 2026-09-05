@@ -280,8 +280,6 @@ a.chrome-action[href][aria-current]:not([aria-current="false"]) {
   color: var(--cn-color-on-indicator);
 }
 
-/* The current destination's Icon keeps the indicator's foreground, not the
-   quieter chrome-icon colour every other action's glyph takes. */
 a.chrome-action[href][aria-current]:not([aria-current="false"]) > .cn-icon {
   color: var(--cn-color-on-indicator);
 }

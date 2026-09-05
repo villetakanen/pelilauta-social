@@ -41,7 +41,7 @@ The leading region carries the page's context noun as a decorative Icon, and the
 logomark where a page states none. That glyph and the wordmark beside it are one region,
 and given a destination they are one link to the root of whatever the bar names — one
 link, because a reader pressing either half wants the same place, and two would be
-announced twice. The link takes the bar's foreground and never underlines: the bar is
+announced twice. The glyph takes `--cn-color-chrome-icon`. The link takes the bar's foreground and never underlines: the bar is
 chrome, not running text. Where the region leads somewhere, the wordmark names the link,
 so the logomark names nothing of its own. A small screen carries neither: no rail holds
 the navigation trigger there, so the bar reserves `8 × --cn-grid` at its start edge and the

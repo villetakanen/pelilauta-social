@@ -31,9 +31,8 @@
       "dark": "{chroma:surface-60}"
     },
     "cn-color-chrome-icon": {
-      "comment": "Application chrome's icon foreground, one surface step quieter than the chrome label it stands beside.",
       "light": "{chroma:surface-10}",
-      "dark": "{chroma:surface-80}"
+      "dark": "{chroma:surface-99}"
     },
     "cn-color-background": {
       "value": "{token:cn-color-surface}"

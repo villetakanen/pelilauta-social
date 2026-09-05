@@ -70,8 +70,7 @@ capability does not.
 
 A chrome action's label takes its foreground from the container that places it, so the
 class displaces the default link colour and underline and the default button surface.
-Its Icon reads one shade quieter than the label, so the glyph recedes behind the word
-that names it.
+Its Icon takes the dedicated chrome-icon foreground independently of the label.
 
 The state surface is transparent at rest and carries the transient feedback;
 activation replaces hover rather than compounding it. The focus outline follows the
