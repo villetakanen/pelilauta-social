@@ -51,20 +51,20 @@ it('browses the library card grid, sorts sites, and reads a wiki page with prose
   await gloamroadCard.click();
   await page.waitForURL('**/sites/gloamroad-company**', { timeout: 30_000 });
 
-  // 4. Verify the page article is presented with .surface and .text-prose.
+  // 4. Verify the page article is presented with .surface and .content-area.
   const pageArticle = page.locator('article.page-article');
   await expect
     .poll(() => pageArticle.isVisible(), { timeout: 30_000 })
     .toBe(true);
 
-  const proseContainer = pageArticle.locator('.text-prose');
+  const contentArea = pageArticle.locator('.content-area');
   await expect
-    .poll(() => proseContainer.isVisible(), { timeout: 15_000 })
+    .poll(() => contentArea.isVisible(), { timeout: 15_000 })
     .toBe(true);
 
-  // Verify that headings and paragraphs inside the prose container have vertical separation.
-  const heading = proseContainer.locator('h1').first();
-  const paragraph = proseContainer.locator('p').first();
+  // Verify that headings and paragraphs inside the content area have vertical separation.
+  const heading = contentArea.locator('h1').first();
+  const paragraph = contentArea.locator('p').first();
 
   await expect.poll(() => heading.isVisible()).toBe(true);
   await expect.poll(() => paragraph.isVisible()).toBe(true);
