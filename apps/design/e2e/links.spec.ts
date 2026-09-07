@@ -95,7 +95,10 @@ for (const scheme of ['light', 'dark'] as const) {
       page,
     }) => {
       const tokens = await references(page);
-      await mount(page, '<a href="/utilities/surface">Study surface elevation</a>');
+      await mount(
+        page,
+        '<a href="/utilities/surface">Study surface elevation</a>',
+      );
       const probe = await read(page);
 
       expect(probe.color).toBe(tokens.link);
