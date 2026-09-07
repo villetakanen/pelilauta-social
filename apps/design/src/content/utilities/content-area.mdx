@@ -18,8 +18,8 @@ Use a content area for rendered markdown in a page, thread, handout or article. 
 [Content containers](/utilities/content-containers) to place regions in page columns, and
 apply this capability inside the region that holds authored document content.
 
-Do not apply it to a listing teaser whose text is part of the listing layout. Keep that
-teaser flattened and let its component define its spacing.
+Do not apply it to a listing teaser whose text is part of the listing layout. Use
+`.teaser` there instead, so the summary reads compact and its component defines its spacing.
 
 ## Component override
 
@@ -119,17 +119,18 @@ fits the offered inline size and keeps its intrinsic ratio.
 </div>
 ```
 
-## Flattened teaser
+## Teaser summary
 
-A listing teaser presents a summary as one component. Flatten its authored descendants
-so the content-area floor does not add document spacing to the listing row.
+A listing teaser presents authored content as one summary beside the listing's own
+titles. Its text reads small, an authored list keeps its markers, and its blocks carry a
+compact gap rather than the document rhythm.
 
-<DsComposition themes caption="A teaser keeps its component layout">
-  <article class="teaser"><strong>Tonight's session</strong><p>Three seats remain.</p></article>
+<DsComposition themes caption="A teaser reads as a compact summary">
+  <article class="teaser"><strong>Tonight's session</strong><p>Three seats remain. Bring:</p><ol><li>A character sheet.</li><li>Dice.</li></ol></article>
 </DsComposition>
 
 ```html
-<article class="teaser"><strong>Tonight's session</strong><p>Three seats remain.</p></article>
+<article class="teaser"><strong>Tonight's session</strong><p>Three seats remain. Bring:</p><ol><li>A character sheet.</li><li>Dice.</li></ol></article>
 ```
 
 ## Reference
@@ -139,7 +140,7 @@ so the content-area floor does not add document spacing to the listing row.
 | Class | Use |
 | :--- | :--- |
 | `.content-area` | Restores authored document presentation inside one region. |
-| `.teaser` | Flattens descendant block margins in a listing summary. |
+| `.teaser` | Renders a listing summary: small text, authored lists keep markers, blocks carry a compact gap. |
 
 The class takes no options. The parent states page-edge inset and column placement;
 components state their internal layout and spacing.

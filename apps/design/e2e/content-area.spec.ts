@@ -32,7 +32,7 @@ test('authored lists retain native markers and gain a gutter while scaffold list
   }
 });
 
-test('the content floor has zero specificity and teasers remain flat', async ({
+test('the content floor has zero specificity and teasers read as compact summaries', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
@@ -46,11 +46,11 @@ test('the content floor has zero specificity and teasers remain flat', async ({
     .locator('> p')
     .first();
   const finalParagraph = rhythm.locator('> p').last();
-  const teaser = page
+  const teaserFigure = page
     .locator('figure')
-    .filter({ hasText: 'A teaser keeps its component layout' })
-    .locator('.teaser p')
-    .first();
+    .filter({ hasText: 'A teaser reads as a compact summary' });
+  const teaserParagraph = teaserFigure.locator('.teaser p').first();
+  const teaserList = teaserFigure.locator('.teaser ol').first();
   const cardDescription = page
     .locator('figure')
     .filter({ hasText: 'A component keeps its declared spacing' })
@@ -62,19 +62,34 @@ test('the content floor has zero specificity and teasers remain flat', async ({
     .getByRole('img', { name: 'A media example' })
     .first();
 
-  const line = await page.evaluate(() => {
-    const probe = document.createElement('div');
-    probe.style.marginBlockEnd = 'var(--cn-line)';
-    document.body.append(probe);
-    const resolved = getComputedStyle(probe).marginBlockEnd;
-    probe.remove();
-    return resolved;
-  });
+  const resolveVar = (token: string) =>
+    page.evaluate((value) => {
+      const probe = document.createElement('div');
+      probe.style.marginBlockEnd = value;
+      document.body.append(probe);
+      const resolved = getComputedStyle(probe).marginBlockEnd;
+      probe.remove();
+      return resolved;
+    }, `var(${token})`);
+
+  const line = await resolveVar('--cn-line');
+  const grid = await resolveVar('--cn-grid');
+  const small = await resolveVar('--cn-font-size-small');
   expect(line).toMatch(/px$/);
   await expect(paragraph).toHaveCSS('margin-bottom', line);
   await expect(finalParagraph).toHaveCSS('margin-bottom', '0px');
   await expect(cardDescription).toHaveCSS('margin-bottom', '0px');
-  await expect(teaser).toHaveCSS('margin-bottom', '0px');
+
+  // The teaser reads small, its non-final block carries a compact gap, its final
+  // block sits flush, and an authored list keeps its markers inside the gutter.
+  await expect(teaserParagraph).toHaveCSS('font-size', small);
+  await expect(teaserParagraph).toHaveCSS('margin-bottom', grid);
+  await expect(teaserList).toHaveCSS('margin-bottom', '0px');
+  await expect(teaserList).toHaveCSS('list-style-type', 'decimal');
+  const teaserGutter = await teaserList.evaluate(
+    (node) => Number.parseFloat(getComputedStyle(node).fontSize) * 1.5,
+  );
+  await expect(teaserList).toHaveCSS('padding-left', `${teaserGutter}px`);
   const mediaBox = await media.boundingBox();
   const areaBox = await media
     .locator('xpath=ancestor::div[contains(@class,"content-area")]')

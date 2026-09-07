@@ -37,8 +37,9 @@ fits the offered width and keeps its ratio.
 When a component sets the size of its own image, that size wins inside a content area;
 the content area does not resize it.
 
-A teaser that shows authored content as part of a listing deliberately flattens its
-descendants instead of applying the content-area floor.
+A teaser that shows authored content in a listing applies a compact summary floor
+instead of the document one: its text reads small, an authored list keeps its markers,
+and its blocks carry a compact gap rather than the document rhythm.
 
 ## Contract
 
@@ -97,8 +98,10 @@ Feature: Content Area
     When the component renders
     Then the component's size holds
 
-  Scenario: Teaser stays flat
-    Given a listing teaser containing authored text
+  Scenario: Teaser reads as a compact summary
+    Given a listing teaser containing authored text and a list
     When the teaser renders
-    Then the teaser keeps its flattened presentation
+    Then its text reads small
+    And an authored list keeps its markers
+    And its blocks carry a compact gap rather than the document rhythm
 ```
