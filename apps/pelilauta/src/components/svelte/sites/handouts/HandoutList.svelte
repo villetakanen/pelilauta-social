@@ -8,7 +8,7 @@ import HandoutListItem from './HandoutListItem.svelte';
 {#if $handouts.length === 0}
   <p>No handouts available.</p>
 {:else}
-  <ul class="handouts-list">
+  <ul class="handouts-list" role="list">
     {#each $handouts as handout (handout.key)}
       <HandoutListItem {handout} />     
     {/each}
@@ -24,4 +24,3 @@ import HandoutListItem from './HandoutListItem.svelte';
     margin: 0;
   }
 </style>
-

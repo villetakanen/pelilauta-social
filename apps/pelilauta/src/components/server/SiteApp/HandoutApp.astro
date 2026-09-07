@@ -13,7 +13,7 @@ const { handout, site } = Astro.props as Props;
 <div class="content-golden">
   <section class="handout surface elevation-1">
     <h1>{handout.title}</h1>
-    <div class="text-prose" set:html={handout.htmlContent}></div>
+  <div class="content-area" set:html={handout.htmlContent}></div>
   </section>
   <div>
     <HandoutMeta handout={handout} site={site} client:only="svelte"/>

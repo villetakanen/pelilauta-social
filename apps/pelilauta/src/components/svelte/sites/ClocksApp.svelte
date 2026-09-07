@@ -18,7 +18,7 @@ const empty = $derived.by(() => {
 <div class="content-prose">
   <article class="surface">
     <h2>{t('site:clocks.title')}</h2>
-    <ul class="clocks-list">
+    <ul class="clocks-list" role="list">
       {#each $clocks as clock (clock.key)}
         <li>
           <StoryClock {clock} />

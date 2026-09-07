@@ -144,7 +144,7 @@ function setBio(event: Event) {
       </p>
 
       {#if links.length > 0}
-        <ul class="links-list">
+        <ul class="links-list" role="list">
           {#each links as link, index}
             <li class="link-item">
               <div class="link-info">

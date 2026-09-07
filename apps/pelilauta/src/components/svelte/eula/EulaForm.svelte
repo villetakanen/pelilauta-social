@@ -96,7 +96,7 @@ async function handleCancel(event: Event) {
 </script>
 
 <form onsubmit={handleSubmit} class="surface eula-form">
-  <article class="text-prose">
+  <article class="content-area">
     {#if children}
       {@render children()}
     {:else}

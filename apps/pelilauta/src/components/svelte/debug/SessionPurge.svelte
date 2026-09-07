@@ -157,7 +157,7 @@ async function purgeSession() {
     <div class="purge-warning-content">
       <p class="text-warning"><strong>Warning:</strong> This action is destructive.</p>
       <p>It will:</p>
-      <ul class="warning-list">
+      <ul class="warning-list" role="list">
         <li>Log you out of the application</li>
         <li>Clear all local settings and preferences</li>
         <li>Remove all cached data and assets</li>
