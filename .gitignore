@@ -165,3 +165,6 @@ CLAUDE.local.md
 
 # The acceptance suite's signed-in browser state, written by its global setup
 uat/pelilauta/e2e/.auth/
+
+# macOS writes a Finder attributes file into every directory it browses
+**/.DS_Store
