@@ -68,7 +68,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
       <a href={`/channels/${channelSlug}`}>{channel}</a>
     </Fragment>
 
-    <Fragment set:html={snippet} />
+    <div class="teaser" set:html={snippet} />
     <CardSubscription thread={thread} client:only="svelte" />
 
     <Fragment slot="actions">

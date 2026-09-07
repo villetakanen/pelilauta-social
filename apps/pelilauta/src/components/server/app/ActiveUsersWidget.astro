@@ -31,7 +31,7 @@ try {
 {activeUids.length > 0 && (
   <section class="active-users-widget">
     <h4>{t('app:footer.activeUsers.title')}</h4>
-    <ul class="cn-avatar-list">
+    <ul class="cn-avatar-list" role="list">
       {activeUids.map((uid: string) => (
         <li><AvatarLink uid={uid} size="medium" client:only="svelte"/></li>
       ))}
