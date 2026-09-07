@@ -100,14 +100,35 @@ test('a list keeps its items together', async ({ page }) => {
   }
 });
 
-test('outside a region a block carries no margin', async ({ page }) => {
+test('a document outside a content area keeps the preflight floor', async ({
+  page,
+}) => {
   await page.goto(BOOK);
 
-  const plain = await blocks(page, '#plain-region');
-  expect(plain.length).toBeGreaterThan(1);
-  for (const block of plain.slice(0, -1)) {
-    expect(block.gapAfter).toBeCloseTo(0, 0);
-  }
+  const plain = await page.evaluate(() => {
+    const region = document.createElement('div');
+    region.innerHTML =
+      '<p>One</p><p>Two</p><ul role="list"><li>Three</li></ul>';
+    document.body.append(region);
+    const paragraphs = [...region.querySelectorAll('p')].map(
+      (node) => getComputedStyle(node).marginBlockEnd,
+    );
+    const list = region.querySelector('ul');
+    const listStyle = list ? getComputedStyle(list) : null;
+    const listBox = list?.getBoundingClientRect();
+    const itemBox = list?.querySelector('li')?.getBoundingClientRect();
+    region.remove();
+    return {
+      paragraphs,
+      listStyle: listStyle?.listStyle,
+      listInset: listBox && itemBox ? itemBox.left - listBox.left : null,
+    };
+  });
+  expect(plain.paragraphs).toEqual(['0px', '0px']);
+  // Chromium serializes the role-list reset as an empty shorthand here; it must
+  // still differ from the native unordered marker treatment.
+  expect(plain.listStyle).not.toContain('disc');
+  expect(plain.listInset).toBe(0);
 });
 
 test('a subtitle sits against the heading above it', async ({ page }) => {

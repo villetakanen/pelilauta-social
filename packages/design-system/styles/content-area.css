@@ -1,0 +1,86 @@
+/* The document presentation floor inside preflight's reset. */
+:where(
+    .content-area
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      )
+  ) {
+  margin-block-end: var(--cn-line);
+}
+
+:where(
+    .content-area
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      ):last-child
+  ) {
+  margin-block-end: 0;
+}
+
+/* Authored lists retain native markers and regain the document gutter. */
+:where(.content-area :where(ul, ol, menu):not([role="list"])) {
+  padding-inline-start: 1.5em;
+}
+
+:where(
+    .content-area
+      :where(img, picture, video, canvas, svg, iframe, embed, object)
+  ) {
+  max-inline-size: 100%;
+}
+
+:where(.content-area :where(img, picture, video, canvas, svg)) {
+  block-size: auto;
+}
+
+/* A teaser is a summary in a listing, so authored descendants stay flat. */
+:where(
+    .teaser
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      )
+  ) {
+  margin-block-end: 0;
+}

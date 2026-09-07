@@ -5,6 +5,7 @@
 @import "./tokens.css";
 @import "./fonts.css";
 @import "./typography.css";
+@import "./content-area.css";
 /* Dividers and links follow typography because both correct elements stripped by the preflight reset. */
 @import "./dividers.css";
 @import "./links.css";
