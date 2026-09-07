@@ -62,6 +62,7 @@ const book = <S extends z.ZodType>(group: string, schema: S) =>
 export const collections = {
   principles: book('principles', bookSchema),
   base: book('base', bookSchema),
+  utilities: book('utilities', bookSchema),
   tokens: book('tokens', bookSchema),
   components: book('components', componentSchema),
   extensions: book('extensions', componentSchema),

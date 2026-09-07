@@ -14,7 +14,7 @@ high-legibility voice for interface controls, headings, and discussion content, 
 **Roboto Mono** provides structure, alignment, and disambiguation for code, technical
 metadata, and tabular figures.
 
-<div class="surface elevation-1 text-prose" id="type-pairing">
+<div class="surface elevation-1 content-area" id="type-pairing">
 
 ### Lato
 
@@ -86,12 +86,10 @@ wiki page, a thread post, a reply and a handout arrive as a run of paragraphs,
 headings, lists and tables. The markup says nothing about where one block ends and the
 next begins.
 
-We mark the region rather than the blocks. Inside `.text-prose`, one line
-(`--cn-line`, 24px) separates every standard text block from the block after it. The
-last block of each parent closes flush, so a region drops into a card or a column
-without adding space at the edge.
+The [Content Area](/utilities/content-area) marks the region rather than individual blocks.
+It carries the document rhythm and list, table and media treatment for authored content.
 
-<div class="surface elevation-1 text-prose" id="prose-region">
+<div class="surface elevation-1 content-area" id="prose-region">
 
 ### Aloitus
 
@@ -120,7 +118,7 @@ Kohtaus päättyy, kun jokainen on toiminut kerran.
 </div>
 
 ```html
-<article class="text-prose">
+<article class="content-area">
   <!-- rendered markdown -->
 </article>
 ```
@@ -129,17 +127,6 @@ A list keeps its items together. The line separates blocks, and a list is one bl
 its items sit against one another. The list carries the separation from what follows
 it.
 
-Outside a region an element carries no margin, and two paragraphs meet with nothing
-between them.
-
-<div class="surface elevation-1" id="plain-region">
-
-Ilman aluetta kappaleet asettuvat vastakkain.
-
-Tämä on toinen kappale.
-
-</div>
-
 ### Media in a region
 
 An image an author wrote into a page has nothing to fit but the text around it, so we
@@ -147,7 +134,7 @@ cap every replaced element in a region at the width offered and keep the ratio i
 arrived with. A component that sizes its own image or glyph keeps that size: the
 rules of the region weigh nothing against the rule the component states.
 
-<div class="surface elevation-1 text-prose" id="media-region">
+<div class="surface elevation-1 content-area" id="media-region">
 
 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='400'%3E%3Crect width='1600' height='400' fill='%236b7f6b'/%3E%3C/svg%3E" width="1600" height="400" alt="An illustration wider than the column holding it" />
 
@@ -173,4 +160,3 @@ takes any emphasis.
 <p>Default emphasis.</p>
 <p class="text-high">High emphasis.</p>
 ```
-

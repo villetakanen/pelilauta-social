@@ -14,7 +14,7 @@ import { expect, type Page, test } from '@playwright/test';
  * and only a broken utility separates them.
  */
 
-const BOOK = '/base/surface';
+const BOOK = '/utilities/surface';
 
 type Probe = {
   /** Classes under test, applied to the innermost element. */

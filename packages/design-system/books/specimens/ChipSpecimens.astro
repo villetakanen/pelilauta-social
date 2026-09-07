@@ -6,7 +6,7 @@
  * a `button` to act, a `div` for a label chip that nests its remove control. Nothing
  * here styles them; every rule comes from styles/chip.css.
  *
- * Book: apps/design/src/content/base/chip.mdx
+ * Book: apps/design/src/content/utilities/chip.mdx
  */
 import CnIcon from '../../components/CnIcon.svelte';
 
@@ -33,7 +33,7 @@ const TAGS = [
 <div class="chip-specimens" data-group={group}>
   {group === 'hosts' && (
     <div class="chip-list" data-variant="hosts">
-      <a class="chip" href="/base/chip">Destination</a>
+      <a class="chip" href="/utilities/chip">Destination</a>
       <span class="chip">Read-only</span>
       <button class="chip" type="button">Command</button>
       <button class="chip" type="button" disabled>Disabled</button>
@@ -42,14 +42,14 @@ const TAGS = [
 
   {group === 'variants' && (
     <div class="chip-list" data-variant="variants">
-      <a class="chip" href="/base/chip">Free tag</a>
-      <a class="chip promoted" href="/base/chip">Promoted label</a>
+      <a class="chip" href="/utilities/chip">Free tag</a>
+      <a class="chip promoted" href="/utilities/chip">Promoted label</a>
     </div>
   )}
 
   {group === 'content' && (
     <div class="chip-list" data-variant="content">
-      <a class="chip" href="/base/chip">
+      <a class="chip" href="/utilities/chip">
         <CnIcon noun="label-tag" decorative />
         Leading icon
       </a>
@@ -71,7 +71,7 @@ const TAGS = [
   {group === 'wrapping' && (
     <div class="chip-list" data-variant="wrapping">
       {TAGS.map((tag) => (
-        <a class="chip" href="/base/chip">{tag}</a>
+        <a class="chip" href="/utilities/chip">{tag}</a>
       ))}
     </div>
   )}

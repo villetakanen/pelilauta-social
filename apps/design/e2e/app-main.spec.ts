@@ -10,7 +10,7 @@ import { expect, type Page, test } from '@playwright/test';
  * `<main>` holding the page body, which is what a consumer does.
  */
 
-const BOOK = '/base/content-containers';
+const BOOK = '/utilities/content-containers';
 const GAP_STEPS = 2;
 const BAR_STEPS = 8;
 const GRID_REM = 0.5;

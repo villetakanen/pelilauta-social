@@ -16,6 +16,7 @@ import runtimeVocabulary from '@design-system/books/runtimes.json';
 export type GroupId =
   | 'principles'
   | 'base'
+  | 'utilities'
   | 'tokens'
   | 'components'
   | 'extensions';

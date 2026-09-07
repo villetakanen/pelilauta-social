@@ -17,7 +17,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
  * element styled from the token the surface is built on, resolved by the same panel.
  */
 
-const BOOK = '/base/chip';
+const BOOK = '/utilities/chip';
 
 /** One scheme panel of a themed composition. */
 const panel = (mode: 'light' | 'dark') => `.themed[data-mode="${mode}"]`;

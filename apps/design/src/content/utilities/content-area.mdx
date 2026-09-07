@@ -1,0 +1,154 @@
+---
+title: Content Area
+description: The document presentation floor for authored text, lists, tables and media.
+order: 2.5
+---
+
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+import CnCard from '@design-system/components/CnCard.svelte'
+
+<div>
+Apply `.content-area` to the element that holds authored content. It restores document
+presentation inside the reset interface while leaving components free to define their
+own layout.
+
+## When to use it
+
+Use a content area for rendered markdown in a page, thread, handout or article. Use
+[Content containers](/utilities/content-containers) to place regions in page columns, and
+apply this capability inside the region that holds authored document content.
+
+Do not apply it to a listing teaser whose text is part of the listing layout. Keep that
+teaser flattened and let its component define its spacing.
+
+## Component override
+
+The content area supplies a floor with zero specificity. A component that declares its
+own layout and spacing keeps those declarations inside the authored region.
+
+<DsComposition themes caption="A component keeps its declared spacing">
+  <div class="content-area">
+    <CnCard title="Component content" description="The card declares its own spacing." />
+  </div>
+</DsComposition>
+
+```svelte
+<div class="content-area">
+  <CnCard title="Component content" description="The card declares its own spacing." />
+</div>
+```
+
+## Text and block rhythm
+
+Standard block siblings have one `--cn-line` between them. The final block has no
+trailing separation, so a following region can state its own relationship.
+
+<DsComposition themes caption="Authored blocks follow the content area's rhythm">
+  <div class="content-area">
+    <p>A paragraph introduces the passage.</p>
+    <blockquote>A quotation remains a block in the document.</blockquote>
+    <p>The final paragraph has no trailing separation.</p>
+  </div>
+</DsComposition>
+
+```html
+<div class="content-area">
+  <p>A paragraph introduces the passage.</p>
+  <blockquote>A quotation remains a block in the document.</blockquote>
+  <p>The final paragraph has no trailing separation.</p>
+</div>
+```
+
+## Lists
+
+Authored unordered and ordered lists retain native markers and gain the document
+gutter. The source order and nesting remain the order the reader follows.
+
+<DsComposition themes caption="Unordered and ordered lists retain markers and nesting">
+  <div class="content-area" style="max-inline-size: 18rem; overflow: clip;">
+    <ul><li>Prepare the table.<ul><li>Place the map.</li><li>Set the tokens.</li></ul></li><li>Invite the players.</li></ul>
+    <ol><li>Read the premise.</li><li>Choose an approach.</li></ol>
+    <ul role="list"><li>Navigation item</li><li>Another structural item</li></ul>
+  </div>
+</DsComposition>
+
+```html
+<div class="content-area">
+  <ul>
+    <li>Prepare the table.
+      <ul><li>Place the map.</li></ul>
+    </li>
+  </ul>
+  <ol><li>Read the premise.</li></ol>
+</div>
+```
+
+A scaffold list that carries `role="list"` stays markerless inside the region. Use the
+role for a structural list whose markers carry no meaning to the reader. The same
+markerless treatment applies outside a content area.
+
+```html
+<div class="content-area">
+  <ul role="list"><li>Navigation item</li></ul>
+</div>
+```
+
+## Tables and media
+
+A table remains a document block and follows the same rhythm as text. Replaced media
+fits the offered inline size and keeps its intrinsic ratio.
+
+<DsComposition themes caption="A table and media stay inside the offered region">
+  <div class="content-area">
+    <table>
+      <caption>Session roles</caption>
+      <thead><tr><th scope="col">Role</th><th scope="col">Task</th></tr></thead>
+      <tbody><tr><td>Guide</td><td>Sets the scene.</td></tr><tr><td>Player</td><td>Chooses an action.</td></tr></tbody>
+    </table>
+    <svg width="1200" height="480" viewBox="0 0 120 48" role="img" aria-label="A media example">
+      <rect width="120" height="48" rx="8" fill="var(--cn-color-button)" />
+      <text x="60" y="30" text-anchor="middle" fill="var(--cn-color-on-button)">MEDIA</text>
+    </svg>
+  </div>
+</DsComposition>
+
+```html
+<div class="content-area">
+  <table>…</table>
+  <svg width="1200" height="480" viewBox="0 0 120 48" role="img" aria-label="A media example">…</svg>
+</div>
+```
+
+## Flattened teaser
+
+A listing teaser presents a summary as one component. Flatten its authored descendants
+so the content-area floor does not add document spacing to the listing row.
+
+<DsComposition themes caption="A teaser keeps its component layout">
+  <article class="teaser"><strong>Tonight's session</strong><p>Three seats remain.</p></article>
+</DsComposition>
+
+```html
+<article class="teaser"><strong>Tonight's session</strong><p>Three seats remain.</p></article>
+```
+
+## Reference
+
+### Classes
+
+| Class | Use |
+| :--- | :--- |
+| `.content-area` | Restores authored document presentation inside one region. |
+| `.teaser` | Flattens descendant block margins in a listing summary. |
+
+The class takes no options. The parent states page-edge inset and column placement;
+components state their internal layout and spacing.
+
+## Accessibility
+
+The content area preserves the semantics of the elements it contains. Give every
+informative image alternative text, and give every table a caption and header scope
+where the document needs them. A flattened teaser keeps the semantics its component
+publishes.
+
+</div>

@@ -3,6 +3,7 @@
   "groups": [
     { "id": "principles", "label": "Principles" },
     { "id": "base", "label": "Base" },
+    { "id": "utilities", "label": "Utilities" },
     { "id": "tokens", "label": "Tokens" },
     { "id": "components", "label": "Components" },
     { "id": "extensions", "label": "Extensions" }
