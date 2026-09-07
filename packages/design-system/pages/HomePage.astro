@@ -1,19 +1,7 @@
 ---
 /**
- * Index of the design-system books.
- *
- * The catalog is passed in from the site rather than hand-written, so it cannot
- * drift from the navigation. Grouping and ordering are the site's decision; this
- * component only renders them.
- *
- * The page is built from what the design system ships: a golden container puts the
- * masthead beside a contents card, a prose container carries the index below it,
- * and the type comes from the typography steps. It states no measure, no rhythm and
- * no type scale of its own — the front page is the first thing a reader sees, and
- * a front page that needed its own vocabulary would be an argument against the
- * books behind it.
+ * The Design System Homepage.
  */
-import '@design-system/styles/ds.css';
 
 interface BookEntry {
   title: string;
@@ -31,6 +19,8 @@ interface Props {
   groups: BookGroup[];
 }
 
+import { version } from '../../../package.json';
+
 const { title, groups } = Astro.props;
 
 // One running number across all groups, so the index reads as a single spine.
@@ -40,29 +30,45 @@ const numbered = groups.flatMap((group) =>
 ---
 
 <section class="content-golden">
-  <!-- The golden primary is exactly the readable measure, so the prose container
-       nested in it fills the region and gives the column its rhythm. -->
-  <div class="content-prose">
-    <p class="text-caption text-low">Pelilauta / v21</p>
+  <article class="content-area">
+    <p class="text-caption text-low">Pelilauta / v{version}</p>
     <h1 class="text-title">{title}</h1>
     <p class="text-low">
-      Living books connect design intent to the exact contracts used by Pelilauta.
-      Each book ships with its specification and its production implementation.
+      A living Design System for <a href="https://pelilauta.social">Pelilauta.social</a>,
+      exploring the Design Language of the app, through "Storybooks" and foundational articles.
     </p>
 
-    <h2>Start anywhere</h2>
-    <ol class="index-list">
-      {numbered.map((book, i) => (
-        <li>
-          <p class="text-caption text-low">
-            {String(i + 1).padStart(2, '0')} / {book.group}
-          </p>
-          <h3><a href={book.href}>{book.title}</a></h3>
-          <p class="text-small text-low">{book.description}</p>
-        </li>
-      ))}
-    </ol>
-  </div>
+    <section>
+      <h2>Chapters</h2>
+      <h3><a href="/principles">Principles</a></h3>
+      <p>The foundational concepts, philosophy and principles of the design language.</p>
+
+      <h3><a href="/base">Base</a></h3>
+      <p>Base covers the look of plain HTML: the reset, the two typefaces, and how links,
+        buttons, fields and dividers appear on their own. Preflight flattens the
+        differences between browsers so every element starts from the same place; Lato
+        then carries reading and interface text, and Roboto Mono the code and whatever
+        the reader types. A page of bare markup reads correctly on Base alone — components
+        build on it, and override it only where they set their own layout.</p>
+
+      <h3><a href="/utilities">Utilities</a></h3>
+      <p>Utilities provide the optional styling, enriching the Base styles: surfaces and
+        their elevation, content areas, layout columns, chips, and the chrome marks. A
+        surface wraps content in padding and one of five elevation levels; a content area
+        restores document flow to authored text inside the reset. Each adds one
+        capability, and can be composed for more complex styling needs.</p>
+
+      <h3><a href="/tokens">Tokens</a></h3>
+      <p>The typography, colour and spatial values the whole system draws from.</p>
+
+      <h3><a href="/components">Components</a></h3>
+      <p>The reusable Svelte and Astro components, from avatars to application chrome.</p>
+
+      <h3><a href="/extensions">Extensions</a></h3>
+      <p>The richer application capabilities built on the components: the editor, dice and clocks.</p>
+    </section>
+
+  </article>
 
   <aside class="surface elevation-2">
     <p class="text-caption text-low">Contents</p>

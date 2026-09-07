@@ -1,0 +1,123 @@
+/* The document presentation floor inside preflight's reset. */
+:where(
+    .content-area
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      )
+  ) {
+  margin-block-end: var(--cn-line);
+}
+
+:where(
+    .content-area
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      ):last-child
+  ) {
+  margin-block-end: 0;
+}
+
+/* Authored lists retain native markers and regain the document gutter. */
+:where(.content-area :where(ul, ol, menu):not([role="list"])) {
+  padding-inline-start: 1.5em;
+}
+
+:where(
+    .content-area
+      :where(img, picture, video, canvas, svg, iframe, embed, object)
+  ) {
+  max-inline-size: 100%;
+}
+
+:where(.content-area :where(img, picture, video, canvas, svg)) {
+  block-size: auto;
+}
+
+/*
+ * A teaser is a listing summary, read beside the listing's own titles. Its text
+ * is small so it reads as secondary, and its blocks carry a compact gap rather
+ * than the content-area's document rhythm.
+ */
+:where(.teaser :where(p, li)) {
+  font-size: var(--cn-font-size-small);
+}
+
+/* An authored list keeps its markers, so it needs the gutter to hold them. */
+:where(.teaser :where(ul, ol, menu):not([role="list"])) {
+  padding-inline-start: 1.5em;
+}
+
+:where(
+    .teaser
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      )
+  ) {
+  margin-block-end: var(--cn-grid);
+}
+
+/* The final block leaves no trailing gap, so the listing row states its own. */
+:where(
+    .teaser
+      > :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        ul,
+        ol,
+        dl,
+        blockquote,
+        pre,
+        table,
+        figure,
+        hr
+      ):last-child
+  ) {
+  margin-block-end: 0;
+}

@@ -6,7 +6,7 @@ import { expect, type Page, test } from '@playwright/test';
  * state what a container query reports.
  */
 
-const BOOK = '/base/content-containers';
+const BOOK = '/utilities/content-containers';
 const MEASURE_STEPS = 83;
 const GAP_STEPS = 2;
 /** The rhythm: what a content area puts between its children, and between containers. */

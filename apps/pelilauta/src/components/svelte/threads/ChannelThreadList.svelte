@@ -76,7 +76,7 @@ async function loadMoreThreads() {
   <header class="surface">
     <div>
       <nav aria-label="Breadcrumb">
-        <ol>
+        <ol role="list">
           <li>
             <a href="/">{t('app:shortname')}</a>
           </li>

@@ -122,7 +122,7 @@ function parseUrl(tag: Tag) {
               <CnIcon noun="discussion" size="small" />
               <span>{t('tag:discussions')} ({threads.length})</span>
             </h2>
-            <ul class="tag-entries-list">
+            <ul class="tag-entries-list" role="list">
               {threads.map((entry) => (
                 <li class="tag-entry-row">
                   <a href={parseUrl(entry)} class="entry-link">{entry.title}</a>
@@ -141,7 +141,7 @@ function parseUrl(tag: Tag) {
               <CnIcon noun="card" size="small" />
               <span>{t('tag:pages')} ({pages.length})</span>
             </h2>
-            <ul class="tag-entries-list">
+            <ul class="tag-entries-list" role="list">
               {pages.map((entry) => (
                 <li class="tag-entry-row">
                   <a href={parseUrl(entry)} class="entry-link">{entry.title}</a>

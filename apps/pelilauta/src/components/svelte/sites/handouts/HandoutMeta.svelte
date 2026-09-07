@@ -71,7 +71,7 @@ async function onSubmit(e: Event) {
   <section class="surface">
     <h3>{t('site:handouts.metadata.title')}</h3>
     {#if readers?.length}
-      <ul class="reader-list">
+      <ul class="reader-list" role="list">
         {#each readers as reader (reader)}
           <li class="reader-row">
             <span class="reader-link">
@@ -147,4 +147,3 @@ async function onSubmit(e: Event) {
     min-inline-size: 0;
   }
 </style>
-

@@ -107,6 +107,9 @@ sweep item rather than a surprise.
 
 ## Blueprint
 
+`ds.css` imports the preflight first, before any other design-system stylesheet: the
+reset is the base every later stylesheet loads onto.
+
 One stylesheet, reached through the design system's CSS entry point rather than by
 name: the preflight is the first design-system global that is not a token, so a
 consumer who wants tokens does not receive a reset. It declares no custom property, so

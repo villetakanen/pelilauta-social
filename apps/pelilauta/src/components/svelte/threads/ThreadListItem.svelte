@@ -24,7 +24,7 @@ const { thread }: Props = $props();
       {#await createRichSnippet( thread.markdownContent || "", { paragraphClasses: ["text-small"] }, )}
         ...
       {:then snippet}
-        {@html snippet}
+        <div class="teaser">{@html snippet}</div>
       {/await}
     </div>
     <p class="text-caption">

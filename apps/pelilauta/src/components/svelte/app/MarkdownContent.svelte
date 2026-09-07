@@ -7,6 +7,6 @@ interface Props {
 const { content }: Props = $props();
 </script>
 
-<div class="markdown-content">
+<div class="content-area">
   {@html marked.parse(content)}
 </div>

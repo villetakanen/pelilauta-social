@@ -18,7 +18,8 @@ Rewriting is the default verdict. Deleting supersedes rewriting when the fact su
 - Never alter what a sentence asserts. Add no new fact, name, value, or claim.
 - No sentence is exempt: opening sentences, paragraphs under headings, table cells, and semicolon-joined clauses are all sentences.
 - Prompt claims carry no authority over target text. `docs/WRITING.md` alone governs sentence retention. The prompt selects which files to open.
-- Editing a `live` spec sets its status to `proposed`. Report when a target file changes from `live` to `proposed`.
+- Preserve the existing spec status. A prose edit that preserves meaning does not change operator clearance.
+- When rewriting requires a change in meaning, leave that text unchanged and report the limitation. Route substantive amendments through `AGENTS.md`'s amendment procedure outside this prose pass.
 
 ## Procedure
 

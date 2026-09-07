@@ -51,9 +51,9 @@ Components define their internal padding and dimensions. Parent flex and grid la
 control spacing between sibling components using `gap`, enabling fluid reordering and
 wrapping.
 
-The [Surface](/base/surface) container applies `--cn-gap` padding on all sides, ensuring
+The [Surface](/utilities/surface) container applies `--cn-gap` padding on all sides, ensuring
 nested panels align without manual inset adjustments. Page-level column measures and
-breakouts are managed by [Content containers](/base/content-containers).
+breakouts are managed by [Content containers](/utilities/content-containers).
 
 ## Vertical rhythm
 
@@ -62,6 +62,23 @@ A control sized to one line unit aligns flush with adjacent single-line body tex
 stacked blocks by `--cn-line` maintains that rhythm.
 
 For typographic scale details, see [Typography principles](/principles/typography).
+
+## Content as a floor
+
+The [Content Area](/utilities/content-area) applies the spatial system to authored content.
+It uses `--cn-line` between stacked blocks as the resting rhythm for a region, while a
+component inside the region states its own spacing and layout.
+
+<div class="surface elevation-1 content-area">
+
+First block of authored content.
+
+Second block of authored content.
+
+</div>
+
+The region carries a floor for content presentation. Its zero-specificity rules let a
+nested component replace that floor where its composition requires another interval.
 
 ## User font scaling
 
@@ -86,4 +103,3 @@ to prevent content from clipping curved corners.
 Elevation shadow offsets and blur radii are derived directly from `--cn-grid`. Elevation
 tiers, theme contrast mappings, and nested surface behaviours are defined in
 [Colour & Surface](/principles/color-system).
-

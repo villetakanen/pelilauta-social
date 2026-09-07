@@ -29,9 +29,9 @@ it('presents the terms, rejects a taken nickname, and activates the profile', as
   const form = page.locator('form.eula-form');
   await expect.poll(() => form.isVisible()).toBe(true);
 
-  // The rendered Markdown lives in the prose region rather than inheriting a
+  // The rendered Markdown lives in the content area rather than inheriting a
   // legacy wrapper, and its first promise is readable to the new member.
-  const terms = form.locator('article.text-prose');
+  const terms = form.locator('article.content-area');
   await expect.poll(() => terms.isVisible()).toBe(true);
   await expect
     .poll(() =>

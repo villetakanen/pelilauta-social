@@ -19,7 +19,12 @@ rules in this file take precedence.
    narrative in the commit message, an irreversible choice in an ADR.
 3. **Audience register.** A document for agents or developers instructs and avoids
    pronouns. A document for people using the product says "we". A principles book
-   argues, and the argument is its content.
+   argues, and the argument is its content. A document for people, and a principles
+   book, repeats what the system carries elsewhere, because its reader has not been
+   there yet; the test on such a sentence is whether the reader can act on it, not
+   whether the fact survives its deletion. A sentence that tells the reader how to
+   regard the system, and promises nothing they can check, is filler in every
+   register.
 4. **Canonical source.** A fact is defined once, in the file that carries it.
    Elsewhere, a reference or nothing.
 

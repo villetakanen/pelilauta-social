@@ -200,7 +200,7 @@ const hasFiles = $derived(uploadedFiles.length > 0);
   {#if hasFiles}
     <div>
       <h3>Files Ready for Import</h3>
-      <ul>
+      <ul role="list">
         {#each uploadedFiles as file}
           <li>
             <strong>{file.name}</strong>

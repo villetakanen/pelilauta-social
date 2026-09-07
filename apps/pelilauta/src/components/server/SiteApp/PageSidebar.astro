@@ -38,10 +38,10 @@ if (site.useSidebar && site.sidebarKey) {
 }
 ---
 {site.useSidebar && (
-<article class="surface">
+<article class="surface content-area">
   <h3>{site.name}</h3>
   {site.posterURL && (
-    <img src={site.posterURL} alt={site.name} class="poster" />
+    <img src={site.posterURL} alt={site.name} />
   )}
   <ReactionButton
     key={site.key}
@@ -53,7 +53,7 @@ if (site.useSidebar && site.sidebarKey) {
   
   {sidebarPage ? (
     /* Custom sidebar page content */
-    <div set:html={sidebarPage.htmlContent} class="text-prose"/>
+    <div set:html={sidebarPage.htmlContent}/>
     <div class="text-end text-small">
       <a 
         href={`/sites/${site.key}/${sidebarPage.key}`}
@@ -76,13 +76,5 @@ if (site.useSidebar && site.sidebarKey) {
   .surface {
     display: grid;
     row-gap: var(--cn-line);
-  }
-
-  .poster {
-    display: block;
-    max-inline-size: 100%;
-    block-size: auto;
-    border-radius: var(--cn-border-radius-large);
-    object-fit: cover;
   }
 </style>

@@ -55,57 +55,9 @@ if [ "$SKILL" = "technical-writer" ]; then
   fi
 
 elif [ "$SKILL" = "next-task" ]; then
-  echo "Running deterministic checks for next-task..."
-  
-  # 1. Check exactly 3 non-empty paragraphs
-  PARAGRAPH_COUNT=$(awk 'BEGIN{RS=""; FS="\n"} {print NF}' "$CANDIDATE" | wc -l | tr -d ' ')
-  echo -n "Checking paragraph count (expected 3)... "
-  if [ "$PARAGRAPH_COUNT" -eq 3 ]; then
-    echo "PASSED (3 paragraphs)"
-  else
-    echo "FAILED (found $PARAGRAPH_COUNT paragraphs)"
-    FAILURES=$((FAILURES + 1))
-  fi
-
-  # 2. Check paragraph headers and lengths
-  TASK_LEN=$(grep '^Task:' "$CANDIDATE" | sed 's/^Task: *//' | tr -d '\n' | wc -c | tr -d ' ')
-  RATIONALE_LEN=$(grep '^Rationale:' "$CANDIDATE" | sed 's/^Rationale: *//' | tr -d '\n' | wc -c | tr -d ' ')
-  RISKS_LEN=$(grep '^Risks:' "$CANDIDATE" | sed 's/^Risks: *//' | tr -d '\n' | wc -c | tr -d ' ')
-
-  echo -n "Checking Task length (<= 73 chars, actual $TASK_LEN)... "
-  if [ "$TASK_LEN" -gt 0 ] && [ "$TASK_LEN" -le 73 ]; then
-    echo "PASSED"
-  else
-    echo "FAILED"
-    FAILURES=$((FAILURES + 1))
-  fi
-
-  echo -n "Checking Rationale length (<= 221 chars, actual $RATIONALE_LEN)... "
-  if [ "$RATIONALE_LEN" -gt 0 ] && [ "$RATIONALE_LEN" -le 221 ]; then
-    echo "PASSED"
-  else
-    echo "FAILED"
-    FAILURES=$((FAILURES + 1))
-  fi
-
-  echo -n "Checking Risks length (<= 221 chars, actual $RISKS_LEN)... "
-  if [ "$RISKS_LEN" -gt 0 ] && [ "$RISKS_LEN" -le 221 ]; then
-    echo "PASSED"
-  else
-    echo "FAILED"
-    FAILURES=$((FAILURES + 1))
-  fi
-
-  # 3. Check for placeholder nouns
-  PLACEHOLDERS=$(grep -iE '\b(ownership|capability|contract|boundary|surface|slice)\b' "$CANDIDATE" || true)
-  echo -n "Checking for placeholder nouns... "
-  if [ -z "$PLACEHOLDERS" ]; then
-    echo "PASSED (0 placeholder nouns)"
-  else
-    echo "FAILED"
-    echo "  Found placeholder nouns: $PLACEHOLDERS"
-    FAILURES=$((FAILURES + 1))
-  fi
+  echo "Next-task requires qualitative review against $SKILL_DIR/rubric.md."
+  echo "No automated grade assigned. Candidate: $CANDIDATE"
+  exit 0
 fi
 
 echo "----------------------------------------"

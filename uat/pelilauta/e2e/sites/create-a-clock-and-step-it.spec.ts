@@ -50,10 +50,21 @@ it('creates a clock and steps its value', async () => {
     .poll(() => dial.getAttribute('aria-valuenow'), { timeout: 15_000 })
     .toBe('0');
 
+  // The dial paints the step before the database has it, and the reload below
+  // cancels whatever the page still has in flight. Firebase carries the step on
+  // its write channel, so the journey waits for that channel to answer: without
+  // it the reload aborts the only write, and no later reload reissues it.
+  const stepWritten = page.waitForResponse(
+    (response) =>
+      response.url().includes('/google.firestore.v1.Firestore/Write/channel') &&
+      response.request().method() === 'POST',
+    { timeout: 30_000 },
+  );
   await dial.click();
   await expect
     .poll(() => dial.getAttribute('aria-valuenow'), { timeout: 15_000 })
     .toBe('1');
+  await stepWritten;
 
   await expect
     .poll(
