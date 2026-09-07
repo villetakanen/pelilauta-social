@@ -16,11 +16,11 @@ open GitHub issues labeled `epic`. When the operator explicitly names a differen
 improvement scope, use that scope rather than assigning it to an unrelated epic.
 
 Inspect the implementation, governing specs, and relevant documentation. Inspect
-v18 behavior and v20 presentation when the candidate changes a migrated surface.
+v20 presentation when the candidate changes a surface no spec has settled.
 Identify what becomes possible, clearer, more reliable, or less costly after the
 change ships.
 
-Treat the epic's Possible work entries as candidates. Consider discoveries within
+Treat Possible work entries in the epic as candidates. Consider discoveries within
 its goal and success criteria; do not assume every entry is necessary or correctly
 sized.
 
@@ -33,7 +33,7 @@ Compare plausible candidates internally. Choose one that:
 - Includes the implementation, adoption, documentation, and evidence necessary
   for its outcome.
 - Excludes improvements that can ship independently.
-- Fits the epic or the operator's stated scope.
+- Fits the epic or the operator stated scope.
 
 Prefer the smallest useful outcome that resolves a current need or enables
 valuable subsequent work. Include supporting changes when the outcome depends
@@ -45,7 +45,7 @@ a complete increment. Name who benefits and what changes for them.
 ## Check readiness
 
 Before proposing implementation, establish that the specs required to govern the
-intended work are live. Apply `AGENTS.md`'s rules for when a spec is required;
+intended work are live. Apply rules in `AGENTS.md` for when a spec is required;
 do not invent a spec requirement for every task.
 
 If a required spec is missing or proposed, consider making its completion and
@@ -70,7 +70,7 @@ Name relevant files, components, commands, interfaces, or behaviors.
 Describe the resulting behavior precisely enough to distinguish this task
 from neighboring work.
 
-Connect the proposal to the source evidence: the current implementation,
+Connect the proposal to source evidence: the current implementation,
 an observed failure, a governing spec, or an epic requirement. Explain why
 this is the next useful increment through that concrete relationship.
 
@@ -83,7 +83,7 @@ Do not substitute phrases such as “improve consistency,” “align the contra
 or “ensure robustness” for the exact change. Do not spend lines announcing
 value or risk that the technical description already demonstrates.
 
-The proposal should contain enough technical detail to accept or correct its
+The proposal must contain enough technical detail to accept or correct its
 scope without requiring another turn to discover what work is being proposed.
 
 ## Boundary

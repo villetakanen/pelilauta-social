@@ -14,20 +14,20 @@
 
 Reusable files use PascalCase; default import identifiers match filenames. Ported
 components keep conforming v20 names. Unprefixed public v20 names gain `Cn` when
-ported. `App*` is reserved pending a separate ownership decision.
+ported. `App*` is reserved pending a separate governance decision.
 
 A `Cn{Name}` or `Ds{Name}` component ships a component book. Its spec lists any
 base or principles book that also carries it.
 
 ### Marks
 
-Three marks, and each names one thing. The **logomark** carries the product's
-graphic — the fox. The **wordmark** carries the product's name set in type. The **identity mark**
-is a person's, and `specs/design-system/identity-mark/spec.md` governs it: a reader's
-avatar and their nick, never the product's.
+Three marks exist, and each names one thing. The **logomark** carries the product
+graphic — the fox. The **wordmark** carries the product name set in type. The **identity mark**
+belongs to a user, and `specs/design-system/identity-mark/spec.md` governs it: a reader
+avatar and nick, never product marks.
 
-Prose says which. "The mark", unqualified, tells a reader nothing, and the product
-and the person are the two things chrome most often shows side by side.
+Prose states the exact mark. Unqualified references provide no distinction when chrome
+presents product and user marks together.
 
 ### Tokens
 
@@ -77,8 +77,8 @@ A content container establishes inline-size containment without a container name
 
 ### Interaction states
 
-A state's name comes from the platform selector that switches it on. The design
-system changes how a state looks; it does not rename, merge or invent states.
+A state name comes from the platform selector that activates it. The design
+system changes visual presentation without renaming, merging, or inventing states.
 
 | Selector | Meaning | Token |
 | :--- | :--- | :--- |
@@ -100,9 +100,10 @@ A persistent container surface and a transient state layer compose: the overlay
 sits above the container and both remain visible. v20 is a visual reference, not
 a source of truth for state naming.
 
-## v18 compatibility
+## Decisions that departed from v18
 
-And known deviations.
+v21 replaced v18 and carries none of its code. Where v21 chose differently from what v18
+did, the choice is recorded here; the entries are history, not a compatibility contract.
 
 ### Thread images
 
@@ -117,7 +118,7 @@ table-of-contents ordering to anybody holding the address, and lets the client a
 what to render. v21 verifies the session on the server and answers a reader outside the
 site's `owners` with 403, through `requireSiteOwner`.
 
-The deviation is deliberate. v21 states this policy in its own pages rather than leaving it
+The deviation is deliberate. v21 states this policy in its pages rather than leaving it
 to what the shared backend permits, and it does not widen a page to match a permission it
 finds there.
 
@@ -153,19 +154,17 @@ See [ADR 0003](adrs/0003-discontinue-characters.md).
 
 ### Syndicated feeds
 
-v18 stacks one section per feed on the front page, each with its own heading, its own
-"read more" link, and — for one of the two — a promotional image the other does not
-get. A reader sees two lists, and how recent either one is against the other is
-something they have to work out. v21 merges every feed into one stream ordered by
-recency, and names its source on each post.
+v18 stacks one section per feed on the front page, each with a separate heading, a separate
+"read more" link, and — for one feed — a promotional image omitted from the other. A reader
+sees two lists and must compare recency manually. v21 merges all feeds into one stream ordered
+by recency and attributes each post to its source.
 
-The deviation is deliberate. The stream is for the ecosystem's activity, not each
-publisher's, and a section per publisher makes the page grow a section every time one
-is added. One stream ranks the whole community by when it last posted, and takes a new
-publisher as configuration.
+The deviation is deliberate. The stream presents ecosystem activity rather than individual
+publisher sections, avoiding page growth with each added publisher. One stream ranks the
+community by post timestamp and adds publishers through configuration.
 
-v21 also holds a place in the stream for a publisher declared guaranteed. v18 needs no
-such notion: a section per publisher cannot be excluded by another's activity.
+v21 reserves a stream slot for guaranteed publishers. v18 requires no reservation mechanism
+because separate publisher sections prevent exclusion.
 
 ### Login
 
