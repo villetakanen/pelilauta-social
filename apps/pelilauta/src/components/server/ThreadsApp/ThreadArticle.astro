@@ -20,15 +20,9 @@ const figures =
   })) || [];
 ---
 <article>
-  <h1>
+  <h1 class="text-h2">
     {thread.title}
   </h1>
-  { thread.quoteRef && (
-    <QuoteBubble 
-      threadKey={thread.quoteRef.split('/')[0]}
-      replyKey={thread.quoteRef.split('/')[1]}
-    />
-  )}
   { figures.length > 0 && (
     <CnLightbox
       images={figures}
@@ -37,7 +31,13 @@ const figures =
       client:load
     />
   )}
-  <section class="text-prose" set:html={htmlContent} />
+  { thread.quoteRef && (
+    <QuoteBubble
+      threadKey={thread.quoteRef.split('/')[0]}
+      replyKey={thread.quoteRef.split('/')[1]}
+    />
+  )}
+  <section class="content-area" set:html={htmlContent} />
   
 </article>
 
