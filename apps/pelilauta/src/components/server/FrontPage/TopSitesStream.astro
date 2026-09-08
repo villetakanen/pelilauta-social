@@ -27,7 +27,7 @@ if (siteListResponse.ok) {
 <section class="content-prose">
   <h2 class="text-h3">{t('frontPage:sites.title')}</h2>
   {sites.map((site) => (
-    site && <SiteCard site={site} client:load />
+    site && <SiteCard site={site} elevation={3} client:load />
   ))}
   <div>
     <a href="/sites" class="button">

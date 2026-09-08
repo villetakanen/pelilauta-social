@@ -13,9 +13,10 @@ import CardSubscription from '../../svelte/frontpage/CardSubscription.svelte';
 export interface Props {
   thread: Thread;
   noun: string;
+  elevation?: 0 | 1 | 2 | 3 | 4;
 }
 
-const { thread, noun } = Astro.props;
+const { thread, noun, elevation = 1 } = Astro.props;
 
 // The thread's poster holds its primary image. `parseThread` derives it from the first
 // image where a thread has none, so a card reads the one field.
@@ -60,7 +61,7 @@ const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');
     cover={poster}
     srcset={posterSrcset}
     sizes="(max-width: 768px) 100vw, 450px"
-    elevation={1}
+    elevation={elevation}
     {noun}
   >
     <Fragment slot="eyebrow">
