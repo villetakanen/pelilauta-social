@@ -16,8 +16,13 @@ const previewContainerStyles = $derived.by(() => {
 });
 </script>
 
+<!--
+  The section previews the site's background image, so it breaks out of the
+  Prose measure to the container's full width. A breakout starts a row of its
+  own, so the sections around it keep the measure.
+-->
 <section
-  class="surface elevation-1" 
+  class="surface elevation-1 breakout"
   style={previewContainerStyles}>
   <h2>{t('site:settings.theming.title')}</h2>
   
@@ -30,8 +35,11 @@ const previewContainerStyles = $derived.by(() => {
 </section>
 
 <style>
+  /* The background spans the breakout; the card and the inputs keep the measure. */
   section {
     display: grid;
+    grid-template-columns: min(var(--cn-measure), 100%);
+    justify-content: center;
     row-gap: var(--cn-line);
   }
 </style>
