@@ -4,138 +4,143 @@ status: live
 
 # Preflight
 
-## Intent
-
-v21's base styles are a **modern reset**, in the line of
-[Andy Bell's](https://piccalil.li/blog/a-more-modern-css-reset/) and
-[Tailwind Preflight](https://tailwindcss.com/docs/preflight).
-
-Cyan 4 and v20 are references for what exists, not a floor to preserve. Where the
-modern reset and Cyan disagree, the reset wins and the consuming surface migrates —
-appearance is not a compatibility contract.
-
-Nothing else can hold these rules. Removing Cyan today would take the document's box
-model, control inheritance and list handling with it, and `apps/design`, which imports
-no Cyan, keeps a private copy inside its book stylesheet.
-
-## What Belongs In It
-
-A rule belongs when it corrects a browser default, or establishes a baseline every
-component may assume, and no component, container, Surface or typography
-capability could state it instead.
-
-**A rule that needs another stylesheet to win against it is in the wrong file.** Type
-sizes, leading and heading wrap are therefore absent: each is a value typography states,
-not a default to correct.
-
-Margins and padding are removed from every element. Removal is explicit because there
-is no application-wide paragraph margin.
-
-One rule is not a browser correction at all. Astro's hydration wrapper is a box in the
-document that the author did not write, so `astro-island { display: contents }` belongs
-here: islands appear anywhere in either application, which puts the rule out of reach
-of any component or shell.
-
-The rule set is closed — a sixth concern changes this spec before it changes a
-stylesheet. Prose cannot settle whether `optgroup` or a WebKit search pseudo-element
-is inside it, so the selector list is written out, grouped as the stylesheet groups
-it. Selector lists are compared as written; reordering one is an edit here too.
-
-1. Box model: `*, ::before, ::after` —
-   `*, ::after, ::before, ::backdrop, ::file-selector-button`
-2. Document: `:root` — `html`
-3. Inheritance: `button, input, optgroup, select, textarea` — `button, select` —
-   `button, [role="button"]` — `button, [type="button"], [type="reset"],
-   [type="submit"]` — `textarea` — `textarea:not([rows])` — `::-moz-focus-inner` —
-   `:-moz-focusring` — `:-moz-ui-invalid` —
-   `::-webkit-inner-spin-button, ::-webkit-outer-spin-button` — `[type="search"]` —
-   `::-webkit-search-decoration`
-4. Element defaults: `hr` — `abbr[title]` — `b, strong` — `small` — `sub, sup` —
-   `sub` — `sup` — `code, kbd, samp, pre` — `summary` — `table` —
-   `[hidden]:where(:not([hidden="until-found"]))` —
-   `ol[role="list"], ul[role="list"], menu[role="list"]` — `[popover]` — `:target`
-5. Body and framework: `body` — `astro-island`
-
-## Boundaries
-
-| Concern | Stated by |
-| :--- | :--- |
-| Box model, document, control inheritance, element defaults, body, runtime wrappers | the reset |
-| Applying the document's base background and foreground | the reset |
-| Ground-plane meaning and elevated surface utilities | Surface |
-| Which family any element renders in | fonts |
-| Type sizes, leading, heading wrap | typography |
-| Native link presentation and navigation-versus-command semantics | Links and Actions |
-| Constraining media width, and whether media is block-level | the container holding it |
-| Scrollbar appearance | nothing: browser default |
-| How a control looks | its component; the reset normalises, it does not style |
-| Page grid, rows and columns | a shell component, which neither app has yet |
-
-Media carries no rules here. A reset cannot know which images are content and which are
-chrome, so whatever an image has to fit decides.
-
-The body fills the viewport in `dvh`, not `vh`, so it survives a mobile browser's
-collapsing toolbar. The body *being* a grid with named rows is a shell's, and no v21
-shell exists yet: `apps/pelilauta` gets its chrome from Cyan's `main`, `bar`, `rail` and
-`tray` stylesheets, and `apps/design` lays out its own in the book layout.
-
-Controls keep their native look until a component gives them the system's. The reset
-neutralises the artefacts nobody wants — Firefox's focus ring and inner border, number
-spinners, the search field — and keeps `-webkit-appearance: button`, which preserves
-native button rendering that iOS Safari otherwise drops on `[type="button"]`. Blanking
-controls to a slate instead would make a component mandatory before any control is
-usable.
-
-The `hidden` attribute keeps elements out of layout, except for
-`hidden="until-found"`: that state remains the browser's so find-in-page can reveal it.
-
-The browser governs scrollbars. Cyan 4 is the only source that styles them, and it is the
-source being replaced. Styling them later would be a separate scrollbar and theming
-capability with its own tokens and spec, not a gap in this one or in Surface.
-
-Media constraint and Cyan's scrollbar rules both disappear with Cyan, and nothing fails
-when they do, which is why they are written down rather than left to be discovered.
-
-## Lists Keep Their Semantics
-
-Markers are removed only where an author writes `role="list"`, because Safari drops a
-list's semantics from VoiceOver when `list-style` is removed.
-
-Cyan strips them globally, so nothing moves while it is present. When it goes, the
-application's list elements need the role or their `list-style` — an enumerated
-sweep item rather than a surprise.
-
 ## Blueprint
 
-`ds.css` imports the preflight first, before any other design-system stylesheet: the
-reset is the base every later stylesheet loads onto.
+### Context
 
-One stylesheet, reached through the design system's CSS entry point rather than by
-name: the preflight is the first design-system global that is not a token, so a
-consumer who wants tokens does not receive a reset. It declares no custom property, so
-a missing definition is a token defect rather than a reset defect.
+Preflight establishes a global style baseline for both applications across browsers.
+Preflight resets browser defaults so components and content treatments define presentation
+directly. [Andy Bell's modern reset](https://piccalil.li/blog/a-more-modern-css-reset/)
+and [Tailwind Preflight](https://tailwindcss.com/docs/preflight) inform the reset.
 
-Its book is the first entry in the design site's `base` group.
+### Architecture
 
-## Regression Guardrails
+The design system CSS entry point loads preflight before presentation styles.
+Importing tokens alone does not apply the reset.
 
-- No design-system stylesheet sets `font-size` on `html` or `:root`.
-- Exactly one design-system stylesheet declares `color-scheme`, and the applications'
-  `color-scheme` meta tags agree with it.
-- The preflight declares no custom property, and every name it reads resolves in both
-  colour schemes.
-- No preflight rule needs another stylesheet to override it, and no other stylesheet
-  restates one.
+Scoped content treatments and components replace reset presentation through the cascade
+without specificity escalation. [Content Area](../content-area/spec.md) governs document
+presentation inside authored content.
 
-## Acceptance
+Preflight applies theme background and foreground colours to the document so pages without a
+containing surface receive the theme. [Surface](../surface/spec.md) governs surface roles
+and treatments.
 
-- A button, a text input and a textarea render in the application's font with no
-  component rule setting it.
-- A book page renders with `border-box` sizing, no body margin and the theme's
-  background and foreground, with no reset in the design site's stylesheet.
-- The preflight can be imported at any position in either application's shell without
-  changing what a page looks like.
-- A Svelte island inside a flex row lays out identically whether or not Cyan's flex
-  utilities are present.
-- Human review accepts the layout effect of `astro-island { display: contents }`, the
-  one rule here that can move something already on screen.
+Astro hydration wrappers remain transparent to layout because wrappers occur between layout
+containers and authored children.
+
+### Documentation
+
+`apps/design/src/content/base/preflight.mdx` carries the preflight book.
+
+### Constraints
+
+A rule belongs in preflight when it establishes a global reset baseline or corrects a
+browser inconsistency across consuming surfaces. A global selector alone does not qualify a
+presentation rule for inclusion.
+
+Preflight normalises control inheritance and browser defaults. Preflight does not define
+field presentation, form spacing, sizing variants, or interaction treatments.
+[Fields](../fields/spec.md) and [Actions](../actions/spec.md) govern control presentation.
+Unstyled controls retain native rendering and visible keyboard focus.
+
+Preflight leaves font-family selection to [Fonts](../fonts/spec.md), type treatment to
+[Typography](../typography/spec.md), and media constraints to the containing capability.
+Preflight leaves scrollbar appearance to the browser.
+
+A textarea without a `rows` attribute has a minimum block size of 10em for multiline entry.
+Textareas resize vertically so manual resizing preserves the inline constraints of the
+containing layout.
+
+Other opinionated defaults, including pointer cursors, target scroll margins and font
+smoothing, require a global baseline rationale. Presence in an upstream reset or earlier
+stylesheet does not establish that rationale.
+
+## Contract
+
+### Definition of Done
+
+- Both applications receive the reset through the design system CSS entry point.
+- Browser verification demonstrates the scenarios below and records the inspected browsers
+  and versions across Chromium, Firefox and WebKit.
+- Human review accepts unstyled control usability, visible keyboard focus, and document
+  colours in both colour schemes.
+
+### Regression Guardrails
+
+- Preflight declares no custom properties, and every token it reads resolves in both colour
+  schemes.
+- Preflight preserves the reader's ability to enlarge text.
+- Reset presentation permits scoped overrides without `!important` or stronger selectors
+  added solely to defeat preflight.
+- Browser corrections preserve control operation, keyboard focus, and accessibility
+  semantics.
+
+### Scenarios
+
+```gherkin
+Feature: Preflight
+
+  Scenario: Global sizing and spacing baseline
+    Given either application loads the design system CSS entry point
+    When elements and their before and after pseudo-elements render
+    Then they use border-box sizing
+    And elements, before and after pseudo-elements, backdrops and file-selector buttons have no default margin or padding
+
+  Scenario: Control typography inheritance
+    Given an unstyled button, text input, select and textarea inside a text container
+    When the controls render
+    Then they inherit the container's font family, font size and line height
+
+  Scenario: Textarea baseline supports multiline entry
+    Given an unstyled textarea without a rows attribute
+    When the textarea renders
+    Then its minimum block size is 10em
+    And the reader can resize it vertically but not horizontally
+
+  Scenario: Native controls remain usable
+    Given controls without component presentation
+    When a reader operates them with the keyboard
+    Then enabled controls retain their native operation
+    And keyboard focus remains visible
+
+  Scenario: Authored lists retain markers
+    Given an ordered or unordered list without an explicit list role
+    When the reset applies
+    Then the list retains its native markers
+
+  Scenario: Interface lists retain semantics
+    Given an ordered list, unordered list or menu with role="list"
+    When the reset applies
+    Then its markers are removed
+    And assistive technology can still identify it as a list
+
+  Scenario: Hidden content stays outside layout
+    Given an element with the hidden attribute other than hidden="until-found"
+    When the reset applies
+    Then the element occupies no layout space
+
+  Scenario: Find-in-page can reveal hidden content
+    Given a browser supporting hidden="until-found"
+    And an element with hidden="until-found"
+    When find-in-page reveals that element
+    Then the reset does not prevent the browser from revealing it
+
+  Scenario: Scoped presentation replaces reset defaults
+    Given authored content with a scoped content treatment
+    And a nested component with declared presentation
+    When the design system CSS entry point loads
+    Then each scope can replace reset presentation through the normal cascade
+    And neither scope needs specificity escalation to defeat the reset
+
+  Scenario: Document receives the theme
+    Given a page shorter than the viewport without a containing surface
+    When either colour scheme renders
+    Then the body covers at least the dynamic viewport height
+    And the document uses the theme's background and foreground
+
+  Scenario: Hydration wrappers preserve layout
+    Given authored children inside an Astro island in a flex or grid container
+    When the page renders before and after hydration
+    Then the children participate in the container's layout as if the wrapper were absent
+```

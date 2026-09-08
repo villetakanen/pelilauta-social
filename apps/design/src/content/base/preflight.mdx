@@ -1,56 +1,103 @@
 ---
 title: Preflight
-description: Global CSS reset rules, baseline element overrides, and framework wrappers.
+description: The global browser reset beneath component and document presentation.
 order: 1
 ---
 
-Our preflight reset establishes baseline browser styles across all applications.
-It adapts patterns from Andy Bell's modern reset and Tailwind Preflight to our
-layout and accessibility requirements.
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+
+<div class="content-area">
+
+Preflight establishes a global style baseline across browsers. Applications receive the
+reset through the design system CSS entry point before presentation styles. Importing
+tokens alone does not apply the reset.
+
+[Andy Bell's modern reset](https://piccalil.li/blog/a-more-modern-css-reset/) and
+[Tailwind Preflight](https://tailwindcss.com/docs/preflight) inform the reset.
+
+## Reset and presentation
+
+Preflight removes browser defaults and normalises inconsistencies shared across surfaces.
+A global selector alone does not make a presentation rule part of the reset.
+
+[Fields](/base/fields) and [Links, actions and buttons](/base/links-actions-buttons) define
+field presentation, form spacing, sizing variants and interaction treatments.
+[Fonts](/base/fonts) supplies font families. [Typography](/tokens/typography) supplies
+type treatment. Scrollbars retain browser presentation.
+
+## Document composition
+
+Apply [Content Area](/utilities/content-area) to authored prose that needs document
+spacing, list gutters and media constraints. Scoped treatments and nested components
+replace reset presentation through the cascade without specificity escalation.
+
+</div>
+
+<DsComposition themes caption="Document presentation above the reset">
+  <div class="content-area">
+    <p>Prepare the session before the players arrive.</p>
+    <ol>
+      <li>Read the premise.</li>
+      <li>Choose an opening scene.</li>
+    </ol>
+    <p>The document treatment separates these blocks and provides a list gutter.</p>
+  </div>
+</DsComposition>
+
+<div class="content-area">
+
+```html
+<div class="content-area">
+  <p>Prepare the session before the players arrive.</p>
+  <ol>
+    <li>Read the premise.</li>
+    <li>Choose an opening scene.</li>
+  </ol>
+  <p>The document treatment separates these blocks and provides a list gutter.</p>
+</div>
+```
+
+## Sizing and spacing
+
+Elements and before and after pseudo-elements use border-box sizing. Preflight
+removes margins and padding from elements, before and after pseudo-elements, backdrops
+and file-selector buttons. Layout and content treatments supply spacing.
 
 ## List markers
 
-List markers are removed only from elements declared with `[role="list"]`. Removing
-`list-style` without an explicit role causes Safari VoiceOver to drop list semantics.
-All lists reset to zero margin and padding.
+Authored ordered and unordered lists retain native markers. Add `role="list"` to
+an interface list to remove its markers. The explicit role preserves list
+semantics for assistive technology. The reset removes list margins and padding in both
+cases.
 
-```css
-ol[role="list"], ul[role="list"], menu[role="list"] { list-style: none; }
-```
+## Controls
 
-## Margins and padding
+Preflight makes buttons, inputs, selects and textareas inherit font family, size and line
+height from their container. Later font and control treatments can replace that baseline.
+Unstyled controls retain native rendering, keyboard operation and visible keyboard focus.
 
-All elements, pseudo-elements, and backdrops reset to zero margin and padding. We
-declare no default paragraph or heading margins; layout containers control spacing
-between elements.
+Textareas without a `rows` attribute receive a minimum height for multiline entry.
+Textareas resize vertically to preserve the inline limits of the containing layout.
 
-```css
-*, ::after, ::before, ::backdrop, ::file-selector-button { margin: 0; padding: 0; }
-```
+## Hidden content
 
-## Media elements
+The reset keeps elements with `hidden` outside layout. The reset leaves `hidden="until-found"`
+available for find-in-page to reveal in browsers that support that state.
 
-Media elements (`img`, `video`, `canvas`, `svg`) retain browser-default display and
-sizing in preflight. Containers explicitly control media constraints and aspect
-ratios.
+## Media
 
-## Colour scheme
+Preflight leaves media display and sizing to the browser. Apply media constraints from the
+containing capability when images or video must fit an offered width.
 
-The root stylesheet declares `color-scheme: dark light`. Application `<meta name="color-scheme">`
-tags must match this order to prevent rendering discrepancies before stylesheet evaluation.
+## Document colours
 
-```css
-:root { color-scheme: dark light; }
-```
-
-`body` applies `--cn-color-surface` and `--cn-color-text` roles rather than raw color values.
+The body fills at least the dynamic viewport height and applies theme background and
+foreground colours, including on pages without a containing surface.
+[Surface](/utilities/surface) defines surface roles and treatments above that baseline.
 
 ## Hydration wrappers
 
-Astro island wrappers declare `display: contents`, so an island generates no box and its
-markup lays out as though written in place.
+Astro islands add no layout box. Authored island children participate in the surrounding
+flex or grid layout before and after hydration as though the wrapper were absent.
 
-```css
-astro-island { display: contents; }
-```
-
+</div>
