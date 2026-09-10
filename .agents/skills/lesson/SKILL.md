@@ -1,36 +1,22 @@
 ---
 name: lesson
-description: Note one thing we might want to take into account the next time we change the Pelilauta harness. Use retro to look at the harness alongside these notes.
+description: Record one finding from the current work as a lesson note, an issue, blocker, error or opening for improvement in the harness, the context or the ways of working.
 ---
 
-# Write A Lesson Note
+# Lessons learned
 
-Shape and invariants: `docs/practices/lessons.md`. This skill only writes a note. It
-never assesses, applies, or acts — that is `retro`.
+A lesson records an issue, a blocker, an error or an opening for improvement, whether it
+concerns the harness, the context or the ways of working.
 
-## Before writing anything
+A finding is valuable as it happened, without conjecture or analysis. A root-cause
+analysis or a chain of events goes in the note only when the operator asked for it.
 
-1. Can this be fixed now, inside the current pull request, without crossing an approval
-   boundary in `AGENTS.md`? Then fix it. Do not write a file.
-2. Would we want to know this the next time we change the harness — the contract, a
-   skill, a template, a workflow, the site's architecture? Then write it down.
-3. Is it task state, check output, PR history, current objectives, remaining work, or
-   an already-fixed defect? Then do not write it down.
+The agent, the model and the operator are never suspects. A note records no blame.
+Expect an issue to stem from the harness, the context or the prompt.
 
-## Writing
+Shape and invariants: `docs/practices/lessons.md`.
 
-4. One note, one new file: `docs/lessons/<slug>.md`, with the frontmatter and four
-   fields the practice guide defines. Four short paragraphs.
-5. Name one instance, with the file and the line. A note about a category rather than
-   a case cannot be acted on, and each reader fills the category with different
-   examples.
-6. Write the **Fix** as a change someone can make and mark done — not a rule to
-   follow. If you cannot state it as a diff, do not file the note. Let the problem
-   recur; a second occurrence usually names itself.
-7. Keep `**Suspected why:**` to one sentence, phrased as a guess. Do not reason it
-   into a verdict; capture is cheap and low-confidence by design.
-8. Commit the file with its reasoning in the message body. The message is the
-   permanent record; the file is disposable.
+File the lesson to `docs/lessons/<slug>.md`, with the frontmatter and the fields the
+practice guide defines.
 
-Never make a spec, plan, skill, test, runbook, or implementation depend on a note.
-The project must remain operable when there are none.
+Note the lesson from the current context. Never compare it with earlier lessons.
