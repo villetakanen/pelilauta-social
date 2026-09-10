@@ -112,7 +112,7 @@ function handleSubmit(event: SubmitEvent) {
       </div>
     {/if}
 
-    <fieldset class="fields">
+    <fieldset>
       <label>
         {t('admin:channels.add.form.name')} *
         <input
@@ -204,14 +204,6 @@ function handleSubmit(event: SubmitEvent) {
 
 <style>
   .add-channel-form {
-    display: grid;
-    row-gap: var(--cn-line);
-  }
-
-  fieldset.fields {
-    border: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     row-gap: var(--cn-line);
   }

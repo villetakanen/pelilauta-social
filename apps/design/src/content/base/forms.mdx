@@ -1,0 +1,121 @@
+---
+title: Forms
+description: The borderless stack a fieldset and legend render for a group of related fields, with or without a title, in both colour schemes and in a narrow container.
+order: 4.6
+---
+
+import DsComposition from '@design-system/books/specimens/DsComposition.astro'
+
+`packages/design-system/styles/forms.css` paints `fieldset` and `legend` as a
+borderless stack. `specs/design-system/forms/spec.md` governs the treatment
+below. The containing surface supplies the enclosure a fieldset does not. A
+consumer places a group inside a surface rather than adding a second inset or
+elevation layer.
+
+## A titled group
+
+A legend takes the h3 type treatment: size, line, weight and colour. It
+precedes the stack by `--cn-line`. Every other direct child separates from its
+neighbour by the same interval, measured between margin boxes, regardless of
+any margin the child already carries.
+
+<DsComposition themes elevation={1} caption="A titled group of a text control, a toggle and supporting text">
+  <fieldset data-testid="titled-fieldset">
+    <legend>Notifications</legend>
+    <label>Display name <input type="text" placeholder="How others see you" /></label>
+    <label class="cn-toggle"><span>Email me about replies</span><input type="checkbox" role="switch" checked /></label>
+    <p class="text-low">Changes apply the moment you leave a field.</p>
+  </fieldset>
+</DsComposition>
+
+```html
+<fieldset>
+  <legend>Notifications</legend>
+  <label>Display name <input type="text" placeholder="How others see you" /></label>
+  <label class="cn-toggle"><span>Email me about replies</span><input type="checkbox" role="switch" checked /></label>
+  <p class="text-low">Changes apply the moment you leave a field.</p>
+</fieldset>
+```
+
+## An untitled group
+
+A fieldset without a legend reserves no title space. Its first child starts
+where the stack starts, at the top of the fieldset content box.
+
+<DsComposition themes elevation={1} caption="An untitled group of the same kinds of children">
+  <fieldset data-testid="untitled-fieldset">
+    <label>Display name <input type="text" placeholder="How others see you" /></label>
+    <label class="cn-toggle"><span>Email me about replies</span><input type="checkbox" role="switch" /></label>
+    <p class="text-low">Changes apply the moment you leave a field.</p>
+  </fieldset>
+</DsComposition>
+
+```html
+<fieldset>
+  <label>Display name <input type="text" placeholder="How others see you" /></label>
+  <label class="cn-toggle"><span>Email me about replies</span><input type="checkbox" role="switch" /></label>
+  <p class="text-low">Changes apply the moment you leave a field.</p>
+</fieldset>
+```
+
+## Fit
+
+A fieldset shrinks below its content width to fit the container. A long
+legend wraps within it rather than forcing the fieldset wider.
+
+<DsComposition narrow elevation={1} caption="A group in a container narrower than its legend and control">
+  <fieldset data-testid="narrow-fieldset">
+    <legend>A legend longer than this narrow container can hold on one line</legend>
+    <label>Channel name <input type="text" placeholder="Where this discussion lives" /></label>
+  </fieldset>
+</DsComposition>
+
+```html
+<fieldset>
+  <legend>A legend longer than this narrow container can hold on one line</legend>
+  <label>Channel name <input type="text" placeholder="Where this discussion lives" /></label>
+</fieldset>
+```
+
+## Editing preserves group depth
+
+An unsaved edit changes nothing about the group. The group keeps the
+background and shadow of the surface it already sits in, for as long as the
+edit stands.
+
+<DsComposition themes elevation={2} caption="A group inside a surface, unchanged by an unsaved edit">
+  <fieldset>
+    <legend>Site title</legend>
+    <label>Title <input type="text" value="A title the reader is still editing" /></label>
+  </fieldset>
+</DsComposition>
+
+```html
+<div class="elevation-2">
+  <fieldset>
+    <legend>Site title</legend>
+    <label>Title <input type="text" value="A title the reader is still editing" /></label>
+  </fieldset>
+</div>
+```
+
+## Disabled
+
+The native `disabled` attribute reaches every control a fieldset contains.
+This stylesheet changes nothing about that behaviour.
+
+<DsComposition themes elevation={1} caption="A disabled group">
+  <fieldset disabled>
+    <legend>Archived channel</legend>
+    <label>Channel name <input type="text" value="general" /></label>
+    <label class="cn-toggle"><span>Allow new threads</span><input type="checkbox" role="switch" /></label>
+  </fieldset>
+</DsComposition>
+
+```html
+<fieldset disabled>
+  <legend>Archived channel</legend>
+  <label>Channel name <input type="text" value="general" /></label>
+  <label class="cn-toggle"><span>Allow new threads</span><input type="checkbox" role="switch" /></label>
+</fieldset>
+```
