@@ -8,13 +8,15 @@ status: proposed
 Spec template. Copy to specs/<domain>/<capability>/spec.md.
 
 status is a process gate, not protection: `proposed` — the text carries a new,
-material or unsettled amendment the operator has not read; do not implement it.
-For a minor, settled amendment to a live spec, show an unapplied diff and its
-reason in chat. Apply an accepted amendment while retaining `live`. `live` — an
-operator has read it through; it portrays how the capability is supposed to
-work. `deprecated` — kept for its context or architecture as a lesson or example.
+material or unsettled amendment the operator has not cleared. A task starts from
+it only when the operator explicitly asks. For a minor, settled amendment to a
+live spec, show an unapplied diff and its reason in chat. Apply an accepted
+amendment while retaining `live`. `live` — an operator has read it through; it
+portrays how the capability is supposed to work. `deprecated` — kept for its
+context or architecture as a lesson or example.
 
-After a staged proposed amendment, stop before implementation.
+A material amendment created during implementation becomes `proposed` without
+stopping that task. Run the spec review and flag the amendment for operator review.
 
 Prose rules: docs/WRITING.md. The spec-specific tests: can an agent derive this
 line from the code? If yes, delete it. Name the mistake a sentence prevents; if

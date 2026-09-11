@@ -19,10 +19,11 @@ Keep out of this chat: progress narration, a subagent's transcript, a work list 
 can act on yourself, and a question a spec or the source already answers.
 
 Check task readiness before delegating implementation. Required governing specs
-must be live when the task starts. If a required spec is missing or proposed,
-delegate its completion and obtain operator clearance first. When live specs
-already govern the work, delegate implementation directly. Apply `AGENTS.md` to
-determine whether a spec is required.
+must be live when the task starts unless the operator explicitly asks to start
+from a proposed spec. Without that instruction, delegate completion of a missing
+or proposed spec and obtain operator clearance first. When live specs already
+govern the work, delegate implementation directly. Apply `AGENTS.md` to determine
+whether a spec is required.
 
 Implementation may reveal errors or missing constraints in those specs. Delegate
 amendments through the procedure in `AGENTS.md` and the `spec` skill, including

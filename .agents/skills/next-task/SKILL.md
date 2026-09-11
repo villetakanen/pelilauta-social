@@ -48,8 +48,9 @@ intended work are live. Apply rules in `AGENTS.md` for when a spec is required;
 do not invent a spec requirement for every task.
 
 If a required spec is missing or proposed, consider making its completion and
-operator clearance the next increment. Name the intent or decision it must
-establish and the work that decision enables.
+operator clearance the next increment. An explicit operator request to start from
+a proposed spec also establishes readiness. Name the intent or decision the spec
+must establish and the work that decision enables.
 
 Starting from live specs does not freeze them. A task may uncover errors,
 missing constraints, or better implementation choices. Amend specs during the

@@ -1,13 +1,14 @@
 ---
 name: retro
-description: Look at the Pelilauta harness alongside the notes in docs/lessons/ and promote actionable change concepts with the human owner. Use lesson to write a note.
+description: Synthesize the Pelilauta harness, all notes in docs/lessons/, and prior lesson-driven changes when the operator requests a retrospective or a review of accumulated findings. Do not use for a focused correction to a named harness artifact.
 ---
 
 # Retro And Compound Mining
 
-Shape and invariants: `docs/practices/lessons.md`. Run this when improving the
-harness — the contract, a skill, a template, a workflow. The notes are input to that
-work, not a queue to be cleared.
+Shape and invariants: `docs/practices/lessons.md`. Run this when the operator asks
+to relate accumulated findings to the harness. A focused correction to a named
+contract, skill, template, or workflow is ordinary harness work. The notes are input
+to a retrospective, not a queue to be cleared.
 
 ## Look
 
@@ -34,13 +35,14 @@ work, not a queue to be cleared.
 ## Act
 
 8. Apply an accepted change directly to the relevant code, test, spec, guide, skill,
-   runbook, or workflow, and commit it with the reasoning in the message body. Prefer
-   correcting an existing artifact over adding a process layer.
+   runbook, or workflow. Prefer correcting an existing artifact over adding a process
+   layer.
 9. Delete the note. Applied and discarded both end in deletion; git retains the
-   reasoning. A note the owner wants to keep is promoted out to a plan, spec, or ADR
-   first — ask for that decision, and never invent a destination.
+   reasoning. Promote a note the operator wants to keep to a plan, spec, or ADR
+   first. Ask for that decision, and never invent a destination.
 
-This pass produces commits and deletions. It never produces a summary file, an index,
+An accepted pass may change harness artifacts and delete resolved notes. Commit only
+on explicit operator instruction. The pass never produces a summary file, an index,
 a history table, or a report artifact — all of those get deleted, so writing them is
 pure cost. It does not block unrelated delivery, and it does not need to leave the
 list empty.
