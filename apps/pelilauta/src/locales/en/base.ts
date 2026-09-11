@@ -8,4 +8,7 @@ export const base: Locale = {
     channels: 'Discussions',
     sites: 'Games',
   },
+  changelog: {
+    title: 'Changelog',
+  },
 };

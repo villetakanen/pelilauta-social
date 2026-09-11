@@ -10,7 +10,7 @@ status: live
 
 A reader reaching the end of an application page receives peripheral access to active
 community presence, external Finnish role-playing spaces and feeds, platform
-documentation, release notes, and page attribution. BaseFooter organizes these
+documentation, the changelog, and page attribution. BaseFooter organizes these
 ancillary destinations at the close of the document.
 
 ### Architecture
@@ -28,7 +28,7 @@ slots:
   (`app:footer.links.title`) above the community links from
   `apps/pelilauta/src/data/footer-links.json`.
 - **Block 3 (Identity and metadata):** Renders the product logomark, the product
-  wordmark, a version link targeting the release notes, and an `app-footer-credits` slot
+  wordmark, a version link targeting the changelog, and an `app-footer-credits` slot
   for page or artwork attribution.
 
 ### Constraints
@@ -49,7 +49,7 @@ The documentation link targets `/docs`.
 
 The RSS feed link targets `/rss/threads.xml`.
 
-The release notes link targets `/docs/80-release-notes` and displays the current package
+The version link targets `/changelog.html` and displays the current package
 version.
 
 The active users widget renders active reader avatars during server rendering, and only
@@ -68,7 +68,7 @@ The `app-footer-credits` slot forwards its content to Block 3 beneath the versio
 - Block 2 renders the localized community heading and every entry of
   `footer-links.json` as a link.
 - Block 3 displays the product logomark, wordmark, version link to
-  `/docs/80-release-notes`, and any forwarded attribution credits.
+  `/changelog.html`, and any forwarded attribution credits.
 
 ### Regression Guardrails
 

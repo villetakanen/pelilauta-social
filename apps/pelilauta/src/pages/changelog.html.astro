@@ -1,0 +1,18 @@
+---
+import Base from '@layouts/Base.astro';
+// The build bundles the release record the repository carries, so a
+// deployed page cannot show a changelog from another revision. See
+// docs/adrs/0004-publish-the-root-changelog.md.
+import changelog from '@root/CHANGELOG.md?raw';
+import { renderChangelog } from '@utils/server/renderChangelog';
+import { t } from 'src/utils/i18n';
+
+const title = t('base:changelog.title');
+const html = renderChangelog(changelog);
+---
+
+<Base {title} noSharing>
+  <div class="content-prose">
+    <article class="surface content-area" set:html={html} />
+  </div>
+</Base>

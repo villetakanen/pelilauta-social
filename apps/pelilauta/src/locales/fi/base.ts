@@ -8,4 +8,7 @@ export const base: Locale = {
     channels: 'Keskustelut',
     sites: 'Pelit',
   },
+  changelog: {
+    title: 'Muutosloki',
+  },
 };
