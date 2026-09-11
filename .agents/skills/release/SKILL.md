@@ -5,10 +5,10 @@ description: Leave beta, or roll back a published release. Not needed for ordina
 
 # Release
 
-Ordinary work does not use this skill. Every merge to main is a release: the branch
-takes one beta bump after the previous merge, the merge deploys, and CI tags the
-merge commit from the root version. That is the release process. A second bump before
-the merge burns a version and never becomes a release.
+Ordinary work does not use this skill. Every merge to main is a release: the release
+branch takes one beta bump after the previous merge, the merge deploys, and CI tags
+the merge commit from the root version. That is the release process. A second bump
+before the merge burns a version and never becomes a release.
 
 Two decisions require owner authorization.
 

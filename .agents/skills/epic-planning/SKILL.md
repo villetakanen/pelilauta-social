@@ -20,8 +20,8 @@ carries the process; `docs/WRITING.md` carries the sentences.
    presentation no spec has settled.
 2. Identify the intended outcome, the observable states that would prove it,
    what must not regress, the boundaries, and the material unknowns.
-3. Create or edit the issue with `gh issue`, labeled `epic`, named after its
-   `feat/**` branch.
+3. Create or edit the issue with `gh issue` and label it `epic`. Name the
+   outcome rather than the release branch.
 4. Re-read for scope creep, hidden commitments, and task-shaped success
    criteria.
 

@@ -17,7 +17,7 @@
 
 - Conform prose to `docs/WRITING.md` and `docs/ARCHITECTURE.md` when writing documents, books, specs, or comments. Reference those files directly instead of restating their contents.
 - Increment the root beta version with `pnpm version prerelease --preid=beta --no-git-tag-version` once per release on the first commit after merging to `main`. Subsequent commits on the branch skip version bumps because the version already leads `main`. CI tags the merge commit.
-- Remain on the active long-lived `feat/**` branch.
+- Remain on the active long-lived release branch, named `feat/<major>-<minor>`.
 - Execute the verification gate corresponding to the active question; `delivery.yaml` defines gate commands, cadences, and coverage.
 
 ## NEVER
@@ -30,8 +30,8 @@
 ## Delivery Contract
 
 - Test dependency additions and updates locally. Merging dependency changes requires explicit approval.
-- During beta, merging an active `feat/**` pull request to `main` constitutes a release and its approval.
-- Fix defects within touched scope and resolve defects discovered in the active epic.
+- During beta, merging the active release branch to `main` constitutes a release and its approval.
+- Fix defects within touched scope and resolve defects discovered in the active work scope.
 
 ## Workspace Contract
 
@@ -49,4 +49,4 @@ Request clarification when established behavior or the Firebase contract cannot 
 
 A design-system capability requires a governing spec. An `apps/pelilauta` feature requires no new spec when work preserves established behavior; create or update its spec when work introduces or alters behavior.
 
-Every design-system change requires a named open epic and is governed by a spec. Create or amend that spec as part of the change, not as a gate before it: a proposed amendment does not halt the work, and the operator clears it to `live`, or turns it back, at delivery review. Minor spec amendments follow the inline workflow.
+Every design-system change is governed by a spec. Create or amend that spec as part of the change, not as a gate before it: a proposed amendment does not halt the work, and the operator clears it to `live`, or turns it back, at delivery review. Minor spec amendments follow the inline workflow.

@@ -10,7 +10,7 @@ approver PR review. Use it only on explicit request. The mandatory separate
 adversarial review of a spec is the `spec` skill review gate and is
 unaffected by this boundary.
 
-Review one pull request, not the lifetime diff of its feature branch. The purpose
+Review one pull request, not the lifetime diff of its release branch. The purpose
 is to challenge assumptions before they become a dependency of `main`, not to
 prohibit supporting work the change needs.
 
@@ -22,7 +22,7 @@ practical and scale the review to the named concern.
 Establish the exact delta this pull request proposes. If the boundary is unclear,
 stop and ask rather than reviewing unrelated historical branch work.
 
-Plans are working scaffolding for an active epic. They may help establish the
+Plans are working scaffolding for the active work scope. They may help establish the
 claimed outcome, but their status, reconciliation and eventual deletion are not
 integration evidence or delivery findings.
 

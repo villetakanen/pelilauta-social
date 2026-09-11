@@ -1,6 +1,6 @@
 ---
 name: next-task
-description: Propose the smallest deliverable increment that creates useful value within the active Pelilauta epic or an explicitly requested improvement scope. Use when asked what to do next or to propose the next task.
+description: Propose the smallest deliverable increment that creates useful value within a Pelilauta issue or an explicitly requested improvement scope. Use when asked what to do next or to propose the next task.
 ---
 
 # Next Task
@@ -11,18 +11,17 @@ A smaller diff is not necessarily a smaller useful increment.
 
 ## Establish the basis
 
-Read the named epic. If none is named, identify it from the active branch and
-open GitHub issues labeled `epic`. When the operator explicitly names a different
-improvement scope, use that scope rather than assigning it to an unrelated epic.
+Read the named epic, task, or bug. When the operator names an improvement scope
+without an issue, use that scope. Do not infer work scope from the release branch.
 
 Inspect the implementation, governing specs, and relevant documentation. Inspect
 v20 presentation when the candidate changes a surface no spec has settled.
 Identify what becomes possible, clearer, more reliable, or less costly after the
 change ships.
 
-Treat Possible work entries in the epic as candidates. Consider discoveries within
-its goal and success criteria; do not assume every entry is necessary or correctly
-sized.
+Treat Possible work entries in an epic as candidates. Consider discoveries within
+the issue or operator-stated scope; do not assume every entry is necessary or
+correctly sized.
 
 ## Find the increment
 
@@ -33,7 +32,7 @@ Compare plausible candidates internally. Choose one that:
 - Includes the implementation, adoption, documentation, and evidence necessary
   for its outcome.
 - Excludes improvements that can ship independently.
-- Fits the epic or the operator stated scope.
+- Fits the issue or operator-stated scope.
 
 Prefer the smallest useful outcome that resolves a current need or enables
 valuable subsequent work. Include supporting changes when the outcome depends

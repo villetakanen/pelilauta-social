@@ -16,9 +16,9 @@ The assessment does not establish equivalent behavior across four live agent run
 
 | Decision | Expected agent action | Governing reference |
 | --- | --- | --- |
-| Establish scope. | Identify the requested outcome, active branch, existing edits, and relevant epic. Preserve work outside the request. | [Project contract](../AGENTS.md) |
+| Establish scope. | Identify the requested outcome, active release branch, existing edits, and governing issue or operator-stated scope. Preserve work outside the request. | [Project contract](../AGENTS.md) |
 | Start a task. | Establish that required governing specs are live before implementation begins. Distinguish starting readiness from amendments discovered during the task. | [Next-task skill](../.agents/skills/next-task/SKILL.md#check-readiness) |
-| Change design-system behavior. | Name an open epic and governing spec. Deliver implementation, consumer adoption, and the required book together. | [Developer skill](../.agents/skills/design-system-developer/SKILL.md), [architecture](ARCHITECTURE.md) |
+| Change design-system behavior. | Name the governing spec. Deliver implementation, consumer adoption, and the required book together. | [Developer skill](../.agents/skills/design-system-developer/SKILL.md), [architecture](ARCHITECTURE.md) |
 | Amend a spec. | Continue work alongside a material `proposed` amendment and flag the amendment for operator clearance. Present a minor settled amendment as an unapplied diff and await acceptance. | [Spec skill](../.agents/skills/spec/SKILL.md) |
 | Verify a change. | Select evidence for the active question and report actual results and omissions. | [Delivery gates](../delivery.yaml) |
 | Cross a judgment boundary. | Obtain operator confirmation before modifying shared Firebase assets, departing from compatibility, executing destructive migrations, or changing release processes. Request explicit instructions before changing branches. | [Project contract](../AGENTS.md#judgment-boundaries) |
@@ -58,8 +58,8 @@ schema as executable configuration.
 ```yaml
 task:
   outcome: "One observable change"
-  branch: "Current feat/** branch"
-  epic: "Issue URL when required"
+  branch: "Current release branch"
+  issue: "Issue URL when one governs the work"
   spec: "Governing spec path, or why none applies"
   sources: ["Governing spec", "Current implementation", "v20 visual reference where the spec is silent"]
   write_scope: ["Explicit target paths"]
