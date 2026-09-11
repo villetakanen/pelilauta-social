@@ -1,11 +1,11 @@
 <script lang="ts">
+import SiteThemingSection from '@pelilauta/site/client/settings/SiteThemingSection.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
 import { uid } from '../../../../stores/session';
 import { site } from '../../../../stores/site';
 import WithAuth from '../../app/WithAuth.svelte';
 import SiteDangerZoneSection from './SiteDangerZoneSection.svelte';
 import SiteMetaForm from './SiteMetaForm.svelte';
-import SiteThemingSection from './SiteThemingSection.svelte';
 import SiteTocRegenSection from './SiteTocRegenSection.svelte';
 
 /**

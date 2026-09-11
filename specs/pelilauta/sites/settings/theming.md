@@ -5,8 +5,8 @@ The Theming section of `spec.md` governs the poster and the background image.
 ## Context
 
 A site owner changes the site poster and background images through the theming tool. The
-section renders a lightweight preview of `CnPoster` with the site card resting on it and two
-forms that update the images. The poster image covers the site card; the background image forms
+section renders a lightweight preview, `CnPoster` behind the site card, and two forms that
+update the images. The poster image covers the site card; the background image forms
 the poster behind site pages.
 
 ## Architecture
@@ -14,8 +14,9 @@ the poster behind site pages.
 A `client:only` CSR island: `@pelilauta/site/client/settings/SiteThemingSection.svelte`.
 
 The preview is an iframe on an SSR page, `pages/sites/[siteKey]/settings/poster.astro`.
-The page renders only `CnPoster` and the site card. A poster restyles the whole document
-around it, so it gets a document of its own.
+The page renders `CnPoster` and nothing else. A poster restyles the whole document around
+it, so it gets a document of its own. The frame is the section's backdrop: it fills the
+section, and the site card and the forms sit over it.
 
 The poster page enforces `requireSiteOwner` and contains no islands.
 
@@ -26,11 +27,12 @@ to the field.
 
 ## Constraints
 
-- A write to either field reloads the frame to display saved state.
-- The poster page sends no cache headers and carries no cache tag, so a reload shows the
-  current document.
+- A write to `backgroundURL` reloads the frame to display saved state.
+- The poster page sends `Cache-Control: no-store` and carries no cache tag, so a reload
+  shows the current document.
 - The frame accepts no pointer events and adds no focus stop.
-- The frame pins the poster to display the artwork under its tint without dissolve.
+- The poster takes the scrolling placement, as the site's pages mount it, so the frame shows
+  the reader's picture: the same tint and the same dissolve.
 
 ## Regression Guardrails
 
@@ -47,12 +49,12 @@ Feature: Site settings theming
     Given an owner on /sites/{siteKey}/settings
     And the site carries a backgroundURL
     Then the Theming section shows that image through the poster, tinted for the scheme
-    And the site card rests on it
+    And the site card and the forms sit over it
 
   Scenario: No background
     Given an owner on /sites/{siteKey}/settings
     And the site carries no backgroundURL
-    Then the Theming section shows the site card on the plain canvas
+    Then the Theming section shows the site card and the forms on the plain surface
 
   Scenario: Background uploaded
     Given an owner on /sites/{siteKey}/settings

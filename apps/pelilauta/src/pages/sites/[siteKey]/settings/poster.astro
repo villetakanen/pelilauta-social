@@ -1,0 +1,40 @@
+---
+import CnPoster from '@design-system/components/CnPoster.astro';
+import { getSiteData } from '@firebase/server/sites';
+import ThemeScript from '@pelilauta/components/server/BaseHead/ThemeScript.astro';
+import { requireSiteOwner } from '@pelilauta/site/utils/requireSiteOwner';
+import '@design-system/styles/ds.css';
+
+// `SiteThemingSection` embeds this page in an iframe so chrome-wide overrides in
+// specs/design-system/components/cn-poster/spec.md stay inside the frame instead
+// of dressing the settings page.
+
+const { siteKey } = Astro.params;
+
+if (!siteKey) {
+  return new Response('Bad request', { status: 400 });
+}
+
+const site = await getSiteData(siteKey);
+
+if (!site) {
+  return Astro.redirect('/404');
+}
+
+const denied = await requireSiteOwner(Astro, site);
+if (denied) return denied;
+
+Astro.response.headers.set('Cache-Control', 'no-store');
+---
+
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.name}</title>
+    <ThemeScript />
+  </head>
+  <body>
+    {site.backgroundURL && <CnPoster src={site.backgroundURL} />}
+  </body>
+</html>
