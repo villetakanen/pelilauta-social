@@ -2,11 +2,11 @@
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addAssetToSite } from 'src/firebase/client/site/addAssetToSite';
 import type { Site } from 'src/schemas/SiteSchema';
+import { uid } from 'src/stores/session';
+import { update } from 'src/stores/site';
 import { resizeImage } from 'src/utils/client/resizeImage';
 import { t } from 'src/utils/i18n';
 import { logWarn } from 'src/utils/logHelpers';
-import { uid } from '../../../../stores/session';
-import { update } from '../../../../stores/site';
 
 /**
  * Uploads an avatar, card, or background image to site assets and assigns the asset URL to the site theme.
@@ -52,7 +52,7 @@ async function onsubmit(e: Event) {
 
   const url = await addAssetToSite(site, f, $uid);
 
-  update({
+  await update({
     [imageField]: url,
   });
 }

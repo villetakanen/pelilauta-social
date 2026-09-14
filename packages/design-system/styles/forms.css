@@ -1,0 +1,47 @@
+/*
+ * Forms styles the borderless stack `fieldset` and `legend` render, so
+ * readers can group related fields when editing settings or entering
+ * account and channel details. `specs/design-system/forms/spec.md` governs
+ * it. The containing surface supplies the enclosure a fieldset does not. A
+ * legend takes the h3 treatment typography.css declares, so this
+ * stylesheet states no size, line or colour of its own.
+ */
+
+/*
+ * A fieldset strips the inset border, padding, background and shadow a
+ * browser paints by default. It also gives up the `min-content` floor a
+ * browser holds a fieldset to, so a narrow container can shrink it below
+ * the width its content needs.
+ *
+ * A rendered legend splits `display: flex` in two. The browser places the
+ * legend at the block start, then wraps every other child into an
+ * anonymous box and applies the flex properties declared here to that box.
+ * The gap falls only between the margin boxes of the non-legend children,
+ * never against the legend. A fieldset with no legend must not reserve
+ * that interval.
+ */
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cn-line);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/*
+ * The legend precedes the anonymous box as an ordinary sibling, so the
+ * flex gap above cannot reach it. Setting margin-block-end here instead
+ * keeps the title-to-stack interval equal to the gaps in the stack. A
+ * fieldset with no legend then reserves no space for a title, because no
+ * legend margin exists to create one.
+ */
+legend {
+  margin: 0;
+  margin-block-end: var(--cn-line);
+  padding: 0;
+  border: 0;
+}

@@ -118,7 +118,7 @@ const descriptionLength = $derived($activeSite?.description?.length || 0);
     onreset={reset}
     
   >
-    <fieldset class:elevation-1={$dirty}>
+    <fieldset>
       <legend>{t('site:settings.meta.fieldset')}</legend>
       <label>{t('entries:site.name')}
         <input

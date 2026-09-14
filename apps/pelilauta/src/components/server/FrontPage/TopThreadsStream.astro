@@ -51,7 +51,7 @@ function getNoun(slug: string | undefined): string {
     </div>
   )}
   {threads.map((thread) => (
-    <ThreadCard {thread} noun={getNoun(thread.channel)}/>
+    <ThreadCard {thread} noun={getNoun(thread.channel)} elevation={3}/>
   ))}
   <div>
     <a href="/channels" class="button">

@@ -99,22 +99,8 @@ async function setSidebarKey(key: string) {
 </section>
 
 <style>
-  .surface,
-  fieldset {
+  .surface {
     display: grid;
     row-gap: var(--cn-line);
-  }
-
-  fieldset {
-    border: none;
-    padding: 0;
-  }
-
-  legend {
-    font-size: var(--cn-font-size-h3);
-    font-weight: var(--cn-font-weight-h3);
-    line-height: var(--cn-line-height-h3);
-    letter-spacing: var(--cn-letter-spacing-h3);
-    color: var(--cn-color-text-subheading);
   }
 </style>

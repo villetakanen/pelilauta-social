@@ -1,16 +1,14 @@
 # Acceptance Testing
 
-The test plan for v21's user acceptance suite: what it verifies, how it models the
-application, and what runs it. The specs under `uat/pelilauta/e2e/` carry the
-journeys themselves.
+This document defines the test plan for the v21 user acceptance suite: verification scope, application modeling, and test execution. Specs in `uat/pelilauta/e2e/` define the journeys.
 
 ## Goals
 
 The suite verifies user journeys end to end: a real browser drives the running
 application against the `skaldbase-test` Firebase project, which carries the same
-Firestore, Storage and Auth products as live v18 on a separate project. A passing
-run is evidence that a reader can do what a journey promises — the evidence
-`docs/MIGRATION.md` rules the inherited v18 suite out of giving.
+Firestore, Storage and Auth products as production on a separate project. A passing
+run is evidence that a reader can do what a journey promises — evidence the
+`apps/pelilauta/e2e` suite does not give (#120).
 
 ## Model
 
@@ -27,7 +25,7 @@ Three example accounts model the reader roles:
 | Account | Role |
 | :--- | :--- |
 | existingUser | A member with a profile; the default actor. |
-| newUser | An account with no profile; the registration journey's actor. |
+| newUser | An account with no profile; the registration journey actor. |
 | adminUser | A member listed as an admin. |
 
 A spec is a journey: it drives the application as a reader and asserts what that
@@ -37,7 +35,7 @@ reader observes. It does not read Firestore to prove a write happened.
 
 Vitest is the driver and Playwright supplies the browser: one runner, one command
 — `pnpm test:uat` — for the specs under `uat/pelilauta/e2e/**/*.spec.ts`. Specs
-run in a single worker because they share one database. The runner's global setup
+run in a single worker because they share one database. The runner global setup
 resets, seeds, and signs example accounts in through the login form once, saving the
 browser states for each actor.
 
@@ -47,11 +45,11 @@ records.
 
 ## Environment
 
-- The `skaldbase-test` project, reached through two gitignored files at the
-  repository root: `server_principal.json`, the service principal, and
-  `credentials.ts`, the example accounts' sign-ins.
+- Execution targets the `skaldbase-test` project using two gitignored files at the
+  repository root: `server_principal.json` for the service principal and
+  `credentials.ts` for example account credentials.
 - The reset reads the project id from the service principal and refuses every
   project except the test project, so the suite cannot run against production.
 - The runner starts no server. Start the application under acceptance before
-  the run; the setup fails unless the page at `BASE_URL` carries the
-  repository's version.
+  the run; setup fails unless the page at `BASE_URL` carries the
+  repository version.

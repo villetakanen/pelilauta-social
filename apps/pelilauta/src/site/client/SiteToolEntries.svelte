@@ -5,7 +5,7 @@
  * the rail the server sent.
  *
  * Which tool shows, and how it behaves for a reader who does not hold the
- * role it needs, are `specs/pelilauta/site/site-rail/spec.md`'s; this
+ * role it needs, are `specs/pelilauta/sites/site-rail/spec.md`'s; this
  * component states none of it.
  */
 import CnIcon from '@design-system/components/CnIcon.svelte';

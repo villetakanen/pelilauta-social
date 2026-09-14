@@ -138,15 +138,6 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
     gap: var(--cn-gap);
   }
 
-  fieldset {
-    display: grid;
-    gap: var(--cn-grid);
-    min-inline-size: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
   input {
     inline-size: 100%;
   }

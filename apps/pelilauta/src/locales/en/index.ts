@@ -47,6 +47,11 @@ export const en: Locale = {
   login,
   search,
   seo,
+  settings: {
+    actions: {
+      theme: 'Light theme',
+    },
+  },
   site,
   snack,
   tag,

@@ -1,30 +1,31 @@
 # Lessons And Compounding
 
-`docs/lessons/` is a list of things we might want to take into account the next time
-we change the harness. One file per note. It is not a work queue, a status board, or
-agent memory, and nothing may depend on it.
+`docs/lessons/` is a list of findings from the work: issues, blockers, errors and
+openings for improvement in the harness, the context or the ways of working. One file
+per note. It is not a work queue, a status board, or agent memory, and nothing may
+depend on it.
 
 Two skills use it. `lesson` writes a note. `retro` looks at the harness alongside the
 notes and promotes actionable change concepts.
 
 ## Invariants
 
-- **Write it only if it needs the owner.** A problem an agent may simply fix gets
-  fixed in the pull request; it does not become a file. Notes are for what crosses an
-  approval boundary in `AGENTS.md`, whatever it later becomes — a change to the
-  contract, a skill or a template, a decision worth an ADR, a product observation, a
-  gap that belongs to nobody.
-- **The commit message is the permanent record.** Commit a note with its reasoning in
-  the message body so that deleting the file later costs nothing. Git history is the
-  archive; the list is scaffolding.
+- **A note records what happened.** The finding as it occurred is the value. Task
+  state, check output, PR history and remaining work are not findings.
+- **Nobody is a suspect.** The agent, the model and the operator are not where an
+  issue comes from. Expect the harness, the context or the prompt, and record no blame.
+- **A note names one instance.** Give the file and the line. A guess at the cause is
+  one sentence. A root-cause chain goes in only when the operator asks for it; `retro`
+  finds cause with more evidence.
+- **A note stands alone.** Do not compare it with earlier notes or search history for
+  the same finding. `retro` does that.
+- **The commit message is the permanent record.** A note is committed with its
+  reasoning in the message body when the operator asks, so that deleting the file later
+  costs nothing. Git history is the archive; the list is scaffolding.
 - **Anyone may delete any note at any time.** A human who thinks a note is incidental
   or not worth keeping should delete it — no justification, no ceremony. Nothing in
   the list needs to survive branch close, and a note worth keeping is promoted out to
   a plan, spec, or ADR first — the owner decides that.
-- **A note names one instance and proposes one change.** Give the file and the line.
-  The **Fix** must be something a person can do and then be done with, not a rule to
-  follow. If the Fix cannot be written as a diff, do not file it — let the problem
-  recur, because a second occurrence usually names itself.
 
 ## File Shape
 
@@ -41,13 +42,12 @@ date: <YYYY-MM-DD>
 
 **What happened:** the observation, naming commits, files, or costs.
 
-**Suspected why:** one sentence. A guess, not a verdict — `retro` finds root
-cause with more evidence.
+**Suspected why:** one sentence, a guess. Omit it when no guess is visible.
 
-**Fix:** the smallest change worth considering.
+**Fix:** the smallest change worth considering. Omit it when none is visible.
 ```
 
-Four short paragraphs. A file that explains itself is the wrong shape.
+Four short paragraphs at most. A file that explains itself is the wrong shape.
 
 ## Rules
 

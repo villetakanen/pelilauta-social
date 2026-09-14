@@ -3,6 +3,7 @@ import type { Locale } from 'src/utils/i18n';
 export const settings: Locale = {
   actions: {
     title: 'Toiminnot',
+    theme: 'Vaalea teema',
   },
   personal: {
     title: 'Omat tiedot',

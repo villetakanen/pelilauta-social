@@ -92,7 +92,7 @@ test('the content floor has zero specificity and teasers read as compact summari
   await expect(teaserList).toHaveCSS('padding-left', `${teaserGutter}px`);
   const mediaBox = await media.boundingBox();
   const areaBox = await media
-    .locator('xpath=ancestor::div[contains(@class,"content-area")]')
+    .locator('xpath=ancestor::div[contains(@class,"content-area")][1]')
     .boundingBox();
   expect(mediaBox).toBeTruthy();
   expect(areaBox).toBeTruthy();

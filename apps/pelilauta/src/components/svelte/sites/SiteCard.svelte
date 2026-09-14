@@ -10,8 +10,9 @@ import { uid } from '../../../stores/session';
 interface Props {
   site: Site;
   showPlayerIndicator?: boolean;
+  elevation?: 0 | 1 | 2 | 3 | 4;
 }
-const { site, showPlayerIndicator = false }: Props = $props();
+const { site, showPlayerIndicator = false, elevation = 1 }: Props = $props();
 const owns = $derived(site.owners.includes($uid));
 const plays = $derived(site.players?.includes($uid));
 
@@ -42,6 +43,7 @@ const coverSrcset = $derived.by(() => {
   srcset={coverSrcset}
   sizes="(max-width: 768px) 100vw, 450px"
   description={site.description}
+  elevation={elevation}
 >
   {#snippet actions()}
     <span class="membership">

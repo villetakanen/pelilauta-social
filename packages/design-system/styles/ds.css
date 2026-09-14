@@ -18,6 +18,9 @@
 /* Fields.css follows toggle.css as the final form control; text fields share no
    gradient, elevation, or icon-size context with adjacent controls. */
 @import "./fields.css";
+/* Forms.css follows fields.css because a fieldset groups the text controls,
+   toggles, and supporting text that fields.css and toggle.css already style. */
+@import "./forms.css";
 @import "./fab.css";
 @import "./chrome-actions.css";
 @import "./rail.css";

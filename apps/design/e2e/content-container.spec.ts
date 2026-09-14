@@ -62,7 +62,7 @@ const boxes = async (page: Page) => {
   // The article spans the page for breakouts, and its blocks are the column, so
   // measure the box of a block.
   const column = await page
-    .locator('main#content > .content-prose > p')
+    .locator('main#content > .content-prose > .content-area')
     .first()
     .boundingBox();
   if (!main || !column) throw new Error('container not rendered');
@@ -288,14 +288,16 @@ test('a stack keeps its rhythm, and its last container closes it', async ({
   );
 });
 
-test("a content container among a content area's children adds its own separation", async ({
+test("a content container inside a content area's flow states its separation", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(BOOK);
 
   await page.evaluate(() => {
-    const area = document.querySelector('main#content > .content-prose');
+    const area = document.querySelector(
+      'main#content > .content-prose > .content-area',
+    );
     const block = document.createElement('div');
     block.innerHTML = `
       <p id="child-1">before</p>
@@ -319,14 +321,13 @@ test("a content container among a content area's children adds its own separatio
   const interval = (index: number) =>
     boxes[index + 1].y - (boxes[index].y + boxes[index].height);
 
-  // Between two ordinary blocks the area's rhythm is the whole interval.
+  // The content area gives an ordinary block its document interval.
   expect(interval(0)).toBeCloseTo(line, 0);
 
-  // A container states the separation after it wherever it sits, and the area
-  // states its rhythm whatever the child is, so where a container precedes a
-  // sibling both apply, through an island as well, which has no box.
-  expect(interval(1)).toBeCloseTo(2 * line, 0);
-  expect(interval(2)).toBeCloseTo(2 * line, 0);
+  // A nested container states that same interval on its own box, through an
+  // island as well, which has no box of its own.
+  expect(interval(1)).toBeCloseTo(line, 0);
+  expect(interval(2)).toBeCloseTo(line, 0);
 });
 
 /** The markup of one numbered child. Each is a surface, so its box paints. */
