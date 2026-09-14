@@ -16,7 +16,7 @@
 ## ALWAYS
 
 - Conform prose to `docs/WRITING.md` and `docs/ARCHITECTURE.md` when writing documents, books, specs, or comments. Reference those files directly instead of restating their contents.
-- Increment the root beta version with `pnpm version prerelease --preid=beta --no-git-tag-version` once per release on the first commit after merging to `main`. Subsequent commits on the branch skip version bumps because the version already leads `main`. CI tags the merge commit.
+- Increment the root prerelease version once per release, on the first commit after merging to `main`. Run `pnpm version prerelease --preid=<identifier> --no-git-tag-version`, reading the identifier from the version `package.json` carries. A hardcoded identifier sorts the version backwards once the series moves on. Open the changelog section for the new version in the same commit, because a test asserts the changelog carries a heading for the declared version. Subsequent commits on the branch skip version bumps because the version already leads `main`. CI tags the merge commit.
 - Remain on the active long-lived release branch, named `feat/<major>-<minor>`.
 - Execute the verification gate corresponding to the active question; `delivery.yaml` defines gate commands, cadences, and coverage.
 
