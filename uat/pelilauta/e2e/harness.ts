@@ -50,6 +50,20 @@ export async function openReaderPage(
 }
 
 /**
+ * A page a reader who is not signed in drives, and the browser behind it. A
+ * spec closes the browser when it is done.
+ */
+export async function openVisitorPage(): Promise<{
+  browser: Browser;
+  page: Page;
+}> {
+  const browser = await chromium.launch();
+  const context = await browser.newContext({ baseURL: BASE_URL });
+  const page = await context.newPage();
+  return { browser, page };
+}
+
+/**
  * A name no other run has used, so a journey that creates a site never collides
  * with what an earlier one left behind. The application derives the site's URL
  * key from the name, so the key is unique with it.

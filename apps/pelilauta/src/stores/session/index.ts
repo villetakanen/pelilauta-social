@@ -3,7 +3,7 @@ import { persistentAtom } from '@nanostores/persistent';
 import { pushSnack } from '@utils/client/snackUtils';
 import { logDebug, logError, logWarn } from '@utils/logHelpers';
 import type { User } from 'firebase/auth';
-import { atom, computed, onMount } from 'nanostores';
+import { atom, computed } from 'nanostores';
 import {
   $account,
   subscribe as subscribeToAccount,
@@ -82,16 +82,17 @@ export const $theme = computed(
 
 export { $profile, $profileMissing } from './profile';
 
-// We need to listen to Firebase auth state changes if any of the components
-// are interested in the session state
-onMount(uid, () => {
-  const unsubscribe = auth.onAuthStateChanged(handleFirebaseAuthChange);
-  logDebug('sessionStore', 'onMount', 'Subscribed to auth state changes');
-  return () => {
-    unsubscribe();
-    logDebug('sessionStore', 'onMount', 'Unsubscribed from auth state changes');
-  };
-});
+/*
+ * The browser learns who the reader is here, and nowhere else. A store mount
+ * hook would have missed it: the class toggle above subscribes to `uid` as this
+ * module loads, so the store is mounted before a hook could arm, and the hook
+ * fires on the first listener alone. The listener is attached on load instead,
+ * which no import order can silence.
+ */
+if (typeof window !== 'undefined') {
+  auth.onAuthStateChanged(handleFirebaseAuthChange);
+  logDebug('sessionStore', 'Subscribed to auth state changes');
+}
 
 /**
  * This function is called whenever the firebase auth state changes.
