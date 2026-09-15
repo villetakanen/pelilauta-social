@@ -2,7 +2,7 @@
  * Journey: A signed-in reader answers a thread from the chat bar, and a reader
  * who is not signed in is invited to join the discussion instead.
  *
- * `specs/pelilauta/reply-authoring/spec.md` states both.
+ * `specs/pelilauta/threads/reply-authoring/spec.md` states both.
  */
 import type { Browser, Page } from 'playwright';
 import { afterAll, beforeAll, expect, it } from 'vitest';
@@ -30,15 +30,26 @@ it('gives a signed-in reader the chat bar, and a visitor the invitation to join'
   // 1. The signed-in reader opens the thread.
   await readerPage.goto(`/threads/${THREAD_KEY}`);
 
-  // The bar stands, so there is somewhere to type.
+  // The bar stands, so there is somewhere to type. Watch for the invitation
+  // on every tick while waiting, so a flash during rehydration is caught,
+  // not just its state once the bar settles.
   const bar = readerPage.locator('.cn-chat-bar');
-  await expect.poll(() => bar.isVisible(), { timeout: 30_000 }).toBe(true);
-
-  // Nothing invites a reader who is already here.
   const invitation = readerPage.getByRole('link', {
     name: /osallistu keskusteluun/i,
   });
-  await expect.poll(() => invitation.count(), { timeout: 15_000 }).toBe(0);
+  let invitationSeen = false;
+  await expect
+    .poll(
+      async () => {
+        if ((await invitation.count()) > 0) invitationSeen = true;
+        return bar.isVisible();
+      },
+      { timeout: 30_000 },
+    )
+    .toBe(true);
+
+  // The invitation never showed, not even for a moment.
+  expect(invitationSeen).toBe(false);
 
   // 2. A reader who is not signed in opens the same thread.
   await visitorPage.goto(`/threads/${THREAD_KEY}`);

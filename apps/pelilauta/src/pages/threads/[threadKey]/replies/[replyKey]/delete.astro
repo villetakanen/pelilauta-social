@@ -1,9 +1,9 @@
 ---
+import ReplyDeleteSection from '@pelilauta/threads/client/ReplyDeleteSection.svelte';
 import { REPLIES_COLLECTION, ReplySchema } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME } from 'src/schemas/ThreadSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
-import ReplyDeleteSection from '../../../../../components/svelte/discussion/ReplyDeleteSection.svelte';
 import { serverDB } from '../../../../../firebase/server';
 import ModalPage from '../../../../../layouts/ModalPage.astro';
 

@@ -7,12 +7,13 @@ import {
   ReplySchema,
 } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
+import { uid } from 'src/stores/session';
+import { isActive, isRehydrating } from 'src/stores/session/computed';
+import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
-import { authUser, sessionState, uid } from '../../../stores/session';
-import { hasSeen, setSeen, subscription } from '../../../stores/subscription';
 import ReplyArticle from './ReplyArticle.svelte';
 
 interface Props {
@@ -22,11 +23,6 @@ interface Props {
 const { discussion: initDiscussion, thread }: Props = $props();
 
 let discussion = $state(initDiscussion);
-
-const isLoading = $derived(
-  $sessionState === 'loading' || ($sessionState === 'initial' && $uid !== ''),
-);
-const isAuthenticated = $derived($authUser && $sessionState === 'active');
 
 onMount(async () => {
   const lastSeen = $subscription?.seenEntities?.[thread.key] || 0;
@@ -107,11 +103,11 @@ onMount(async () => {
     so nothing stands here for them. A reader who is not signed in is invited
     to the discussion instead, at the end of the replies, in the document.
   -->
-  {#if isLoading}
+  {#if $isRehydrating}
     <div class="text-center">
       <CnLoader inline />
     </div>
-  {:else if !isAuthenticated}
+  {:else if !$isActive}
     <div class="text-center">
       <a href="/login" class="button">
         <CnIcon noun="discussion" />

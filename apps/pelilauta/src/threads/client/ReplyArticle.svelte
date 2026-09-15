@@ -3,16 +3,16 @@ import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
+import ProfileLink from '@svelte/app/ProfileLink.svelte';
+import ReactionButton from '@svelte/app/ReactionButton.svelte';
 import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
+import { getProfileAtom } from 'src/stores/profiles';
+import { editedReply, editReply } from 'src/stores/replyEditing';
+import { uid } from 'src/stores/session';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
-import { getProfileAtom } from '../../../stores/profiles';
-import { editedReply, editReply } from '../../../stores/replyEditing';
-import { uid } from '../../../stores/session';
-import ProfileLink from '../app/ProfileLink.svelte';
-import ReactionButton from '../app/ReactionButton.svelte';
 
 interface Props {
   reply: Reply;

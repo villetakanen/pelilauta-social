@@ -1,10 +1,10 @@
 <script lang="ts">
+import WithAuth from '@svelte/app/WithAuth.svelte';
 import { deleteReply } from 'src/firebase/client/threads/deleteReply';
 import type { Reply } from 'src/schemas/ReplySchema';
+import { uid } from 'src/stores/session';
 import { pushSessionSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
-import { uid } from '../../../stores/session';
-import WithAuth from '../app/WithAuth.svelte';
 
 interface Props {
   threadKey: string;
