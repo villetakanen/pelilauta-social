@@ -14,20 +14,19 @@ thread, while anonymous visitors receive a sign-in prompt at the end of the disc
 
 ### Architecture
 
-`@pelilauta/threads/client/ThreadChatBar.svelte` mounts into `Base.astro`'s `authoring` slot
+`@pelilauta/threads/client/ThreadChatBar.svelte` mounts into the `authoring` slot of `Base.astro`
 in `CnAppChrome`, wrapping `@design-system/components/CnChatBar.svelte`.
 
 `ThreadChatBar` handles both new replies and edits. When a member edits an existing reply,
 `@pelilauta/stores/replyEditing` coordinates the active edit target with the bar. Submissions
 call `submitReply` to create a reply and `updateReply` to save an edit.
 
-
 ### Constraints
 
-An in-progress reply draft is preserved when an edit borrows the bar, and restored when
-that edit finishes or cancels.
+The bar preserves an in-progress reply draft when an edit borrows the bar, and restores the
+draft when that edit finishes or cancels.
 
-A failed submission retains the draft text and attached files, displaying the error
+A failed submission retains draft text and attached files, displaying the error
 message above the input row.
 
 The bar edits one reply at a time. Starting a new edit replaces any unsaved in-progress
@@ -40,7 +39,7 @@ is in flight.
 
 ### Definition of Done
 
-- A signed-in member can submit a new reply or edit their existing reply from the docked
+- A signed-in member can submit a new reply or edit an existing reply from the docked
   chrome bar.
 - Attached images preview in the supporting area before sending.
 - A failed submission preserves draft text and attachments with an error notice.
@@ -48,7 +47,7 @@ is in flight.
 
 ### Regression Guardrails
 
-- Ending an edit restores keyboard focus to a visible element in the document; it does
+- Ending an edit restores keyboard focus to a visible element in the document; focus does
   not target a closed or hidden menu item.
 - Entering edit mode preserves any in-progress reply draft in memory without clearing it.
 
@@ -71,7 +70,7 @@ Feature: Reply Authoring
     Given a signed-in member with a reply draft in the chat bar
     When they submit the reply
     Then the draft clears
-    And the new reply is posted to the thread
+    And the new reply appears in the thread
 
   Scenario: Failed submission preserves draft
     Given a signed-in member with a reply draft
@@ -81,7 +80,7 @@ Feature: Reply Authoring
 
   Scenario: Image attachments preview before submission
     Given a signed-in member who selects an image attachment
-    When the file is selected
+    When the member selects the file
     Then the image previews above the input row
 
   Scenario: Empty draft cannot be sent
@@ -97,7 +96,7 @@ Feature: Reply Authoring
 
   Scenario: Edit completion restores in-progress draft
     Given a member editing a reply with a prior draft held in memory
-    When the edit is submitted or canceled
+    When the member submits or cancels the edit
     Then the held draft returns to the chat bar
     And focus returns to the edit trigger control
 
@@ -105,5 +104,5 @@ Feature: Reply Authoring
     Given a member currently editing a reply
     When they select edit on another reply
     Then the chat bar loads the second reply
-    And the previous edit draft is discarded
+    And the bar discards the previous edit draft
 ```

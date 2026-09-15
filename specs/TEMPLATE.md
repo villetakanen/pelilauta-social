@@ -5,37 +5,25 @@ status: proposed
 # <Capability>
 
 <!--
-Spec template. Copy to:
+Spec template. Destination paths:
 - Design system: specs/design-system/<category>/<capability>/spec.md (e.g. specs/design-system/components/cn-chat-bar/spec.md)
 - Application:   specs/pelilauta/<sub-app>/<capability>/spec.md (e.g. specs/pelilauta/threads/reply-authoring/spec.md)
 
 
-status is a process gate, not protection: `proposed` — the text carries a new,
-material or unsettled amendment the operator has not cleared. A task starts from
-it only when the operator explicitly asks. For a minor, settled amendment to a
-live spec, show an unapplied diff and its reason in chat. Apply an accepted
-amendment while retaining `live`. `live` — an operator has read it through; it
-portrays how the capability is supposed to work. `deprecated` — kept for its
-context or architecture as a lesson or example.
+The status field acts as a process gate:
+- `proposed`: The text carries a new, material, or unsettled amendment the operator has not cleared. A task starts from it only when the operator explicitly requests.
+- `live`: An operator cleared the spec; it portrays intended capability operation. For a minor, settled amendment to a live spec, show an unapplied diff and rationale in chat. Apply the accepted amendment while retaining `live` status.
+- `deprecated`: Retained for historical context or architectural reference.
 
-A material amendment created during implementation becomes `proposed` without
-stopping that task. Run the spec review and flag the amendment for operator review.
+A material amendment created during implementation becomes `proposed` without stopping that task. Run the spec review and flag the amendment for operator review.
 
-Prose rules: docs/WRITING.md. The spec-specific tests: can an agent derive this
-line from the code? If yes, delete it. Name the mistake a sentence prevents; if
-it prevents none, or something else already prevents it, delete it. A section
-the code fully expresses states `(implicit)`.
+Follow the prose rules in docs/WRITING.md. Delete any line an agent can derive from the code. Name the mistake a sentence prevents; delete a sentence if it prevents no mistake or if another source already prevents it. A section that the code fully expresses states `(implicit)`.
 
-A spec states what its own capability does. It cannot bind another capability, so
-a sentence about what another one does, does not do, or is the only exception to
-governs nothing, and goes stale the moment that capability changes. Where the
-boundary matters, name the spec that governs the other side and stop there.
+A spec defines what the capability does. It cannot bind another capability; sentences describing other capabilities govern nothing and become stale when those capabilities change. Where the boundary matters, name the governing spec of the other capability and stop there.
 
-Do not write datelines, provenance, or the narrative of how a decision was
-reached; git carries those. Do not announce the spec's authority ("the set
-is closed; a step is added by changing this spec").
+Do not write datelines, provenance, or decision narratives; git carries them. Do not announce the authority of the spec.
 
-Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.
+.agents/skills/spec/SKILL.md defines the authoring procedure and review gate.
 -->
 
 ## Blueprint
@@ -59,28 +47,28 @@ Example:
 
 <!--
 State the structural wiring and cross-boundary coordination:
-1. Component placement: The component's mounting slot or parent layout using `@package` aliases (e.g. `@pelilauta/threads/client/ThreadChatBar.svelte`, `@design-system/components/CnChatBar.svelte`).
+1. Component placement: The component mounting slot or parent layout using `@package` aliases (such as `@pelilauta/threads/client/ThreadChatBar.svelte` or `@design-system/components/CnChatBar.svelte`).
 2. State coordination: Reactive stores or event channels connecting this capability across islands.
-3. Execution path: Handlers or API endpoints that perform the writes.
+3. Execution path: Handlers or API endpoints that perform writes.
 
-Do not describe what neighboring components or streams render; describe only this capability's wiring.
-When a capability extends another, name the spec it extends and state only what differs.
+Do not describe what neighboring components or streams render; describe only the wiring for this capability.
+When a capability extends another, name the extended spec and state only what differs.
 -->
 
 ### Documentation
 
 <!--
-(Design System specs only)
-The books that carry this capability. Omit this entire section in application/sub-app specs.
+Design System specs only.
+List the books that carry this capability. Omit this section in application specs.
 -->
 
 ### Constraints
 
 <!--
-Invariants, data-loss protection rules, concurrency boundaries, and validation limits that govern the implementation.
+State invariants, data-loss protection rules, concurrency boundaries, and validation limits that govern the implementation.
 Do not write basic conditional rendering rules here; specify observable UI behaviors in Scenarios instead.
 
-Do not copy values defined elsewhere. Link to them instead.
+Do not copy values defined elsewhere; link to them instead.
 -->
 
 ## Contract
@@ -88,8 +76,8 @@ Do not copy values defined elsewhere. Link to them instead.
 ### Definition of Done
 
 <!--
-Observable product completion criteria:
-- State what the user can accomplish when complete.
+Define observable product completion criteria:
+- State what the user can accomplish upon completion.
 - Do not name test file paths, test runners, or test suites.
 - Do not list historical migration cleanup items.
 -->
@@ -97,15 +85,15 @@ Observable product completion criteria:
 ### Regression Guardrails
 
 <!--
-Silent failure modes and accessibility/state traps (e.g. keyboard focus lost to hidden elements, state overwrite on unmount).
+List silent failure modes and accessibility or state traps, such as keyboard focus lost to hidden elements or state overwrite on unmount.
 Do not use this section to argue or defend design decisions.
 -->
 
 ### Scenarios
 
 <!--
-Observable behavioral specification in standard Gherkin.
-One scenario is one distinct behavior.
+Specify observable behavior in standard Gherkin.
+Each scenario defines one distinct behavior.
 -->
 
 ```gherkin
