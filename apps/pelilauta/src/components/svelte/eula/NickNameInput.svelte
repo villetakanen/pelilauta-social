@@ -1,7 +1,9 @@
 <script lang="ts">
 import CnAvatar from '@design-system/components/CnAvatar.svelte';
+import { auth, db } from '@firebase/client';
 import { toMekanismiURI } from '@utils/mekanismiUtils';
 import { toFid } from '@utils/toFid';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 
@@ -14,8 +16,7 @@ let exists = $state(false);
 let currentNick = $state(nick);
 let avatarUrl = $state('');
 
-onMount(async () => {
-  const { auth } = await import('../../../firebase/client');
+onMount(() => {
   if (auth.currentUser) {
     getUserInfo(auth.currentUser);
   } else {
@@ -76,11 +77,6 @@ async function checkForDuplicate(nickname: string): Promise<boolean> {
   if (!nickname) return false;
 
   try {
-    const { getDocs, getFirestore, collection, query, where } = await import(
-      'firebase/firestore'
-    );
-    const { auth } = await import('../../../firebase/client');
-    const db = getFirestore();
     const username = toFid(nickname);
 
     const q = query(
