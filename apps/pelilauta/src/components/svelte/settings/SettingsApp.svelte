@@ -6,6 +6,7 @@ import {
   profileMissing,
   subscribeToProfile,
 } from '@stores/session/profile';
+import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 import ProfileSection from '../../shared/ProfileSection.svelte';
 import Actions from './Actions.svelte';
@@ -29,14 +30,14 @@ onMount(() => {
 {:else if $profileMissing}
   <div class="surface">
     <p>
-      Profile not found. Please try logging out and back in.
+      {t('settings:missingProfile.title')}
     </p>
     <p class="text-low">
-      If the issue persists, your profile data might be corrupted.
+      {t('settings:missingProfile.info')}
     </p>
     <div>
       <a href="/onboarding" class="button">
-        Repair Profile
+        {t('settings:missingProfile.action')}
       </a>
     </div>
   </div>

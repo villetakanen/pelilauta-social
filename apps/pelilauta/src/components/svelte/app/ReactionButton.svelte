@@ -1,6 +1,9 @@
 <script lang="ts">
 import CnReactionButton from '@design-system/components/CnReactionButton.svelte';
+import { db } from '@firebase/client';
 import { persistentAtom } from '@nanostores/persistent';
+import { uid } from '@stores/session';
+import { doc, getDoc } from 'firebase/firestore';
 import { toggleReaction } from 'src/firebase/client/reactions';
 import {
   REACTIONS_COLLECTION_NAME,
@@ -11,7 +14,6 @@ import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { logDebug, logWarn } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
-import { uid } from '../../../stores/session';
 
 /**
  * An universal "love" button for Pelilauta 16+. The functionality here might break 16 and lesser
@@ -73,9 +75,8 @@ const disabled = $derived($reactions.subscribers.includes($uid));
 
 onMount(async () => {
   try {
-    const { getFirestore, doc, getDoc } = await import('firebase/firestore');
     const reactionsDoc = await getDoc(
-      doc(getFirestore(), `${REACTIONS_COLLECTION_NAME}/${key}`),
+      doc(db, `${REACTIONS_COLLECTION_NAME}/${key}`),
     );
     if (reactionsDoc.exists()) {
       reactions.set(reactionsSchema.parse(reactionsDoc.data()));

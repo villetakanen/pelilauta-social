@@ -23,10 +23,10 @@ import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import { submitReply } from 'src/firebase/client/threads/submitReply';
 import { updateReply } from 'src/firebase/client/threads/updateReply';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import { editedReply, endEditing } from 'src/stores/replyEditing';
+import { isActive } from 'src/stores/session/computed';
 import { t } from 'src/utils/i18n';
 import { logError } from 'src/utils/logHelpers';
-import { editedReply, endEditing } from '../../../stores/replyEditing';
-import { authUser, sessionState } from '../../../stores/session';
 
 interface Props {
   thread: Thread;
@@ -44,7 +44,7 @@ let fileInput = $state<HTMLInputElement | null>(null);
 let heldDraft = $state('');
 let heldFiles = $state<File[]>([]);
 
-const signedIn = $derived($authUser && $sessionState === 'active');
+const signedIn = $derived($isActive);
 const editing = $derived(
   $editedReply?.threadKey === thread.key ? $editedReply : null,
 );

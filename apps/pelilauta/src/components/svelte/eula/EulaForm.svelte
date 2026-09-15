@@ -27,7 +27,7 @@ $effect(() => {
 
 async function getUserInfo() {
   try {
-    const { auth } = await import('../../../firebase/client');
+    const { auth } = await import('@firebase/client');
     const user = auth.currentUser;
     if (user?.photoURL) {
       avatarURL = user.photoURL;
@@ -56,7 +56,7 @@ async function handleSubmit(event: Event) {
   });
 
   try {
-    const { authedPost } = await import('../../../firebase/client/apiClient');
+    const { authedPost } = await import('@firebase/client/apiClient');
     const response = await authedPost('/api/onboarding/complete-eula', {
       nick,
       avatarURL,
@@ -85,7 +85,7 @@ async function handleCancel(event: Event) {
   logDebug('EulaForm', 'User cancelled onboarding, logging out');
 
   try {
-    const { logout } = await import('../../../stores/session');
+    const { logout } = await import('@stores/session');
     await logout();
     // Redirect to home page after logout
     window.location.href = '/';

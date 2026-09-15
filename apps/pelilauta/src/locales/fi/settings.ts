@@ -5,6 +5,11 @@ export const settings: Locale = {
     title: 'Toiminnot',
     theme: 'Vaalea teema',
   },
+  missingProfile: {
+    title: 'Profiilia ei löytynyt. Kirjaudu ulos ja takaisin sisään.',
+    info: 'Jos ongelma toistuu, profiilitietosi ovat voineet vioittua.',
+    action: 'Korjaa profiili',
+  },
   personal: {
     title: 'Omat tiedot',
   },

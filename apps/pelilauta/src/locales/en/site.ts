@@ -18,6 +18,7 @@ export const site: Locale = {
   },
   handouts: {
     title: 'Secrets',
+    empty: 'This site has no secrets.',
     edit: {
       title: 'Edit secret',
     },

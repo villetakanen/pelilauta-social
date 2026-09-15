@@ -5,107 +5,102 @@ status: proposed
 # <Capability>
 
 <!--
-Spec template. Copy to specs/<domain>/<capability>/spec.md.
+Spec template. Destination paths:
+- Design system: specs/design-system/<category>/<capability>/spec.md (e.g. specs/design-system/components/cn-chat-bar/spec.md)
+- Application:   specs/pelilauta/<sub-app>/<capability>/spec.md (e.g. specs/pelilauta/threads/reply-authoring/spec.md)
 
-status is a process gate, not protection: `proposed` — the text carries a new,
-material or unsettled amendment the operator has not cleared. A task starts from
-it only when the operator explicitly asks. For a minor, settled amendment to a
-live spec, show an unapplied diff and its reason in chat. Apply an accepted
-amendment while retaining `live`. `live` — an operator has read it through; it
-portrays how the capability is supposed to work. `deprecated` — kept for its
-context or architecture as a lesson or example.
 
-A material amendment created during implementation becomes `proposed` without
-stopping that task. Run the spec review and flag the amendment for operator review.
+The status field acts as a process gate:
+- `proposed`: The text carries a new, material, or unsettled amendment the operator has not cleared. A task starts from it only when the operator explicitly requests.
+- `live`: An operator cleared the spec; it portrays intended capability operation. For a minor, settled amendment to a live spec, show an unapplied diff and rationale in chat. Apply the accepted amendment while retaining `live` status.
+- `deprecated`: Retained for historical context or architectural reference.
 
-Prose rules: docs/WRITING.md. The spec-specific tests: can an agent derive this
-line from the code? If yes, delete it. Name the mistake a sentence prevents; if
-it prevents none, or something else already prevents it, delete it. A section
-the code fully expresses states `(implicit)`.
+A material amendment created during implementation becomes `proposed` without stopping that task. Run the spec review and flag the amendment for operator review.
 
-A spec states what its own capability does. It cannot bind another capability, so
-a sentence about what another one does, does not do, or is the only exception to
-governs nothing, and goes stale the moment that capability changes. Where the
-boundary matters, name the spec that governs the other side and stop there.
+Follow the prose rules in docs/WRITING.md. Delete any line an agent can derive from the code. Name the mistake a sentence prevents; delete a sentence if it prevents no mistake or if another source already prevents it. A section that the code fully expresses states `(implicit)`.
 
-Do not write datelines, provenance, or the narrative of how a decision was
-reached; git carries those. Do not announce the spec's authority ("the set
-is closed; a step is added by changing this spec").
+A spec defines what the capability does. It cannot bind another capability; sentences describing other capabilities govern nothing and become stale when those capabilities change. Where the boundary matters, name the governing spec of the other capability and stop there.
 
-Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.
+Do not write datelines, provenance, or decision narratives; git carries them. Do not announce the authority of the spec.
+
+.agents/skills/spec/SKILL.md defines the authoring procedure and review gate.
 -->
 
 ## Blueprint
 
 ### Context
 
-The product outcome this capability delivers: who is served, and what real-world
-task or experience they get. Open with the capability's purpose — if deleting the
-capability loses nothing nameable in the first sentence, the why is missing.
-Do not describe the world before the work; that description is false once the
-work lands. One paragraph.
+<!--
+State the baseline and capability purpose in 1–2 direct sentences:
+1. Baseline: The existing page or parent domain context this capability attaches to.
+2. Purpose: The specific user action or capability it introduces.
 
-The Context is the paragraph the rest of the spec exists to serve. The need is
-a product fact: it comes from a human decision, an ADR or a plan — an
-implementation carries behaviour, never need. Test: could the paragraph be
-written by reading the component? Then it restates behaviour as need; ask the
-human, and write the answers.
+State facts without philosophical justifications, metaphors, or defensive "X, not Y" rhetoric.
+
+Example:
+> Pelilauta threads display discussion topics and their chronological replies. Reply authoring
+> provides the docked chrome composer for signed-in members to post and edit replies on a
+> thread, while anonymous visitors receive a sign-in prompt at the end of the discussion.
+-->
 
 ### Architecture
 
-What would a reader of the code get backwards? State which way the dependencies
-run, and any structural choice that reading one file would not reveal.
+<!--
+State the structural wiring and cross-boundary coordination:
+1. Component placement: The component mounting slot or parent layout using `@package` aliases (such as `@pelilauta/threads/client/ThreadChatBar.svelte` or `@design-system/components/CnChatBar.svelte`).
+2. State coordination: Reactive stores or event channels connecting this capability across islands.
+3. Execution path: Handlers or API endpoints that perform writes.
 
-When a capability extends another, name the spec it extends and state only what
-differs. The extended spec governs wherever this one is silent. Do not restate an
-inherited rule to make this spec read completely.
+Do not describe what neighboring components or streams render; describe only the wiring for this capability.
+When a capability extends another, name the extended spec and state only what differs.
+-->
 
 ### Documentation
 
-The books that carry this capability. A change here has to reach every page
-listed.
+<!--
+Design System specs only.
+List the books that carry this capability. Omit this section in application specs.
+-->
 
 ### Constraints
 
-What would someone guess wrong if it were not written here?
+<!--
+State invariants, data-loss protection rules, concurrency boundaries, and validation limits that govern the implementation.
+Do not write basic conditional rendering rules here; specify observable UI behaviors in Scenarios instead.
 
-Do not copy a value that is already written somewhere else. Link to it instead —
-two copies can disagree.
-
-A decorative micro-interaction — motion that announces nothing and changes no
-state — is one sentence here: its trigger, what it shows, and the clause that
-keeps it harmless, such as changing no measurement or resting under reduced
-motion. It gets no scenario; the human review in the Definition of Done is its
-gate.
+Do not copy values defined elsewhere; link to them instead.
+-->
 
 ## Contract
 
 ### Definition of Done
 
-How do we know we are finished? Observable success criteria.
-
-State the outcome, not the instrument. Naming a check here, or listing what it
-asserts, writes the test plan before the behaviour is settled. What such a check
-would assert is already a Constraint, a Guardrail or a Scenario; where it is not,
-write it there.
+<!--
+Define observable product completion criteria:
+- State what the user can accomplish upon completion.
+- Do not name test file paths, test runners, or test suites.
+- Do not list historical migration cleanup items.
+-->
 
 ### Regression Guardrails
 
-What breaks silently, and when? Invariants that must survive changes to this and
-neighbouring capabilities.
+<!--
+List silent failure modes and accessibility or state traps, such as keyboard focus lost to hidden elements or state overwrite on unmount.
+Do not use this section to argue or defend design decisions.
+-->
 
 ### Scenarios
 
-What behaviour must not change? Gherkin, without dictating implementation. Name
-the check that runs each one, where one exists.
-
-One scenario is one behaviour. The same behaviour holding across a scheme, a size
-or a presentation is still one scenario; write a second one only where the
-behaviour itself differs. Where a rendered specimen is the detector rather than a
-check, name the specimen.
+<!--
+Specify observable behavior in standard Gherkin.
+Each scenario defines one distinct behavior.
+-->
 
 ```gherkin
-Given <state>
-When <action>
-Then <observable outcome>
+Feature: <Capability Name>
+
+  Scenario: <Descriptive Scenario Name>
+    Given <state>
+    When <action>
+    Then <observable outcome>
 ```

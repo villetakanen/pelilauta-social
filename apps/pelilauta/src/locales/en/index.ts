@@ -51,6 +51,11 @@ export const en: Locale = {
     actions: {
       theme: 'Light theme',
     },
+    missingProfile: {
+      title: 'Profile not found. Sign out and back in.',
+      info: 'If the problem persists, your profile data may be corrupted.',
+      action: 'Repair profile',
+    },
   },
   site,
   snack,

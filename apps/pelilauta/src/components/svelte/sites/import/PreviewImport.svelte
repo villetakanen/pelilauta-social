@@ -5,6 +5,7 @@ import {
   isImporting,
 } from 'src/stores/site/importsStore';
 import { pushSnack } from 'src/utils/client/snackUtils';
+import { t } from 'src/utils/i18n';
 import { logDebug, logError } from 'src/utils/logHelpers';
 import { toMekanismiURI } from 'src/utils/mekanismiUtils';
 import { uid } from '../../../../stores/session';
@@ -54,7 +55,7 @@ function removeUndefinedValues<T extends Record<string, unknown>>(
 
 async function importPages() {
   if (!currentSite || !$uid) {
-    pushSnack('Error: No site or user authenticated');
+    pushSnack(t('site:import.snacks.noSession'));
     return;
   }
 
@@ -153,7 +154,7 @@ async function importPages() {
     }
   } catch (error) {
     logError('PreviewImport', 'Error during import:', error);
-    pushSnack('Import failed');
+    pushSnack(t('site:import.snacks.failed'));
   } finally {
     importStore.setImporting(false);
   }
@@ -165,12 +166,12 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
 
 {#if hasPages}
 <section class="surface">
-  <h2>Import Preview</h2>
-  <p>Review the files to be imported. Pages with matching names will automatically overwrite existing content. Remove any files you don't want to import.</p>
+  <h2>{t('site:import.preview.title')}</h2>
+  <p>{t('site:import.preview.info')}</p>
   
   <div class="preview-toolbar">
-    <p>{pages.length} file{pages.length === 1 ? '' : 's'} ready</p>
-    <button class="text" onclick={clearAll} type="button">Clear All</button>
+    <p>{t('site:import.preview.ready', { count: pages.length })}</p>
+    <button class="text" onclick={clearAll} type="button">{t('site:import.preview.clearAll')}</button>
   </div>
   
   <div class="preview-list">
@@ -189,28 +190,28 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
             onclick={() => removeFile(index)}
             type="button"
           >
-            Remove
+            {t('site:import.preview.remove')}
           </button>
         </div>
         <p>
-          Source: <code>{page.fileName}</code>
+          {t('site:import.preview.source')}: <code>{page.fileName}</code>
         </p>
         {#if page.markdownContent}
           <p>
-            Content preview: {page.markdownContent.slice(0, 100)}{page.markdownContent.length > 100 ? '...' : ''}
+            {t('site:import.preview.contentPreview')}: {page.markdownContent.slice(0, 100)}{page.markdownContent.length > 100 ? '...' : ''}
           </p>
         {/if}
         
         {#if exists}
           <div>
             {#if page.action === 'overwrite'}
-              <p>⚠️ Will overwrite existing page</p>
+              <p>⚠️ {t('site:import.preview.willOverwrite')}</p>
             {:else}
-              <p>ℹ️ Will create new page (with auto-generated name)</p>
+              <p>ℹ️ {t('site:import.preview.willCreateRenamed')}</p>
             {/if}
           </div>
         {:else}
-          <p>✅ Will create new page</p>
+          <p>✅ {t('site:import.preview.willCreate')}</p>
         {/if}
       </article>
     {/each}
@@ -218,7 +219,7 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
   
   <div class="text-end">
     <button class="text" onclick={clearAll} disabled={importing} type="button">
-      Cancel
+      {t('site:import.preview.cancel')}
     </button>
     <button 
       onclick={importPages}
@@ -226,9 +227,9 @@ const canImport = $derived(hasPages && !importing && currentSite && $uid);
       type="button"
     >
       {#if importing}
-        Importing...
+        {t('site:import.preview.importing')}
       {:else}
-        Import {pages.length} Page{pages.length === 1 ? '' : 's'}
+        {t('site:import.preview.importAction', { count: pages.length })}
       {/if}
     </button>
   </div>

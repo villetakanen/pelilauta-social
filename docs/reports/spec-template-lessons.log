@@ -1,0 +1,39 @@
+# Spec Template Lessons Log
+
+## 2026-09-15 - Context section prompting creates purple prose
+
+- **Symptom**: In `specs/pelilauta/reply-authoring/spec.md`, the Context section became dramatic and philosophical ("Composing is the act the thread exists for, so it is present rather than summoned: a signed-in reader always has somewhere to type...").
+- **Root cause in template**: `specs/TEMPLATE.md` instructs: *"Open with the capability's purpose — if deleting the capability loses nothing nameable in the first sentence, the why is missing... The Context is the paragraph the rest of the spec exists to serve."* This pushes LLMs toward grandiose, poetic rationalizations instead of crisp, factual statements.
+- **Exemplar pattern** (`specs/design-system/content-area/spec.md`): State the baseline system state and the specific role/override this capability provides in two direct sentences:
+  > Preflight resets browser defaults across the app. `.content-area` overrides that reset for site content, to render wiki pages, threads or handouts as documents.
+- **Lesson**: The Context prompt should ask for: (1) what existing system/page structure this capability attaches to or modifies, and (2) what primary user task it enables, stated factually without existential justifications.
+
+## 2026-09-15 - Missing Domain Anchoring in Specs and Directory Layout
+
+- **Symptom**: Capabilities were placed at flat paths like `specs/pelilauta/reply-authoring/` rather than within their functional domain (`specs/pelilauta/threads/reply-authoring/`). The Context text opened without anchoring the reader in the parent domain (Threads).
+- **Lesson**: Specs for application features must be organized by domain hierarchy (`specs/pelilauta/<domain>/<capability>/spec.md`) and the Context paragraph must state the domain baseline before defining what the capability introduces.
+
+## 2026-09-15 - Spec Scope Leaking to Adjacent Components
+
+- **Symptom**: `specs/pelilauta/reply-authoring/spec.md` contained paragraphs describing what `DiscussionSection.svelte` rendered (reply list, unauthenticated prompt), even though the capability was strictly the composer (`ThreadChatBar`).
+- **Lesson**: Delete statements about neighboring components that belong to their own capabilities/specs. A capability spec must only state what its own components and coordination mechanisms do.
+
+## 2026-09-15 - Blind Copying of DS-Only Sections to Application Specs
+
+- **Symptom**: `specs/pelilauta/reply-authoring/spec.md` carried a `### Documentation` section stating "None...", when application-level specs do not have or require a Documentation section (only Design System specs carry books).
+- **Lesson**: Omit the `### Documentation` heading completely in application/sub-app specs instead of writing empty/filler boilerplate.
+
+## 2026-09-15 - Distinguishing Constraints from Gherkin Scenarios
+
+- **Symptom**: The Constraints section was stuffed with simple conditional rendering descriptions (e.g. "signed in sees bar, signed out sees invitation, resolving sees loader").
+- **Lesson**: If a statement is purely an observable state/action/outcome check, it belongs in Gherkin scenarios (`Feature: ...`). `### Constraints` should be strictly reserved for design invariants, data-loss protection rules, concurrency boundaries, and non-obvious limits that a developer could get wrong during implementation.
+
+## 2026-09-15 - Naming Test Instruments and Migration Cleanup in Definition of Done
+
+- **Symptom**: `specs/pelilauta/reply-authoring/spec.md` listed test file names (e.g. `apps/pelilauta/e2e/add-reply.spec.ts drives the bar...`) and migration remnants (e.g. `No Pelilauta surface renders cn-reply-dialog`) in the Definition of Done.
+- **Lesson**: Definition of Done must state observable product completion criteria, never specific test file paths or historical migration cleanup tasks.
+
+## 2026-09-15 - Regression Guardrails Turned Into Design Justifications
+
+- **Symptom**: `specs/pelilauta/reply-authoring/spec.md` used Regression Guardrails to defend architectural choices (e.g. "An edit and a new reply stay one bar. A second authoring surface is what this capability replaced.").
+- **Lesson**: Regression Guardrails must strictly document silent traps and invariants that fail without obvious runtime errors (such as accessibility focus lost to hidden elements or silent state overwrite). They are not an argumentation space.

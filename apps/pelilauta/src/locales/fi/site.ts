@@ -66,6 +66,7 @@ export const site: Locale = {
   },
   handouts: {
     title: 'Salaisuudet',
+    empty: 'Sivustolla ei ole salaisuuksia.',
     description:
       'Sivustolle lisätty jaettu materiaali, joka on rajattu. Tämä listaus näkyy vain omistajille, mutta itse salaisuudet ovat jaettavissa suoralla linkillä muille.',
     create: {
@@ -83,12 +84,38 @@ export const site: Locale = {
   },
   import: {
     title: 'Tuo sivuja',
+    upload: {
+      title: 'Tuo markdown-tiedostoja',
+      description:
+        'Valitse yksi tai useampi .md-tiedosto. Frontmatter luetaan sivun metatiedoiksi.',
+      select: 'Valitse tiedostot',
+      processing: 'Käsitellään…',
+      clear: 'Tyhjennä ({count})',
+      ready: 'Tuotavat tiedostot',
+      category: '(luokka: {category})',
+    },
     preview: {
       title: 'Esikatselu',
       description: 'Tuodaan {count} sivua',
+      info: 'Tarkista tuotavat tiedostot. Samannimiset sivut korvataan. Poista tiedostot, joita et halua tuoda.',
+      ready: '{count} tiedostoa valmiina',
+      clearAll: 'Tyhjennä kaikki',
+      remove: 'Poista',
+      source: 'Lähde',
+      contentPreview: 'Sisällön alku',
+      willOverwrite: 'Korvaa olemassa olevan sivun',
+      willCreateRenamed: 'Luo uuden sivun, jolle annetaan uusi nimi',
+      willCreate: 'Luo uuden sivun',
+      cancel: 'Peruuta',
+      importing: 'Tuodaan…',
+      importAction: 'Tuo {count} sivua',
       action: 'Toiminto',
       overwrite: 'Korvaa vanha',
       create: 'Luo uusi',
+    },
+    snacks: {
+      noSession: 'Tuonti vaatii sivuston ja sisäänkirjautumisen.',
+      failed: 'Tuonti epäonnistui.',
     },
     massImport: {
       description: 'Tuodaan {complete} / {count} sivua',

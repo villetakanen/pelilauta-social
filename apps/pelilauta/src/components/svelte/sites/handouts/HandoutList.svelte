@@ -1,12 +1,13 @@
 <script lang="ts">
 import { handouts } from 'src/stores/site/handouts';
 import { toDisplayString } from 'src/utils/contentHelpers';
+import { t } from 'src/utils/i18n';
 import ProfileLink from '../../app/ProfileLink.svelte';
 import HandoutListItem from './HandoutListItem.svelte';
 </script>
 
 {#if $handouts.length === 0}
-  <p>No handouts available.</p>
+  <p>{t('site:handouts.empty')}</p>
 {:else}
   <ul class="handouts-list" role="list">
     {#each $handouts as handout (handout.key)}

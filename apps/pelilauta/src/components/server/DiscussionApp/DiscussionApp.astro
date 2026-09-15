@@ -1,7 +1,7 @@
 ---
+import DiscussionSection from '@pelilauta/threads/client/DiscussionSection.svelte';
 import { fetchDiscussion } from 'src/firebase/server/discussion/fetchDiscussion';
 import type { Thread } from 'src/schemas/ThreadSchema';
-import DiscussionSection from '../../svelte/discussion/DiscussionSection.svelte';
 
 interface Props {
   thread: Thread;
