@@ -5,6 +5,7 @@ This file records Pelilauta releases from 21.0.0-rc.2 onward.
 ## 21.0.0-rc.3
 
 - fix(threads): A signed-in reader has the chat bar on a thread page, and no invitation to join the discussion. ([#149](https://github.com/villetakanen/pelilauta-social/issues/149), [#151](https://github.com/villetakanen/pelilauta-social/issues/151))
+- fix(i18n): The magic-link verification prompt, the missing-profile panel in Settings, the empty handout list, and the site import flow read text from the locale files. ([#154](https://github.com/villetakanen/pelilauta-social/issues/154))
 
 ## 21.0.0-rc.2
 

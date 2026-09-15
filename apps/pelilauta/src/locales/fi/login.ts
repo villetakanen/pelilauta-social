@@ -10,6 +10,8 @@ export const login: Locale = {
     sent: 'Linkki lähetetty sähköpostiisi. Kirjaudu linkkiä klikkaamalla.',
     label: 'Kirjaudu sähköpostiosoitteellasi',
     sendAction: 'Lähetä linkki',
+    verifyInfo: 'Syötä sähköpostiosoite, jolla pyysit kirjautumislinkin.',
+    verifyAction: 'Vahvista linkki',
   },
   withProvider: {
     title: 'Tunnuksella',

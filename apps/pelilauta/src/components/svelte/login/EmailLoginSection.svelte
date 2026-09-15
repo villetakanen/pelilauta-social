@@ -275,7 +275,7 @@ onMount(async () => {
     <p>{t("login:withEmail.sent")}</p>
   {:else if view === "verifyWithEmail"}
     <!-- User needs to re-enter email for link verification -->
-    <p>Please enter the email address you used to request the login link:</p>
+    <p>{t("login:withEmail.verifyInfo")}</p>
     <form onsubmit={verifyWithEmail}>
       <label>
         {t("login:withEmail.label")}
@@ -292,7 +292,7 @@ onMount(async () => {
           {#if suspend}
             <CnLoader inline />
           {/if}
-          <span>Verify Login Link</span>
+          <span>{t("login:withEmail.verifyAction")}</span>
         </button>
       </div>
     </form>

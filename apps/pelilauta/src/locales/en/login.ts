@@ -10,6 +10,8 @@ export const login: Locale = {
     sent: 'Link sent to your email. Sign in by clicking the link.',
     label: 'Sign in with your email address',
     sendAction: 'Send link',
+    verifyInfo: 'Enter the email address you requested the sign-in link with.',
+    verifyAction: 'Verify link',
   },
   withProvider: {
     title: 'With Account',

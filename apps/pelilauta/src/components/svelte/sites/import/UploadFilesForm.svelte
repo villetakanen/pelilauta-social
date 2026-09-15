@@ -1,5 +1,6 @@
 <script lang="ts">
 import { importStore } from 'src/stores/site/importsStore';
+import { t } from 'src/utils/i18n';
 import { logDebug, logError, logWarn } from 'src/utils/logHelpers';
 import { site } from '../../../../stores/site';
 
@@ -173,8 +174,8 @@ const hasFiles = $derived(uploadedFiles.length > 0);
 </script>
 
 <section class="surface">
-  <h2>Upload Markdown Files</h2>
-  <p>Select one or more .md files to import. Frontmatter will be parsed as page metadata.</p>
+  <h2>{t('site:import.upload.title')}</h2>
+  <p>{t('site:import.upload.description')}</p>
   
   <input
     type="file"
@@ -187,19 +188,19 @@ const hasFiles = $derived(uploadedFiles.length > 0);
   
   <div class="actions justify-start">
     <button onclick={triggerFileSelect} disabled={isUploading} type="button">
-      {isUploading ? 'Processing...' : 'Select Files'}
+      {isUploading ? t('site:import.upload.processing') : t('site:import.upload.select')}
     </button>
     
     {#if hasFiles}
       <button class="text" onclick={clearUploads} type="button">
-        Clear ({uploadedFiles.length})
+        {t('site:import.upload.clear', { count: uploadedFiles.length })}
       </button>
     {/if}
   </div>
   
   {#if hasFiles}
     <div>
-      <h3>Files Ready for Import</h3>
+      <h3>{t('site:import.upload.ready')}</h3>
       <ul role="list">
         {#each uploadedFiles as file}
           <li>
@@ -208,7 +209,7 @@ const hasFiles = $derived(uploadedFiles.length > 0);
               → "{file.frontmatter.title}"
             {/if}
             {#if file.frontmatter.category}
-              <span>(category: {file.frontmatter.category})</span>
+              <span>{t('site:import.upload.category', { category: `${file.frontmatter.category}` })}</span>
             {/if}
           </li>
         {/each}
