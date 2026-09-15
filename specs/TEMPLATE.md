@@ -5,7 +5,10 @@ status: proposed
 # <Capability>
 
 <!--
-Spec template. Copy to specs/<domain>/<capability>/spec.md.
+Spec template. Copy to:
+- Design system: specs/design-system/<category>/<capability>/spec.md (e.g. specs/design-system/components/cn-chat-bar/spec.md)
+- Application:   specs/pelilauta/<sub-app>/<capability>/spec.md (e.g. specs/pelilauta/threads/reply-authoring/spec.md)
+
 
 status is a process gate, not protection: `proposed` — the text carries a new,
 material or unsettled amendment the operator has not cleared. A task starts from
@@ -39,73 +42,77 @@ Authoring procedure and the review gate: .agents/skills/spec/SKILL.md.
 
 ### Context
 
-The product outcome this capability delivers: who is served, and what real-world
-task or experience they get. Open with the capability's purpose — if deleting the
-capability loses nothing nameable in the first sentence, the why is missing.
-Do not describe the world before the work; that description is false once the
-work lands. One paragraph.
+<!--
+State the baseline and capability purpose in 1–2 direct sentences:
+1. Baseline: The existing page or parent domain context this capability attaches to.
+2. Purpose: The specific user action or capability it introduces.
 
-The Context is the paragraph the rest of the spec exists to serve. The need is
-a product fact: it comes from a human decision, an ADR or a plan — an
-implementation carries behaviour, never need. Test: could the paragraph be
-written by reading the component? Then it restates behaviour as need; ask the
-human, and write the answers.
+State facts without philosophical justifications, metaphors, or defensive "X, not Y" rhetoric.
+
+Example:
+> Pelilauta threads display discussion topics and their chronological replies. Reply authoring
+> provides the docked chrome composer for signed-in members to post and edit replies on a
+> thread, while anonymous visitors receive a sign-in prompt at the end of the discussion.
+-->
 
 ### Architecture
 
-What would a reader of the code get backwards? State which way the dependencies
-run, and any structural choice that reading one file would not reveal.
+<!--
+State the structural wiring and cross-boundary coordination:
+1. Component placement: The component's mounting slot or parent layout using `@package` aliases (e.g. `@pelilauta/threads/client/ThreadChatBar.svelte`, `@design-system/components/CnChatBar.svelte`).
+2. State coordination: Reactive stores or event channels connecting this capability across islands.
+3. Execution path: Handlers or API endpoints that perform the writes.
 
-When a capability extends another, name the spec it extends and state only what
-differs. The extended spec governs wherever this one is silent. Do not restate an
-inherited rule to make this spec read completely.
+Do not describe what neighboring components or streams render; describe only this capability's wiring.
+When a capability extends another, name the spec it extends and state only what differs.
+-->
 
 ### Documentation
 
-The books that carry this capability. A change here has to reach every page
-listed.
+<!--
+(Design System specs only)
+The books that carry this capability. Omit this entire section in application/sub-app specs.
+-->
 
 ### Constraints
 
-What would someone guess wrong if it were not written here?
+<!--
+Invariants, data-loss protection rules, concurrency boundaries, and validation limits that govern the implementation.
+Do not write basic conditional rendering rules here; specify observable UI behaviors in Scenarios instead.
 
-Do not copy a value that is already written somewhere else. Link to it instead —
-two copies can disagree.
-
-A decorative micro-interaction — motion that announces nothing and changes no
-state — is one sentence here: its trigger, what it shows, and the clause that
-keeps it harmless, such as changing no measurement or resting under reduced
-motion. It gets no scenario; the human review in the Definition of Done is its
-gate.
+Do not copy values defined elsewhere. Link to them instead.
+-->
 
 ## Contract
 
 ### Definition of Done
 
-How do we know we are finished? Observable success criteria.
-
-State the outcome, not the instrument. Naming a check here, or listing what it
-asserts, writes the test plan before the behaviour is settled. What such a check
-would assert is already a Constraint, a Guardrail or a Scenario; where it is not,
-write it there.
+<!--
+Observable product completion criteria:
+- State what the user can accomplish when complete.
+- Do not name test file paths, test runners, or test suites.
+- Do not list historical migration cleanup items.
+-->
 
 ### Regression Guardrails
 
-What breaks silently, and when? Invariants that must survive changes to this and
-neighbouring capabilities.
+<!--
+Silent failure modes and accessibility/state traps (e.g. keyboard focus lost to hidden elements, state overwrite on unmount).
+Do not use this section to argue or defend design decisions.
+-->
 
 ### Scenarios
 
-What behaviour must not change? Gherkin, without dictating implementation. Name
-the check that runs each one, where one exists.
-
-One scenario is one behaviour. The same behaviour holding across a scheme, a size
-or a presentation is still one scenario; write a second one only where the
-behaviour itself differs. Where a rendered specimen is the detector rather than a
-check, name the specimen.
+<!--
+Observable behavioral specification in standard Gherkin.
+One scenario is one distinct behavior.
+-->
 
 ```gherkin
-Given <state>
-When <action>
-Then <observable outcome>
+Feature: <Capability Name>
+
+  Scenario: <Descriptive Scenario Name>
+    Given <state>
+    When <action>
+    Then <observable outcome>
 ```
