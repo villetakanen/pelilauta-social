@@ -16,9 +16,8 @@
     "generate:icons": "node scripts/generate-icons.mjs",
     "test": "vitest run test --exclude test/api",
     "test:api": "NODE_ENV=development node test/api/init-api-test-db.js && NODE_ENV=development npx wait-on http://localhost:4321 && NODE_ENV=development vitest run test/api",
-    "test:e2e": "NODE_ENV=development node e2e/init-test-db.js && NODE_ENV=development npx wait-on http://localhost:4321 && NODE_ENV=development playwright test",
-    "test:e2e:theme": "THEME_E2E=1 playwright test color-theme.spec.ts --project=chromium",
-    "test:e2e:debug": "NODE_ENV=development node e2e/init-test-db.js && NODE_ENV=development npx wait-on http://localhost:4321 && NODE_ENV=development playwright test --debug",
+    "test:e2e": "NODE_ENV=development npx wait-on --timeout 60000 \"${BASE_URL:-http://localhost:4321}\" && NODE_ENV=development node e2e/reset-fixtures.mjs && NODE_ENV=development playwright test",
+    "test:e2e:debug": "NODE_ENV=development npx wait-on --timeout 60000 \"${BASE_URL:-http://localhost:4321}\" && NODE_ENV=development node e2e/reset-fixtures.mjs && NODE_ENV=development playwright test --debug",
     "generateSW": "SW_DIST_PATH=dist workbox injectManifest workbox.config.cjs",
     "backup:storage": "node tooling/backupStorage.js",
     "postbuild": "node tooling/warm-cache.mjs"

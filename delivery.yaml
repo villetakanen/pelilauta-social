@@ -44,6 +44,7 @@ gates:
     see: docs/ACCEPTANCE_TESTING.md
   app-e2e:
     question: pelilauta feature browser behavior
-    run: none
-    gap: no suite exists; apps/pelilauta/e2e is not evidence and is not run
-    see: https://github.com/villetakanen/pelilauta-social/issues/120
+    run: pnpm --filter pelilauta test:e2e
+    when: [in-flight, pre-merge]
+    gap: covers one regression (#159); apps/pelilauta/e2e grows one feature at a time, see #120
+    see: apps/pelilauta/e2e/README.md

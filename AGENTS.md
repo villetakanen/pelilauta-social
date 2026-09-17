@@ -23,8 +23,7 @@
 ## NEVER
 
 - Create, switch, or delete a branch without an explicit instruction. Requesting permission is not an instruction; wait for explicit approval.
-- Run the `apps/pelilauta` end-to-end suite. `test:e2e` seeds Firestore at startup and requires tens of minutes; the suite is not evidence (#120). Read the governing spec and run the `apps/design` test suite instead.
-- Run `pnpm test:uat` to check work in progress. `pnpm test:uat` performs release acceptance, resets Firestore, and requires ten minutes. Run UAT during delivery review. Verify work in progress using `astro check`, `pnpm test`, and the `apps/design` suite.
+- Run `pnpm test:uat` to check work in progress. `pnpm test:uat` performs release acceptance, resets Firestore, and requires ten minutes. Run UAT during delivery review. Verify work in progress using `astro check`, `pnpm test`, and the `apps/design` suite. `apps/pelilauta`'s `test:e2e` (#159) is a separate, real app feature regression suite with its own bespoke, narrow reset — it is evidence for the `app-e2e` gate and is not `test:uat`.
 - Write Firestore security rules into repository files. The repository is public while security rules protect the live service. Reason about security rules when provided, and state conclusions without exposing rule details in prose or code.
 
 ## Delivery Contract
