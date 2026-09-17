@@ -2,6 +2,10 @@
 
 This file records Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.0.0-rc.4
+
+- fix(front-page): Returning to the front page through a view transition keeps the welcome section hidden from a signed-in member.
+
 ## 21.0.0-rc.3
 
 - fix(threads): A signed-in member sees the chat bar on a thread page without an invitation to join the discussion. ([#149](https://github.com/villetakanen/pelilauta-social/issues/149), [#151](https://github.com/villetakanen/pelilauta-social/issues/151))

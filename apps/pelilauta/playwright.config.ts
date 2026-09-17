@@ -1,84 +1,40 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * See https://playwright.dev/docs/test-configuration.
+ * The replacement app feature suite: one maintained regression, run
+ * independently of release acceptance. See e2e/README.md.
+ *
+ * `pnpm --filter pelilauta test:e2e` seeds fixtures then invokes Playwright
+ * with no arguments, so this config is the only thing standing between that
+ * command and running every file in `testDir` — `testMatch` pins it to the
+ * single regression spec explicitly, so adding a stray file to `e2e/` cannot
+ * silently widen what the command runs.
  */
 export default defineConfig({
   testDir: './e2e',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  testMatch: 'onboarding-callout-transition.spec.ts',
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 3, // Reduce workers to minimize conflicts
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  // No retries initially: a flaky pass would hide a real regression.
+  retries: 0,
+  workers: 1,
   reporter: process.env.CI ? [['html'], ['github']] : [['list']],
-  webServer: process.env.THEME_E2E
-    ? {
-        command: 'pnpm run dev --host 127.0.0.1',
-        url: 'http://127.0.0.1:4321',
-        reuseExistingServer: !process.env.CI,
-        /*
-         * Astro 7 daemonises `astro dev` when it detects an agent environment,
-         * and Playwright then sees its web server exit immediately. Setting this
-         * to any value turns the detection off and keeps the server in the
-         * foreground — the name reads backwards, because the variable's other
-         * job is to request the background explicitly.
-         */
-        env: { ASTRO_DEV_BACKGROUND: '1' },
-      }
-    : undefined,
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-
-    /* Add default timeouts for better reliability */
+    baseURL: process.env.BASE_URL || 'http://localhost:4321',
+    // Failure traces on; this suite is small enough that always-on tracing
+    // is not run-time worth avoiding, but retain-on-failure keeps output lean.
+    trace: 'retain-on-failure',
     actionTimeout: 10000,
     navigationTimeout: 30000,
   },
-
-  /* Configure projects for major browsers */
   projects: [
-    { name: 'setup', testMatch: /auth.setup.ts/ },
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        // Add extra timeout for authentication and page loads
-        actionTimeout: 15000,
-        navigationTimeout: 30000,
-      },
+      use: { ...devices['Desktop Chrome'] },
     },
-
-    /* {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-      dependencies: ['setup'],
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-      dependencies: ['setup'],
-    },*/
   ],
-
-  /* Global timeout settings */
-  timeout: 90000,
+  timeout: 60000,
   expect: {
-    timeout: 15000,
+    timeout: 10000,
   },
 });

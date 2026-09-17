@@ -16,6 +16,12 @@
  * access, and the failure falls open: a reader whose storage is denied sees the
  * invitation rather than losing the page's heading.
  *
+ * A view transition replaces the document element's attributes with the incoming
+ * page's, so arriving at the front page from a thread takes the class with it and
+ * the block returns. The script runs again on `astro:after-swap`, which fires
+ * before the browser paints the new page, and registers that listener once for the
+ * document rather than once per parse.
+ *
  * The section is both the content container and the surface, which Content
  * Container Layouts allows: one boundary, under Surface's name. Its children are
  * the content area's own flow, so the area's `--cn-line` sets the rhythm between
@@ -26,12 +32,22 @@ import { t } from 'src/utils/i18n';
 
 <script is:inline>
   (() => {
-    try {
-      if (localStorage.getItem('session-uid')) {
-        document.documentElement.classList.add('has-session-uid');
+    function applySessionClass() {
+      try {
+        document.documentElement.classList.toggle(
+          'has-session-uid',
+          Boolean(localStorage.getItem('session-uid')),
+        );
+      } catch {
+        // Storage denied. The invitation stays.
       }
-    } catch {
-      // Storage denied. The invitation stays.
+    }
+
+    applySessionClass();
+
+    if (!window.__onboardingCalloutSwapBound) {
+      window.__onboardingCalloutSwapBound = true;
+      document.addEventListener('astro:after-swap', applySessionClass);
     }
   })();
 </script>
