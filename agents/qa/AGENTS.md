@@ -9,7 +9,27 @@ harness-agnostic tooling, not a coding-harness skill; those live in `.agents/`.
 
 - `agy` on the PATH and signed in.
 - `credentials.ts` and `server_principal.json` at the repository root.
-- The dev server at `http://localhost:4321`, or let the runner start it.
+- The dev server at `http://localhost:4321`, or let the runner start it, on the
+  same test project the initialization resets. [Acceptance Testing](../../docs/ACCEPTANCE_TESTING.md)
+  states the environment.
+
+## Initialize before a batch
+
+Reset and seed the test database once, before the batch, and wait for it to
+finish before the first persona starts:
+
+```sh
+node --import ./uat/pelilauta/e2e/schema-resolver-loader.mjs \
+  ./uat/pelilauta/e2e/reset-and-seed.ts
+```
+
+Run no API test or other database writer between the initialization and the
+batch. The API suite adds `test-channel` back, and the baseline no longer carries
+it, so a writer in between leaves the personas a channel list the baseline does
+not state.
+
+Initialization stays a separate step you run, because it deletes test content.
+Opening the runner never resets the database.
 
 ## Commands
 

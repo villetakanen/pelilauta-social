@@ -19,6 +19,23 @@ const appSrc = path.resolve(
   '../../../apps/pelilauta/src',
 );
 
+// The `@`-prefixed aliases from `apps/pelilauta/tsconfig.json` that point into
+// `src/`. A schema reaches its neighbours through these as readily as through a
+// bare `src/` specifier, and Node resolves neither.
+const SRC_ALIASES = {
+  '@components/': 'components/',
+  '@svelte/': 'components/svelte/',
+  '@layouts/': 'layouts/',
+  '@pages/': 'pages/',
+  '@schemas/': 'schemas/',
+  '@stores/': 'stores/',
+  '@styles/': 'styles/',
+  '@locales/': 'locales/',
+  '@firebase/': 'firebase/',
+  '@utils/': 'utils/',
+  '@pelilauta/': '',
+};
+
 const CANDIDATE_EXTENSIONS = ['.ts', '.js', '.mjs', '/index.ts', '/index.js'];
 
 function resolveOnDisk(basePath) {
@@ -32,8 +49,17 @@ function resolveOnDisk(basePath) {
 
 export async function resolve(specifier, context, nextResolve) {
   let basePath = null;
+  const alias = Object.keys(SRC_ALIASES).find((prefix) =>
+    specifier.startsWith(prefix),
+  );
   if (specifier.startsWith('src/')) {
     basePath = path.join(appSrc, specifier.slice('src/'.length));
+  } else if (alias) {
+    basePath = path.join(
+      appSrc,
+      SRC_ALIASES[alias],
+      specifier.slice(alias.length),
+    );
   } else if (
     specifier.startsWith('.') &&
     context.parentURL?.startsWith('file://')

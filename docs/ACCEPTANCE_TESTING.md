@@ -13,9 +13,10 @@ run is evidence that a reader can do what a journey promises — evidence the
 ## Model
 
 Every run starts from one known state. The runner wipes a named set of Firestore
-collections — `sites`, `reactions` and `stream`; the set grows with what the
-specs write — then writes the default seed, overwriting its documents in place. The
-three example accounts persist in Auth between runs, because their uids tie the
+collections — `sites`, `reactions`, `stream` and `tags`; the set grows with what
+the specs write — then writes the default seed, overwriting its documents in place.
+`tags` is a derived index, so it joins the list: a stale entry outlives the
+document it points at. The three example accounts persist in Auth between runs, because their uids tie the
 Auth accounts to the Firestore documents the seed writes; the runner creates an
 account only when it is missing. No spec cleans up after itself; the next run's
 reset does.
