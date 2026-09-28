@@ -1,5 +1,6 @@
 <script lang="ts">
 import { importStore } from 'src/stores/site/importsStore';
+import { parseFrontmatter, toEntryDate } from 'src/utils/entryConversions';
 import { t } from 'src/utils/i18n';
 import { logDebug, logError, logWarn } from 'src/utils/logHelpers';
 import { site } from '../../../../stores/site';
@@ -35,7 +36,7 @@ async function processFiles(files: FileList) {
       }
 
       const content = await readFileAsText(file);
-      const parsed = parseMdFile(content);
+      const parsed = parseFrontmatter(content);
 
       processedFiles.push({
         name: file.name,
@@ -71,6 +72,15 @@ async function processFiles(files: FileList) {
             : null) ||
           file.name.replace('.md', '');
 
+        // Imported pages keep the dates of the system they came from, so the
+        // site index orders them by when they were written, not imported.
+        const createdAt = toEntryDate(
+          file.frontmatter.createdAt ?? file.frontmatter.created,
+        );
+        const updatedAt = toEntryDate(
+          file.frontmatter.updatedAt ?? file.frontmatter.updated,
+        );
+
         return {
           name: title,
           markdownContent: file.body,
@@ -79,6 +89,9 @@ async function processFiles(files: FileList) {
             typeof file.frontmatter.category === 'string'
               ? file.frontmatter.category
               : undefined,
+          createdAt,
+          updatedAt,
+          flowTime: (updatedAt ?? createdAt)?.getTime(),
         };
       }),
       existingPageNames,
@@ -97,65 +110,6 @@ function readFileAsText(file: File): Promise<string> {
     reader.onerror = () => reject(reader.error);
     reader.readAsText(file);
   });
-}
-
-function parseMdFile(content: string): {
-  frontmatter: Record<string, unknown>;
-  body: string;
-} {
-  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
-
-  if (!match) {
-    return {
-      frontmatter: {},
-      body: content,
-    };
-  }
-
-  const [, frontmatterStr, body] = match;
-  const frontmatter: Record<string, unknown> = {};
-
-  // Simple YAML parsing for frontmatter
-  const lines = frontmatterStr.split('\n');
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    const colonIndex = trimmed.indexOf(':');
-    if (colonIndex === -1) continue;
-
-    const key = trimmed.slice(0, colonIndex).trim();
-    let value = trimmed.slice(colonIndex + 1).trim();
-
-    // Remove quotes if present
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-
-    // Try to parse as number or boolean
-    if (value === 'true') {
-      frontmatter[key] = true;
-    } else if (value === 'false') {
-      frontmatter[key] = false;
-    } else if (
-      value.trim() !== '' &&
-      !Number.isNaN(Number(value)) &&
-      value.trim() === value
-    ) {
-      frontmatter[key] = Number(value);
-    } else {
-      frontmatter[key] = value;
-    }
-  }
-
-  return {
-    frontmatter,
-    body: body.trim(),
-  };
 }
 
 function triggerFileSelect() {

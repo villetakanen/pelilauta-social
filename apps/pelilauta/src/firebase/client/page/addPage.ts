@@ -49,10 +49,18 @@ async function addPageToFirestore(
   ).id;
 }
 
+/**
+ * Adds a page to a site.
+ *
+ * `updateIndex: false` leaves the site's page index alone, so a caller writing
+ * many pages at once can write the index a single time instead of once per
+ * page. That caller owns adding the page's ref to the index.
+ */
 export async function addPage(
   siteKey: string,
   page: Partial<Page>,
   slug?: string,
+  { updateIndex = true }: { updateIndex?: boolean } = {},
 ) {
   logDebug('addPage', siteKey, page, slug);
   const { getDoc, doc } = await import('firebase/firestore');
@@ -82,7 +90,7 @@ export async function addPage(
     key,
   );
 
-  await updatePageRef(updatedPage);
+  if (updateIndex) await updatePageRef(updatedPage);
   await updatePageTags(updatedPage);
 
   return key;
