@@ -50,31 +50,28 @@ it('creates a clock and steps its value', async () => {
     .poll(() => dial.getAttribute('aria-valuenow'), { timeout: 15_000 })
     .toBe('0');
 
-  // The dial paints the step before the database has it, and the reload below
-  // cancels whatever the page still has in flight. Firebase carries the step on
-  // its write channel, so the journey waits for that channel to answer: without
-  // it the reload aborts the only write, and no later reload reissues it.
-  const stepWritten = page.waitForResponse(
-    (response) =>
-      response.url().includes('/google.firestore.v1.Firestore/Write/channel') &&
-      response.request().method() === 'POST',
-    { timeout: 30_000 },
-  );
   await dial.click();
   await expect
     .poll(() => dial.getAttribute('aria-valuenow'), { timeout: 15_000 })
     .toBe('1');
-  await stepWritten;
 
+  // The dial paints the step before the database has it, and reloading the
+  // stepping page cancels the write still in flight. No later reload reissues
+  // it, so the page that stepped stays open and a second page reads what the
+  // database holds. Waiting on Firebase's write channel does not answer this:
+  // the page's own subscriptions post to that channel too, so the wait returns
+  // on a handshake while the step is still in flight.
+  const reader = await page.context().newPage();
   await expect
     .poll(
       async () => {
-        await page.reload();
-        const reloaded = page.getByRole('slider', { name: label });
+        await reader.goto(`/sites/${SITE_KEY}/clocks`);
+        const reloaded = reader.getByRole('slider', { name: label });
         await reloaded.waitFor({ state: 'visible', timeout: 30_000 });
         return reloaded.getAttribute('aria-valuenow');
       },
       { timeout: 60_000, interval: 2_000 },
     )
     .toBe('1');
+  await reader.close();
 });
