@@ -1,7 +1,7 @@
 # AGENTS.md
 
 > **Project:** pelilauta.social is a Finnish online community for tabletop role-playing games, with discussion channels and a shared library. It serves Finnish, Swedish, and English. Unicode `latin` and `latin-ext` contain every required character.
-> **State:** Version 21 is the application release candidate. The repository carries no code from earlier versions; specs and code record system behavior.
+> **State:** Version 21 is the application. The repository carries no code from earlier versions; specs and code record system behavior.
 > **Design source:** Read `../pelilauta-20` for v20 design where a spec has not settled a treatment.
 > **Core constraint:** Version 21 runs on a dedicated host, sharing Firestore, Storage, and Auth with v18 while v18 remains live at pelilauta.social.
 
@@ -29,7 +29,7 @@
 ## Delivery Contract
 
 - Test dependency additions and updates locally. Merging dependency changes requires explicit approval.
-- During beta, merging the active release branch to `main` constitutes a release and its approval.
+- Merging the active release branch to `main` constitutes a release and its approval.
 - Fix defects within touched scope and defects discovered during the work.
 
 ## Workspace Contract
