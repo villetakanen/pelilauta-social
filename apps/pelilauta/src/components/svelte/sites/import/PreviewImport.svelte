@@ -1,5 +1,8 @@
 <script lang="ts">
+import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
+import type { PageRef } from 'src/schemas/SiteSchema';
 import {
+  type ImportedPage,
   importedPages,
   importStore,
   isImporting,
@@ -53,6 +56,18 @@ function removeUndefinedValues<T extends Record<string, unknown>>(
   return result;
 }
 
+// The index entry a written page contributes. flowTime carries the date from
+// the file, so the index orders imported pages by when they were written.
+function toPageRef(importedPage: ImportedPage, key: string): PageRef {
+  return {
+    key,
+    name: importedPage.name || importedPage.fileName,
+    author: $uid || '-',
+    category: importedPage.category || '-',
+    flowTime: importedPage.flowTime ?? Date.now(),
+  };
+}
+
 async function importPages() {
   if (!currentSite || !$uid) {
     pushSnack(t('site:import.snacks.noSession'));
@@ -64,6 +79,11 @@ async function importPages() {
   try {
     let successCount = 0;
     let errorCount = 0;
+
+    // The site's page index is written once for the whole batch. Writing it per
+    // page means a read and a write of the site document for every file, which
+    // is what makes a large import slow.
+    const importedRefs: PageRef[] = [];
 
     for (const importedPage of pages) {
       try {
@@ -94,9 +114,17 @@ async function importPages() {
             category: importedPage.category,
             siteKey: currentSite.key,
             owners: [$uid],
+            // A file carrying dates keeps them; a file without them is
+            // stamped with the time of the import.
+            createdAt: importedPage.createdAt,
+            updatedAt: importedPage.updatedAt,
+            flowTime: importedPage.flowTime,
           });
 
-          await addPage(currentSite.key, pageData, pageKey);
+          const createdKey = await addPage(currentSite.key, pageData, pageKey, {
+            updateIndex: false,
+          });
+          importedRefs.push(toPageRef(importedPage, createdKey));
 
           logDebug('PreviewImport', 'Created page:', importedPage.name);
         } else {
@@ -114,9 +142,14 @@ async function importPages() {
             name: importedPage.name || importedPage.fileName,
             markdownContent: importedPage.markdownContent,
             category: importedPage.category,
+            updatedAt: importedPage.updatedAt,
+            flowTime: importedPage.flowTime,
           });
 
-          await updatePage(currentSite.key, pageKey, updateData);
+          await updatePage(currentSite.key, pageKey, updateData, {
+            updateIndex: false,
+          });
+          importedRefs.push(toPageRef(importedPage, pageKey));
 
           logDebug('PreviewImport', 'Updated page:', importedPage.name);
         }
@@ -131,6 +164,21 @@ async function importPages() {
         );
         errorCount++;
       }
+    }
+
+    if (importedRefs.length > 0) {
+      const pageRefs = currentSite.pageRefs ? [...currentSite.pageRefs] : [];
+      for (const ref of importedRefs) {
+        const index = pageRefs.findIndex(
+          (existing) => existing.key === ref.key,
+        );
+        if (index === -1) {
+          pageRefs.push(ref);
+        } else {
+          pageRefs[index] = ref;
+        }
+      }
+      await updateSiteApi({ key: currentSite.key, pageRefs });
     }
 
     if (successCount > 0) {

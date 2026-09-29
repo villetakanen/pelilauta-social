@@ -24,13 +24,14 @@
     "channel": "yleinen",
     "author": "@adminUser",
     "owners": ["@adminUser"],
-    "markdownContent": "Oletko aloittamassa ensimmäistä kampanjaasi pelinjohtajana? Tässä muutama hyväksi havaittu käytäntö:\n\n1. Aloita pienestä: yksi kylä ja yksi luolasto riittävät aluksi.\n2. Pidä nollasessio eli Session Zero odotusten tasaamiseksi.\n3. Muista, että pelaajat yllättävät aina – luota improvisointiin.",
-    "replyCount": 0,
+    "markdownContent": "Oletko aloittamassa ensimmäistä kampanjaasi pelinjohtajana? Tässä muutama hyväksi havaittu käytäntö:\n\n1. Aloita pienestä: yksi kylä ja yksi luolasto riittävät aluksi.\n2. Pidä nollasessio eli Session Zero odotusten tasaamiseksi.\n3. Muista, että pelaajat yllättävät aina – luota improvisointiin.\n\nMoni aloittaa nimenomaan D&D:llä, koska säännöistä löytyy eniten valmista materiaalia ja esimerkkiseikkailuja. Se on hyvä valinta ensikertalaiselle, kunhan ei yritä omaksua koko sääntökirjaa kerralla.\n\n#dnd #aloittelijoille",
+    "replyCount": 2,
     "lovedCount": 0,
     "public": true,
     "createdAt": "@now",
     "updatedAt": "@now",
-    "flowTime": "@now"
+    "flowTime": "@now",
+    "tags": ["dnd", "aloittelijoille"]
   },
   "sandboxing-ja-heksaryominta": {
     "title": "Heksaryömintä ja avoimen maailman kampanjat",
@@ -38,12 +39,26 @@
     "author": "@existingUser",
     "owners": ["@existingUser"],
     "markdownContent": "Heksaryömintä (hexcrawl) on mainio tapa luoda avoin ja tutkiva pelikokemus. Miten te hallitsette matkustamisen resursseja, kohtaamistaulukoita ja sääilmiöitä ilman, että pelaaminen muuttuu pelkäksi kirjanpidoksi?",
-    "replyCount": 0,
+    "replyCount": 2,
     "lovedCount": 0,
     "public": true,
     "createdAt": "@now",
     "updatedAt": "@now",
     "flowTime": "@now"
+  },
+  "kotitekoinen-hiekkalaatikko": {
+    "title": "Uusi hiekkalaatikko: Tuhkakruunun rannikko (OSR, kotitekoinen)",
+    "channel": "roolipelit",
+    "author": "@existingUser",
+    "owners": ["@existingUser"],
+    "markdownContent": "Olen rakentanut parin vuoden ajan omaa hiekkalaatikkosetting'iä nimeltä **Tuhkakruunun rannikko**, ja se on nyt siinä kunnossa että uskallan kutsua muitakin mukaan pelaamaan.\n\nKyseessä on kotitekoinen OSR-maailma: karu saaristo, hylätyt majakat ja niiden alle uponneet holvit. Säännöt nojaavat kevyeen d20-runkoon, mutta hahmot ovat hauraita ja resurssienhallinta (soihdut, köydet, muona) on koko pelin ydin. Ei valmiita juonipolkuja – pelaajat päättävät minne heksaverkolla mennään ja mitä sieltä lähdetään hakemaan.\n\nMitä on valmiina:\n\n- heksakartta rannikkoalueesta noin 40 heksan verran;\n- kuusi avainlokaatiota täydellä kuvauksella;\n- yksinkertainen kohtaamistaulukko jokaiselle maastotyypille;\n- pari kotitekoista hirviötä, joita ei löydy mistään sääntökirjasta.\n\nJos joku haluaa testata tätä pelinjohtajana tai pelaajana, kerron mielelläni lisää. Otan myös vastaan palautetta itse settingistä, en pelkästään pelistä.\n\n#osr #homebrew",
+    "replyCount": 1,
+    "lovedCount": 0,
+    "public": true,
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now",
+    "tags": ["osr", "homebrew"]
   },
   "soolopelaaminen-ja-oraakkelit": {
     "title": "Sooloroolipelit ja oraakkelityökalujen käyttö",

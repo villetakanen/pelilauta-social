@@ -18,17 +18,11 @@ export function convertDatesToTimestamps(record: DocumentData) {
   const converted: DocumentData = { ...record };
 
   if (converted.createdAt instanceof Date) {
-    converted.createdAt = new Timestamp(
-      converted.createdAt.getTime() / 1000,
-      0,
-    );
+    converted.createdAt = Timestamp.fromDate(converted.createdAt);
   }
 
   if (converted.updatedAt instanceof Date) {
-    converted.updatedAt = new Timestamp(
-      converted.updatedAt.getTime() / 1000,
-      0,
-    );
+    converted.updatedAt = Timestamp.fromDate(converted.updatedAt);
   }
 
   return converted;
@@ -39,6 +33,10 @@ export function convertDatesToTimestamps(record: DocumentData) {
  *
  * Sometimes, we want to do a silent conversion, where we don't want to update the
  * fields createdAt, updatedAt and flowTime - thus they are deleted from the object
+ *
+ * An entry that carries its own createdAt, updatedAt or flowTime keeps them. This
+ * is how imported content holds the dates of the system it came from. An entry
+ * that carries none is stamped by the server.
  *
  * @param entry A partial entry or a an object that extends Entry
  * @param params { silent: boolean }, if silent is true, the fields createdAt, updatedAt and flowTime will be deleted
@@ -57,10 +55,14 @@ export function toFirestoreEntry(
         entryWithAuthor.author ||
         (entry.owners && entry.owners.length > 0 ? entry.owners[0] : '-'),
       createdAt: entry.createdAt
-        ? new Timestamp(entry.createdAt.getTime() / 1000, 0)
+        ? Timestamp.fromDate(entry.createdAt)
         : serverTimestamp(),
-      updatedAt: serverTimestamp(),
-      flowTime: serverTimestamp(),
+      updatedAt: entry.updatedAt
+        ? Timestamp.fromDate(entry.updatedAt)
+        : serverTimestamp(),
+      flowTime: entry.flowTime
+        ? Timestamp.fromMillis(entry.flowTime)
+        : serverTimestamp(),
     };
 
   // We want to return the entry, and delete the fields createdAt, updatedAt and flowTime if they are present

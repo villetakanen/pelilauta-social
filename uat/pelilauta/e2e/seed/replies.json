@@ -6,5 +6,45 @@
     "createdAt": "@now",
     "updatedAt": "@now",
     "flowTime": "@now"
+  },
+  "ensikertalaisen-pelinjohtaminen/vastaus-1": {
+    "threadKey": "ensikertalaisen-pelinjohtaminen",
+    "owners": ["@existingUser"],
+    "markdownContent": "Hyvä lista. Lisäisin vielä: älä suunnittele liikaa etukäteen. Kolme tuntia valmisteltua materiaalia menee hukkaan, jos pelaajat kävelevätkin ihan toiseen suuntaan.",
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "ensikertalaisen-pelinjohtaminen/vastaus-2": {
+    "threadKey": "ensikertalaisen-pelinjohtaminen",
+    "owners": ["@adminUser"],
+    "markdownContent": "Tuo suunnittelupointti on tärkeä. Itse teen valmiiksi vain paikkoja ja hahmoja, en tapahtumaketjuja – silloin improvisointi on helpompaa kun pelaajat yllättävät.",
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "sandboxing-ja-heksaryominta/vastaus-1": {
+    "threadKey": "sandboxing-ja-heksaryominta",
+    "owners": ["@adminUser"],
+    "markdownContent": "Käytämme yksinkertaista muona- ja soihtulaskuria: yksi merkintä per hahmo per matkapäivä. Sääilmiöt heitetään kerran päivässä pienellä taulukolla, ei sen monimutkaisempaa.",
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "sandboxing-ja-heksaryominta/vastaus-2": {
+    "threadKey": "sandboxing-ja-heksaryominta",
+    "owners": ["@existingUser"],
+    "markdownContent": "Meillä kohtaamistaulukko on sidottu maastotyyppiin eikä heksaan itseensä, jolloin sitä ei tarvitse päivittää joka kerta kun kartta laajenee. Säästää yllättävän paljon kirjanpitoa.",
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
+  },
+  "kotitekoinen-hiekkalaatikko/vastaus-1": {
+    "threadKey": "kotitekoinen-hiekkalaatikko",
+    "owners": ["@adminUser"],
+    "markdownContent": "Tämä kuulostaa juuri siltä mitä olen etsinyt – kevyt sääntörunko ja oikeasti hauras hahmo tekevät heksaryömistä jännittävää. Ilmoittaudun mielelläni pelaajaksi, jos otatte porukkaa mukaan.",
+    "createdAt": "@now",
+    "updatedAt": "@now",
+    "flowTime": "@now"
   }
 }

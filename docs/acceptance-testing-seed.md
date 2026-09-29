@@ -54,8 +54,10 @@ does: signed in, redirected to onboarding.
   `username`, `avatarURL: ""`, a one-line `bio`.
 - `meta/pelilauta` — `admins: ["@adminUser"]`.
 - `meta/threads` — `topics` with authentic forum channels under category
-  `Pelilauta`: `yleinen` (`threadCount: 2`), `roolipelit` (`threadCount: 2`),
-  `tapahtumat` (`threadCount: 1`) and empty `test-channel` (`threadCount: 0`).
+  `Pelilauta`: `yleinen` (`threadCount: 2`), `roolipelit` (`threadCount: 3`) and
+  `tapahtumat` (`threadCount: 1`). No `test-channel`:
+  `apps/pelilauta/test/api/init-api-test-db.js` adds that channel when it is
+  missing, so a UAT reset runs after an API suite, never before one.
 - `stream/kauhupelit-syysiltoina` — a public discussion thread authored and owned by
   `@existingUser` in channel `yleinen`, with `poster` and gallery image
   `seed/assets/cat-pirate-thread.webp`, Finnish markdown content on tabletop horror RPG
@@ -64,8 +66,18 @@ does: signed in, redirected to onboarding.
   `stream/soolopelaaminen-ja-oraakkelit`, `stream/tracon-2026-peliohjelma` — four
   Finnish discussion threads across `yleinen`, `roolipelit` and `tapahtumat`, providing
   realistic thread volume across the forum channels.
+  `ensikertalaisen-pelinjohtaminen` carries `tags: ["dnd", "aloittelijoille"]`.
+  `soolopelaaminen-ja-oraakkelit` and `tracon-2026-peliohjelma` stay unanswered,
+  so the baseline keeps an empty discussion.
+- `stream/kotitekoinen-hiekkalaatikko` — a Finnish homebrew announcement in
+  `roolipelit`, owned by `@existingUser`, tagged `osr` and `homebrew`.
 - `stream/kauhupelit-syysiltoina/comments/vastaus-1` — a Finnish discussion reply owned
   by `@adminUser`.
+- `stream/ensikertalaisen-pelinjohtaminen/comments/vastaus-1` and `vastaus-2`,
+  `stream/sandboxing-ja-heksaryominta/comments/vastaus-1` and `vastaus-2` — short
+  Finnish exchanges, the two member accounts alternating.
+- `stream/kotitekoinen-hiekkalaatikko/comments/vastaus-1` — a reader's response to
+  the announcement, owned by `@adminUser`.
 - `sites/gloamroad-company`, `sites/bellweather-knives`, `sites/fallowdeep` —
   three public sites owned by `@existingUser`, one per major campaign-wiki shape:
   a heroic-fantasy quest log, a *Blades in the Dark* crew dossier, and a homebrew
@@ -79,7 +91,7 @@ does: signed in, redirected to onboarding.
   `assets` array — one image gives a reading journey a hero, a background and a
   gallery entry already in place.
 - `sites/gloamroad-company` also carries `useClocks`, the site option that
-  enables rail navigation to site clocks.
+  enables rail navigation to site clocks. Its front page carries `tags: ["dnd"]`.
 - `sites/seed-hidden-site` — a hidden site owned by `@existingUser`, with a front
   page. Every spec that asserts a listing omits hidden sites needs one that
   predates the spec's actions.
@@ -87,6 +99,26 @@ does: signed in, redirected to onboarding.
 `seed/assets/gloamroad-company-upload-fixture.png` is not written by the seed. An
 asset-upload spec uploads it through the running application, so the upload
 journey exercises a real file rather than a stub.
+
+## The derived tag index
+
+The seeder derives the `tags` documents from the tagged threads and pages in the
+seed JSON. There is no second, handwritten tag inventory: `threads.json` and
+`pages.json` are the content authority.
+
+A thread's tag document carries the thread key as both its id and its `key`
+field. A page's tag document carries the page key alone as its id, while its
+`key` field carries `siteKey/pageKey`, because the tag page builds
+`/sites/${key}` for a page result. `toTagData` lowercases a tag and resolves no
+synonym. Pages on a hidden site are left out.
+
+The seed derives three entries:
+
+| Document | Type | `key` |
+| :--- | :--- | :--- |
+| `tags/ensikertalaisen-pelinjohtaminen` | thread | `ensikertalaisen-pelinjohtaminen` |
+| `tags/kotitekoinen-hiekkalaatikko` | thread | `kotitekoinen-hiekkalaatikko` |
+| `tags/front-page` | page | `gloamroad-company/front-page` |
 
 ## Dropped from the v18 seeds
 

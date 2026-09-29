@@ -16,6 +16,9 @@ import { updatePageTags } from './updatePageTags';
  * 4. Updates the page references in the site, and site updatedAt field.
  * 5. Updates the tags entries for the tags found in the page.
  *
+ * `updateIndex: false` skips step 4, for a caller writing many pages at once
+ * that writes the site's page index a single time afterwards.
+ *
  * Steps 3-5 should be moved to a server side function, or a cloud function, as they all can be
  * triggered by the page update, and are not strictly necessary to be done in the client.
  *
@@ -27,6 +30,7 @@ export async function updatePage(
   siteKey: string,
   pageKey: string,
   changes: Partial<Page>,
+  { updateIndex = true }: { updateIndex?: boolean } = {},
 ) {
   const { getFirestore, doc, updateDoc, getDoc } = await import(
     'firebase/firestore'
@@ -86,7 +90,7 @@ export async function updatePage(
     siteKey,
   );
 
-  await updatePageRef(updatedPage);
+  if (updateIndex) await updatePageRef(updatedPage);
 
   logDebug('Page references updated', { siteKey, pageKey });
 

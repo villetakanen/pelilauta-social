@@ -1,9 +1,11 @@
 # Changelog
 
-This file records Pelilauta releases from 21.0.0-rc.2 onward.
+CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.0.0-rc.4
 
+- feat(site-import): An imported page keeps the dates its source file carries, so the site index orders imported pages by authoring date. An import stamps a file that carries no dates.
+- fix(site-import): An import writes the site page index once for the whole batch instead of once per page.
 - fix(front-page): Returning to the front page through a view transition keeps the welcome section hidden from a signed-in member.
 
 ## 21.0.0-rc.3
