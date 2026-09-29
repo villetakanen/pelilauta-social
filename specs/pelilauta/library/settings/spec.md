@@ -57,7 +57,7 @@ Loading and missing-profile messages occupy the Prose column in place of the sec
 
 ### Constraints
 
-`src/schemas/AccountSchema.ts` is shared with live v18. Account writes use only fields
+`src/schemas/AccountSchema.ts` describes production data. Account writes use only fields
 the schema carries.
 
 ## Contract
