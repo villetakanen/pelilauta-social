@@ -2,6 +2,10 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.0.0
+
+Pelilauta v21 leaves beta and replaces v18.
+
 ## 21.0.0-rc.4
 
 - feat(site-import): An imported page keeps the dates its source file carries, so the site index orders imported pages by authoring date. An import stamps a file that carries no dates.

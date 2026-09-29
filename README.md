@@ -9,9 +9,9 @@ live v18.
 
 ## Project Status
 
-The current release is `v21.0.0-rc.1`.
+The current release is `v21.0.0`.
 
-The v21 design migration has reached its planned release-candidate boundary.
+The v21 design migration is complete, and v21 replaces v18.
 Every supported public, signed-in, site-owner, and administrator surface
 renders on the published design system. No application or design-system source
 renders `@11thdeg/cyan-lit` custom elements, and no package depends on the Cyan
