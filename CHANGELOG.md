@@ -2,6 +2,10 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.0.1
+
+- The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
+
 ## 21.0.0
 
 Pelilauta v21 leaves beta and replaces v18.
