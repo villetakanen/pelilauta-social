@@ -20,6 +20,10 @@
 - Remain on the active long-lived release branch, named `feat/<major>-<minor>`.
 - Execute the verification gate corresponding to the active question; `delivery.yaml` defines gate commands, cadences, and coverage.
 
+## ASK
+
+- Before editing code in app/pelilauta/src/components – this is a legacy path, and we want to migrate all componen code to sub-app-specific folders
+
 ## NEVER
 
 - Create, switch, or delete a branch without an explicit instruction. Requesting permission is not an instruction; wait for explicit approval.

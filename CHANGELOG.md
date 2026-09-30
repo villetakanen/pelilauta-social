@@ -5,6 +5,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 ## 21.0.1
 
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
+- fix(threads): A thread page carries the opening post author name and profile link in the initial response, before browser scripts run. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(i18n): A post whose author profile does not resolve displays the anonymous label instead of the key `app:meta.anonymous`.
 
 ## 21.0.0
 

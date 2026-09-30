@@ -1,12 +1,13 @@
 ---
 import Base from '@layouts/Base.astro';
 import ThreadChatBar from '@pelilauta/threads/client/ThreadChatBar.svelte';
+import DiscussionApp from '@pelilauta/threads/server/DiscussionApp.astro';
+import ThreadArticle from '@pelilauta/threads/server/ThreadArticle.astro';
+import ThreadInfoSection from '@pelilauta/threads/server/ThreadInfoSection.astro';
+import { getPublicProfiles } from 'src/firebase/server/profiles';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
-import DiscussionApp from '../../../components/server/DiscussionApp/DiscussionApp.astro';
-import ThreadArticle from '../../../components/server/ThreadsApp/ThreadArticle.astro';
-import ThreadInfoSection from '../../../components/server/ThreadsApp/ThreadInfoSection.astro';
 
 const { threadKey } = Astro.params;
 
@@ -32,6 +33,12 @@ const title = thread.title
   : `${t('app:shortname')} - ${thread.channel}`;
 
 const snippet = createPlainSnippet(thread.markdownContent || '', 160);
+
+// Resolve the opening post's public attribution before rendering.
+const authorUid = thread.owners[0];
+const authorAttribution = authorUid
+  ? ((await getPublicProfiles([authorUid]))[authorUid] ?? null)
+  : null;
 ---
 
 <Base
@@ -40,7 +47,7 @@ const snippet = createPlainSnippet(thread.markdownContent || '', 160);
 >
   <div class="content-golden">
     <ThreadArticle thread={thread} />
-    <ThreadInfoSection thread={thread} />
+    <ThreadInfoSection thread={thread} authorAttribution={authorAttribution} />
   </div>
   <DiscussionApp thread={thread} />
   <ThreadChatBar thread={thread} slot="authoring" client:only="svelte" />

@@ -1,19 +1,13 @@
 import { persistentAtom } from '@nanostores/persistent';
 import { atom, computed } from 'nanostores';
-import { PROFILES_COLLECTION_NAME } from 'src/schemas/ProfileSchema';
+import {
+  PROFILES_COLLECTION_NAME,
+  type PublicProfile,
+  PublicProfileSchema,
+} from 'src/schemas/ProfileSchema';
 import { t } from 'src/utils/i18n';
 import { logError, logWarn } from 'src/utils/logHelpers';
 import { toFid } from 'src/utils/toFid';
-import { z } from 'zod';
-
-export const PublicProfileSchema = z.object({
-  key: z.string(),
-  nick: z.string(),
-  avatarURL: z.string().optional(),
-  username: z.string(),
-});
-
-export type PublicProfile = z.infer<typeof PublicProfileSchema>;
 
 /**
  * Store for public profiles
