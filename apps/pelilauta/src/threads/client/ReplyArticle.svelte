@@ -3,32 +3,65 @@ import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
-import ProfileLink from '@svelte/app/ProfileLink.svelte';
 import ReactionButton from '@svelte/app/ReactionButton.svelte';
-import { marked } from 'marked';
+import type { PublicProfile } from 'src/schemas/ProfileSchema';
 import type { Reply } from 'src/schemas/ReplySchema';
 import { getProfileAtom } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
 import { uid } from 'src/stores/session';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
+import { markdownToHTML } from 'src/utils/marked';
 import { onMount } from 'svelte';
 
 interface Props {
   reply: Reply;
+  /**
+   * Public attribution for `reply`, prepared on the server for every reply
+   * present in the initial document. A reply that arrives over the live
+   * subscription carries none, so its attribution resolves client-side
+   * through the existing profile store instead.
+   */
+  author?: PublicProfile;
+  /**
+   * The reply's body, already rendered through `markdownToHTML`, for every
+   * reply present in the initial document. A live-arriving reply renders its
+   * own body the same way, client-side.
+   */
+  bodyHtml?: string;
 }
-const { reply }: Props = $props();
+const {
+  reply,
+  author: preparedAuthor,
+  bodyHtml: preparedBodyHtml,
+}: Props = $props();
 const fromUser = $derived.by(() => {
   return reply.owners[0] === $uid;
 });
 
 /**
  * The bubble draws the identity mark, so this is the profile the mark is drawn
- * from. The nick is also in the header, through ProfileLink, which is what names
- * the author; the mark repeats it and the bubble drops it in a narrow column.
+ * from. The nick is also in the header; the mark repeats it and the bubble
+ * drops it in a narrow column. A reply with prepared attribution never
+ * touches the profile store; a live-arriving reply resolves it there, as
+ * before.
  */
-const authorAtom = getProfileAtom(reply.owners[0]);
-const author = $derived($authorAtom);
+const liveAuthorAtom = preparedAuthor
+  ? undefined
+  : getProfileAtom(reply.owners[0]);
+const author = $derived(
+  preparedAuthor ?? (liveAuthorAtom ? $liveAuthorAtom : undefined),
+);
+
+let liveBodyHtml = $state('');
+$effect(() => {
+  if (preparedBodyHtml !== undefined) return;
+  const markdown = reply.markdownContent || '';
+  markdownToHTML(markdown).then((html) => {
+    liveBodyHtml = html;
+  });
+});
+const bodyHtml = $derived(preparedBodyHtml ?? liveBodyHtml);
 
 const images = $derived.by(() => {
   return (
@@ -85,7 +118,11 @@ $effect(() => {
   >
     <header class="reply-band">
       <p class="reply-author">
-        <ProfileLink uid={reply.owners[0]} />
+        {#if author}
+          <a class="cn-nick" href={`/profiles/${author.key}`}>{author.nick}</a>
+        {:else}
+          <span>{t("app:meta.anonymous")}</span>
+        {/if}
       </p>
       <ReactionButton
         target="reply"
@@ -116,7 +153,7 @@ $effect(() => {
         openLabel={t("actions:openImage")}
         closeLabel={t("actions:close")}
       />
-      {@html marked(reply.markdownContent || "")}
+      {@html bodyHtml}
     </div>
     {#if reply.updatedAt}
       <footer class="text-end">

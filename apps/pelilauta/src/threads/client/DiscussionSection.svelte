@@ -1,15 +1,12 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import {
-  REPLIES_COLLECTION,
-  type Reply,
-  ReplySchema,
-} from 'src/schemas/ReplySchema';
+import { REPLIES_COLLECTION, ReplySchema } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
 import { uid } from 'src/stores/session';
 import { isActive, isRehydrating } from 'src/stores/session/computed';
 import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
+import type { PreparedReply } from 'src/threads/server/prepareDiscussion';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
 import { t } from 'src/utils/i18n';
@@ -18,35 +15,29 @@ import ReplyArticle from './ReplyArticle.svelte';
 
 interface Props {
   thread: Thread;
-  discussion: Reply[];
+  discussion: PreparedReply[];
+  incomplete?: boolean;
 }
-const { discussion: initDiscussion, thread }: Props = $props();
+const { discussion: initDiscussion, thread, incomplete }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
-onMount(async () => {
-  const lastSeen = $subscription?.seenEntities?.[thread.key] || 0;
-
-  if ($uid && !$hasSeen(thread.key, thread.flowTime)) {
-    // We haven't seen this thread or it's latest comments yet, so we mark it as seen
-    setSeen(thread.key);
+/**
+ * Anonymous reading, and an unresolved session, open no Firebase
+ * subscription. Only an active signed-in session subscribes, and only once:
+ * `$isActive` can turn true after this component mounted (session
+ * resolution completing after the initial render), so this effect — not
+ * `onMount` — is what starts it.
+ */
+let subscribed = false;
+$effect(() => {
+  if ($isActive && !subscribed) {
+    subscribed = true;
+    subscribeToReplies();
   }
+});
 
-  // Scroll to unread logic
-  const urlParams = new URLSearchParams(window.location.search);
-  if ($uid && urlParams.get('jumpTo') === 'unread' && lastSeen > 0) {
-    const firstUnread = discussion.find((r) => (r.flowTime || 0) > lastSeen);
-    const targetReply = firstUnread || discussion[discussion.length - 1];
-    if (targetReply) {
-      setTimeout(() => {
-        const element = document.getElementById(targetReply.key);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300); // Give it a moment to render
-    }
-  }
-
+async function subscribeToReplies() {
   const { getFirestore, query, collection, orderBy, onSnapshot } = await import(
     'firebase/firestore'
   );
@@ -62,38 +53,73 @@ onMount(async () => {
     for (const change of querySnapshot.docChanges()) {
       const data = change.doc.data();
       if (change.type === 'removed') {
-        const remove = d.findIndex((r) => r.key === change.doc.id);
+        const remove = d.findIndex((item) => item.reply.key === change.doc.id);
         if (remove !== -1) {
           d.splice(remove, 1);
         }
       } else {
-        const index = d.findIndex((r) => r.key === change.doc.id);
+        const index = d.findIndex((item) => item.reply.key === change.doc.id);
         const reply = ReplySchema.parse({
           ...toClientEntry(fixImageData(data)),
           key: change.doc.id,
           threadKey: thread.key,
         });
+        // Attribution and body render client-side, the same as any other
+        // reply this component did not receive prepared: ReplyArticle
+        // resolves author from the profile store and renders the body
+        // through markdownToHTML when neither prop is given.
+        const item: PreparedReply = { reply };
         if (index !== -1) {
-          d[index] = reply;
+          d[index] = item;
         } else {
-          d.push(reply);
+          d.push(item);
         }
       }
     }
     discussion = d;
   });
+}
+
+onMount(() => {
+  const lastSeen = $subscription?.seenEntities?.[thread.key] || 0;
+
+  if ($uid && !$hasSeen(thread.key, thread.flowTime)) {
+    // We haven't seen this thread or it's latest comments yet, so we mark it as seen
+    setSeen(thread.key);
+  }
+
+  // Scroll to unread logic
+  const urlParams = new URLSearchParams(window.location.search);
+  if ($uid && urlParams.get('jumpTo') === 'unread' && lastSeen > 0) {
+    const firstUnread = discussion.find(
+      (item) => (item.reply.flowTime || 0) > lastSeen,
+    );
+    const targetReply = firstUnread || discussion[discussion.length - 1];
+    if (targetReply) {
+      setTimeout(() => {
+        const element = document.getElementById(targetReply.reply.key);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300); // Give it a moment to render
+    }
+  }
 });
 </script>
 
 <section class="content-prose" aria-labelledby="discussion-title">
   <h2 id="discussion-title">{t("threads:discussion.title")}</h2>
 
+  {#if incomplete}
+    <p class="text-small text-low">{t("threads:discussion.incomplete")}</p>
+  {/if}
+
   {#if discussion.length === 0}
     <p>{t("threads:discussion.empty")}</p>
   {:else}
     <div class="replies">
-      {#each discussion as reply}
-        <ReplyArticle {reply} />
+      {#each discussion as item (item.reply.key)}
+        <ReplyArticle reply={item.reply} author={item.author} bodyHtml={item.bodyHtml} />
       {/each}
     </div>
   {/if}

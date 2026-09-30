@@ -1,11 +1,15 @@
 /**
  * A bespoke, limited Firestore/Auth reset for the onboarding-callout-transition
- * regression, in place of the retired suite's full `init-test-db.js`.
+ * and initial-reply-render regressions, in place of the retired suite's full
+ * `init-test-db.js`.
  *
- * It restores exactly three documents, by explicit id:
- *   - account/<memberUid>   (src/schemas/AccountSchema.ts)
- *   - profiles/<memberUid>  (src/schemas/ProfileSchema.ts)
- *   - stream/<THREAD_KEY>   (src/schemas/ThreadSchema.ts)
+ * It restores exactly six documents, by explicit id:
+ *   - account/<memberUid>                          (src/schemas/AccountSchema.ts)
+ *   - profiles/<memberUid>                          (src/schemas/ProfileSchema.ts)
+ *   - stream/<THREAD_KEY>                           (src/schemas/ThreadSchema.ts)
+ *   - stream/<REPLY_THREAD_KEY>                     (src/schemas/ThreadSchema.ts)
+ *   - stream/<REPLY_THREAD_KEY>/comments/<REPLY_1_KEY> (src/schemas/ReplySchema.ts)
+ *   - stream/<REPLY_THREAD_KEY>/comments/<REPLY_2_KEY> (src/schemas/ReplySchema.ts)
  *
  * `<memberUid>` is resolved from the existing Auth account for `existingUser`
  * (credentials.ts) rather than hardcoded, so the Auth account itself is never
@@ -43,6 +47,10 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
 
 // Explicit fixture ids. The member's uid is resolved below, not hardcoded.
 const THREAD_KEY = 'e2e-onboarding-regression-thread';
+// Matches e2e/initial-reply-render.spec.ts's REPLY_THREAD_KEY and reply keys.
+const REPLY_THREAD_KEY = 'e2e-initial-reply-render-thread';
+const REPLY_1_KEY = 'e2e-reply-1';
+const REPLY_2_KEY = 'e2e-reply-2';
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
 function refuse(reason) {
@@ -188,5 +196,53 @@ await serverDB
     lovedCount: 0,
   });
 console.log(`Restored stream/${THREAD_KEY}`);
+
+// stream/<REPLY_THREAD_KEY> and its two replies — for
+// initial-reply-render.spec.ts, which asserts the replies render in the
+// initial document, with JavaScript disabled. Reusing `memberUid` as the
+// author lets the spec assert on the profile already restored above.
+await serverDB
+  .collection('stream')
+  .doc(REPLY_THREAD_KEY)
+  .set({
+    title: 'E2E initial reply render regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the initial-reply-render regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 2,
+    lovedCount: 0,
+  });
+console.log(`Restored stream/${REPLY_THREAD_KEY}`);
+
+const repliesCollection = serverDB
+  .collection('stream')
+  .doc(REPLY_THREAD_KEY)
+  .collection('comments');
+
+await repliesCollection.doc(REPLY_1_KEY).set({
+  markdownContent: 'The first seeded reply body.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 1,
+});
+await repliesCollection.doc(REPLY_2_KEY).set({
+  markdownContent: 'The second seeded reply body.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 2,
+});
+console.log(
+  `Restored stream/${REPLY_THREAD_KEY}/comments/${REPLY_1_KEY} and .../${REPLY_2_KEY}`,
+);
 
 console.log('Fixture reset complete.');

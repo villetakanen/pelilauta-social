@@ -6,16 +6,33 @@ import {
 import { THREADS_COLLECTION_NAME } from 'src/schemas/ThreadSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
+import { logError } from 'src/utils/logHelpers';
 import { serverDB } from '..';
 
 /**
- * Server side function to fetch a discussion related to a thread
+ * A discussion read, isolated from any single record's failure.
+ *
+ * `incomplete` is `true` when at least one stored reply failed
+ * `ReplySchema` parsing; `replies` carries every record that parsed.
+ */
+export interface DiscussionRead {
+  replies: Reply[];
+  incomplete: boolean;
+}
+
+/**
+ * Server side function to fetch a discussion related to a thread.
+ *
+ * Each stored record parses in isolation: a malformed reply is skipped and
+ * marks the read `incomplete` rather than discarding every valid reply.
  *
  * @param threadKey
  */
-export async function fetchDiscussion(threadKey: string): Promise<Reply[]> {
+export async function fetchDiscussion(
+  threadKey: string,
+): Promise<DiscussionRead> {
   if (!threadKey) {
-    return [];
+    return { replies: [], incomplete: false };
   }
   const replies = serverDB
     .collection(THREADS_COLLECTION_NAME)
@@ -25,17 +42,23 @@ export async function fetchDiscussion(threadKey: string): Promise<Reply[]> {
   const snapshot = await replies.get();
 
   const discussion: Reply[] = [];
+  let incomplete = false;
 
   for (const doc of snapshot.docs) {
-    const reply = parseReply(
-      toClientEntry(fixImageData(doc.data())),
-      doc.id,
-      threadKey,
-    );
-    discussion.push(reply);
+    try {
+      const reply = parseReply(
+        toClientEntry(fixImageData(doc.data())),
+        doc.id,
+        threadKey,
+      );
+      discussion.push(reply);
+    } catch (error) {
+      logError('fetchDiscussion', 'Skipping malformed reply', doc.id, error);
+      incomplete = true;
+    }
   }
 
   discussion.sort((a, b) => a.flowTime - b.flowTime);
 
-  return discussion;
+  return { replies: discussion, incomplete };
 }

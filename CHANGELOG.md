@@ -7,6 +7,10 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
 - fix(threads): A thread page carries the opening post author name and profile link in the initial response, before browser scripts run. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(i18n): A post whose author profile does not resolve displays the anonymous label instead of the key `app:meta.anonymous`.
+- fix(threads): A thread page carries every reply, with its body, attachments and author name, in the initial response, before browser scripts run. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(threads): A reply that fails to parse no longer takes down the thread page. The discussion displays the replies it can read and states that it is incomplete.
+- fix(threads): Reading a thread without signing in opens no Firestore subscription.
+- fix(threads): A reply body renders through the same converter as a thread body, so both support footnotes.
 
 ## 21.0.0
 

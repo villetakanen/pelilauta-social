@@ -61,6 +61,7 @@ export const threads: Locale = {
     title: 'Keskustelu',
     reply: 'Vastaa',
     empty: 'Aloita keskustelu aiheesta vastaamalla alta.',
+    incomplete: 'Osaa vastauksista ei voitu näyttää.',
     confirmDelete: {
       message: 'Oletko varma, että haluat poistaa tämän viestin?',
     },
