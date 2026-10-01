@@ -11,6 +11,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(threads): A reply that fails to parse no longer takes down the thread page. The discussion displays the replies it can read and states that it is incomplete.
 - fix(threads): Reading a thread without signing in opens no Firestore subscription.
 - fix(threads): A reply body renders through the same converter as a thread body, so both support footnotes.
+- fix(threads): A link to a thread discussion reaches the discussion. Thread lists, the front page and notifications target `#discussion`, which the thread page now carries.
+- fix(threads): A reply displays a permalink on its timestamp, and the reply count on a thread page reaches the latest reply. Both work without browser scripts.
 
 ## 21.0.0
 

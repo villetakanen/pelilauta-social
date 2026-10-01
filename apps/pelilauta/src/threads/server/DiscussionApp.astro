@@ -1,13 +1,13 @@
 ---
 import DiscussionSection from '@pelilauta/threads/client/DiscussionSection.svelte';
 import type { Thread } from 'src/schemas/ThreadSchema';
-import { prepareDiscussion } from 'src/threads/server/prepareDiscussion';
+import type { PreparedDiscussion } from 'src/threads/server/prepareDiscussion';
 
 interface Props {
   thread: Thread;
+  /** Prepared once, in the page, so `ThreadInfoSection` reads the same discussion. */
+  discussion: PreparedDiscussion;
 }
-const { thread }: Props = Astro.props;
-
-const discussion = await prepareDiscussion(thread.key);
+const { thread, discussion }: Props = Astro.props;
 ---
 <DiscussionSection discussion={discussion.replies} incomplete={discussion.incomplete} {thread} client:load/>

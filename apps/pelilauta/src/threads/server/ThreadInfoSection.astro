@@ -10,6 +10,10 @@ import { verifySession } from '@utils/server/auth/verifySession';
 import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
 import type { PublicProfile } from 'src/schemas/ProfileSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import {
+  latestReplyFragment,
+  type PreparedDiscussion,
+} from 'src/threads/server/prepareDiscussion';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 
@@ -17,9 +21,12 @@ interface Props {
   thread: Thread;
   /** Public attribution for the opening post's author, or `null` when it does not resolve. */
   authorAttribution: PublicProfile | null;
+  /** Targets the reply-count link at the final reply, or the discussion heading when there is none. */
+  discussion: PreparedDiscussion;
 }
 
-const { thread, authorAttribution } = Astro.props;
+const { thread, authorAttribution, discussion } = Astro.props;
+const latestReplyHref = latestReplyFragment(discussion);
 
 const channel = `${thread?.channel || '-'}`;
 
@@ -71,7 +78,7 @@ if (thread.blueskyPostUri) {
     <div class="actions text-center">
       <a
         class="button text"
-        href="#discussion-title"
+        href={latestReplyHref}
         aria-label={t("threads:info.replies", { count: thread.replyCount || 0 })}
       >
         <CnIcon noun="discussion" />

@@ -6,6 +6,7 @@ import ThreadArticle from '@pelilauta/threads/server/ThreadArticle.astro';
 import ThreadInfoSection from '@pelilauta/threads/server/ThreadInfoSection.astro';
 import { getPublicProfiles } from 'src/firebase/server/profiles';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
+import { prepareDiscussion } from 'src/threads/server/prepareDiscussion';
 import { t } from 'src/utils/i18n';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
 
@@ -39,6 +40,10 @@ const authorUid = thread.owners[0];
 const authorAttribution = authorUid
   ? ((await getPublicProfiles([authorUid]))[authorUid] ?? null)
   : null;
+
+// Prepared once so ThreadInfoSection's latest-reply control and DiscussionApp's
+// initial render agree on the same discussion, without a second Firestore read.
+const discussion = await prepareDiscussion(thread.key);
 ---
 
 <Base
@@ -47,8 +52,12 @@ const authorAttribution = authorUid
 >
   <div class="content-golden">
     <ThreadArticle thread={thread} />
-    <ThreadInfoSection thread={thread} authorAttribution={authorAttribution} />
+    <ThreadInfoSection
+      thread={thread}
+      authorAttribution={authorAttribution}
+      discussion={discussion}
+    />
   </div>
-  <DiscussionApp thread={thread} />
+  <DiscussionApp thread={thread} discussion={discussion} />
   <ThreadChatBar thread={thread} slot="authoring" client:only="svelte" />
 </Base>

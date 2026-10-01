@@ -58,3 +58,14 @@ export async function prepareDiscussion(
 
   return { replies: prepared, incomplete };
 }
+
+/**
+ * The fragment a latest-reply control targets: the final reply in
+ * `discussion.replies`, ordered as `prepareDiscussion` returns it, or the
+ * discussion heading (`DiscussionSection.svelte`'s `#discussion`) when the
+ * thread carries no replies yet.
+ */
+export function latestReplyFragment(discussion: PreparedDiscussion): string {
+  const lastReply = discussion.replies.at(-1);
+  return lastReply ? `#${lastReply.reply.key}` : '#discussion';
+}

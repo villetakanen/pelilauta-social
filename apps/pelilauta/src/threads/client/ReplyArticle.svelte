@@ -156,10 +156,15 @@ $effect(() => {
       {@html bodyHtml}
     </div>
     {#if reply.updatedAt}
+      <!-- The timestamp is the reply's permalink, so no new visible control joins it. -->
       <footer class="text-end">
-        <span class="text-small text-low">
+        <a
+          class="text-small text-low"
+          href={`/threads/${reply.threadKey}#${reply.key}`}
+          aria-label={t("threads:discussion.permalink", { time: displayTime })}
+        >
           {displayTime}
-        </span>
+        </a>
       </footer>
     {/if}
   </CnBubble>

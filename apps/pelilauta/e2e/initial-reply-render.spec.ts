@@ -5,6 +5,11 @@ import { expect, test } from '@playwright/test';
  * initial document must render every public reply as an article with its
  * body and public attribution, without JavaScript.
  *
+ * Also covers specs/pelilauta/threads/read-state/spec.md's static navigation
+ * requirement: `#discussion` exists in the initial document, each reply
+ * carries a permalink to `/threads/{threadKey}#{replyKey}`, and the
+ * latest-reply control targets the final reply — all without JavaScript.
+ *
  * Fixtures: e2e/reset-fixtures.mjs restores stream/e2e-initial-reply-render-thread
  * and its two replies (both authored by the signed-in member restored for
  * onboarding-callout-transition.spec.ts), by explicit document id. Run it,
@@ -52,4 +57,38 @@ test('every reply renders in the initial HTML, with JavaScript disabled', async 
 
   await expect(firstReply.locator('.reply-author')).toContainText(AUTHOR_NICK);
   await expect(secondReply.locator('.reply-author')).toContainText(AUTHOR_NICK);
+});
+
+test('static navigation anchors work with JavaScript disabled', async ({
+  page,
+}) => {
+  const configResponse = await page.request.get(
+    `${BASE_URL}/api/test/firebase-config`,
+  );
+  expect(configResponse.ok()).toBeTruthy();
+  const liveConfig = await configResponse.json();
+  expect(liveConfig.projectId).toBe('skaldbase-test');
+
+  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`, {
+    waitUntil: 'domcontentloaded',
+  });
+
+  // specs/pelilauta/threads/read-state/spec.md: the discussion heading's
+  // anchor is present in the initial document.
+  await expect(page.locator('#discussion')).toBeAttached();
+
+  // Each reply displays a permalink to /threads/{threadKey}#{replyKey}.
+  const firstPermalink = page
+    .locator(`#${REPLY_1_KEY}`)
+    .locator(`a[href="/threads/${THREAD_KEY}#${REPLY_1_KEY}"]`);
+  const secondPermalink = page
+    .locator(`#${REPLY_2_KEY}`)
+    .locator(`a[href="/threads/${THREAD_KEY}#${REPLY_2_KEY}"]`);
+  await expect(firstPermalink).toBeAttached();
+  await expect(secondPermalink).toBeAttached();
+
+  // The latest-reply control targets the final reply (REPLY_2_KEY has the
+  // later flowTime, per e2e/reset-fixtures.mjs).
+  const latestReplyControl = page.locator(`a[href="#${REPLY_2_KEY}"]`);
+  await expect(latestReplyControl).toBeAttached();
 });

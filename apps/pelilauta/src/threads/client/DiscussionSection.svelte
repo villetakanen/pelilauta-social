@@ -107,7 +107,7 @@ onMount(() => {
 });
 </script>
 
-<section class="content-prose" aria-labelledby="discussion-title">
+<section id="discussion" class="content-prose" aria-labelledby="discussion-title">
   <h2 id="discussion-title">{t("threads:discussion.title")}</h2>
 
   {#if incomplete}

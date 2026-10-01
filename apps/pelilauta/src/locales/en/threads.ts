@@ -67,6 +67,7 @@ export const threads: Locale = {
     reply: 'Reply',
     empty: 'Start the discussion by replying below.',
     incomplete: 'Some replies could not be shown.',
+    permalink: 'Permalink, {time}',
     confirmDelete: {
       message: 'Are you sure you want to delete this message?',
     },
