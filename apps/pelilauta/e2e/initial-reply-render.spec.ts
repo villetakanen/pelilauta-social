@@ -7,7 +7,7 @@ import { expect, test } from '@playwright/test';
  *     Given a public thread with three valid replies
  *     When an anonymous reader opens the thread with JavaScript disabled
  *     Then the document contains three reply articles with bodies and public attribution
- *     And attachment links provide direct image access without hydration
+ *     And an attachment presents in the initial document
  *
  * The fixture thread carries two replies, not three; the count is not the
  * scenario's point (fetchDiscussion imposes no limit), so the assertions
@@ -63,9 +63,8 @@ test('Read all replies without JavaScript', async ({ page }) => {
   await expect(firstReply.locator('.reply-author')).toContainText(AUTHOR_NICK);
   await expect(secondReply.locator('.reply-author')).toContainText(AUTHOR_NICK);
 
-  // Attachment links provide direct image access without hydration: the
-  // second reply's image carries a direct link to its full resolution,
-  // reachable without CnLightbox's script-driven dialog.
-  const directImageLink = secondReply.locator(`a[href="${REPLY_2_IMAGE_URL}"]`);
-  await expect(directImageLink).toBeAttached();
+  // CnLightbox governs how an attachment presents; the scenario asserts the
+  // attachment is in the initial document, not how a reader opens it.
+  const attachment = secondReply.locator(`img[src="${REPLY_2_IMAGE_URL}"]`);
+  await expect(attachment).toBeAttached();
 });

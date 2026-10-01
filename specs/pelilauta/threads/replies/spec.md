@@ -20,7 +20,7 @@ Reply articles use [CnBubble](../../../design-system/components/cn-bubble/spec.m
 
 The reading path uses the thread and comments collections under `ThreadSchema` and `ReplySchema` boundaries. Server and live reads normalize stored records without rewriting them.
 
-The initial HTML renders every public reply as an article with formatted body, attachments, public attribution, and known dates. Serialized properties alone do not satisfy this requirement. Attribution and date semantics follow [Thread Reading](../spec.md). Initial content renders without browser profile requests or Firebase initialization. Each attachment provides a direct link to its full image without JavaScript. Application composition pairs this link with `CnLightbox` presentation.
+The initial HTML renders every public reply as an article with formatted body, attachments, public attribution, and known dates. Serialized properties alone do not satisfy this requirement. Attribution and date semantics follow [Thread Reading](../spec.md). Initial content renders without browser profile requests or Firebase initialization. [CnLightbox](../../../design-system/components/cn-lightbox/spec.md) governs how an attachment presents.
 
 Replies sort by creation time in ascending order, with reply keys breaking ties in ascending lexical order. A stored `flowTime` substitutes only when creation time is missing. Replies missing both sort by key before dated replies. An edit timestamp never replaces a missing creation time or alters reply order. Initial and live reads apply this ordering.
 
@@ -57,7 +57,7 @@ Feature: Thread Replies
     Given a public thread with three valid replies
     When an anonymous reader opens the thread with JavaScript disabled
     Then the document contains three reply articles with bodies and public attribution
-    And attachment links provide direct image access without hydration
+    And an attachment presents in the initial document
 
   Scenario: Read as an anonymous visitor with JavaScript enabled
     Given an anonymous reader viewing a thread

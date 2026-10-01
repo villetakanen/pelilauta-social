@@ -178,20 +178,6 @@ $effect(() => {
         openLabel={t("actions:openImage")}
         closeLabel={t("actions:close")}
       />
-      <!--
-        CnLightbox opens an attachment through a script-driven dialog, so the
-        application pairs it with the link a reader without JavaScript follows
-        to the full image.
-      -->
-      {#if images.length > 0}
-        <p class="attachments text-small">
-          {#each images as image (image.src)}
-            <a class="text-low" href={image.src}
-              >{image.caption || t("actions:openImage")}</a
-            >
-          {/each}
-        </p>
-      {/if}
       {@html bodyHtml}
     </div>
     {#if publishedAt || editedAt}
@@ -235,17 +221,6 @@ $effect(() => {
 
   .reply-author {
     flex: 1 1 auto;
-    margin-block: 0;
-  }
-
-  /*
-   * The attachment links stand under the gallery as one run, so several
-   * attachments do not each take a separate line.
-   */
-  .attachments {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cn-gap);
     margin-block: 0;
   }
 
