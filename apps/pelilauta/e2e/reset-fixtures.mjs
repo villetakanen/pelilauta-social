@@ -22,12 +22,22 @@
  *   - stream/<DISCOVERY_THREAD_KEY>                 (src/schemas/ThreadSchema.ts)
  *   - stream/<DISCOVERY_THREAD_KEY>/comments/<DISCOVERY_REPLY_KEY>
  *   - stream/<DISCOVERY_THREAD_KEY>/comments/<DISCOVERY_HOSTILE_REPLY_KEY> — body carrying `</script>`
+ *   - stream/<CHRONOLOGY_THREAD_KEY>                — reply A edited after reply B was created
+ *   - stream/<CHRONOLOGY_THREAD_KEY>/comments/<CHRONOLOGY_REPLY_A_KEY>
+ *   - stream/<CHRONOLOGY_THREAD_KEY>/comments/<CHRONOLOGY_REPLY_B_KEY>
+ *   - stream/<ORDER_THREAD_KEY>                     — equal creation times, and one record without one
+ *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_UNDATED_KEY>  — no creation time: fails ReplySchema on purpose
+ *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_EQUAL_A_KEY>  — creation time shared with ORDER_EQUAL_B_KEY, edited later
+ *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_EQUAL_B_KEY>
  *
  * and deletes, by explicit id, to guarantee their absence at the start of a run:
  *   - profiles/<NO_PROFILE_AUTHOR_UID>
  *   - stream/<ANON_LIVE_THREAD_KEY>/comments/<ANON_LIVE_NEW_REPLY_KEY> — written mid-test by
  *     anonymous-visitor-live-reading.spec.ts itself, through the Admin SDK, to
  *     simulate another author publishing while the reader's page stays open
+ *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_FLOWTIME_KEY> — seeded by an earlier
+ *     revision of this script, when a stored flowTime stood in for a missing creation
+ *     time; the rule it encoded is gone
  *
  * `<memberUid>` is resolved from the existing Auth account for `existingUser`
  * (credentials.ts) rather than hardcoded, so the Auth account itself is never
@@ -129,6 +139,35 @@ const DISCOVERY_HOSTILE_BODY =
 // reply" needs a thread whose latest-reply control targets the discussion
 // heading instead of a reply.
 const EMPTY_THREAD_KEY = 'e2e-empty-discussion-thread';
+
+// preserve-chronology-after-an-edit.spec.ts: reply A is created before reply
+// B and edited after B exists, and its stored flowTime carries that later
+// edit. Creation time alone decides the order, so A precedes B.
+const CHRONOLOGY_THREAD_KEY = 'e2e-reply-chronology-thread';
+const CHRONOLOGY_REPLY_A_KEY = 'e2e-chronology-reply-a';
+const CHRONOLOGY_REPLY_B_KEY = 'e2e-chronology-reply-b';
+const CHRONOLOGY_A_CREATED_AT = new Date('2024-04-01T09:00:00.000Z');
+const CHRONOLOGY_B_CREATED_AT = new Date('2024-04-02T09:00:00.000Z');
+const CHRONOLOGY_A_UPDATED_AT = new Date('2024-04-03T09:00:00.000Z');
+
+// order-replies-with-equal-creation-dates.spec.ts: one thread carrying the
+// ordering constraint's remaining cases. Expected reading order is
+// ORDER_EQUAL_A_KEY, ORDER_EQUAL_B_KEY, and ORDER_UNDATED_KEY appears nowhere.
+const ORDER_THREAD_KEY = 'e2e-reply-order-thread';
+// No createdAt at all, only an edit date: ReplySchema rejects the record, so
+// the discussion renders without it and reports incomplete content.
+const ORDER_UNDATED_KEY = 'e2e-order-a-undated';
+// A creation time shared with ORDER_EQUAL_B_KEY, so the key breaks the tie,
+// and an edit date later than every other date in the thread, carried in its
+// stored flowTime, so an edit standing in for creation would move it last.
+const ORDER_EQUAL_A_KEY = 'e2e-order-b-equal-first';
+const ORDER_EQUAL_B_KEY = 'e2e-order-c-equal-second';
+// Written by an earlier revision of this script and deleted now; see the
+// header.
+const ORDER_FLOWTIME_KEY = 'e2e-order-d-flowtime';
+const ORDER_EQUAL_CREATED_AT = new Date('2024-02-04T10:00:00.000Z');
+const ORDER_EQUAL_A_UPDATED_AT = new Date('2024-06-02T10:00:00.000Z');
+const ORDER_UNDATED_UPDATED_AT = new Date('2024-06-01T10:00:00.000Z');
 
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
@@ -519,6 +558,107 @@ await discoveryReplies.doc(DISCOVERY_HOSTILE_REPLY_KEY).set({
 });
 console.log(
   `Restored stream/${DISCOVERY_THREAD_KEY}/comments/${DISCOVERY_REPLY_KEY} and .../${DISCOVERY_HOSTILE_REPLY_KEY}`,
+);
+
+// stream/<CHRONOLOGY_THREAD_KEY> — reply A created first and edited after
+// reply B was created. A's stored flowTime carries the edit, so a read that
+// sorts by flowTime puts B first; creation time puts A first.
+await serverDB
+  .collection('stream')
+  .doc(CHRONOLOGY_THREAD_KEY)
+  .set({
+    title: 'E2E reply chronology regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the preserve-chronology-after-an-edit regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: CHRONOLOGY_A_CREATED_AT,
+    updatedAt: CHRONOLOGY_A_UPDATED_AT,
+    flowTime: CHRONOLOGY_A_UPDATED_AT,
+    replyCount: 2,
+    lovedCount: 0,
+  });
+const chronologyReplies = serverDB
+  .collection('stream')
+  .doc(CHRONOLOGY_THREAD_KEY)
+  .collection('comments');
+await chronologyReplies.doc(CHRONOLOGY_REPLY_A_KEY).set({
+  markdownContent: 'Reply A, written first and edited later.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: CHRONOLOGY_A_CREATED_AT,
+  updatedAt: CHRONOLOGY_A_UPDATED_AT,
+  flowTime: CHRONOLOGY_A_UPDATED_AT.getTime(),
+});
+await chronologyReplies.doc(CHRONOLOGY_REPLY_B_KEY).set({
+  markdownContent: 'Reply B, written after reply A and never edited.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: CHRONOLOGY_B_CREATED_AT,
+  updatedAt: CHRONOLOGY_B_CREATED_AT,
+  flowTime: CHRONOLOGY_B_CREATED_AT.getTime(),
+});
+console.log(
+  `Restored stream/${CHRONOLOGY_THREAD_KEY}/comments/${CHRONOLOGY_REPLY_A_KEY} and .../${CHRONOLOGY_REPLY_B_KEY}`,
+);
+
+// stream/<ORDER_THREAD_KEY> — two replies sharing one creation time, the
+// first of them edited last of all, and one record stored without a creation
+// time, which ReplySchema rejects. See the ordering constraint in
+// specs/pelilauta/threads/replies/spec.md.
+await serverDB
+  .collection('stream')
+  .doc(ORDER_THREAD_KEY)
+  .set({
+    title: 'E2E reply order regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the order-replies-with-equal-creation-dates regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: ORDER_EQUAL_CREATED_AT,
+    updatedAt: ORDER_EQUAL_A_UPDATED_AT,
+    flowTime: ORDER_EQUAL_A_UPDATED_AT,
+    replyCount: 3,
+    lovedCount: 0,
+  });
+const orderReplies = serverDB
+  .collection('stream')
+  .doc(ORDER_THREAD_KEY)
+  .collection('comments');
+// No createdAt field: a reply has no reading position without one, so
+// ReplySchema rejects the record and the discussion reports itself
+// incomplete.
+await orderReplies.doc(ORDER_UNDATED_KEY).set({
+  markdownContent: 'A reply stored with no creation date.',
+  owners: [memberUid],
+  author: memberUid,
+  updatedAt: ORDER_UNDATED_UPDATED_AT,
+});
+// An edit later than every other date in the thread, carried in the stored
+// flowTime, and still the first of the two replies sharing a creation time.
+await orderReplies.doc(ORDER_EQUAL_A_KEY).set({
+  markdownContent:
+    'The first of two replies sharing one creation time, edited since.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: ORDER_EQUAL_CREATED_AT,
+  updatedAt: ORDER_EQUAL_A_UPDATED_AT,
+  flowTime: ORDER_EQUAL_A_UPDATED_AT.getTime(),
+});
+await orderReplies.doc(ORDER_EQUAL_B_KEY).set({
+  markdownContent: 'The second of two replies sharing one creation time.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: ORDER_EQUAL_CREATED_AT,
+  flowTime: ORDER_EQUAL_CREATED_AT.getTime(),
+});
+await orderReplies.doc(ORDER_FLOWTIME_KEY).delete();
+console.log(
+  `Restored stream/${ORDER_THREAD_KEY}/comments/${ORDER_UNDATED_KEY}, .../${ORDER_EQUAL_A_KEY} and .../${ORDER_EQUAL_B_KEY}, and confirmed .../${ORDER_FLOWTIME_KEY} is absent`,
 );
 
 // stream/<THREAD_KEY> — src/schemas/ThreadSchema.ts (collection name 'stream').

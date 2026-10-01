@@ -19,8 +19,10 @@ or `specs/pelilauta/threads/read-state/spec.md`, named after it:
 `read-opening-post.spec.ts`,
 `distinguish-activity-from-publication.spec.ts`,
 `inspect-discovery-metadata.spec.ts`,
-`preserve-unknown-publication-dates.spec.ts`, and
-`omit-unknown-structured-data-authors.spec.ts`.
+`preserve-unknown-publication-dates.spec.ts`,
+`omit-unknown-structured-data-authors.spec.ts`,
+`preserve-chronology-after-an-edit.spec.ts`, and
+`order-replies-with-equal-creation-dates.spec.ts`.
 
 ## Prerequisites
 
@@ -77,9 +79,16 @@ edit day, a later activity day and one image attachment, for
 `read-opening-post.spec.ts` and
 `distinguish-activity-from-publication.spec.ts`; a thread stored with neither
 a creation nor an edit date, for
-`preserve-unknown-publication-dates.spec.ts`; and a thread with two
+`preserve-unknown-publication-dates.spec.ts`; a thread with two
 attributed replies, the second carrying `</script>`, angle brackets and an
-ampersand in its body, for `inspect-discovery-metadata.spec.ts`.
+ampersand in its body, for `inspect-discovery-metadata.spec.ts`; a thread
+whose first reply was created before the second and edited after it, its
+stored `flowTime` carrying that edit, for
+`preserve-chronology-after-an-edit.spec.ts`; and a thread with three replies
+— two sharing one creation date, the first of them edited after every
+other date in the thread, and one stored with no creation date, which
+`ReplySchema` rejects — for
+`order-replies-with-equal-creation-dates.spec.ts`.
 `omit-unknown-structured-data-authors.spec.ts` reads the same thread as
 `no-profile-author-reads.spec.ts`.
 

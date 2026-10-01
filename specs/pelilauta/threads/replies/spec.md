@@ -22,7 +22,7 @@ The reading path uses the thread and comments collections under `ThreadSchema` a
 
 The initial HTML renders every public reply as an article with formatted body, attachments, public attribution, and known dates. Serialized properties alone do not satisfy this requirement. Attribution and date semantics follow [Thread Reading](../spec.md). Initial content renders without browser profile requests or Firebase initialization. [CnLightbox](../../../design-system/components/cn-lightbox/spec.md) governs how an attachment presents.
 
-Replies sort by creation time in ascending order, with reply keys breaking ties in ascending lexical order. A stored `flowTime` substitutes only when creation time is missing. Replies missing both sort by key before dated replies. An edit timestamp never replaces a missing creation time or alters reply order. Initial and live reads apply this ordering.
+Replies sort by creation time in ascending order, with reply keys breaking ties in ascending lexical order. An edit timestamp never alters reply order. A reply carries a creation time; `ReplySchema` rejects a record without one, which the discussion then reports as incomplete content. Initial and live reads apply this ordering.
 
 Anonymous reading creates no Firebase subscriptions for replies, attribution, or reactions. Anonymous readers receive no live updates. An unresolved session establishes no subscription. An active signed-in session subscribes to live additions, edits, and deletions. Sign-out, account changes, and page departures terminate active subscriptions and discard late results.
 
@@ -78,12 +78,12 @@ Feature: Thread Replies
     When A is edited after creation of B
     Then A precedes B in live views and after reloads
 
-  Scenario: Order replies with equal or missing creation dates
-    Given replies with identical creation times and replies without creation times
+  Scenario: Order replies with equal creation dates
+    Given replies with identical creation times
     When the server or client orders the replies
     Then identical creation times sort by key
-    And undated replies sort by stored flowTime or before dated replies
     And edit times do not alter order
+    And a reply without a creation time does not appear
 
   Scenario: Preserve passage position during live updates
     Given a signed-in reader focused on an unchanged reply

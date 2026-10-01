@@ -27,6 +27,8 @@ export default defineConfig({
     'inspect-discovery-metadata.spec.ts',
     'preserve-unknown-publication-dates.spec.ts',
     'omit-unknown-structured-data-authors.spec.ts',
+    'preserve-chronology-after-an-edit.spec.ts',
+    'order-replies-with-equal-creation-dates.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

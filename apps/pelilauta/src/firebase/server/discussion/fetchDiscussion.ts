@@ -4,6 +4,7 @@ import {
   type Reply,
 } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME } from 'src/schemas/ThreadSchema';
+import { compareReplies } from 'src/threads/replyOrder';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
 import { logError } from 'src/utils/logHelpers';
@@ -58,7 +59,7 @@ export async function fetchDiscussion(
     }
   }
 
-  discussion.sort((a, b) => a.flowTime - b.flowTime);
+  discussion.sort(compareReplies);
 
   return { replies: discussion, incomplete };
 }
