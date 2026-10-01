@@ -1,19 +1,34 @@
 /**
- * A bespoke, limited Firestore/Auth reset for the onboarding-callout-transition
- * and initial-reply-render regressions, in place of the retired suite's full
+ * A bespoke, limited Firestore/Auth reset for the app feature regression
+ * suite (e2e/README.md), in place of the retired suite's full
  * `init-test-db.js`.
  *
- * It restores exactly six documents, by explicit id:
+ * It restores, by explicit id:
  *   - account/<memberUid>                          (src/schemas/AccountSchema.ts)
  *   - profiles/<memberUid>                          (src/schemas/ProfileSchema.ts)
  *   - stream/<THREAD_KEY>                           (src/schemas/ThreadSchema.ts)
  *   - stream/<REPLY_THREAD_KEY>                     (src/schemas/ThreadSchema.ts)
  *   - stream/<REPLY_THREAD_KEY>/comments/<REPLY_1_KEY> (src/schemas/ReplySchema.ts)
- *   - stream/<REPLY_THREAD_KEY>/comments/<REPLY_2_KEY> (src/schemas/ReplySchema.ts)
+ *   - stream/<REPLY_THREAD_KEY>/comments/<REPLY_2_KEY>, carrying one image attachment
+ *   - stream/<NO_PROFILE_THREAD_KEY>                — owned by an uid with no profiles document
+ *   - stream/<ANON_LIVE_THREAD_KEY>                 (src/schemas/ThreadSchema.ts)
+ *   - stream/<ANON_LIVE_THREAD_KEY>/comments/<ANON_LIVE_REPLY_KEY>
+ *   - stream/<MALFORMED_THREAD_KEY>                 (src/schemas/ThreadSchema.ts)
+ *   - stream/<MALFORMED_THREAD_KEY>/comments/<MALFORMED_VALID_REPLY_KEY>
+ *   - stream/<MALFORMED_THREAD_KEY>/comments/<MALFORMED_REPLY_KEY> — fails ReplySchema on purpose
+ *   - stream/<EMPTY_THREAD_KEY>                     — no replies
+ *
+ * and deletes, by explicit id, to guarantee their absence at the start of a run:
+ *   - profiles/<NO_PROFILE_AUTHOR_UID>
+ *   - stream/<ANON_LIVE_THREAD_KEY>/comments/<ANON_LIVE_NEW_REPLY_KEY> — written mid-test by
+ *     anonymous-visitor-live-reading.spec.ts itself, through the Admin SDK, to
+ *     simulate another author publishing while the reader's page stays open
  *
  * `<memberUid>` is resolved from the existing Auth account for `existingUser`
  * (credentials.ts) rather than hardcoded, so the Auth account itself is never
  * created, deleted, or otherwise touched here — only looked up.
+ * `NO_PROFILE_AUTHOR_UID` is a literal id with no corresponding Auth account:
+ * nothing reads it through Auth, only through `profiles/`, so none is needed.
  *
  * Safety is the point of this script, not a formality:
  *   1. The service account at the repository root must belong to
@@ -48,9 +63,45 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
 // Explicit fixture ids. The member's uid is resolved below, not hardcoded.
 const THREAD_KEY = 'e2e-onboarding-regression-thread';
 // Matches e2e/initial-reply-render.spec.ts's REPLY_THREAD_KEY and reply keys.
+// Also reused by compose-thread-page.spec.ts (a thread with replies, read by
+// a signed-in reader) and resolve-session-after-render.spec.ts (server-
+// rendered replies the client subscribes to once the session resolves).
 const REPLY_THREAD_KEY = 'e2e-initial-reply-render-thread';
 const REPLY_1_KEY = 'e2e-reply-1';
+// Carries an attached image, for initial-reply-render.spec.ts's attachment
+// assertion.
 const REPLY_2_KEY = 'e2e-reply-2';
+const REPLY_2_IMAGE_URL =
+  'https://storage.googleapis.com/skaldbase-test.appspot.com/e2e-fixtures/reply-attachment.jpg';
+
+// no-profile-author-reads.spec.ts: a thread whose owner uid resolves to no
+// profiles document at all — never a real Auth account, so nothing provisions
+// or removes one.
+const NO_PROFILE_THREAD_KEY = 'e2e-no-profile-author-thread';
+const NO_PROFILE_AUTHOR_UID = 'e2e-ghost-author-uid';
+
+// anonymous-visitor-live-reading.spec.ts: an anonymous, JavaScript-enabled
+// reader must open no Firestore subscription. ANON_LIVE_NEW_REPLY_KEY is
+// deleted on every reset, never created here — the spec itself writes it
+// mid-test, through the Admin SDK, to simulate another author publishing
+// while the reader's page is open.
+const ANON_LIVE_THREAD_KEY = 'e2e-anon-visitor-thread';
+const ANON_LIVE_REPLY_KEY = 'e2e-anon-visitor-reply-1';
+const ANON_LIVE_NEW_REPLY_KEY = 'e2e-anon-visitor-new-reply';
+
+// malformed-reply-render.spec.ts: isolated on its own thread, per
+// e2e/README.md — a malformed record marks its whole thread `incomplete`
+// forever, so it never shares a thread with another spec's assertions.
+const MALFORMED_THREAD_KEY = 'e2e-malformed-reply-thread';
+const MALFORMED_VALID_REPLY_KEY = 'e2e-malformed-thread-valid-reply';
+// Fails ReplySchema's `owners` minimum (at least one entry) on purpose.
+const MALFORMED_REPLY_KEY = 'e2e-malformed-reply';
+
+// latest-reply-navigation.spec.ts: the "no replies" half of "Reach the latest
+// reply" needs a thread whose latest-reply control targets the discussion
+// heading instead of a reply.
+const EMPTY_THREAD_KEY = 'e2e-empty-discussion-thread';
+
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
 function refuse(reason) {
@@ -174,29 +225,6 @@ await serverDB.collection('profiles').doc(memberUid).set({
 });
 console.log(`Restored profiles/${memberUid}`);
 
-// stream/<THREAD_KEY> — src/schemas/ThreadSchema.ts (collection name 'stream').
-// `public: true` and the timestamps are all `/api/threads.json` and
-// `/api/threads/[threadKey].json` need; no channel metadata is read by either
-// route, so none is seeded.
-await serverDB
-  .collection('stream')
-  .doc(THREAD_KEY)
-  .set({
-    title: 'E2E onboarding regression thread',
-    markdownContent:
-      'Seeded by e2e/reset-fixtures.mjs for the onboarding-callout-transition regression.',
-    channel: 'yleinen',
-    owners: [memberUid],
-    author: memberUid,
-    public: true,
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
-    flowTime: FieldValue.serverTimestamp(),
-    replyCount: 0,
-    lovedCount: 0,
-  });
-console.log(`Restored stream/${THREAD_KEY}`);
-
 // stream/<REPLY_THREAD_KEY> and its two replies — for
 // initial-reply-render.spec.ts, which asserts the replies render in the
 // initial document, with JavaScript disabled. Reusing `memberUid` as the
@@ -240,9 +268,172 @@ await repliesCollection.doc(REPLY_2_KEY).set({
   createdAt: FieldValue.serverTimestamp(),
   updatedAt: FieldValue.serverTimestamp(),
   flowTime: 2,
+  images: [{ url: REPLY_2_IMAGE_URL, alt: 'A seeded attachment image.' }],
 });
 console.log(
   `Restored stream/${REPLY_THREAD_KEY}/comments/${REPLY_1_KEY} and .../${REPLY_2_KEY}`,
 );
+
+// stream/<NO_PROFILE_THREAD_KEY> — src/schemas/ThreadSchema.ts. Owned by
+// NO_PROFILE_AUTHOR_UID, for which no profiles/ document is ever written, so
+// getPublicProfiles resolves no attribution and the thread page falls back
+// to the anonymous-author label.
+await serverDB
+  .collection('stream')
+  .doc(NO_PROFILE_THREAD_KEY)
+  .set({
+    title: 'E2E no-profile author regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the no-profile-author-reads regression.',
+    channel: 'yleinen',
+    owners: [NO_PROFILE_AUTHOR_UID],
+    author: NO_PROFILE_AUTHOR_UID,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 0,
+    lovedCount: 0,
+  });
+// Defensive: guarantees NO_PROFILE_AUTHOR_UID resolves to no profile even if
+// a previous, differently shaped run left one behind.
+await serverDB.collection('profiles').doc(NO_PROFILE_AUTHOR_UID).delete();
+console.log(
+  `Restored stream/${NO_PROFILE_THREAD_KEY} and confirmed profiles/${NO_PROFILE_AUTHOR_UID} is absent`,
+);
+
+// stream/<ANON_LIVE_THREAD_KEY> and its one reply — for
+// anonymous-visitor-live-reading.spec.ts. ANON_LIVE_NEW_REPLY_KEY is deleted,
+// never written, so the spec starts from a thread the simulated "new reply"
+// has not yet reached.
+await serverDB
+  .collection('stream')
+  .doc(ANON_LIVE_THREAD_KEY)
+  .set({
+    title: 'E2E anonymous visitor regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the anonymous-visitor-live-reading regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 1,
+    lovedCount: 0,
+  });
+const anonLiveReplies = serverDB
+  .collection('stream')
+  .doc(ANON_LIVE_THREAD_KEY)
+  .collection('comments');
+await anonLiveReplies.doc(ANON_LIVE_REPLY_KEY).set({
+  markdownContent:
+    'The only reply present before the spec publishes a new one.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 1,
+});
+await anonLiveReplies.doc(ANON_LIVE_NEW_REPLY_KEY).delete();
+console.log(
+  `Restored stream/${ANON_LIVE_THREAD_KEY}/comments/${ANON_LIVE_REPLY_KEY} and confirmed .../${ANON_LIVE_NEW_REPLY_KEY} is absent`,
+);
+
+// stream/<MALFORMED_THREAD_KEY> — one valid reply and one reply failing
+// ReplySchema (`owners: []`, below its minimum of one). Isolated on its own
+// thread: fetchDiscussion marks a thread `incomplete` for its whole lifetime
+// once a malformed record exists in it, so no other spec's thread carries one.
+await serverDB
+  .collection('stream')
+  .doc(MALFORMED_THREAD_KEY)
+  .set({
+    title: 'E2E malformed reply regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the malformed-reply-render regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 1,
+    lovedCount: 0,
+  });
+const malformedReplies = serverDB
+  .collection('stream')
+  .doc(MALFORMED_THREAD_KEY)
+  .collection('comments');
+await malformedReplies.doc(MALFORMED_VALID_REPLY_KEY).set({
+  markdownContent: 'A valid reply beside the malformed record.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 1,
+});
+// `owners: []` fails ReplySchema's `.min(1, ...)` on purpose.
+await malformedReplies.doc(MALFORMED_REPLY_KEY).set({
+  markdownContent: 'A malformed reply with no owners.',
+  owners: [],
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 2,
+});
+console.log(
+  `Restored stream/${MALFORMED_THREAD_KEY}/comments/${MALFORMED_VALID_REPLY_KEY} and .../${MALFORMED_REPLY_KEY}`,
+);
+
+// stream/<EMPTY_THREAD_KEY> — no replies at all, for latest-reply-navigation
+// .spec.ts's "no replies" case: the latest-reply control targets the
+// discussion heading instead of a reply.
+await serverDB
+  .collection('stream')
+  .doc(EMPTY_THREAD_KEY)
+  .set({
+    title: 'E2E empty discussion regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the latest-reply-navigation regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 0,
+    lovedCount: 0,
+  });
+console.log(`Restored stream/${EMPTY_THREAD_KEY}`);
+
+// stream/<THREAD_KEY> — src/schemas/ThreadSchema.ts (collection name 'stream').
+// `public: true` and the timestamps are all `/api/threads.json` and
+// `/api/threads/[threadKey].json` need; no channel metadata is read by either
+// route, so none is seeded. Written last, deliberately: `/api/threads.json`
+// (TopThreadsStream.astro, the front page this document's regression reads)
+// orders public threads by `flowTime` descending and takes the top 5, so this
+// write must carry the latest `flowTime` of every thread this script
+// restores — otherwise the other fixture threads this run also wrote would
+// outrank it and the front page would never link it.
+await serverDB
+  .collection('stream')
+  .doc(THREAD_KEY)
+  .set({
+    title: 'E2E onboarding regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the onboarding-callout-transition regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 0,
+    lovedCount: 0,
+  });
+console.log(`Restored stream/${THREAD_KEY}`);
 
 console.log('Fixture reset complete.');

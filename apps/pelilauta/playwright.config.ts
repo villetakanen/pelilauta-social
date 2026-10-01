@@ -15,6 +15,13 @@ export default defineConfig({
   testMatch: [
     'onboarding-callout-transition.spec.ts',
     'initial-reply-render.spec.ts',
+    'no-profile-author-reads.spec.ts',
+    'compose-thread-page.spec.ts',
+    'anonymous-visitor-live-reading.spec.ts',
+    'resolve-session-after-render.spec.ts',
+    'malformed-reply-render.spec.ts',
+    'reply-permalink-navigation.spec.ts',
+    'latest-reply-navigation.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

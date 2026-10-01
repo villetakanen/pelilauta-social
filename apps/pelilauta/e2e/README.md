@@ -9,8 +9,13 @@ of `pnpm test` or the pre-push hook.
 Each feature this suite covers gets its own spec and declares the fixtures it
 needs; nothing here is a general fixture framework, and nothing from the
 retired suite was ported. `onboarding-callout-transition.spec.ts` was the
-first; `initial-reply-render.spec.ts` covers the thread page rendering every
-reply in the initial document, with JavaScript disabled.
+first. The remaining specs each carry one `Scenario:` from
+`specs/pelilauta/threads/spec.md`, `specs/pelilauta/threads/replies/spec.md`,
+or `specs/pelilauta/threads/read-state/spec.md`, named after it:
+`initial-reply-render.spec.ts`, `no-profile-author-reads.spec.ts`,
+`compose-thread-page.spec.ts`, `anonymous-visitor-live-reading.spec.ts`,
+`resolve-session-after-render.spec.ts`, `malformed-reply-render.spec.ts`,
+`reply-permalink-navigation.spec.ts`, and `latest-reply-navigation.spec.ts`.
 
 ## Prerequisites
 
@@ -47,10 +52,22 @@ only those regressions — never a legacy spec, never the UAT reset.
 ## Fixtures and safety
 
 `reset-fixtures.mjs` restores, by explicit document id, only what the named
-specs read: the signed-in member's `account` and `profiles` documents, one
-public thread in `stream` for `onboarding-callout-transition.spec.ts`, and a
-second public thread with two replies in `stream/.../comments`, both authored
-by the same member, for `initial-reply-render.spec.ts`. It refuses to run —
-before making any Firestore call — unless the service account, the
-application's `.env`, and the *running* application (checked live through
-`/api/test/firebase-config`) all agree the target is `skaldbase-test`.
+specs read: the signed-in member's `account` and `profiles` documents; one
+public thread in `stream` for `onboarding-callout-transition.spec.ts`; a
+second public thread with two replies — the second carrying one image
+attachment — in `stream/.../comments`, both authored by the same member, for
+`initial-reply-render.spec.ts`, `compose-thread-page.spec.ts`,
+`resolve-session-after-render.spec.ts`, `reply-permalink-navigation.spec.ts`,
+and the replies half of `latest-reply-navigation.spec.ts`; a thread owned by
+an uid with no `profiles` document, for `no-profile-author-reads.spec.ts`; a
+thread with one reply, for `anonymous-visitor-live-reading.spec.ts` (which
+writes a second reply itself, through the Admin SDK, to simulate another
+author publishing while its page stays open — the script deletes that second
+reply's document on every reset so the spec starts from its absence); a
+thread with one valid reply and one reply document failing `ReplySchema` on
+purpose, isolated on its own thread, for `malformed-reply-render.spec.ts`;
+and a thread with no replies, for the empty-discussion half of
+`latest-reply-navigation.spec.ts`. It refuses to run — before making any
+Firestore call — unless the service account, the application's `.env`, and
+the *running* application (checked live through `/api/test/firebase-config`)
+all agree the target is `skaldbase-test`.
