@@ -110,6 +110,12 @@ Feature: Thread Read State and Navigation
     Then the browser scrolls to that reply in the initial document
     And fixed chrome does not obscure the reply
 
+  Scenario: Reach the latest reply
+    Given a thread page with replies
+    When the reader activates the latest-reply control
+    Then the viewport targets the final reply
+    And a discussion with no replies targets the discussion heading
+
   Scenario: Prioritize explicit reply fragment over unread parameter
     Given a URL containing jumpTo=unread and a reply-key fragment
     When the page opens
