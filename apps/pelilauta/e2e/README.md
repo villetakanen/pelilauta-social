@@ -15,7 +15,12 @@ or `specs/pelilauta/threads/read-state/spec.md`, named after it:
 `initial-reply-render.spec.ts`, `no-profile-author-reads.spec.ts`,
 `compose-thread-page.spec.ts`, `anonymous-visitor-live-reading.spec.ts`,
 `resolve-session-after-render.spec.ts`, `malformed-reply-render.spec.ts`,
-`reply-permalink-navigation.spec.ts`, and `latest-reply-navigation.spec.ts`.
+`reply-permalink-navigation.spec.ts`, `latest-reply-navigation.spec.ts`,
+`read-opening-post.spec.ts`,
+`distinguish-activity-from-publication.spec.ts`,
+`inspect-discovery-metadata.spec.ts`,
+`preserve-unknown-publication-dates.spec.ts`, and
+`omit-unknown-structured-data-authors.spec.ts`.
 
 ## Prerequisites
 
@@ -66,8 +71,19 @@ author publishing while its page stays open — the script deletes that second
 reply's document on every reset so the spec starts from its absence); a
 thread with one valid reply and one reply document failing `ReplySchema` on
 purpose, isolated on its own thread, for `malformed-reply-render.spec.ts`;
-and a thread with no replies, for the empty-discussion half of
-`latest-reply-navigation.spec.ts`. It refuses to run — before making any
+a thread with no replies, for the empty-discussion half of
+`latest-reply-navigation.spec.ts`; a thread carrying a creation day, a later
+edit day, a later activity day and one image attachment, for
+`read-opening-post.spec.ts` and
+`distinguish-activity-from-publication.spec.ts`; a thread stored with neither
+a creation nor an edit date, for
+`preserve-unknown-publication-dates.spec.ts`; and a thread with two
+attributed replies, the second carrying `</script>`, angle brackets and an
+ampersand in its body, for `inspect-discovery-metadata.spec.ts`.
+`omit-unknown-structured-data-authors.spec.ts` reads the same thread as
+`no-profile-author-reads.spec.ts`.
+
+`reset-fixtures.mjs` refuses to run — before making any
 Firestore call — unless the service account, the application's `.env`, and
 the *running* application (checked live through `/api/test/firebase-config`)
 all agree the target is `skaldbase-test`.

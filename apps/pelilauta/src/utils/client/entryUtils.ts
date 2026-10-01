@@ -24,10 +24,18 @@ export function toClientEntry(entry: Record<string, unknown>) {
       ? [entry.author]
       : [];
 
+  /*
+   * A stored record that carries no date leaves the field unset, rather than
+   * taking the time of the read: a reader cannot be shown a publication date
+   * the record never had.
+   */
+  const dates: { createdAt?: Date; updatedAt?: Date } = {};
+  if (entry.createdAt) dates.createdAt = toDate(entry.createdAt);
+  if (entry.updatedAt) dates.updatedAt = toDate(entry.updatedAt);
+
   return {
     ...entry,
-    createdAt: toDate(entry.createdAt),
-    updatedAt: toDate(entry.updatedAt),
+    ...dates,
     flowTime,
     owners,
   } as Entry;

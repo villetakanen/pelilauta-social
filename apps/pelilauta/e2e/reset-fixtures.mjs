@@ -17,6 +17,11 @@
  *   - stream/<MALFORMED_THREAD_KEY>/comments/<MALFORMED_VALID_REPLY_KEY>
  *   - stream/<MALFORMED_THREAD_KEY>/comments/<MALFORMED_REPLY_KEY> — fails ReplySchema on purpose
  *   - stream/<EMPTY_THREAD_KEY>                     — no replies
+ *   - stream/<OPENING_POST_THREAD_KEY>              — three distinct dates, one image attachment
+ *   - stream/<UNDATED_THREAD_KEY>                   — no creation date and no edit date
+ *   - stream/<DISCOVERY_THREAD_KEY>                 (src/schemas/ThreadSchema.ts)
+ *   - stream/<DISCOVERY_THREAD_KEY>/comments/<DISCOVERY_REPLY_KEY>
+ *   - stream/<DISCOVERY_THREAD_KEY>/comments/<DISCOVERY_HOSTILE_REPLY_KEY> — body carrying `</script>`
  *
  * and deletes, by explicit id, to guarantee their absence at the start of a run:
  *   - profiles/<NO_PROFILE_AUTHOR_UID>
@@ -96,6 +101,29 @@ const MALFORMED_THREAD_KEY = 'e2e-malformed-reply-thread';
 const MALFORMED_VALID_REPLY_KEY = 'e2e-malformed-thread-valid-reply';
 // Fails ReplySchema's `owners` minimum (at least one entry) on purpose.
 const MALFORMED_REPLY_KEY = 'e2e-malformed-reply';
+
+// read-opening-post.spec.ts and distinguish-activity-from-publication.spec.ts:
+// one thread published, edited, and last active on three different days, with
+// one image attachment, a resolvable author, and a channel — everything the
+// opening post renders.
+const OPENING_POST_THREAD_KEY = 'e2e-opening-post-thread';
+const OPENING_POST_CREATED_AT = new Date('2024-01-02T09:00:00.000Z');
+const OPENING_POST_UPDATED_AT = new Date('2024-03-04T09:00:00.000Z');
+const OPENING_POST_FLOW_TIME = new Date('2024-05-06T09:00:00.000Z');
+
+// preserve-unknown-publication-dates.spec.ts: a stored thread carrying no
+// creation date at all, and no edit date either, so the only date it has is
+// its activity.
+const UNDATED_THREAD_KEY = 'e2e-undated-thread';
+const UNDATED_THREAD_FLOW_TIME = new Date('2024-07-08T09:00:00.000Z');
+
+// inspect-discovery-metadata.spec.ts: two attributed, dated replies, the
+// second carrying the delimiters a JSON-LD block must not let out.
+const DISCOVERY_THREAD_KEY = 'e2e-discovery-metadata-thread';
+const DISCOVERY_REPLY_KEY = 'e2e-discovery-reply-1';
+const DISCOVERY_HOSTILE_REPLY_KEY = 'e2e-discovery-hostile-reply';
+const DISCOVERY_HOSTILE_BODY =
+  'Hostile reply text: </script><img src=x onerror=alert(1)> with <b>angle</b> brackets & an ampersand.';
 
 // latest-reply-navigation.spec.ts: the "no replies" half of "Reach the latest
 // reply" needs a thread whose latest-reply control targets the discussion
@@ -407,6 +435,91 @@ await serverDB
     lovedCount: 0,
   });
 console.log(`Restored stream/${EMPTY_THREAD_KEY}`);
+
+// stream/<OPENING_POST_THREAD_KEY> — three distinct dates and one image, so
+// the opening post renders a publication date, an edit date and an activity
+// date a reader can tell apart. The dates are literal, never server
+// timestamps: the specs assert the rendered days.
+await serverDB
+  .collection('stream')
+  .doc(OPENING_POST_THREAD_KEY)
+  .set({
+    title: 'E2E opening post regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the opening-post reading regressions.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: OPENING_POST_CREATED_AT,
+    updatedAt: OPENING_POST_UPDATED_AT,
+    flowTime: OPENING_POST_FLOW_TIME,
+    replyCount: 0,
+    lovedCount: 0,
+    images: [{ url: REPLY_2_IMAGE_URL, alt: 'A seeded attachment image.' }],
+  });
+console.log(`Restored stream/${OPENING_POST_THREAD_KEY}`);
+
+// stream/<UNDATED_THREAD_KEY> — no createdAt and no updatedAt field at all.
+await serverDB
+  .collection('stream')
+  .doc(UNDATED_THREAD_KEY)
+  .set({
+    title: 'E2E undated regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the preserve-unknown-publication-dates regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    flowTime: UNDATED_THREAD_FLOW_TIME,
+    replyCount: 0,
+    lovedCount: 0,
+  });
+console.log(`Restored stream/${UNDATED_THREAD_KEY}`);
+
+// stream/<DISCOVERY_THREAD_KEY> and its two replies — both authored by the
+// member restored above, so both qualify for a structured-data item.
+await serverDB
+  .collection('stream')
+  .doc(DISCOVERY_THREAD_KEY)
+  .set({
+    title: 'E2E discovery metadata regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the inspect-discovery-metadata regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 2,
+    lovedCount: 0,
+  });
+const discoveryReplies = serverDB
+  .collection('stream')
+  .doc(DISCOVERY_THREAD_KEY)
+  .collection('comments');
+await discoveryReplies.doc(DISCOVERY_REPLY_KEY).set({
+  markdownContent: 'The first discovery-metadata reply body.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 1,
+});
+await discoveryReplies.doc(DISCOVERY_HOSTILE_REPLY_KEY).set({
+  markdownContent: DISCOVERY_HOSTILE_BODY,
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 2,
+});
+console.log(
+  `Restored stream/${DISCOVERY_THREAD_KEY}/comments/${DISCOVERY_REPLY_KEY} and .../${DISCOVERY_HOSTILE_REPLY_KEY}`,
+);
 
 // stream/<THREAD_KEY> — src/schemas/ThreadSchema.ts (collection name 'stream').
 // `public: true` and the timestamps are all `/api/threads.json` and

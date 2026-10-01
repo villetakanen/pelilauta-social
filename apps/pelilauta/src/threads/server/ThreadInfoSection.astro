@@ -16,6 +16,7 @@ import {
 } from 'src/threads/server/prepareDiscussion';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
+import { toDate } from 'src/utils/schemaHelpers';
 
 interface Props {
   thread: Thread;
@@ -29,6 +30,21 @@ const { thread, authorAttribution, discussion } = Astro.props;
 const latestReplyHref = latestReplyFragment(discussion);
 
 const channel = `${thread?.channel || '-'}`;
+
+/*
+ * Three dates with three meanings: creation, a later edit, and the thread's
+ * latest activity. A record that carries none of a date renders none of it,
+ * so a reader never reads a date the thread never had.
+ */
+const publishedAt = thread.createdAt ? toDate(thread.createdAt) : null;
+const storedUpdatedAt = thread.updatedAt ? toDate(thread.updatedAt) : null;
+const editedAt =
+  publishedAt &&
+  storedUpdatedAt &&
+  storedUpdatedAt.getTime() > publishedAt.getTime()
+    ? storedUpdatedAt
+    : null;
+const activeAt = thread.flowTime ? new Date(thread.flowTime) : null;
 
 // Check if current user is author or admin
 const session = await verifySession(Astro);
@@ -57,9 +73,29 @@ if (thread.blueskyPostUri) {
       <CnIcon noun="discussion" size="small" decorative />
       {t("threads:info.title")}
     </h2>
-    <p>
-      {toDisplayString(thread.flowTime)}
-    </p>
+    <div class="dates text-small">
+      {
+        publishedAt && (
+          <time datetime={publishedAt.toISOString()}>
+            {t("threads:info.createdAt", { time: toDisplayString(publishedAt) })}
+          </time>
+        )
+      }
+      {
+        editedAt && (
+          <time datetime={editedAt.toISOString()}>
+            {t("threads:info.updatedAt", { time: toDisplayString(editedAt) })}
+          </time>
+        )
+      }
+      {
+        activeAt && (
+          <time datetime={activeAt.toISOString()}>
+            {t("threads:info.flowTime", { time: toDisplayString(activeAt) })}
+          </time>
+        )
+      }
+    </div>
     <p>
       {
         authorAttribution ? (
@@ -141,6 +177,15 @@ if (thread.blueskyPostUri) {
   .summary {
     display: grid;
     row-gap: var(--cn-line);
+  }
+
+  /*
+   * Each date is its own line: the three say different things, and a reader
+   * separates them by reading down rather than by parsing one run of text.
+   */
+  .dates {
+    display: grid;
+    row-gap: var(--cn-gap);
   }
 
 </style>

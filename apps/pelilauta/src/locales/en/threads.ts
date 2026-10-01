@@ -15,6 +15,7 @@ export const threads: Locale = {
     inTopic: 'in topic',
     replies: '{count} replies',
     createdAt: 'Created {time}',
+    updatedAt: 'Edited {time}',
     flowTime: 'Updated {time}',
     loveCount: '{count} likes',
     blueskyTitle: 'Bluesky',

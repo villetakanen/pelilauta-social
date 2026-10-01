@@ -90,8 +90,8 @@ export function parseThread(
       poster,
       title: data.title || '',
       channel: data.channel || data.topic || '',
-      createdAt: toDate(data.createdAt),
-      updatedAt: toDate(data.updatedAt),
+      createdAt: data.createdAt ? toDate(data.createdAt) : undefined,
+      updatedAt: data.updatedAt ? toDate(data.updatedAt) : undefined,
       flowTime: toDate(data.flowTime).getTime(),
       key,
     });

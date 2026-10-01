@@ -13,6 +13,9 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(threads): A reply body renders through the same converter as a thread body, so both support footnotes.
 - fix(threads): A link to a thread discussion reaches the discussion. Thread lists, the front page and notifications target `#discussion`, which the thread page now carries.
 - fix(threads): A reply displays a permalink on its timestamp, and the reply count on a thread page reaches the latest reply. Both work without browser scripts.
+- fix(threads): A thread page distinguishes when the opening post was published, when it was edited, and when the discussion was last active. A date the record does not carry displays nothing, where the page previously displayed the time of the read.
+- fix(threads): A thread page carries discussion structured data describing the conversation a reader sees, its authors and its dates.
+- fix(threads): A reply attachment carries a direct link to its full image, reachable without browser scripts.
 
 ## 21.0.0
 

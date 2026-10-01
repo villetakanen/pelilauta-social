@@ -6,6 +6,10 @@ import ThreadArticle from '@pelilauta/threads/server/ThreadArticle.astro';
 import ThreadInfoSection from '@pelilauta/threads/server/ThreadInfoSection.astro';
 import { getPublicProfiles } from 'src/firebase/server/profiles';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
+import {
+  buildDiscussionGraph,
+  serializeJsonLd,
+} from 'src/threads/server/discussionMetadata';
 import { prepareDiscussion } from 'src/threads/server/prepareDiscussion';
 import { t } from 'src/utils/i18n';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
@@ -44,6 +48,16 @@ const authorAttribution = authorUid
 // Prepared once so ThreadInfoSection's latest-reply control and DiscussionApp's
 // initial render agree on the same discussion, without a second Firestore read.
 const discussion = await prepareDiscussion(thread.key);
+
+// Discovery metadata for the contributions this document renders, built from
+// the same prepared content and left out entirely when the opening post does
+// not qualify.
+const discussionGraph = buildDiscussionGraph({
+  thread,
+  authorAttribution,
+  discussion,
+  origin: Astro.url.origin,
+});
 ---
 
 <Base
@@ -59,5 +73,14 @@ const discussion = await prepareDiscussion(thread.key);
     />
   </div>
   <DiscussionApp thread={thread} discussion={discussion} />
+  {
+    discussionGraph && (
+      <script
+        type="application/ld+json"
+        is:inline
+        set:html={serializeJsonLd(discussionGraph)}
+      />
+    )
+  }
   <ThreadChatBar thread={thread} slot="authoring" client:only="svelte" />
 </Base>

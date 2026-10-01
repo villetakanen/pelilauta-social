@@ -15,6 +15,7 @@ export const threads: Locale = {
     inTopic: 'aiheessa',
     replies: '{count} vastausta',
     createdAt: 'Luotu {time}',
+    updatedAt: 'Muokattu {time}',
     flowTime: 'Päivitetty {time}',
     loveCount: '{count} tykkäystä',
     blueskyTitle: 'Bluesky',

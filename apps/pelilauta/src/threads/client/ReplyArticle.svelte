@@ -72,12 +72,37 @@ const images = $derived.by(() => {
   );
 });
 
-let displayTime = $state(toDisplayString(reply.updatedAt));
+/**
+ * Publication, edit and activity carry three different meanings, so the reply
+ * states the two it has of its own: when it was written, and when it was
+ * edited afterwards. A reply carrying neither date renders no footer, rather
+ * than a placeholder.
+ */
+const publishedAt = $derived(
+  reply.createdAt ? new Date(reply.createdAt) : null,
+);
+const storedUpdatedAt = $derived(
+  reply.updatedAt ? new Date(reply.updatedAt) : null,
+);
+const editedAt = $derived(
+  publishedAt &&
+    storedUpdatedAt &&
+    storedUpdatedAt.getTime() > publishedAt.getTime()
+    ? storedUpdatedAt
+    : null,
+);
 
+// Client-side enhancement: a recent date reads as relative time once mounted.
+let relative = $state(false);
 onMount(() => {
-  // Client-Side enhancement: update to relative time
-  displayTime = toDisplayString(reply.updatedAt, true);
+  relative = true;
 });
+const publishedLabel = $derived(
+  publishedAt ? toDisplayString(publishedAt, relative) : '',
+);
+const editedLabel = $derived(
+  editedAt ? toDisplayString(editedAt, relative) : '',
+);
 
 /**
  * The edit action hands the reply to the thread's chat bar and takes the focus
@@ -153,18 +178,43 @@ $effect(() => {
         openLabel={t("actions:openImage")}
         closeLabel={t("actions:close")}
       />
+      <!--
+        CnLightbox opens an attachment through a script-driven dialog, so the
+        application pairs it with the link a reader without JavaScript follows
+        to the full image.
+      -->
+      {#if images.length > 0}
+        <p class="attachments text-small">
+          {#each images as image (image.src)}
+            <a class="text-low" href={image.src}
+              >{image.caption || t("actions:openImage")}</a
+            >
+          {/each}
+        </p>
+      {/if}
       {@html bodyHtml}
     </div>
-    {#if reply.updatedAt}
-      <!-- The timestamp is the reply's permalink, so no new visible control joins it. -->
-      <footer class="text-end">
-        <a
-          class="text-small text-low"
-          href={`/threads/${reply.threadKey}#${reply.key}`}
-          aria-label={t("threads:discussion.permalink", { time: displayTime })}
-        >
-          {displayTime}
-        </a>
+    {#if publishedAt || editedAt}
+      <!-- The publication date carries the permalink, so no new visible control joins it. -->
+      <footer class="reply-dates text-end text-small">
+        {#if publishedAt}
+          <a
+            class="text-low"
+            href={`/threads/${reply.threadKey}#${reply.key}`}
+            aria-label={t("threads:discussion.permalink", {
+              time: publishedLabel,
+            })}
+          >
+            <time datetime={publishedAt.toISOString()}
+              >{t("threads:info.createdAt", { time: publishedLabel })}</time
+            >
+          </a>
+        {/if}
+        {#if editedAt}
+          <time class="text-low" datetime={editedAt.toISOString()}
+            >{t("threads:info.updatedAt", { time: editedLabel })}</time
+          >
+        {/if}
       </footer>
     {/if}
   </CnBubble>
@@ -186,5 +236,24 @@ $effect(() => {
   .reply-author {
     flex: 1 1 auto;
     margin-block: 0;
+  }
+
+  /*
+   * The attachment links stand under the gallery as one run, so several
+   * attachments do not each take a separate line.
+   */
+  .attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cn-gap);
+    margin-block: 0;
+  }
+
+  /* Publication and edit read as one trailing line, in that order. */
+  .reply-dates {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--cn-gap);
   }
 </style>
