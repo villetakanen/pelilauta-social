@@ -3,8 +3,10 @@
  *
  * `fetchDiscussion` parses each stored reply in isolation: a malformed
  * record is skipped rather than discarding every valid reply, and the read
- * reports `incomplete` when it skipped one. These tests mock `serverDB` so
- * they never touch a real Firestore instance.
+ * reports `incomplete` when it skipped one. A failure of the collection read
+ * itself reports `unavailable` instead of propagating, so the thread page
+ * still renders its opening post. These tests mock `serverDB` so they never
+ * touch a real Firestore instance.
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -44,7 +46,11 @@ describe('fetchDiscussion', () => {
   it('returns an empty, complete discussion without a Firestore call for an empty key', async () => {
     const result = await fetchDiscussion('');
 
-    expect(result).toEqual({ replies: [], incomplete: false });
+    expect(result).toEqual({
+      replies: [],
+      incomplete: false,
+      unavailable: false,
+    });
     expect(mockCollection).not.toHaveBeenCalled();
   });
 
@@ -76,5 +82,17 @@ describe('fetchDiscussion', () => {
     expect(result.incomplete).toBe(true);
     expect(result.replies).toHaveLength(1);
     expect(result.replies[0].key).toBe('good');
+  });
+
+  it('reports the read unavailable, rather than throwing, when the collection read fails', async () => {
+    mockGet.mockRejectedValueOnce(new Error('Firestore is unreachable'));
+
+    const result = await fetchDiscussion('thread-1');
+
+    expect(result).toEqual({
+      replies: [],
+      incomplete: false,
+      unavailable: true,
+    });
   });
 });

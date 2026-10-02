@@ -52,12 +52,17 @@ describe('prepareDiscussion', () => {
     mockFetchDiscussion.mockResolvedValueOnce({
       replies: [],
       incomplete: false,
+      unavailable: false,
     });
     mockGetPublicProfiles.mockResolvedValueOnce({});
 
     const result = await prepareDiscussion('thread-1');
 
-    expect(result).toEqual({ replies: [], incomplete: false });
+    expect(result).toEqual({
+      replies: [],
+      incomplete: false,
+      unavailable: false,
+    });
     expect(mockGetPublicProfiles).toHaveBeenCalledWith([]);
   });
 
@@ -65,6 +70,7 @@ describe('prepareDiscussion', () => {
     mockFetchDiscussion.mockResolvedValueOnce({
       replies: [reply('r1', 'uid-a', 'Hello'), reply('r2', 'uid-b', 'World')],
       incomplete: false,
+      unavailable: false,
     });
     mockGetPublicProfiles.mockResolvedValueOnce({
       'uid-a': { key: 'uid-a', nick: 'Aino', username: 'aino' },
@@ -90,10 +96,11 @@ describe('prepareDiscussion', () => {
     ]);
   });
 
-  it('carries incomplete through from fetchDiscussion', async () => {
+  it('carries incomplete and unavailable through from fetchDiscussion', async () => {
     mockFetchDiscussion.mockResolvedValueOnce({
       replies: [reply('r1', 'uid-a', 'Hello')],
       incomplete: true,
+      unavailable: false,
     });
     mockGetPublicProfiles.mockResolvedValueOnce({
       'uid-a': { key: 'uid-a', nick: 'Aino', username: 'aino' },
@@ -102,12 +109,31 @@ describe('prepareDiscussion', () => {
     const result = await prepareDiscussion('thread-1');
 
     expect(result.incomplete).toBe(true);
+    expect(result.unavailable).toBe(false);
+  });
+
+  it('carries an unavailable read through as an empty discussion', async () => {
+    mockFetchDiscussion.mockResolvedValueOnce({
+      replies: [],
+      incomplete: false,
+      unavailable: true,
+    });
+    mockGetPublicProfiles.mockResolvedValueOnce({});
+
+    const result = await prepareDiscussion('thread-1');
+
+    expect(result).toEqual({
+      replies: [],
+      incomplete: false,
+      unavailable: true,
+    });
   });
 
   it('leaves author undefined for a reply whose author does not resolve', async () => {
     mockFetchDiscussion.mockResolvedValueOnce({
       replies: [reply('r1', 'uid-missing', 'Hello')],
       incomplete: false,
+      unavailable: false,
     });
     mockGetPublicProfiles.mockResolvedValueOnce({});
 

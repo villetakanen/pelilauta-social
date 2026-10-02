@@ -39,7 +39,11 @@ function reply(key: string): Reply {
 
 describe('latestReplyFragment', () => {
   it('targets the discussion heading when the thread has no replies', () => {
-    const discussion: PreparedDiscussion = { replies: [], incomplete: false };
+    const discussion: PreparedDiscussion = {
+      replies: [],
+      incomplete: false,
+      unavailable: false,
+    };
 
     expect(latestReplyFragment(discussion)).toBe('#discussion');
   });
@@ -52,6 +56,7 @@ describe('latestReplyFragment', () => {
         { reply: reply('r3') },
       ],
       incomplete: false,
+      unavailable: false,
     };
 
     expect(latestReplyFragment(discussion)).toBe('#r3');

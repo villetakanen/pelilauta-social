@@ -63,6 +63,9 @@ export const threads: Locale = {
     reply: 'Vastaa',
     empty: 'Aloita keskustelu aiheesta vastaamalla alta.',
     incomplete: 'Osaa vastauksista ei voitu näyttää.',
+    unavailable: 'Keskustelua ei voitu ladata. Lataa sivu uudelleen.',
+    updatesUnavailable:
+      'Uudet vastaukset eivät päivity. Lataa sivu uudelleen nähdäksesi ne.',
     permalink: 'Pysyvä linkki, {time}',
     confirmDelete: {
       message: 'Oletko varma, että haluat poistaa tämän viestin?',

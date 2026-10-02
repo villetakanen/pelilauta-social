@@ -29,6 +29,14 @@
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_UNDATED_KEY>  — no creation time: fails ReplySchema on purpose
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_EQUAL_A_KEY>  — creation time shared with ORDER_EQUAL_B_KEY, edited later
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_EQUAL_B_KEY>
+ *   - stream/<PASSAGE_THREAD_KEY>                   — ten long replies, enough to scroll
+ *   - stream/<PASSAGE_THREAD_KEY>/comments/e2e-passage-reply-01 … -10
+ *   - stream/<BOUNDARY_THREAD_KEY>                  — six long replies, emptied by its spec
+ *   - stream/<BOUNDARY_THREAD_KEY>/comments/e2e-boundary-reply-01 … -06
+ *   - stream/<SHORTEN_THREAD_KEY>                   — ten long replies, the first five deleted by its spec
+ *   - stream/<SHORTEN_THREAD_KEY>/comments/e2e-shorten-reply-01 … -10
+ *   - stream/<TEARDOWN_THREAD_KEY>                  (src/schemas/ThreadSchema.ts)
+ *   - stream/<TEARDOWN_THREAD_KEY>/comments/<TEARDOWN_REPLY_KEY>
  *
  * and deletes, by explicit id, to guarantee their absence at the start of a run:
  *   - profiles/<NO_PROFILE_AUTHOR_UID>
@@ -38,6 +46,9 @@
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_FLOWTIME_KEY> — seeded by an earlier
  *     revision of this script, when a stored flowTime stood in for a missing creation
  *     time; the rule it encoded is gone
+ *   - stream/<TEARDOWN_THREAD_KEY>/comments/<TEARDOWN_LATE_REPLY_KEY> — written mid-test by
+ *     terminate-a-live-subscription.spec.ts, through the Admin SDK, after the reader
+ *     signed out, to check that no listener is left to deliver it
  *
  * `<memberUid>` is resolved from the existing Auth account for `existingUser`
  * (credentials.ts) rather than hardcoded, so the Auth account itself is never
@@ -168,6 +179,25 @@ const ORDER_FLOWTIME_KEY = 'e2e-order-d-flowtime';
 const ORDER_EQUAL_CREATED_AT = new Date('2024-02-04T10:00:00.000Z');
 const ORDER_EQUAL_A_UPDATED_AT = new Date('2024-06-02T10:00:00.000Z');
 const ORDER_UNDATED_UPDATED_AT = new Date('2024-06-01T10:00:00.000Z');
+
+// The three viewport specs — preserve-passage-position.spec.ts,
+// re-anchor-viewport-at-a-scroll-boundary.spec.ts and
+// shorten-the-page-above-a-surviving-target.spec.ts — each delete replies
+// while their page is open, so each reads its own thread and no run depends
+// on the order the specs happen to execute in. Every reply body is long
+// enough that the thread scrolls past one viewport.
+const PASSAGE_THREAD_KEY = 'e2e-passage-position-thread';
+const BOUNDARY_THREAD_KEY = 'e2e-scroll-boundary-thread';
+const SHORTEN_THREAD_KEY = 'e2e-shorten-above-thread';
+const VIEWPORT_FIRST_CREATED_AT = new Date('2024-08-01T09:00:00.000Z');
+
+// terminate-a-live-subscription.spec.ts: one reply before the reader signs
+// out. TEARDOWN_LATE_REPLY_KEY is deleted on every reset, never written here
+// — the spec writes it after the sign-out, through the Admin SDK, so a
+// listener left attached would deliver it.
+const TEARDOWN_THREAD_KEY = 'e2e-subscription-teardown-thread';
+const TEARDOWN_REPLY_KEY = 'e2e-teardown-reply-1';
+const TEARDOWN_LATE_REPLY_KEY = 'e2e-teardown-late-reply';
 
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
@@ -659,6 +689,96 @@ await orderReplies.doc(ORDER_EQUAL_B_KEY).set({
 await orderReplies.doc(ORDER_FLOWTIME_KEY).delete();
 console.log(
   `Restored stream/${ORDER_THREAD_KEY}/comments/${ORDER_UNDATED_KEY}, .../${ORDER_EQUAL_A_KEY} and .../${ORDER_EQUAL_B_KEY}, and confirmed .../${ORDER_FLOWTIME_KEY} is absent`,
+);
+
+/**
+ * Seeds one scrollable thread: `count` replies, keyed `<prefix>-01` upward in
+ * reading order, each body long enough that the discussion runs past a
+ * viewport. Creation times are literal and one minute apart, so the reading
+ * order the specs assert never depends on write order.
+ */
+async function restoreScrollableThread(threadKey, replyPrefix, count) {
+  await serverDB
+    .collection('stream')
+    .doc(threadKey)
+    .set({
+      title: `E2E ${threadKey} regression thread`,
+      markdownContent:
+        'Seeded by e2e/reset-fixtures.mjs for the live-update viewport regressions.',
+      channel: 'yleinen',
+      owners: [memberUid],
+      author: memberUid,
+      public: true,
+      createdAt: VIEWPORT_FIRST_CREATED_AT,
+      updatedAt: VIEWPORT_FIRST_CREATED_AT,
+      flowTime: VIEWPORT_FIRST_CREATED_AT,
+      replyCount: count,
+      lovedCount: 0,
+    });
+
+  const replies = serverDB
+    .collection('stream')
+    .doc(threadKey)
+    .collection('comments');
+  const body = (ordinal) =>
+    `Reply ${ordinal} of ${count}. ${'Seeded body text, long enough that this reply occupies several lines and the thread scrolls past one viewport. '.repeat(4)}`;
+
+  for (let ordinal = 1; ordinal <= count; ordinal++) {
+    const createdAt = new Date(
+      VIEWPORT_FIRST_CREATED_AT.getTime() + ordinal * 60_000,
+    );
+    await replies
+      .doc(`${replyPrefix}-${String(ordinal).padStart(2, '0')}`)
+      .set({
+        markdownContent: body(ordinal),
+        owners: [memberUid],
+        author: memberUid,
+        createdAt,
+        updatedAt: createdAt,
+        flowTime: createdAt.getTime(),
+      });
+  }
+  console.log(`Restored stream/${threadKey} and its ${count} replies`);
+}
+
+await restoreScrollableThread(PASSAGE_THREAD_KEY, 'e2e-passage-reply', 10);
+await restoreScrollableThread(BOUNDARY_THREAD_KEY, 'e2e-boundary-reply', 6);
+await restoreScrollableThread(SHORTEN_THREAD_KEY, 'e2e-shorten-reply', 10);
+
+// stream/<TEARDOWN_THREAD_KEY> — one reply the signed-in reader sees before
+// signing out, and the absence of the reply the spec publishes afterwards.
+await serverDB
+  .collection('stream')
+  .doc(TEARDOWN_THREAD_KEY)
+  .set({
+    title: 'E2E subscription teardown regression thread',
+    markdownContent:
+      'Seeded by e2e/reset-fixtures.mjs for the terminate-a-live-subscription regression.',
+    channel: 'yleinen',
+    owners: [memberUid],
+    author: memberUid,
+    public: true,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    flowTime: FieldValue.serverTimestamp(),
+    replyCount: 1,
+    lovedCount: 0,
+  });
+const teardownReplies = serverDB
+  .collection('stream')
+  .doc(TEARDOWN_THREAD_KEY)
+  .collection('comments');
+await teardownReplies.doc(TEARDOWN_REPLY_KEY).set({
+  markdownContent: 'The only reply present while the reader is signed in.',
+  owners: [memberUid],
+  author: memberUid,
+  createdAt: FieldValue.serverTimestamp(),
+  updatedAt: FieldValue.serverTimestamp(),
+  flowTime: 1,
+});
+await teardownReplies.doc(TEARDOWN_LATE_REPLY_KEY).delete();
+console.log(
+  `Restored stream/${TEARDOWN_THREAD_KEY}/comments/${TEARDOWN_REPLY_KEY} and confirmed .../${TEARDOWN_LATE_REPLY_KEY} is absent`,
 );
 
 // stream/<THREAD_KEY> — src/schemas/ThreadSchema.ts (collection name 'stream').

@@ -52,7 +52,7 @@ function reply(overrides: Partial<Reply> = {}): Reply {
 function discussion(
   replies: PreparedDiscussion['replies'],
 ): PreparedDiscussion {
-  return { replies, incomplete: false };
+  return { replies, incomplete: false, unavailable: false };
 }
 
 describe('buildDiscussionGraph', () => {

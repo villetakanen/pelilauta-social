@@ -5,45 +5,44 @@ import type { Reply } from 'src/schemas/ReplySchema';
 import { markdownToHTML } from 'src/utils/marked';
 
 /**
- * One reply, prepared for the initial document: its body already rendered
- * through `markdownToHTML` and its public attribution already resolved, so
- * `ReplyArticle.svelte` composes it without a browser profile request or a
- * client-side markdown pass.
+ * Represents a reply prepared for initial server rendering with pre-rendered
+ * HTML and resolved public author attribution.
  */
 export interface PreparedReply {
   reply: Reply;
   /**
-   * Optional because a reply the live subscription adds after the initial
-   * render carries neither a rendered body nor resolved attribution;
-   * `ReplyArticle.svelte` renders and resolves those itself in that case.
+   * Omitted when live subscriptions add replies after initial document
+   * rendering. `ReplyArticle.svelte` renders markdown and resolves author
+   * attribution on the client.
    */
   bodyHtml?: string;
   author?: PublicProfile;
 }
 
 /**
- * What the thread page's initial render needs from a thread's discussion.
+ * Contains prepared discussion replies and read status flags for server
+ * rendering.
  *
- * `incomplete` is `true` when `fetchDiscussion` skipped at least one
- * malformed record; the valid replies in `replies` render regardless.
+ * `incomplete` is `true` when `fetchDiscussion` skipped malformed records.
+ * `unavailable` is `true` when the collection read failed.
  */
 export interface PreparedDiscussion {
   replies: PreparedReply[];
   incomplete: boolean;
+  unavailable: boolean;
 }
 
 /**
- * Prepares a thread's discussion for the initial document: fetches the
- * replies, resolves every author's public attribution in one batched read,
- * and renders every body through `markdownToHTML` — the same renderer the
- * live path uses, so server and live rendering agree.
+ * Prepares thread replies for initial server rendering by fetching replies,
+ * resolving author public profiles in a batched query, and rendering
+ * markdown to HTML.
  *
- * @param threadKey the thread whose discussion to prepare
+ * @param threadKey Thread identifier.
  */
 export async function prepareDiscussion(
   threadKey: string,
 ): Promise<PreparedDiscussion> {
-  const { replies, incomplete } = await fetchDiscussion(threadKey);
+  const { replies, incomplete, unavailable } = await fetchDiscussion(threadKey);
 
   const authorUids = replies.map((reply) => reply.owners[0]);
   const authors = await getPublicProfiles(authorUids);
@@ -56,14 +55,12 @@ export async function prepareDiscussion(
     })),
   );
 
-  return { replies: prepared, incomplete };
+  return { replies: prepared, incomplete, unavailable };
 }
 
 /**
- * The fragment a latest-reply control targets: the final reply in
- * `discussion.replies`, ordered as `prepareDiscussion` returns it, or the
- * discussion heading (`DiscussionSection.svelte`'s `#discussion`) when the
- * thread carries no replies yet.
+ * Returns the URL hash targeting the latest reply, or `#discussion` when the
+ * thread carries no replies.
  */
 export function latestReplyFragment(discussion: PreparedDiscussion): string {
   const lastReply = discussion.replies.at(-1);

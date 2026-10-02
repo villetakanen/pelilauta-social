@@ -17,6 +17,9 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(threads): A thread page carries discussion structured data describing the conversation a reader sees, its authors and its dates.
 - fix(threads): A discussion reads in the order the replies were written, and keeps that order when a reply arrives or is edited while the page is open. A reply the server sent and a reply arriving live now sort the same way.
 - fix(threads): A reply stored without a creation time reports as incomplete content instead of appearing in an arbitrary place in the discussion.
+- fix(threads): Signing out, changing account, or leaving a thread page ends its live connection. A thread no longer receives replies for the account that was signed in before.
+- fix(threads): A reader keeps their place when a reply arrives or disappears above the passage they are reading, and the discussion heading takes focus when the reply holding it is removed.
+- fix(threads): A discussion that fails to load says so beside the opening post, and a live connection that fails leaves the replies on screen and states that updates are unavailable.
 
 ## 21.0.0
 

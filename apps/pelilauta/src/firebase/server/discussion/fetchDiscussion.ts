@@ -11,36 +11,46 @@ import { logError } from 'src/utils/logHelpers';
 import { serverDB } from '..';
 
 /**
- * A discussion read, isolated from any single record's failure.
+ * Represents the result of fetching a thread discussion.
  *
- * `incomplete` is `true` when at least one stored reply failed
- * `ReplySchema` parsing; `replies` carries every record that parsed.
+ * `incomplete` is `true` when one or more stored records failed schema
+ * validation. `unavailable` is `true` when the Firestore collection read
+ * failed.
  */
 export interface DiscussionRead {
   replies: Reply[];
   incomplete: boolean;
+  unavailable: boolean;
 }
 
 /**
- * Server side function to fetch a discussion related to a thread.
+ * Fetches and validates discussion replies for a thread from Firestore.
  *
- * Each stored record parses in isolation: a malformed reply is skipped and
- * marks the read `incomplete` rather than discarding every valid reply.
+ * Each record parses in isolation. Skipping malformed records sets
+ * `incomplete` to `true` while preserving valid replies. A query failure sets
+ * `unavailable` to `true` without throwing, allowing the caller to render
+ * the opening post.
  *
- * @param threadKey
+ * @param threadKey Thread identifier.
  */
 export async function fetchDiscussion(
   threadKey: string,
 ): Promise<DiscussionRead> {
   if (!threadKey) {
-    return { replies: [], incomplete: false };
+    return { replies: [], incomplete: false, unavailable: false };
   }
   const replies = serverDB
     .collection(THREADS_COLLECTION_NAME)
     .doc(threadKey)
     .collection(REPLIES_COLLECTION);
 
-  const snapshot = await replies.get();
+  let snapshot: FirebaseFirestore.QuerySnapshot;
+  try {
+    snapshot = await replies.get();
+  } catch (error) {
+    logError('fetchDiscussion', 'Reply read failed', threadKey, error);
+    return { replies: [], incomplete: false, unavailable: true };
+  }
 
   const discussion: Reply[] = [];
   let incomplete = false;
@@ -61,5 +71,5 @@ export async function fetchDiscussion(
 
   discussion.sort(compareReplies);
 
-  return { replies: discussion, incomplete };
+  return { replies: discussion, incomplete, unavailable: false };
 }
