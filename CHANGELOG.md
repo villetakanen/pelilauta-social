@@ -8,6 +8,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(i18n): A post whose author profile does not resolve displays the anonymous label instead of the key `app:meta.anonymous`.
 - fix(threads): A thread page opens a live reply subscription only for an active signed-in session, releases it on sign-out, account change and page departure, and says when live updates fail. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(threads): The server reads a discussion's replies in creation order, and a malformed reply is skipped without discarding the rest. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(threads): A thread page carries its replies, with bodies and attachments, in the initial document, so an anonymous reader reads them without JavaScript. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 
 ## 21.0.0
 

@@ -10,7 +10,8 @@ Each feature this suite covers gets its own spec and declares the fixtures it
 needs; nothing here is a general fixture framework, and nothing from the
 retired suite was ported. `onboarding-callout-transition.spec.ts` covers
 onboarding callout view transitions, and `reply-subscription-termination.spec.ts`
-covers reply subscription lifecycle.
+covers reply subscription lifecycle, and `read-replies-without-javascript.spec.ts`
+covers reading replies in the initial document.
 
 ## Prerequisites
 
@@ -40,7 +41,7 @@ pnpm --filter pelilauta test:e2e
 fixtures, and runs Playwright — so once the server is up, running that one
 command is enough.
 
-`playwright.config.ts` pins `testMatch` to both specs, one worker, no retries,
+`playwright.config.ts` pins `testMatch` to the specs, one worker, no retries,
 and `trace: retain-on-failure`, so the command discovers only these regressions —
 never a legacy spec, never the UAT reset.
 
@@ -48,7 +49,7 @@ never a legacy spec, never the UAT reset.
 
 `reset-fixtures.mjs` restores, by explicit document id, only what
 `onboarding-callout-transition.spec.ts` reads: the signed-in member's
-`account` and `profiles` documents, and one public thread in `stream`. It
+`account` and `profiles` documents, one public thread in `stream`, and that thread's three replies, one with an image. It
 refuses to run — before making any Firestore call — unless the service
 account, the application's `.env`, and the *running* application (checked live
 through `/api/test/firebase-config`) all agree the target is

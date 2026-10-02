@@ -7,7 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
  * `pnpm --filter pelilauta test:e2e` seeds fixtures then invokes Playwright
  * with no arguments, so this config is the only thing standing between that
  * command and running every file in `testDir` — `testMatch` pins it to the
- * single regression spec explicitly, so adding a stray file to `e2e/` cannot
+ * named specs explicitly, so adding a stray file to `e2e/` cannot
  * silently widen what the command runs.
  */
 export default defineConfig({
@@ -15,6 +15,7 @@ export default defineConfig({
   testMatch: [
     'onboarding-callout-transition.spec.ts',
     'reply-subscription-termination.spec.ts',
+    'read-replies-without-javascript.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

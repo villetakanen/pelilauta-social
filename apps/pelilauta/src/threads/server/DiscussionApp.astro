@@ -10,4 +10,4 @@ const { thread }: Props = Astro.props;
 
 const discussion = await fetchDiscussion(thread.key);
 ---
-<DiscussionSection discussion={discussion} {thread} client:only="svelte"/>
+<DiscussionSection discussion={discussion} {thread} client:load/>
