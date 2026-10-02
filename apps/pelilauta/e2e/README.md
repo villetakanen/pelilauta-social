@@ -11,7 +11,8 @@ needs; nothing here is a general fixture framework, and nothing from the
 retired suite was ported. `onboarding-callout-transition.spec.ts` covers
 onboarding callout view transitions, and `reply-subscription-termination.spec.ts`
 covers reply subscription lifecycle, and `read-replies-without-javascript.spec.ts`
-covers reading replies in the initial document.
+covers reading replies in the initial document, and
+`anonymous-reply-reaction-reads.spec.ts` covers an anonymous reader reading no reaction documents.
 
 ## Prerequisites
 

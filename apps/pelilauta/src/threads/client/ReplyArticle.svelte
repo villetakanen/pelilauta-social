@@ -9,6 +9,7 @@ import type { Reply } from 'src/schemas/ReplySchema';
 import { getProfileAtom, type PublicProfile } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
 import { uid } from 'src/stores/session';
+import { isActive } from 'src/stores/session/computed';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
@@ -95,12 +96,15 @@ $effect(() => {
           <a class="cn-nick" href="/profiles/{author.key}">{author.nick}</a>
         {/if}
       </p>
-      <ReactionButton
-        target="reply"
-        small
-        key={reply.key}
-        title={reply.markdownContent?.substring(0, 50)}
-      ></ReactionButton>
+      <!-- ReactionButton reads its reaction document on mount, so mount it only for an active session. -->
+      {#if $isActive}
+        <ReactionButton
+          target="reply"
+          small
+          key={reply.key}
+          title={reply.markdownContent?.substring(0, 50)}
+        ></ReactionButton>
+      {/if}
       <CnMenu inline label={t("actions:moreOptions")}>
         <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
           <CnIcon noun="fork" decorative />
