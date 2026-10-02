@@ -57,6 +57,8 @@ export const threads: Locale = {
     editing: 'Muokkaat viestiä',
     editFailed: 'Muutosten tallennus ei onnistunut. Yritä uudelleen.',
     join: 'Osallistu keskusteluun',
+    liveFailed:
+      'Reaaliaikaiset päivitykset eivät ole käytettävissä. Näkyvät vastaukset voivat olla vanhentuneita.',
     sendFailed: 'Viestin lähetys ei onnistunut. Yritä uudelleen.',
     title: 'Keskustelu',
     reply: 'Vastaa',

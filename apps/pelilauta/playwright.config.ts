@@ -12,7 +12,10 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './e2e',
-  testMatch: 'onboarding-callout-transition.spec.ts',
+  testMatch: [
+    'onboarding-callout-transition.spec.ts',
+    'reply-subscription-termination.spec.ts',
+  ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   // No retries initially: a flaky pass would hide a real regression.

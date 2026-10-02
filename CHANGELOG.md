@@ -6,6 +6,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
 - fix(i18n): A post whose author profile does not resolve displays the anonymous label instead of the key `app:meta.anonymous`.
+- fix(threads): A thread page opens a live reply subscription only for an active signed-in session, releases it on sign-out, account change and page departure, and says when live updates fail. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 
 ## 21.0.0
 

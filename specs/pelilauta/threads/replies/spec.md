@@ -26,6 +26,8 @@ The initial and live reads both query replies ordered by creation time ascending
 
 Anonymous readers receive server-rendered reply content without application-level browser data reads or live subscriptions. An unresolved session establishes no subscription. An active signed-in session subscribes to live additions, edits, and deletions. Sign-out, account changes, and page departures terminate active subscriptions and discard late results.
 
+Replies deleted while the live subscription is inactive may remain visible after resubscription until the reader reloads the page.
+
 Removing a focused reply returns focus to the discussion heading.
 
 Initial reply-read failure displays an unavailable-discussion state beside the opening post rather than an empty discussion. A malformed reply does not discard valid replies. The discussion indicates incomplete content when records fail parsing. A live subscription failure retains rendered content and indicates that updates are unavailable.
