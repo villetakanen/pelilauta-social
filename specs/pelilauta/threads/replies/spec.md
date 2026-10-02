@@ -30,7 +30,7 @@ Replies deleted while the live subscription is inactive may remain visible after
 
 Removing a focused reply returns focus to the discussion heading.
 
-Initial reply-read failure displays an unavailable-discussion state beside the opening post rather than an empty discussion. A malformed reply does not discard valid replies. The discussion indicates incomplete content when records fail parsing. A live subscription failure retains rendered content and indicates that updates are unavailable.
+Initial reply-read failure displays an unavailable-discussion state beside the opening post rather than an empty discussion. A malformed reply does not prevent valid replies from rendering. If no valid replies remain, the discussion displays its empty state. A live subscription failure retains rendered content and indicates that updates are unavailable.
 
 ## Contract
 
@@ -41,7 +41,7 @@ Initial reply-read failure displays an unavailable-discussion state beside the o
 - Signed-in readers receive live changes.
 - Replies maintain deterministic chronological order across rendering, hydration, and edits.
 - Live updates preserve focus.
-- The interface distinguishes empty discussions, incomplete content, and unavailable updates.
+- The interface distinguishes empty discussions, failed reply retrieval, and unavailable updates.
 
 ### Regression Guardrails
 
@@ -114,5 +114,4 @@ Feature: Thread Replies
     Given a thread with valid replies and one malformed record
     When the discussion renders or updates
     Then valid replies remain readable
-    And the discussion indicates incomplete content
 ```
