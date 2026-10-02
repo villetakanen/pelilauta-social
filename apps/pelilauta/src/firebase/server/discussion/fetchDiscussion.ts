@@ -4,14 +4,13 @@ import {
   type Reply,
 } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME } from 'src/schemas/ThreadSchema';
-import { compareReplies } from 'src/threads/replyOrder';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
 import { logError } from 'src/utils/logHelpers';
 import { serverDB } from '..';
 
 /**
- * Represents the result of fetching a thread discussion.
+ * `DiscussionRead` carries the replies and read status for a thread discussion.
  *
  * `incomplete` is `true` when one or more stored records failed schema
  * validation. `unavailable` is `true` when the Firestore collection read
@@ -24,7 +23,8 @@ export interface DiscussionRead {
 }
 
 /**
- * Fetches and validates discussion replies for a thread from Firestore.
+ * `fetchDiscussion` fetches and validates discussion replies for a thread from
+ * Firestore.
  *
  * Each record parses in isolation. Skipping malformed records sets
  * `incomplete` to `true` while preserving valid replies. A query failure sets
@@ -39,10 +39,12 @@ export async function fetchDiscussion(
   if (!threadKey) {
     return { replies: [], incomplete: false, unavailable: false };
   }
+  // A reply stored without a creation time leaves the discussion here.
   const replies = serverDB
     .collection(THREADS_COLLECTION_NAME)
     .doc(threadKey)
-    .collection(REPLIES_COLLECTION);
+    .collection(REPLIES_COLLECTION)
+    .orderBy('createdAt', 'asc');
 
   let snapshot: FirebaseFirestore.QuerySnapshot;
   try {
@@ -68,8 +70,6 @@ export async function fetchDiscussion(
       incomplete = true;
     }
   }
-
-  discussion.sort(compareReplies);
 
   return { replies: discussion, incomplete, unavailable: false };
 }

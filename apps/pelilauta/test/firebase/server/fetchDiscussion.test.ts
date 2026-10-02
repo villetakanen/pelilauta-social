@@ -1,7 +1,8 @@
 /**
  * Unit tests for the discussion reader.
  *
- * `fetchDiscussion` parses each stored reply in isolation: a malformed
+ * The query orders the replies, so `fetchDiscussion` preserves the order the
+ * snapshot arrives in. It parses each stored reply in isolation: a malformed
  * record is skipped rather than discarding every valid reply, and the read
  * reports `incomplete` when it skipped one. A failure of the collection read
  * itself reports `unavailable` instead of propagating, so the thread page
@@ -11,12 +12,13 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { mockGet, mockCollection } = vi.hoisted(() => {
+const { mockGet, mockCollection, mockOrderBy } = vi.hoisted(() => {
   const mockGet = vi.fn();
+  const mockOrderBy = vi.fn(() => ({ get: mockGet }));
   const mockCollection = vi.fn(() => ({
-    doc: () => ({ collection: () => ({ get: mockGet }) }),
+    doc: () => ({ collection: () => ({ orderBy: mockOrderBy }) }),
   }));
-  return { mockGet, mockCollection };
+  return { mockGet, mockCollection, mockOrderBy };
 });
 
 vi.mock('../../../src/firebase/server/index.ts', () => ({
@@ -54,7 +56,7 @@ describe('fetchDiscussion', () => {
     expect(mockCollection).not.toHaveBeenCalled();
   });
 
-  it('returns every valid reply, sorted, when no record is malformed', async () => {
+  it('orders the query by creation time and keeps the snapshot order', async () => {
     mockGet.mockResolvedValueOnce({
       docs: [
         docFor('b', validReply('b', 200)),
@@ -64,8 +66,9 @@ describe('fetchDiscussion', () => {
 
     const result = await fetchDiscussion('thread-1');
 
+    expect(mockOrderBy).toHaveBeenCalledWith('createdAt', 'asc');
     expect(result.incomplete).toBe(false);
-    expect(result.replies.map((r) => r.key)).toEqual(['a', 'b']);
+    expect(result.replies.map((r) => r.key)).toEqual(['b', 'a']);
   });
 
   it('skips a malformed record, keeps valid replies, and marks the read incomplete', async () => {

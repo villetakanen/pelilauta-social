@@ -10,8 +10,6 @@ import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
 import { uid } from 'src/stores/session';
 import { isActive, isRehydrating } from 'src/stores/session/computed';
 import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
-import { selectReadingAnchor } from 'src/threads/readingAnchor';
-import { compareReplies } from 'src/threads/replyOrder';
 import type { PreparedReply } from 'src/threads/server/prepareDiscussion';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
@@ -24,7 +22,7 @@ interface Props {
   thread: Thread;
   discussion: PreparedReply[];
   incomplete?: boolean;
-  /** True when the server read of the replies failed. */
+  /** The server read of replies failed. */
   unavailable?: boolean;
 }
 const {
@@ -36,8 +34,8 @@ const {
 
 let discussion = $state(initDiscussion);
 /*
- * The server read reports records that failed parsing. A live snapshot can
- * also deliver a malformed record, so the component stores this notice as
+ * The server read reports records that failed parsing. Because a live snapshot
+ * can also deliver a malformed record, the component stores this notice in
  * state.
  */
 let incomplete = $state(initIncomplete === true);
@@ -62,8 +60,8 @@ let subscribedUid: string | null = null;
 let unsubscribe: (() => void) | null = null;
 /*
  * Because `subscribeToReplies` awaits a dynamic import, teardown can occur
- * while the import is in flight. Each subscription records its generation,
- * and the callback discards results from older generations.
+ * while the import is in flight. Each subscription records its generation.
+ * The callback discards results from older generations.
  */
 let generation = 0;
 
@@ -88,79 +86,57 @@ $effect(() => {
   subscribeToReplies(account);
 });
 
-/*
- * Destroying the component terminates the active Firestore subscription.
- */
 $effect(() => terminateSubscription);
 
 async function subscribeToReplies(account: string) {
   const attempt = generation;
-  const { getFirestore, query, collection, onSnapshot } = await import(
+  const { getFirestore, query, collection, onSnapshot, orderBy } = await import(
     'firebase/firestore'
   );
-  // Discards late imports when the subscription terminates before the import resolves.
   if (attempt !== generation) return;
 
   const db = getFirestore();
 
   /*
-   * The query specifies no order because Firestore `orderBy` drops documents
-   * lacking the sort field. `compareReplies` in `src/threads/replyOrder.ts`
-   * applies the canonical order.
+   * Firestore excludes documents lacking the sort field, omitting replies
+   * stored without a creation timestamp.
    */
   const q = query(
     collection(db, THREADS_COLLECTION_NAME, thread.key, REPLIES_COLLECTION),
+    orderBy('createdAt', 'asc'),
   );
 
   const stop = onSnapshot(
     q,
     (querySnapshot) => {
       if (attempt !== generation) return;
-      const d = [...discussion];
-      for (const change of querySnapshot.docChanges()) {
-        const data = change.doc.data();
-        if (change.type === 'removed') {
-          const remove = d.findIndex(
-            (item) => item.reply.key === change.doc.id,
+      const d: PreparedReply[] = [];
+      for (const doc of querySnapshot.docs) {
+        /*
+         * Each record parses in isolation. A malformed document marks the
+         * discussion incomplete without discarding valid replies.
+         */
+        let reply: Reply;
+        try {
+          reply = ReplySchema.parse({
+            ...toClientEntry(fixImageData(doc.data())),
+            key: doc.id,
+            threadKey: thread.key,
+          });
+        } catch (error) {
+          logError(
+            'DiscussionSection',
+            'Skipping malformed reply',
+            doc.id,
+            error,
           );
-          if (remove !== -1) {
-            d.splice(remove, 1);
-          }
-        } else {
-          const index = d.findIndex((item) => item.reply.key === change.doc.id);
-          /*
-           * Each record parses in isolation. A malformed document marks the
-           * discussion incomplete without discarding valid replies.
-           */
-          let reply: Reply;
-          try {
-            reply = ReplySchema.parse({
-              ...toClientEntry(fixImageData(data)),
-              key: change.doc.id,
-              threadKey: thread.key,
-            });
-          } catch (error) {
-            logError(
-              'DiscussionSection',
-              'Skipping malformed reply',
-              change.doc.id,
-              error,
-            );
-            incomplete = true;
-            continue;
-          }
-          // `ReplyArticle.svelte` resolves author attribution from the profile
-          // store and renders markdown to HTML when props omit them.
-          const item: PreparedReply = { reply };
-          if (index !== -1) {
-            d[index] = item;
-          } else {
-            d.push(item);
-          }
+          incomplete = true;
+          continue;
         }
+        // `ReplyArticle.svelte` resolves author attribution from the profile
+        // store and renders markdown to HTML when props omit them.
+        d.push({ reply });
       }
-      // `compareReplies` reorders the entire discussion after applying snapshot changes.
-      d.sort((first, second) => compareReplies(first.reply, second.reply));
       unavailable = false;
       updatesUnavailable = false;
       applyDiscussion(d);
@@ -172,7 +148,7 @@ async function subscribeToReplies(account: string) {
     },
   );
 
-  // Stops the listener when the subscription terminates before registration completes.
+  // The callback stops the listener when the subscription terminates before registration completes.
   if (attempt !== generation) {
     stop();
     return;
@@ -181,9 +157,9 @@ async function subscribeToReplies(account: string) {
 }
 
 /**
- * Returns the reply key containing the node, or `null` when the node sits
- * outside all replies. `ReplyArticle.svelte` sets each element id to its
- * reply key.
+ * `enclosingReplyKey` returns the reply key containing the node, or `null`
+ * when the node sits outside all replies. `ReplyArticle.svelte` sets each
+ * element ID to its reply key.
  */
 function enclosingReplyKey(node: Element | null): string | null {
   const keys = new Set(discussion.map((item) => item.reply.key));
@@ -195,54 +171,24 @@ function enclosingReplyKey(node: Element | null): string | null {
   return null;
 }
 
-/** Returns the focused reply key or the first reply key visible in the viewport. */
-function visibleReplyKey(): string | null {
-  const focusedKey = enclosingReplyKey(document.activeElement);
-  if (focusedKey) return focusedKey;
-  for (const item of discussion) {
-    const element = document.getElementById(item.reply.key);
-    if (element && element.getBoundingClientRect().bottom > 0) {
-      return item.reply.key;
-    }
-  }
-  return null;
-}
-
 /**
- * Replaces the rendered discussion while preserving the scroll position of
- * the visible passage. The function measures the viewport offset of the
- * anchor element before updating state, then adjusts scroll position to
- * counteract layout shifts.
+ * Updates the rendered discussion. Browser scroll anchoring preserves the
+ * visible passage and clamps at document boundaries, so the function does not
+ * adjust the viewport.
  */
 function applyDiscussion(next: PreparedReply[]) {
-  const previousKeys = discussion.map((item) => item.reply.key);
   const nextKeys = next.map((item) => item.reply.key);
-  const anchorKey = selectReadingAnchor(
-    previousKeys,
-    nextKeys,
-    visibleReplyKey(),
-  );
   const focusedKey = enclosingReplyKey(document.activeElement);
   const focusLost = focusedKey !== null && !nextKeys.includes(focusedKey);
 
-  const anchorElement = anchorKey
-    ? document.getElementById(anchorKey)
-    : headingElement;
-  const offsetBefore = anchorElement?.getBoundingClientRect().top ?? null;
-
   discussion = next;
 
+  if (!focusLost) return;
+
   tick().then(() => {
-    const settled = anchorKey
-      ? document.getElementById(anchorKey)
-      : headingElement;
-    if (settled && offsetBefore !== null) {
-      const drift = settled.getBoundingClientRect().top - offsetBefore;
-      if (drift !== 0) window.scrollBy(0, drift);
-    }
     // Focus moves to the heading when an update removes the focused reply.
-    // `preventScroll` preserves the reading anchor scroll position.
-    if (focusLost) headingElement?.focus({ preventScroll: true });
+    // `preventScroll` leaves the scroll position to the browser.
+    headingElement?.focus({ preventScroll: true });
   });
 }
 
@@ -322,16 +268,13 @@ onMount(() => {
 </section>
 
 <style>
-  /*
-   * Defines the vertical interval between replies.
-   */
   .replies {
     display: grid;
     row-gap: var(--cn-line);
   }
 
   /*
-   * Suppresses focus rings during programmatic focus transfers.
+   * The rule suppresses focus rings during programmatic focus transfers.
    */
   h2:focus:not(:focus-visible) {
     outline: none;

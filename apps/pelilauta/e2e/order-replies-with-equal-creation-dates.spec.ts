@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-// Credentials live at the repository root, gitignored, never in the app. See
+// Credentials live at the repository root outside the app. Refer to
 // e2e/README.md.
 import { existingUser } from '../../../credentials.ts';
 
@@ -13,26 +13,20 @@ import { existingUser } from '../../../credentials.ts';
  *     And edit times do not alter order
  *     And a reply without a creation time does not appear
  *
- * Fixtures: e2e/reset-fixtures.mjs restores stream/e2e-reply-order-thread with
- * three replies — two sharing one creation time, the first of them carrying an
- * edit date later than every other date in the thread, and one stored with no
- * creation time at all. `ReplySchema` rejects that last record, so the
- * discussion renders without it and reports itself incomplete, the same path
- * malformed-reply-render.spec.ts covers for a record failing on `owners`. Run
- * the reset, with the dev server already up against skaldbase-test, before
- * this spec.
+ * `e2e/reset-fixtures.mjs` restores `stream/e2e-reply-order-thread` with three
+ * replies: two share a creation timestamp, the first carries an edit date later
+ * than all other dates in the thread, and the third contains no creation
+ * timestamp. The ordered query excludes the undated record, preventing it from
+ * reaching the parser and rendering. Run the reset against `skaldbase-test`
+ * before executing this spec.
  */
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
-// Matches e2e/reset-fixtures.mjs's constants.
+// Matches constants defined in e2e/reset-fixtures.mjs.
 const THREAD_KEY = 'e2e-reply-order-thread';
 const UNDATED_KEY = 'e2e-order-a-undated';
 const EQUAL_A_KEY = 'e2e-order-b-equal-first';
 const EQUAL_B_KEY = 'e2e-order-c-equal-second';
-// src/locales/fi/threads.ts's discussion.incomplete — the default locale
-// ('fi') applies with no locale negotiation in play.
-const INCOMPLETE_LABEL = 'Osaa vastauksista ei voitu näyttää.';
-
 const EXPECTED_ORDER = [EQUAL_A_KEY, EQUAL_B_KEY];
 
 async function renderedReplyKeys(page: Page): Promise<string[]> {
@@ -42,8 +36,8 @@ async function renderedReplyKeys(page: Page): Promise<string[]> {
 }
 
 test('Order replies with equal creation dates', async ({ page }) => {
-  // Refuse to proceed against anything but the test environment, the same
-  // guard the reset script applies before mutating.
+  // Verify the test environment before proceeding, mirroring the guard in the
+  // reset script.
   const configResponse = await page.request.get(
     `${BASE_URL}/api/test/firebase-config`,
   );
@@ -51,16 +45,15 @@ test('Order replies with equal creation dates', async ({ page }) => {
   const liveConfig = await configResponse.json();
   expect(liveConfig.projectId).toBe('skaldbase-test');
 
-  // The server orders the replies: the initial document carries the order.
+  // The server orders the replies; the initial document carries the reading order.
   await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`, {
     waitUntil: 'domcontentloaded',
   });
   expect(await renderedReplyKeys(page)).toEqual(EXPECTED_ORDER);
   await expect(page.locator(`#${UNDATED_KEY}`)).toHaveCount(0);
-  await expect(page.locator('#discussion')).toContainText(INCOMPLETE_LABEL);
 
-  // The client orders the replies: a signed-in reader's live subscription
-  // reconciles every reply and reaches the same order.
+  // The client orders replies through the live subscription of the signed-in
+  // reader, matching server order.
   await page.goto(`${BASE_URL}/login`);
   const emailField = page.locator('#password-email');
   await emailField.waitFor({ state: 'visible' });
@@ -75,5 +68,4 @@ test('Order replies with equal creation dates', async ({ page }) => {
   await page.waitForTimeout(4000);
   expect(await renderedReplyKeys(page)).toEqual(EXPECTED_ORDER);
   await expect(page.locator(`#${UNDATED_KEY}`)).toHaveCount(0);
-  await expect(page.locator('#discussion')).toContainText(INCOMPLETE_LABEL);
 });

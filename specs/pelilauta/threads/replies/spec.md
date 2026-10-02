@@ -22,11 +22,11 @@ The reading path uses the thread and comments collections under `ThreadSchema` a
 
 The initial HTML renders every public reply as an article with formatted body, attachments, public attribution, and known dates. Serialized properties alone do not satisfy this requirement. Attribution and date semantics follow [Thread Reading](../spec.md). Initial content renders without browser profile requests or Firebase initialization. [CnLightbox](../../../design-system/components/cn-lightbox/spec.md) governs how an attachment presents.
 
-Replies sort by creation time in ascending order, with reply keys breaking ties in ascending lexical order. An edit timestamp never alters reply order. A reply carries a creation time; `ReplySchema` rejects a record without one, which the discussion then reports as incomplete content. Initial and live reads apply this ordering.
+The initial and live reads both query replies ordered by creation time ascending, so the store returns reading order and the reply key breaks a tie. A record without a creation time falls outside that query and does not reach the discussion.
 
 Anonymous reading creates no Firebase subscriptions for replies, attribution, or reactions. Anonymous readers receive no live updates. An unresolved session establishes no subscription. An active signed-in session subscribes to live additions, edits, and deletions. Sign-out, account changes, and page departures terminate active subscriptions and discard late results.
 
-Hydration preserves initial articles. Live updates reconcile by reply key without replacing unaffected articles or replaying navigation. Content changes above the visible passage maintain its viewport position within the available scroll range. At a document boundary the viewport clamps to the nearest available position without artificial space. If the visible reply disappears, the next surviving reply becomes the reading anchor, or the preceding reply when none follows. An empty discussion uses its heading. Removing a focused reply returns focus to the discussion heading.
+Hydration preserves initial articles. Live updates reconcile by reply key without replacing unaffected articles or replaying navigation. If the visible reply disappears, the next surviving reply becomes the reading anchor, or the preceding reply when none follows. An empty discussion uses its heading. Removing a focused reply returns focus to the discussion heading.
 
 Initial reply-read failure displays an unavailable-discussion state beside the opening post rather than an empty discussion. A malformed reply does not discard valid replies. The discussion indicates incomplete content when records fail parsing. A live subscription failure retains rendered content and indicates that updates are unavailable.
 
@@ -38,7 +38,7 @@ Initial reply-read failure displays an unavailable-discussion state beside the o
 - Anonymous readers receive a static snapshot.
 - Signed-in readers receive live changes.
 - Replies maintain deterministic chronological order across rendering, hydration, and edits.
-- Live updates preserve passage position and focus.
+- Live updates preserve focus.
 - The interface distinguishes empty discussions, incomplete content, and unavailable updates.
 
 ### Regression Guardrails
@@ -47,6 +47,7 @@ Initial reply-read failure displays an unavailable-discussion state beside the o
 - Listeners from previous pages or accounts never update the active conversation.
 - A malformed record never clears valid replies.
 - The reading contract renders every reply without pagination or truncation.
+- The capability overrides no browser behaviour it relies on, including scroll anchoring during live updates and the scrolling a focus move performs.
 
 ### Scenarios
 
@@ -85,25 +86,12 @@ Feature: Thread Replies
     And edit times do not alter order
     And a reply without a creation time does not appear
 
-  Scenario: Preserve passage position during live updates
-    Given a signed-in reader focused on an unchanged reply
-    When an earlier reply changes height or is removed
-    Then the focused reply retains focus and viewport position within scroll bounds
-    And the viewport does not jump to the latest reply
-
-  Scenario: Re-anchor viewport at a scroll boundary
+  Scenario: Re-anchor a deleted reading target
     Given a reader at the end of a discussion
     When deletion removes the active viewport target
-    Then the viewport clamps to the nearest valid position without empty space
-    And the next surviving reply becomes the reading anchor, or the preceding reply when none follows
+    Then the next surviving reply becomes the reading anchor, or the preceding reply when none follows
     And an empty discussion uses its heading
     And removal of the focused reply moves focus to the discussion heading
-
-  Scenario: Shorten the page above a surviving target
-    Given a reader at the end of a discussion focused on a surviving reply
-    When deletion of preceding content reduces the maximum scroll position
-    Then the viewport clamps to the nearest available position without artificial space
-    And focus remains on the surviving reply
 
   Scenario: Terminate a live subscription
     Given an active reply subscription

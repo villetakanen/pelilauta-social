@@ -18,14 +18,12 @@ Each covered feature defines a dedicated spec file and declares required fixture
 - `omit-unknown-structured-data-authors.spec.ts`
 - `preserve-chronology-after-an-edit.spec.ts`
 - `order-replies-with-equal-creation-dates.spec.ts`
-- `preserve-passage-position.spec.ts`
-- `re-anchor-viewport-at-a-scroll-boundary.spec.ts`
-- `shorten-the-page-above-a-surviving-target.spec.ts`
+- `re-anchor-a-deleted-reading-target.spec.ts`
 - `terminate-a-live-subscription.spec.ts`
 
 `admin.ts` and `signIn.ts` provide shared helpers rather than test specs. `admin.ts` provides `skaldbase-test` Admin SDK access for tests that mutate replies while a page is open. `signIn.ts` performs authentication through the login form. `playwright.config.ts` matches spec files only.
 
-Two scenarios in `specs/pelilauta/threads/replies/spec.md` have no browser regression spec. `Handle initial reply read failure` requires a failed server read, and `Handle live update failure` requires a rejected subscription. Because fixtures and browser automation cannot produce either condition, `test/firebase/server/fetchDiscussion.test.ts` covers server read failure instead.
+Two scenarios in `specs/pelilauta/threads/replies/spec.md` have no browser regression spec. `Handle initial reply read failure` requires a failed server read. `Handle live update failure` requires a rejected subscription. Because fixtures and browser automation cannot produce either condition, `test/firebase/server/fetchDiscussion.test.ts` covers server read failure instead.
 
 ## Prerequisites
 
@@ -53,12 +51,12 @@ pnpm --filter pelilauta test:e2e
 
 ## Fixtures and safety
 
-By explicit document ID, `reset-fixtures.mjs` restores only fixture documents required by the regression specs:
+`reset-fixtures.mjs` restores by explicit document ID only fixture documents required by the regression specs:
 - The signed-in member `account` and `profiles` documents.
 - One public thread in `stream` for `onboarding-callout-transition.spec.ts`.
 - One public thread with two replies authored by the same member (the second carrying an image attachment) for `initial-reply-render.spec.ts`, `compose-thread-page.spec.ts`, `resolve-session-after-render.spec.ts`, `reply-permalink-navigation.spec.ts`, and `latest-reply-navigation.spec.ts`.
 - One thread with an author UID lacking a `profiles` document for `no-profile-author-reads.spec.ts` and `omit-unknown-structured-data-authors.spec.ts`.
-- One thread with a single reply for `anonymous-visitor-live-reading.spec.ts`. The test publishes a second reply via Admin SDK, and `reset-fixtures.mjs` removes the second reply document on each reset.
+- One thread with a single reply for `anonymous-visitor-live-reading.spec.ts`. The test publishes a second reply through the Admin SDK. `reset-fixtures.mjs` removes the second reply document on each reset.
 - One dedicated thread with one valid reply and one malformed reply document failing `ReplySchema` for `malformed-reply-render.spec.ts`.
 - One thread without replies for `latest-reply-navigation.spec.ts`.
 - One thread with distinct creation, edit, and activity timestamps and an image attachment for `read-opening-post.spec.ts` and `distinguish-activity-from-publication.spec.ts`.
@@ -66,7 +64,7 @@ By explicit document ID, `reset-fixtures.mjs` restores only fixture documents re
 - One thread with two attributed replies containing HTML tags and special characters in the body for `inspect-discovery-metadata.spec.ts`.
 - One thread whose first reply was edited after the second reply for `preserve-chronology-after-an-edit.spec.ts`.
 - One thread with two replies sharing a creation timestamp and one reply lacking a creation timestamp for `order-replies-with-equal-creation-dates.spec.ts`.
-- Three multi-reply threads exceeding viewport height for viewport regression specs: `e2e-passage-position-thread` (ten replies), `e2e-scroll-boundary-thread` (six replies), and `e2e-shorten-above-thread` (ten replies).
+- One multi-reply thread exceeding viewport height for the reading-anchor regression spec: `e2e-scroll-boundary-thread` (six replies).
 - One thread with a single reply for `terminate-a-live-subscription.spec.ts`.
 
 Before making Firestore requests, `reset-fixtures.mjs` verifies that the service account, `apps/pelilauta/.env`, and `/api/test/firebase-config` all target `skaldbase-test`.

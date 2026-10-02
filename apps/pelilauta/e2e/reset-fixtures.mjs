@@ -29,12 +29,8 @@
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_UNDATED_KEY>  — no creation time: fails ReplySchema on purpose
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_EQUAL_A_KEY>  — creation time shared with ORDER_EQUAL_B_KEY, edited later
  *   - stream/<ORDER_THREAD_KEY>/comments/<ORDER_EQUAL_B_KEY>
- *   - stream/<PASSAGE_THREAD_KEY>                   — ten long replies, enough to scroll
- *   - stream/<PASSAGE_THREAD_KEY>/comments/e2e-passage-reply-01 … -10
  *   - stream/<BOUNDARY_THREAD_KEY>                  — six long replies, emptied by its spec
  *   - stream/<BOUNDARY_THREAD_KEY>/comments/e2e-boundary-reply-01 … -06
- *   - stream/<SHORTEN_THREAD_KEY>                   — ten long replies, the first five deleted by its spec
- *   - stream/<SHORTEN_THREAD_KEY>/comments/e2e-shorten-reply-01 … -10
  *   - stream/<TEARDOWN_THREAD_KEY>                  (src/schemas/ThreadSchema.ts)
  *   - stream/<TEARDOWN_THREAD_KEY>/comments/<TEARDOWN_REPLY_KEY>
  *
@@ -165,8 +161,8 @@ const CHRONOLOGY_A_UPDATED_AT = new Date('2024-04-03T09:00:00.000Z');
 // ordering constraint's remaining cases. Expected reading order is
 // ORDER_EQUAL_A_KEY, ORDER_EQUAL_B_KEY, and ORDER_UNDATED_KEY appears nowhere.
 const ORDER_THREAD_KEY = 'e2e-reply-order-thread';
-// No createdAt at all, only an edit date: ReplySchema rejects the record, so
-// the discussion renders without it and reports incomplete content.
+// No createdAt at all, only an edit date: the ordered query excludes the
+// record, so the discussion renders without it.
 const ORDER_UNDATED_KEY = 'e2e-order-a-undated';
 // A creation time shared with ORDER_EQUAL_B_KEY, so the key breaks the tie,
 // and an edit date later than every other date in the thread, carried in its
@@ -180,15 +176,10 @@ const ORDER_EQUAL_CREATED_AT = new Date('2024-02-04T10:00:00.000Z');
 const ORDER_EQUAL_A_UPDATED_AT = new Date('2024-06-02T10:00:00.000Z');
 const ORDER_UNDATED_UPDATED_AT = new Date('2024-06-01T10:00:00.000Z');
 
-// The three viewport specs — preserve-passage-position.spec.ts,
-// re-anchor-viewport-at-a-scroll-boundary.spec.ts and
-// shorten-the-page-above-a-surviving-target.spec.ts — each delete replies
-// while their page is open, so each reads its own thread and no run depends
-// on the order the specs happen to execute in. Every reply body is long
-// enough that the thread scrolls past one viewport.
-const PASSAGE_THREAD_KEY = 'e2e-passage-position-thread';
+// re-anchor-a-deleted-reading-target.spec.ts deletes replies while its page
+// is open, and every reply body is long enough that the thread scrolls past
+// one viewport.
 const BOUNDARY_THREAD_KEY = 'e2e-scroll-boundary-thread';
-const SHORTEN_THREAD_KEY = 'e2e-shorten-above-thread';
 const VIEWPORT_FIRST_CREATED_AT = new Date('2024-08-01T09:00:00.000Z');
 
 // terminate-a-live-subscription.spec.ts: one reply before the reader signs
@@ -741,9 +732,7 @@ async function restoreScrollableThread(threadKey, replyPrefix, count) {
   console.log(`Restored stream/${threadKey} and its ${count} replies`);
 }
 
-await restoreScrollableThread(PASSAGE_THREAD_KEY, 'e2e-passage-reply', 10);
 await restoreScrollableThread(BOUNDARY_THREAD_KEY, 'e2e-boundary-reply', 6);
-await restoreScrollableThread(SHORTEN_THREAD_KEY, 'e2e-shorten-reply', 10);
 
 // stream/<TEARDOWN_THREAD_KEY> — one reply the signed-in reader sees before
 // signing out, and the absence of the reply the spec publishes afterwards.
