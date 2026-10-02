@@ -4,13 +4,7 @@ import ThreadChatBar from '@pelilauta/threads/client/ThreadChatBar.svelte';
 import DiscussionApp from '@pelilauta/threads/server/DiscussionApp.astro';
 import ThreadArticle from '@pelilauta/threads/server/ThreadArticle.astro';
 import ThreadInfoSection from '@pelilauta/threads/server/ThreadInfoSection.astro';
-import { getPublicProfiles } from 'src/firebase/server/profiles';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
-import {
-  buildDiscussionGraph,
-  serializeJsonLd,
-} from 'src/threads/server/discussionMetadata';
-import { prepareDiscussion } from 'src/threads/server/prepareDiscussion';
 import { t } from 'src/utils/i18n';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
 
@@ -38,26 +32,6 @@ const title = thread.title
   : `${t('app:shortname')} - ${thread.channel}`;
 
 const snippet = createPlainSnippet(thread.markdownContent || '', 160);
-
-// Resolve the opening post's public attribution before rendering.
-const authorUid = thread.owners[0];
-const authorAttribution = authorUid
-  ? ((await getPublicProfiles([authorUid]))[authorUid] ?? null)
-  : null;
-
-// Prepared once so ThreadInfoSection's latest-reply control and DiscussionApp's
-// initial render agree on the same discussion, without a second Firestore read.
-const discussion = await prepareDiscussion(thread.key);
-
-// Discovery metadata for the contributions this document renders, built from
-// the same prepared content and left out entirely when the opening post does
-// not qualify.
-const discussionGraph = buildDiscussionGraph({
-  thread,
-  authorAttribution,
-  discussion,
-  origin: Astro.url.origin,
-});
 ---
 
 <Base
@@ -66,21 +40,8 @@ const discussionGraph = buildDiscussionGraph({
 >
   <div class="content-golden">
     <ThreadArticle thread={thread} />
-    <ThreadInfoSection
-      thread={thread}
-      authorAttribution={authorAttribution}
-      discussion={discussion}
-    />
+    <ThreadInfoSection thread={thread} />
   </div>
-  <DiscussionApp thread={thread} discussion={discussion} />
-  {
-    discussionGraph && (
-      <script
-        type="application/ld+json"
-        is:inline
-        set:html={serializeJsonLd(discussionGraph)}
-      />
-    )
-  }
+  <DiscussionApp thread={thread} />
   <ThreadChatBar thread={thread} slot="authoring" client:only="svelte" />
 </Base>

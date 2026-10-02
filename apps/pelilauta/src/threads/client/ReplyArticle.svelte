@@ -3,65 +3,32 @@ import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
+import ProfileLink from '@svelte/app/ProfileLink.svelte';
 import ReactionButton from '@svelte/app/ReactionButton.svelte';
-import type { PublicProfile } from 'src/schemas/ProfileSchema';
+import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
 import { getProfileAtom } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
 import { uid } from 'src/stores/session';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
-import { markdownToHTML } from 'src/utils/marked';
 import { onMount } from 'svelte';
 
 interface Props {
   reply: Reply;
-  /**
-   * Public attribution for `reply`, prepared on the server for every reply
-   * present in the initial document. A reply that arrives over the live
-   * subscription carries none, so its attribution resolves client-side
-   * through the existing profile store instead.
-   */
-  author?: PublicProfile;
-  /**
-   * The reply's body, already rendered through `markdownToHTML`, for every
-   * reply present in the initial document. A live-arriving reply renders its
-   * own body the same way, client-side.
-   */
-  bodyHtml?: string;
 }
-const {
-  reply,
-  author: preparedAuthor,
-  bodyHtml: preparedBodyHtml,
-}: Props = $props();
+const { reply }: Props = $props();
 const fromUser = $derived.by(() => {
   return reply.owners[0] === $uid;
 });
 
 /**
  * The bubble draws the identity mark, so this is the profile the mark is drawn
- * from. The nick is also in the header; the mark repeats it and the bubble
- * drops it in a narrow column. A reply with prepared attribution never
- * touches the profile store; a live-arriving reply resolves it there, as
- * before.
+ * from. The nick is also in the header, through ProfileLink, which is what names
+ * the author; the mark repeats it and the bubble drops it in a narrow column.
  */
-const liveAuthorAtom = preparedAuthor
-  ? undefined
-  : getProfileAtom(reply.owners[0]);
-const author = $derived(
-  preparedAuthor ?? (liveAuthorAtom ? $liveAuthorAtom : undefined),
-);
-
-let liveBodyHtml = $state('');
-$effect(() => {
-  if (preparedBodyHtml !== undefined) return;
-  const markdown = reply.markdownContent || '';
-  markdownToHTML(markdown).then((html) => {
-    liveBodyHtml = html;
-  });
-});
-const bodyHtml = $derived(preparedBodyHtml ?? liveBodyHtml);
+const authorAtom = getProfileAtom(reply.owners[0]);
+const author = $derived($authorAtom);
 
 const images = $derived.by(() => {
   return (
@@ -72,37 +39,12 @@ const images = $derived.by(() => {
   );
 });
 
-/**
- * Publication, edit and activity carry three different meanings, so the reply
- * states the two it has of its own: when it was written, and when it was
- * edited afterwards. A reply carrying neither date renders no footer, rather
- * than a placeholder.
- */
-const publishedAt = $derived(
-  reply.createdAt ? new Date(reply.createdAt) : null,
-);
-const storedUpdatedAt = $derived(
-  reply.updatedAt ? new Date(reply.updatedAt) : null,
-);
-const editedAt = $derived(
-  publishedAt &&
-    storedUpdatedAt &&
-    storedUpdatedAt.getTime() > publishedAt.getTime()
-    ? storedUpdatedAt
-    : null,
-);
+let displayTime = $state(toDisplayString(reply.updatedAt));
 
-// Client-side enhancement: a recent date reads as relative time once mounted.
-let relative = $state(false);
 onMount(() => {
-  relative = true;
+  // Client-Side enhancement: update to relative time
+  displayTime = toDisplayString(reply.updatedAt, true);
 });
-const publishedLabel = $derived(
-  publishedAt ? toDisplayString(publishedAt, relative) : '',
-);
-const editedLabel = $derived(
-  editedAt ? toDisplayString(editedAt, relative) : '',
-);
 
 /**
  * The edit action hands the reply to the thread's chat bar and takes the focus
@@ -143,11 +85,7 @@ $effect(() => {
   >
     <header class="reply-band">
       <p class="reply-author">
-        {#if author}
-          <a class="cn-nick" href={`/profiles/${author.key}`}>{author.nick}</a>
-        {:else}
-          <span>{t("app:meta.anonymous")}</span>
-        {/if}
+        <ProfileLink uid={reply.owners[0]} />
       </p>
       <ReactionButton
         target="reply"
@@ -178,29 +116,13 @@ $effect(() => {
         openLabel={t("actions:openImage")}
         closeLabel={t("actions:close")}
       />
-      {@html bodyHtml}
+      {@html marked(reply.markdownContent || "")}
     </div>
-    {#if publishedAt || editedAt}
-      <!-- The publication date carries the permalink, so no new visible control joins it. -->
-      <footer class="reply-dates text-end text-small">
-        {#if publishedAt}
-          <a
-            class="text-low"
-            href={`/threads/${reply.threadKey}#${reply.key}`}
-            aria-label={t("threads:discussion.permalink", {
-              time: publishedLabel,
-            })}
-          >
-            <time datetime={publishedAt.toISOString()}
-              >{t("threads:info.createdAt", { time: publishedLabel })}</time
-            >
-          </a>
-        {/if}
-        {#if editedAt}
-          <time class="text-low" datetime={editedAt.toISOString()}
-            >{t("threads:info.updatedAt", { time: editedLabel })}</time
-          >
-        {/if}
+    {#if reply.updatedAt}
+      <footer class="text-end">
+        <span class="text-small text-low">
+          {displayTime}
+        </span>
       </footer>
     {/if}
   </CnBubble>
@@ -222,13 +144,5 @@ $effect(() => {
   .reply-author {
     flex: 1 1 auto;
     margin-block: 0;
-  }
-
-  /* Publication and edit read as one trailing line, in that order. */
-  .reply-dates {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cn-gap);
   }
 </style>

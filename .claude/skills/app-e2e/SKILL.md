@@ -5,15 +5,21 @@ description: Writing or pruning a test in the pelilauta app e2e suite. Use whene
 
 # App E2E
 
-Where a spec under `specs/pelilauta` governs the work, each `Scenario:` in it gets
-one test in `apps/pelilauta/e2e`, and most get no more than one. Name the test
-after the scenario.
+Add a concise test for each application scenario the change adds or alters.
+Name it after the scenario and use the smallest fixture and assertion set
+that demonstrates the changed behavior. Existing scenarios gain no tests
+solely because a spec now describes them.
 
-The test arrives with the slice that builds the behaviour. A scenario nothing
-implements yet carries no test.
+Use browser tests when the browser integration is the behavior under test.
+Use an existing unit-test path for application logic that needs no browser.
+Do not duplicate the same claim across layers or test guarantees supplied
+entirely by the browser, framework, or service.
 
-Assert what the scenario states. A scenario where a reader reaches a reply asserts
-the reader reaches it, not that the link exists.
+Assert the application outcome. A test of live enhancement observes an
+update; unchanged element counts do not establish that a listener started.
+Reuse existing fixture and authentication helpers. Keep scenario prose in
+the governing spec.
 
-Each test declares its fixtures in `e2e/reset-fixtures.mjs`, which writes to
-`skaldbase-test`. `pnpm --filter pelilauta test:e2e` runs the suite.
+Declare browser fixtures in `e2e/reset-fixtures.mjs` and retain the checks
+that restrict writes to `skaldbase-test`. Run browser scenarios through
+`pnpm --filter pelilauta test:e2e`.

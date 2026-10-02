@@ -24,9 +24,9 @@ The initial HTML renders every public reply as an article with formatted body, a
 
 The initial and live reads both query replies ordered by creation time ascending, so the store returns reading order and the reply key breaks a tie. A record without a creation time falls outside that query and does not reach the discussion.
 
-Anonymous reading creates no Firebase subscriptions for replies, attribution, or reactions. Anonymous readers receive no live updates. An unresolved session establishes no subscription. An active signed-in session subscribes to live additions, edits, and deletions. Sign-out, account changes, and page departures terminate active subscriptions and discard late results.
+Anonymous readers receive server-rendered reply content without application-level browser data reads or live subscriptions. An unresolved session establishes no subscription. An active signed-in session subscribes to live additions, edits, and deletions. Sign-out, account changes, and page departures terminate active subscriptions and discard late results.
 
-Hydration preserves initial articles. Live updates reconcile by reply key without replacing unaffected articles or replaying navigation. If the visible reply disappears, the next surviving reply becomes the reading anchor, or the preceding reply when none follows. An empty discussion uses its heading. Removing a focused reply returns focus to the discussion heading.
+Removing a focused reply returns focus to the discussion heading.
 
 Initial reply-read failure displays an unavailable-discussion state beside the opening post rather than an empty discussion. A malformed reply does not discard valid replies. The discussion indicates incomplete content when records fail parsing. A live subscription failure retains rendered content and indicates that updates are unavailable.
 
@@ -43,7 +43,6 @@ Initial reply-read failure displays an unavailable-discussion state beside the o
 
 ### Regression Guardrails
 
-- Server and live rendering produce identical formatting and attachment content.
 - Listeners from previous pages or accounts never update the active conversation.
 - A malformed record never clears valid replies.
 - The reading contract renders every reply without pagination or truncation.
@@ -86,12 +85,10 @@ Feature: Thread Replies
     And edit times do not alter order
     And a reply without a creation time does not appear
 
-  Scenario: Re-anchor a deleted reading target
-    Given a reader at the end of a discussion
-    When deletion removes the active viewport target
-    Then the next surviving reply becomes the reading anchor, or the preceding reply when none follows
-    And an empty discussion uses its heading
-    And removal of the focused reply moves focus to the discussion heading
+  Scenario: Restore focus after deleting a focused reply
+    Given keyboard focus within a reply
+    When deletion removes that reply
+    Then focus moves to the discussion heading
 
   Scenario: Terminate a live subscription
     Given an active reply subscription

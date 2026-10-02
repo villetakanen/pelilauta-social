@@ -1,5 +1,10 @@
 import type { APIContext } from 'astro';
-import { getProfileData } from 'src/firebase/server/profiles';
+import {
+  PROFILES_COLLECTION_NAME,
+  parseProfile,
+} from 'src/schemas/ProfileSchema';
+import { toClientEntry } from 'src/utils/client/entryUtils';
+import { serverDB } from '../../../firebase/server';
 
 export async function GET({ params }: APIContext): Promise<Response> {
   const { uid } = params;
@@ -8,11 +13,18 @@ export async function GET({ params }: APIContext): Promise<Response> {
     return new Response('Invalid request', { status: 400 });
   }
 
-  const profile = await getProfileData(uid);
+  const profileDoc = await serverDB
+    .collection(PROFILES_COLLECTION_NAME)
+    .doc(uid)
+    .get();
 
-  if (!profile) {
+  const data = profileDoc.data();
+
+  if (!profileDoc.exists || !data) {
     return new Response('Profile not found', { status: 404 });
   }
+
+  const profile = parseProfile(toClientEntry(data), uid);
 
   return new Response(JSON.stringify(profile), {
     status: 200,

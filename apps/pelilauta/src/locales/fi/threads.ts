@@ -15,7 +15,6 @@ export const threads: Locale = {
     inTopic: 'aiheessa',
     replies: '{count} vastausta',
     createdAt: 'Luotu {time}',
-    updatedAt: 'Muokattu {time}',
     flowTime: 'Päivitetty {time}',
     loveCount: '{count} tykkäystä',
     blueskyTitle: 'Bluesky',
@@ -62,11 +61,6 @@ export const threads: Locale = {
     title: 'Keskustelu',
     reply: 'Vastaa',
     empty: 'Aloita keskustelu aiheesta vastaamalla alta.',
-    incomplete: 'Osaa vastauksista ei voitu näyttää.',
-    unavailable: 'Keskustelua ei voitu ladata. Lataa sivu uudelleen.',
-    updatesUnavailable:
-      'Uudet vastaukset eivät päivity. Lataa sivu uudelleen nähdäksesi ne.',
-    permalink: 'Pysyvä linkki, {time}',
     confirmDelete: {
       message: 'Oletko varma, että haluat poistaa tämän viestin?',
     },

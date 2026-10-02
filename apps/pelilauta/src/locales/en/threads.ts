@@ -15,7 +15,6 @@ export const threads: Locale = {
     inTopic: 'in topic',
     replies: '{count} replies',
     createdAt: 'Created {time}',
-    updatedAt: 'Edited {time}',
     flowTime: 'Updated {time}',
     loveCount: '{count} likes',
     blueskyTitle: 'Bluesky',
@@ -67,12 +66,6 @@ export const threads: Locale = {
     title: 'Discussion',
     reply: 'Reply',
     empty: 'Start the discussion by replying below.',
-    incomplete: 'Some replies could not be shown.',
-    unavailable:
-      'The discussion could not be loaded. Reload the page to try again.',
-    updatesUnavailable:
-      'New replies are not arriving. Reload the page to see them.',
-    permalink: 'Permalink, {time}',
     confirmDelete: {
       message: 'Are you sure you want to delete this message?',
     },

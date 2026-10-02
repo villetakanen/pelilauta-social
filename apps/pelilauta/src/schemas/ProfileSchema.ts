@@ -10,15 +10,6 @@ export const ProfileLinkSchema = z.object({
 
 export type ProfileLink = z.infer<typeof ProfileLinkSchema>;
 
-export const PublicProfileSchema = z.object({
-  key: z.string(),
-  nick: z.string(),
-  avatarURL: z.string().optional(),
-  username: z.string(),
-});
-
-export type PublicProfile = z.infer<typeof PublicProfileSchema>;
-
 export const ProfileSchema = z.object({
   key: z.string(),
   username: z.string(),

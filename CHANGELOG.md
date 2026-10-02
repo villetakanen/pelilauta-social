@@ -5,21 +5,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 ## 21.0.1
 
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
-- fix(threads): A thread page carries the opening post author name and profile link in the initial response, before browser scripts run. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(i18n): A post whose author profile does not resolve displays the anonymous label instead of the key `app:meta.anonymous`.
-- fix(threads): A thread page carries every reply, with its body, attachments and author name, in the initial response, before browser scripts run. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
-- fix(threads): A reply that fails to parse no longer takes down the thread page. The discussion displays the replies it can read and states that it is incomplete.
-- fix(threads): Reading a thread without signing in opens no Firestore subscription.
-- fix(threads): A reply body renders through the same converter as a thread body, so both support footnotes.
-- fix(threads): A link to a thread discussion reaches the discussion. Thread lists, the front page and notifications target `#discussion`, which the thread page now carries.
-- fix(threads): A reply displays a permalink on its timestamp, and the reply count on a thread page reaches the latest reply. Both work without browser scripts.
-- fix(threads): A thread page distinguishes when the opening post was published, when it was edited, and when the discussion was last active. A date the record does not carry displays nothing, where the page previously displayed the time of the read.
-- fix(threads): A thread page carries discussion structured data describing the conversation a reader sees, its authors and its dates.
-- fix(threads): A discussion reads in the order the replies were written, and keeps that order when a reply arrives or is edited while the page is open. A reply the server sent and a reply arriving live now sort the same way.
-- fix(threads): A reply stored without a creation time reports as incomplete content instead of appearing in an arbitrary place in the discussion.
-- fix(threads): Signing out, changing account, or leaving a thread page ends its live connection. A thread no longer receives replies for the account that was signed in before.
-- fix(threads): A reader keeps their place when a reply arrives or disappears above the passage they are reading, and the discussion heading takes focus when the reply holding it is removed.
-- fix(threads): A discussion that fails to load says so beside the opening post, and a live connection that fails leaves the replies on screen and states that updates are unavailable.
 
 ## 21.0.0
 

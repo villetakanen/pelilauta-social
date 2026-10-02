@@ -26,7 +26,7 @@ When no subscription record exists, subscription creation sets an initial `allSe
 
 The page captures the previous effective read boundary before persisting a new opening. Read-state mutations apply only to the active account and never reuse boundaries from prior accounts. Recording an opening never regresses a later persisted boundary.
 
-Read status consumes stored thread `flowTime` without deriving activity from reply edits or deletions. Mutation endpoints define `flowTime` updates. Unread targeting evaluates reply creation time using the fallback order in [Thread Replies](../replies/spec.md) instead of edit timestamps.
+Read status consumes stored thread `flowTime` without deriving activity from reply edits or deletions. Mutation endpoints define `flowTime` updates. Unread targeting uses reply creation time.
 
 The initial document exposes `#discussion` and `#discussion-title` at the discussion heading, alongside fragments for each reply key. Each reply displays a permalink. A latest-reply control links to the final reply, or to the discussion heading when no replies exist. These anchors function without JavaScript.
 

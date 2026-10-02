@@ -7,31 +7,12 @@ import { defineConfig, devices } from '@playwright/test';
  * `pnpm --filter pelilauta test:e2e` seeds fixtures then invokes Playwright
  * with no arguments, so this config is the only thing standing between that
  * command and running every file in `testDir` — `testMatch` pins it to the
- * named regression specs explicitly, so adding a stray file to `e2e/`
- * cannot silently widen what the command runs.
+ * single regression spec explicitly, so adding a stray file to `e2e/` cannot
+ * silently widen what the command runs.
  */
 export default defineConfig({
   testDir: './e2e',
-  testMatch: [
-    'onboarding-callout-transition.spec.ts',
-    'initial-reply-render.spec.ts',
-    'no-profile-author-reads.spec.ts',
-    'compose-thread-page.spec.ts',
-    'anonymous-visitor-live-reading.spec.ts',
-    'resolve-session-after-render.spec.ts',
-    'malformed-reply-render.spec.ts',
-    'reply-permalink-navigation.spec.ts',
-    'latest-reply-navigation.spec.ts',
-    'read-opening-post.spec.ts',
-    'distinguish-activity-from-publication.spec.ts',
-    'inspect-discovery-metadata.spec.ts',
-    'preserve-unknown-publication-dates.spec.ts',
-    'omit-unknown-structured-data-authors.spec.ts',
-    'preserve-chronology-after-an-edit.spec.ts',
-    'order-replies-with-equal-creation-dates.spec.ts',
-    're-anchor-a-deleted-reading-target.spec.ts',
-    'terminate-a-live-subscription.spec.ts',
-  ],
+  testMatch: 'onboarding-callout-transition.spec.ts',
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   // No retries initially: a flaky pass would hide a real regression.

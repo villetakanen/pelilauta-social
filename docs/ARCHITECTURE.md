@@ -1,5 +1,11 @@
 # Architecture
 
+## Progressive enhancement
+
+Client enhancement preserves server-rendered content and working native
+interactions. Activating enhancement alone does not change displayed content;
+subsequent data updates may change it.
+
 ## Naming
 
 ### Components

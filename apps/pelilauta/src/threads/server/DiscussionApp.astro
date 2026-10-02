@@ -1,13 +1,13 @@
 ---
 import DiscussionSection from '@pelilauta/threads/client/DiscussionSection.svelte';
+import { fetchDiscussion } from 'src/firebase/server/discussion/fetchDiscussion';
 import type { Thread } from 'src/schemas/ThreadSchema';
-import type { PreparedDiscussion } from 'src/threads/server/prepareDiscussion';
 
 interface Props {
   thread: Thread;
-  /** Prepared by the page so `ThreadInfoSection` reads the same discussion. */
-  discussion: PreparedDiscussion;
 }
-const { thread, discussion }: Props = Astro.props;
+const { thread }: Props = Astro.props;
+
+const discussion = await fetchDiscussion(thread.key);
 ---
-<DiscussionSection discussion={discussion.replies} incomplete={discussion.incomplete} unavailable={discussion.unavailable} {thread} client:load/>
+<DiscussionSection discussion={discussion} {thread} client:only="svelte"/>

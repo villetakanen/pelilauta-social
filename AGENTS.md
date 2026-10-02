@@ -16,6 +16,7 @@
 ## ALWAYS
 
 - Conform prose to `docs/WRITING.md` and `docs/ARCHITECTURE.md` when writing documents, books, specs, or comments. Reference those files directly instead of restating their contents.
+- Before adding implementation, identify the remaining gap against the existing code. Check what the browser, framework, service, and existing components already provide; implement only the missing application behavior. A spec describes required outcomes, not a checklist of mechanisms to build.
 - Set the root version once per release, on the first commit after merging to `main`. Run `pnpm version patch --no-git-tag-version` for a release carrying no feature, and `pnpm version minor --no-git-tag-version` for one that does. A branch that bumped a patch and then takes a feature bumps to the minor. The minor release ends the branch. Open the changelog section for the new version in the same commit, because a test asserts the changelog carries a heading for the declared version. Subsequent commits on the branch skip version bumps because the version already leads `main`. CI tags the merge commit.
 - Remain on the active long-lived release branch, named `feat/<major>-<minor>`.
 - Execute the verification gate corresponding to the active question; `delivery.yaml` defines gate commands, cadences, and coverage.

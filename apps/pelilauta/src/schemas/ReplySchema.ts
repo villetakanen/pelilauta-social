@@ -24,13 +24,6 @@ export const ReplySchema = ContentEntrySchema.extend({
   // Override owners to ensure at least one owner (the reply author)
   owners: z.array(z.string()).min(1, 'Reply must have at least one owner'),
 
-  // A reply states when it was written. Reading order is creation order, so a
-  // record without a creation time has no place in a discussion: it fails here
-  // and the discussion reports itself incomplete. The coercion `EntrySchema`
-  // states is kept, because a reply also arrives as JSON from
-  // `/api/replies/[threadKey]/[replyKey].json`, with its dates as strings.
-  createdAt: z.coerce.date(),
-
   images: ImageArraySchema.optional(), // Array of images in the reply
   quoteref: z.string().optional(), // The key of the reply that this reply is quoting.
   threadKey: z.string(), // The key of the thread that this reply is in.
