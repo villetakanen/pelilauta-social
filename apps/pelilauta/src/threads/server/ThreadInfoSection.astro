@@ -1,17 +1,17 @@
 ---
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { isAdmin } from '@firebase/server/admin';
+import BlueskyPostCard from '@pelilauta/components/server/app/BlueskyPostCard.astro';
+import EntryTagsWithLabelsSection from '@pelilauta/components/server/app/EntryTagsWithLabelsSection.astro';
+import ProfileLink from '@pelilauta/components/svelte/app/ProfileLink.svelte';
+import ReactionButton from '@pelilauta/components/svelte/app/ReactionButton.svelte';
+import BlueskyCard from '@pelilauta/components/svelte/threads/BlueskyCard.svelte';
+import ThreadInfoActions from '@pelilauta/components/svelte/threads/ThreadInfoActions.svelte';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
-import ProfileLink from '../../svelte/app/ProfileLink.svelte';
-import ReactionButton from '../../svelte/app/ReactionButton.svelte';
-import BlueskyCard from '../../svelte/threads/BlueskyCard.svelte';
-import ThreadInfoActions from '../../svelte/threads/ThreadInfoActions.svelte';
-import BlueskyPostCard from '../app/BlueskyPostCard.astro';
-import EntryTagsWithLabelsSection from '../app/EntryTagsWithLabelsSection.astro';
 
 interface Props {
   thread: Thread;

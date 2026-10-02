@@ -31,6 +31,9 @@ export const en: Locale = {
         'Failed to load threads. Please try refreshing the page.',
       themeNotSaved: 'Saving the theme failed.',
     },
+    meta: {
+      anonymous: 'Anonymous',
+    },
     onboarding: {
       title: 'Welcome to Pelilauta',
       about:

@@ -33,7 +33,7 @@ a disclosure.
 
 ### Constraints
 
-`src/schemas/SiteSchema.ts` is shared with live v18. Site writes use only fields the schema
+`src/schemas/SiteSchema.ts` describes production data. Site writes use only fields the schema
 carries.
 
 ## Contract

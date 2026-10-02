@@ -1,12 +1,12 @@
 ---
 import Base from '@layouts/Base.astro';
 import ThreadChatBar from '@pelilauta/threads/client/ThreadChatBar.svelte';
+import DiscussionApp from '@pelilauta/threads/server/DiscussionApp.astro';
+import ThreadArticle from '@pelilauta/threads/server/ThreadArticle.astro';
+import ThreadInfoSection from '@pelilauta/threads/server/ThreadInfoSection.astro';
 import { ThreadSchema } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
-import DiscussionApp from '../../../components/server/DiscussionApp/DiscussionApp.astro';
-import ThreadArticle from '../../../components/server/ThreadsApp/ThreadArticle.astro';
-import ThreadInfoSection from '../../../components/server/ThreadsApp/ThreadInfoSection.astro';
 
 const { threadKey } = Astro.params;
 

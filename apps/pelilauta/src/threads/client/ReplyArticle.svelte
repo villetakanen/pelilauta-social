@@ -3,13 +3,13 @@ import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
-import ProfileLink from '@svelte/app/ProfileLink.svelte';
 import ReactionButton from '@svelte/app/ReactionButton.svelte';
 import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
-import { getProfileAtom } from 'src/stores/profiles';
+import { getProfileAtom, type PublicProfile } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
 import { uid } from 'src/stores/session';
+import { isActive } from 'src/stores/session/computed';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
@@ -24,11 +24,14 @@ const fromUser = $derived.by(() => {
 
 /**
  * The bubble draws the identity mark, so this is the profile the mark is drawn
- * from. The nick is also in the header, through ProfileLink, which is what names
- * the author; the mark repeats it and the bubble drops it in a narrow column.
+ * from. The nick is also in the header, which is what names the author; the
+ * mark repeats it and the bubble drops it in a narrow column.
+ *
+ * The lookup waits for mount: the profile store starts a client Firestore read
+ * and keeps its result in module state, and the server render must do neither.
+ * Until the lookup answers there is no author, and the document names none.
  */
-const authorAtom = getProfileAtom(reply.owners[0]);
-const author = $derived($authorAtom);
+let author = $state<PublicProfile | undefined>();
 
 const images = $derived.by(() => {
   return (
@@ -44,6 +47,10 @@ let displayTime = $state(toDisplayString(reply.updatedAt));
 onMount(() => {
   // Client-Side enhancement: update to relative time
   displayTime = toDisplayString(reply.updatedAt, true);
+
+  return getProfileAtom(reply.owners[0]).subscribe((profile) => {
+    author = profile;
+  });
 });
 
 /**
@@ -85,14 +92,19 @@ $effect(() => {
   >
     <header class="reply-band">
       <p class="reply-author">
-        <ProfileLink uid={reply.owners[0]} />
+        {#if author}
+          <a class="cn-nick" href="/profiles/{author.key}">{author.nick}</a>
+        {/if}
       </p>
-      <ReactionButton
-        target="reply"
-        small
-        key={reply.key}
-        title={reply.markdownContent?.substring(0, 50)}
-      ></ReactionButton>
+      <!-- ReactionButton reads its reaction document on mount, so mount it only for an active session. -->
+      {#if $isActive}
+        <ReactionButton
+          target="reply"
+          small
+          key={reply.key}
+          title={reply.markdownContent?.substring(0, 50)}
+        ></ReactionButton>
+      {/if}
       <CnMenu inline label={t("actions:moreOptions")}>
         <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
           <CnIcon noun="fork" decorative />

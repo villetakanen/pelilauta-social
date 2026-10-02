@@ -4,8 +4,7 @@ Pelilauta is a Finnish online community for tabletop role-playing games, with
 discussion channels and a shared library. This workspace carries version 21 of
 the application and the design system.
 
-Version 21 runs on a dedicated host, sharing Firestore, Storage, and Auth with
-version 18 while version 18 remains live at pelilauta.social.
+Version 21 is live at pelilauta.social.
 
 ## Workspace
 

@@ -62,6 +62,8 @@ export const threads: Locale = {
     editing: 'Editing a message',
     editFailed: 'The change was not saved. Try again.',
     join: 'Join the discussion',
+    liveFailed:
+      'Live updates are unavailable. The replies shown may be out of date.',
     sendFailed: 'The reply was not sent. Try again.',
     title: 'Discussion',
     reply: 'Reply',

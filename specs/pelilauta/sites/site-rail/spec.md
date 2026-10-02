@@ -42,7 +42,7 @@ Salaisuudet is a site player tool: it stands wherever the site has enabled it, a
 disabled for a reader who is not a player. The site states that it plays this way, whoever
 is looking.
 
-Kellot stands for every reader the site shows it to, as v18 serves it.
+Kellot stands for every reader the site shows it to, as v18 served it.
 
 A site owner tool is absent for a reader who is not an owner, rather than disabled.
 

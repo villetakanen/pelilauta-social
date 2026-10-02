@@ -46,42 +46,69 @@ onMount(async () => {
       }, 300); // Give it a moment to render
     }
   }
+});
 
-  const { getFirestore, query, collection, orderBy, onSnapshot } = await import(
-    'firebase/firestore'
-  );
-  const db = getFirestore();
+let liveFailed = $state(false);
 
-  const q = query(
-    collection(db, THREADS_COLLECTION_NAME, thread.key, REPLIES_COLLECTION),
-    orderBy('createdAt', 'asc'),
-  );
+$effect(() => {
+  // An account change re-runs the effect, so the uid is read here.
+  const active = $isActive;
+  void $uid;
+  if (!active) return;
 
-  onSnapshot(q, (querySnapshot) => {
-    const d = [...discussion];
-    for (const change of querySnapshot.docChanges()) {
-      const data = change.doc.data();
-      if (change.type === 'removed') {
-        const remove = d.findIndex((r) => r.key === change.doc.id);
-        if (remove !== -1) {
-          d.splice(remove, 1);
+  let cancelled = false;
+  let unsubscribe: (() => void) | undefined;
+  liveFailed = false;
+
+  (async () => {
+    const { getFirestore, query, collection, orderBy, onSnapshot } =
+      await import('firebase/firestore');
+    if (cancelled) return;
+    const db = getFirestore();
+
+    const q = query(
+      collection(db, THREADS_COLLECTION_NAME, thread.key, REPLIES_COLLECTION),
+      orderBy('createdAt', 'asc'),
+    );
+
+    unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (cancelled) return;
+        const d = [...discussion];
+        for (const change of querySnapshot.docChanges()) {
+          const data = change.doc.data();
+          if (change.type === 'removed') {
+            const remove = d.findIndex((r) => r.key === change.doc.id);
+            if (remove !== -1) {
+              d.splice(remove, 1);
+            }
+          } else {
+            const index = d.findIndex((r) => r.key === change.doc.id);
+            const reply = ReplySchema.parse({
+              ...toClientEntry(fixImageData(data)),
+              key: change.doc.id,
+              threadKey: thread.key,
+            });
+            if (index !== -1) {
+              d[index] = reply;
+            } else {
+              d.push(reply);
+            }
+          }
         }
-      } else {
-        const index = d.findIndex((r) => r.key === change.doc.id);
-        const reply = ReplySchema.parse({
-          ...toClientEntry(fixImageData(data)),
-          key: change.doc.id,
-          threadKey: thread.key,
-        });
-        if (index !== -1) {
-          d[index] = reply;
-        } else {
-          d.push(reply);
-        }
-      }
-    }
-    discussion = d;
-  });
+        discussion = d;
+      },
+      () => {
+        if (!cancelled) liveFailed = true;
+      },
+    );
+  })();
+
+  return () => {
+    cancelled = true;
+    unsubscribe?.();
+  };
 });
 </script>
 
@@ -96,6 +123,10 @@ onMount(async () => {
         <ReplyArticle {reply} />
       {/each}
     </div>
+  {/if}
+
+  {#if liveFailed}
+    <p role="status">{t("threads:discussion.liveFailed")}</p>
   {/if}
 
   <!--
