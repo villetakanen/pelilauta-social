@@ -18,6 +18,7 @@ export default defineConfig({
     'read-replies-without-javascript.spec.ts',
     'anonymous-reply-reaction-reads.spec.ts',
     'open-reply-permalink.spec.ts',
+    'jump-to-timestamp.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

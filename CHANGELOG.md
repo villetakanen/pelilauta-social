@@ -13,6 +13,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(threads): A thread page names each reply's author in the initial document, resolved on the server, so a reader without JavaScript sees who wrote each reply and the replies trigger no browser profile read. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(threads): A thread page names the opening post's author in the initial document, resolved on the server through a shared server-side fetch helper, so the opening post triggers no browser profile read. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(threads): A thread page exposes `#discussion`, gives each reply a permalink and the discussion an end-of-discussion link, both working without JavaScript, and a malformed live reply no longer discards the other changes in its snapshot. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- feat(threads): A signed-in reader's `?jumpTo=<timestamp>` link lands at the last reply created at or before the timestamp, resolved from the URL alone; `?jumpTo=unread` no longer targets unread replies.
 
 ## 21.0.0
 

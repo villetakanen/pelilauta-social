@@ -212,7 +212,8 @@ const staleReplies = await repliesCollection.listDocuments();
 for (const stale of staleReplies) {
   if (!REPLIES.some((reply) => reply.key === stale.id)) await stale.delete();
 }
-const replyBase = Date.now() - 60_000;
+// A fixed base, so jump-to-timestamp.spec.ts can address a moment between replies.
+const replyBase = Date.UTC(2026, 0, 1);
 for (const [index, reply] of REPLIES.entries()) {
   const createdAt = Timestamp.fromMillis(replyBase + index * 1000);
   await repliesCollection.doc(reply.key).set({

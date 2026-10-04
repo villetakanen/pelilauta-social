@@ -10,7 +10,7 @@ import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
 import type { PublicProfile } from 'src/stores/profiles';
 import { uid } from 'src/stores/session';
 import { isActive, isRehydrating } from 'src/stores/session/computed';
-import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
+import { hasSeen, setSeen } from 'src/stores/subscription';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
 import { t } from 'src/utils/i18n';
@@ -29,26 +29,31 @@ const { discussion: initDiscussion, thread, authors }: Props = $props();
 let discussion = $state(initDiscussion);
 
 onMount(async () => {
-  const lastSeen = $subscription?.seenEntities?.[thread.key] || 0;
-
   if ($uid && !$hasSeen(thread.key, thread.flowTime)) {
     // We haven't seen this thread or it's latest comments yet, so we mark it as seen
     setSeen(thread.key);
   }
 
-  // Scroll to unread logic
-  const urlParams = new URLSearchParams(window.location.search);
-  if ($uid && urlParams.get('jumpTo') === 'unread' && lastSeen > 0) {
-    const firstUnread = discussion.find((r) => (r.flowTime || 0) > lastSeen);
-    const targetReply = firstUnread || discussion[discussion.length - 1];
-    if (targetReply) {
-      setTimeout(() => {
-        const element = document.getElementById(targetReply.key);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300); // Give it a moment to render
-    }
+  // The page takes the jump target from the timestamp in the URL alone; the
+  // producer of the link decides what that timestamp means.
+  const jumpTo = Number(new URLSearchParams(window.location.search).get('jumpTo'));
+  const fragment = decodeURIComponent(window.location.hash.slice(1));
+  const namesReply = discussion.some((r) => r.key === fragment);
+  if ($uid && Number.isFinite(jumpTo) && jumpTo > 0 && !namesReply) {
+    const atOrBefore = discussion.filter(
+      (r) => r.createdAt && r.createdAt.getTime() <= jumpTo,
+    );
+    const targetId =
+      atOrBefore.length > 0
+        ? atOrBefore[atOrBefore.length - 1].key
+        : 'discussion-title';
+    requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      });
+    });
   }
 });
 
