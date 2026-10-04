@@ -14,6 +14,7 @@ import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { fixImageData } from 'src/utils/fixImageData';
 import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
 import ReplyArticle from './ReplyArticle.svelte';
 
@@ -80,23 +81,27 @@ $effect(() => {
         if (cancelled) return;
         const d = [...discussion];
         for (const change of querySnapshot.docChanges()) {
-          const data = change.doc.data();
           if (change.type === 'removed') {
             const remove = d.findIndex((r) => r.key === change.doc.id);
             if (remove !== -1) {
               d.splice(remove, 1);
             }
           } else {
-            const index = d.findIndex((r) => r.key === change.doc.id);
-            const reply = ReplySchema.parse({
-              ...toClientEntry(fixImageData(data)),
-              key: change.doc.id,
-              threadKey: thread.key,
-            });
-            if (index !== -1) {
-              d[index] = reply;
-            } else {
-              d.push(reply);
+            // A malformed reply is skipped, so the other changes still apply.
+            try {
+              const index = d.findIndex((r) => r.key === change.doc.id);
+              const reply = ReplySchema.parse({
+                ...toClientEntry(fixImageData(change.doc.data())),
+                key: change.doc.id,
+                threadKey: thread.key,
+              });
+              if (index !== -1) {
+                d[index] = reply;
+              } else {
+                d.push(reply);
+              }
+            } catch (e) {
+              logError('DiscussionSection: skipped reply', change.doc.id, e);
             }
           }
         }
@@ -115,8 +120,20 @@ $effect(() => {
 });
 </script>
 
-<section class="content-prose" aria-labelledby="discussion-title">
+<section
+  id="discussion"
+  class="content-prose"
+  aria-labelledby="discussion-title"
+>
   <h2 id="discussion-title">{t("threads:discussion.title")}</h2>
+
+  {#if discussion.length > 0}
+    <p>
+      <a href={`#${discussion[discussion.length - 1].key}`}>
+        {t("threads:discussion.latest")}
+      </a>
+    </p>
+  {/if}
 
   {#if discussion.length === 0}
     <p>{t("threads:discussion.empty")}</p>

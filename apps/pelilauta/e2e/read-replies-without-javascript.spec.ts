@@ -36,6 +36,16 @@ test('an anonymous reader reads all replies without JavaScript', async ({
     await expect(nick).toHaveCount(1);
     await expect(nick).toHaveAttribute('href', /^\/profiles\//);
   }
+  // The anchors and permalinks work without JavaScript.
+  await expect(page.locator('section#discussion')).toHaveCount(1);
+  for (const reply of REPLIES) {
+    await expect(
+      page.locator(`[id="${reply.key}"] footer a[href$="#${reply.key}"]`),
+    ).toHaveCount(1);
+  }
+  await expect(
+    page.locator('section#discussion a[href="#e2e-reply-3"]'),
+  ).toHaveCount(1);
   // The opening post's byline sits outside the reply articles.
   const openingAuthor = page
     .getByRole('link', { name: AUTHOR_NICK })

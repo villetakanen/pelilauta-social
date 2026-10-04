@@ -61,6 +61,8 @@ export const threads: Locale = {
       'Reaaliaikaiset päivitykset eivät ole käytettävissä. Näkyvät vastaukset voivat olla vanhentuneita.',
     sendFailed: 'Viestin lähetys ei onnistunut. Yritä uudelleen.',
     title: 'Keskustelu',
+    latest: 'Siirry keskustelun loppuun',
+    permalink: 'Pysyvä linkki vastaukseen',
     reply: 'Vastaa',
     empty: 'Aloita keskustelu aiheesta vastaamalla alta.',
     confirmDelete: {

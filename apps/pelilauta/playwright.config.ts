@@ -17,6 +17,7 @@ export default defineConfig({
     'reply-subscription-termination.spec.ts',
     'read-replies-without-javascript.spec.ts',
     'anonymous-reply-reaction-reads.spec.ts',
+    'open-reply-permalink.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

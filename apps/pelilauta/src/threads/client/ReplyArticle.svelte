@@ -137,9 +137,13 @@ $effect(() => {
     </div>
     {#if reply.updatedAt}
       <footer class="text-end">
-        <span class="text-small text-low">
+        <a
+          class="text-small text-low"
+          href={`/threads/${reply.threadKey}#${reply.key}`}
+          aria-label={t("threads:discussion.permalink")}
+        >
           {displayTime}
-        </span>
+        </a>
       </footer>
     {/if}
   </CnBubble>
