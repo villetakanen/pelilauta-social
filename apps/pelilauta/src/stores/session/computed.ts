@@ -1,5 +1,5 @@
 import { computed } from 'nanostores';
-import { sessionState, uid } from './index';
+import { authUser, sessionState, uid } from './index';
 
 /**
  * Session state helpers to properly handle the "Optimistic UID" problem.
@@ -44,3 +44,20 @@ export const isRehydrating = computed(
 export const isActive = computed([sessionState, uid], (state, currentUid) => {
   return currentUid !== '' && state === 'active';
 });
+
+/**
+ * Adds to `isActive` that Firebase has confirmed the identity in this page
+ * load: `isActive` also holds on persisted state before `onAuthStateChanged`
+ * runs. Gate reads and subscriptions on this store.
+ */
+export const isResolvedActive = computed(
+  [sessionState, uid, authUser],
+  (state, currentUid, user) => {
+    return (
+      currentUid !== '' &&
+      state === 'active' &&
+      user !== null &&
+      user.uid === currentUid
+    );
+  },
+);

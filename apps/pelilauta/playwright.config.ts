@@ -19,6 +19,7 @@ export default defineConfig({
     'anonymous-reply-reaction-reads.spec.ts',
     'open-reply-permalink.spec.ts',
     'jump-to-timestamp.spec.ts',
+    'stale-session-reads.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

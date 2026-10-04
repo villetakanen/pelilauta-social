@@ -10,7 +10,9 @@ describe('fetchApiJson', () => {
   });
 
   it('returns the parsed JSON of an ok response', async () => {
-    const fetchMock = vi.fn(async (_url: URL) => Response.json({ nick: 'Ada' }));
+    const fetchMock = vi.fn(async (_url: URL) =>
+      Response.json({ nick: 'Ada' }),
+    );
     vi.stubGlobal('fetch', fetchMock);
     expect(await fetchApiJson(astro, '/api/profiles/a.json')).toEqual({
       nick: 'Ada',

@@ -222,7 +222,9 @@ for (const [index, reply] of REPLIES.entries()) {
     createdAt,
     updatedAt: createdAt,
     flowTime: createdAt,
-    ...(reply.image ? { images: [{ url: reply.image, alt: 'E2E reply image' }] } : {}),
+    ...(reply.image
+      ? { images: [{ url: reply.image, alt: 'E2E reply image' }] }
+      : {}),
   });
   console.log(`Restored stream/${THREAD_KEY}/comments/${reply.key}`);
 }

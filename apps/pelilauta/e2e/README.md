@@ -14,7 +14,8 @@ covers reply subscription lifecycle, and `read-replies-without-javascript.spec.t
 covers reading replies in the initial document, and
 `anonymous-reply-reaction-reads.spec.ts` covers an anonymous reader reading no reaction documents, and
 `open-reply-permalink.spec.ts` covers opening a reply permalink without JavaScript, and
-`jump-to-timestamp.spec.ts` covers landing at the reply a URL timestamp names.
+`jump-to-timestamp.spec.ts` covers landing at the reply a URL timestamp names, and
+`stale-session-reads.spec.ts` covers a persisted session Firebase has not confirmed opening no reply subscription and reading no reaction.
 
 ## Prerequisites
 

@@ -1,21 +1,19 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import {
-  REPLIES_COLLECTION,
-  type Reply,
-  ReplySchema,
-} from 'src/schemas/ReplySchema';
+import { REPLIES_COLLECTION, type Reply } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
 import type { PublicProfile } from 'src/stores/profiles';
 import { uid } from 'src/stores/session';
-import { isActive, isRehydrating } from 'src/stores/session/computed';
+import {
+  isActive,
+  isRehydrating,
+  isResolvedActive,
+} from 'src/stores/session/computed';
 import { hasSeen, setSeen } from 'src/stores/subscription';
-import { toClientEntry } from 'src/utils/client/entryUtils';
-import { fixImageData } from 'src/utils/fixImageData';
 import { t } from 'src/utils/i18n';
-import { logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
+import { parseSnapshotReplies } from './parseSnapshotReplies';
 import ReplyArticle from './ReplyArticle.svelte';
 
 interface Props {
@@ -36,7 +34,9 @@ onMount(async () => {
 
   // The page takes the jump target from the timestamp in the URL alone; the
   // producer of the link decides what that timestamp means.
-  const jumpTo = Number(new URLSearchParams(window.location.search).get('jumpTo'));
+  const jumpTo = Number(
+    new URLSearchParams(window.location.search).get('jumpTo'),
+  );
   const fragment = decodeURIComponent(window.location.hash.slice(1));
   const namesReply = discussion.some((r) => r.key === fragment);
   if ($uid && Number.isFinite(jumpTo) && jumpTo > 0 && !namesReply) {
@@ -61,13 +61,13 @@ let liveFailed = $state(false);
 
 $effect(() => {
   // An account change re-runs the effect, so the uid is read here.
-  const active = $isActive;
+  const active = $isResolvedActive;
   void $uid;
+  liveFailed = false;
   if (!active) return;
 
   let cancelled = false;
   let unsubscribe: (() => void) | undefined;
-  liveFailed = false;
 
   (async () => {
     const { getFirestore, query, collection, orderBy, onSnapshot } =
@@ -84,33 +84,7 @@ $effect(() => {
       q,
       (querySnapshot) => {
         if (cancelled) return;
-        const d = [...discussion];
-        for (const change of querySnapshot.docChanges()) {
-          if (change.type === 'removed') {
-            const remove = d.findIndex((r) => r.key === change.doc.id);
-            if (remove !== -1) {
-              d.splice(remove, 1);
-            }
-          } else {
-            // A malformed reply is skipped, so the other changes still apply.
-            try {
-              const index = d.findIndex((r) => r.key === change.doc.id);
-              const reply = ReplySchema.parse({
-                ...toClientEntry(fixImageData(change.doc.data())),
-                key: change.doc.id,
-                threadKey: thread.key,
-              });
-              if (index !== -1) {
-                d[index] = reply;
-              } else {
-                d.push(reply);
-              }
-            } catch (e) {
-              logError('DiscussionSection: skipped reply', change.doc.id, e);
-            }
-          }
-        }
-        discussion = d;
+        discussion = parseSnapshotReplies(querySnapshot.docs, thread.key);
       },
       () => {
         if (!cancelled) liveFailed = true;

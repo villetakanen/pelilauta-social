@@ -3,7 +3,6 @@ import CnIcon from '@design-system/components/CnIcon.svelte';
 import { isAdmin } from '@firebase/server/admin';
 import BlueskyPostCard from '@pelilauta/components/server/app/BlueskyPostCard.astro';
 import EntryTagsWithLabelsSection from '@pelilauta/components/server/app/EntryTagsWithLabelsSection.astro';
-import ReactionButton from '@pelilauta/components/svelte/app/ReactionButton.svelte';
 import BlueskyCard from '@pelilauta/components/svelte/threads/BlueskyCard.svelte';
 import ThreadInfoActions from '@pelilauta/components/svelte/threads/ThreadInfoActions.svelte';
 import { verifySession } from '@utils/server/auth/verifySession';
@@ -11,6 +10,7 @@ import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
 import { fetchApiJson } from '@utils/server/fetchApi';
 import { type Profile, parseProfile } from 'src/schemas/ProfileSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import ThreadReactions from 'src/threads/client/ThreadReactions.svelte';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
@@ -33,7 +33,10 @@ const profileJson = await fetchApiJson(
 );
 if (profileJson && typeof profileJson === 'object') {
   try {
-    profile = parseProfile(toClientEntry(profileJson as Record<string, unknown>), author);
+    profile = parseProfile(
+      toClientEntry(profileJson as Record<string, unknown>),
+      author,
+    );
   } catch {
     profile = undefined;
   }
@@ -93,8 +96,7 @@ if (thread.blueskyPostUri) {
         <CnIcon noun="discussion" />
         <span>{thread.replyCount || 0}</span>
       </a>
-      <ReactionButton
-        target="thread"
+      <ThreadReactions
         key={thread.key}
         title={thread.title}
         client:only="svelte"

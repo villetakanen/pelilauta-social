@@ -9,7 +9,7 @@ import type { Reply } from 'src/schemas/ReplySchema';
 import { getProfileAtom, type PublicProfile } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
 import { uid } from 'src/stores/session';
-import { isActive } from 'src/stores/session/computed';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
@@ -101,8 +101,8 @@ $effect(() => {
           <a class="cn-nick" href="/profiles/{author.key}">{author.nick}</a>
         {/if}
       </p>
-      <!-- ReactionButton reads its reaction document on mount, so mount it only for an active session. -->
-      {#if $isActive}
+      <!-- ReactionButton reads its reaction document on mount, so mount it only once Firebase confirms an active session. -->
+      {#if $isResolvedActive}
         <ReactionButton
           target="reply"
           small

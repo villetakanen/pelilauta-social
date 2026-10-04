@@ -2,7 +2,7 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
-## 21.0.1
+## 21.1.0
 
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
 - fix(i18n): A post whose author profile does not resolve displays the anonymous label instead of the key `app:meta.anonymous`.
@@ -14,6 +14,12 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(threads): A thread page names the opening post's author in the initial document, resolved on the server through a shared server-side fetch helper, so the opening post triggers no browser profile read. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(threads): A thread page exposes `#discussion`, gives each reply a permalink and the discussion an end-of-discussion link, both working without JavaScript, and a malformed live reply no longer discards the other changes in its snapshot. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - feat(threads): A signed-in reader's `?jumpTo=<timestamp>` link lands at the last reply created at or before the timestamp, resolved from the URL alone; `?jumpTo=unread` no longer targets unread replies.
+- fix(threads): A live reply snapshot keeps Firestore's creation order, so a reply inserted between two others appears between them. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(threads): The opening post's reaction document is read only for a signed-in session that Firebase has confirmed. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(threads): The live reply subscription and reaction reads wait for Firebase to confirm the persisted session, and a failure notice clears when the session ends. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(profiles): The profile route answers with the avatar of a profile stored with the legacy `photoURL` field. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- test(threads): The anonymous reaction-read test names a data-fetching boundary and checks the opening post's reaction and attributed content; a new test covers a persisted session Firebase has not confirmed. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- chore(threads): The thread page files conform to the lint rules.
 
 ## 21.0.0
 

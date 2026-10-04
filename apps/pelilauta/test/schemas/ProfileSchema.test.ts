@@ -82,6 +82,30 @@ describe('parseProfile', () => {
     expect(profile.nick).toBe('N.N.');
     expect(profile.username).toBeTruthy();
   });
+
+  it('should map a legacy photoURL to avatarURL', () => {
+    const profile = parseProfile(
+      { nick: 'Old Member', photoURL: 'https://example.com/old.jpg' },
+      'user123',
+    );
+
+    expect(profile.avatarURL).toBe('https://example.com/old.jpg');
+  });
+
+  it('should keep avatarURL over photoURL and omit it when neither exists', () => {
+    const both = parseProfile(
+      {
+        nick: 'Member',
+        avatarURL: 'https://example.com/new.jpg',
+        photoURL: 'https://example.com/old.jpg',
+      },
+      'user123',
+    );
+    const neither = parseProfile({ nick: 'Member' }, 'user123');
+
+    expect(both.avatarURL).toBe('https://example.com/new.jpg');
+    expect('avatarURL' in neither).toBe(false);
+  });
 });
 
 describe('migrateProfile', () => {

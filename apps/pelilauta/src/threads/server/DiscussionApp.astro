@@ -1,7 +1,6 @@
 ---
 import DiscussionSection from '@pelilauta/threads/client/DiscussionSection.svelte';
 import { fetchDiscussion } from 'src/firebase/server/discussion/fetchDiscussion';
-import { fetchApiJson } from 'src/utils/server/fetchApi';
 import type { Thread } from 'src/schemas/ThreadSchema';
 // ERROR: a browser store imported into server code. The public-profile shape,
 // its projection and the anonymous fallback need a stateless home; see
@@ -11,6 +10,7 @@ import {
   normalizeProfileData,
   type PublicProfile,
 } from 'src/stores/profiles';
+import { fetchApiJson } from 'src/utils/server/fetchApi';
 
 interface Props {
   thread: Thread;
