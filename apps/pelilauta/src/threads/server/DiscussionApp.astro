@@ -2,6 +2,14 @@
 import DiscussionSection from '@pelilauta/threads/client/DiscussionSection.svelte';
 import { fetchDiscussion } from 'src/firebase/server/discussion/fetchDiscussion';
 import type { Thread } from 'src/schemas/ThreadSchema';
+// ERROR: a browser store imported into server code. The public-profile shape,
+// its projection and the anonymous fallback need a stateless home; see
+// docs/lessons/server-code-imports-the-client-profile-store.md.
+import {
+  createEmptyPublicProfile,
+  normalizeProfileData,
+  type PublicProfile,
+} from 'src/stores/profiles';
 
 interface Props {
   thread: Thread;
@@ -9,5 +17,29 @@ interface Props {
 const { thread }: Props = Astro.props;
 
 const discussion = await fetchDiscussion(thread.key);
+
+// The profile route is the reader. An author it cannot answer for is
+// anonymous in the document, so the browser has no profile left to look up.
+const authorUids = [
+  ...new Set(discussion.map((reply) => reply.owners[0]).filter(Boolean)),
+];
+const authors: Record<string, PublicProfile> = Object.fromEntries(
+  await Promise.all(
+    authorUids.map(async (uid): Promise<[string, PublicProfile]> => {
+      try {
+        const response = await fetch(
+          new URL(
+            `/api/profiles/${encodeURIComponent(uid)}.json`,
+            Astro.url.origin,
+          ),
+        );
+        if (!response.ok) return [uid, createEmptyPublicProfile(uid)];
+        return [uid, normalizeProfileData(await response.json(), uid)];
+      } catch {
+        return [uid, createEmptyPublicProfile(uid)];
+      }
+    }),
+  ),
+);
 ---
-<DiscussionSection discussion={discussion} {thread} client:load/>
+<DiscussionSection discussion={discussion} {thread} {authors} client:load/>

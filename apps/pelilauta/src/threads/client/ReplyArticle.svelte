@@ -16,8 +16,10 @@ import { onMount } from 'svelte';
 
 interface Props {
   reply: Reply;
+  /** The server's answer for the author, present for every author in the initial document. */
+  author?: PublicProfile;
 }
-const { reply }: Props = $props();
+const { reply, author: initAuthor }: Props = $props();
 const fromUser = $derived.by(() => {
   return reply.owners[0] === $uid;
 });
@@ -27,11 +29,13 @@ const fromUser = $derived.by(() => {
  * from. The nick is also in the header, which is what names the author; the
  * mark repeats it and the bubble drops it in a narrow column.
  *
- * The lookup waits for mount: the profile store starts a client Firestore read
- * and keeps its result in module state, and the server render must do neither.
- * Until the lookup answers there is no author, and the document names none.
+ * The server resolves the authors of the initial document, so the document
+ * names them and the browser reads no profile. Only a reply that arrives live
+ * from an author the server never saw has no prop, and looks the profile up
+ * after mount: the profile store starts a client Firestore read and keeps its
+ * result in module state, and the server render must do neither.
  */
-let author = $state<PublicProfile | undefined>();
+let author = $state<PublicProfile | undefined>(initAuthor);
 
 const images = $derived.by(() => {
   return (
@@ -48,6 +52,7 @@ onMount(() => {
   // Client-Side enhancement: update to relative time
   displayTime = toDisplayString(reply.updatedAt, true);
 
+  if (initAuthor) return;
   return getProfileAtom(reply.owners[0]).subscribe((profile) => {
     author = profile;
   });

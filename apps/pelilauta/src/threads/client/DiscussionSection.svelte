@@ -7,6 +7,7 @@ import {
   ReplySchema,
 } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
+import type { PublicProfile } from 'src/stores/profiles';
 import { uid } from 'src/stores/session';
 import { isActive, isRehydrating } from 'src/stores/session/computed';
 import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
@@ -19,8 +20,10 @@ import ReplyArticle from './ReplyArticle.svelte';
 interface Props {
   thread: Thread;
   discussion: Reply[];
+  /** The server's answer for each author, by uid; kept apart from the replies a live snapshot replaces. */
+  authors: Record<string, PublicProfile>;
 }
-const { discussion: initDiscussion, thread }: Props = $props();
+const { discussion: initDiscussion, thread, authors }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
@@ -120,7 +123,7 @@ $effect(() => {
   {:else}
     <div class="replies">
       {#each discussion as reply}
-        <ReplyArticle {reply} />
+        <ReplyArticle {reply} author={authors[reply.owners[0]]} />
       {/each}
     </div>
   {/if}

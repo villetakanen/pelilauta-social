@@ -158,7 +158,10 @@ export async function fetchProfileEntry(key: string): Promise<PublicProfile> {
   }
 }
 
-function createEmptyPublicProfile(key: string): PublicProfile {
+// ERROR: exported for server code in threads/server/DiscussionApp.astro, which
+// must not import this store; see
+// docs/lessons/server-code-imports-the-client-profile-store.md.
+export function createEmptyPublicProfile(key: string): PublicProfile {
   return {
     key,
     nick: t('app:meta.anonymous'),
