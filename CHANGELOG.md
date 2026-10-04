@@ -11,6 +11,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(threads): A thread page carries its replies, with bodies and attachments, in the initial document, so an anonymous reader reads them without JavaScript. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(threads): An anonymous or unresolved session reads no reaction documents for a thread's replies. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - fix(threads): A thread page names each reply's author in the initial document, resolved on the server, so a reader without JavaScript sees who wrote each reply and the replies trigger no browser profile read. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(threads): A thread page names the opening post's author in the initial document, resolved on the server through a shared server-side fetch helper, so the opening post triggers no browser profile read. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 
 ## 21.0.0
 

@@ -5,7 +5,8 @@ import { expect, test } from '@playwright/test';
  * specs/pelilauta/threads/replies/spec.md.
  *
  * Fixture: the thread and its three replies seeded by e2e/reset-fixtures.mjs;
- * the second reply carries the image. Each reply names its seeded author.
+ * the second reply carries the image. Each reply names its seeded author, and
+ * so does the opening post, whose owner is the same member.
  */
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
@@ -35,6 +36,12 @@ test('an anonymous reader reads all replies without JavaScript', async ({
     await expect(nick).toHaveCount(1);
     await expect(nick).toHaveAttribute('href', /^\/profiles\//);
   }
+  // The opening post's byline sits outside the reply articles.
+  const openingAuthor = page
+    .getByRole('link', { name: AUTHOR_NICK })
+    .and(page.locator('a:not(article a)'));
+  await expect(openingAuthor).toHaveCount(1);
+  await expect(openingAuthor).toHaveAttribute('href', /^\/profiles\//);
   await expect(
     page.locator('[id="e2e-reply-2"] article img').first(),
   ).toBeAttached();
