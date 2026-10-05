@@ -2,6 +2,10 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.1
+
+- fix(threads): A live reply that shifts the discussion no longer shows a reply under another author's name, profile link, avatar or date. ([#175](https://github.com/villetakanen/pelilauta-social/issues/175))
+
 ## 21.1.0
 
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.
