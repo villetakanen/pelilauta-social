@@ -124,7 +124,7 @@ $effect(() => {
     <p>{t("threads:discussion.empty")}</p>
   {:else}
     <div class="replies">
-      {#each discussion as reply}
+      {#each discussion as reply (reply.key)}
         <ReplyArticle {reply} author={authors[reply.owners[0]]} />
       {/each}
     </div>

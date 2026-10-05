@@ -34,8 +34,13 @@ const fromUser = $derived.by(() => {
  * from an author the server never saw has no prop, and looks the profile up
  * after mount: the profile store starts a client Firestore read and keeps its
  * result in module state, and the server render must do neither.
+ *
+ * The prop is read where it is used, so the mark follows the reply the
+ * component currently shows. The looked-up profile fills in only when the
+ * prop is absent.
  */
-let author = $state<PublicProfile | undefined>(initAuthor);
+let lookedUp = $state<PublicProfile | undefined>();
+const author = $derived(initAuthor ?? lookedUp);
 
 const images = $derived.by(() => {
   return (
@@ -46,15 +51,17 @@ const images = $derived.by(() => {
   );
 });
 
-let displayTime = $state(toDisplayString(reply.updatedAt));
+// The server renders the absolute time; after mount the time turns relative.
+let relativeTime = $state(false);
+const displayTime = $derived(toDisplayString(reply.updatedAt, relativeTime));
 
 onMount(() => {
   // Client-Side enhancement: update to relative time
-  displayTime = toDisplayString(reply.updatedAt, true);
+  relativeTime = true;
 
   if (initAuthor) return;
   return getProfileAtom(reply.owners[0]).subscribe((profile) => {
-    author = profile;
+    lookedUp = profile;
   });
 });
 

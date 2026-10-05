@@ -10,6 +10,7 @@ Each spec file defines fixtures for one feature regression:
 - `anonymous-reply-reaction-reads.spec.ts` tests that anonymous readers perform no reaction queries.
 - `open-reply-permalink.spec.ts` tests navigating to a reply permalink without JavaScript.
 - `jump-to-timestamp.spec.ts` tests navigation to the reply matching a URL timestamp parameter.
+- `live-reply-attribution.spec.ts` tests that a live reply inserted between replies leaves every reply under its own author.
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
 
 ## Prerequisites
@@ -38,4 +39,4 @@ pnpm --filter pelilauta test:e2e
 
 ## Fixtures and Safety
 
-`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, and three replies belonging to that thread, including one reply with an image. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.
+`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author's profile, and three replies belonging to that thread, including one reply with an image. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.

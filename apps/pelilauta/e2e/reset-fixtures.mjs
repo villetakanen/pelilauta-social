@@ -54,6 +54,8 @@ const REPLIES = [
   },
   { key: 'e2e-reply-3', body: 'Third seeded reply body.' },
 ];
+// A second author, with a profile and no Auth account, for live-reply-attribution.spec.ts.
+const SECOND_AUTHOR_UID = 'e2e-second-author';
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
 function refuse(reason) {
@@ -176,6 +178,15 @@ await serverDB.collection('profiles').doc(memberUid).set({
   avatarURL: '',
 });
 console.log(`Restored profiles/${memberUid}`);
+
+await serverDB.collection('profiles').doc(SECOND_AUTHOR_UID).set({
+  key: SECOND_AUTHOR_UID,
+  uid: SECOND_AUTHOR_UID,
+  username: 'e2e-second-author',
+  nick: 'E2E Second Author',
+  avatarURL: '',
+});
+console.log(`Restored profiles/${SECOND_AUTHOR_UID}`);
 
 // stream/<THREAD_KEY> — src/schemas/ThreadSchema.ts (collection name 'stream').
 // `public: true` and the timestamps are all `/api/threads.json` and
