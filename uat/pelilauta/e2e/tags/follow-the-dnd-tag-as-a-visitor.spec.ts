@@ -81,12 +81,15 @@ it('leads a signed-out visitor from the D&D tag to the seeded thread and wiki pa
     .poll(() => threadHeading.textContent(), { timeout: 30_000 })
     .toBe(THREAD_TITLE);
 
-  const firstReply = page.getByText('älä suunnittele liikaa etukäteen');
+  const discussion = page.getByRole('region', {
+    name: t('threads:discussion.title'),
+  });
+  const firstReply = discussion.getByText('älä suunnittele liikaa etukäteen');
   await expect
     .poll(() => firstReply.isVisible(), { timeout: 30_000 })
     .toBe(true);
 
-  const secondReply = page.getByText('en tapahtumaketjuja');
+  const secondReply = discussion.getByText('en tapahtumaketjuja');
   await expect
     .poll(() => secondReply.isVisible(), { timeout: 15_000 })
     .toBe(true);

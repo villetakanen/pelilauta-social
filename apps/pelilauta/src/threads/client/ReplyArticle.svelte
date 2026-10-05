@@ -3,32 +3,39 @@ import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
-import ProfileLink from '@svelte/app/ProfileLink.svelte';
 import ReactionButton from '@svelte/app/ReactionButton.svelte';
 import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
-import { getProfileAtom } from 'src/stores/profiles';
+import { getProfileAtom, type PublicProfile } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
 import { uid } from 'src/stores/session';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 
 interface Props {
   reply: Reply;
+  /** The server's answer for the author, present for every author in the initial document. */
+  author?: PublicProfile;
 }
-const { reply }: Props = $props();
+const { reply, author: initAuthor }: Props = $props();
 const fromUser = $derived.by(() => {
   return reply.owners[0] === $uid;
 });
 
 /**
  * The bubble draws the identity mark, so this is the profile the mark is drawn
- * from. The nick is also in the header, through ProfileLink, which is what names
- * the author; the mark repeats it and the bubble drops it in a narrow column.
+ * from. The nick is also in the header, which is what names the author; the
+ * mark repeats it and the bubble drops it in a narrow column.
+ *
+ * The server resolves the authors of the initial document, so the document
+ * names them and the browser reads no profile. Only a reply that arrives live
+ * from an author the server never saw has no prop, and looks the profile up
+ * after mount: the profile store starts a client Firestore read and keeps its
+ * result in module state, and the server render must do neither.
  */
-const authorAtom = getProfileAtom(reply.owners[0]);
-const author = $derived($authorAtom);
+let author = $state<PublicProfile | undefined>(initAuthor);
 
 const images = $derived.by(() => {
   return (
@@ -44,6 +51,11 @@ let displayTime = $state(toDisplayString(reply.updatedAt));
 onMount(() => {
   // Client-Side enhancement: update to relative time
   displayTime = toDisplayString(reply.updatedAt, true);
+
+  if (initAuthor) return;
+  return getProfileAtom(reply.owners[0]).subscribe((profile) => {
+    author = profile;
+  });
 });
 
 /**
@@ -85,14 +97,19 @@ $effect(() => {
   >
     <header class="reply-band">
       <p class="reply-author">
-        <ProfileLink uid={reply.owners[0]} />
+        {#if author}
+          <a class="cn-nick" href="/profiles/{author.key}">{author.nick}</a>
+        {/if}
       </p>
-      <ReactionButton
-        target="reply"
-        small
-        key={reply.key}
-        title={reply.markdownContent?.substring(0, 50)}
-      ></ReactionButton>
+      <!-- ReactionButton reads its reaction document on mount, so mount it only once Firebase confirms an active session. -->
+      {#if $isResolvedActive}
+        <ReactionButton
+          target="reply"
+          small
+          key={reply.key}
+          title={reply.markdownContent?.substring(0, 50)}
+        ></ReactionButton>
+      {/if}
       <CnMenu inline label={t("actions:moreOptions")}>
         <a href={`/threads/${reply.threadKey}/replies/${reply.key}/fork`}>
           <CnIcon noun="fork" decorative />
@@ -120,9 +137,13 @@ $effect(() => {
     </div>
     {#if reply.updatedAt}
       <footer class="text-end">
-        <span class="text-small text-low">
+        <a
+          class="text-small text-low"
+          href={`/threads/${reply.threadKey}#${reply.key}`}
+          aria-label={t("threads:discussion.permalink")}
+        >
           {displayTime}
-        </span>
+        </a>
       </footer>
     {/if}
   </CnBubble>

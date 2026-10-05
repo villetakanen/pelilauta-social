@@ -2,10 +2,11 @@
  * A bespoke, limited Firestore/Auth reset for the onboarding-callout-transition
  * regression, in place of the retired suite's full `init-test-db.js`.
  *
- * It restores exactly three documents, by explicit id:
+ * It restores, by explicit id, three documents and the thread's replies:
  *   - account/<memberUid>   (src/schemas/AccountSchema.ts)
  *   - profiles/<memberUid>  (src/schemas/ProfileSchema.ts)
  *   - stream/<THREAD_KEY>   (src/schemas/ThreadSchema.ts)
+ *   - stream/<THREAD_KEY>/comments/<REPLY_KEYS> (src/schemas/ReplySchema.ts)
  *
  * `<memberUid>` is resolved from the existing Auth account for `existingUser`
  * (credentials.ts) rather than hardcoded, so the Auth account itself is never
@@ -31,7 +32,7 @@ import { fileURLToPath } from 'node:url';
 import { config } from 'dotenv';
 import { cert, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { existingUser } from '../../../credentials.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,6 +44,16 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
 
 // Explicit fixture ids. The member's uid is resolved below, not hardcoded.
 const THREAD_KEY = 'e2e-onboarding-regression-thread';
+// The thread's replies. read-replies-without-javascript.spec.ts repeats the keys and bodies.
+const REPLIES = [
+  { key: 'e2e-reply-1', body: 'First seeded reply body.' },
+  {
+    key: 'e2e-reply-2',
+    body: 'Second seeded reply body.',
+    image: 'https://pelilauta.social/favicon.svg',
+  },
+  { key: 'e2e-reply-3', body: 'Third seeded reply body.' },
+];
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
 function refuse(reason) {
@@ -184,9 +195,38 @@ await serverDB
     createdAt: FieldValue.serverTimestamp(),
     updatedAt: FieldValue.serverTimestamp(),
     flowTime: FieldValue.serverTimestamp(),
-    replyCount: 0,
+    replyCount: REPLIES.length,
     lovedCount: 0,
   });
 console.log(`Restored stream/${THREAD_KEY}`);
+
+// stream/<THREAD_KEY>/comments/<key> — src/schemas/ReplySchema.ts. Three
+// replies in a fixed creation order, the second carrying an image. The
+// reply-reading regression reads them from the document without JavaScript.
+// Each is a full overwrite; the comments collection holds nothing else.
+const repliesCollection = serverDB
+  .collection('stream')
+  .doc(THREAD_KEY)
+  .collection('comments');
+const staleReplies = await repliesCollection.listDocuments();
+for (const stale of staleReplies) {
+  if (!REPLIES.some((reply) => reply.key === stale.id)) await stale.delete();
+}
+// A fixed base, so jump-to-timestamp.spec.ts can address a moment between replies.
+const replyBase = Date.UTC(2026, 0, 1);
+for (const [index, reply] of REPLIES.entries()) {
+  const createdAt = Timestamp.fromMillis(replyBase + index * 1000);
+  await repliesCollection.doc(reply.key).set({
+    markdownContent: reply.body,
+    owners: [memberUid],
+    createdAt,
+    updatedAt: createdAt,
+    flowTime: createdAt,
+    ...(reply.image
+      ? { images: [{ url: reply.image, alt: 'E2E reply image' }] }
+      : {}),
+  });
+  console.log(`Restored stream/${THREAD_KEY}/comments/${reply.key}`);
+}
 
 console.log('Fixture reset complete.');

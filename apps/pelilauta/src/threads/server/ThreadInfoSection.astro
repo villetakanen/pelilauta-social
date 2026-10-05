@@ -1,17 +1,19 @@
 ---
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { isAdmin } from '@firebase/server/admin';
+import BlueskyPostCard from '@pelilauta/components/server/app/BlueskyPostCard.astro';
+import EntryTagsWithLabelsSection from '@pelilauta/components/server/app/EntryTagsWithLabelsSection.astro';
+import BlueskyCard from '@pelilauta/components/svelte/threads/BlueskyCard.svelte';
+import ThreadInfoActions from '@pelilauta/components/svelte/threads/ThreadInfoActions.svelte';
 import { verifySession } from '@utils/server/auth/verifySession';
 import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
+import { fetchApiJson } from '@utils/server/fetchApi';
+import { type Profile, parseProfile } from 'src/schemas/ProfileSchema';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import ThreadReactions from 'src/threads/client/ThreadReactions.svelte';
+import { toClientEntry } from 'src/utils/client/entryUtils';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
-import ProfileLink from '../../svelte/app/ProfileLink.svelte';
-import ReactionButton from '../../svelte/app/ReactionButton.svelte';
-import BlueskyCard from '../../svelte/threads/BlueskyCard.svelte';
-import ThreadInfoActions from '../../svelte/threads/ThreadInfoActions.svelte';
-import BlueskyPostCard from '../app/BlueskyPostCard.astro';
-import EntryTagsWithLabelsSection from '../app/EntryTagsWithLabelsSection.astro';
 
 interface Props {
   thread: Thread;
@@ -21,6 +23,24 @@ const { thread } = Astro.props;
 
 const author = `${thread?.owners[0] || ''}`;
 const channel = `${thread?.channel || '-'}`;
+
+// The profile route names the author in the document; a profile it cannot
+// answer for leaves the author anonymous.
+let profile: Profile | undefined;
+const profileJson = await fetchApiJson(
+  Astro,
+  `/api/profiles/${encodeURIComponent(author)}.json`,
+);
+if (profileJson && typeof profileJson === 'object') {
+  try {
+    profile = parseProfile(
+      toClientEntry(profileJson as Record<string, unknown>),
+      author,
+    );
+  } catch {
+    profile = undefined;
+  }
+}
 
 // Check if current user is author or admin
 const session = await verifySession(Astro);
@@ -53,7 +73,15 @@ if (thread.blueskyPostUri) {
       {toDisplayString(thread.flowTime)}
     </p>
     <p>
-      <ProfileLink uid={author} client:only="svelte" />{" "}
+      {
+        profile ? (
+          <a class="cn-nick" href={`/profiles/${profile.key}`}>
+            {profile.nick}
+          </a>
+        ) : (
+          <span>{t("app:meta.anonymous")}</span>
+        )
+      }{" "}
       {t("threads:info.inTopic")}{" "}
       <a href={`/channels/${channel}`}>
         {channel.charAt(0).toUpperCase() + channel.slice(1)}
@@ -62,14 +90,13 @@ if (thread.blueskyPostUri) {
     <div class="actions text-center">
       <a
         class="button text"
-        href="#discussion-title"
+        href="#discussion"
         aria-label={t("threads:info.replies", { count: thread.replyCount || 0 })}
       >
         <CnIcon noun="discussion" />
         <span>{thread.replyCount || 0}</span>
       </a>
-      <ReactionButton
-        target="thread"
+      <ThreadReactions
         key={thread.key}
         title={thread.title}
         client:only="svelte"

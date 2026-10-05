@@ -15,7 +15,9 @@ export interface Props {
 const { title, description, image, noSharing = false } = Astro.props;
 const metaDescription = description || t('app:meta.description');
 const metaTitle = title ? title : t('app:meta.title');
-const canonicalURL = Astro.url;
+// The canonical address is the path alone; a query such as `?jumpTo=` names a
+// position in the page, not a different page.
+const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin);
 const ogImage = image || `${Astro.url.origin}favicons/fox-ico-512.png`;
 ---
 

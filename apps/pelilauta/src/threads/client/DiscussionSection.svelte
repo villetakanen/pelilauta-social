@@ -1,101 +1,137 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
-import {
-  REPLIES_COLLECTION,
-  type Reply,
-  ReplySchema,
-} from 'src/schemas/ReplySchema';
+import { REPLIES_COLLECTION, type Reply } from 'src/schemas/ReplySchema';
 import { THREADS_COLLECTION_NAME, type Thread } from 'src/schemas/ThreadSchema';
+import type { PublicProfile } from 'src/stores/profiles';
 import { uid } from 'src/stores/session';
-import { isActive, isRehydrating } from 'src/stores/session/computed';
-import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
-import { toClientEntry } from 'src/utils/client/entryUtils';
-import { fixImageData } from 'src/utils/fixImageData';
+import {
+  isActive,
+  isRehydrating,
+  isResolvedActive,
+} from 'src/stores/session/computed';
+import { hasSeen, setSeen } from 'src/stores/subscription';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
+import { parseSnapshotReplies } from './parseSnapshotReplies';
 import ReplyArticle from './ReplyArticle.svelte';
 
 interface Props {
   thread: Thread;
   discussion: Reply[];
+  /** The server's answer for each author, by uid; kept apart from the replies a live snapshot replaces. */
+  authors: Record<string, PublicProfile>;
 }
-const { discussion: initDiscussion, thread }: Props = $props();
+const { discussion: initDiscussion, thread, authors }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
-onMount(async () => {
-  const lastSeen = $subscription?.seenEntities?.[thread.key] || 0;
-
-  if ($uid && !$hasSeen(thread.key, thread.flowTime)) {
-    // We haven't seen this thread or it's latest comments yet, so we mark it as seen
+// The thread is marked read once Firebase confirms the account, which lands
+// after mount, so this waits for the session rather than reading it at mount.
+let seenMarked = false;
+$effect(() => {
+  if (!$isResolvedActive || seenMarked) return;
+  seenMarked = true;
+  if (!$hasSeen(thread.key, thread.flowTime)) {
     setSeen(thread.key);
   }
+});
 
-  // Scroll to unread logic
-  const urlParams = new URLSearchParams(window.location.search);
-  if ($uid && urlParams.get('jumpTo') === 'unread' && lastSeen > 0) {
-    const firstUnread = discussion.find((r) => (r.flowTime || 0) > lastSeen);
-    const targetReply = firstUnread || discussion[discussion.length - 1];
-    if (targetReply) {
-      setTimeout(() => {
-        const element = document.getElementById(targetReply.key);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300); // Give it a moment to render
-    }
+onMount(async () => {
+  // The page takes the jump target from the timestamp in the URL alone; the
+  // producer of the link decides what that timestamp means.
+  const jumpTo = Number(
+    new URLSearchParams(window.location.search).get('jumpTo'),
+  );
+  const fragment = decodeURIComponent(window.location.hash.slice(1));
+  const namesReply = discussion.some((r) => r.key === fragment);
+  if ($uid && Number.isFinite(jumpTo) && jumpTo > 0 && !namesReply) {
+    const atOrBefore = discussion.filter(
+      (r) => r.createdAt && r.createdAt.getTime() <= jumpTo,
+    );
+    const targetId =
+      atOrBefore.length > 0
+        ? atOrBefore[atOrBefore.length - 1].key
+        : 'discussion-title';
+    requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      });
+    });
   }
+});
 
-  const { getFirestore, query, collection, orderBy, onSnapshot } = await import(
-    'firebase/firestore'
-  );
-  const db = getFirestore();
+let liveFailed = $state(false);
 
-  const q = query(
-    collection(db, THREADS_COLLECTION_NAME, thread.key, REPLIES_COLLECTION),
-    orderBy('createdAt', 'asc'),
-  );
+$effect(() => {
+  // An account change re-runs the effect, so the uid is read here.
+  const active = $isResolvedActive;
+  void $uid;
+  liveFailed = false;
+  if (!active) return;
 
-  onSnapshot(q, (querySnapshot) => {
-    const d = [...discussion];
-    for (const change of querySnapshot.docChanges()) {
-      const data = change.doc.data();
-      if (change.type === 'removed') {
-        const remove = d.findIndex((r) => r.key === change.doc.id);
-        if (remove !== -1) {
-          d.splice(remove, 1);
-        }
-      } else {
-        const index = d.findIndex((r) => r.key === change.doc.id);
-        const reply = ReplySchema.parse({
-          ...toClientEntry(fixImageData(data)),
-          key: change.doc.id,
-          threadKey: thread.key,
-        });
-        if (index !== -1) {
-          d[index] = reply;
-        } else {
-          d.push(reply);
-        }
-      }
-    }
-    discussion = d;
-  });
+  let cancelled = false;
+  let unsubscribe: (() => void) | undefined;
+
+  (async () => {
+    const { getFirestore, query, collection, orderBy, onSnapshot } =
+      await import('firebase/firestore');
+    if (cancelled) return;
+    const db = getFirestore();
+
+    const q = query(
+      collection(db, THREADS_COLLECTION_NAME, thread.key, REPLIES_COLLECTION),
+      orderBy('createdAt', 'asc'),
+    );
+
+    unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (cancelled) return;
+        discussion = parseSnapshotReplies(querySnapshot.docs, thread.key);
+      },
+      () => {
+        if (!cancelled) liveFailed = true;
+      },
+    );
+  })();
+
+  return () => {
+    cancelled = true;
+    unsubscribe?.();
+  };
 });
 </script>
 
-<section class="content-prose" aria-labelledby="discussion-title">
+<section
+  id="discussion"
+  class="content-prose"
+  aria-labelledby="discussion-title"
+>
   <h2 id="discussion-title">{t("threads:discussion.title")}</h2>
+
+  {#if discussion.length > 0}
+    <p>
+      <a href={`#${discussion[discussion.length - 1].key}`}>
+        {t("threads:discussion.latest")}
+      </a>
+    </p>
+  {/if}
 
   {#if discussion.length === 0}
     <p>{t("threads:discussion.empty")}</p>
   {:else}
     <div class="replies">
       {#each discussion as reply}
-        <ReplyArticle {reply} />
+        <ReplyArticle {reply} author={authors[reply.owners[0]]} />
       {/each}
     </div>
+  {/if}
+
+  {#if liveFailed}
+    <p role="status">{t("threads:discussion.liveFailed")}</p>
   {/if}
 
   <!--

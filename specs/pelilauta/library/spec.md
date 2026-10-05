@@ -51,7 +51,7 @@ place of this application rather than a modal page.
 
 ### Regression Guardrails
 
-- The three addresses stay as v18 serves them.
+- The three addresses stay as v18 served them.
 - No page of the library takes `ModalPage.astro`.
 
 ### Scenarios

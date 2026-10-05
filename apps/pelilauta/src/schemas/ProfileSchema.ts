@@ -31,11 +31,15 @@ export function parseProfile(
 
   const username = data.username ? data.username : toFid(nick);
 
+  // The schema strips the legacy photoURL, so it maps to avatarURL here.
+  const avatarURL = data.avatarURL || data.photoURL || undefined;
+
   return ProfileSchema.parse({
     ...data,
     nick,
     username,
     key,
+    ...(avatarURL ? { avatarURL } : {}),
   });
 }
 

@@ -1,3 +1,4 @@
+import type { User } from 'firebase/auth';
 import { atom } from 'nanostores';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { SessionState } from '../../src/stores/session';
@@ -6,11 +7,14 @@ import type { SessionState } from '../../src/stores/session';
 vi.mock('../../src/stores/session', () => ({
   sessionState: atom<SessionState>('initial'),
   uid: atom<string>(''),
+  authUser: atom<User | null>(null),
 }));
 
 // Import after mocking
-const { sessionState, uid } = await import('../../src/stores/session');
-const { isAnonymous, isRehydrating, isActive } = await import(
+const { sessionState, uid, authUser } = await import(
+  '../../src/stores/session'
+);
+const { isAnonymous, isRehydrating, isActive, isResolvedActive } = await import(
   '../../src/stores/session/computed'
 );
 
@@ -19,6 +23,33 @@ describe('Session State Helpers', () => {
     // Reset to clean state before each test
     sessionState.set('initial');
     uid.set('');
+    authUser.set(null);
+  });
+
+  describe('isResolvedActive', () => {
+    test('is false for a persisted session Firebase has not confirmed', () => {
+      sessionState.set('active');
+      uid.set('user_123');
+
+      expect(isActive.get()).toBe(true);
+      expect(isResolvedActive.get()).toBe(false);
+    });
+
+    test('is false when the confirmed user differs from the persisted uid', () => {
+      sessionState.set('active');
+      uid.set('user_123');
+      authUser.set({ uid: 'other' } as User);
+
+      expect(isResolvedActive.get()).toBe(false);
+    });
+
+    test('is true when Firebase confirms the persisted uid', () => {
+      sessionState.set('active');
+      uid.set('user_123');
+      authUser.set({ uid: 'user_123' } as User);
+
+      expect(isResolvedActive.get()).toBe(true);
+    });
   });
 
   describe('isAnonymous', () => {
