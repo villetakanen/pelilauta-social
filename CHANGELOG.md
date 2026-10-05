@@ -20,6 +20,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(profiles): The profile route answers with the avatar of a profile stored with the legacy `photoURL` field. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - test(threads): The anonymous reaction-read test names a data-fetching boundary and checks the opening post's reaction and attributed content; a new test covers a persisted session Firebase has not confirmed. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 - chore(threads): The thread page files conform to the lint rules.
+- fix(seo): A page's canonical URL is its path alone, so a thread link carrying `?jumpTo=` resolves to one canonical conversation. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
+- fix(threads): A thread is marked read once Firebase confirms the signed-in account, so a stale persisted session writes nothing. ([#165](https://github.com/villetakanen/pelilauta-social/issues/165))
 
 ## 21.0.0
 

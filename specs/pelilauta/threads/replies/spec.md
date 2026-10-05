@@ -12,32 +12,32 @@ A thread presents discussion contributions following the opening post. Anonymous
 
 ### Architecture
 
-The [thread page](../spec.md) prepares replies through the server discussion accessor and composes them into the initial document. `@pelilauta/threads/client/DiscussionSection.svelte` coordinates live enhancement with session state. `ReplyArticle.svelte` composes a reply from prepared content and public attribution.
+The [thread page](../spec.md) prepares replies through the server discussion accessor and composes them into the initial document. The thread page hydrates the discussion from replies and author data prepared by the server, and `@pelilauta/threads/client/DiscussionSection.svelte` coordinates live enhancement with session state. `ReplyArticle.svelte` composes a reply from prepared content and public attribution.
 
 Reply articles use [CnBubble](../../../design-system/components/cn-bubble/spec.md), [identity marks](../../../design-system/identity-mark/spec.md), [content area](../../../design-system/content-area/spec.md), and [CnLightbox](../../../design-system/components/cn-lightbox/spec.md). [Reply Authoring](../reply-authoring/spec.md) governs editing coordination and focus restoration. [Read State](../read-state/spec.md) governs destinations and read tracking.
 
 ### Constraints
 
-The reading path uses the thread and comments collections under `ThreadSchema` and `ReplySchema` boundaries. Server and live reads normalize stored records without rewriting them.
+The reading path queries thread and comment collections conforming to `ThreadSchema` and `ReplySchema`. Server and live reads normalize stored records without rewriting persisted data.
 
-The initial HTML renders every public reply as an article with formatted body, attachments, public attribution, and known dates. Serialized properties alone do not satisfy this requirement. Attribution and date semantics follow [Thread Reading](../spec.md). Initial content renders without browser profile requests or Firebase initialization. [CnLightbox](../../../design-system/components/cn-lightbox/spec.md) governs how an attachment presents.
+The initial HTML renders every public reply as an article with formatted body, attachments, public attribution, and known dates. Serialized properties alone do not satisfy initial rendering. Attribution and date semantics follow [Thread Reading](../spec.md). Initial content renders without browser profile requests or Firebase initialization. [CnLightbox](../../../design-system/components/cn-lightbox/spec.md) governs attachment presentation.
 
-The initial and live reads both query replies ordered by creation time ascending, so the store returns reading order and the reply key breaks a tie. A record without a creation time falls outside that query and does not reach the discussion.
+Initial and live reads query replies ordered by creation time ascending, with the reply key resolving ties. A record without a creation timestamp does not match the query and does not enter the discussion.
 
-Anonymous readers receive server-rendered reply content without application-level browser data reads or live subscriptions. An unresolved session establishes no subscription. An active signed-in session subscribes to live additions, edits, and deletions. Sign-out, account changes, and page departures terminate active subscriptions and discard late results.
+Anonymous readers receive server-rendered reply content without client data reads or live subscriptions. A session resolves once Firebase Auth confirms the persisted account. An unresolved session establishes no subscription and performs no reaction reads. A resolved session subscribes to live additions, edits, and deletions. Signing out, switching accounts, and navigating away terminate active subscriptions and discard late results.
 
-Replies deleted while the live subscription is inactive may remain visible after resubscription until the reader reloads the page.
+Replies deleted while a live subscription is inactive may remain visible after resubscription until the reader reloads the page.
 
-Removing a focused reply returns focus to the discussion heading.
+Deleting a focused reply returns keyboard focus to the discussion heading.
 
-Initial reply-read failure displays an unavailable-discussion state beside the opening post rather than an empty discussion. A malformed reply does not prevent valid replies from rendering. If no valid replies remain, the discussion displays its empty state. A live subscription failure retains rendered content and indicates that updates are unavailable.
+Initial reply-read failures display an unavailable-discussion notice beside the opening post rather than an empty discussion state. A malformed reply record does not block rendering of valid replies. When no valid replies exist, the discussion displays an empty state. Live subscription failures retain rendered content and display an update-unavailable notice.
 
 ## Contract
 
 ### Definition of Done
 
 - Anonymous readers read all replies and attribution without JavaScript.
-- Anonymous readers receive a static snapshot.
+- Anonymous readers receive a static snapshot without live listeners.
 - Signed-in readers receive live changes.
 - Replies maintain deterministic chronological order across rendering, hydration, and edits.
 - Live updates preserve focus.
@@ -45,10 +45,10 @@ Initial reply-read failure displays an unavailable-discussion state beside the o
 
 ### Regression Guardrails
 
-- Listeners from previous pages or accounts never update the active conversation.
-- A malformed record never clears valid replies.
+- Subscriptions from previous pages or accounts never update the active conversation.
+- Malformed records never clear valid replies.
 - The reading contract renders every reply without pagination or truncation.
-- The capability overrides no browser behaviour it relies on, including scroll anchoring during live updates and the scrolling a focus move performs.
+- Real-time updates and focus shifts preserve native browser scroll anchoring and scrolling behaviors.
 
 ### Scenarios
 

@@ -12,7 +12,7 @@ A thread joins an opening post to its discussion. Readers open and share the con
 
 ### Architecture
 
-`apps/pelilauta/src/pages/threads/[threadKey]/index.astro` composes the thread under `@layouts/Base.astro`. Server preparation resolves the opening post and public attribution before rendering.
+The thread page composes the opening post and the discussion under the base layout. Server preparation resolves the opening post and public attribution through the profile route before rendering.
 
 - [Replies](replies/spec.md) governs reply content, ordering, and live enhancement.
 - [Read State](read-state/spec.md) governs opening-based read status and navigation.
@@ -26,7 +26,7 @@ Public attribution uses only the public name, profile destination, and avatar. T
 
 The document title and description identify the opening post. The canonical URL identifies the thread without query parameters or fragments. Incoming thread URLs continue to resolve.
 
-The initial response includes `DiscussionForumPosting` and `Comment` data corresponding to visible contributions and satisfying Google's [discussion forum requirements](https://developers.google.com/search/docs/appearance/structured-data/discussion-forum) without critical Rich Results Test errors. Contributions missing required information remain readable but omit structured-data items. An ineligible opening post omits the entire discussion graph. Metadata never fabricates authors or dates. Metadata serializes user text without executable markup.
+The initial response includes `DiscussionForumPosting` and `Comment` data corresponding to visible contributions and satisfying the Google [discussion forum requirements](https://developers.google.com/search/docs/appearance/structured-data/discussion-forum) without critical Rich Results Test errors. Contributions missing required information remain readable but omit structured-data items. An ineligible opening post omits the entire discussion graph. Metadata never fabricates authors or dates. Metadata serializes user text without executable markup.
 
 ## Contract
 
@@ -36,7 +36,7 @@ The initial response includes `DiscussionForumPosting` and `Comment` data corres
 - Readers distinguish publication, editing, and activity dates.
 - Shared thread links identify one canonical conversation, including links carrying navigation parameters.
 - Discussion structured data describes the conversation visible in the initial HTML.
-- The page presents the opening post before its discussion within the shared layout.
+- The page presents the opening post before the discussion within the shared layout.
 
 ### Regression Guardrails
 
@@ -68,7 +68,7 @@ Feature: Thread Reading
   Scenario: Share a navigation URL
     Given a thread URL with jumpTo=unread and a discussion fragment
     When the initial document renders
-    Then its canonical URL identifies the thread without navigation parameters or fragments
+    Then the canonical URL identifies the thread without navigation parameters or fragments
 
   Scenario: Inspect discovery metadata
     Given a public thread with attributed replies and known dates

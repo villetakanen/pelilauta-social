@@ -26,12 +26,18 @@ const { discussion: initDiscussion, thread, authors }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
-onMount(async () => {
-  if ($uid && !$hasSeen(thread.key, thread.flowTime)) {
-    // We haven't seen this thread or it's latest comments yet, so we mark it as seen
+// The thread is marked read once Firebase confirms the account, which lands
+// after mount, so this waits for the session rather than reading it at mount.
+let seenMarked = false;
+$effect(() => {
+  if (!$isResolvedActive || seenMarked) return;
+  seenMarked = true;
+  if (!$hasSeen(thread.key, thread.flowTime)) {
     setSeen(thread.key);
   }
+});
 
+onMount(async () => {
   // The page takes the jump target from the timestamp in the URL alone; the
   // producer of the link decides what that timestamp means.
   const jumpTo = Number(

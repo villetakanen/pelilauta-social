@@ -3,7 +3,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { existingUser } from '../../../credentials.ts';
 
 /**
- * Scenario "Navigate to a timestamped position" in
+ * Scenario "Land on a timestamped position" in
  * specs/pelilauta/threads/read-state/spec.md.
  */
 
