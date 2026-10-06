@@ -14,11 +14,17 @@ Notifications are transient messages without durable history.
 
 ### Architecture
 
-`apps/pelilauta/src/pages/inbox/index.astro` mounts `InboxApp.svelte`.
-`apps/pelilauta/src/stores/inbox/index.ts` supplies the inbox and navigation badge
-from recipient Firestore notifications. The inbox capability governs
-notification retention and acknowledgment; notification producers determine
-recipients and event payloads.
+`apps/pelilauta/src/pages/inbox/index.astro` embeds `Library.astro` and mounts
+`@pelilauta/library/client/inbox/InboxApp.svelte`. `NotificationItem.svelte`,
+browser state, and acknowledgment and deletion actions reside beside the component
+under `apps/pelilauta/src/library/client/inbox/`.
+
+`@pelilauta/base/client/InboxNavigationButton.svelte` supplies the shared inbox
+entry. The component reads the unread count from the inbox browser state.
+
+`apps/pelilauta/src/base/server/notifications/` implements retention alongside
+delivery. The inbox capability governs retention and acknowledgment;
+`specs/pelilauta/notifications/spec.md` governs recipients and event payloads.
 
 `specs/design-system/chrome-actions/notification-action/spec.md` governs the badge.
 `specs/pelilauta/threads/read-state/spec.md` governs thread navigation.

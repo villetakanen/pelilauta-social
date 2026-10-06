@@ -14,9 +14,15 @@ Delivery serves engagement and is not critical to the underlying data operation.
 
 ### Architecture
 
-Reply, reaction, site-player, and handout mutations write notifications to the Firestore
-`notifications` collection. `apps/pelilauta/src/schemas/NotificationSchema.ts` defines
-their payload. Reply creation paths and other producers share recipient and target rules.
+Shared notification delivery and retention reside under
+`apps/pelilauta/src/base/server/notifications/`, reached through
+`@pelilauta/base/server/notifications/`. Delivery writes to the Firestore
+`notifications` collection.
+
+Event producers remain with threads, reactions, and sites, using the shared
+delivery capability. `apps/pelilauta/src/pages/api/notifications/send.ts` provides
+the HTTP entry point. `apps/pelilauta/src/schemas/NotificationSchema.ts` defines
+the payload shared across producers and delivery.
 
 `specs/pelilauta/inbox/spec.md` governs destinations, acknowledgment, deletion, and
 retention.
