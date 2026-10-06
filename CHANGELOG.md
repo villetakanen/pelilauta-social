@@ -4,6 +4,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.1.1
 
+- fix(inbox): Notifications clear when the signed-in reader changes, and delayed updates from the previous reader cannot restore them.
+
 - fix(threads): A live reply that shifts the discussion no longer shows a reply under another author's name, profile link, avatar or date. ([#175](https://github.com/villetakanen/pelilauta-social/issues/175))
 - fix(threads): A thread opened before the subscription has loaded is marked read once it arrives, instead of staying unread. ([#176](https://github.com/villetakanen/pelilauta-social/issues/176))
 - fix(inbox): A reply notification links to the reply, at `/threads/<thread>#<reply>`; one stored with the thread key alone links to the discussion. Each reply creates its own notification. ([#172](https://github.com/villetakanen/pelilauta-social/issues/172))

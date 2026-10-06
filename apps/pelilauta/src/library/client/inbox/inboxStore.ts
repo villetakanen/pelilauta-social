@@ -1,107 +1,91 @@
-import { persistentAtom } from '@nanostores/persistent';
 import { uid } from '@pelilauta/stores/session';
-import { computed, onMount, onStop } from 'nanostores';
+import { isResolvedActive } from '@pelilauta/stores/session/computed';
+import { atom, computed, onMount } from 'nanostores';
 import {
   NOTIFICATION_FIRESTORE_COLLECTION,
   type Notification,
   parseNotification,
 } from 'src/schemas/NotificationSchema';
-import { logDebug } from 'src/utils/logHelpers';
+import { logError } from 'src/utils/logHelpers';
 
-export const notifications = persistentAtom<Notification[]>(
-  'notifications',
-  [],
-  {
-    encode: JSON.stringify,
-    decode: (data) => {
-      return JSON.parse(data).map((entry: Record<string, unknown>) => {
-        return parseNotification(entry, entry.key as string);
-      });
-    },
-  },
-);
+export const notifications = atom<Notification[]>([]);
 
 export const newCount = computed(notifications, (notifications) => {
   return notifications.filter((notification) => !notification.read).length;
 });
 
-let unsubscribe = () => {};
+const recipient = computed([uid, isResolvedActive], (key, resolved) =>
+  resolved ? key : '',
+);
 
 onMount(notifications, () => {
-  const key = uid.get();
-  // If we have no uid, we don't need to load notifications
-  if (!key) return;
-
-  // Start listening for notifications
-  logDebug('Notifications mounted');
-  subscribeToNotifications(key);
-});
-
-onStop(notifications, () => {
-  unsubscribe();
-  logDebug('Notifications stopped');
-});
-
-async function subscribeToNotifications(key: string) {
-  unsubscribe();
-
-  const { getFirestore, onSnapshot, query, collection, where, orderBy, limit } =
-    await import('firebase/firestore');
-
-  const q = query(
-    collection(getFirestore(), NOTIFICATION_FIRESTORE_COLLECTION),
-    where('to', '==', key),
-    orderBy('createdAt', 'desc'),
-    limit(10),
-  );
-
-  let initial = true;
-
-  unsubscribe = onSnapshot(q, (snapshot) => {
-    // If this is the first snapshot, we need to refresh the
-    // local copy of notifications (to remove any stale data)
-    if (initial) {
-      initial = false;
-      const online = snapshot.docChanges();
-      const local: Notification[] = [];
-
-      for (const change of online) {
-        local.push(parseNotification(change.doc.data(), change.doc.id));
-      }
-
-      notifications.set(local);
-      return;
+  // Discard the legacy cache shared by every reader of this browser.
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.removeItem('notifications');
+    } catch (error) {
+      logError('inboxStore', 'Could not discard the legacy inbox cache', error);
     }
-
-    // Otherwise, we need to update the local copy of notifications,
-    // by adding, modifying, or removing notifications as needed
-    for (const change of snapshot.docChanges()) {
-      if (change.type === 'removed') {
-        popNotification(change.doc.id);
-      }
-      if (change.type === 'added' || change.type === 'modified') {
-        patchNotification(change.doc.id, change.doc.data());
-      }
-    }
-  });
-}
-
-function popNotification(key: string) {
-  const current = notifications.get();
-  notifications.set(current.filter((n) => n.key !== key));
-}
-
-function patchNotification(key: string, data: Record<string, unknown>) {
-  const current = [...notifications.get()];
-  const index = current.findIndex((n) => n.key === key);
-
-  if (index === -1) {
-    current.push(parseNotification(data, key));
-  } else {
-    current[index] = parseNotification(data, key);
   }
 
-  current.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  let generation = 0;
+  let unsubscribe = () => {};
 
-  notifications.set(current);
-}
+  const stopRecipient = recipient.subscribe((key) => {
+    const current = ++generation;
+    unsubscribe();
+    unsubscribe = () => {};
+    notifications.set([]);
+    if (!key) return;
+
+    const isCurrent = () => current === generation && recipient.get() === key;
+
+    async function subscribe() {
+      const {
+        getFirestore,
+        onSnapshot,
+        query,
+        collection,
+        where,
+        orderBy,
+        limit,
+      } = await import('firebase/firestore');
+      if (!isCurrent()) return;
+
+      const q = query(
+        collection(getFirestore(), NOTIFICATION_FIRESTORE_COLLECTION),
+        where('to', '==', key),
+        orderBy('createdAt', 'desc'),
+        limit(10),
+      );
+
+      unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          if (!isCurrent()) return;
+          notifications.set(
+            snapshot.docs.map((doc) => parseNotification(doc.data(), doc.id)),
+          );
+        },
+        (error) => {
+          if (!isCurrent()) return;
+          notifications.set([]);
+          logError('inboxStore', 'Notification subscription failed', error);
+        },
+      );
+    }
+
+    void subscribe().catch((error) => {
+      if (isCurrent()) {
+        logError('inboxStore', 'Notification subscription failed', error);
+      }
+    });
+  });
+
+  return () => {
+    ++generation;
+    stopRecipient();
+    unsubscribe();
+    notifications.set([]);
+  };
+});
