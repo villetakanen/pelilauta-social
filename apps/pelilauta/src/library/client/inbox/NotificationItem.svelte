@@ -1,12 +1,13 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
-import { deleteNotification } from 'src/firebase/client/inbox/deleteNotification';
-import { markRead } from 'src/firebase/client/inbox/markRead';
+import ProfileLink from '@pelilauta/components/svelte/app/ProfileLink.svelte';
 import type { Notification } from 'src/schemas/NotificationSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
-import ProfileLink from '../app/ProfileLink.svelte';
+import { deleteNotification } from './deleteNotification';
+import { markRead } from './markRead';
+import { notificationHref } from './notificationHref';
 
 interface Props {
   notification: Notification;
@@ -27,20 +28,7 @@ const noun = $derived.by(() => {
   return 'info';
 });
 
-const href = $derived.by(() => {
-  if (notification.targetType === 'thread.loved')
-    return `/threads/${notification.targetKey}`;
-  if (notification.targetType === 'site.invited')
-    return `/sites/${notification.targetKey}`;
-  if (notification.targetType === 'site.loved')
-    return `/sites/${notification.targetKey}`;
-  if (notification.targetType === 'thread.reply')
-    return `/threads/${notification.targetKey}?jumpTo=unread#discussion`;
-  if (notification.targetType.startsWith('handout.')) {
-    const keys = notification.targetKey.split('/');
-    return `/sites/${keys[0]}/handouts/${keys[1]}`;
-  }
-});
+const href = $derived(notificationHref(notification));
 
 async function read() {
   markRead(notification.key, true);

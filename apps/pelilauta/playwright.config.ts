@@ -22,6 +22,7 @@ export default defineConfig({
     'live-reply-attribution.spec.ts',
     'stale-session-reads.spec.ts',
     'read-marking-awaits-subscription.spec.ts',
+    'open-inbox-reply-notification.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

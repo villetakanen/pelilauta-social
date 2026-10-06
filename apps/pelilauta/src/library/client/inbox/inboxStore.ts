@@ -1,4 +1,5 @@
 import { persistentAtom } from '@nanostores/persistent';
+import { uid } from '@pelilauta/stores/session';
 import { computed, onMount, onStop } from 'nanostores';
 import {
   NOTIFICATION_FIRESTORE_COLLECTION,
@@ -6,7 +7,6 @@ import {
   parseNotification,
 } from 'src/schemas/NotificationSchema';
 import { logDebug } from 'src/utils/logHelpers';
-import { uid } from '../session';
 
 export const notifications = persistentAtom<Notification[]>(
   'notifications',

@@ -1,8 +1,8 @@
 <script lang="ts">
 import CnNotificationAction from '@design-system/components/CnNotificationAction.svelte';
+import { newCount } from '@pelilauta/library/client/inbox/inboxStore';
+import { isActive } from '@pelilauta/stores/session/computed';
 import { t } from 'src/utils/i18n';
-import { newCount } from '../../../stores/inbox';
-import { isActive } from '../../../stores/session/computed';
 
 // Set where this entry is a place of the application drawing the rail. A rail
 // whose entry leads out of its own application passes nothing: a reader who

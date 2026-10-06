@@ -56,6 +56,8 @@ const REPLIES = [
 ];
 // A second author, with a profile and no Auth account, for live-reply-attribution.spec.ts.
 const SECOND_AUTHOR_UID = 'e2e-second-author';
+// The member's inbox notification for open-inbox-reply-notification.spec.ts; the spec repeats the title.
+const NOTIFICATION_KEY = 'e2e-inbox-reply-notification';
 const MEMBER_EMAIL = existingUser.email; // credentials.ts, the same identity the spec logs in as
 
 function refuse(reason) {
@@ -239,5 +241,23 @@ for (const [index, reply] of REPLIES.entries()) {
   });
   console.log(`Restored stream/${THREAD_KEY}/comments/${reply.key}`);
 }
+
+// notifications/<NOTIFICATION_KEY> — src/schemas/NotificationSchema.ts. An
+// unread reply notification addressed to the member, linking to the thread's
+// third reply. A full overwrite of this one document; no other notification is touched.
+await serverDB
+  .collection('notifications')
+  .doc(NOTIFICATION_KEY)
+  .set({
+    key: NOTIFICATION_KEY,
+    to: memberUid,
+    from: SECOND_AUTHOR_UID,
+    targetType: 'thread.reply',
+    targetKey: `${THREAD_KEY}/${REPLIES[2].key}`,
+    targetTitle: 'E2E inbox reply notification',
+    createdAt: Timestamp.fromMillis(replyBase),
+    read: false,
+  });
+console.log(`Restored notifications/${NOTIFICATION_KEY}`);
 
 console.log('Fixture reset complete.');

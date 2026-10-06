@@ -13,6 +13,7 @@ Each spec file defines fixtures for one feature regression:
 - `live-reply-attribution.spec.ts` tests that a live reply inserted between replies leaves every reply under its own author.
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
 - `read-marking-awaits-subscription.spec.ts` tests that opening a thread marks it read when the subscription arrives after the session confirms.
+- `open-inbox-reply-notification.spec.ts` tests that a reply notification in the inbox links to its reply in the thread.
 
 ## Prerequisites
 
@@ -40,4 +41,4 @@ pnpm --filter pelilauta test:e2e
 
 ## Fixtures and Safety
 
-`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author's profile, and three replies belonging to that thread, including one reply with an image. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.
+`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author's profile, and three replies belonging to that thread, including one reply with an image, and one unread reply notification for the signed-in member. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.

@@ -121,7 +121,7 @@ function executeBackgroundTasks(
           notification: {
             key: '',
             targetType: 'thread.reply',
-            targetKey: thread.key,
+            targetKey: `${thread.key}/${replyId}`,
             targetTitle,
             message: createPlainSnippet(markdownContent, 120),
           },
@@ -133,7 +133,7 @@ function executeBackgroundTasks(
         const base = notification.notification;
         const notificationDoc = {
           ...base,
-          key: `${base.targetKey}-${base.targetType}-${notification.from}-${thread.owners[0]}`,
+          key: `${replyId}-${base.targetType}-${author}-${thread.owners[0]}`,
           createdAt: FieldValue.serverTimestamp(),
           to: thread.owners[0],
           from: author,
