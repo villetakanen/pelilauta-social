@@ -10,7 +10,7 @@ import {
   isRehydrating,
   isResolvedActive,
 } from 'src/stores/session/computed';
-import { hasSeen, setSeen } from 'src/stores/subscription';
+import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 import { parseSnapshotReplies } from './parseSnapshotReplies';
@@ -26,11 +26,13 @@ const { discussion: initDiscussion, thread, authors }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
-// The thread is marked read once Firebase confirms the account, which lands
-// after mount, so this waits for the session rather than reading it at mount.
+// The thread is marked read once Firebase confirms the account and the
+// subscription has loaded. Both land after mount, and `hasSeen` reads every
+// thread as seen while the subscription is null, so this waits for each
+// rather than deciding early.
 let seenMarked = false;
 $effect(() => {
-  if (!$isResolvedActive || seenMarked) return;
+  if (!$isResolvedActive || seenMarked || !$subscription) return;
   seenMarked = true;
   if (!$hasSeen(thread.key, thread.flowTime)) {
     setSeen(thread.key);

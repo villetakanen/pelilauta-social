@@ -12,6 +12,7 @@ Each spec file defines fixtures for one feature regression:
 - `jump-to-timestamp.spec.ts` tests navigation to the reply matching a URL timestamp parameter.
 - `live-reply-attribution.spec.ts` tests that a live reply inserted between replies leaves every reply under its own author.
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
+- `read-marking-awaits-subscription.spec.ts` tests that opening a thread marks it read when the subscription arrives after the session confirms.
 
 ## Prerequisites
 

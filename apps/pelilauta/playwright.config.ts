@@ -21,6 +21,7 @@ export default defineConfig({
     'jump-to-timestamp.spec.ts',
     'live-reply-attribution.spec.ts',
     'stale-session-reads.spec.ts',
+    'read-marking-awaits-subscription.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
