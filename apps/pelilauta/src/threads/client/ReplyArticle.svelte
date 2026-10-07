@@ -1,10 +1,10 @@
 <script lang="ts">
+import '@dice/styles/dice.css';
 import CnBubble from '@design-system/components/CnBubble.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import CnMenu from '@design-system/components/CnMenu.svelte';
 import ReactionButton from '@svelte/app/ReactionButton.svelte';
-import { marked } from 'marked';
 import type { Reply } from 'src/schemas/ReplySchema';
 import { getProfileAtom, type PublicProfile } from 'src/stores/profiles';
 import { editedReply, editReply } from 'src/stores/replyEditing';
@@ -12,14 +12,18 @@ import { uid } from 'src/stores/session';
 import { isResolvedActive } from 'src/stores/session/computed';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
+import { footnoteNamespace } from 'src/utils/shared/footnoteNamespace';
+import { renderMarkdown } from 'src/utils/shared/renderMarkdown';
 import { onMount } from 'svelte';
 
 interface Props {
   reply: Reply;
+  /** The site origin; the server supplies it so server and browser renders agree. */
+  origin: string;
   /** The server's answer for the author, present for every author in the initial document. */
   author?: PublicProfile;
 }
-const { reply, author: initAuthor }: Props = $props();
+const { reply, origin, author: initAuthor }: Props = $props();
 const fromUser = $derived.by(() => {
   return reply.owners[0] === $uid;
 });
@@ -34,8 +38,13 @@ const fromUser = $derived.by(() => {
  * from an author the server never saw has no prop, and looks the profile up
  * after mount: the profile store starts a client Firestore read and keeps its
  * result in module state, and the server render must do neither.
+ *
+ * The prop is read where it is used, so the mark follows the reply the
+ * component currently shows. The looked-up profile fills in only when the
+ * prop is absent.
  */
-let author = $state<PublicProfile | undefined>(initAuthor);
+let lookedUp = $state<PublicProfile | undefined>();
+const author = $derived(initAuthor ?? lookedUp);
 
 const images = $derived.by(() => {
   return (
@@ -46,15 +55,17 @@ const images = $derived.by(() => {
   );
 });
 
-let displayTime = $state(toDisplayString(reply.updatedAt));
+// The server renders the absolute time; after mount the time turns relative.
+let relativeTime = $state(false);
+const displayTime = $derived(toDisplayString(reply.updatedAt, relativeTime));
 
 onMount(() => {
   // Client-Side enhancement: update to relative time
-  displayTime = toDisplayString(reply.updatedAt, true);
+  relativeTime = true;
 
   if (initAuthor) return;
   return getProfileAtom(reply.owners[0]).subscribe((profile) => {
-    author = profile;
+    lookedUp = profile;
   });
 });
 
@@ -133,7 +144,10 @@ $effect(() => {
         openLabel={t("actions:openImage")}
         closeLabel={t("actions:close")}
       />
-      {@html marked(reply.markdownContent || "")}
+      {@html renderMarkdown(reply.markdownContent || "", {
+        origin,
+        namespace: footnoteNamespace("reply", reply.key),
+      })}
     </div>
     {#if reply.updatedAt}
       <footer class="text-end">

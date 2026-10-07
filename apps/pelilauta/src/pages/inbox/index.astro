@@ -1,7 +1,7 @@
 ---
 import Library from '@layouts/Library.astro';
 import { requireSession } from '@pelilauta/base/utils/requireSession';
-import InboxApp from '../../components/svelte/inbox/InboxApp.svelte';
+import InboxApp from '@pelilauta/library/client/inbox/InboxApp.svelte';
 import { t } from '../../utils/i18n';
 
 const { denied } = await requireSession(Astro);

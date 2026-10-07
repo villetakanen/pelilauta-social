@@ -2,6 +2,18 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.1
+
+- fix(design-system): Marked URL links truncate with an ellipsis inside authored content, and reply bubbles fit narrow columns. ([#199](https://github.com/villetakanen/pelilauta-social/issues/199))
+
+- fix(markdown): Thread bodies, replies, previews, snippets, RSS items, handouts and wiki pages render Markdown through one renderer, and its output and stored HTML pass one sanitization policy before reaching the page. Single newlines break lines everywhere, footnote links stay within the body that contains them, and a bare URL carries `class="url"`. ([#200](https://github.com/villetakanen/pelilauta-social/issues/200))
+- fix(inbox): Following a notification marks it read. Failed acknowledgment leaves it unread and allows navigation. ([#189](https://github.com/villetakanen/pelilauta-social/issues/189))
+- fix(inbox): Notifications clear when the signed-in reader changes, and delayed updates from the previous reader cannot restore them.
+
+- fix(threads): A live reply that shifts the discussion no longer shows a reply under another author's name, profile link, avatar or date. ([#175](https://github.com/villetakanen/pelilauta-social/issues/175))
+- fix(threads): A thread opened before the subscription has loaded is marked read once it arrives, instead of staying unread. ([#176](https://github.com/villetakanen/pelilauta-social/issues/176))
+- fix(inbox): A reply notification links to the reply, at `/threads/<thread>#<reply>`; one stored with the thread key alone links to the discussion. Each reply creates its own notification. ([#172](https://github.com/villetakanen/pelilauta-social/issues/172))
+
 ## 21.1.0
 
 - The contract records that version 21 serves pelilauta.social, and that Firestore, Storage and Auth carry production data.

@@ -6,6 +6,28 @@ Client enhancement preserves server-rendered content and working native
 interactions. Activating enhancement alone does not change displayed content;
 subsequent data updates may change it.
 
+## Source trees
+
+### Pelilauta.social
+
+Root: `/apps/pelilauta/src`
+
+```yaml
+- utils     # Utility classes, methods and libraries
+  - client  # Strictly CSR, requires dom etc.
+  - server  # Strictly SSR, requires firebase admin etc.
+  - shared  # Universal, usable in browser and in Netlify
+- admin       # App: administration
+- base        # App: shared shell for every app
+- library     # App: the reader's library
+- site        # App: sites and their pages
+- threads     # App: discussion threads
+  - chrome    # Astro components for the app chrome: bars and rails
+  - client    # Svelte components hydrated in the browser
+  - server    # Astro components rendered on the server
+- components  # Legacy; components migrate to app folders
+```
+
 ## Naming
 
 ### Components

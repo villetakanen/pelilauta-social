@@ -2,22 +2,22 @@
 status: proposed
 ---
 
-# Wiki Dice Notation
+# Dice Notation
 
 ## Blueprint
 
 ### Context
 
-A wiki writer uses compact tabletop-rules notation in prose and link text. A
+A member uses compact tabletop-rules notation in prose and link text. A
 reader receives the same die, result or target information in rendered pages
 without the notation changing a code sample, destination or HTML.
 
 ### Architecture
 
-The wiki Markdown renderer identifies the eligible inline text that this
-capability governs before HTML is emitted. It converts each supported token into
-a server-rendered span for `specs/dice/spec.md`; it never creates a custom
-element or a client boundary.
+The shared Markdown renderer governed by `specs/pelilauta/markdown/spec.md`
+identifies eligible inline text on every user Markdown surface. It converts
+each supported token into a span for `specs/dice/spec.md` during server or
+browser rendering. The notation creates no custom element or hydration boundary.
 
 The span has `class="dice"` and `role="img"`. `data-sides` holds the admitted
 side count. `data-value` always holds the numeric face value. `data-kind` is
@@ -70,14 +70,14 @@ fenced code, raw HTML element children and HTML attributes remain literal.
 
 ### Definition of Done
 
-- Rendered wiki text exposes the settled markup and accessible name for every
+- Rendered user Markdown exposes the settled markup and accessible name for every
   accepted notation form.
 - Wiki syntax documentation lists the grammar, accepted sides, value range,
   equivalent target forms and literal contexts.
 
 ### Regression Guardrails
 
-- The server response contains the Dice span before client-side JavaScript runs.
+- A server-rendered document contains the Dice span before client-side JavaScript runs.
 - A literal context never gains a Dice span.
 
 ### Scenarios
@@ -123,8 +123,8 @@ Then the notation remains text
 ```
 
 ```gherkin
-Given a raw HTML attribute whose value is dice:6:2
-When the page renders
+Given a raw HTML title attribute whose value is dice:6:2
+When the Dice extension processes the HTML before sanitization
 Then the attribute value remains exactly dice:6:2
 ```
 

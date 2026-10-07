@@ -59,6 +59,26 @@ trailing separation, so a following region can state its own relationship.
 </div>
 ```
 
+## URL links
+
+Apply `.url` to an anchor whose text is its address. A long address truncates to one
+line with an ellipsis while its full text and destination remain available to the
+browser. Leave descriptive links unmarked so their words wrap as prose.
+
+<DsComposition themes caption="A marked URL truncates while descriptive text wraps">
+  <div class="content-area" style="max-inline-size: 18rem;">
+    <p><a class="url" href="https://example.org/tabletop/roleplaying/publications/2018-2021/complete-catalogue">{'https://example.org/tabletop/roleplaying/publications/2018-2021/complete-catalogue'}</a></p>
+    <p><a href="https://example.org/tabletop/roleplaying/publications/2018-2021/complete-catalogue">Read the complete catalogue of tabletop roleplaying publications from 2018 to 2021</a></p>
+  </div>
+</DsComposition>
+
+```html
+<div class="content-area">
+  <p><a class="url" href="https://example.org/long-address">https://example.org/long-address</a></p>
+  <p><a href="https://example.org/long-address">Read the catalogue</a></p>
+</div>
+```
+
 ## Lists
 
 Authored unordered and ordered lists retain native markers and gain the document
@@ -140,6 +160,7 @@ compact gap rather than the document rhythm.
 | Class | Use |
 | :--- | :--- |
 | `.content-area` | Restores authored document presentation inside one region. |
+| `.url` | Truncates an address link to one line inside `.content-area`. |
 | `.teaser` | Renders a listing summary: small text, authored lists keep markers, blocks carry a compact gap. |
 
 The class takes no options. The parent states page-edge inset and column placement;

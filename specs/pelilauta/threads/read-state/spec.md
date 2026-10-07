@@ -8,7 +8,7 @@ status: live
 
 ### Context
 
-A signed-in reader's thread list and inbox tell them which threads carry activity they have not seen, and a link from either lands them where they left off.
+A signed-in reader's thread list tells them which threads carry activity they have not seen, and a link from it lands them where they left off.
 
 ### Architecture
 

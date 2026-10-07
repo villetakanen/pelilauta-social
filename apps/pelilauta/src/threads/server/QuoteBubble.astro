@@ -14,7 +14,7 @@ const replyResponse = await fetch(
 );
 ---
 { replyResponse.ok ? (
-  <ReplyArticle reply={ReplySchema.parse(await replyResponse.json())} client:only="svelte"/>
+  <ReplyArticle reply={ReplySchema.parse(await replyResponse.json())} origin={Astro.url.origin} client:only="svelte"/>
 ) : (
   <blockquote>
     {threadKey || '-'} / {replyKey || '-'} 404

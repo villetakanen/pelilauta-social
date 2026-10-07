@@ -1,10 +1,11 @@
 // rss/threads.xml.ts
 import rss, { type RSSFeedItem } from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { marked } from 'marked';
 import { parseThread, type Thread } from 'src/schemas/ThreadSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
 import { t } from 'src/utils/i18n';
+import { footnoteNamespace } from 'src/utils/shared/footnoteNamespace';
+import { renderMarkdown } from 'src/utils/shared/renderMarkdown';
 import { createPlainSnippet } from 'src/utils/snippetHelpers';
 
 export async function GET({ request }: APIContext) {
@@ -25,12 +26,18 @@ export async function GET({ request }: APIContext) {
     parseThread(toClientEntry(thread), thread.key),
   );
 
+  const origin = new URL(request.url).origin;
+
   const items: RSSFeedItem[] = await Promise.all(
     allThreads.map(async (thread) => ({
       title: thread.title,
       link: `/threads/${thread.key}`,
       description: createPlainSnippet(thread.markdownContent || '', 500),
-      content: await marked(thread.markdownContent || ''),
+      content: renderMarkdown(thread.markdownContent || '', {
+        origin,
+        footnotes: true,
+        namespace: footnoteNamespace('thread', thread.key),
+      }),
       pubDate: new Date(thread.createdAt),
       enclosure: thread.images?.[0]?.url
         ? {

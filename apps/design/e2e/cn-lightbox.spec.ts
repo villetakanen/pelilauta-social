@@ -309,6 +309,7 @@ test.describe('a caption truncates to one line', () => {
       page,
     }) => {
       await page.goto(BOOK);
+      await ready(page);
       const root = specimen(page, group);
       const caption = root.locator('.caption').first();
       const before = await box(caption);

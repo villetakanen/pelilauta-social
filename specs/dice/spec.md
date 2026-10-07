@@ -15,11 +15,10 @@ a compact visual notation that remains part of the text line.
 
 Dice is a CSS design-system extension in `packages/dice`, beside
 `packages/editor`. `specs/pelilauta/wiki-dice-notation/spec.md` governs the
-server span Dice consumes. The extension defines no custom element, client code
+span Dice consumes. The extension defines no custom element, client code
 or hydration boundary.
 
-`apps/pelilauta`'s two wiki-rendering surfaces — the page article and the page
-sidebar — import `packages/dice/styles/dice.css` directly;
+Pelilauta surfaces displaying Dice markup load `packages/dice/styles/dice.css`.
 `packages/design-system/styles/ds.css` does not import it.
 
 ### Documentation

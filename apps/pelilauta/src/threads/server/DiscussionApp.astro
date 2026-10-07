@@ -41,4 +41,4 @@ const authors: Record<string, PublicProfile> = Object.fromEntries(
   ),
 );
 ---
-<DiscussionSection discussion={discussion} {thread} {authors} client:load/>
+<DiscussionSection discussion={discussion} {thread} {authors} origin={Astro.url.origin} client:load/>

@@ -1,6 +1,10 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const common: Locale = {
+  footnote: {
+    reference: 'Alaviite {n}',
+    backToReference: 'Takaisin viitteeseen {n}',
+  },
   error: {
     generic: 'Tapahtui odottamaton virhe. Yritä uudelleen.',
     networkError: 'Verkkovirhe. Tarkista internet-yhteytesi.',

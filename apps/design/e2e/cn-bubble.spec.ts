@@ -281,18 +281,16 @@ test('the colour roles resolve differently in Light and Dark', async ({
   page,
 }) => {
   await open(page);
-  const panels = page.locator('#content figure .themed');
+  const panels = page.locator('#content figure').first().locator('.themed');
   expect(await panels.count()).toBe(2);
 
   for (const variant of ['.cn-bubble:not(.reply)', '.cn-bubble.reply']) {
-    const painted = await page
-      .locator(`#content figure .themed ${variant}`)
-      .evaluateAll((elements) =>
-        elements.map((element) => {
-          const style = getComputedStyle(element);
-          return `${style.backgroundColor} ${style.color}`;
-        }),
-      );
+    const painted = await panels.locator(variant).evaluateAll((elements) =>
+      elements.map((element) => {
+        const style = getComputedStyle(element);
+        return `${style.backgroundColor} ${style.color}`;
+      }),
+    );
 
     expect(painted.length).toBe(2);
     expect(painted[0]).not.toBe(painted[1]);

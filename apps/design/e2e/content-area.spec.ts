@@ -99,3 +99,54 @@ test('the content floor has zero specificity and teasers read as compact summari
   expect(mediaBox?.width).toBeLessThanOrEqual(areaBox?.width ?? 0);
   expect(mediaBox?.height).toBeCloseTo((mediaBox?.width ?? 0) * 0.4, 0);
 });
+
+for (const specimen of [
+  {
+    book: BOOK,
+    caption: 'A marked URL truncates while descriptive text wraps',
+  },
+  {
+    book: '/components/cn-bubble',
+    caption: 'Long URLs fit both bubble variants',
+  },
+]) {
+  test(`address links fit at 360 px in ${specimen.book}`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 900 });
+    await page.goto(specimen.book);
+    const figure = page.locator('figure').filter({ hasText: specimen.caption });
+    const areas = figure.locator('.themed').first().locator('.content-area');
+    await expect(areas).toHaveCount(specimen.book === BOOK ? 1 : 2);
+    for (const area of await areas.all()) {
+      const url = area.locator('a.url');
+      const descriptive = area.locator('a:not(.url)');
+      await expect(url).toHaveCSS('text-overflow', 'ellipsis');
+      await expect(url).toHaveCSS('white-space', 'nowrap');
+      await expect(url).toHaveCSS('overflow-x', 'hidden');
+      const address = await url.textContent();
+      await expect(url).toHaveAttribute('href', address ?? '');
+      await expect(url).toHaveAccessibleName(address ?? '');
+      expect(
+        await url.evaluate((node) => node.scrollWidth > node.clientWidth),
+      ).toBe(true);
+      const bounds = await area.evaluate((node) => {
+        const box = node.getBoundingClientRect();
+        const bubble = node.closest('.cn-bubble');
+        return {
+          left: box.left,
+          right: box.right,
+          fits: node.scrollWidth <= node.clientWidth + 1,
+          bubbleRight: bubble?.getBoundingClientRect().right ?? box.right,
+        };
+      });
+      expect(bounds.left).toBeGreaterThanOrEqual(0);
+      expect(bounds.right).toBeLessThanOrEqual(360);
+      expect(bounds.bubbleRight).toBeLessThanOrEqual(360);
+      expect(bounds.fits).toBe(true);
+      expect(
+        await descriptive.evaluate((node) => node.getClientRects().length),
+      ).toBeGreaterThan(1);
+      await url.focus();
+      await expect(url).toBeFocused();
+    }
+  });
+}

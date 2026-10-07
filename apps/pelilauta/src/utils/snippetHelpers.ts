@@ -1,4 +1,4 @@
-import { marked } from 'marked';
+import { renderMarkdown } from './shared/renderMarkdown';
 
 export interface SnippetOptions {
   /**
@@ -36,13 +36,15 @@ export interface SnippetOptions {
 /**
  * Creates a rich HTML snippet from markdown content.
  *
- * - Renders markdown using marked
+ * - Renders markdown using renderMarkdown, footnotes off: truncation drops
+ *   the footnote section a reference would point to
  * - Adds styling classes (text-h4 to headers)
  * - Optionally adds styling classes to paragraphs (disabled by default)
  * - Intelligently truncates while preserving HTML structure
  * - Adds ellipsis when content is cut off
  *
  * @param markdownContent - The markdown string to convert
+ * @param origin - The site origin the content renders against
  * @param options - Configuration options
  * @returns Rendered and truncated HTML string
  *
@@ -50,6 +52,7 @@ export interface SnippetOptions {
  * ```typescript
  * const snippet = await createRichSnippet(
  *   '# Welcome\n\nThis is **bold** text.',
+ *   'https://pelilauta.social',
  *   { maxLength: 50, paragraphClasses: ['text-small'] }
  * );
  * // Returns: '<h1 class="text-h4">Welcome</h1><p class="text-small">This is <strong>bold</strong> text.</p>'
@@ -57,6 +60,7 @@ export interface SnippetOptions {
  */
 export async function createRichSnippet(
   markdownContent: string,
+  origin: string,
   options: SnippetOptions = {},
 ): Promise<string> {
   const {
@@ -72,7 +76,9 @@ export async function createRichSnippet(
   }
 
   // Step 1: Render markdown to HTML
-  const rawHtml = await marked.parse(markdownContent);
+  const rawHtml = renderMarkdown(markdownContent, {
+    origin,
+  });
 
   // Step 2: Add CSS classes to headers and paragraphs
   let styledHtml = addHeaderClasses(rawHtml, headerClasses);

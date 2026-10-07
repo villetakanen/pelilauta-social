@@ -1,14 +1,14 @@
 import type { APIContext } from 'astro';
-import { marked } from 'marked';
 import {
   HANDOUTS_COLLECTION_NAME,
   handoutFrom,
 } from 'src/schemas/HandoutSchema';
-import { SITES_COLLECTION_NAME } from 'src/schemas/SiteSchema';
+import { SITES_COLLECTION_NAME, SiteSchema } from 'src/schemas/SiteSchema';
 import { toClientEntry } from 'src/utils/client/entryUtils';
+import { renderMarkdown } from 'src/utils/shared/renderMarkdown';
 import { serverDB } from '../../../../../firebase/server';
 
-export async function GET({ params }: APIContext): Promise<Response> {
+export async function GET({ params, url }: APIContext): Promise<Response> {
   const { siteKey, handoutKey } = params;
 
   if (!siteKey || !handoutKey) {
@@ -30,7 +30,19 @@ export async function GET({ params }: APIContext): Promise<Response> {
   try {
     const handout = handoutFrom(toClientEntry(data), handoutKey, siteKey);
 
-    handout.htmlContent = await marked(handout.markdownContent || '... \n');
+    const siteDoc = await serverDB
+      .collection(SITES_COLLECTION_NAME)
+      .doc(siteKey)
+      .get();
+    const siteData = siteDoc.data();
+    const site = siteData
+      ? SiteSchema.parse({ ...toClientEntry(siteData), key: siteKey })
+      : undefined;
+
+    handout.htmlContent = renderMarkdown(handout.markdownContent || '... \n', {
+      origin: url.origin,
+      site: site ? { key: site.key, assets: site.assets } : { key: siteKey },
+    });
 
     return new Response(JSON.stringify(handout), {
       status: 200,

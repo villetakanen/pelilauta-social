@@ -26,6 +26,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 
+import { NOTIFICATION_FIRESTORE_COLLECTION } from 'src/schemas/NotificationSchema';
 import { REACTIONS_COLLECTION_NAME } from 'src/schemas/ReactionsSchema';
 import {
   ACCOUNTS_COLLECTION_NAME,
@@ -58,6 +59,7 @@ const RESET_COLLECTIONS = [
   REACTIONS_COLLECTION_NAME,
   THREADS_COLLECTION_NAME,
   TAG_FIRESTORE_COLLECTION,
+  NOTIFICATION_FIRESTORE_COLLECTION,
 ];
 
 function readSeedJson(filename: string): SeedDoc {

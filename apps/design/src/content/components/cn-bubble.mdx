@@ -5,6 +5,7 @@ order: 25
 runtime: static
 ---
 
+import BubbleUrlSpecimen from '@design-system/books/specimens/BubbleUrlSpecimen.svelte'
 import BubbleSpecimen from '@design-system/books/specimens/BubbleSpecimen.svelte'
 import DsComposition from '@design-system/books/specimens/DsComposition.astro'
 
@@ -65,6 +66,15 @@ and the band stops being what sits against the edge.
 The bubble reserves the gap its tail stands in and carries no other outer spacing.
 How far apart two messages sit, how wide the column is, and where an avatar aligns
 are the presenting surface's.
+
+### Long addresses
+
+Use [Content Area](/utilities/content-area#url-links) for authored message content.
+Mark bare address links with `.url` to keep them on one line within the bubble.
+
+<DsComposition themes stack caption="Long URLs fit both bubble variants">
+  <BubbleUrlSpecimen />
+</DsComposition>
 
 ## Reference
 

@@ -89,6 +89,7 @@ const marked = $derived(Boolean(nick || avatar));
     /* The tail is positioned against this box, in the margin beside it. */
     position: relative;
     flex: 1 1 auto;
+    min-inline-size: 0;
     /* The reserved gap, on the edge the tail points out of. */
     margin-inline: var(--cn-gap) 0;
     padding-block: var(--cn-gap) var(--cn-grid);

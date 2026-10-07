@@ -10,7 +10,7 @@ import {
   isRehydrating,
   isResolvedActive,
 } from 'src/stores/session/computed';
-import { hasSeen, setSeen } from 'src/stores/subscription';
+import { hasSeen, setSeen, subscription } from 'src/stores/subscription';
 import { t } from 'src/utils/i18n';
 import { onMount } from 'svelte';
 import { parseSnapshotReplies } from './parseSnapshotReplies';
@@ -21,16 +21,20 @@ interface Props {
   discussion: Reply[];
   /** The server's answer for each author, by uid; kept apart from the replies a live snapshot replaces. */
   authors: Record<string, PublicProfile>;
+  /** The site origin, passed on to the reply renders. */
+  origin: string;
 }
-const { discussion: initDiscussion, thread, authors }: Props = $props();
+const { discussion: initDiscussion, thread, authors, origin }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
-// The thread is marked read once Firebase confirms the account, which lands
-// after mount, so this waits for the session rather than reading it at mount.
+// The thread is marked read once Firebase confirms the account and the
+// subscription has loaded. Both land after mount, and `hasSeen` reads every
+// thread as seen while the subscription is null, so this waits for each
+// rather than deciding early.
 let seenMarked = false;
 $effect(() => {
-  if (!$isResolvedActive || seenMarked) return;
+  if (!$isResolvedActive || seenMarked || !$subscription) return;
   seenMarked = true;
   if (!$hasSeen(thread.key, thread.flowTime)) {
     setSeen(thread.key);
@@ -124,8 +128,8 @@ $effect(() => {
     <p>{t("threads:discussion.empty")}</p>
   {:else}
     <div class="replies">
-      {#each discussion as reply}
-        <ReplyArticle {reply} author={authors[reply.owners[0]]} />
+      {#each discussion as reply (reply.key)}
+        <ReplyArticle {reply} {origin} author={authors[reply.owners[0]]} />
       {/each}
     </div>
   {/if}
