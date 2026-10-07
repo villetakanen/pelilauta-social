@@ -12,31 +12,40 @@ import {
 describe('snippetHelpers', () => {
   describe('createRichSnippet', () => {
     it('should return empty string for empty input', async () => {
-      const result = await createRichSnippet('');
+      const result = await createRichSnippet('', 'https://example.com');
       expect(result).toBe('');
     });
 
     it('should return empty string for whitespace-only input', async () => {
-      const result = await createRichSnippet('   \n  \t  ');
+      const result = await createRichSnippet(
+        '   \n  \t  ',
+        'https://example.com',
+      );
       expect(result).toBe('');
     });
 
     it('should render simple markdown to HTML', async () => {
-      const result = await createRichSnippet('# Hello World');
+      const result = await createRichSnippet(
+        '# Hello World',
+        'https://example.com',
+      );
       expect(result).toContain('<h1');
       expect(result).toContain('Hello World');
       expect(result).toContain('text-h4');
     });
 
     it('should add text-h4 class to headers by default', async () => {
-      const result = await createRichSnippet('# H1\n## H2\n### H3');
+      const result = await createRichSnippet(
+        '# H1\n## H2\n### H3',
+        'https://example.com',
+      );
       expect(result).toContain('<h1 class="text-h4">H1</h1>');
       expect(result).toContain('<h2 class="text-h4">H2</h2>');
       expect(result).toContain('<h3 class="text-h4">H3</h3>');
     });
 
     it('should allow custom header classes', async () => {
-      const result = await createRichSnippet('# Hello', {
+      const result = await createRichSnippet('# Hello', 'https://example.com', {
         headerClasses: ['custom-class', 'another-class'],
       });
       expect(result).toContain('custom-class another-class');
@@ -45,6 +54,7 @@ describe('snippetHelpers', () => {
     it('should not add paragraph classes by default', async () => {
       const result = await createRichSnippet(
         'This is a paragraph.\n\nAnother paragraph.',
+        'https://example.com',
       );
       expect(result).toContain('<p>This is a paragraph.</p>');
       expect(result).toContain('<p>Another paragraph.</p>');
@@ -52,43 +62,57 @@ describe('snippetHelpers', () => {
     });
 
     it('should allow custom paragraph classes', async () => {
-      const result = await createRichSnippet('Simple text.', {
-        paragraphClasses: ['custom-p', 'another-p'],
-      });
+      const result = await createRichSnippet(
+        'Simple text.',
+        'https://example.com',
+        {
+          paragraphClasses: ['custom-p', 'another-p'],
+        },
+      );
       expect(result).toContain('custom-p another-p');
     });
 
     it('should allow disabling paragraph classes', async () => {
-      const result = await createRichSnippet('Simple text.', {
-        paragraphClasses: [],
-      });
+      const result = await createRichSnippet(
+        'Simple text.',
+        'https://example.com',
+        {
+          paragraphClasses: [],
+        },
+      );
       expect(result).toContain('<p>Simple text.</p>');
       expect(result).not.toContain('class=');
     });
 
     it('should not truncate content shorter than maxLength', async () => {
       const content = 'Short text';
-      const result = await createRichSnippet(content, { maxLength: 100 });
+      const result = await createRichSnippet(content, 'https://example.com', {
+        maxLength: 100,
+      });
       expect(result).toContain('Short text');
       expect(result).not.toContain('...');
     });
 
     it('should truncate content longer than maxLength', async () => {
       const content = 'A'.repeat(300);
-      const result = await createRichSnippet(content, { maxLength: 100 });
+      const result = await createRichSnippet(content, 'https://example.com', {
+        maxLength: 100,
+      });
       const visibleText = result.replace(/<[^>]*>/g, '');
       expect(visibleText.length).toBeLessThanOrEqual(103); // 100 + '...'
     });
 
     it('should add ellipsis when truncated by default', async () => {
       const content = 'A'.repeat(300);
-      const result = await createRichSnippet(content, { maxLength: 100 });
+      const result = await createRichSnippet(content, 'https://example.com', {
+        maxLength: 100,
+      });
       expect(result).toContain('...');
     });
 
     it('should not add ellipsis when addEllipsis is false', async () => {
       const content = 'A'.repeat(300);
-      const result = await createRichSnippet(content, {
+      const result = await createRichSnippet(content, 'https://example.com', {
         maxLength: 100,
         addEllipsis: false,
       });
@@ -96,22 +120,34 @@ describe('snippetHelpers', () => {
     });
 
     it('should properly render bold text', async () => {
-      const result = await createRichSnippet('This is **bold** text');
+      const result = await createRichSnippet(
+        'This is **bold** text',
+        'https://example.com',
+      );
       expect(result).toContain('<strong>bold</strong>');
     });
 
     it('should properly render italic text', async () => {
-      const result = await createRichSnippet('This is *italic* text');
+      const result = await createRichSnippet(
+        'This is *italic* text',
+        'https://example.com',
+      );
       expect(result).toContain('<em>italic</em>');
     });
 
     it('should properly render links', async () => {
-      const result = await createRichSnippet('[Example](https://example.com)');
+      const result = await createRichSnippet(
+        '[Example](https://example.com)',
+        'https://example.com',
+      );
       expect(result).toContain('<a href="https://example.com">Example</a>');
     });
 
     it('should properly render lists', async () => {
-      const result = await createRichSnippet('- Item 1\n- Item 2');
+      const result = await createRichSnippet(
+        '- Item 1\n- Item 2',
+        'https://example.com',
+      );
       expect(result).toContain('<ul>');
       expect(result).toContain('<li>Item 1</li>');
       expect(result).toContain('<li>Item 2</li>');
@@ -127,7 +163,7 @@ This is a **bold** statement with *emphasis*.
 
 [Link](https://example.com)`;
 
-      const result = await createRichSnippet(markdown);
+      const result = await createRichSnippet(markdown, 'https://example.com');
       expect(result).toContain('<h1 class="text-h4">Welcome</h1>');
       expect(result).toContain('<strong>bold</strong>');
       expect(result).toContain('<em>emphasis</em>');
@@ -137,14 +173,16 @@ This is a **bold** statement with *emphasis*.
 
     it('should use default maxLength of 220', async () => {
       const content = 'A'.repeat(300);
-      const result = await createRichSnippet(content);
+      const result = await createRichSnippet(content, 'https://example.com');
       const visibleText = result.replace(/<[^>]*>/g, '');
       expect(visibleText.length).toBeLessThanOrEqual(223); // 220 + '...'
     });
 
     it('should preserve HTML structure when truncating', async () => {
       const markdown = `This is **bold** and this is *italic* text. ${'A'.repeat(200)}`;
-      const result = await createRichSnippet(markdown, { maxLength: 50 });
+      const result = await createRichSnippet(markdown, 'https://example.com', {
+        maxLength: 50,
+      });
 
       // Should have properly closed tags
       const openTags = (result.match(/<(?!\/)\w+/g) || []).length;
@@ -507,7 +545,9 @@ This is an exciting **new campaign** for our group!
 
 Check out the [player guide](https://example.com/guide) for more info.`;
 
-      const result = await createRichSnippet(markdown, { maxLength: 150 });
+      const result = await createRichSnippet(markdown, 'https://example.com', {
+        maxLength: 150,
+      });
 
       expect(result).toContain('text-h4');
       expect(result).toContain('<strong>new campaign</strong>');
@@ -539,7 +579,9 @@ Can't wait for next week!`;
 
     it('should handle edge case with only headers', async () => {
       const markdown = '# Title\n## Subtitle\n### Section';
-      const result = await createRichSnippet(markdown, { maxLength: 50 });
+      const result = await createRichSnippet(markdown, 'https://example.com', {
+        maxLength: 50,
+      });
 
       expect(result).toContain('<h1 class="text-h4">Title</h1>');
       expect(result).toContain('<h2 class="text-h4">Subtitle</h2>');
@@ -547,7 +589,7 @@ Can't wait for next week!`;
 
     it('should handle markdown with special characters', async () => {
       const markdown = 'Text with äöü and émojis 🎮 and symbols & < >';
-      const result = await createRichSnippet(markdown);
+      const result = await createRichSnippet(markdown, 'https://example.com');
 
       expect(result).toContain('äöü');
       expect(result).toContain('🎮');
@@ -556,7 +598,11 @@ Can't wait for next week!`;
     it('should maintain consistency between rich and plain snippets', async () => {
       const markdown = '# Title\n\nSome **bold** text with *emphasis*.';
 
-      const richSnippet = await createRichSnippet(markdown, { maxLength: 30 });
+      const richSnippet = await createRichSnippet(
+        markdown,
+        'https://example.com',
+        { maxLength: 30 },
+      );
       const plainSnippet = createPlainSnippet(markdown, 30);
 
       // Both should have ellipsis

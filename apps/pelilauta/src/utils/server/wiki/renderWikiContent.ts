@@ -1,19 +1,18 @@
 import type { Page } from 'src/schemas/PageSchema';
 import type { Site } from 'src/schemas/SiteSchema';
-import { renderAssetMarkup } from '../renderAssetMarkup';
-import { renderTags } from '../renderTags';
+import { renderMarkdown } from 'src/utils/shared/renderMarkdown';
+import { sanitizeHtml } from 'src/utils/shared/sanitizeHtml';
 
-export async function renderWikiContent(page: Page, site: Site, url: URL) {
-  const { getMarkedInstance } = await import('src/utils/shared/getMarked');
-  const marked = getMarkedInstance(url.origin, { site });
-
+export function renderWikiContent(page: Page, site: Site, url: URL): string {
   // Legacy pages might not have markdown content, so we'll fall back to
   // contents saved by earlier versions of the App.
-  if (!page.markdownContent) return page.htmlContent || page.content || '';
+  if (!page.markdownContent) {
+    return sanitizeHtml(page.htmlContent || page.content || '');
+  }
 
-  const hashTags = renderTags(page.markdownContent, url.origin);
-  const assetLinks = renderAssetMarkup(hashTags, site, url.origin);
-  const htmlContent = await marked.parse(assetLinks || '');
-
-  return htmlContent;
+  return renderMarkdown(page.markdownContent, {
+    origin: url.origin,
+    site: { key: site.key, assets: site.assets },
+    hashtags: true,
+  });
 }

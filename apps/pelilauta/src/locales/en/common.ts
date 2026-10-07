@@ -1,6 +1,10 @@
 import type { Locale } from 'src/utils/i18n';
 
 export const common: Locale = {
+  footnote: {
+    reference: 'Footnote {n}',
+    backToReference: 'Back to reference {n}',
+  },
   error: {
     generic: 'An unexpected error occurred. Please try again.',
     networkError: 'Network error. Please check your internet connection.',

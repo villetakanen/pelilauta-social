@@ -21,8 +21,10 @@ interface Props {
   discussion: Reply[];
   /** The server's answer for each author, by uid; kept apart from the replies a live snapshot replaces. */
   authors: Record<string, PublicProfile>;
+  /** The site origin, passed on to the reply renders. */
+  origin: string;
 }
-const { discussion: initDiscussion, thread, authors }: Props = $props();
+const { discussion: initDiscussion, thread, authors, origin }: Props = $props();
 
 let discussion = $state(initDiscussion);
 
@@ -127,7 +129,7 @@ $effect(() => {
   {:else}
     <div class="replies">
       {#each discussion as reply (reply.key)}
-        <ReplyArticle {reply} author={authors[reply.owners[0]]} />
+        <ReplyArticle {reply} {origin} author={authors[reply.owners[0]]} />
       {/each}
     </div>
   {/if}

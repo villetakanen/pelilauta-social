@@ -59,7 +59,7 @@ export async function getPageData(
     const page = parsePage(toClientEntry(pageData), pageKey, siteKey);
 
     // Render wiki content
-    page.htmlContent = await renderWikiContent(page, site, url);
+    page.htmlContent = renderWikiContent(page, site, url);
 
     return page;
   } catch (error) {

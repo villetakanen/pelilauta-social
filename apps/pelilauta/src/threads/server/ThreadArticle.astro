@@ -1,16 +1,23 @@
 ---
+import '@dice/styles/dice.css';
 import CnLightbox from '@design-system/components/CnLightbox.svelte';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { t } from 'src/utils/i18n';
-import { markdownToHTML } from 'src/utils/marked';
+import { footnoteNamespace } from 'src/utils/shared/footnoteNamespace';
+import { renderMarkdown } from 'src/utils/shared/renderMarkdown';
 import QuoteBubble from './QuoteBubble.astro';
 
 interface Props {
   thread: Thread;
 }
 const { thread } = Astro.props;
-const htmlContent = await markdownToHTML(
+const htmlContent = renderMarkdown(
   thread.markdownContent || thread.content || '',
+  {
+    origin: Astro.url.origin,
+    footnotes: true,
+    namespace: footnoteNamespace('thread', thread.key),
+  },
 );
 
 const figures =

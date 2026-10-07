@@ -15,10 +15,16 @@ interface Props {
   initialThreads: Thread[];
   initialLastFlowTime: number;
   hasError: boolean;
+  origin: string;
 }
 
-const { channel, initialThreads, initialLastFlowTime, hasError }: Props =
-  $props();
+const {
+  channel,
+  initialThreads,
+  initialLastFlowTime,
+  hasError,
+  origin,
+}: Props = $props();
 
 // Component state
 let threads = $state([...initialThreads]);
@@ -95,7 +101,7 @@ async function loadMoreThreads() {
   </header>
 
   {#each threads as thread (thread.key)}
-    <ThreadListItem {thread} />
+    <ThreadListItem {thread} {origin} />
   {/each}
 
   {#if hasMore}

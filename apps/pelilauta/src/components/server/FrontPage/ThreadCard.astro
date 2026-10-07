@@ -1,4 +1,5 @@
 ---
+import '@dice/styles/dice.css';
 import CnCard from '@design-system/components/CnCard.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from '@utils/i18n';
@@ -40,10 +41,14 @@ const posterSrcset = posterUrl
     : undefined
   : undefined;
 
-const snippet = await createRichSnippet(thread.markdownContent || '', {
-  maxLength: 220,
-  headerClasses: ['text-h4'],
-});
+const snippet = await createRichSnippet(
+  thread.markdownContent || '',
+  Astro.url.origin,
+  {
+    maxLength: 220,
+    headerClasses: ['text-h4'],
+  },
+);
 
 const channel = thread.channel || 'Yleinen';
 const channelSlug = channel.toLowerCase().replace(/\s+/g, '-');

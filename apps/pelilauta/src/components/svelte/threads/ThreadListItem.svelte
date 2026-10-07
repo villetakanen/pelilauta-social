@@ -1,5 +1,6 @@
 <!-- src/components/svelte/threads/ThreadListItem.svelte -->
 <script lang="ts">
+import '@dice/styles/dice.css';
 import type { Thread } from '@schemas/ThreadSchema';
 import ProfileLink from '@svelte/app/ProfileLink.svelte';
 import ThreadSubscriber from '@svelte/threads/ThreadSubscriber.svelte';
@@ -9,8 +10,9 @@ import { createRichSnippet } from '@utils/snippetHelpers';
 
 interface Props {
   thread: Thread;
+  origin: string;
 }
-const { thread }: Props = $props();
+const { thread, origin }: Props = $props();
 </script>
 
 <article class="surface" id={`thread-${thread.key}`}>
@@ -21,7 +23,7 @@ const { thread }: Props = $props();
       </a>
     </h4>
     <div>
-      {#await createRichSnippet( thread.markdownContent || "", { paragraphClasses: ["text-small"] }, )}
+      {#await createRichSnippet( thread.markdownContent || "", origin, { paragraphClasses: ["text-small"] }, )}
         ...
       {:then snippet}
         <div class="teaser">{@html snippet}</div>
