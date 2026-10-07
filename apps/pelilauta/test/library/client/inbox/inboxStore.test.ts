@@ -31,6 +31,7 @@ const snapshot = (to: string) => ({
   docs: [
     {
       id: `note-${to}`,
+      metadata: { hasPendingWrites: false },
       data: () => ({
         to,
         from: 'author',
@@ -79,7 +80,7 @@ describe('inbox recipient lifecycle', () => {
     await vi.waitFor(() =>
       expect(firebase.onSnapshot).toHaveBeenCalledTimes(1),
     );
-    const receiveA = firebase.onSnapshot.mock.calls[0][1];
+    const receiveA = firebase.onSnapshot.mock.calls[0][2];
     receiveA(snapshot('A'));
     expect(newCount.get()).toBe(1);
 
@@ -95,10 +96,31 @@ describe('inbox recipient lifecycle', () => {
     await vi.waitFor(() =>
       expect(firebase.onSnapshot).toHaveBeenCalledTimes(2),
     );
-    firebase.onSnapshot.mock.calls[1][1](snapshot('B'));
+    firebase.onSnapshot.mock.calls[1][2](snapshot('B'));
     receiveA(snapshot('A'));
     expect(notifications.get().map((note) => note.to)).toEqual(['B']);
     expect(firebase.where).toHaveBeenLastCalledWith('to', '==', 'B');
+  });
+
+  it('counts acknowledgment only after the write succeeds', async () => {
+    uid.set('A');
+    resolved.set(true);
+    await vi.waitFor(() => expect(firebase.onSnapshot).toHaveBeenCalledOnce());
+    const receive = firebase.onSnapshot.mock.calls[0][2];
+    receive(snapshot('A'));
+    const pending = snapshot('A');
+    pending.docs[0].metadata.hasPendingWrites = true;
+    pending.docs[0].data = () => ({
+      ...snapshot('A').docs[0].data(),
+      read: true,
+    });
+    receive(pending);
+    expect(newCount.get()).toBe(1);
+    receive(snapshot('A'));
+    expect(newCount.get()).toBe(1);
+    pending.docs[0].metadata.hasPendingWrites = false;
+    receive(pending);
+    expect(newCount.get()).toBe(0);
   });
 
   it('abandons a pending subscription when the reader signs out', async () => {
@@ -116,7 +138,7 @@ describe('inbox recipient lifecycle', () => {
     await vi.waitFor(() =>
       expect(firebase.onSnapshot).toHaveBeenCalledTimes(1),
     );
-    const receiveA = firebase.onSnapshot.mock.calls[0][1];
+    const receiveA = firebase.onSnapshot.mock.calls[0][2];
     receiveA(snapshot('A'));
     uid.set('B');
     expect(notifications.get()).toEqual([]);
@@ -124,7 +146,7 @@ describe('inbox recipient lifecycle', () => {
     await vi.waitFor(() =>
       expect(firebase.onSnapshot).toHaveBeenCalledTimes(2),
     );
-    firebase.onSnapshot.mock.calls[1][1](snapshot('B'));
+    firebase.onSnapshot.mock.calls[1][2](snapshot('B'));
     receiveA(snapshot('A'));
     expect(notifications.get().map((note) => note.to)).toEqual(['B']);
   });
@@ -135,7 +157,7 @@ describe('inbox recipient lifecycle', () => {
     await vi.waitFor(() =>
       expect(firebase.onSnapshot).toHaveBeenCalledTimes(1),
     );
-    const receive = firebase.onSnapshot.mock.calls[0][1];
+    const receive = firebase.onSnapshot.mock.calls[0][2];
     receive(snapshot('A'));
     cleanStores(notifications);
     receive(snapshot('A'));

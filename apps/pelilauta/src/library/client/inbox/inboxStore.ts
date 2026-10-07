@@ -61,10 +61,20 @@ onMount(notifications, () => {
 
       unsubscribe = onSnapshot(
         q,
+        { includeMetadataChanges: true },
         (snapshot) => {
           if (!isCurrent()) return;
+          const previous = new Map(
+            notifications.get().map((note) => [note.key, note]),
+          );
           notifications.set(
-            snapshot.docs.map((doc) => parseNotification(doc.data(), doc.id)),
+            snapshot.docs.map((doc) => {
+              const note = parseNotification(doc.data(), doc.id);
+              if (doc.metadata.hasPendingWrites) {
+                note.read = previous.get(doc.id)?.read ?? false;
+              }
+              return note;
+            }),
           );
         },
         (error) => {

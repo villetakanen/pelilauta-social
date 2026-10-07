@@ -4,6 +4,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.1.1
 
+- fix(inbox): Following a notification marks it read. Failed acknowledgment leaves it unread and allows navigation. ([#189](https://github.com/villetakanen/pelilauta-social/issues/189))
 - fix(inbox): Notifications clear when the signed-in reader changes, and delayed updates from the previous reader cannot restore them.
 
 - fix(threads): A live reply that shifts the discussion no longer shows a reply under another author's name, profile link, avatar or date. ([#175](https://github.com/villetakanen/pelilauta-social/issues/175))

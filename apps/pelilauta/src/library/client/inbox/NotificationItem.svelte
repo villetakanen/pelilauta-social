@@ -4,6 +4,7 @@ import ProfileLink from '@pelilauta/components/svelte/app/ProfileLink.svelte';
 import type { Notification } from 'src/schemas/NotificationSchema';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { t } from 'src/utils/i18n';
+import { logError } from 'src/utils/logHelpers';
 import { onMount } from 'svelte';
 import { deleteNotification } from './deleteNotification';
 import { markRead } from './markRead';
@@ -31,7 +32,12 @@ const noun = $derived.by(() => {
 const href = $derived(notificationHref(notification));
 
 async function read() {
-  markRead(notification.key, true);
+  if (notification.read) return;
+  try {
+    await markRead(notification.key, true);
+  } catch (error) {
+    logError('NotificationItem', 'Notification acknowledgment failed', error);
+  }
 }
 async function remove() {
   deleteNotification(notification.key);
@@ -49,7 +55,13 @@ async function remove() {
     </p>
     <p>
       {#if href}
-        <a {href}>{notification.targetTitle}</a>
+        <a
+          {href}
+          onclick={read}
+          onauxclick={(event) => {
+            if (event.button === 1) void read();
+          }}
+        >{notification.targetTitle}</a>
       {:else}
         {notification.targetTitle}
       {/if}
