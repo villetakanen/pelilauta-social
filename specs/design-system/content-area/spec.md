@@ -57,6 +57,9 @@ and its blocks carry a compact gap rather than the document rhythm.
 - An audited scaffold list carries `role="list"` where marker removal requires explicit
   list semantics, remains markerless inside and outside the region, and receives no
   automatic document indentation.
+- An anchor marked `.url` inside the region fits its offered width on one line,
+  truncates overflow with an ellipsis, and retains its full text and destination.
+- Unmarked descriptive links wrap as prose.
 - Replaced content stays within the region's offered inline size.
 
 ### Scenarios

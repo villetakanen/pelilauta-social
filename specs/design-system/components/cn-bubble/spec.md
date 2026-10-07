@@ -90,6 +90,8 @@ below it the mark leaves the layout and reserves no space.
 - CnBubble displays and announces no participant name. It accepts one to build the
   mark from, and shows the initials the mark derives.
 - CnBubble supplies no timestamp, actions or application state.
+- The article fits the row's offered inline size even when its content has a long
+  unbroken address. Content Area governs marked URL truncation.
 - CnBubble carries no outer layout width or message-list spacing.
 - The initial server response contains the complete article and its content.
 

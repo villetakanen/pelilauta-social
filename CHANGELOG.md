@@ -4,6 +4,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.1.1
 
+- fix(design-system): Marked URL links truncate with an ellipsis inside authored content, and reply bubbles fit narrow columns. ([#199](https://github.com/villetakanen/pelilauta-social/issues/199))
+
 - fix(markdown): Thread bodies, replies, previews, snippets, RSS items, handouts and wiki pages render Markdown through one renderer, and its output and stored HTML pass one sanitization policy before reaching the page. Single newlines break lines everywhere, footnote links stay within their own body, and a bare URL carries `class="url"`. ([#200](https://github.com/villetakanen/pelilauta-social/issues/200))
 - fix(inbox): Following a notification marks it read. Failed acknowledgment leaves it unread and allows navigation. ([#189](https://github.com/villetakanen/pelilauta-social/issues/189))
 - fix(inbox): Notifications clear when the signed-in reader changes, and delayed updates from the previous reader cannot restore them.
