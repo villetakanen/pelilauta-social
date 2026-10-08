@@ -95,6 +95,33 @@ if (typeof window !== 'undefined') {
 }
 
 /**
+ * Compares the server cookie with the resolved Firebase user.
+ * Only a 401 or a valid body for another uid requires repair; anything
+ * else that is not a match leaves agreement unconfirmed.
+ */
+async function getServerSessionStatus(
+  userUid: string,
+): Promise<'match' | 'repair' | 'inconclusive'> {
+  try {
+    const response = await fetch('/api/auth/session');
+    if (response.status === 401) return 'repair';
+    if (response.status !== 200) return 'inconclusive';
+    const body = await response.json();
+    if (
+      typeof body?.uid !== 'string' ||
+      !body.uid ||
+      !Number.isInteger(body.expiresAt)
+    ) {
+      return 'inconclusive';
+    }
+    return body.uid === userUid ? 'match' : 'repair';
+  } catch (error) {
+    logWarn('sessionStore', 'Failed to check server session:', error);
+    return 'inconclusive';
+  }
+}
+
+/**
  * This function is called whenever the firebase auth state changes.
  *
  * @param user
@@ -129,58 +156,53 @@ async function handleFirebaseAuthChange(user: User | null) {
     return;
   }
 
-  // User is authenticated
-  if (uid.get() === user.uid && sessionState.get() === 'active') {
-    // Verify server session integrity before trusting client state
-    let serverSessionValid = false;
-    try {
-      const response = await fetch('/api/auth/session');
-      serverSessionValid = response.ok;
-    } catch (error) {
-      logWarn('sessionStore', 'Failed to check server session:', error);
-    }
-
-    if (serverSessionValid) {
-      logDebug(
-        'sessionStore',
-        'handleFirebaseAuthChange',
-        'User already logged in and session is active, checking if subscriptions need refresh',
-      );
-
-      // Even if session is active, we should ensure subscriptions are active
-      // This handles cases where session state was restored from localStorage
-      // but subscriptions were not re-established
-      try {
-        await subscribeToAccount(user.uid);
-        subscribeToProfile(user.uid);
-        logDebug(
-          'sessionStore',
-          'handleFirebaseAuthChange',
-          'Refreshed subscriptions for active session',
-        );
-      } catch (error) {
-        logError('sessionStore', 'Failed to refresh subscriptions:', error);
-      }
-      return;
-    } else {
-      logDebug(
-        'sessionStore',
-        'handleFirebaseAuthChange',
-        'Client session active but server session missing/invalid. Re-authenticating.',
-      );
-    }
+  // User is authenticated. Persisted uid and state do not substitute for the
+  // server's answer: every resolved user is checked against the cookie.
+  const status = await getServerSessionStatus(user.uid);
+  if (status === 'inconclusive') {
+    // Agreement is unconfirmed; Firebase auth and the persisted uid stay for a later check.
+    logWarn(
+      'sessionStore',
+      'handleFirebaseAuthChange',
+      'Server session check inconclusive. Not confirming session.',
+    );
+    sessionState.set('error');
+    return;
   }
 
   try {
-    sessionState.set('loading');
-    const token = await user.getIdToken();
-    await fetch('/api/auth/session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token }),
-    });
+    if (status === 'repair') {
+      sessionState.set('loading');
+      let postStatus = 0;
+      try {
+        // A token refresh can fail offline; that is as temporary as the POST.
+        const token = await user.getIdToken();
+        const response = await fetch('/api/auth/session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token }),
+        });
+        postStatus = response.status;
+      } catch (error) {
+        logWarn('sessionStore', 'Failed to post session token:', error);
+      }
+
+      if (postStatus === 401) {
+        throw new Error('Session credentials rejected');
+      }
+      if (postStatus !== 200) {
+        // Network failure or 5xx: temporary, a later check can repair.
+        logWarn(
+          'sessionStore',
+          'handleFirebaseAuthChange',
+          'Session repair failed temporarily. Not confirming session.',
+        );
+        sessionState.set('error');
+        return;
+      }
+    }
 
     // Subscribe to account and profile - both might be missing
     try {

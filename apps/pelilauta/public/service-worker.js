@@ -18,9 +18,12 @@ workbox.precaching.precacheAndRoute([
   { url: '/offline.html', revision: '1' },
 ]);
 
+// Session status is never cached or replayed.
+const isSessionEndpoint = (url) => url.pathname === '/api/auth/session';
+
 // Cache API routes with network-first strategy
 workbox.routing.registerRoute(
-  ({ url }) => url.pathname.startsWith('/api/'),
+  ({ url }) => url.pathname.startsWith('/api/') && !isSessionEndpoint(url),
   new workbox.strategies.NetworkFirst({
     cacheName: 'api-cache',
     networkTimeoutSeconds: 3,
@@ -91,7 +94,9 @@ const { NetworkOnly } = workbox.strategies;
 
 workbox.routing.registerRoute(
   ({ url, request }) =>
-    url.pathname.startsWith('/api/') && request.method === 'POST',
+    url.pathname.startsWith('/api/') &&
+    !isSessionEndpoint(url) &&
+    request.method === 'POST',
   new NetworkOnly({
     plugins: [
       new BackgroundSyncPlugin('api-queue', {

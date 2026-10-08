@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { checkSession } from 'src/utils/server/auth/verifySession';
 import { serverAuth } from '../../../firebase/server';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -27,12 +28,20 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   }
 };
 
-export const GET: APIRoute = async ({ cookies }) => {
-  const sessionCookie = cookies.get('session');
-  if (!sessionCookie) {
-    return new Response('Unauthorized', { status: 401 });
+const noStore = { 'Cache-Control': 'no-store' };
+
+export const GET: APIRoute = async (context) => {
+  const result = await checkSession(context);
+  if (result.status === 'verified') {
+    return Response.json(
+      { uid: result.token.uid, expiresAt: result.token.exp },
+      { status: 200, headers: noStore },
+    );
   }
-  return new Response('OK', { status: 200 });
+  const status = { rejected: 401, unavailable: 503, failed: 500 }[
+    result.status
+  ];
+  return new Response(null, { status, headers: noStore });
 };
 
 export const DELETE: APIRoute = async ({ cookies }) => {

@@ -2,6 +2,10 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.3
+
+- fix(session): The browser confirms a signed-in session only when the server verifies a session cookie for the same account, and recreates a missing or mismatched cookie. A temporary verification or network failure leaves the reader signed in to Firebase for a later check, and the service worker neither caches session status nor replays a session request. ([#178](https://github.com/villetakanen/pelilauta-social/issues/178))
+
 ## 21.1.2
 
 - fix(markdown): The server bundles the HTML sanitizer so Markdown pages render on the Netlify runtime.

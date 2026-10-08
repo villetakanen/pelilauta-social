@@ -14,6 +14,7 @@ Each spec file defines fixtures for one feature regression:
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
 - `read-marking-awaits-subscription.spec.ts` tests that opening a thread marks it read when the subscription arrives after the session confirms.
 - `open-inbox-reply-notification.spec.ts` tests that a reply notification in the inbox links to its reply in the thread.
+- `session-agreement.spec.ts` tests that reloading with a matching session cookie sends no session POST, and that a missing cookie is recreated by one POST.
 
 ## Prerequisites
 
