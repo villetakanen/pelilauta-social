@@ -33,6 +33,28 @@ export default defineConfig({
       },
     },
     plugins: [
+      {
+        name: 'bundle-markdown-sanitizer',
+        apply: 'build',
+        config: () => ({
+          ssr: {
+            noExternal: [
+              'sanitize-html',
+              'htmlparser2',
+              'escape-string-regexp',
+              'is-plain-object',
+              'deepmerge',
+              'parse-srcset',
+              'postcss',
+              'source-map-js',
+              'picocolors',
+              'nanoid',
+              'launder',
+              'dayjs',
+            ],
+          },
+        }),
+      },
       optionalProprietary(
         new URL('../../packages/myrrys-proprietary/index.ts', import.meta.url),
       ),
@@ -77,18 +99,6 @@ export default defineConfig({
         'firebase',
         'marked',
         'marked-footnote',
-        'sanitize-html',
-        'htmlparser2',
-        'escape-string-regexp',
-        'is-plain-object',
-        'deepmerge',
-        'parse-srcset',
-        'postcss',
-        'source-map-js',
-        'picocolors',
-        'nanoid',
-        'launder',
-        'dayjs',
         'uuid',
       ],
       /*
