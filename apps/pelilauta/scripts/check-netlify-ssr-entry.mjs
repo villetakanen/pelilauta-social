@@ -1,5 +1,7 @@
-import { readdir, readFile, stat } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { cp, mkdtemp, readdir, readFile, rm, stat } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { basename, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const entry = process.argv[2]
@@ -35,6 +37,7 @@ async function collectMjs(dir) {
     return found;
   }
   for (const item of entries) {
+    if (item.name === 'node_modules') continue;
     const child = new URL(`${item.name}${item.isDirectory() ? '/' : ''}`, dir);
     if (item.isDirectory()) found.push(...(await collectMjs(child)));
     // Astro's content-layer chunks are serialized *data*, not executable code.
@@ -90,7 +93,8 @@ function stripComments(text) {
 }
 
 const required = new Set();
-for (const file of await collectMjs(buildDir)) {
+const builtModules = await collectMjs(buildDir);
+for (const file of builtModules) {
   const text = stripComments(await readFile(file, 'utf8'));
   for (const pattern of [FROM_IMPORT, DYNAMIC_IMPORT]) {
     for (const match of text.matchAll(pattern)) {
@@ -132,6 +136,46 @@ if (missing.length > 0) {
       `They are imported by the SSR output but absent from ${functionDir}node_modules.\n` +
       'Either bundle them via vite.ssr.noExternal, or ensure the function ships them.',
   );
+}
+
+const markdownModule = (await collectMjs(functionRoot)).find((file) =>
+  basename(file.pathname).startsWith('renderMarkdown_'),
+);
+if (!markdownModule) throw new Error('Netlify SSR Markdown chunk is missing');
+
+// Isolate the function so missing dependencies cannot resolve from the repository.
+const runtimeRoot = await mkdtemp(join(tmpdir(), 'pelilauta-ssr-'));
+try {
+  await cp(functionDir, runtimeRoot, { recursive: true, dereference: true });
+  const isolatedMarkdown = pathToFileURL(
+    join(runtimeRoot, relative(functionDir, fileURLToPath(markdownModule))),
+  );
+  // The deployed runtime disables require(ESM), which local Node enables by default.
+  const runtimeCheck = spawnSync(
+    process.execPath,
+    [
+      '--no-experimental-require-module',
+      '--input-type=module',
+      '--eval',
+      `
+      const module = await import(${JSON.stringify(isolatedMarkdown.href)});
+      const render = Object.values(module).find(value => value.name === 'renderMarkdown');
+      if (!render) throw new Error('Built Markdown renderer is missing');
+      const html = render('**Release**<script>alert(1)</script>', { origin: 'https://pelilauta.social' });
+      if (html !== '<p><strong>Release</strong></p>\\n') {
+        throw new Error('Built Markdown renderer did not sanitize its output');
+      }
+    `,
+    ],
+    { cwd: runtimeRoot, encoding: 'utf8', timeout: 30_000 },
+  );
+  if (runtimeCheck.error || runtimeCheck.status !== 0) {
+    throw new Error(
+      `Netlify SSR Markdown failed without require(ESM):\n${runtimeCheck.stderr || runtimeCheck.error}`,
+    );
+  }
+} finally {
+  await rm(runtimeRoot, { recursive: true, force: true });
 }
 
 console.log(
