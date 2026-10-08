@@ -2,6 +2,10 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.2
+
+- fix(markdown): The server bundles the HTML sanitizer so Markdown pages render on the Netlify runtime.
+
 ## 21.1.1
 
 - fix(design-system): Marked URL links truncate with an ellipsis inside authored content, and reply bubbles fit narrow columns. ([#199](https://github.com/villetakanen/pelilauta-social/issues/199))

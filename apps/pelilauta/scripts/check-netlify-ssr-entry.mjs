@@ -1,5 +1,6 @@
+import { spawnSync } from 'node:child_process';
 import { readdir, readFile, stat } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const entry = process.argv[2]
@@ -90,7 +91,8 @@ function stripComments(text) {
 }
 
 const required = new Set();
-for (const file of await collectMjs(buildDir)) {
+const builtModules = await collectMjs(buildDir);
+for (const file of builtModules) {
   const text = stripComments(await readFile(file, 'utf8'));
   for (const pattern of [FROM_IMPORT, DYNAMIC_IMPORT]) {
     for (const match of text.matchAll(pattern)) {
@@ -131,6 +133,36 @@ if (missing.length > 0) {
     `Netlify SSR function is missing runtime dependencies: ${missing.join(', ')}\n` +
       `They are imported by the SSR output but absent from ${functionDir}node_modules.\n` +
       'Either bundle them via vite.ssr.noExternal, or ensure the function ships them.',
+  );
+}
+
+const markdownModule = builtModules.find((file) =>
+  basename(file.pathname).startsWith('renderMarkdown_'),
+);
+if (!markdownModule) throw new Error('Netlify SSR Markdown chunk is missing');
+
+// The deployed runtime disables require(ESM), which local Node enables by default.
+const runtimeCheck = spawnSync(
+  process.execPath,
+  [
+    '--no-experimental-require-module',
+    '--input-type=module',
+    '--eval',
+    `
+      const module = await import(${JSON.stringify(markdownModule.href)});
+      const render = Object.values(module).find(value => value.name === 'renderMarkdown');
+      if (!render) throw new Error('Built Markdown renderer is missing');
+      const html = render('**Release**<script>alert(1)</script>', { origin: 'https://pelilauta.social' });
+      if (html !== '<p><strong>Release</strong></p>\\n') {
+        throw new Error('Built Markdown renderer did not sanitize its output');
+      }
+    `,
+  ],
+  { cwd: functionDir, encoding: 'utf8' },
+);
+if (runtimeCheck.error || runtimeCheck.status !== 0) {
+  throw new Error(
+    `Netlify SSR Markdown failed without require(ESM):\n${runtimeCheck.stderr || runtimeCheck.error}`,
   );
 }
 

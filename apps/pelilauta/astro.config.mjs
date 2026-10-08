@@ -77,6 +77,9 @@ export default defineConfig({
         'firebase',
         'marked',
         'marked-footnote',
+        'sanitize-html',
+        'htmlparser2',
+        'escape-string-regexp',
         'uuid',
       ],
       /*
