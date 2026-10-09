@@ -15,7 +15,10 @@ vi.mock('@firebase/client', () => ({
     signOut: h.signOut,
   },
 }));
-vi.mock('@utils/client/snackUtils', () => ({ pushSnack: h.pushSnack }));
+vi.mock('@utils/client/snackUtils', () => ({
+  pushSnack: h.pushSnack,
+  pushSessionSnack: vi.fn(),
+}));
 vi.mock('../../src/stores/session/account', () => ({
   $account: {
     get: () => null,
@@ -33,6 +36,7 @@ vi.mock('../../src/stores/session/profile', () => ({
 }));
 vi.mock('../../src/stores/session/subscriber', () => ({
   initSubscriberStore: vi.fn(),
+  resetSubscriberStore: vi.fn(),
 }));
 
 // The store attaches its auth listener only where a window exists.

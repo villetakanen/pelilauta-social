@@ -22,16 +22,23 @@ export const $subscriber = persistentAtom<Subscription>(
   },
 );
 
-let unsubscribe: () => void;
+let unsubscribe: (() => void) | undefined;
 
 onMount($subscriber, () => {
   const u = uid.get();
   if (u) initSubscriberStore(u);
 });
 
+/** Drops the Firestore listener and the persisted subscriber data. */
+export function resetSubscriberStore() {
+  unsubscribe?.();
+  unsubscribe = undefined;
+  $subscriber.set(createSubscription(''));
+}
+
 export async function initSubscriberStore(uid: string) {
   if (!uid) {
-    unsubscribe();
+    resetSubscriberStore();
     return;
   }
   const { onSnapshot, doc } = await import('firebase/firestore');

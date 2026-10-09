@@ -1,6 +1,6 @@
 import { auth } from '@firebase/client';
 import { persistentAtom } from '@nanostores/persistent';
-import { pushSnack } from '@utils/client/snackUtils';
+import { pushSessionSnack, pushSnack } from '@utils/client/snackUtils';
 import { logDebug, logError, logWarn } from '@utils/logHelpers';
 import type { User } from 'firebase/auth';
 import { atom, computed } from 'nanostores';
@@ -10,7 +10,7 @@ import {
   reset as unsubscribeFromAccount,
 } from './account';
 import { subscribeToProfile, unsubscribeFromProfile } from './profile';
-import { initSubscriberStore } from './subscriber';
+import { initSubscriberStore, resetSubscriberStore } from './subscriber';
 
 // Firebase auth user - reactive store for the current Firebase user
 export const authUser = atom<User | null>(null);
@@ -134,24 +134,11 @@ async function handleFirebaseAuthChange(user: User | null) {
   });
   authUser.set(user);
 
-  // User is not authenticated
+  // User is not authenticated. An initial session has nothing to log out of;
+  // every other state does, and a logout already running absorbs this call.
   if (!user) {
-    const currentState = sessionState.get();
-    // Prevent redundant logout calls - if we're already in initial state or loading (during logout)
-    // then we don't need to call logout() again
-    if (currentState !== 'initial' && currentState !== 'loading') {
-      logDebug(
-        'sessionStore',
-        'handleFirebaseAuthChange',
-        'User logged out, calling logout()',
-      );
+    if (sessionState.get() !== 'initial') {
       await logout();
-    } else {
-      logDebug(
-        'sessionStore',
-        'handleFirebaseAuthChange',
-        `User logged out but session state is '${currentState}' - skipping logout() call`,
-      );
     }
     return;
   }
@@ -252,44 +239,53 @@ async function login(newUid: string) {
 async function clear() {
   logDebug('sessionStore', 'clear', 'Clearing session data');
   uid.set('');
+  resetSubscriberStore();
   unsubscribeFromAccount();
   unsubscribeFromProfile();
 }
 
-export async function logout() {
-  const currentState = sessionState.get();
-  if (currentState === 'initial') {
-    logDebug(
-      'sessionStore',
-      'logout',
-      'Session already cleared - skipping logout',
-    );
-    return;
-  }
+let logoutInProgress: Promise<boolean> | undefined;
 
-  if (currentState === 'loading') {
-    logDebug(
-      'sessionStore',
-      'logout',
-      'Logout already in progress - skipping duplicate call',
-    );
-    return;
+/**
+ * Logs out: the session cookie first, local user data second, Firebase last.
+ * A failed step stops the rest, sets the state to 'error' and notifies the
+ * reader. Callers arriving during a logout share it. Resolves to `true` when
+ * logout completed and `false` when a step failed; it never rejects.
+ */
+export function logout(): Promise<boolean> {
+  if (!logoutInProgress) {
+    logoutInProgress = runLogout().finally(() => {
+      logoutInProgress = undefined;
+    });
   }
+  return logoutInProgress;
+}
 
+async function runLogout(): Promise<boolean> {
   logDebug('sessionStore', 'logout', 'Starting logout process');
   sessionState.set('loading');
 
-  // Clear the session
-  await clear();
-
-  // Sign out from Firebase
-  await auth.signOut();
-
-  // Clear the session cookie
-  await fetch('/api/auth/session', { method: 'DELETE' });
+  try {
+    const response = await fetch('/api/auth/session', { method: 'DELETE' });
+    if (!response.ok) {
+      throw new Error(`Session cookie deletion failed: ${response.status}`);
+    }
+    await clear();
+    await auth.signOut();
+  } catch (error) {
+    logError('sessionStore', 'logout', 'Logout did not complete', error);
+    sessionState.set('error');
+    try {
+      pushSessionSnack('snack:session.logoutIncomplete');
+    } catch (snackError) {
+      logWarn('sessionStore', 'logout', 'Could not notify reader', snackError);
+    }
+    return false;
+  }
 
   sessionState.set('initial');
   logDebug('sessionStore', 'logout', 'Logout complete');
+  return true;
 }
 
 export * from './account';

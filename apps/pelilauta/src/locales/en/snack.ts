@@ -5,6 +5,9 @@ export const snack: Locale = {
     copied: 'Link copied to the clipboard',
     failed: 'Sharing failed',
   },
+  session: {
+    logoutIncomplete: 'Logout did not complete. Try again.',
+  },
   site: {
     pageDeleted: 'Page {name} deleted',
     sortOrderUpdated: 'Page order updated',

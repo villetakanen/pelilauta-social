@@ -5,6 +5,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 ## 21.1.3
 
 - fix(session): The browser confirms a signed-in session only when the server verifies a session cookie for the same account, and recreates a missing or mismatched cookie. A temporary verification or network failure leaves the reader signed in to Firebase for a later check, and the service worker neither caches session status nor replays a session request. ([#178](https://github.com/villetakanen/pelilauta-social/issues/178))
+- fix(session): Logout deletes the session cookie first, clears local user data second, and signs out of Firebase last. A failed step stops the logout, keeps the Firebase session, and tells the reader to try again. Logout also clears the persisted subscriber data. ([#180](https://github.com/villetakanen/pelilauta-social/issues/180))
+- test(session): Sign-in redirects only after the server creates the session cookie. ([#179](https://github.com/villetakanen/pelilauta-social/issues/179))
 
 ## 21.1.2
 

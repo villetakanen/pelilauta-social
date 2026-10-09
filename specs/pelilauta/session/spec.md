@@ -8,8 +8,11 @@ status: live
 
 ### Context
 
-Readers require a signed-in interface backed by the same account on the server.
+Readers require the browser interface and server requests to share the same account.
 Temporary verification failures do not force readers to sign in again.
+
+Readers often use shared computers. After a completed logout, the device neither
+displays the reader's data nor acts under the reader's account.
 
 ### Architecture
 
@@ -17,8 +20,8 @@ Firebase client authentication supplies credentials for browser Firestore access
 The Firebase Admin SDK verifies the `session` cookie for server requests.
 `@pelilauta/stores/session` reconciles these identities through
 `/api/auth/session`. Server agreement follows either verification of a cookie for
-the resolved Firebase user or acknowledged cookie creation from that user's
-verified ID token. Agreement establishes neither client data readiness nor
+the resolved Firebase user or acknowledged cookie creation from the verified ID
+token for that user. Agreement establishes neither client data readiness nor
 resource access permissions.
 
 `@pelilauta/utils/server/auth/verifySession` carries shared cookie verification.
@@ -27,32 +30,32 @@ Protected routes retain existing guards, including
 `@pelilauta/base/utils/requireSession`.
 
 The optional [service worker](../../../apps/pelilauta/public/service-worker.js)
-intercepts API traffic and participates in the session endpoint's cache and
-replay exclusions.
+intercepts API traffic and participates in cache and replay exclusions for the
+session endpoint.
 
 [Login](../login/spec.md) governs sign-in presentation and return destinations.
 [Settings](../library/settings/spec.md) governs account controls.
 
 #### Server-rendering boundary
 
-Server-rendered identity derives from cookie verification and passes only identity
-data required by an island. Identity remains scoped to the request and never
-populates module-level stores. Server identity establishes neither a
+Server rendering derives identity from cookie verification and passes only
+identity data required by an island. Identity remains scoped to the request and
+never populates module-level stores. Server identity establishes neither a
 Firebase user nor authenticated client reads. Personalized responses remain
 outside shared and offline caches.
 
 Route guards retain authorization decisions; pathname-prefix middleware does not
-replace them. The architecture retains Firebase
-cookies and browser authentication. The contract excludes migration to
-[Astro sessions](https://docs.astro.build/en/guides/sessions/) and moving browser
-Firestore access to server APIs.
+replace them. The architecture retains Firebase cookies and browser
+authentication. The contract excludes migration to
+[Astro sessions](https://docs.astro.build/en/guides/sessions/) and excludes
+moving browser Firestore access to server APIs.
 
 ### Constraints
 
-The contract governs verified session status and reconciliation between server
-and browser identities. Extending SSR identity initialization requires a separate
-decision. The specification preserves cookie lifetimes, client persistence,
-renewal triggers, and protected-page authorization semantics.
+The contract governs verified session status, reconciliation between server
+and browser identities, and logout. Extending SSR identity initialization
+requires a separate decision. The specification preserves cookie lifetimes,
+client persistence, renewal triggers, and protected-page authorization semantics.
 
 The [session endpoint](../../../apps/pelilauta/src/pages/api/auth/session.ts)
 defines cookie lifetime and attributes. The [session store](../../../apps/pelilauta/src/stores/session/index.ts)
@@ -69,37 +72,78 @@ returning identity. The endpoint performs no cookie creation, renewal, or deleti
 
 | Verification result | Response |
 | :--- | :--- |
-| The cookie verifies successfully. | The endpoint returns HTTP 200 with JSON containing only `uid` and `expiresAt`. `uid` carries the verified UID, and `expiresAt` carries the verified `exp` claim in Unix seconds. |
+| The cookie verifies. | The endpoint returns HTTP 200 with JSON containing only `uid` and `expiresAt`. `uid` carries the verified UID, and `expiresAt` carries the verified `exp` claim in Unix seconds. |
 | The cookie is absent, expired, invalid, or revoked, or the account is disabled or deleted. | The endpoint returns HTTP 401 without identity data. |
 | A verification dependency is unavailable. | The endpoint returns HTTP 503 without identity data. |
 | Verification encounters an unclassified server error. | The endpoint returns HTTP 500 without identity data. |
 
 Every GET response carries `Cache-Control: no-store`. Only recognized credential
-failures map to HTTP 401. Unknown exceptions do not indicate invalid credentials.
-Recognized dependency transport failures, timeouts, and service-unavailability
-errors map to HTTP 503; other unclassified server errors map to HTTP 500.
-Responses expose no tokens, cookie values, additional claims, or verifier
-error details.
+failures map to HTTP 401. Recognized dependency transport failures, timeouts,
+and service-unavailability errors map to HTTP 503. Responses expose no tokens,
+cookie values, additional claims, or verifier error details.
 
 ### Reconciliation
 
 When checking server session status, the browser compares the returned UID
-with the resolved Firebase user UID. A matching response accepts server
-agreement without a POST request. A mismatched UID or an HTTP 401 response
-requires exchanging the resolved user ID token through POST `/api/auth/session`
+with the resolved Firebase user UID. Matching UIDs establish server agreement
+without a POST request. When the UID mismatches or the endpoint returns HTTP 401,
+the browser exchanges the resolved user ID token through POST `/api/auth/session`
 before confirming agreement. An HTTP 200 response to that POST acknowledges
 cookie creation and establishes agreement without a second GET.
 
-A failed repair POST leaves agreement unconfirmed and cannot produce a confirmed
-active session. A transport failure or HTTP 5xx response preserves Firebase
-authentication and permits a later repair attempt. An HTTP 401 response denotes
-credential rejection and does not confirm a session.
+A failed repair POST leaves agreement unconfirmed and produces no active session.
+A transport failure or HTTP 5xx response preserves Firebase authentication and
+permits a later repair attempt. An HTTP 401 response denotes credential
+rejection.
 
-A GET network failure, a server error, or a malformed success body leaves agreement
-unconfirmed and permits a later check. Inconclusive checks trigger neither
-speculative cookie creation nor Firebase sign-out. A valid success body
-requires a non-empty string `uid` and a finite integer `expiresAt`. HTTP
-status 200 from GET alone carries no identity evidence.
+A GET network failure, a server error, or a malformed success body leaves
+agreement unconfirmed and permits a later check. Inconclusive checks trigger
+neither speculative cookie creation nor Firebase sign-out. A valid success body
+requires a non-empty string `uid` and a finite integer `expiresAt`.
+
+### Logout
+
+Reconciliation rebuilds the session cookie and local user data from the Firebase
+session; a cookie never restores Firebase authentication. Logout removes the
+session cookie first, local user data second, and the Firebase session last.
+Local user data covers the persisted UID, the persisted subscriber data, and the
+account and profile subscriptions.
+
+```mermaid
+sequenceDiagram
+  participant Store as Session store
+  participant Server as /api/auth/session
+  participant Firebase as Firebase Auth
+  Store->>Server: DELETE
+  alt network failure or non-2xx
+    Server-->>Store: failure
+    Note over Store: stop, report incomplete logout
+  else 2xx
+    Server-->>Store: cookie deleted
+    Store->>Store: clear local user data
+    Store->>Firebase: sign out
+    alt sign-out fails
+      Note over Store: report incomplete logout
+    else signed out
+      Note over Store: session state initial
+    end
+  end
+```
+
+If a step fails, logout stops and leaves the later steps undone. Firebase keeps
+the session, so a later page load can repair or remove the cookie. A failed step
+sets the session state to `error` and tells the reader that logout did not
+complete. The notice survives a redirect. A completed logout sets the session
+state to `initial`. A retry runs every step again. A caller that invokes logout
+while one is in progress awaits that operation and receives its outcome.
+
+When Firebase resolves no user, the session store calls logout only if the
+session state is not `initial`. When an incomplete logout leaves the Firebase
+session intact, the next page load runs reconciliation, which can restore the
+session.
+
+The contract excludes ordering against in-flight cookie creation and excludes
+session revocation on other devices.
 
 ## Contract
 
@@ -113,6 +157,10 @@ status 200 from GET alone carries no identity evidence.
 - Missing or mismatched credentials require successful repair before the browser
   accepts server agreement.
 - A temporary repair failure preserves Firebase authentication for a later attempt.
+- Logout removes the session cookie, local user data, and the Firebase session, in
+  that order, from every session state.
+- A failed logout step leaves later steps undone and notifies the reader that
+  logout did not complete.
 
 ### Regression Guardrails
 
@@ -123,9 +171,10 @@ status 200 from GET alone carries no identity evidence.
   before the status protocol changed. Exclude `/api/auth/session` from
   service-worker cache reads and writes.
 - The service worker never queues or replays session mutations.
-- Protected-page verification continues returning `null` for every verifier
-  error. `requireSession` continues redirecting to login for that result, including
-  during a verification outage. Other page guards retain their redirects and denials.
+- Protected-page verification returns `null` for every verifier error.
+  `requireSession` redirects to login when verification returns `null`, including
+  during a verification outage. Other page guards retain their redirects and
+  denials.
 
 ### Scenarios
 
@@ -251,4 +300,72 @@ Feature: Verified session agreement
     Then the worker stores no session request for background replay
     When connectivity returns after the reader signs out
     Then the worker does not replay that session POST
+
+  Scenario Outline: Log out from any session state
+    Given the session state is <state>
+    When logout is called and every step succeeds
+    Then the store deletes the session cookie before clearing local user data
+    And the store clears local user data before Firebase signs out
+    And the session state becomes initial
+
+    Examples:
+      | state   |
+      | initial |
+      | loading |
+      | active  |
+      | error   |
+
+  Scenario Outline: Keep the Firebase session when the cookie deletion fails
+    Given account A is signed in
+    When logout is called and the cookie DELETE meets <failure>
+    Then local user data remains
+    And Firebase keeps account A signed in
+    And the session state is error
+    And the store notifies the reader that logout did not complete, including after a redirect
+
+    Examples:
+      | failure           |
+      | a network failure |
+      | HTTP 500          |
+
+  Scenario: Report a failed Firebase sign-out
+    Given the store deleted the session cookie and cleared local user data
+    When Firebase sign-out fails
+    Then the session state is error
+    And the store notifies the reader that logout did not complete
+
+  Scenario: Share one logout among concurrent callers
+    Given a logout is in progress
+    When a second caller calls logout
+    Then the second caller awaits the logout in progress
+    And each logout step runs once
+    And both callers receive the same outcome
+
+  Scenario: Restore the session after an incomplete logout
+    Given an earlier logout failed while Firebase kept account A signed in
+    When the reader loads a page
+    Then reconciliation runs for account A
+    And a successful reconciliation sets the session state to active
+
+  Scenario: Leave an anonymous page load alone
+    Given the session state is initial
+    When Firebase resolves no user
+    Then the session store does not call logout
+    And no logout step runs
+
+  Scenario Outline: Log out when Firebase has no user
+    Given the session state is <state>
+    When Firebase resolves no user
+    Then the session store calls logout
+
+    Examples:
+      | state   |
+      | active  |
+      | loading |
+      | error   |
+
+  Scenario: Retry an incomplete logout
+    Given an earlier logout ended with a failed step
+    When logout is called again
+    Then every logout step runs again
 ```
