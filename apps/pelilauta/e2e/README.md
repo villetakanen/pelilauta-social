@@ -38,6 +38,8 @@ pnpm --filter pelilauta test:e2e
 
 `pnpm --filter pelilauta test:e2e` waits for the development server, resets test fixtures, and executes Playwright.
 
+The suite expects the development server at `http://localhost:4321`. `astro dev` takes the next free port when 4321 is busy, so stop every running `astro dev` process before starting the server. A server left running from an earlier session can serve stale state.
+
 `playwright.config.ts` limits `testMatch` to the regression specs and configures one worker, zero retries, and `trace: retain-on-failure`.
 
 ## Fixtures and Safety
