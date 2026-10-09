@@ -1,5 +1,6 @@
 import type { Thread } from '@schemas/ThreadSchema';
 import { logDebug, logError } from '@utils/logHelpers';
+import { getAuthToken } from 'src/firebase/client/apiClient';
 
 /**
  * Updates an existing thread using the server-side API endpoint.
@@ -26,15 +27,7 @@ export async function updateThreadApi(
       silent,
     });
 
-    // Get the current user's auth token
-    const { auth } = await import('@firebase/client');
-    const { getIdToken } = await import('firebase/auth');
-
-    if (!auth.currentUser) {
-      throw new Error('User not authenticated');
-    }
-
-    const token = await getIdToken(auth.currentUser);
+    const token = await getAuthToken();
 
     // Prepare request body (exclude key, include silent flag)
     const { key: _, ...bodyWithoutKey } = thread;

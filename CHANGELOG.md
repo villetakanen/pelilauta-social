@@ -8,6 +8,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 - fix(session): Logout deletes the session cookie first, clears local user data second, and signs out of Firebase last. A failed step stops the logout, keeps the Firebase session, and tells the reader to try again. Logout also clears the persisted subscriber data. ([#180](https://github.com/villetakanen/pelilauta-social/issues/180))
 - test(session): Sign-in redirects only after the server creates the session cookie. ([#179](https://github.com/villetakanen/pelilauta-social/issues/179))
 - fix(threads): A thread created as non-public is stored as non-public. A thread created without the flag stays public. ([#167](https://github.com/villetakanen/pelilauta-social/issues/167))
+- fix(threads): A thread, reply or edit sent while the page restores the signed-in session waits for the session and is saved. ([#198](https://github.com/villetakanen/pelilauta-social/issues/198))
 
 ## 21.1.2
 
