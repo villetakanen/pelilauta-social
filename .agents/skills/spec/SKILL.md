@@ -1,38 +1,29 @@
 ---
 name: spec
-description: Create specs before implementation. Use when introducing a feature, making a significant change, or clarifying ambiguous requirements.
+description: Create or revise specs when defining or clarifying required behavior.
 ---
 
 # Spec
 
-A spec defines feature purpose, mechanics, system operation, and expected quality.
+A living spec explains a capability's purpose, required behavior, and constraints.
 
-Specs follow ASDLC.io living specs practice and anchor features to expected states.
+Follow [AGENTS.md](../../../AGENTS.md) for spec necessity, authority, and status.
+Follow [WRITING.md](../../../docs/WRITING.md) for prose and
+[ARCHITECTURE.md](../../../docs/ARCHITECTURE.md) for artifact responsibilities.
+Use [TEMPLATE.md](../../../specs/TEMPLATE.md) for structure and destination paths.
 
-`specs/TEMPLATE.md` defines spec anatomy.
+Read governing specs and relevant implementation before drafting.
+Use v20 for unsettled design treatments; confirm its intended purpose with the operator.
+When evidence conflicts or leaves intent unclear, resolve concrete examples with
+the operator: starting conditions, an action or event, and the expected outcome.
 
-A spec governs every design-system change. Pelilauta application work proceeds without a spec where none governs it yet; when `specs/pelilauta/**` governs a feature, amend the spec and flag the change for operator clearance.
+State requirements at the capability they govern; link shared requirements.
+Describe observable outcomes and concrete constraints.
+Link implementation details to their canonical artifacts.
+When implementation disagrees with a spec, identify the mismatch before choosing a fix.
 
-A task starts from live required specs unless the operator explicitly asks to start from a proposed spec. A material amendment discovered during implementation becomes proposed without stopping that task.
+Aim for 100 lines per spec; above 120, review scope and duplication.
+Split independent capabilities into child specs, preserving requirements,
+review status, and incoming links. Keep shared requirements in the parent.
 
-## Procedure
-
-1. Determine whether the task requires creating or amending a spec. Small changes inferable from the codebase and conforming to an existing spec require no spec change. State the decision explicitly when work proceeds without a spec change.
-2. Existing specs, implementation, and documents of v20 provide the primary source for design-system behavior. They carry intent only where the human confirms it. When they carry nothing, or carry an implementation identified as faulty, intent comes from the human and the source search stops. An absent or broken feature is not a settled decision. A value repeated across versions represents duplicated data rather than independent corroboration.
-3. Existing specs and the implementation provide the primary source for application logic and features. When they conflict with each other or with design intent, request clarification.
-4. Request clarification when the sources cannot establish the proposed spec.
-5. Create or update `specs/<domain>/<capability>/spec.md` for design system capabilities or `specs/pelilauta/<sub-app>/<capability>/spec.md` for application features. Place sub-features in child directories and list them in the parent spec.
-6. Encode document status in the frontmatter as `status: proposed | live | deprecated`. A `proposed` spec carries a new, material, or unsettled amendment the operator has not cleared. Implement alongside a proposal created during the task and flag the change for clearance in the delivery report, where the operator clears it to `live` or turns it back. For a minor, settled amendment to a live spec, show an unapplied diff and rationale in chat. Do not edit the file or change its status before the operator accepts the diff. Apply an accepted amendment while retaining `live`, then continue. A `live` spec portrays intended system operation. A spec kept for historical context or architectural reference is `deprecated`.
-7. Record large-scale or irreversible decisions in an ADR under `docs/adrs/`.
-8. Apply template sentence tests to new spec text before presenting it. Delete text that code, another spec, or an adjacent sentence already carries.
-9. After modifying a staged proposed spec, run the spec-review skill and flag the change for operator clearance in the delivery report; work continues without stopping. An accepted inline amendment remains `live`.
-
-## Prose
-
-Follow `docs/WRITING.md`. A spec is direct, strict, and technical.
-
-## Recording Intent
-
-The Context and Architecture sections carry the purpose that no other artifact holds: the user or system need the capability satisfies. State no rationale that the reader can derive.
-
-Source code carries behavior, logic, and contracts — what the system does, never why. Purpose comes from a spec, an ADR, a plan, or a human decision. When the only recorded purpose comes from v20, verify it with the human because v20 canonicalized mistakes. Before settling Context, interview the human regarding product priorities: who is served first, what they receive, and which priority prevails during conflicts. A purpose with no recorded source remains a question for the human rather than a claim in the spec.
+Before presenting a proposed spec change, run technical-writer and spec-review.
