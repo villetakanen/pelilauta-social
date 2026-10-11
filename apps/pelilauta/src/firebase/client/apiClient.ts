@@ -90,22 +90,18 @@ export async function authedFetch(
           ...options,
           headers: headers,
         });
-
-        // Fail-safe: If retry also fails with 401, trigger logout
-        if (response.status === 401) {
-          console.error('authedFetch: Retry failed with 401. Logging out...');
-          await auth.signOut();
-          window.location.href = '/login';
-          return response;
-        }
       } catch (refreshError) {
         console.error('authedFetch: Token repair failed:', refreshError);
         console.warn(
           'authedFetch: Logging out due to unrecoverable auth state.',
         );
-        await auth.signOut();
-        window.location.href = '/login';
+        await logoutAndRedirect();
         throw refreshError;
+      }
+
+      if (response.status === 401) {
+        console.error('authedFetch: Retry failed with 401. Logging out...');
+        await logoutAndRedirect();
       }
     }
 
@@ -114,6 +110,13 @@ export async function authedFetch(
     console.error('authedFetch: Network or fetch error:', error);
     // Re-throw the error so the calling code can handle it
     throw error;
+  }
+}
+
+async function logoutAndRedirect(): Promise<void> {
+  const { logout } = await import('src/stores/session');
+  if (await logout()) {
+    window.location.href = '/login';
   }
 }
 
