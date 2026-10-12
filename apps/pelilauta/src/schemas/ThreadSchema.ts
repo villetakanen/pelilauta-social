@@ -126,7 +126,7 @@ export function createThread(
     flowTime: Date.now(),
     markdownContent: source?.markdownContent || '',
     quoteRef: source?.quoteRef || undefined,
-    public: source?.public || true,
+    public: source?.public ?? true,
     tags: source?.tags || undefined,
     labels: source?.labels || undefined,
   };

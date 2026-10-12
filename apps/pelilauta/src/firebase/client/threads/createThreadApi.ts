@@ -1,5 +1,6 @@
 import type { Thread } from '@schemas/ThreadSchema';
 import { logDebug, logError } from '@utils/logHelpers';
+import { getAuthToken } from 'src/firebase/client/apiClient';
 
 /**
  * Creates a new thread using the server-side API endpoint.
@@ -22,20 +23,7 @@ export async function createThreadApi(
       filesCount: files.length,
     });
 
-    // Get the current user's auth token
-    const { auth } = await import('@firebase/client');
-    const { getIdToken } = await import('firebase/auth');
-
-    logDebug(endpointName, 'Auth state', {
-      currentUser: !!auth.currentUser,
-      userUid: auth.currentUser?.uid,
-    });
-
-    if (!auth.currentUser) {
-      throw new Error('User not authenticated');
-    }
-
-    const token = await getIdToken(auth.currentUser);
+    const token = await getAuthToken();
 
     // Prepare form data
     const formData = new FormData();

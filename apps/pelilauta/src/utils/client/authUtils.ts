@@ -1,35 +1,21 @@
 import type { User } from 'firebase/auth';
 import { captureError } from 'src/utils/client/sentry';
 import { logError } from 'src/utils/logHelpers';
+import { beginCookieSession, synchronizeSessionCookie } from './sessionCookie';
 
-/**
- * Completes the authentication flow by saving the session cookie and redirecting.
- *
- * @param user - Firebase user object
- * @param redirectPath - Path to redirect to after successful authentication (default: '/')
- */
 export async function completeAuthFlow(user: User, redirectPath = '/') {
+  const current = beginCookieSession(user.uid);
   try {
-    // Get the ID token from the user
-    const idToken = await user.getIdToken();
+    const response = await synchronizeSessionCookie(user, current);
+    if (!current()) return;
 
-    // Send the token to the server to create a session cookie
-    const response = await fetch('/api/auth/session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token: idToken }),
-    });
-
-    // Check if session creation failed
     if (!response.ok) {
       const errorText = await response.text();
+      if (!current()) return;
       const sessionError = new Error(
         `Session creation failed: ${response.status} ${errorText}`,
       );
 
-      // Log to Sentry - this is an unexpected server-side error
       captureError(sessionError, {
         component: 'completeAuthFlow',
         action: 'createSession',
@@ -40,30 +26,26 @@ export async function completeAuthFlow(user: User, redirectPath = '/') {
       throw sessionError;
     }
 
-    // Dynamically import client utilities
     const { pushSessionSnack } = await import('./snackUtils');
     const { t } = await import('src/utils/i18n');
 
-    // Set client-side session hint in localStorage before redirecting
+    if (!current()) return;
     try {
       localStorage.setItem('session-uid', user.uid);
       localStorage.setItem('session-state', 'active');
-    } catch {
-      // Storage unavailable or restricted
-    }
+    } catch {}
 
     pushSessionSnack(t('login:snacks.success'));
 
-    // Redirect on successful authentication
     window.location.assign(redirectPath);
   } catch (error) {
+    if (!current()) return;
     logError(
       'completeAuthFlow',
       'Failed to complete authentication flow:',
       error,
     );
 
-    // Log to Sentry if not already logged
     if (
       error instanceof Error &&
       !error.message.includes('Session creation failed')
@@ -74,6 +56,6 @@ export async function completeAuthFlow(user: User, redirectPath = '/') {
       });
     }
 
-    throw error; // Re-throw so calling code can handle the error
+    throw error;
   }
 }

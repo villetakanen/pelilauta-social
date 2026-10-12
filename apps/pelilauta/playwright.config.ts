@@ -23,6 +23,7 @@ export default defineConfig({
     'stale-session-reads.spec.ts',
     'read-marking-awaits-subscription.spec.ts',
     'open-inbox-reply-notification.spec.ts',
+    'session-agreement.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

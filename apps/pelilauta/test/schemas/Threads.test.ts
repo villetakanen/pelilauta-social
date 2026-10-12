@@ -26,6 +26,17 @@ test('createThread factory creates a thread object with public set to true', () 
   expect(thread.owners).toEqual(['-']); // Should have default owner
 });
 
+test('createThread keeps a thread created as non-public', () => {
+  expect(createThread({ public: false }).public).toBe(false);
+  expect(createThread({ public: true }).public).toBe(true);
+});
+
+test('parseThread keeps the stored public flag', () => {
+  const stored = { title: 'Test Thread', channel: 'general', owners: ['u'] };
+  expect(parseThread({ ...stored, public: false }).public).toBe(false);
+  expect(parseThread({ ...stored, public: true }).public).toBe(true);
+});
+
 test('ThreadSchema requires at least one owner', () => {
   expect(() => {
     ThreadSchema.parse({

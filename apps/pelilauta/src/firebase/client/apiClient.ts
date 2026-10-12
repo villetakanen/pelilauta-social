@@ -4,6 +4,27 @@ import { app as firebaseApp } from '.';
 const auth = getAuth(firebaseApp);
 
 /**
+ * Resolves the signed-in user's Firebase ID token for a request that cannot go
+ * through authedFetch, such as a multipart upload.
+ *
+ * @returns A Promise that resolves with the ID token.
+ * @throws Throws 'User not authenticated' when no user is signed in.
+ */
+export async function getAuthToken(): Promise<string> {
+  // Auth restores a persisted session asynchronously; a call racing that
+  // restore would read null from currentUser and fail a signed-in user.
+  await auth.authStateReady();
+  const currentUser: User | null = auth.currentUser;
+
+  if (!currentUser) {
+    throw new Error('User not authenticated');
+  }
+
+  // Note: getIdToken() automatically handles refreshing the token if it's expired.
+  return currentUser.getIdToken();
+}
+
+/**
  * A wrapper around the native fetch function that automatically adds the
  * Firebase Authentication ID token to the Authorization header for requests
  * to your backend API.
@@ -17,24 +38,15 @@ export async function authedFetch(
   input: RequestInfo | URL,
   options?: RequestInit,
 ): Promise<Response> {
-  // Auth restores a persisted session asynchronously; a call racing that
-  // restore would read null from currentUser and fail a signed-in user.
-  await auth.authStateReady();
-  const currentUser: User | null = auth.currentUser;
-
-  // 1. Check if user is logged in client-side
-  if (!currentUser) {
-    console.error('authedFetch: No user is currently logged in.');
-    // You might want to redirect to login or throw a specific error type
-    throw new Error('User not authenticated');
-  }
-
+  // 1-2. Wait for the session, then get the Firebase ID token
   let idToken: string;
   try {
-    // 2. Get the Firebase ID token
-    // Note: getIdToken() automatically handles refreshing the token if it's expired.
-    idToken = await currentUser.getIdToken();
+    idToken = await getAuthToken();
   } catch (error) {
+    if (error instanceof Error && error.message === 'User not authenticated') {
+      console.error('authedFetch: No user is currently logged in.');
+      throw error;
+    }
     console.error('authedFetch: Failed to get ID token:', error);
     // Handle token fetch error - maybe the user's session is invalid?
     throw new Error('Failed to retrieve authentication token');
@@ -78,22 +90,18 @@ export async function authedFetch(
           ...options,
           headers: headers,
         });
-
-        // Fail-safe: If retry also fails with 401, trigger logout
-        if (response.status === 401) {
-          console.error('authedFetch: Retry failed with 401. Logging out...');
-          await auth.signOut();
-          window.location.href = '/login';
-          return response;
-        }
       } catch (refreshError) {
         console.error('authedFetch: Token repair failed:', refreshError);
         console.warn(
           'authedFetch: Logging out due to unrecoverable auth state.',
         );
-        await auth.signOut();
-        window.location.href = '/login';
+        await logoutAndRedirect();
         throw refreshError;
+      }
+
+      if (response.status === 401) {
+        console.error('authedFetch: Retry failed with 401. Logging out...');
+        await logoutAndRedirect();
       }
     }
 
@@ -102,6 +110,13 @@ export async function authedFetch(
     console.error('authedFetch: Network or fetch error:', error);
     // Re-throw the error so the calling code can handle it
     throw error;
+  }
+}
+
+async function logoutAndRedirect(): Promise<void> {
+  const { logout } = await import('src/stores/session');
+  if (await logout()) {
+    window.location.href = '/login';
   }
 }
 

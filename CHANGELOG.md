@@ -2,6 +2,17 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.3
+
+- fix(session): Forced sign-out after an API authentication failure clears the session cookie and local user data before signing out of Firebase. Failed logout keeps the reader on the current page with the incomplete-logout notice. ([#207](https://github.com/villetakanen/pelilauta-social/issues/207))
+
+- fix(session): Logout waits for a session cookie request already sent before deleting the cookie, and a late sign-in or session restore cannot restore local user data after logout. Sign-in and session restore for the same account send one session request.
+- fix(session): The browser confirms a signed-in session only when the server verifies a session cookie for the same account, and recreates a missing or mismatched cookie. A temporary verification or network failure leaves the reader signed in to Firebase for a later check, and the service worker neither caches session status nor replays a session request. ([#178](https://github.com/villetakanen/pelilauta-social/issues/178))
+- fix(session): Logout deletes the session cookie first, clears local user data second, and signs out of Firebase last. A failed step stops the logout, keeps the Firebase session, and tells the reader to try again. Logout also clears the persisted subscriber data. ([#180](https://github.com/villetakanen/pelilauta-social/issues/180))
+- test(session): Sign-in redirects only after the server creates the session cookie. ([#179](https://github.com/villetakanen/pelilauta-social/issues/179))
+- fix(threads): A thread created as non-public is stored as non-public. A thread created without the flag stays public. ([#167](https://github.com/villetakanen/pelilauta-social/issues/167))
+- fix(threads): A thread, reply or edit sent while the page restores the signed-in session waits for the session and is saved. ([#198](https://github.com/villetakanen/pelilauta-social/issues/198))
+
 ## 21.1.2
 
 - fix(markdown): The server bundles the HTML sanitizer so Markdown pages render on the Netlify runtime.

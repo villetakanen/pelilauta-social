@@ -10,9 +10,6 @@ import {
 import { db } from '../../firebase/client';
 import { logDebug, logWarn } from '../../utils/logHelpers';
 
-/**
- * The nanostores atom that holds the current user Profile data.
- */
 export const $profile = persistentAtom<Profile | null>(
   'session-profile',
   null,
@@ -29,11 +26,12 @@ export const profile = $profile;
 export const profileMissing = $profileMissing;
 
 let unsubscribe: (() => void) | undefined;
+let subscription = 0;
 
-export function subscribeToProfile(uid: string) {
+export function subscribeToProfile(uid: string, identityCurrent = () => true) {
+  const started = ++subscription;
   logDebug('profileStore', 'subscribeToProfile', { uid });
 
-  // Make sure we unsubscribe from any existing subscription first
   if (unsubscribe) {
     logDebug(
       'profileStore',
@@ -45,6 +43,7 @@ export function subscribeToProfile(uid: string) {
 
   const profileRef = doc(db, PROFILES_COLLECTION_NAME, uid);
   unsubscribe = onSnapshot(profileRef, (snapshot) => {
+    if (started !== subscription || !identityCurrent()) return;
     if (snapshot.exists()) {
       try {
         const profileData = parseProfile(snapshot.data(), snapshot.id);
@@ -61,7 +60,6 @@ export function subscribeToProfile(uid: string) {
           error,
         );
         try {
-          // Attempt to migrate legacy profile data
           const migratedProfile = migrateProfile(snapshot.data(), snapshot.id);
           logDebug(
             'profileStore',
@@ -90,6 +88,7 @@ export function subscribeToProfile(uid: string) {
   });
 }
 export function unsubscribeFromProfile() {
+  subscription++;
   logDebug('profileStore', 'unsubscribeFromProfile', 'Clearing profile data');
   $profile.set(null);
   if (unsubscribe) {

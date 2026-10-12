@@ -1,3 +1,4 @@
+import { getAuthToken } from 'src/firebase/client/apiClient';
 import type { Thread } from 'src/schemas/ThreadSchema';
 import { logDebug } from 'src/utils/logHelpers';
 
@@ -38,15 +39,7 @@ export async function submitReply(
     formData.append(`file_${index}`, file);
   });
 
-  // Get auth token
-  const { getAuth } = await import('firebase/auth');
-  const user = getAuth().currentUser;
-
-  if (!user) {
-    throw new Error('User not authenticated');
-  }
-
-  const token = await user.getIdToken();
+  const token = await getAuthToken();
 
   // Submit to API endpoint
   const response = await fetch('/api/threads/add-reply', {

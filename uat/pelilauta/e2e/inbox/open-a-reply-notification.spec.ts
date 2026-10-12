@@ -49,25 +49,9 @@ it('leads from the inbox notification of a reply to the reply in the thread', as
   const send = authorPage.getByTestId('send-thread-button');
   await expect.poll(() => send.isDisabled(), { timeout: 15_000 }).toBe(false);
 
-  // Saving lands on the thread. The page restores the signed-in session
-  // asynchronously and shows nothing when it is done, and a send before then
-  // fails with "User not authenticated" and leaves the editor open. A failed
-  // send writes nothing, so send again until the page leaves the editor.
-  // #198 tracks the defect; the retry goes when it is fixed.
-  const onThread = /\/threads\/[^/#?]+$/;
-  await expect
-    .poll(
-      async () => {
-        if (onThread.test(authorPage.url())) return true;
-        if (!(await send.isDisabled())) await send.click();
-        return authorPage
-          .waitForURL(onThread, { timeout: 3_000 })
-          .then(() => true)
-          .catch(() => false);
-      },
-      { timeout: 60_000, interval: 500 },
-    )
-    .toBe(true);
+  // Saving lands on the thread.
+  await send.click();
+  await authorPage.waitForURL(/\/threads\/[^/#?]+$/, { timeout: 60_000 });
   const threadPath = new URL(authorPage.url()).pathname;
 
   // 2. Another member replies from the chat bar.
@@ -80,24 +64,9 @@ it('leads from the inbox notification of a reply to the reply in the thread', as
     .getByRole('button', { name: t('actions:send') });
   const standing = replierPage.getByText(replyText).first();
 
-  // The reply stands in the thread. The session is restored asynchronously, as
-  // on the editor, and a send before then fails and keeps the text in the field,
-  // so send again while the field still holds it.
-  await expect
-    .poll(
-      async () => {
-        if (await standing.isVisible()) return true;
-        if (
-          (await replyField.inputValue()) === replyText &&
-          !(await sendReply.isDisabled())
-        ) {
-          await sendReply.click();
-        }
-        return standing.isVisible();
-      },
-      { timeout: 60_000, interval: 1_000 },
-    )
-    .toBe(true);
+  // The reply stands in the thread.
+  await sendReply.click();
+  await expect.poll(() => standing.isVisible(), { timeout: 60_000 }).toBe(true);
 
   // 3. The notification arrives after the reply, so the author reloads the
   // inbox until it lists the reply.

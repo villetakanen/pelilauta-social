@@ -1,4 +1,4 @@
 interface:
   display_name: "Next Task"
-  short_description: "Propose the smallest useful deliverable increment"
-  default_prompt: "Use $next-task to propose the next deliverable increment with concrete technical details for an experienced operator."
+  short_description: "Choose the next worthwhile task"
+  default_prompt: "Use $next-task to choose the next worthwhile task, compare it with the strongest alternative, and define a deliverable increment."
