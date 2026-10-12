@@ -1,5 +1,6 @@
 import { persistentAtom } from '@nanostores/persistent';
 import { onMount } from 'nanostores';
+import { cookieSessionCurrent } from 'src/utils/client/sessionCookie';
 import { logError } from 'src/utils/logHelpers';
 import { db } from '../../firebase/client';
 import {
@@ -23,47 +24,59 @@ export const $subscriber = persistentAtom<Subscription>(
 );
 
 let unsubscribe: (() => void) | undefined;
+let subscription = 0;
 
 onMount($subscriber, () => {
   const u = uid.get();
-  if (u) initSubscriberStore(u);
+  if (u) initSubscriberStore(u, cookieSessionCurrent(u));
 });
 
-/** Drops the Firestore listener and the persisted subscriber data. */
+/** This function terminates the Firestore listener and resets persisted subscriber data. */
 export function resetSubscriberStore() {
+  subscription++;
   unsubscribe?.();
   unsubscribe = undefined;
   $subscriber.set(createSubscription(''));
 }
 
-export async function initSubscriberStore(uid: string) {
+export async function initSubscriberStore(
+  uid: string,
+  identityCurrent = () => true,
+) {
+  const started = ++subscription;
+  const current = () => started === subscription && identityCurrent();
+  unsubscribe?.();
+  unsubscribe = undefined;
   if (!uid) {
     resetSubscriberStore();
     return;
   }
   const { onSnapshot, doc } = await import('firebase/firestore');
+  if (!current()) return;
   unsubscribe = onSnapshot(
     doc(db, `${SUBSCRIPTIONS_FIRESTORE_PATH}/${uid}`),
     (doc) => {
+      if (!current()) return;
       if (doc.exists()) {
         $subscriber.set(parseSubscription(doc.data(), doc.id));
       } else {
-        createSubscriptionEntry(uid);
+        createSubscriptionEntry(uid, current);
       }
     },
   );
-  //logDebug('subscriber', 'Firestore subscription of subscriber set up');
 }
 
-async function createSubscriptionEntry(uid: string) {
+async function createSubscriptionEntry(uid: string, current: () => boolean) {
   if (!uid) {
     throw new Error('an uid is required to create a subscription');
   }
   const subscription = createSubscription(uid);
   const { getDoc, setDoc, doc } = await import('firebase/firestore');
+  if (!current()) return;
   const subscriberRef = doc(db, `${SUBSCRIPTIONS_FIRESTORE_PATH}/${uid}`);
 
   const subscriberDoc = await getDoc(subscriberRef);
+  if (!current()) return;
   if (subscriberDoc.exists()) {
     throw new Error('subscriber doc already exists, aborting');
   }

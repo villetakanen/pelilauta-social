@@ -44,7 +44,21 @@ vi.stubGlobal('window', {
   addEventListener: () => {},
   removeEventListener: () => {},
 });
-const { sessionState, uid } = await import('../../src/stores/session');
+const { sessionState, uid, logout } = await import('../../src/stores/session');
+const { subscribe } = await import('../../src/stores/session/account');
+const { initSubscriberStore } = await import(
+  '../../src/stores/session/subscriber'
+);
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (error: unknown) => void;
+  const promise = new Promise<T>((yes, no) => {
+    resolve = yes;
+    reject = no;
+  });
+  return { promise, resolve, reject };
+}
 
 const user = {
   uid: 'A',
@@ -66,11 +80,107 @@ beforeEach(() => {
   fetchMock.mockReset();
   h.signOut.mockReset();
   h.pushSnack.mockReset();
+  vi.mocked(subscribe).mockReset();
+  vi.mocked(initSubscriberStore).mockReset();
   sessionState.set('initial');
   uid.set('');
 });
 
 describe('session reconciliation', () => {
+  test.each(['success', 'network failure', 'HTTP 401'])(
+    'logout supersedes a late POST %s',
+    async (outcome) => {
+      const post = deferred<Response>();
+      fetchMock
+        .mockResolvedValueOnce(status(401))
+        .mockReturnValueOnce(post.promise)
+        .mockResolvedValue(status(200));
+      const restoring = h.onChange?.(user);
+      await vi.waitFor(() => expect(calls('POST')).toHaveLength(1));
+      const leaving = logout();
+      expect(calls('DELETE')).toHaveLength(0);
+      if (outcome === 'network failure') post.reject(new TypeError('offline'));
+      else post.resolve(status(outcome === 'HTTP 401' ? 401 : 200));
+      await restoring;
+      expect(await leaving).toBe(true);
+      expect(calls('DELETE')).toHaveLength(1);
+      expect(uid.get()).toBe('');
+      expect(sessionState.get()).toBe('initial');
+      expect(subscribe).not.toHaveBeenCalled();
+      expect(h.pushSnack).not.toHaveBeenCalled();
+    },
+  );
+
+  test('a new identity checks status only after older cookie creation settles', async () => {
+    const post = deferred<Response>();
+    fetchMock
+      .mockResolvedValueOnce(status(401))
+      .mockReturnValueOnce(post.promise)
+      .mockResolvedValueOnce(matching())
+      .mockResolvedValueOnce(status(200));
+    const first = h.onChange?.(user);
+    await vi.waitFor(() => expect(calls('POST')).toHaveLength(1));
+    const second = h.onChange?.({ ...user, uid: 'B' } as User);
+    expect(calls('GET')).toHaveLength(1);
+    post.resolve(status(200));
+    await Promise.all([first, second]);
+    expect(
+      fetchMock.mock.calls.map(([, init]) => init?.method ?? 'GET'),
+    ).toEqual(['GET', 'POST', 'GET', 'POST']);
+    expect(uid.get()).toBe('B');
+    expect(subscribe).toHaveBeenCalledTimes(1);
+    expect(subscribe).toHaveBeenCalledWith('B', expect.any(Function));
+  });
+
+  test('an obsolete status check does not replace the new account', async () => {
+    const get = deferred<Response>();
+    fetchMock
+      .mockReturnValueOnce(get.promise)
+      .mockResolvedValueOnce(ok({ uid: 'B', expiresAt: 1900000000 }));
+    const first = h.onChange?.(user);
+    await vi.waitFor(() => expect(calls('GET')).toHaveLength(1));
+    await h.onChange?.({ ...user, uid: 'B' } as User);
+    get.resolve(matching());
+    await first;
+    expect(uid.get()).toBe('B');
+    expect(subscribe).toHaveBeenCalledTimes(1);
+    expect(subscribe).toHaveBeenCalledWith('B', expect.any(Function));
+  });
+
+  test('logout during account setup prevents subsequent subscriptions and activation', async () => {
+    const account = deferred<void>();
+    vi.mocked(subscribe).mockReturnValueOnce(account.promise);
+    fetchMock.mockResolvedValueOnce(matching()).mockResolvedValue(status(200));
+    const restoring = h.onChange?.(user);
+    await vi.waitFor(() => expect(subscribe).toHaveBeenCalled());
+    expect(await logout()).toBe(true);
+    account.resolve();
+    await restoring;
+    expect(initSubscriberStore).not.toHaveBeenCalled();
+    expect(uid.get()).toBe('');
+    expect(sessionState.get()).toBe('initial');
+  });
+
+  test('failed logout still supersedes earlier setup and permits new reconciliation', async () => {
+    const account = deferred<void>();
+    vi.mocked(subscribe).mockReturnValueOnce(account.promise);
+    fetchMock
+      .mockResolvedValueOnce(matching())
+      .mockResolvedValueOnce(status(500));
+    const restoring = h.onChange?.(user);
+    await vi.waitFor(() => expect(subscribe).toHaveBeenCalled());
+    expect(await logout()).toBe(false);
+    account.resolve();
+    await restoring;
+    expect(sessionState.get()).toBe('error');
+    expect(initSubscriberStore).not.toHaveBeenCalled();
+
+    fetchMock.mockResolvedValueOnce(matching());
+    await h.onChange?.(user);
+    expect(sessionState.get()).toBe('active');
+    expect(uid.get()).toBe('A');
+  });
+
   test('a matching cookie activates without a POST', async () => {
     fetchMock.mockResolvedValueOnce(matching());
     await h.onChange?.(user);

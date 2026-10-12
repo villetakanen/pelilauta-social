@@ -5,6 +5,13 @@ import { logDebug, logError, logWarn } from '@utils/logHelpers';
 import type { User } from 'firebase/auth';
 import { atom, computed } from 'nanostores';
 import {
+  beginCookieSession,
+  blockCookieSynchronization,
+  resumeCookieSynchronization,
+  synchronizeSessionCookie,
+  waitForCookieSynchronization,
+} from 'src/utils/client/sessionCookie';
+import {
   $account,
   subscribe as subscribeToAccount,
   reset as unsubscribeFromAccount,
@@ -12,26 +19,19 @@ import {
 import { subscribeToProfile, unsubscribeFromProfile } from './profile';
 import { initSubscriberStore, resetSubscriberStore } from './subscriber';
 
-// Firebase auth user - reactive store for the current Firebase user
 export const authUser = atom<User | null>(null);
 
-// *** Primary session stores ******************************************
-
 export type SessionState = 'initial' | 'loading' | 'active' | 'error';
-// Session state - used to determine if the session is active for UX purposes
 export const sessionState = persistentAtom<SessionState>(
   'session-state',
   'initial',
 );
 
-// Fix for infinite loading state:
-// If the page was reloaded while in 'loading' state, we need to reset it
-// because the async process that was supposed to clear it is no longer running.
+// A page reload during loading state leaves the asynchronous process terminated. Reset state to initial.
 if (sessionState.get() === 'loading') {
   sessionState.set('initial');
 }
 
-// Add debug logging for session state changes
 sessionState.subscribe((state, oldState) => {
   if (state !== oldState) {
     logDebug('sessionStore', 'sessionState changed', {
@@ -41,10 +41,9 @@ sessionState.subscribe((state, oldState) => {
   }
 });
 
-// Legacy support for solid components
+// Solid components use $loadingState as a legacy alias.
 export const $loadingState = sessionState;
 
-// Active user's UID, stored in localStorage for session persistence
 export const uid = persistentAtom<string>('session-uid', '');
 
 if (typeof document !== 'undefined') {
@@ -56,20 +55,14 @@ if (typeof document !== 'undefined') {
   });
 }
 
-// *** Computed stores ******************************************
-
-// Helper for the session state
 export const active = computed(sessionState, (state) => state === 'active');
 
-// Helper to identify anonymous session for UX purposes
 export const anonymous = computed([active, uid], (active, uid) => {
   if (!active) return false;
   return !uid;
 });
-// Legacy support for solid components
+// Solid components use $isAnonymous as a legacy alias.
 export const $isAnonymous = anonymous;
-
-// *** REFACTORED UP TO HERE ******************************************
 
 export const $locale = computed(
   $account,
@@ -83,11 +76,9 @@ export const $theme = computed(
 export { $profile, $profileMissing } from './profile';
 
 /*
- * The browser learns who the reader is here, and nowhere else. A store mount
- * hook would have missed it: the class toggle above subscribes to `uid` as this
- * module loads, so the store is mounted before a hook could arm, and the hook
- * fires on the first listener alone. The listener is attached on load instead,
- * which no import order can silence.
+ * The authentication listener attaches on module load. Subscribing to `uid`
+ * during module evaluation mounts the store before an `onMount` hook can arm,
+ * preventing hook execution on subsequent listeners.
  */
 if (typeof window !== 'undefined') {
   auth.onAuthStateChanged(handleFirebaseAuthChange);
@@ -95,9 +86,9 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * Compares the server cookie with the resolved Firebase user.
- * Only a 401 or a valid body for another uid requires repair; anything
- * else that is not a match leaves agreement unconfirmed.
+ * This function compares the server session cookie with the resolved Firebase user.
+ * Only HTTP 401 or a response containing another UID requires repair. Other mismatches
+ * leave agreement unconfirmed.
  */
 async function getServerSessionStatus(
   userUid: string,
@@ -121,12 +112,12 @@ async function getServerSessionStatus(
   }
 }
 
-/**
- * This function is called whenever the firebase auth state changes.
- *
- * @param user
- */
+let reconciliation = 0;
+
 async function handleFirebaseAuthChange(user: User | null) {
+  const started = ++reconciliation;
+  const identityCurrent = beginCookieSession(user?.uid ?? null);
+  const current = () => identityCurrent() && started === reconciliation;
   logDebug('sessionStore', 'handleFirebaseAuthChange', {
     user: !!user,
     currentState: sessionState.get(),
@@ -134,8 +125,7 @@ async function handleFirebaseAuthChange(user: User | null) {
   });
   authUser.set(user);
 
-  // User is not authenticated. An initial session has nothing to log out of;
-  // every other state does, and a logout already running absorbs this call.
+  // Unauthenticated state requires cleanup when the session is not initial. Concurrent calls share the running logout operation.
   if (!user) {
     if (sessionState.get() !== 'initial') {
       await logout();
@@ -143,11 +133,14 @@ async function handleFirebaseAuthChange(user: User | null) {
     return;
   }
 
-  // User is authenticated. Persisted uid and state do not substitute for the
-  // server's answer: every resolved user is checked against the cookie.
+  // Persisted session state cannot substitute for server verification. Every resolved user requires verification against the session cookie.
+  if (!current()) return;
+  await waitForCookieSynchronization();
+  if (!current()) return;
   const status = await getServerSessionStatus(user.uid);
+  if (!current()) return;
   if (status === 'inconclusive') {
-    // Agreement is unconfirmed; Firebase auth and the persisted uid stay for a later check.
+    // Agreement remains unconfirmed. Firebase authentication and persisted identity remain for subsequent verification.
     logWarn(
       'sessionStore',
       'handleFirebaseAuthChange',
@@ -162,25 +155,18 @@ async function handleFirebaseAuthChange(user: User | null) {
       sessionState.set('loading');
       let postStatus = 0;
       try {
-        // A token refresh can fail offline; that is as temporary as the POST.
-        const token = await user.getIdToken();
-        const response = await fetch('/api/auth/session', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ token }),
-        });
+        const response = await synchronizeSessionCookie(user, identityCurrent);
         postStatus = response.status;
       } catch (error) {
         logWarn('sessionStore', 'Failed to post session token:', error);
       }
 
+      if (!current()) return;
       if (postStatus === 401) {
         throw new Error('Session credentials rejected');
       }
       if (postStatus !== 200) {
-        // Network failure or 5xx: temporary, a later check can repair.
+        // Transport failures and HTTP 5xx responses represent temporary errors. Subsequent checks retry repair.
         logWarn(
           'sessionStore',
           'handleFirebaseAuthChange',
@@ -191,20 +177,22 @@ async function handleFirebaseAuthChange(user: User | null) {
       }
     }
 
-    // Subscribe to account and profile - both might be missing
+    // The session subscribes to account and profile documents even when either document is absent.
     try {
-      await subscribeToAccount(user.uid);
+      await subscribeToAccount(user.uid, current);
     } catch (error) {
       logError('sessionStore', 'Failed to subscribe to account:', error);
     }
 
+    if (!current()) return;
     try {
-      subscribeToProfile(user.uid);
+      subscribeToProfile(user.uid, current);
     } catch (error) {
       logError('sessionStore', 'Failed to subscribe to profile:', error);
     }
 
-    await login(user.uid);
+    await login(user.uid, current);
+    if (!current()) return;
 
     sessionState.set('active');
     logDebug(
@@ -213,6 +201,7 @@ async function handleFirebaseAuthChange(user: User | null) {
       'User logged in and session is active',
     );
   } catch (error) {
+    if (!current()) return;
     logWarn(
       'sessionStore',
       'handleFirebaseAuthChange',
@@ -225,15 +214,14 @@ async function handleFirebaseAuthChange(user: User | null) {
   }
 }
 
-async function login(newUid: string) {
+async function login(newUid: string, current: () => boolean) {
   if (!newUid) {
     logWarn('sessionStore', 'login', 'No uid provided');
     return;
   }
   uid.set(newUid);
 
-  // subscribe to user subscriptions data
-  initSubscriberStore(newUid);
+  await initSubscriberStore(newUid, current);
 }
 
 async function clear() {
@@ -247,14 +235,16 @@ async function clear() {
 let logoutInProgress: Promise<boolean> | undefined;
 
 /**
- * Logs out: the session cookie first, local user data second, Firebase last.
- * A failed step stops the rest, sets the state to 'error' and notifies the
- * reader. Callers arriving during a logout share it. Resolves to `true` when
- * logout completed and `false` when a step failed; it never rejects.
+ * Logout deletes the session cookie first, clears local user data second, and
+ * signs out of Firebase last. A failed step halts subsequent steps, sets state
+ * to error, and notifies the reader. Concurrent callers share the active logout
+ * operation. The operation resolves to true on completion and false on failure,
+ * and never rejects.
  */
 export function logout(): Promise<boolean> {
   if (!logoutInProgress) {
     logoutInProgress = runLogout().finally(() => {
+      resumeCookieSynchronization();
       logoutInProgress = undefined;
     });
   }
@@ -266,6 +256,7 @@ async function runLogout(): Promise<boolean> {
   sessionState.set('loading');
 
   try {
+    await blockCookieSynchronization();
     const response = await fetch('/api/auth/session', { method: 'DELETE' });
     if (!response.ok) {
       throw new Error(`Session cookie deletion failed: ${response.status}`);
@@ -290,5 +281,5 @@ async function runLogout(): Promise<boolean> {
 
 export * from './account';
 export * from './subscriber';
-// NOTE: Do NOT export from './computed' here to avoid circular dependency
+// Exporting from './computed' here creates a circular dependency.
 // Import computed helpers directly: import { isActive, isRehydrating, isAnonymous } from 'src/stores/session/computed';

@@ -2,19 +2,17 @@
 
 The feature regression suite drives Playwright against a running development server and the shared `skaldbase-test` Firebase project. `pnpm --filter pelilauta test:e2e` runs this suite independently of `pnpm test:uat`. Neither `pnpm test` nor the pre-push hook runs these tests.
 
-Each spec file defines fixtures for one feature regression:
-
 - `onboarding-callout-transition.spec.ts` tests onboarding callout view transitions.
 - `reply-subscription-termination.spec.ts` tests reply subscription lifecycles.
 - `read-replies-without-javascript.spec.ts` tests reply rendering in the initial document.
 - `anonymous-reply-reaction-reads.spec.ts` tests that anonymous readers perform no reaction queries.
 - `open-reply-permalink.spec.ts` tests navigating to a reply permalink without JavaScript.
 - `jump-to-timestamp.spec.ts` tests navigation to the reply matching a URL timestamp parameter.
-- `live-reply-attribution.spec.ts` tests that a live reply inserted between replies leaves every reply under its own author.
+- `live-reply-attribution.spec.ts` tests that a live reply inserted between replies leaves every reply attributed to its author.
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
 - `read-marking-awaits-subscription.spec.ts` tests that opening a thread marks it read when the subscription arrives after the session confirms.
 - `open-inbox-reply-notification.spec.ts` tests that a reply notification in the inbox links to its reply in the thread.
-- `session-agreement.spec.ts` tests that reloading with a matching session cookie sends no session POST, and that a missing cookie is recreated by one POST.
+- `session-agreement.spec.ts` tests matching-cookie preservation, missing-cookie repair, and logout during cookie repair.
 
 ## Prerequisites
 
@@ -25,7 +23,7 @@ The suite requires two gitignored files in the repository root:
 
 `apps/pelilauta/.env` provides Firestore configuration.
 
-The Auth account for `existingUser` must exist in `skaldbase-test`. `reset-fixtures.mjs` aborts when the account is missing. `reset-fixtures.mjs` neither creates nor deletes Auth accounts.
+The `skaldbase-test` project requires an Auth account for `existingUser`. `reset-fixtures.mjs` aborts when the account is missing. `reset-fixtures.mjs` neither creates nor deletes Auth accounts.
 
 ## Running
 
@@ -38,10 +36,10 @@ pnpm --filter pelilauta test:e2e
 
 `pnpm --filter pelilauta test:e2e` waits for the development server, resets test fixtures, and executes Playwright.
 
-The suite expects the development server at `http://localhost:4321`. `astro dev` takes the next free port when 4321 is busy, so stop every running `astro dev` process before starting the server. A server left running from an earlier session can serve stale state.
+The suite targets the development server at `http://localhost:4321`. `astro dev` takes the next free port when port 4321 is busy. Stop running `astro dev` processes before starting the server. A server left running from an earlier session can serve stale state.
 
 `playwright.config.ts` limits `testMatch` to the regression specs and configures one worker, zero retries, and `trace: retain-on-failure`.
 
 ## Fixtures and Safety
 
-`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author's profile, and three replies belonging to that thread, including one reply with an image, and one unread reply notification for the signed-in member. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.
+`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author profile, and three replies belonging to that thread, including one reply with an image, and one unread reply notification for the signed-in member. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.

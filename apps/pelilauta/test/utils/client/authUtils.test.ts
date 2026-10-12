@@ -17,6 +17,23 @@ const { completeAuthFlow } = await import(
   '../../../src/utils/client/authUtils'
 );
 
+const {
+  beginCookieSession,
+  synchronizeSessionCookie,
+  blockCookieSynchronization,
+  resumeCookieSynchronization,
+} = await import('../../../src/utils/client/sessionCookie');
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (error: unknown) => void;
+  const promise = new Promise<T>((yes, no) => {
+    resolve = yes;
+    reject = no;
+  });
+  return { promise, resolve, reject };
+}
+
 const user = {
   uid: 'A',
   getIdToken: vi.fn(async () => 'token-A'),
@@ -41,6 +58,39 @@ afterEach(() => {
 });
 
 describe('completeAuthFlow', () => {
+  test('explicit login shares a restoration exchange', async () => {
+    const post = deferred<Response>();
+    fetchMock.mockReturnValue(post.promise);
+    const restoring = synchronizeSessionCookie(
+      user,
+      beginCookieSession(user.uid),
+    );
+    const signingIn = completeAuthFlow(user, '/channels');
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    post.resolve(new Response('{}', { status: 200 }));
+    await Promise.all([restoring, signingIn]);
+    expect(assign).toHaveBeenCalledWith('/channels');
+  });
+
+  test.each([false, true])(
+    'logout suppresses late sign-in completion (failure: %s)',
+    async (failure) => {
+      const post = deferred<Response>();
+      fetchMock.mockReturnValue(post.promise);
+      const signingIn = completeAuthFlow(user, '/channels');
+      await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+      const logout = blockCookieSynchronization();
+      if (failure) post.reject(new TypeError('offline'));
+      else post.resolve(new Response('{}', { status: 200 }));
+      await Promise.all([signingIn, logout]);
+      resumeCookieSynchronization();
+      expect(store.size).toBe(0);
+      expect(assign).not.toHaveBeenCalled();
+      expect(h.pushSessionSnack).not.toHaveBeenCalled();
+      expect(h.captureError).not.toHaveBeenCalled();
+    },
+  );
+
   test('on 200 posts the token, writes the hints and redirects', async () => {
     fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
 

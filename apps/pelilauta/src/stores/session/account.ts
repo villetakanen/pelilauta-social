@@ -8,11 +8,8 @@ import {
 import { appMeta } from 'src/stores/metaStore/metaStore';
 import { logWarn } from 'src/utils/logHelpers';
 
-// *** Primary session stores: Acccount ******************************************
+const LAST_LOGIN_TIMEOUT = 24 * 60 * 60 * 1000;
 
-const LAST_LOGIN_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-
-// The nanostores persisten atom that holds the current user Account data.
 export const account = persistentAtom<Account | null>('session-account', null, {
   encode: JSON.stringify,
   decode: (data) => {
@@ -23,22 +20,18 @@ export const account = persistentAtom<Account | null>('session-account', null, {
 });
 const accountNotFound = atom(false);
 
-// Legacy support for solid components
+// Solid components use $account as a legacy alias.
 export const $account = account;
 
-// *** Computed stores *************************************************
-
-// Helper for the EULA acceptance state
 export const requiresEula = computed([account, accountNotFound], (acc, anf) => {
   if (anf) return true;
   if (!acc) return false;
   return !acc.eulaAccepted;
 });
 
-// Helper for the admin tooling visiblity. The actual authz is done in the
-// backend, this is just a helper to show/hide the admin tools in the UI.
+// This computed store controls visibility for administrative interface tools. Backend rules enforce administrative authorization.
 export const showAdminTools = computed(
-  [account, appMeta], // Uses $account
+  [account, appMeta],
   (account, appMeta) => {
     if (!account) return false;
     if (!account.uid) return false;
@@ -48,26 +41,26 @@ export const showAdminTools = computed(
 );
 
 let unsubscribe: () => void;
+let subscription = 0;
 
 async function handleAccountSnapshot(
   accountData: Partial<Account> | undefined,
   key: string,
+  current: () => boolean,
 ) {
+  if (!current()) return;
   if (accountData) {
     try {
       const incoming = parseAccount(accountData, key);
 
-      // Lets handle the account update
       account.set(incoming);
 
-      // Check if the lastLogin is within 24 hours, if not we will update it
       const lastLoginTime = incoming.lastLogin?.getTime() || 0;
       if (Date.now() - lastLoginTime > LAST_LOGIN_TIMEOUT) {
-        // If the lastLogin is more than 24 hours ago, update it
-        await stampLoginTime(incoming.uid);
+        await stampLoginTime(incoming.uid, current);
       }
 
-      accountNotFound.set(false);
+      if (current()) accountNotFound.set(false);
     } catch (error) {
       logWarn(
         'AccountStore',
@@ -75,18 +68,17 @@ async function handleAccountSnapshot(
         'Error parsing account data',
         error,
       );
-      // If we fail to parse the account data, we'LL handle it as not found
-      handleAccountSnapshot(undefined, key);
+      handleAccountSnapshot(undefined, key, current);
     }
   } else {
-    // If the account data is null, we set the account to null and mark it as not found
     account.set(null);
     accountNotFound.set(true);
   }
 }
 
-export async function subscribe(uid: string) {
-  // Clean up existing subscription first to prevent memory leaks
+export async function subscribe(uid: string, identityCurrent = () => true) {
+  const started = ++subscription;
+  const current = () => started === subscription && identityCurrent();
   if (unsubscribe) {
     unsubscribe();
     unsubscribe = () => {};
@@ -94,11 +86,12 @@ export async function subscribe(uid: string) {
 
   const { doc, onSnapshot, getFirestore } = await import('firebase/firestore');
 
+  if (!current()) return;
   try {
     const accountRef = doc(getFirestore(), ACCOUNTS_COLLECTION_NAME, uid);
     unsubscribe = onSnapshot(
       accountRef,
-      (snapshot) => handleAccountSnapshot(snapshot.data(), uid),
+      (snapshot) => handleAccountSnapshot(snapshot.data(), uid, current),
       (error) => {
         logWarn(
           'AccountStore',
@@ -106,16 +99,16 @@ export async function subscribe(uid: string) {
           'Error receiving account snapshot',
           error,
         );
-        handleAccountSnapshot(undefined, uid);
+        handleAccountSnapshot(undefined, uid, current);
       },
     );
   } catch (error) {
     logWarn('AccountStore', 'subscribe', 'Error subscribing to account', error);
-    handleAccountSnapshot(undefined, uid);
+    handleAccountSnapshot(undefined, uid, current);
   }
 }
 
-async function stampLoginTime(uid: string) {
+async function stampLoginTime(uid: string, current: () => boolean) {
   if (!uid) {
     logWarn(
       'AccountStore',
@@ -128,6 +121,7 @@ async function stampLoginTime(uid: string) {
   const { doc, updateDoc, getFirestore, serverTimestamp } = await import(
     'firebase/firestore'
   );
+  if (!current()) return;
   try {
     await updateDoc(doc(getFirestore(), ACCOUNTS_COLLECTION_NAME, uid), {
       lastLogin: serverTimestamp(),
@@ -143,6 +137,7 @@ async function stampLoginTime(uid: string) {
 }
 
 export function reset() {
+  subscription++;
   account.set(null);
   unsubscribe?.();
 }
