@@ -1,178 +1,242 @@
 # Read a game site through an AI assistant
 
-This plan proposes a remote MCP connection for game-site authors, tentatively targeting Pelilauta 21.3.0. The first release serves existing site content through Netlify Functions and authenticates the person through Firebase Auth. The agent acts with that person's authority. The connection exposes no content mutations.
+[Epic #208](https://github.com/villetakanen/pelilauta-social/issues/208) proposes
+reading game-site content through ChatGPT Work or Claude Cowork. The assistant retrieves
+current pages and cites their addresses. Pelilauta supplies content through MCP on
+Netlify Functions and identifies the person through Firebase Auth.
 
-[Epic #208](https://github.com/villetakanen/pelilauta-social/issues/208) carries transient scope. This plan records the proposed design and unresolved choices; implementation requires a governing spec under `specs/pelilauta/sites/`. The release target authorizes no branch change, version bump, deployment, or production configuration change.
+Run the authorization spike before writing the MCP spec. Use its findings to record
+required behavior in a proposed spec under `specs/pelilauta/sites/` before implementing
+the production capability. The illustrative 21.3.0
+target indicates priority without committing to a release number. Include the work
+in 21.2.0 if capacity permits, or defer it to 21.4.0 if critical work takes precedence.
 
-## Author outcome
+## First task: authorization spike
 
-An author connects a selected game site to ChatGPT Work or Claude Cowork and asks questions grounded in current pages. Responses cite pages retrieved through the connection. The author discusses campaign history, compares setting descriptions, finds rules, or prepares sessions without exporting the wiki.
+Establish a separate Netlify development project that reproduces the local app setup
+against `skaldbase-test`. Use a generated, obscure `netlify.app` hostname and authorize
+that hostname in Firebase Auth for the test project. The operator approved this
+development setup. The hostname provides no access control; MCP still requires
+authentication.
 
-The first useful conversation starts with “Read this campaign and explain what the pages establish about the harbour district.” The assistant retrieves relevant material and links its sources. Suggestions remain in the conversation; the connection cannot save them to Pelilauta.
+Reuse the app build and runtime configuration. Transfer the required local development
+environment values through Netlify environment settings without writing credentials
+into tracked files or logs. Verify the deployed client and server project IDs before
+running the proof. Keep the existing production deployment and its Firebase
+configuration unchanged.
 
-Pelilauta supplies content and permissions. The connected assistant supplies inference and conversation history. This scope excludes embedded chat interfaces and model API calls billed by Pelilauta.
+Prove Firebase sign-in, consent to read-only MCP access, and one authenticated fixture
+read from both target clients at the development `/mcp` endpoint. Exercise anonymous
+rejection, refresh, disconnect, Firebase revocation, and reconnect after a cold start.
+Verify that a second permitted site needs no additional consent. Keep the tool surface
+limited to the reads needed for this proof.
 
-## Scope and authority
+Deliver the working development environment and a report carrying the tested client
+flows, authorization component, connection storage, token lifecycle, failures, and
+remaining constraints. Record how to reproduce the deployment and tests without
+publishing credentials. Use these results to draft the governing spec. Full page
+search and production deployment remain outside the spike.
 
-The user establishes the authority model: a person signs in as themselves, and the agent acts within that person's current rights. Tool arguments, prompts, and client-supplied user identifiers cannot select another principal. The Firebase service credential of the backend never constitutes the agent's authority.
+## Repository findings
 
-The proposed initial eligibility rule admits site owners, matching the author audience. The operator must confirm this restriction before implementation; the authority model itself is settled. Under this proposal, player and other reader connections remain outside the release; owner connections gain no new content permissions.
+### Authors and visibility
 
-Each connection grants reading for one selected site. Effective access is the intersection of the grant, the signed-in person's current site and page rights, and the read-only tool surface. Selecting a site limits access when the person can access other sites. Changing the selected site requires new consent.
+[verifySiteAccess](../apps/pelilauta/src/utils/server/auth/verifySiteAccess.ts) defines
+site members as owners or players. The
+[page editor](../apps/pelilauta/src/pages/sites/[siteKey]/[pageKey]/edit.astro)
+admits both. These roles govern page editing; MCP connection eligibility requires
+Firebase sign-in and consent to read-only MCP access.
 
-Read-only applies to game content. Connection consent, token rotation, revocation, and operational records require separate infrastructure writes. Approve storage and retention before deployment; add no fields to existing site or page documents for connection state.
+The [site listing](../apps/pelilauta/src/pages/api/sites/index.ts) excludes hidden
+sites. The [page route](../apps/pelilauta/src/pages/sites/[siteKey]/[pageKey]/index.astro)
+passes `site.hidden` to `noSharing` but reads content without a caller check.
+The [site spec](../specs/pelilauta/sites/spec.md) requires every page to respect site
+visibility without defining the read permission matrix.
 
-Excluded work comprises page creation, updates, deletion, revision restoration, notes, handouts, assets, clocks, discussion threads, membership changes, site settings, autonomous scheduled work, and a public connector-directory listing. The connection exposes no generic Firestore queries and fetches no arbitrary URLs.
+[PageSchema](../apps/pelilauta/src/schemas/PageSchema.ts) inherits optional `public`
+and page `owners` fields from
+[ContentEntrySchema](../apps/pelilauta/src/schemas/ContentEntry.ts). Their presence
+does not establish a page read policy. The operator-provided rules snapshot linked
+from [AGENTS.md](../AGENTS.md) resolves the Firebase read-contract question for this
+scope. Enforce the authenticated person’s current read permissions for each requested
+resource. Keep security-rule details outside tracked files.
 
-## Existing application and remaining gaps
+### Content and search
 
-| Existing carrier | Consequence for implementation |
+[Server readers](../apps/pelilauta/src/firebase/server/sites.ts) read pages from
+`sites/{siteKey}/pages/{pageKey}` and parse current Markdown. They accept no caller
+identity and collapse missing documents and backend failures into `null`. MCP needs
+caller authorization and distinct failure results before reusing this data access.
+
+The existing
+[page index](../apps/pelilauta/src/pages/api/sites/[siteKey]/pages.json.ts) reads the
+whole subcollection and returns shared-cache headers. Build bounded MCP reads against
+the requested site rather than forwarding these JSON responses.
+
+[SiteSchema](../apps/pelilauta/src/schemas/SiteSchema.ts) carries page references,
+categories, and ordering. Page references provide navigation metadata, not permission
+evidence. Use `/sites/{siteKey}/{pageKey}` for citations and `markdownContent` for
+source text. Omit rendered HTML and revision history.
+
+[AlgoliaSearchApp](../apps/pelilauta/src/components/svelte/search/AlgoliaSearchApp.svelte)
+queries `pelilauta-entries` without a Firebase principal.
+That integration does not supply authorized MCP search. Start with bounded reads of
+the requested site. Measure coverage and cost before choosing search limits.
+
+### Identity and logout
+
+The live [session spec](../specs/pelilauta/session/spec.md) governs browser identity.
+The [session endpoint](../apps/pelilauta/src/pages/api/auth/session.ts) verifies
+revocation and creates a five-day cookie. Logout deletes that cookie, clears local
+reader data, and signs out of Firebase in the browser. It does not revoke credentials
+across devices.
+
+Preserve this logout contract. Give MCP grants separate disconnect controls.
+Ordinary browser logout does not revoke them. Firebase account disablement, deletion,
+and credential revocation must still invalidate delegated access. The OAuth design
+must define how it detects those events before reads and renewal.
+
+### Runtime and test environment
+
+[Astro configuration](../apps/pelilauta/astro.config.mjs) already deploys server routes
+through the Netlify adapter. [Netlify configuration](../apps/pelilauta/netlify.toml)
+sets Node 22 and builds `apps/pelilauta`. Evaluate the MCP adapter in this runtime
+before adding a standalone function. The
+[Firebase server module](../apps/pelilauta/src/firebase/server/index.ts) reads secrets
+through `import.meta.env`. A standalone function would need separate packaging and
+configuration evidence.
+
+Use `skaldbase-test`, the existing development/test Firebase project documented in
+[Acceptance Testing](ACCEPTANCE_TESTING.md). The
+[app regression suite](../apps/pelilauta/e2e/README.md) defines credentials and checks
+that the service principal, app configuration, and running server target that project
+before resetting fixtures. Reuse those checks for MCP fixtures. The project is shared.
+Use dedicated fixture IDs and a narrow reset, and avoid concurrent resets by other
+suites.
+
+The authorization spike establishes the deployed MCP test endpoint. Verify that it
+targets `skaldbase-test` before client connection tests.
+
+## Connection and authority
+
+1. The author adds the Pelilauta MCP URL in the assistant.
+2. Pelilauta verifies an existing browser session or opens Firebase sign-in.
+3. The consent page displays the account, requesting client, and read-only MCP scope.
+4. The author approves MCP access for that client.
+5. The assistant discovers tools and requests sites named in the conversation.
+6. The author can disconnect the client through Pelilauta account controls.
+
+Derive identity from verified Firebase authentication. Tool arguments identify the
+requested site and page but cannot select a UID. Check the person’s current read
+permissions on every disclosure. Consent covers the MCP connection. Reading another
+site requires no new consent.
+
+Authenticate before initialization, tool discovery, and tool execution, including
+reads of public content. Guard both the public route and every direct function entry
+path. Permit anonymous access to sign-in and required authorization metadata only.
+Callbacks and token endpoints validate their flow proofs. Require identity before
+consent. Bound anonymous traffic and authentication failures to
+limit function invocation costs.
+
+Bind each connection grant to a UID, client, MCP read scope, expiry, and revocation state.
+Disconnect stops subsequent reads and renewal with already-issued tokens. Keep
+connection state separate from site and page documents. Disconnection cannot erase
+content already disclosed to an assistant.
+
+## OAuth and transport
+
+Select an established OAuth component through a connection proof in both clients.
+Firebase remains the identity source. Authors do not paste Firebase credentials into
+assistant configuration. Verify authorization-code exchange with PKCE, discovery,
+client registration, exact redirect validation, resource-bound tokens, refresh, and
+revocation against current client requirements.
+
+Use the MCP SDK for protocol handling. Prove Streamable HTTP with bounded JSON
+responses, initialization, notifications, version negotiation, Origin validation,
+reconnection, and unsupported methods. Select transport and packaging from the deployed
+proof. Keep request identity and requested-site state out of process globals so cold
+starts and concurrent requests preserve isolation.
+
+Keep server credentials out of client configuration, responses, and logs. Authorize
+reads before invoking Firebase Admin. Return `Cache-Control: no-store` for authenticated
+content and authorization responses. Verify CDN and service-worker behavior on the
+deployed endpoint.
+
+The approved production endpoint is `https://pelilauta.social/mcp` on the existing
+Netlify deployment. This approval settles the endpoint address. Apply the approval
+boundaries in [AGENTS.md](../AGENTS.md) to authentication, persistence, and deployment
+configuration changes.
+
+## Read tools
+
+Each tool accepts a site key and checks resource access using the identity from the
+verified MCP connection. Tool names remain provisional.
+
+| Tool | Result |
 | :--- | :--- |
-| [Site spec](../specs/pelilauta/sites/spec.md) | Preserve the game-site boundary and resolve its visibility requirements before exposing content. |
-| [Page schema](../apps/pelilauta/src/schemas/PageSchema.ts) and [content schema](../apps/pelilauta/src/schemas/ContentEntry.ts) | Return current Markdown with identifiers and metadata. Exclude internal document fields from tool responses. |
-| [Site schema](../apps/pelilauta/src/schemas/SiteSchema.ts) | Reuse the site identity and page organization; do not treat `pageRefs` as authorization evidence. |
-| [Server readers](../apps/pelilauta/src/firebase/server/sites.ts) | Existing data access requires an explicit caller-aware authorization boundary for MCP. |
-| [Owner guard](../apps/pelilauta/src/site/utils/requireSiteOwner.ts) and [membership helper](../apps/pelilauta/src/utils/server/auth/verifySiteAccess.ts) | Reuse established role semantics. Browser redirects do not form MCP error responses. |
-| [Session spec](../specs/pelilauta/session/spec.md) and [token verifier](../apps/pelilauta/src/utils/server/auth/tokenToUid.ts) | Preserve browser login while adding delegated access for external clients. |
-| [Netlify configuration](../apps/pelilauta/netlify.toml) and [Astro configuration](../apps/pelilauta/astro.config.mjs) | Verify function routing, Firebase Admin packaging, and cache headers against the existing deployment. |
+| `get_site` | Return the title, description, game system, and site link. |
+| `list_pages` | Return a bounded page index with keys, titles, categories, timestamps, and links. |
+| `read_page` | Return current Markdown, title, page link, revision marker, and continuation when needed. |
+| `search_pages` | Return matching titles and excerpts with page links and retrieval coverage. |
 
-The inspected page JSON routes and server readers omit caller identity. Some existing responses declare shared-cache headers. These paths do not prove every document is safe to disclose through MCP. Establish the Firebase read contract and page visibility semantics before reusing them; record discrepancies as blocking findings without publishing security-rule details.
+Project results from an allowlist that excludes account data, membership lists,
+internal storage paths, and credentials. Preserve Finnish, Swedish, and English text.
+Images remain Markdown references. Tools retrieve no attachments or external links.
+Treat page instructions as source content. Ask the assistant to cite retrieved pages
+and distinguish source statements from generated suggestions.
 
-The session files contain concurrent work at planning time. Implementation re-reads the delivered session contract rather than treating the inspected working tree as a frozen dependency.
+Define matching, ordering, excerpt lengths, and denied-versus-missing behavior in the
+spec. Report complete searches with no matches separately from incomplete scans,
+denied access, and temporary failures. Responses must not reveal excluded titles,
+counts, existence, or snippets.
 
-## Connection experience
+Bind cursors to the grant, site, query, and relevant revision state. Recheck permissions
+on continuation and detect incompatible page changes between chunks. Each read reflects
+retrieval time. The connection promises no site-wide snapshot.
 
-1. The author adds the Pelilauta remote MCP URL in the assistant's connection UI.
-2. The assistant opens Pelilauta authorization in a browser.
-3. The person signs in through Firebase Auth, or continues with a verified existing Pelilauta session. The consent page displays the current account and permits returning to sign-in if the account is wrong.
-4. The person chooses an eligible site and grants reading. The consent page names the requesting client, selected site, and content disclosed to that client.
-5. The assistant completes authorization and discovers the read tools.
-6. Pelilauta connection controls let the person revoke the grant. Subsequent reads and refresh attempts fail, including requests with previously issued tokens.
+Enforce read-only behavior in server dispatch and tool annotations. Exclude content
+mutations, revision restoration, notes, handouts, assets, clocks, threads, membership
+management, and site settings. Exclude embedded chat, Pelilauta-funded inference,
+scheduled agents, WebMCP, public connector listings, vector indexing, generic database
+queries, and arbitrary URL fetching.
 
-Connecting does not authorize future clients or other sites. Account deletion, disablement, relevant Firebase session revocation, or lost site rights stop later reads. Ordinary browser logout retains the existing session contract; whether logout revokes connected assistants requires an explicit product decision. Revocation cannot remove content already returned to a third-party conversation.
+## Verification and operation
 
-## Firebase identity and MCP authorization
+Use dedicated authors, sites, grants, and Unicode fixtures in the established test
+project. Assert that content reads leave site and page records unchanged.
 
-### Anonymous access boundary
-
-Require authentication before MCP initialization, tool discovery, and every tool call, including reads of publicly visible site content. Reject missing, invalid, expired, or revoked credentials before dispatching MCP operations or reading site and page data. Apply the same guard to the public MCP route and the direct Netlify Function URL; alternate paths cannot bypass it.
-
-Allow anonymous access only to the sign-in entry and protocol metadata needed to establish authorization. Authorization callbacks and token endpoints must validate the proof required by their flow before issuing credentials. Site selection and consent require a verified person. Anonymous responses disclose no account, site, page, search result, or tool catalog.
-
-The remote clients must reach the HTTPS endpoint to receive an authentication challenge. Public network reachability grants no MCP access. Bound and rate-limit rejected requests and authorization entry points to control anonymous traffic; application authentication alone does not prevent requests from invoking a function.
-
-### Delegated credentials
-
-Keep Firebase Auth as the identity source. Add an OAuth authorization layer that binds a delegated grant to the verified Firebase UID. Do not instruct authors to paste Firebase ID tokens, refresh tokens, or session cookies into an assistant. Forward no Firebase credentials to an MCP client.
-
-The recommended flow uses an established OAuth implementation or provider that authenticates through the existing Firebase identity. Select that component through a compatibility proof before committing to its storage model. A bespoke authorization server introduces token lifecycle and client-registration work beyond the MCP tool adapter.
-
-The authorization layer covers authorization-code exchange with PKCE, discovery metadata, exact redirect validation, resource-bound tokens, and client identification supported by both target products. Validate the documented MCP authorization flow rather than assuming Firebase ID-token verification implements it. See [MCP authorization][mcp-auth] and [OpenAI authentication][openai-auth].
-
-Bind each grant to a UID, client, selected site, read scope, creation time, expiry, and revocation state. Exact storage fields and token lifetimes remain design choices. Validate token issuer, audience, expiry, and scope on every protected request. Check the grant and current account and resource permissions before returning data. Keep credentials and account lookup failures out of tool output.
-
-Treat Firebase authentication and delegated tokens as separate lifecycles. A revoked Firebase session must not survive through an independently refreshable MCP grant. Specify and test how Firebase revocation invalidates existing grants and token renewal. Use durable grant state where immediate revocation requires it; process memory cannot carry this guarantee.
-
-Server Firebase credentials remain deployment secrets. The reader authorizes each operation before using Firebase Admin, whose reads bypass client security rules. Restrict deployment credentials to required operations where the selected runtime permits it. [Firebase token verification][firebase-tokens] and [Firestore access documentation][firestore-access] define the platform boundary.
-
-## Netlify Functions architecture
-
-Use a dedicated Node Netlify Function as the remote MCP entry point. Keep protocol dispatch separate from site authorization and content reading under the site application, following [ARCHITECTURE.md](ARCHITECTURE.md). Configure the function directory and public route only after deployment approval. The proposed external route is `/mcp`; its exact address remains uncommitted.
-
-Use the MCP SDK for transport and protocol handling. Prove Streamable HTTP with bounded JSON responses in both clients before considering streaming. Store no user identity, selected site, or protocol session in process-global state. A request can reach a different function instance after any tool call.
-
-The [Streamable HTTP specification][mcp-http] permits JSON responses and optional protocol sessions. Use these properties to avoid persistent connections for ordinary reads. Handle initialization, notifications, version negotiation, unsupported methods, and Origin validation through the SDK and explicit tests. Do not claim compatibility based on HTTP POST success alone.
-
-Check runtime behavior against [Netlify function limits][netlify-limits]. Bound query work and response size below platform limits, and report a retryable error when a dependency times out. Long-running jobs and server-initiated notifications remain outside the initial transport design.
-
-The existing Firebase module uses `import.meta.env` and Astro bundling. Verify how the standalone function receives secrets and resolves `firebase-admin`; importing that module unchanged is an unproven deployment path. Preserve Vite aliases and TypeScript mappings when sharing workspace code. Do not add package orchestration.
-
-Return `Cache-Control: no-store` for authenticated content and authorization responses. Verify the deployed response against Netlify headers, CDN behavior, and service-worker handling. Public discovery metadata can use separate caching. No authenticated response can reuse another person's cached content.
-
-## Proposed read tools
-
-Tool names are provisional. Each tool derives the selected site from the verified grant, preventing prompts from widening scope with another site key.
-
-| Tool | Proposed result |
+| Scenario | Required result |
 | :--- | :--- |
-| `get_site` | Return the selected site's title, description, game system, and canonical link. |
-| `list_pages` | Return an authorized, paginated page index with stable keys, titles, categories, timestamps, and links. |
-| `read_page` | Return current source Markdown, title, canonical link, revision marker, and an explicit continuation when needed. |
-| `search_pages` | Return matching authorized page titles and excerpts with links and explicit search coverage. |
+| An author connects from either target client. | Sign-in, consent, discovery, retrieval, and a cited answer complete on the deployed test endpoint. |
+| An anonymous caller uses either endpoint path. | Initialization, discovery, and content reads fail before MCP dispatch or content access. |
+| A caller forges a UID, requests an unauthorized resource, or reuses another grant's cursor. | No content or metadata exceeds the authenticated person’s current read permissions. |
+| A conversation requests another permitted site. | Retrieval succeeds through the existing MCP connection without new consent. |
+| A grant expires or is revoked, or an account becomes invalid. | Subsequent reads and renewal fail. |
+| A person loses read permission for a resource. | Subsequent reads of that resource fail without revoking access to other permitted resources. |
+| Calls overlap or reach different function instances. | Authorization remains isolated and reconnection succeeds. |
+| A site is empty, large, or contains excluded content. | Retrieval stays bounded and reports coverage without disclosing excluded records. |
+| A page changes between chunks. | Continuation detects incompatible revisions and requires a restart. |
+| A dependency fails temporarily. | The response reports a retryable failure rather than an empty result. |
+| A conversation requests a content mutation. | The connection performs no content write. |
 
-Expose tools as read-only through MCP annotations and enforce that property in the server. Unknown tool names and mutation requests perform no content writes. Discovery publishes no mutation capability, hidden administrative tool, or generic database operation.
+Measure input, response, query-work, concurrency, and request-rate limits against
+realistic test sites. Include authorization checks and search reads in the Firestore
+budget. Verify bounded responses against the selected Netlify runtime limits.
 
-Project responses from an allowlist. Exclude credentials, private account fields, membership lists, internal storage paths, and revision history. Images remain source references in Markdown; image retrieval and attached-file reading remain outside this release.
+Log correlation IDs, tool names, outcomes, durations, and bounded metrics. Exclude
+credentials, page bodies, and query text. Set identifier retention and log access before
+production exposure. Provide a connection disable control that preserves browser site
+access.
 
-Use page keys for identity and existing URL rules for citations. Preserve Finnish, Swedish, and English text, including extended Latin characters. Define title and content matching, case handling, ordering, and excerpt limits in the governing spec. Distinguish complete searches with zero matches from incomplete scans.
+Apply [delivery.yaml](../delivery.yaml) to implementation surfaces. Use focused unit
+tests for authorization and retrieval, `astro check` for app changes, and the app
+regression suite for consent and disconnect. Test protocol compatibility, refresh,
+and revocation in both clients against the deployed endpoint. Reserve `pnpm test:uat`
+for delivery review.
 
-Measure authorized listing and bounded content search against realistic site sizes. Evaluate the existing search integration only when it enforces the same access boundary before returning matches or counts. Add no vector database, external indexing copy, or embedding pipeline for this release.
+## Remaining investigations
 
-Bind opaque pagination cursors to the grant, site, query, and relevant revision state. Recheck authorization when following a cursor. Paginate large pages with explicit truncation and continuation rather than dropping text. Detect content changes between chunks and require restarts when consistency breaks. Independent reads represent current data at retrieval time, not a promised site-wide snapshot.
-
-Return source content as data. Do not promote instructions found in a wiki page into server instructions or fetch external links embedded in that page. Direct the assistant to cite retrieved pages and distinguish source statements from generated suggestions.
-
-## Failure behavior and operational bounds
-
-Reject invalid credentials with an authentication challenge. Deny resources outside the selected site without revealing titles, existence, counts, or snippets. Define consistent denied-versus-missing behavior in the spec. Distinguish permission failure from temporary backend failure and empty search results.
-
-Bound input lengths, page sizes, search work, concurrency, and requests per grant. Select numeric limits from test-site measurements before release. Account for Firestore reads during search and authorization checks in the operating budget.
-
-Log request correlation, tool name, outcome, duration, and bounded operational metrics. Exclude bearer tokens, authorization codes, page bodies, and search text from ordinary logs. Decide identifier retention and log access before enabling the connection in production. Provide an endpoint disable control that preserves normal site access.
-
-## Evidence required for delivery
-
-| Scenario | Required evidence |
-| :--- | :--- |
-| An author connects from each target assistant. | Firebase sign-in, site selection, consent, tool discovery, and a cited answer complete against a deployed test endpoint. |
-| An anonymous request reaches the MCP route or direct function URL. | Initialization, tool discovery, and content reads fail before MCP dispatch or site-data access; only the authorization entry and required metadata remain accessible. |
-| A request supplies another UID or site key. | The authenticated principal and selected site remain unchanged; no unrelated content or metadata returns. |
-| Two grants belong to different authors or sites. | Concurrent calls and reused cursors cannot cross either boundary. |
-| A grant expires or is revoked. | Reads and token renewal fail according to the authorization contract. |
-| An account or required permission changes. | Later calls stop disclosing content without waiting for a new conversation. |
-| A request asks to create, edit, or delete content. | No mutation tool exists, and the content collections remain unchanged. |
-| A site is empty, large, or contains restricted pages. | Listing and search remain bounded and describe coverage without leaking excluded records. |
-| A page changes during retrieval. | The response identifies its revision and chunk continuation detects incompatible changes. |
-| Firebase or Netlify fails temporarily. | The client receives a retryable failure without content, credentials, or a false empty result. |
-| The function starts cold or another instance handles the next call. | Authorization and read results remain correct without process-local session state. |
-
-Use emulators or an approved non-production Firebase project with distinct authors, sites, permissions, and Unicode fixtures. Deploy previews must not inherit production credentials for these checks. Authentication and hosting tests can write isolated connection records; content-read tests assert that site and page records remain unchanged.
-
-Apply [delivery.yaml](../delivery.yaml) to each implementation surface. Run focused authorization and reader unit tests, `astro check` for app changes, and the app browser regression gate for consent and disconnect UI. Exercise the deployed MCP protocol separately in both clients, including refresh and revocation. Reserve `pnpm test:uat` for delivery review under the existing release process.
-
-## Delivery approach
-
-First resolve the read contract, initial author eligibility, OAuth component, and grant persistence. Record required behavior in a proposed governing spec and review it through the repository's spec workflow.
-
-Then prove the complete authentication and read journey against isolated data on Netlify. Use that evidence to settle SDK compatibility, function packaging, transport behavior, query bounds, and token lifecycle before production exposure.
-
-Release only after both clients demonstrate the author outcome and pass the permission and revocation scenarios. Stage production configuration, endpoint naming, and authentication or persistence changes for operator approval under [AGENTS.md](../AGENTS.md). The current task delivers planning artifacts only.
-
-## Open decisions
-
-- Confirm whether initial connection eligibility requires the site owner role.
-- Establish the effective site and page read contract, including hidden sites and page-level restrictions, without committing security rules to the repository.
-- Select the OAuth implementation that preserves Firebase identity and supports both clients; settle client registration and callback validation through testing.
-- Approve grant storage, token lifetimes, refresh behavior, and retention.
-- Decide whether browser logout revokes agent connections as well as browser sessions.
-- Confirm the external endpoint address and isolated Netlify and Firebase test environments.
-- Set measured request, search, response, and cost limits for supported site sizes.
-- Confirm 21.3.0 scheduling after current release work; no milestone commitment exists.
-
-## Source references
-
-Protocol and product documentation was checked on 2026-10-12. Recheck client requirements when selecting the SDK and authorization component.
-
-- [ChatGPT Work custom MCP setup][openai-setup] describes connection and testing.
-- [Claude custom connectors][claude-setup] describes Cowork remote connections.
-- [ChatGPT WebMCP][webmcp] describes a browser-local alternative outside this scope.
-
-[mcp-auth]: https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization
-[mcp-http]: https://modelcontextprotocol.io/specification/2025-11-25/basic/transports
-[openai-auth]: https://developers.openai.com/plugins/build/auth
-[openai-setup]: https://developers.openai.com/plugins/quickstart
-[claude-setup]: https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp
-[firebase-tokens]: https://firebase.google.com/docs/auth/admin/verify-id-tokens
-[firestore-access]: https://firebase.google.com/docs/firestore/security/rules-conditions
-[netlify-limits]: https://docs.netlify.com/build/functions/configuration/
-[webmcp]: https://learn.chatgpt.com/docs/webmcp
+- Use the authorization spike to settle connection storage, token lifetimes, refresh,
+  revocation detection, and retention.
+- Measure site sizes and deployment behavior to set operating limits during retrieval
+  implementation.

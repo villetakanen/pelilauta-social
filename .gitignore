@@ -80,6 +80,9 @@ web_modules/
 server_principal.json
 credentials.ts
 
+# Local reference material stays outside version control.
+/.local/
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

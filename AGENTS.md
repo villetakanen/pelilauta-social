@@ -12,6 +12,7 @@
 - `specs` contains system behavior specifications, organized with one capability per directory. Spec status is `proposed`, `live`, or `deprecated`. A task starts from live governing specs unless the operator explicitly asks to start from a proposed spec. For a minor, settled amendment, present the unapplied diff and rationale in chat. Apply the accepted amendment while retaining `live` status after operator approval. For a new, material, or unsettled amendment discovered during implementation, set the spec status to `proposed`, continue the task, and flag the change in the delivery report. An operator clears a proposed spec to `live`, or turns it back, at review.
 - An epic is a GitHub issue labeled `epic`, carrying transient scope and defining behavior until a spec governs it. `docs/EPIC_TEMPLATE.md` defines epic structure.
 - `docs/DESIGN.md` defines design intent, `docs/WRITING.md` defines writing rules, and `docs/ARCHITECTURE.md` defines naming conventions and artifact responsibilities.
+- [Local Firestore rules](.local/firestore.rules) contain the operator-provided snapshot from 2026-10-12. Git ignores this file; request it from the operator when absent.
 
 ## ALWAYS
 
@@ -29,7 +30,7 @@
 
 - Create, switch, or delete a branch without an explicit instruction. Requesting permission is not an instruction; wait for explicit approval.
 - Run `pnpm test:uat` to check work in progress. `pnpm test:uat` performs release acceptance, resets Firestore, and requires ten minutes. Run UAT during delivery review. Verify work in progress using `astro check`, `pnpm test`, and the `apps/design` suite. `apps/pelilauta`'s `test:e2e` (#159) is a separate, real app feature regression suite with its own bespoke, narrow reset — it is evidence for the `app-e2e` gate and is not `test:uat`.
-- Write Firestore security rules into repository files. The repository is public while security rules protect the live service. Reason about security rules when provided, and state conclusions without exposing rule details in prose or code.
+- Commit Firestore security rules or copy them into tracked files. Keep the local reference gitignored. Reason about supplied rules and state conclusions without exposing rule details in prose or code.
 
 ## Delivery Contract
 
