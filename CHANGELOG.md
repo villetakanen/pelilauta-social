@@ -2,6 +2,10 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.4
+
+- docs: Define public-page progressive enhancement, onboarding hints, and outage behavior. Revise ADR 0005 to use the existing session endpoint without an additional UID cookie.
+
 ## 21.1.3
 
 - fix(session): Forced sign-out after an API authentication failure clears the session cookie and local user data before signing out of Firebase. Failed logout keeps the reader on the current page with the incomplete-logout notice. ([#207](https://github.com/villetakanen/pelilauta-social/issues/207))

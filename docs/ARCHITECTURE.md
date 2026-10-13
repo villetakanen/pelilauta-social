@@ -6,6 +6,9 @@ Client enhancement preserves server-rendered content and working native
 interactions. Activating enhancement alone does not change displayed content;
 subsequent data updates may change it.
 
+[Pelilauta Progressive Enhancement](../specs/pelilauta/progressive-enhancement/spec.md)
+defines member presentation and outage behavior.
+
 ## Source trees
 
 ### Pelilauta.social

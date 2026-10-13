@@ -24,7 +24,7 @@ The initial HTML renders every public reply as an article with formatted body, a
 
 Initial and live reads query replies ordered by creation time ascending, with the reply key resolving ties. A record without a creation timestamp does not match the query and does not enter the discussion.
 
-Anonymous readers receive server-rendered reply content without client data reads or live subscriptions. A session resolves once Firebase Auth confirms the persisted account. An unresolved session establishes no subscription and performs no reaction reads. A resolved session subscribes to live additions, edits, and deletions. Signing out, switching accounts, and navigating away terminate active subscriptions and discard late results.
+Anonymous readers receive server-rendered reply content without client data reads or live subscriptions. [Session](../../session/spec.md) governs authentication. The discussion subscribes to live replies and reads reactions only after session establishment. Signing out, switching accounts, and navigating away terminate active subscriptions and discard late results.
 
 Replies deleted while a live subscription is inactive may remain visible after resubscription until the reader reloads the page.
 

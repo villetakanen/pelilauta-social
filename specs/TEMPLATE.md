@@ -6,7 +6,8 @@ status: proposed
 
 <!--
 Place design-system specs at specs/design-system/<category>/<capability>/spec.md.
-Place application specs at specs/pelilauta/<sub-app>/<capability>/spec.md.
+Place sub-application capability specs at specs/pelilauta/<sub-app>/<capability>/spec.md.
+Place application-wide capability specs at specs/pelilauta/<capability>/spec.md.
 
 Follow [AGENTS.md](../AGENTS.md) for authority and status, and the
 [spec skill](../.agents/skills/spec/SKILL.md) for authoring and review.
