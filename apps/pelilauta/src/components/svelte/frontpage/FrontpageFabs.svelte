@@ -1,14 +1,10 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from 'src/utils/i18n';
-import { uid } from '../../../stores/session';
-
-const visible = $derived.by(() => {
-  return !!$uid;
-});
+import { isActive } from '../../../stores/session/computed';
 </script>
 
-{#if visible}
+{#if $isActive}
   <a
     href="/create/thread"
     class="button fab"

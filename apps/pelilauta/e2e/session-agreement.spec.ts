@@ -8,6 +8,7 @@ import { existingUser } from '../../../credentials.ts';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
 const SESSION_PATH = '/api/auth/session';
+const creationPages = ['/', '/channels/yleinen'];
 // Matches e2e/reset-fixtures.mjs's THREAD_KEY.
 const THREAD_KEY = 'e2e-onboarding-regression-thread';
 
@@ -16,6 +17,7 @@ const sessionResponse = (page: Page, method: string) =>
     (response) =>
       new URL(response.url()).pathname === SESSION_PATH &&
       response.request().method() === method,
+    { timeout: 30000 },
   );
 
 async function signIn(page: Page) {
@@ -55,6 +57,101 @@ function sessionRequests(page: Page) {
     }
   });
   return methods;
+}
+
+for (const path of creationPages) {
+  const creationLink = (page: Page) =>
+    page.locator('a[href^="/create/thread"]');
+
+  test(`${path} creation waits for verified session agreement`, async ({
+    page,
+  }) => {
+    await signIn(page);
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let dispatched!: () => void;
+    const requested = new Promise<void>((resolve) => {
+      dispatched = resolve;
+    });
+    await page.route(`**${SESSION_PATH}`, async (route) => {
+      if (route.request().method() !== 'GET') return route.continue();
+      dispatched();
+      await held;
+      await route.continue();
+    });
+    await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });
+    await requested;
+    expect(
+      await page.evaluate(() => localStorage.getItem('session-uid')),
+    ).not.toBe('');
+    await page.waitForTimeout(1000);
+    await expect(creationLink(page)).toHaveCount(0);
+    release();
+    await expect(creationLink(page)).toBeVisible();
+    await expect(creationLink(page)).toHaveAttribute(
+      'href',
+      path === '/' ? '/create/thread' : '/create/thread?channel=yleinen',
+    );
+  });
+
+  for (const failure of ['verification', 'repair']) {
+    test(`${path} creation stays hidden after failed ${failure}`, async ({
+      page,
+    }) => {
+      await signIn(page);
+      await page.route(`**${SESSION_PATH}`, async (route) => {
+        const method = route.request().method();
+        if (method === 'GET' || method === 'POST') {
+          return route.fulfill({
+            status: failure === 'repair' && method === 'GET' ? 401 : 503,
+            contentType: 'application/json',
+            body: '{}',
+          });
+        }
+        return route.continue();
+      });
+      const failed = sessionResponse(
+        page,
+        failure === 'repair' ? 'POST' : 'GET',
+      );
+      await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });
+      expect((await failed).status()).toBe(503);
+      await page.waitForTimeout(1000);
+      expect(
+        await page.evaluate(() => localStorage.getItem('session-uid')),
+      ).not.toBe('');
+      await expect(creationLink(page)).toHaveCount(0);
+      if (path !== '/') {
+        await expect(page.locator('a.fab[href="/login"]')).toBeVisible();
+      }
+    });
+  }
+
+  test(`${path} a saved UID without Firebase authentication enables no creation`, async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('session-uid', 'saved-member');
+    });
+    await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });
+    expect(
+      await page.evaluate(async () => {
+        const { auth } = await import('/src/firebase/client/index.ts');
+        await auth.authStateReady();
+        return auth.currentUser;
+      }),
+    ).toBeNull();
+    await page.waitForTimeout(1000);
+    expect(await page.evaluate(() => localStorage.getItem('session-uid'))).toBe(
+      'saved-member',
+    );
+    await expect(creationLink(page)).toHaveCount(0);
+    if (path !== '/') {
+      await expect(page.locator('a.fab[href="/login"]')).toBeVisible();
+    }
+  });
 }
 
 test('logout waits for cookie repair and leaves no restored identity', async ({

@@ -1,18 +1,14 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { t } from 'src/utils/i18n';
-import { uid } from '../../../stores/session';
+import { isActive } from '../../../stores/session/computed';
 
 interface Props {
   channel: string;
 }
 const { channel }: Props = $props();
-
-const visible = $derived.by(() => {
-  return !!$uid;
-});
 </script>
-{#if visible}
+{#if $isActive}
   <a href={`/create/thread?channel=${channel}`} class="fab">
     <CnIcon noun="send" />
     <span>{t('actions:create.thread')}</span>
