@@ -22,15 +22,8 @@ import { initSubscriberStore, resetSubscriberStore } from './subscriber';
 export const authUser = atom<User | null>(null);
 
 export type SessionState = 'initial' | 'loading' | 'active' | 'error';
-export const sessionState = persistentAtom<SessionState>(
-  'session-state',
-  'initial',
-);
-
-// A page reload during loading state leaves the asynchronous process terminated. Reset state to initial.
-if (sessionState.get() === 'loading') {
-  sessionState.set('initial');
-}
+// Every page load starts at `initial`. Only this page's verification against the server session moves the state to `active`.
+export const sessionState = atom<SessionState>('initial');
 
 sessionState.subscribe((state, oldState) => {
   if (state !== oldState) {
@@ -40,9 +33,6 @@ sessionState.subscribe((state, oldState) => {
     });
   }
 });
-
-// Solid components use $loadingState as a legacy alias.
-export const $loadingState = sessionState;
 
 export const uid = persistentAtom<string>('session-uid', '');
 
@@ -124,6 +114,10 @@ async function handleFirebaseAuthChange(user: User | null) {
     currentUid: uid.get(),
   });
   authUser.set(user);
+  // A replacement identity invalidates the verification of the previous one.
+  if (user && sessionState.get() === 'active' && uid.get() !== user.uid) {
+    sessionState.set('initial');
+  }
 
   // Unauthenticated state requires cleanup when the session is not initial. Concurrent calls share the running logout operation.
   if (!user) {

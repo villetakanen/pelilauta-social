@@ -12,7 +12,7 @@ The feature regression suite drives Playwright against a running development ser
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
 - `read-marking-awaits-subscription.spec.ts` tests that opening a thread marks it read when the subscription arrives after the session confirms.
 - `open-inbox-reply-notification.spec.ts` tests that a reply notification in the inbox links to its reply in the thread.
-- `session-agreement.spec.ts` tests matching-cookie preservation, missing-cookie repair, and logout during cookie repair.
+- `session-agreement.spec.ts` tests matching-cookie preservation, missing-cookie repair, logout during cookie repair, and that a reload shows no signed-in controls until the status check returns.
 
 ## Prerequisites
 

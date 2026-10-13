@@ -4,6 +4,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.1.4
 
+- fix(session): Session state starts unverified on each page load. Reply subscriptions, reaction reads, and controls using the active-session gate wait for server agreement. Legacy control gates and stale profile presentation remain in [#215](https://github.com/villetakanen/pelilauta-social/issues/215). ([#182](https://github.com/villetakanen/pelilauta-social/issues/182))
 - docs: Define public-page progressive enhancement, onboarding hints, and outage behavior. Revise ADR 0005 to use the existing session endpoint without an additional UID cookie.
 
 ## 21.1.3

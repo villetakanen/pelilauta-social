@@ -101,7 +101,7 @@ describe('completeAuthFlow', () => {
     expect(init.method).toBe('POST');
     expect(JSON.parse(init.body)).toEqual({ token: 'token-A' });
     expect(store.get('session-uid')).toBe('A');
-    expect(store.get('session-state')).toBe('active');
+    expect(store.has('session-state')).toBe(false);
     expect(assign).toHaveBeenCalledWith('/channels');
   });
 
