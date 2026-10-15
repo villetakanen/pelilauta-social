@@ -1,11 +1,9 @@
 ---
 import CnIcon from '@design-system/components/CnIcon.svelte';
-import { isAdmin } from '@firebase/server/admin';
 import BlueskyPostCard from '@pelilauta/components/server/app/BlueskyPostCard.astro';
 import EntryTagsWithLabelsSection from '@pelilauta/components/server/app/EntryTagsWithLabelsSection.astro';
 import BlueskyCard from '@pelilauta/components/svelte/threads/BlueskyCard.svelte';
 import ThreadInfoActions from '@pelilauta/components/svelte/threads/ThreadInfoActions.svelte';
-import { verifySession } from '@utils/server/auth/verifySession';
 import { fetchBskyPost } from '@utils/server/bsky/fetchBskyPost';
 import { fetchApiJson } from '@utils/server/fetchApi';
 import { type Profile, parseProfile } from 'src/schemas/ProfileSchema';
@@ -41,12 +39,6 @@ if (profileJson && typeof profileJson === 'object') {
     profile = undefined;
   }
 }
-
-// Check if current user is author or admin
-const session = await verifySession(Astro);
-const currentUid = session?.uid || '';
-const userIsAdmin = currentUid ? await isAdmin(currentUid) : false;
-const isAuthorOrAdmin = thread.owners.includes(currentUid) || userIsAdmin;
 
 // Check if Bluesky feature is enabled
 const bskyFeatureEnabled = import.meta.env.FEATURE_BSKY === 'true';
@@ -116,7 +108,6 @@ if (thread.blueskyPostUri) {
     ) : (
       <BlueskyCard
         thread={thread}
-        isAuthorOrAdmin={isAuthorOrAdmin}
         bskyFeatureEnabled={bskyFeatureEnabled}
         client:only="svelte"
       />

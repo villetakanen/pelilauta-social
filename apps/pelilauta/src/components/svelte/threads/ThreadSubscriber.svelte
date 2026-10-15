@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { Thread } from 'src/schemas/ThreadSchema';
-import { uid } from '../../../stores/session';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { hasSeen } from '../../../stores/subscription';
 
 interface Props {
@@ -18,7 +18,7 @@ $effect(() => {
   if (!row) return;
 
   // Only an active session has read state to signal.
-  const unread = !!$uid && !$hasSeen(thread.key, thread.flowTime);
+  const unread = $isResolvedActive && !$hasSeen(thread.key, thread.flowTime);
   row.classList.toggle('has-notify', unread);
 });
 </script>

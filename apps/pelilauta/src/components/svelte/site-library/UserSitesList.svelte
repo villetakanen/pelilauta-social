@@ -1,8 +1,7 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
-import { onMount } from 'svelte';
-import { uid } from '../../../stores/session';
-import { refreshSites, userSites } from '../../../stores/userSites/index.ts';
+import { isResolvedActive } from 'src/stores/session/computed';
+import { userSites } from '../../../stores/userSites/index.ts';
 import { t } from '../../../utils/i18n.ts';
 import FilteredSites from './FilteredSites.svelte';
 import { filters, toggleOrder } from './filters.svelte.ts';
@@ -10,14 +9,9 @@ import { filters, toggleOrder } from './filters.svelte.ts';
 const directionNoun = $derived(
   filters.orderDirection === 'asc' ? 'arrow-up' : 'arrow-down',
 );
-
-onMount(() => {
-  if ($uid) {
-    refreshSites($uid);
-  }
-});
 </script>
 
+{#if $isResolvedActive}
 <div class="content-cards">
   <header>
     <h1>{t("library:sites.title")}</h1>
@@ -48,6 +42,7 @@ onMount(() => {
     <p>{t("library:sites.count", { count: $userSites.length })}</p>
   </footer>
 </div>
+{/if}
 
 <style>
   /*

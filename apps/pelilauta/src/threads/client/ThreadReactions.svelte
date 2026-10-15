@@ -9,7 +9,6 @@ interface Props {
 const { key, title }: Props = $props();
 </script>
 
-<!-- ReactionButton reads its reaction document on mount, so mount it only once Firebase confirms an active session. -->
 {#if $isResolvedActive}
   <ReactionButton target="thread" {key} {title} />
 {/if}

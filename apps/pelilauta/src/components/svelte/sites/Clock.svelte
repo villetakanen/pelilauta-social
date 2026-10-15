@@ -2,6 +2,7 @@
 import CnClock from '@clock/CnClock.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Clock } from 'src/schemas/ClockSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { uid } from '../../../stores/session';
 import { site } from '../../../stores/site';
 import { updateClock } from '../../../stores/site/clocksStore';
@@ -11,9 +12,10 @@ interface Props {
 }
 const { clock }: Props = $props();
 
-const view = $derived.by(() => !$site?.owners.includes($uid));
+const view = $derived(!$isResolvedActive || !$site?.owners.includes($uid));
 
 async function handleChange({ value }: { value: number }) {
+  if (view) return;
   await updateClock({ ...clock, stage: value });
 }
 </script>

@@ -6,8 +6,9 @@ import {
   type Subscription,
   SubscriptionSchema,
 } from 'src/schemas/SubscriberSchema';
-import { logDebug, logError, logWarn } from 'src/utils/logHelpers';
+import { logDebug, logError } from 'src/utils/logHelpers';
 import { uid } from '../session';
+import { isResolvedActive } from '../session/computed';
 
 /**
  * # Subscription Store
@@ -63,12 +64,16 @@ export const subscription: WritableAtom<Subscription | null> = persistentAtom(
 
 // Track the current Firestore listener
 let fsUnsubscribe: (() => void) | null = null;
-let currentUid: string | null = null;
+let generation = 0;
 
 // Helper function to create a new subscription document
-async function createSubscriptionDocument(userId: string) {
+async function createSubscriptionDocument(
+  userId: string,
+  current: () => boolean,
+) {
   try {
     const { getFirestore, setDoc, doc } = await import('firebase/firestore');
+    if (!current()) return null;
     const docRef = doc(getFirestore(), SUBSCRIPTIONS_FIRESTORE_PATH, userId);
 
     const newSubscription = createSubscription(userId);
@@ -86,37 +91,29 @@ async function createSubscriptionDocument(userId: string) {
   }
 }
 
-// Computed store that reacts to uid changes and manages subscription
-const subscriptionManager = computed(uid, async (currentUidValue) => {
-  // Clean up existing listener if uid changed
-  if (fsUnsubscribe && currentUid !== currentUidValue) {
-    fsUnsubscribe();
-    fsUnsubscribe = null;
-    currentUid = null;
-  }
-
-  // If no uid, clear subscription
+computed([isResolvedActive, uid], (active, currentUidValue) => ({
+  active,
+  currentUidValue,
+})).subscribe(async ({ active, currentUidValue }) => {
+  const started = ++generation;
+  const current = () =>
+    started === generation &&
+    isResolvedActive.get() &&
+    uid.get() === currentUidValue;
+  fsUnsubscribe?.();
+  fsUnsubscribe = null;
   if (!currentUidValue) {
     subscription.set(null);
     return;
   }
-
-  // If already listening to the same uid, do nothing
-  if (currentUid === currentUidValue && fsUnsubscribe) {
-    logWarn(
-      'subscriptionStore',
-      'Trying to re-init subscriptions of:',
-      currentUidValue,
-    );
-    return;
-  }
-
-  currentUid = currentUidValue;
+  if (!active) return;
+  subscription.set(null);
 
   try {
     const { getFirestore, onSnapshot, doc } = await import(
       'firebase/firestore'
     );
+    if (!current()) return;
     const docRef = doc(
       getFirestore(),
       SUBSCRIPTIONS_FIRESTORE_PATH,
@@ -126,6 +123,7 @@ const subscriptionManager = computed(uid, async (currentUidValue) => {
     fsUnsubscribe = onSnapshot(
       docRef,
       async (snapshot) => {
+        if (!current()) return;
         if (snapshot.exists()) {
           try {
             const parsedData = SubscriptionSchema.parse(snapshot.data());
@@ -141,43 +139,47 @@ const subscriptionManager = computed(uid, async (currentUidValue) => {
         } else {
           // Document doesn't exist, create a new one
           try {
-            const newSubscription =
-              await createSubscriptionDocument(currentUidValue);
-            subscription.set(newSubscription);
+            const newSubscription = await createSubscriptionDocument(
+              currentUidValue,
+              current,
+            );
+            if (current()) subscription.set(newSubscription);
           } catch (error) {
             logError(
               'subscriptionStore',
               'Failed to create new subscription:',
               error,
             );
-            subscription.set(null);
+            if (current()) subscription.set(null);
           }
         }
       },
       (error) => {
+        if (!current()) return;
         logError('subscriptionStore', 'Firestore listener error:', error);
         subscription.set(null);
       },
     );
   } catch (error) {
     logError('subscriptionStore', 'Failed to setup Firestore listener:', error);
-    subscription.set(null);
+    if (current()) subscription.set(null);
   }
-});
-
-// Initialize the manager by subscribing to it
-subscriptionManager.subscribe(() => {
-  // The computed function handles all the logic
 });
 
 export async function setSeen(entityKey: string) {
   const currentUid = uid.get();
-  if (!currentUid) return; // No user logged in, nothing to do
+  const started = generation;
+  const current = () =>
+    started === generation &&
+    isResolvedActive.get() &&
+    uid.get() === currentUid;
+  if (!currentUid || !current()) return;
 
   const currentTime = Date.now();
 
   try {
     const { getFirestore, updateDoc, doc } = await import('firebase/firestore');
+    if (!current()) return;
     const docRef = doc(
       getFirestore(),
       SUBSCRIPTIONS_FIRESTORE_PATH,
@@ -197,7 +199,9 @@ export async function setSeen(entityKey: string) {
       const error = e as { code: string };
       // If document doesn't exist, create it first
       if (error.code === 'not-found') {
-        await createSubscriptionDocument(currentUid);
+        if (!current()) return;
+        await createSubscriptionDocument(currentUid, current);
+        if (!current()) return;
         await updateDoc(docRef, {
           [`seenEntities.${entityKey}`]: currentTime,
         });

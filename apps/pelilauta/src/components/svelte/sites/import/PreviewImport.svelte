@@ -1,6 +1,7 @@
 <script lang="ts">
 import { updateSiteApi } from 'src/firebase/client/site/updateSiteApi';
 import type { PageRef } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import {
   type ImportedPage,
   importedPages,
@@ -69,7 +70,7 @@ function toPageRef(importedPage: ImportedPage, key: string): PageRef {
 }
 
 async function importPages() {
-  if (!currentSite || !$uid) {
+  if (!currentSite || !$isResolvedActive) {
     pushSnack(t('site:import.snacks.noSession'));
     return;
   }
@@ -209,7 +210,9 @@ async function importPages() {
 }
 
 const hasPages = $derived(pages.length > 0);
-const canImport = $derived(hasPages && !importing && currentSite && $uid);
+const canImport = $derived(
+  hasPages && !importing && currentSite && $isResolvedActive,
+);
 </script>
 
 {#if hasPages}

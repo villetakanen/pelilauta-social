@@ -104,12 +104,14 @@ test('failed acknowledgment leaves the notification unread and allows navigation
       body: 'export async function markRead() { throw new Error("Controlled acknowledgment failure"); }',
     }),
   );
+  await signIn(page);
+  await page.goto(`${BASE_URL}/inbox`);
+  const destination = page.getByRole('link', { name: NOTIFICATION_TITLE });
+  await expect(destination).toBeVisible();
   const failure = page.waitForEvent('console', (message) =>
     message.text().includes('Notification acknowledgment failed'),
   );
-  await signIn(page);
-  await page.goto(`${BASE_URL}/inbox`);
-  await page.getByRole('link', { name: NOTIFICATION_TITLE }).click();
+  await destination.click();
   await failure;
   await expect(page).toHaveURL(
     `${BASE_URL}/threads/${THREAD_KEY}#${REPLY_KEY}`,

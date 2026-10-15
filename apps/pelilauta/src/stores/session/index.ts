@@ -4,6 +4,7 @@ import { pushSessionSnack, pushSnack } from '@utils/client/snackUtils';
 import { logDebug, logError, logWarn } from '@utils/logHelpers';
 import type { User } from 'firebase/auth';
 import { atom, computed } from 'nanostores';
+import { appMeta } from 'src/stores/metaStore/metaStore';
 import {
   beginCookieSession,
   blockCookieSynchronization,
@@ -46,6 +47,17 @@ if (typeof document !== 'undefined') {
 }
 
 export const active = computed(sessionState, (state) => state === 'active');
+
+// This gate controls presentation only. Server authorization remains independent.
+export const showAdminTools = computed(
+  [sessionState, uid, authUser, $account, appMeta],
+  (state, currentUid, user, account, meta) =>
+    state === 'active' &&
+    currentUid !== '' &&
+    user?.uid === currentUid &&
+    account?.uid === currentUid &&
+    Boolean(meta?.admins?.includes(currentUid)),
+);
 
 export const anonymous = computed([active, uid], (active, uid) => {
   if (!active) return false;

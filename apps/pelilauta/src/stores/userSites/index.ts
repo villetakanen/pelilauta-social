@@ -1,5 +1,5 @@
 import { persistentAtom } from '@nanostores/persistent';
-import type { WritableAtom } from 'nanostores';
+import { computed, type WritableAtom } from 'nanostores';
 import {
   SITES_COLLECTION_NAME,
   type Site,
@@ -9,6 +9,7 @@ import { toClientEntry } from 'src/utils/client/entryUtils';
 import { logDebug, logError } from 'src/utils/logHelpers';
 import { z } from 'zod';
 import { uid } from '../session';
+import { isResolvedActive } from '../session/computed';
 
 /**
  * A nanostore for caching the user's sites.
@@ -44,19 +45,22 @@ export const userSites: WritableAtom<Site[]> = persistentAtom(
   },
 );
 
-// This will now react to user logging in or out
-uid.subscribe((currentUid) => {
-  logDebug('userSites:uid.subscribe', 'UID changed, refreshing sites', {
-    currentUid,
-  });
-  if (currentUid) {
-    refreshSites(currentUid);
-  } else {
-    userSites.set([]);
-  }
+let refresh = 0;
+
+computed([isResolvedActive, uid], (active, currentUid) => ({
+  active,
+  currentUid,
+})).subscribe(({ active, currentUid }) => {
+  refresh++;
+  if (!currentUid || active) userSites.set([]);
+  if (active && currentUid) void refreshSites(currentUid);
 });
 
 export async function refreshSites(currentUid: string) {
+  const started = ++refresh;
+  const current = () =>
+    started === refresh && isResolvedActive.get() && uid.get() === currentUid;
+  if (!current()) return;
   logDebug('userSites:refreshSites', 'Refreshing sites for user', {
     currentUid,
   });
@@ -64,6 +68,7 @@ export async function refreshSites(currentUid: string) {
     const { getFirestore, getDocs, query, where, collection } = await import(
       'firebase/firestore'
     );
+    if (!current()) return;
     const db = getFirestore();
 
     // Fetch sites where user is an owner
@@ -83,6 +88,7 @@ export async function refreshSites(currentUid: string) {
       getDocs(playerQuery),
     ]);
 
+    if (!current()) return;
     const sitesMap = new Map<string, Site>();
 
     for (const doc of ownerDocs.docs) {

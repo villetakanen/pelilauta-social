@@ -1,8 +1,8 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Channel } from '@schemas/ChannelSchema';
-import { uid } from '@stores/session';
 import { t } from '@utils/i18n';
+import { isResolvedActive } from 'src/stores/session/computed';
 
 interface Props {
   channel: Channel;
@@ -11,7 +11,7 @@ interface Props {
 const { channel }: Props = $props();
 
 let searchQuery = $state('');
-let isAuthenticated = $derived(!!$uid);
+let isAuthenticated = $derived($isResolvedActive);
 
 function handleSearch(event: Event) {
   event.preventDefault();

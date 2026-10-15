@@ -1,33 +1,31 @@
 # App Feature Regression Suite
 
-The feature regression suite drives Playwright against a running development server and the shared `skaldbase-test` Firebase project. `pnpm --filter pelilauta test:e2e` runs this suite independently of `pnpm test:uat`. Neither `pnpm test` nor the pre-push hook runs these tests.
+The suite drives Playwright against a running development server and the shared `skaldbase-test` Firebase project. `pnpm --filter pelilauta test:e2e` runs the suite independently of `pnpm test:uat`. Neither `pnpm test` nor the pre-push hook runs these tests.
 
 - `onboarding-callout-transition.spec.ts` tests onboarding callout view transitions.
 - `reply-subscription-termination.spec.ts` tests reply subscription lifecycles.
 - `read-replies-without-javascript.spec.ts` tests reply rendering in the initial document.
 - `anonymous-reply-reaction-reads.spec.ts` tests that anonymous readers perform no reaction queries.
-- `open-reply-permalink.spec.ts` tests navigating to a reply permalink without JavaScript.
+- `open-reply-permalink.spec.ts` tests navigation to a reply permalink without JavaScript.
 - `jump-to-timestamp.spec.ts` tests navigation to the reply matching a URL timestamp parameter.
-- `live-reply-attribution.spec.ts` tests that a live reply inserted between replies leaves every reply attributed to its author.
+- `live-reply-attribution.spec.ts` tests that a live reply inserted between replies preserves author attribution on each reply.
 - `stale-session-reads.spec.ts` tests that unconfirmed sessions initiate no subscriptions or reaction reads.
 - `read-marking-awaits-subscription.spec.ts` tests that opening a thread marks it read when the subscription arrives after the session confirms.
 - `open-inbox-reply-notification.spec.ts` tests that a reply notification in the inbox links to its reply in the thread.
-- `session-agreement.spec.ts` tests matching-cookie preservation, missing-cookie repair, logout during cookie repair, and that a reload shows no signed-in controls until the status check returns.
+- `session-agreement.spec.ts` tests cookie reconciliation and logout, verified controls and reads across threads, sites, and the library, administrative presentation, rail profile replacement, and identity-independent public thread HTML. Run the development server with `FEATURE_BSKY=true` to include the Bluesky sharing control.
 
 ## Prerequisites
 
 The suite requires two gitignored files in the repository root:
 
-- `server_principal.json` provides the `skaldbase-test` service account key for `reset-fixtures.mjs`.
+- `server_principal.json` carries the `skaldbase-test` service account key for `reset-fixtures.mjs`.
 - `credentials.ts` defines `existingUser`, `newUser`, and `adminUser` credentials containing `email` and `password`. The suite authenticates as `existingUser`.
 
-`apps/pelilauta/.env` provides Firestore configuration.
+`apps/pelilauta/.env` carries Firestore configuration.
 
 The `skaldbase-test` project requires an Auth account for `existingUser`. `reset-fixtures.mjs` aborts when the account is missing. `reset-fixtures.mjs` neither creates nor deletes Auth accounts.
 
 ## Running
-
-Start the development server and run the suite:
 
 ```sh
 pnpm dev
@@ -42,4 +40,4 @@ The suite targets the development server at `http://localhost:4321`. `astro dev`
 
 ## Fixtures and Safety
 
-`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author profile, and three replies belonging to that thread, including one reply with an image, and one unread reply notification for the signed-in member. Before issuing Firestore requests, `reset-fixtures.mjs` aborts unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.
+`reset-fixtures.mjs` restores explicit document IDs required by the suite: the `account` and `profiles` documents for the signed-in member, one public thread in `stream`, a second author profile, three replies to that thread including one reply with an image, one unread reply notification for the signed-in member, and a public site with a homepage for session-gate checks. `reset-fixtures.mjs` aborts before issuing Firestore requests unless `server_principal.json`, `apps/pelilauta/.env`, and `/api/test/firebase-config` on the running application all target `skaldbase-test`.

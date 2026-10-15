@@ -25,7 +25,7 @@ interface Props {
 }
 const { reply, origin, author: initAuthor }: Props = $props();
 const fromUser = $derived.by(() => {
-  return reply.owners[0] === $uid;
+  return $isResolvedActive && reply.owners[0] === $uid;
 });
 
 /**
@@ -112,7 +112,6 @@ $effect(() => {
           <a class="cn-nick" href="/profiles/{author.key}">{author.nick}</a>
         {/if}
       </p>
-      <!-- ReactionButton reads its reaction document on mount, so mount it only once Firebase confirms an active session. -->
       {#if $isResolvedActive}
         <ReactionButton
           target="reply"

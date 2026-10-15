@@ -2,6 +2,7 @@
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Handout } from 'src/schemas/HandoutSchema';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../../stores/session';
 
@@ -13,7 +14,7 @@ interface Props {
 const { site, handout }: Props = $props();
 
 const visible = $derived.by(() => {
-  if (site.owners.includes($uid)) return true;
+  if ($isResolvedActive && site.owners.includes($uid)) return true;
   return false;
 });
 </script>

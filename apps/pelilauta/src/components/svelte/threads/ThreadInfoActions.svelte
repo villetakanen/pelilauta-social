@@ -1,6 +1,7 @@
 <script lang="ts">
 import { syndicateToBsky } from 'src/components/svelte/thread-editor/submitThreadUpdate';
 import type { Thread } from 'src/schemas/ThreadSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { showAdminTools, uid } from '../../../stores/session';
@@ -11,12 +12,9 @@ interface Props {
 }
 const { thread }: Props = $props();
 
-// Derived state to check if the current user owns the thread
-// Access $uid directly as per nanostores/svelte integration
-const owns = $derived.by(() => {
-  // Ensure thread and owners exist before checking
-  return thread?.owners?.includes($uid) ?? false;
-});
+const owns = $derived(
+  $isResolvedActive && Boolean(thread?.owners?.includes($uid)),
+);
 
 async function onsubmit(e: Event) {
   e.preventDefault();

@@ -1,12 +1,14 @@
 <script lang="ts">
 import CnIdentityAction from '@design-system/components/CnIdentityAction.svelte';
-import { isActive, isRehydrating } from 'src/stores/session/computed';
+import { uid } from 'src/stores/session';
+import { isRehydrating, isResolvedActive } from 'src/stores/session/computed';
 import { profile } from 'src/stores/session/profile';
 import { t } from 'src/utils/i18n';
 
 // Set where this entry is a place of the application drawing the rail. See
 // InboxNavigationButton for why a door passes nothing.
 let { ariaCurrent }: { ariaCurrent?: string } = $props();
+const readerProfile = $derived($profile?.key === $uid ? $profile : null);
 </script>
 
 {#if $isRehydrating}
@@ -18,13 +20,13 @@ let { ariaCurrent }: { ariaCurrent?: string } = $props();
     label={t("navigation:login")}
     disabled
   />
-{:else if $isActive}
+{:else if $isResolvedActive}
   <CnIdentityAction
     href="/settings"
-    label={$profile?.nick ?? t("navigation:settings")}
+    label={readerProfile?.nick ?? t("navigation:settings")}
     signedIn
-    nick={$profile?.nick}
-    src={$profile?.avatarURL}
+    nick={readerProfile?.nick}
+    src={readerProfile?.avatarURL}
     aria-current={ariaCurrent}
   />
 {:else}

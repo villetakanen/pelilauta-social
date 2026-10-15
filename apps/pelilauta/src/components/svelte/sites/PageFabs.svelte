@@ -1,6 +1,7 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
 
@@ -12,6 +13,7 @@ interface Props {
 const { site, pageKey }: Props = $props();
 
 const visible = $derived.by(() => {
+  if (!$isResolvedActive) return false;
   if (site.owners.includes($uid)) return true;
   if (site.players?.includes($uid)) return true;
   return false;

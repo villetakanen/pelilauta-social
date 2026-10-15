@@ -1,7 +1,9 @@
 <script lang="ts">
 import CnThemeSwitch from '@design-system/components/CnThemeSwitch.svelte';
+import { uid } from '@stores/session';
 import { account } from '@stores/session/account';
 import { setTheme } from '@stores/session/theme';
+import { isResolvedActive } from 'src/stores/session/computed';
 
 /**
  * The theme switch as Pelilauta mounts it: signed-in readers only, because the
@@ -22,8 +24,10 @@ interface Props {
 const { label }: Props = $props();
 
 let host: HTMLElement | undefined = $state();
+const interactive = $derived($isResolvedActive && $account?.uid === $uid);
 
 const persist = () => {
+  if (!interactive) return;
   const mode = document.documentElement.style.colorScheme;
   if (mode !== 'light' && mode !== 'dark') return;
   setTheme(mode);
@@ -36,7 +40,7 @@ $effect(() => {
 });
 </script>
 
-{#if $account}
+{#if interactive}
   <span bind:this={host} style="display: contents">
     <CnThemeSwitch {label} />
   </span>

@@ -9,6 +9,7 @@ import { existingUser } from '../../../credentials.ts';
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
 const SESSION_PATH = '/api/auth/session';
 const creationPages = ['/', '/channels/yleinen'];
+const SITE_PATH = '/sites/e2e-session-gates-site';
 // Matches e2e/reset-fixtures.mjs's THREAD_KEY.
 const THREAD_KEY = 'e2e-onboarding-regression-thread';
 
@@ -261,7 +262,334 @@ test('a saved sign-in shows no signed-in controls until the status check returns
   await page.waitForTimeout(1000);
   await expect(replyBar(page)).toHaveCount(0);
   await expect(inboxLink(page)).toHaveCount(0);
+  const editThread = page.locator(`a[href="/threads/${THREAD_KEY}/edit"]`);
+  const deleteReply = page.locator(
+    `a[href="/threads/${THREAD_KEY}/replies/e2e-reply-1/delete"]`,
+  );
+  const share = page.getByRole('button', {
+    name: 'Jaa Blueskyssa',
+    exact: true,
+  });
+  await expect(editThread).toHaveCount(0);
+  await expect(deleteReply).toHaveCount(0);
+  await expect(share).toHaveCount(0);
 
   release();
   await expect(replyBar(page)).toBeVisible();
+  await expect(editThread).toBeVisible();
+  await expect(deleteReply).toHaveCount(1);
+  const props = await page
+    .locator('astro-island[component-url$="/BlueskyCard.svelte"]')
+    .getAttribute('props');
+  if (JSON.parse(props ?? '{}').bskyFeatureEnabled?.[1])
+    await expect(share).toBeVisible();
+});
+
+const adminLink = (page: Page) => page.locator('a[href="/admin"]');
+
+const memberSurfaces = [
+  {
+    path: '/',
+    selector: 'button[aria-label="Love"], button[aria-label="Tykkää"]',
+  },
+  { path: '/channels/yleinen', selector: 'form input[type="text"]' },
+  { path: SITE_PATH, selector: `a[href="${SITE_PATH}/create/page"]` },
+  { path: '/library', selector: 'a[href="/create/site"]' },
+];
+
+for (const surface of memberSurfaces) {
+  test(`${surface.path} member tools and reads wait for verification`, async ({
+    page,
+  }) => {
+    await signIn(page);
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let dispatched!: () => void;
+    const requested = new Promise<void>((resolve) => {
+      dispatched = resolve;
+    });
+    await page.route(`**${SESSION_PATH}`, async (route) => {
+      if (route.request().method() !== 'GET') return route.continue();
+      dispatched();
+      await held;
+      await route.continue();
+    });
+    const memberReads: string[] = [];
+    let collecting = false;
+    page.once('framenavigated', () => {
+      collecting = true;
+    });
+    page.on('request', (request) => {
+      if (
+        !collecting ||
+        !request.url().includes('google.firestore.v1.Firestore/')
+      )
+        return;
+      let body = request.postData() ?? '';
+      try {
+        body = decodeURIComponent(body);
+      } catch {
+        /* Inspect the raw body. */
+      }
+      if (
+        body.includes('reactions/') ||
+        body.includes('subscriptions/') ||
+        (body.includes('collectionId') && body.includes('sites'))
+      ) {
+        memberReads.push(body);
+      }
+    });
+    await page.goto(`${BASE_URL}${surface.path}`, {
+      waitUntil: 'domcontentloaded',
+    });
+    await requested;
+    await page.waitForTimeout(1000);
+    const control = page.locator(surface.selector).first();
+    if (surface.path.startsWith('/channels/'))
+      await expect(control).toBeDisabled();
+    else await expect(control).toHaveCount(0);
+    expect(memberReads).toHaveLength(0);
+    if (surface.path === SITE_PATH) {
+      await expect(page.locator(`a[href="${SITE_PATH}/members"]`)).toHaveCount(
+        0,
+      );
+      await expect(
+        page.locator(`a[href="${SITE_PATH}/handouts"]`),
+      ).toHaveAttribute('aria-disabled', 'true');
+    }
+    release();
+    await expectActive(page);
+    if (surface.path.startsWith('/channels/'))
+      await expect(control).toBeEnabled();
+    else await expect(control).toBeVisible();
+    if (surface.path === SITE_PATH) {
+      await expect(
+        page.locator(`a[href="${SITE_PATH}/members"]`),
+      ).toBeVisible();
+      await expect(
+        page.locator(`a[href="${SITE_PATH}/handouts"]`),
+      ).not.toHaveAttribute('aria-disabled', 'true');
+    }
+    if (surface.path === '/library' || surface.path === '/') {
+      await expect.poll(() => memberReads.length).toBeGreaterThan(0);
+    }
+  });
+}
+
+for (const failure of ['verification', 'repair', 'no Firebase user']) {
+  test(`site owner tools remain hidden after ${failure}`, async ({ page }) => {
+    if (failure === 'no Firebase user') {
+      // Capture the fixture owner hint without copying Firebase persistence.
+      await signIn(page);
+      const savedUid = await page.evaluate(() =>
+        localStorage.getItem('session-uid'),
+      );
+      await page.evaluate(async () => {
+        const { logout } = await import('/src/stores/session/index.ts');
+        await logout();
+      });
+      await page.addInitScript(
+        (uid) => localStorage.setItem('session-uid', uid ?? ''),
+        savedUid,
+      );
+    } else {
+      await signIn(page);
+      await page.route(`**${SESSION_PATH}`, async (route) => {
+        if (
+          route.request().method() === 'GET' ||
+          route.request().method() === 'POST'
+        ) {
+          return route.fulfill({
+            status:
+              failure === 'repair' && route.request().method() === 'GET'
+                ? 401
+                : 503,
+            contentType: 'application/json',
+            body: '{}',
+          });
+        }
+        return route.continue();
+      });
+    }
+    const failed =
+      failure === 'no Firebase user'
+        ? null
+        : sessionResponse(page, failure === 'repair' ? 'POST' : 'GET');
+    await page.goto(`${BASE_URL}${SITE_PATH}`, {
+      waitUntil: 'domcontentloaded',
+    });
+    if (failed) expect((await failed).status()).toBe(503);
+    await page.waitForTimeout(1000);
+    await expect(
+      page.locator(`a[href="${SITE_PATH}/create/page"]`),
+    ).toHaveCount(0);
+    await expect(page.locator(`a[href="${SITE_PATH}/members"]`)).toHaveCount(0);
+    await expect(
+      page.locator(`a[href="${SITE_PATH}/toc/settings"]`),
+    ).toHaveCount(0);
+    await expect(
+      page.locator(`a[href="${SITE_PATH}/handouts"]`),
+    ).toHaveAttribute('aria-disabled', 'true');
+  });
+}
+
+test('public thread HTML and island properties ignore the requesting identity', async ({
+  page,
+}) => {
+  await signIn(page);
+  const url = `${BASE_URL}/threads/${THREAD_KEY}`;
+  const [member, anonymous] = await Promise.all([
+    page.request.get(url),
+    page.request.get(url, { headers: { Cookie: '' } }),
+  ]);
+  expect(member.ok()).toBe(true);
+  expect(anonymous.ok()).toBe(true);
+  const memberHtml = await member.text();
+  expect(memberHtml).not.toContain('isAuthorOrAdmin');
+  // Astro development telemetry varies independently of content and credentials.
+  const withoutTimings = (html: string) =>
+    html.replace(/ server-render-time="[^"]*"/g, '');
+  expect(withoutTimings(await anonymous.text())).toBe(
+    withoutTimings(memberHtml),
+  );
+});
+
+// Supply administrative metadata to test presentation without changing server permissions.
+async function presentSavedAdmin(page: Page) {
+  await page.evaluate(async () => {
+    const { uid } = await import('/src/stores/session/index.ts');
+    const { account } = await import('/src/stores/session/account.ts');
+    const { appMeta } = await import('/src/stores/metaStore/metaStore.ts');
+    account.set({ uid: uid.get(), eulaAccepted: true });
+    appMeta.set({ admins: [uid.get()] });
+  });
+}
+
+test('administrative navigation waits for verification of the saved account', async ({
+  page,
+}) => {
+  await signIn(page);
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let dispatched!: () => void;
+  const requested = new Promise<void>((resolve) => {
+    dispatched = resolve;
+  });
+  await page.route(`**${SESSION_PATH}`, async (route) => {
+    if (route.request().method() !== 'GET') return route.continue();
+    dispatched();
+    await held;
+    await route.continue();
+  });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await requested;
+  await presentSavedAdmin(page);
+  await expect(adminLink(page)).toHaveCount(0);
+  release();
+  await expectActive(page);
+  await presentSavedAdmin(page);
+  await expect(adminLink(page)).toBeVisible();
+});
+
+for (const failure of ['verification', 'repair', 'no Firebase user']) {
+  test(`saved administrative data enables no navigation after ${failure}`, async ({
+    page,
+  }) => {
+    if (failure === 'no Firebase user') {
+      await page.addInitScript(() =>
+        localStorage.setItem('session-uid', 'saved-admin'),
+      );
+      await page.goto(BASE_URL);
+      await page.evaluate(async () => {
+        const { auth } = await import('/src/firebase/client/index.ts');
+        await auth.authStateReady();
+      });
+    } else {
+      await signIn(page);
+      await page.route(`**${SESSION_PATH}`, async (route) => {
+        const method = route.request().method();
+        if (method === 'GET' || method === 'POST') {
+          return route.fulfill({
+            status: failure === 'repair' && method === 'GET' ? 401 : 503,
+            contentType: 'application/json',
+            body: '{}',
+          });
+        }
+        return route.continue();
+      });
+      const failed = sessionResponse(
+        page,
+        failure === 'repair' ? 'POST' : 'GET',
+      );
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      expect((await failed).status()).toBe(503);
+    }
+    await presentSavedAdmin(page);
+    await expect(adminLink(page)).toHaveCount(0);
+  });
+}
+
+test('the rail excludes another account profile during replacement and for a missing profile', async ({
+  page,
+}) => {
+  await signIn(page);
+  const identity = page.locator('a[href="/settings"]');
+  await expect(identity).toHaveAccessibleName('E2E Regression Member');
+
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route(
+    '**/google.firestore.v1.Firestore/Listen/**',
+    async (route) => {
+      await held;
+      await route.continue();
+    },
+  );
+  // Drive the consumer with a replacement identity while its real profile listener is held.
+  await page.evaluate(async () => {
+    const { authUser, sessionState, uid } = await import(
+      '/src/stores/session/index.ts'
+    );
+    const { subscribeToProfile } = await import(
+      '/src/stores/session/profile.ts'
+    );
+    sessionState.set('initial');
+    authUser.set({ ...authUser.get(), uid: 'e2e-missing-rail-profile' });
+    subscribeToProfile('e2e-missing-rail-profile');
+    uid.set('e2e-missing-rail-profile');
+    sessionState.set('active');
+  });
+  await expect(identity).toBeVisible();
+  await expect(identity).toHaveAccessibleName('Asetukset');
+  await expect(identity.locator('img')).toHaveCount(0);
+
+  // Persistent data from another tab must not label the replacement account.
+  await page.evaluate(async () => {
+    const { profile } = await import('/src/stores/session/profile.ts');
+    profile.set({
+      key: 'previous-account',
+      username: 'previous',
+      nick: 'Previous Account',
+      avatarURL: 'https://example.com/previous.png',
+    });
+  });
+  await expect(identity).toHaveAccessibleName('Asetukset');
+  await expect(identity.locator('img')).toHaveCount(0);
+  // Store tests cover missing-document snapshots; drive the resulting presentation state here.
+  await page.evaluate(async () => {
+    const { unsubscribeFromProfile, profileMissing } = await import(
+      '/src/stores/session/profile.ts'
+    );
+    unsubscribeFromProfile();
+    profileMissing.set(true);
+  });
+  release();
+  await expect(identity).toHaveAccessibleName('Asetukset');
+  await expect(identity.locator('img')).toHaveCount(0);
 });

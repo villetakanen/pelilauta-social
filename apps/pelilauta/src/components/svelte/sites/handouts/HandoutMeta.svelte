@@ -2,6 +2,7 @@
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Handout } from 'src/schemas/HandoutSchema';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { update } from 'src/stores/site/handouts';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
@@ -20,7 +21,7 @@ let newReader = $state('');
 let readers = $state(handout.readers ?? ([] as string[]));
 
 const visible = $derived.by(() => {
-  if ($site?.owners?.includes($uid)) return true;
+  if ($isResolvedActive && $site?.owners?.includes($uid)) return true;
   return false;
 });
 const omit = $derived.by(() => {
@@ -39,6 +40,7 @@ function onUserSelect(e: Event) {
 }
 
 async function dropReader(reader: string) {
+  if (!visible) return;
   const r = new Set(readers);
   r.delete(reader);
   await update({
@@ -50,6 +52,7 @@ async function dropReader(reader: string) {
 
 async function onSubmit(e: Event) {
   e.preventDefault();
+  if (!visible) return;
   logDebug('HandoutMeta.onSubmit', newReader);
   const r = new Set(readers);
   r.add(newReader);

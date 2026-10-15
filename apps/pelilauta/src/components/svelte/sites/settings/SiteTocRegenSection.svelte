@@ -2,6 +2,7 @@
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import CnLoader from '@design-system/components/CnLoader.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../../stores/session';
@@ -11,12 +12,13 @@ interface Props {
 }
 const { site }: Props = $props();
 let loading = $state(false);
-const visible = $derived.by(() => site.owners.includes($uid));
+const visible = $derived($isResolvedActive && site.owners.includes($uid));
 
 /**
  * Regenerates page references for a site.
  */
 async function regenPageRefs() {
+  if (!visible) return;
   loading = true;
   try {
     // Dynamically import the utility function
