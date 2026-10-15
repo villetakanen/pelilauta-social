@@ -26,10 +26,21 @@ reconciliation, and logout within one document.
 
 #### Server-rendering boundary
 
-Server rendering derives identity from cookie verification. Request-scoped identity
-never enters module-level stores. Request-scoped identity supplies islands with
-required identity data only. Server identity does not authenticate browser
-Firestore reads. Shared and offline caches exclude personalized responses.
+Astro middleware installs a lazy authentication resolver in `context.locals`,
+following [ADR 0006](../../../docs/adrs/0006-resolve-server-authentication-in-astro-middleware.md).
+Installation performs no verification or cookie mutation. Concurrent and subsequent
+consumers share one verification promise and classified result per request.
+Requests share neither resolved identity nor verification promises. The result
+describes incoming credentials; cookie mutations do not replace it.
+
+Matched routes and resource guards retain authorization and existing failure behavior.
+Public content rendering performs no cookie verification. Protected HTML and
+authentication-dependent responses exclude shared caching. Offline caches exclude
+personalized responses.
+
+Request-scoped identity remains on the server unless an approved contract requires
+specific identity properties in the browser. Server identity does not authenticate
+browser Firestore reads.
 
 ### Constraints
 

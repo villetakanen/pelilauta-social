@@ -60,6 +60,85 @@ function sessionRequests(page: Page) {
   return methods;
 }
 
+test('the anonymous rail login link opens the login form', async ({ page }) => {
+  await page.goto(`${BASE_URL}/`);
+  const rail = page.getByRole('navigation', {
+    name: 'Päävalikko',
+    exact: true,
+  });
+  const login = rail.getByRole('link', { name: 'Kirjaudu', exact: true });
+  await expect(login).toBeVisible();
+  await expect(login).toBeEnabled();
+  await expect(login).toHaveAttribute('href', '/login');
+  await expect(rail.locator('a[href="/settings"]')).toHaveCount(0);
+  await expect(
+    rail.getByRole('link', { name: 'E2E Regression Member', exact: true }),
+  ).toHaveCount(0);
+
+  await login.click();
+  await expect(page).toHaveURL(`${BASE_URL}/login`);
+  await expect(
+    page.getByRole('heading', { name: 'Kirjaudu', level: 1, exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('textbox', {
+      name: 'Kirjaudu sähköpostiosoitteellasi',
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: /Lähetä linkki/ }),
+  ).toBeVisible();
+});
+
+test('the signed-in rail profile link opens the reader settings', async ({
+  page,
+}) => {
+  await signIn(page);
+  const rail = page.getByRole('navigation', {
+    name: 'Päävalikko',
+    exact: true,
+  });
+  const identity = rail.getByRole('link', {
+    name: 'E2E Regression Member',
+    exact: true,
+  });
+  await expect(identity).toBeVisible();
+  await expect(identity).toBeEnabled();
+  await expect(identity).toHaveAttribute('href', '/settings');
+
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url() === `${BASE_URL}/settings` &&
+        response.headers()['content-type']?.includes('text/html') === true,
+    ),
+    identity.click(),
+  ]);
+  expect(response.status()).toBe(200);
+  expect(response.headers()['cache-control']).toMatch(/\bno-store\b/);
+  await expect(page).toHaveURL(`${BASE_URL}/settings`);
+  const main = page.getByRole('main');
+  await expect(
+    main.getByRole('heading', { name: 'Asetukset', level: 1, exact: true }),
+  ).toBeVisible();
+  const profile = main.getByRole('article').filter({
+    has: page.getByText('E2E Regression Member', { exact: true }),
+  });
+  await expect(
+    profile.getByText('E2E Regression Member', { exact: true }),
+  ).toBeVisible();
+  await expect(profile).toContainText('e2e-regression-member');
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Kirjasto', exact: true })
+      .getByRole('link', {
+        name: 'E2E Regression Member',
+        exact: true,
+      }),
+  ).toHaveAttribute('aria-current', 'page');
+});
+
 for (const path of creationPages) {
   const creationLink = (page: Page) =>
     page.locator('a[href^="/create/thread"]');
