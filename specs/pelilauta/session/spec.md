@@ -47,6 +47,12 @@ revocation.
 
 ### Required behavior
 
+#### Cookie lifecycle
+
+A successful `POST /api/auth/session` verifies the ID token and sets the `session`
+cookie. A failed POST sets no cookie. `DELETE /api/auth/session` deletes the
+`session` cookie. The endpoint creates no separate UID cookie.
+
 #### Status protocol
 
 `GET /api/auth/session` checks cookie revocation and mutates no cookies. Every GET
@@ -115,7 +121,8 @@ regardless of the logout outcome.
 ### Regression Guardrails
 
 - Persisted UID and state never substitute for verified server status.
-- A cookie never restores Firebase authentication or supplies its UID.
+- A cookie never restores Firebase authentication or supplies the UID resolved by
+  Firebase Auth.
 - The [service worker][worker] neither reads nor writes session-endpoint caches,
   including previously cached responses, and never queues or replays its mutations.
 - [Protected-page verification][verifier] returns `null` on every verifier error.

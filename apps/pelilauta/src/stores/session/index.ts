@@ -4,6 +4,7 @@ import { pushSessionSnack, pushSnack } from '@utils/client/snackUtils';
 import { logDebug, logError, logWarn } from '@utils/logHelpers';
 import type { User } from 'firebase/auth';
 import { atom, computed } from 'nanostores';
+import { appMeta } from 'src/stores/metaStore/metaStore';
 import {
   beginCookieSession,
   blockCookieSynchronization,
@@ -22,15 +23,8 @@ import { initSubscriberStore, resetSubscriberStore } from './subscriber';
 export const authUser = atom<User | null>(null);
 
 export type SessionState = 'initial' | 'loading' | 'active' | 'error';
-export const sessionState = persistentAtom<SessionState>(
-  'session-state',
-  'initial',
-);
-
-// A page reload during loading state leaves the asynchronous process terminated. Reset state to initial.
-if (sessionState.get() === 'loading') {
-  sessionState.set('initial');
-}
+// Every page load starts at `initial`. Only this page's verification against the server session moves the state to `active`.
+export const sessionState = atom<SessionState>('initial');
 
 sessionState.subscribe((state, oldState) => {
   if (state !== oldState) {
@@ -40,9 +34,6 @@ sessionState.subscribe((state, oldState) => {
     });
   }
 });
-
-// Solid components use $loadingState as a legacy alias.
-export const $loadingState = sessionState;
 
 export const uid = persistentAtom<string>('session-uid', '');
 
@@ -56,6 +47,17 @@ if (typeof document !== 'undefined') {
 }
 
 export const active = computed(sessionState, (state) => state === 'active');
+
+// This gate controls presentation only. Server authorization remains independent.
+export const showAdminTools = computed(
+  [sessionState, uid, authUser, $account, appMeta],
+  (state, currentUid, user, account, meta) =>
+    state === 'active' &&
+    currentUid !== '' &&
+    user?.uid === currentUid &&
+    account?.uid === currentUid &&
+    Boolean(meta?.admins?.includes(currentUid)),
+);
 
 export const anonymous = computed([active, uid], (active, uid) => {
   if (!active) return false;
@@ -124,6 +126,10 @@ async function handleFirebaseAuthChange(user: User | null) {
     currentUid: uid.get(),
   });
   authUser.set(user);
+  // A replacement identity invalidates the verification of the previous one.
+  if (user && sessionState.get() === 'active' && uid.get() !== user.uid) {
+    sessionState.set('initial');
+  }
 
   // Unauthenticated state requires cleanup when the session is not initial. Concurrent calls share the running logout operation.
   if (!user) {

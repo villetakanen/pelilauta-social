@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ASSET_LICENSES_KEYS, type Asset } from 'src/schemas/AssetSchema';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../../stores/session';
@@ -12,7 +13,7 @@ interface Props {
 }
 const { asset, site }: Props = $props();
 
-const interactive = $derived.by(() => site.owners.includes($uid));
+const interactive = $derived($isResolvedActive && site.owners.includes($uid));
 </script>
 
 {#if interactive}

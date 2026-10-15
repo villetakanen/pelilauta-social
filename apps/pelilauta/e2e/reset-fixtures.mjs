@@ -1,12 +1,5 @@
 /**
- * A bespoke, limited Firestore/Auth reset for the onboarding-callout-transition
- * regression, in place of the retired suite's full `init-test-db.js`.
- *
- * It restores, by explicit id, three documents and the thread's replies:
- *   - account/<memberUid>   (src/schemas/AccountSchema.ts)
- *   - profiles/<memberUid>  (src/schemas/ProfileSchema.ts)
- *   - stream/<THREAD_KEY>   (src/schemas/ThreadSchema.ts)
- *   - stream/<THREAD_KEY>/comments/<REPLY_KEYS> (src/schemas/ReplySchema.ts)
+ * This reset restores the application fixtures documented in e2e/README.md.
  *
  * `<memberUid>` is resolved from the existing Auth account for `existingUser`
  * (credentials.ts) rather than hardcoded, so the Auth account itself is never
@@ -259,5 +252,37 @@ await serverDB
     read: false,
   });
 console.log(`Restored notifications/${NOTIFICATION_KEY}`);
+
+const site = serverDB.collection('sites').doc('e2e-session-gates-site');
+await site.set({
+  name: 'E2E session gates site',
+  owners: [memberUid],
+  players: [],
+  hidden: false,
+  homepage: 'home',
+  useHandouts: true,
+  useClocks: true,
+  useSidebar: false,
+  pageRefs: [
+    { key: 'home', name: 'Home', author: memberUid, flowTime: replyBase },
+  ],
+  createdAt: Timestamp.fromMillis(replyBase),
+  updatedAt: Timestamp.fromMillis(replyBase),
+  flowTime: Timestamp.fromMillis(replyBase),
+});
+await site
+  .collection('pages')
+  .doc('home')
+  .set({
+    name: 'Home',
+    siteKey: site.id,
+    owners: [memberUid],
+    author: memberUid,
+    markdownContent: 'Public content for session gate regressions.',
+    createdAt: Timestamp.fromMillis(replyBase),
+    updatedAt: Timestamp.fromMillis(replyBase),
+    flowTime: Timestamp.fromMillis(replyBase),
+  });
+console.log(`Restored sites/${site.id} and its homepage`);
 
 console.log('Fixture reset complete.');

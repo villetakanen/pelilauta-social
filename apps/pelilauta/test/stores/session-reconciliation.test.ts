@@ -45,6 +45,9 @@ vi.stubGlobal('window', {
   removeEventListener: () => {},
 });
 const { sessionState, uid, logout } = await import('../../src/stores/session');
+const { isActive, isResolvedActive, isRehydrating } = await import(
+  '../../src/stores/session/computed'
+);
 const { subscribe } = await import('../../src/stores/session/account');
 const { initSubscriberStore } = await import(
   '../../src/stores/session/subscriber'
@@ -299,4 +302,95 @@ describe('session reconciliation', () => {
       expect(sessionState.get()).toBe('active');
     },
   );
+});
+
+describe('verification on each page load', () => {
+  const userB = {
+    uid: 'B',
+    getIdToken: vi.fn(async () => 'token-B'),
+  } as unknown as User;
+
+  test('a saved UID with a matching Firebase user is not active while the status check is pending', async () => {
+    uid.set('A');
+    const get = deferred<Response>();
+    fetchMock.mockReturnValueOnce(get.promise);
+    const verifying = h.onChange?.(user);
+    await vi.waitFor(() => expect(calls('GET')).toHaveLength(1));
+
+    expect(sessionState.get()).toBe('initial');
+    expect(isActive.get()).toBe(false);
+    expect(isResolvedActive.get()).toBe(false);
+    expect(isRehydrating.get()).toBe(true);
+    expect(subscribe).not.toHaveBeenCalled();
+    expect(initSubscriberStore).not.toHaveBeenCalled();
+
+    get.resolve(matching());
+    await verifying;
+    expect(isActive.get()).toBe(true);
+    expect(isResolvedActive.get()).toBe(true);
+    expect(isRehydrating.get()).toBe(false);
+  });
+
+  test('a 401 followed by a successful repair makes the session active', async () => {
+    uid.set('A');
+    const post = deferred<Response>();
+    fetchMock
+      .mockResolvedValueOnce(status(401))
+      .mockReturnValueOnce(post.promise);
+    const verifying = h.onChange?.(user);
+    await vi.waitFor(() => expect(calls('POST')).toHaveLength(1));
+    expect(isActive.get()).toBe(false);
+    expect(isResolvedActive.get()).toBe(false);
+    expect(subscribe).not.toHaveBeenCalled();
+
+    post.resolve(status(200));
+    await verifying;
+    expect(isActive.get()).toBe(true);
+    expect(isResolvedActive.get()).toBe(true);
+  });
+
+  test.each([
+    ['HTTP 500', () => Promise.resolve(status(500))],
+    ['a network failure', () => Promise.reject(new TypeError('offline'))],
+  ])(
+    'an inconclusive status check (%s) leaves the session inactive and keeps Firebase auth',
+    async (_n, get) => {
+      uid.set('A');
+      fetchMock.mockImplementationOnce(get);
+      await h.onChange?.(user);
+
+      expect(isActive.get()).toBe(false);
+      expect(isResolvedActive.get()).toBe(false);
+      expect(h.signOut).not.toHaveBeenCalled();
+      expect(subscribe).not.toHaveBeenCalled();
+    },
+  );
+
+  test('no Firebase user leaves the saved UID inactive', async () => {
+    uid.set('A');
+    await h.onChange?.(null);
+
+    expect(isActive.get()).toBe(false);
+    expect(isResolvedActive.get()).toBe(false);
+    expect(calls('GET')).toHaveLength(0);
+  });
+
+  test('the previous UID does not present as active while a replacement identity is verified', async () => {
+    fetchMock.mockResolvedValueOnce(matching());
+    await h.onChange?.(user);
+    expect(isActive.get()).toBe(true);
+
+    const get = deferred<Response>();
+    fetchMock.mockReturnValueOnce(get.promise);
+    const replacing = h.onChange?.(userB);
+    await vi.waitFor(() => expect(calls('GET')).toHaveLength(2));
+
+    expect(isActive.get()).toBe(false);
+    expect(isResolvedActive.get()).toBe(false);
+
+    get.resolve(ok({ uid: 'B', expiresAt: 1900000000 }));
+    await replacing;
+    expect(uid.get()).toBe('B');
+    expect(isResolvedActive.get()).toBe(true);
+  });
 });

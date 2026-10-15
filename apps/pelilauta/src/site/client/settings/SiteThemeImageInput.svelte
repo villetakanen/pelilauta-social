@@ -3,6 +3,7 @@ import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addAssetToSite } from 'src/firebase/client/site/addAssetToSite';
 import type { Site } from 'src/schemas/SiteSchema';
 import { uid } from 'src/stores/session';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { update } from 'src/stores/site';
 import { resizeImage } from 'src/utils/client/resizeImage';
 import { t } from 'src/utils/i18n';
@@ -19,6 +20,7 @@ interface Props {
 const { site, imageField }: Props = $props();
 let preview = $state<string | null>(site[imageField] ?? null);
 let file = $state<File | null>(null);
+const interactive = $derived($isResolvedActive && site.owners.includes($uid));
 
 async function fileChanged(e: Event) {
   const target = e.target as HTMLInputElement;
@@ -45,12 +47,14 @@ async function onsubmit(e: Event) {
   const f = file;
   if (!f) return;
 
-  if (!$uid) {
+  if (!interactive) {
     logWarn('SiteThemeImageInput', 'Cannot upload: user not authenticated');
     return;
   }
 
-  const url = await addAssetToSite(site, f, $uid);
+  const reader = $uid;
+  const url = await addAssetToSite(site, f, reader);
+  if (!isResolvedActive.get() || uid.get() !== reader) return;
 
   await update({
     [imageField]: url,
@@ -63,6 +67,7 @@ function resetPreview() {
 }
 
 async function deleteImage() {
+  if (!interactive) return;
   update({
     [imageField]: '',
   });
@@ -93,7 +98,7 @@ async function deleteImage() {
   <div class="actions justify-end">
     <button
       type="button"
-      disabled={!site[imageField]}
+      disabled={!interactive || !site[imageField]}
       onclick={deleteImage}
       class="button text"
     >
@@ -108,7 +113,7 @@ async function deleteImage() {
     >
       {t('actions:reset')}
     </button>
-    <button type="submit" disabled={file === null}>
+    <button type="submit" disabled={!interactive || file === null}>
       {t('actions:upload')}
     </button>
   </div>

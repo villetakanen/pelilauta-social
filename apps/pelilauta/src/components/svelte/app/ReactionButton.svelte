@@ -10,10 +10,10 @@ import {
   type Reactions,
   reactionsSchema,
 } from 'src/schemas/ReactionsSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { logDebug, logWarn } from 'src/utils/logHelpers';
-import { onMount } from 'svelte';
 
 /**
  * An universal "love" button for Pelilauta 16+. The functionality here might break 16 and lesser
@@ -73,23 +73,29 @@ const pressed = $derived($reactions[type]?.includes($uid) ?? false);
 // stays visible and inert.
 const disabled = $derived($reactions.subscribers.includes($uid));
 
-onMount(async () => {
-  try {
-    const reactionsDoc = await getDoc(
-      doc(db, `${REACTIONS_COLLECTION_NAME}/${key}`),
-    );
-    if (reactionsDoc.exists()) {
-      reactions.set(reactionsSchema.parse(reactionsDoc.data()));
-    }
-  } catch (error) {
-    logWarn('ReactionButton', 'Failed to fetch reactions:', error);
-  }
+$effect(() => {
+  if (!$isResolvedActive) return;
+  const reader = $uid;
+  let current = true;
+  void getDoc(doc(db, `${REACTIONS_COLLECTION_NAME}/${key}`))
+    .then((snapshot) => {
+      if (!current || !isResolvedActive.get() || uid.get() !== reader) return;
+      if (snapshot.exists())
+        reactions.set(reactionsSchema.parse(snapshot.data()));
+    })
+    .catch((error) => {
+      logWarn('ReactionButton', 'Failed to fetch reactions:', error);
+    });
+  return () => {
+    current = false;
+  };
 });
 
 async function onclick(e: MouseEvent) {
   e.preventDefault();
   logDebug('ReactionButton', `Reaction ${type} clicked for ${key}`);
-  if (!$uid) return;
+  if (!$isResolvedActive) return;
+  const reader = $uid;
 
   const currentReactions = reactions.get();
 
@@ -121,6 +127,7 @@ async function onclick(e: MouseEvent) {
       title,
     });
 
+    if (!isResolvedActive.get() || uid.get() !== reader) return;
     if (result.success && result.reactions) {
       // Update with the actual server response
       reactions.set(result.reactions);
@@ -131,6 +138,7 @@ async function onclick(e: MouseEvent) {
       pushSnack(t('app:errors.internal'));
     }
   } catch (error) {
+    if (!isResolvedActive.get() || uid.get() !== reader) return;
     // Rollback on network error
     reactions.set(currentReactions);
     logWarn('ReactionButton', 'Failed to update reaction, rolled back:', error);
@@ -139,7 +147,7 @@ async function onclick(e: MouseEvent) {
 }
 </script>
 
-{#if $uid }
+{#if $isResolvedActive}
   <CnReactionButton
     label={t('app:reactions.love')}
     {count}

@@ -2,6 +2,7 @@
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { addAssetToSite } from 'src/firebase/client/site/addAssetToSite';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { resizeImage } from 'src/utils/client/resizeImage';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
@@ -13,10 +14,10 @@ interface Props {
 }
 const { site }: Props = $props();
 
-const visible = $derived.by(() => site.owners.includes($uid));
+const visible = $derived($isResolvedActive && site.owners.includes($uid));
 
 async function uploadFiles(files: FileList) {
-  if (!$uid) {
+  if (!visible) {
     logWarn('UploadAssetFab', 'Cannot upload: user not authenticated');
     return;
   }

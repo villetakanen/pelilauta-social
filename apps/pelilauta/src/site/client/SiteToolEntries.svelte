@@ -10,6 +10,7 @@
  */
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../stores/session';
 
@@ -20,8 +21,10 @@ interface Props {
 
 const { site, path }: Props = $props();
 
-const isOwner = $derived(site.owners.includes($uid));
-const isPlayer = $derived(isOwner || Boolean(site.players?.includes($uid)));
+const isOwner = $derived($isResolvedActive && site.owners.includes($uid));
+const isPlayer = $derived(
+  $isResolvedActive && (isOwner || Boolean(site.players?.includes($uid))),
+);
 
 function current(here: boolean) {
   return here ? 'page' : undefined;

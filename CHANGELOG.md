@@ -2,6 +2,12 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.1.4
+
+- fix(session): Session state starts unverified on each page load. Member controls, reaction reads, library queries, and read-state subscriptions wait for server agreement. Account replacement clears stale profile presentation and rejects obsolete read results. ([#182](https://github.com/villetakanen/pelilauta-social/issues/182), [#215](https://github.com/villetakanen/pelilauta-social/issues/215))
+- fix(threads): Public thread HTML no longer carries requester-specific Bluesky permissions. Sharing controls use the verified browser identity. ([#212](https://github.com/villetakanen/pelilauta-social/issues/212))
+- docs: Specifications define public-page progressive enhancement, onboarding hints, and outage behavior. ADR 0005 uses the existing session endpoint without an additional UID cookie.
+
 ## 21.1.3
 
 - fix(session): Forced sign-out after an API authentication failure clears the session cookie and local user data before signing out of Firebase. Failed logout keeps the reader on the current page with the incomplete-logout notice. ([#207](https://github.com/villetakanen/pelilauta-social/issues/207))

@@ -1,6 +1,4 @@
 import { persistentAtom } from '@nanostores/persistent';
-import { onMount } from 'nanostores';
-import { cookieSessionCurrent } from 'src/utils/client/sessionCookie';
 import { logError } from 'src/utils/logHelpers';
 import { db } from '../../firebase/client';
 import {
@@ -25,11 +23,6 @@ export const $subscriber = persistentAtom<Subscription>(
 
 let unsubscribe: (() => void) | undefined;
 let subscription = 0;
-
-onMount($subscriber, () => {
-  const u = uid.get();
-  if (u) initSubscriberStore(u, cookieSessionCurrent(u));
-});
 
 /** This function terminates the Firestore listener and resets persisted subscriber data. */
 export function resetSubscriberStore() {

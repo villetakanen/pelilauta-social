@@ -4,9 +4,10 @@ import { authUser, sessionState, uid } from './index';
 /**
  * Session state helpers to properly handle the "Optimistic UID" problem.
  *
- * Because `uid` is persisted to localStorage, it's available synchronously on page load
- * before Firebase Auth has verified the session. These helpers provide clean primitives
- * to distinguish between persisted state and verified state.
+ * Because `uid` is persisted to localStorage, it is available synchronously on page load
+ * as a saved sign-in hint, before this page has verified the session. Session state
+ * starts at `initial` on every page load. These helpers distinguish the saved hint
+ * from verification completed on this page.
  */
 
 /**
@@ -21,9 +22,9 @@ export const isAnonymous = computed(
 );
 
 /**
- * Returns true when we have a persisted UID but the session is not yet verified.
+ * Returns true when a saved UID hint exists and verification has not settled.
  * This happens during:
- * - Page load when localStorage has a UID but Firebase Auth hasn't verified yet
+ * - Page load, until the status check and any repair settle
  * - During login/logout transitions
  *
  * UI should typically show a loading state during rehydration.
@@ -36,7 +37,8 @@ export const isRehydrating = computed(
 );
 
 /**
- * Returns true only when the session is fully verified and active.
+ * Returns true only after this page's verification: a matching status response
+ * or a successful repair. A saved UID alone never makes it true.
  * This is the ONLY safe check for features requiring authentication.
  *
  * DO NOT use direct `$uid` checks for authentication - use this instead.
@@ -46,9 +48,8 @@ export const isActive = computed([sessionState, uid], (state, currentUid) => {
 });
 
 /**
- * Adds to `isActive` that Firebase has confirmed the identity in this page
- * load: `isActive` also holds on persisted state before `onAuthStateChanged`
- * runs. Gate reads and subscriptions on this store.
+ * Adds to `isActive` that the Firebase user in this page load matches the
+ * session UID. Gate reads and subscriptions on this store.
  */
 export const isResolvedActive = computed(
   [sessionState, uid, authUser],

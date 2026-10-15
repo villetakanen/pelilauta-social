@@ -3,6 +3,7 @@ import CnCard from '@design-system/components/CnCard.svelte';
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import { generateSrcset, netlifyImage } from '@utils/images/netlifyImage';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { toDisplayString } from 'src/utils/contentHelpers';
 import { systemToNoun } from 'src/utils/schemaHelpers';
 import { uid } from '../../../stores/session';
@@ -13,8 +14,8 @@ interface Props {
   elevation?: 0 | 1 | 2 | 3 | 4;
 }
 const { site, showPlayerIndicator = false, elevation = 1 }: Props = $props();
-const owns = $derived(site.owners.includes($uid));
-const plays = $derived(site.players?.includes($uid));
+const owns = $derived($isResolvedActive && site.owners.includes($uid));
+const plays = $derived($isResolvedActive && site.players?.includes($uid));
 
 // Generate optimized image URLs for the site poster
 // Cards are 170-450px wide, so we use appropriate sizes

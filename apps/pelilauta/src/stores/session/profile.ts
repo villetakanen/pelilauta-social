@@ -41,6 +41,8 @@ export function subscribeToProfile(uid: string, identityCurrent = () => true) {
     unsubscribe();
   }
 
+  $profile.set(null);
+  $profileMissing.set(false);
   const profileRef = doc(db, PROFILES_COLLECTION_NAME, uid);
   unsubscribe = onSnapshot(profileRef, (snapshot) => {
     if (started !== subscription || !identityCurrent()) return;
@@ -78,11 +80,13 @@ export function subscribeToProfile(uid: string, identityCurrent = () => true) {
             'Failed to migrate profile data',
             migrationError,
           );
+          $profile.set(null);
           $profileMissing.set(true);
         }
       }
     } else {
       logDebug('profileStore', 'onSnapshot', 'Profile not found');
+      $profile.set(null);
       $profileMissing.set(true);
     }
   });
@@ -91,6 +95,7 @@ export function unsubscribeFromProfile() {
   subscription++;
   logDebug('profileStore', 'unsubscribeFromProfile', 'Clearing profile data');
   $profile.set(null);
+  $profileMissing.set(false);
   if (unsubscribe) {
     unsubscribe();
     unsubscribe = undefined;

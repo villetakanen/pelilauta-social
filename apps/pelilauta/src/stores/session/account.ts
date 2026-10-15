@@ -5,7 +5,6 @@ import {
   type Account,
   parseAccount,
 } from 'src/schemas/AccountSchema';
-import { appMeta } from 'src/stores/metaStore/metaStore';
 import { logWarn } from 'src/utils/logHelpers';
 
 const LAST_LOGIN_TIMEOUT = 24 * 60 * 60 * 1000;
@@ -28,17 +27,6 @@ export const requiresEula = computed([account, accountNotFound], (acc, anf) => {
   if (!acc) return false;
   return !acc.eulaAccepted;
 });
-
-// This computed store controls visibility for administrative interface tools. Backend rules enforce administrative authorization.
-export const showAdminTools = computed(
-  [account, appMeta],
-  (account, appMeta) => {
-    if (!account) return false;
-    if (!account.uid) return false;
-    if (appMeta?.admins?.includes(account.uid)) return true;
-    return false;
-  },
-);
 
 let unsubscribe: () => void;
 let subscription = 0;

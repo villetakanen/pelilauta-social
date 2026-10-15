@@ -1,24 +1,27 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
 import type { Thread } from '@schemas/ThreadSchema';
-import { uid } from '@stores/session';
+import { showAdminTools, uid } from '@stores/session';
 import { pushSnack } from '@utils/client/snackUtils';
 import { t } from '@utils/i18n';
 import { logDebug, logError } from '@utils/logHelpers';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { syndicateToBsky } from '../thread-editor/submitThreadUpdate';
 
 interface Props {
   thread: Thread;
-  isAuthorOrAdmin: boolean;
   bskyFeatureEnabled: boolean;
 }
 
-const { thread, isAuthorOrAdmin, bskyFeatureEnabled }: Props = $props();
+const { thread, bskyFeatureEnabled }: Props = $props();
+const isAuthorOrAdmin = $derived(
+  $isResolvedActive && (thread.owners.includes($uid) || $showAdminTools),
+);
 
 let isSharing = $state(false);
 
 async function handleShare() {
-  if (!$uid || isSharing) return;
+  if (!isAuthorOrAdmin || isSharing) return;
 
   isSharing = true;
 
@@ -68,7 +71,7 @@ async function handleShare() {
     </p>
 
     <button onclick={handleShare} disabled={isSharing}>
-      <CnIcon noun="share" />
+      <CnIcon noun="share" decorative />
       <span>
         {isSharing ? t("threads:share.sharing") : t("threads:share.button")}
       </span>

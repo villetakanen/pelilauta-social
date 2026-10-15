@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
  * specs/pelilauta/threads/replies/spec.md, and the matching success criterion
  * of #165 for reaction reads.
  *
- * Persisted session state names a user that Firebase never confirms. The
+ * A saved UID names a user that Firebase never confirms. The
  * signal is the Firestore web SDK's Listen channel: a reply listener is a
  * request whose body names `stream/<thread>` and `comments`; a reaction read
  * names `reactions/`.
@@ -21,7 +21,6 @@ test('a persisted session Firebase has not confirmed opens no reply subscription
   page,
 }) => {
   await page.addInitScript(() => {
-    localStorage.setItem('session-state', 'active');
     localStorage.setItem('session-uid', 'stale-e2e-uid');
   });
 

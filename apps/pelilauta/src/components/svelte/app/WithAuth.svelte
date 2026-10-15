@@ -1,8 +1,8 @@
 <script lang="ts">
 import CnIcon from '@design-system/components/CnIcon.svelte';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { t } from 'src/utils/i18n';
 import type { Snippet } from 'svelte';
-import { uid } from '../../../stores/session';
 
 interface Props {
   allow: boolean;
@@ -13,7 +13,7 @@ interface Props {
 const { allow, children, message }: Props = $props();
 </script>
 
-{#if allow}
+{#if $isResolvedActive && allow}
   {@render children?.()}
 {:else}
   <div class="content-prose">
@@ -24,7 +24,7 @@ const { allow, children, message }: Props = $props();
       <div class="surface">
         <h1>{t('app:forbidden.title')}</h1>
         <p>{message || t('app:forbidden.message')}</p>
-        {#if !$uid}
+        {#if !$isResolvedActive}
         <div class="text-center">
           <a href="/login" class="button">
             {t('actions:login')}

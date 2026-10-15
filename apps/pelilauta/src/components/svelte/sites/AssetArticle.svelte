@@ -3,6 +3,7 @@ import CnIcon from '@design-system/components/CnIcon.svelte';
 import { deleteSiteAsset } from 'src/firebase/client/site/deleteSiteFromAssets';
 import type { Asset } from 'src/schemas/AssetSchema';
 import type { Site } from 'src/schemas/SiteSchema';
+import { isResolvedActive } from 'src/stores/session/computed';
 import { pushSnack } from 'src/utils/client/snackUtils';
 import { t } from 'src/utils/i18n';
 import { uid } from '../../../stores/session';
@@ -13,10 +14,11 @@ type Props = {
 };
 const { asset, site }: Props = $props();
 const showActions = $derived.by(() => {
-  return site.owners.includes($uid);
+  return $isResolvedActive && site.owners.includes($uid);
 });
 
 async function deleteAsset() {
+  if (!showActions) return;
   deleteSiteAsset(site, asset);
 }
 async function copyMarkdown() {

@@ -32,7 +32,6 @@ export async function completeAuthFlow(user: User, redirectPath = '/') {
     if (!current()) return;
     try {
       localStorage.setItem('session-uid', user.uid);
-      localStorage.setItem('session-state', 'active');
     } catch {}
 
     pushSessionSnack(t('login:snacks.success'));
