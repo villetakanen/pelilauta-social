@@ -3,6 +3,7 @@ import { beforeEach, expect, test, vi } from 'vitest';
 import {
   beginCookieSession,
   blockCookieSynchronization,
+  reconcileSessionCookie,
   resumeCookieSynchronization,
   synchronizeSessionCookie,
 } from '../../../src/utils/client/sessionCookie';
@@ -25,6 +26,35 @@ beforeEach(async () => {
   resumeCookieSynchronization();
   fetchMock.mockReset();
   vi.stubGlobal('fetch', fetchMock);
+});
+
+test('concurrent reconciliation consumers share one status check and repair', async () => {
+  const status = deferred<Response>();
+  fetchMock
+    .mockReturnValueOnce(status.promise)
+    .mockResolvedValueOnce(new Response('', { status: 200 }));
+  const a = user('A');
+  const first = reconcileSessionCookie(a, beginCookieSession('A'));
+  const second = reconcileSessionCookie(a, beginCookieSession('A'));
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+  status.resolve(new Response('', { status: 401 }));
+  expect(await first).toBe('agreed');
+  expect(await second).toBe('agreed');
+  expect(fetchMock).toHaveBeenCalledTimes(2);
+});
+
+test('explicit sign-in completing before an older status result does not create another cookie', async () => {
+  const status = deferred<Response>();
+  fetchMock
+    .mockReturnValueOnce(status.promise)
+    .mockResolvedValueOnce(new Response('', { status: 200 }));
+  const a = user('A');
+  const restoring = reconcileSessionCookie(a, beginCookieSession('A'));
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+  await synchronizeSessionCookie(a, beginCookieSession('A'));
+  status.resolve(new Response('', { status: 401 }));
+  expect(await restoring).toBe('agreed');
+  expect(fetchMock).toHaveBeenCalledTimes(2);
 });
 
 test('same-identity callers share creation and can both read the response', async () => {

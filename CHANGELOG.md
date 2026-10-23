@@ -2,6 +2,14 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.2.0
+
+- test(auth): Browser regressions reuse isolated copies of one authenticated Firebase session instead of verifying a password for every test. Email-action mocks reuse the setup token response.
+- feat(session): Protected pages restore browser sign-in at the requested address before rendering member content. Recovery preserves return destinations, bounds automatic retries, and distinguishes rejected credentials from temporary and unclassified server failures.
+- fix(cache): The service worker neither stores nor reuses responses marked no-store or private.
+- fix(login): Sign-in validates return destinations before navigation. Email links retain the destination's pathname, query, and fragment when completed in another browser.
+- fix(session): Server authentication shares one lazy verification result per request. Protected documents and authentication-dependent responses exclude shared caching. ([#216](https://github.com/villetakanen/pelilauta-social/issues/216))
+
 ## 21.1.4
 
 - fix(session): Session state starts unverified on each page load. Member controls, reaction reads, library queries, and read-state subscriptions wait for server agreement. Account replacement clears stale profile presentation and rejects obsolete read results. ([#182](https://github.com/villetakanen/pelilauta-social/issues/182), [#215](https://github.com/villetakanen/pelilauta-social/issues/215))

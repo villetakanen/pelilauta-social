@@ -29,9 +29,9 @@ rail is `chrome/LibraryRail.astro`. Its strings are the `library` locale namespa
 It carries `specs/pelilauta/base/base-bar`, whole, so its pages show the service's
 identity rather than one of its own.
 
-Every page of the library establishes the session itself, through
-`@pelilauta/base/utils/requireSession`, and sends a reader without one to sign in. The
-layout takes no part in it.
+Every library page guards its session through `@pelilauta/base/utils/requireSession`.
+[Protected-document recovery](../session/protected-recovery.md) governs authentication
+failures before protected library content renders. The layout performs no session check.
 
 ### Constraints
 
@@ -47,7 +47,7 @@ place of this application rather than a modal page.
 
 - A reader reaches their sites, their notifications and their account from anywhere inside
   the library.
-- A reader without a session reaches no page of the library.
+- A reader without a verified session receives no protected library content.
 
 ### Regression Guardrails
 
@@ -58,6 +58,7 @@ place of this application rather than a modal page.
 
 ```gherkin
 Given a reader without a session
-When they open a page of the library
-Then they are sent away before it renders
+When the reader requests a library document
+Then the server shows non-sensitive recovery content at the requested address
+And the response carries HTTP 401 and no protected library content
 ```

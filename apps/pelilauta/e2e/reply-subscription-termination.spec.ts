@@ -1,6 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-// Credentials live at the repository root, gitignored. See e2e/README.md.
-import { existingUser } from '../../../credentials.ts';
+import { restoreMemberSession as signIn } from './helpers/memberSession';
 
 /**
  * Scenario "Terminate a live subscription" in
@@ -37,16 +36,6 @@ function trackReplyListens(page: Page) {
     }
   });
   return seen;
-}
-
-async function signIn(page: Page) {
-  await page.goto(`${BASE_URL}/login`);
-  const emailField = page.locator('#password-email');
-  await emailField.waitFor({ state: 'visible' });
-  await emailField.fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
-  await page.getByRole('button', { name: 'Login' }).click();
-  await page.waitForURL(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
 }
 
 test('an anonymous reader opens no reply subscription', async ({ page }) => {

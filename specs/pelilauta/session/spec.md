@@ -31,9 +31,11 @@ following [ADR 0006](../../../docs/adrs/0006-resolve-server-authentication-in-as
 Installation performs no verification or cookie mutation. Concurrent and subsequent
 consumers share one verification promise and classified result per request.
 Requests share neither resolved identity nor verification promises. The result
-describes incoming credentials; cookie mutations do not replace it.
+describes incoming credentials; cookie mutations do not replace the classified result.
 
-Matched routes and resource guards retain authorization and existing failure behavior.
+Matched routes and resource guards retain authorization. Protected-document authentication
+failures follow [Protected-document recovery](protected-recovery.md); other failure
+responses remain unchanged.
 Public content rendering performs no cookie verification. Protected HTML and
 authentication-dependent responses exclude shared caching. Offline caches exclude
 personalized responses.
@@ -50,9 +52,8 @@ lifetime and attributes. Persistent Firebase authentication can recreate the coo
 without recent interactive sign-in. Cookie expiry imposes no maximum login duration.
 Returning `expiresAt` introduces no renewal timer or threshold.
 
-Scope excludes further SSR identity initialization, new protected-page recovery,
-Astro sessions, migration of browser Firestore access to server APIs, and cross-device
-revocation.
+Scope excludes further SSR identity initialization, Astro sessions, migration of browser
+Firestore access to server APIs, and cross-device revocation.
 
 ## Contract
 
@@ -91,18 +92,19 @@ a non-empty string `uid` and a finite integer `expiresAt`.
 | Status encounters a network failure, server error, or malformed HTTP 200 body. | Leave agreement unconfirmed, retain Firebase authentication for a later check, and send no POST request. |
 
 Repair verifies the ID token before creating the cookie. HTTP 200 acknowledges creation
-and establishes agreement without another GET. A failed repair leaves agreement
-unconfirmed and establishes no active session. The endpoint maps failures during
-ID-token verification or cookie creation to HTTP 401, including dependency failures.
-Reconciliation reports sign-in failure and calls logout on that response. Network
-failures and HTTP 5xx responses preserve Firebase authentication for retry.
+and establishes agreement without sending another GET request. A failed repair leaves
+agreement unconfirmed and establishes no active session. The endpoint maps failures
+during ID-token verification or cookie creation to HTTP 401, including dependency
+failures. Reconciliation reports sign-in failure and triggers logout upon receiving
+HTTP 401. Network failures and HTTP 5xx responses preserve Firebase authentication
+for retry.
 
 #### Logout
 
-Logout runs from `initial`, `loading`, `active`, and `error`. Logout blocks new cookie
-creation and supersedes reconciliation and sign-in completion. Before deleting the
-cookie, logout waits for dispatched creation to settle, including failed creation.
-Logout then runs these steps in sequence:
+Logout executes from `initial`, `loading`, `active`, and `error` states. Logout blocks
+new cookie creation and supersedes reconciliation and sign-in completion. Before
+deleting the cookie, logout waits for dispatched creation to settle, including failed
+creation. Logout then executes three steps in sequence:
 
 1. Send DELETE to the [session endpoint][endpoint], requiring a 2xx response.
 2. Clear persisted UID and subscriber data, and account and profile subscriptions.
@@ -113,21 +115,21 @@ logout did not complete. The notice survives redirects. A retry repeats every st
 Concurrent callers await one logout operation and receive the same outcome.
 
 When Firebase resolves no user, the [session store][store] calls logout unless state is `initial`.
-If incomplete logout leaves Firebase signed in, the next page load reconciles again.
+When incomplete logout leaves Firebase signed in, the next page load reconciles again.
 Successful reconciliation restores the active session and local user data.
 
 #### Concurrent synchronization
 
 Concurrent cookie-creation requests from explicit sign-in and reconciliation for the
-same Firebase identity send one POST and receive the same response.
+same Firebase identity send one POST request and receive the same response.
 An identity change supersedes earlier work. Superseded work dispatches no further
 requests and changes no session state, local user data, subscriptions, or sign-in
 destination. When cookie creation remains in flight for a previous identity, the
 browser dispatches no status check or creation POST for the new identity until the
-in-flight POST settles, including failure.
+in-flight POST settles, including upon failure.
 
-Failed logout permits a new reconciliation or retry. Earlier work remains superseded
-regardless of the logout outcome.
+Failed logout permits new reconciliation or retry attempts. Earlier work remains
+superseded regardless of the logout outcome.
 
 ### Regression Guardrails
 
@@ -135,10 +137,10 @@ regardless of the logout outcome.
 - A cookie never restores Firebase authentication or supplies the UID resolved by
   Firebase Auth.
 - The [service worker][worker] neither reads nor writes session-endpoint caches,
-  including previously cached responses, and never queues or replays its mutations.
-- [Protected-page verification][verifier] returns `null` on every verifier error.
-  [requireSession][guard] redirects to login on `null`, including during outages.
-  Other guards retain redirects and denials. Pathname-prefix middleware
+  including previously cached responses, and never queues or replays endpoint mutations.
+- [Protected-page verification][verifier] preserves classified failures for
+  [protected-document recovery](protected-recovery.md). Resource guards retain
+  authorization denials after authentication succeeds. Pathname-prefix middleware
   does not replace route authorization.
 
 ### Scenarios
@@ -150,9 +152,9 @@ regardless of the logout outcome.
 | A status check or repair fails temporarily while Firebase retains user A. | A later check verifies user A or repair returns HTTP 200. | The browser establishes agreement without interactive sign-in. |
 | A service worker holds a cached successful status response. | The browser requests status while offline. | Cached identity does not establish agreement. |
 | A session POST fails offline before the reader signs out. | Connectivity returns. | The service worker does not replay the POST request. |
-| Explicit sign-in and reconciliation request cookie creation concurrently for user A. | POST returns HTTP 200. | Both operations receive the same success response from one POST. |
-| Cookie creation for user A remains in flight. | The reader starts logout. | Creation settles before deletion, and its completion restores no local user data or sign-in destination. |
-| Cookie creation for user A remains in flight. | Firebase resolves user B. | Creation for A settles before creation for B, and A restores no local user data or subscriptions. |
+| Explicit sign-in and reconciliation request cookie creation concurrently for user A. | POST returns HTTP 200. | Both operations receive the same success response from one POST request. |
+| Cookie creation for user A remains in flight. | The reader starts logout. | Creation settles before deletion; completed creation restores no local user data or sign-in destination. |
+| Cookie creation for user A remains in flight. | Firebase resolves user B. | Creation for user A settles before creation for user B, and user A restores no local user data or subscriptions. |
 | User A is signed in. | Cookie deletion fails during logout. | Local data and Firebase authentication remain, state becomes `error`, and the notice survives redirects. |
 | Cookie deletion and local cleanup succeed. | Firebase sign-out fails. | Logout remains incomplete, state becomes `error`, and the reader receives a notice. |
 
@@ -160,5 +162,4 @@ regardless of the logout outcome.
 [store]: ../../../apps/pelilauta/src/stores/session/index.ts
 [endpoint]: ../../../apps/pelilauta/src/pages/api/auth/session.ts
 [verifier]: ../../../apps/pelilauta/src/utils/server/auth/verifySession.ts
-[guard]: ../../../apps/pelilauta/src/base/utils/requireSession.ts
 [worker]: ../../../apps/pelilauta/public/service-worker.js

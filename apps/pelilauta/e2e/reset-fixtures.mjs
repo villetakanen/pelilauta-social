@@ -254,7 +254,7 @@ await serverDB
 console.log(`Restored notifications/${NOTIFICATION_KEY}`);
 
 const site = serverDB.collection('sites').doc('e2e-session-gates-site');
-await site.set({
+const siteData = {
   name: 'E2E session gates site',
   owners: [memberUid],
   players: [],
@@ -269,7 +269,16 @@ await site.set({
   createdAt: Timestamp.fromMillis(replyBase),
   updatedAt: Timestamp.fromMillis(replyBase),
   flowTime: Timestamp.fromMillis(replyBase),
-});
+};
+await site.set(siteData);
+await serverDB
+  .collection('sites')
+  .doc('e2e-recovery-nonowner-site')
+  .set({
+    ...siteData,
+    name: 'E2E recovery non-owner site',
+    owners: [SECOND_AUTHOR_UID],
+  });
 await site
   .collection('pages')
   .doc('home')

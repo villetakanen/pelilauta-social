@@ -1,6 +1,7 @@
 import type { User } from 'firebase/auth';
 import { captureError } from 'src/utils/client/sentry';
 import { logError } from 'src/utils/logHelpers';
+import { navigateToDocument } from './documentNavigation';
 import { beginCookieSession, synchronizeSessionCookie } from './sessionCookie';
 
 export async function completeAuthFlow(user: User, redirectPath = '/') {
@@ -34,9 +35,13 @@ export async function completeAuthFlow(user: User, redirectPath = '/') {
       localStorage.setItem('session-uid', user.uid);
     } catch {}
 
-    pushSessionSnack(t('login:snacks.success'));
+    try {
+      pushSessionSnack(t('login:snacks.success'));
+    } catch {
+      // Disabled tab storage does not invalidate a successful cookie exchange.
+    }
 
-    window.location.assign(redirectPath);
+    navigateToDocument(redirectPath);
   } catch (error) {
     if (!current()) return;
     logError(

@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs';
-import { expect, type Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { cert, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 // Credentials live at the repository root, gitignored. See e2e/README.md.
 import { existingUser } from '../../../credentials.ts';
+import { restoreMemberSession as signIn } from './helpers/memberSession';
 
 /**
  * Scenario "Open a thread" in specs/pelilauta/threads/read-state/spec.md,
@@ -18,16 +19,6 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
 // Matches e2e/reset-fixtures.mjs's THREAD_KEY.
 const THREAD_KEY = 'e2e-onboarding-regression-thread';
 const DELAY_MS = 5000;
-
-async function signIn(page: Page) {
-  await page.goto(`${BASE_URL}/login`);
-  const emailField = page.locator('#password-email');
-  await emailField.waitFor({ state: 'visible' });
-  await emailField.fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
-  await page.getByRole('button', { name: 'Login' }).click();
-  await page.waitForURL(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
-}
 
 // Writes go to skaldbase-test only; the service account is checked before use.
 const serviceAccount = JSON.parse(

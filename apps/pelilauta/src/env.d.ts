@@ -6,6 +6,11 @@ declare namespace App {
       import('./utils/server/auth/verifySession').SessionVerification
     >;
     authenticationDependent?: boolean;
+    protectedDocument?: boolean;
+    protectedRecovery?: {
+      status: 401 | 500 | 503;
+      destination: string;
+    };
   }
 }
 

@@ -1,5 +1,9 @@
 import { expect, type Page, test } from '@playwright/test';
 import { existingUser } from '../../../credentials.ts';
+import {
+  memberAuthResponse,
+  restoreMemberSession as signIn,
+} from './helpers/memberSession';
 
 /**
  * Tests cover the agreement scenarios in specs/pelilauta/session/spec.md.
@@ -20,20 +24,6 @@ const sessionResponse = (page: Page, method: string) =>
       response.request().method() === method,
     { timeout: 30000 },
   );
-
-async function signIn(page: Page) {
-  await page.goto(`${BASE_URL}/login`);
-  const emailField = page.locator('#password-email');
-  await emailField.waitFor({ state: 'visible' });
-  await emailField.fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
-  // Login writes a saved UID hint before redirecting. Await the front page status check before checking session state.
-  const settled = sessionResponse(page, 'GET');
-  await page.getByRole('button', { name: 'Login' }).click();
-  await page.waitForURL(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
-  expect((await settled).status()).toBe(200);
-  await expectActive(page);
-}
 
 // The inbox link renders only for a verified active session.
 const inboxLink = (page: Page) => page.locator('a[href="/inbox"]:visible');
@@ -58,6 +48,95 @@ function sessionRequests(page: Page) {
     }
   });
   return methods;
+}
+
+for (const savedState of ['none', 'destination', 'email']) {
+  test(`email sign-in preserves its callback destination in another browser (saved state: ${savedState})`, async ({
+    page,
+    browser,
+  }) => {
+    const destination = `${SITE_PATH}?view=list&redirect=%2Finbox#latest`;
+    const authentication = await memberAuthResponse();
+    let callbackUrl = '';
+    let apiKey = '';
+    await page.route('**/accounts:sendOobCode?*', async (route) => {
+      callbackUrl = route.request().postDataJSON().continueUrl;
+      apiKey = new URL(route.request().url()).searchParams.get('key') ?? '';
+      await route.fulfill({ json: { email: existingUser.email } });
+    });
+    await page.goto(
+      `${BASE_URL}/login?redirect=${encodeURIComponent(destination)}`,
+    );
+    await page.locator('#email-login').fill(existingUser.email);
+    await page.getByRole('button', { name: /Lähetä linkki/ }).click();
+    await expect(
+      page.getByText('Linkki lähetetty sähköpostiisi.', { exact: false }),
+    ).toBeVisible();
+    const callback = new URL(callbackUrl);
+    expect(callback.pathname).toBe('/login');
+    expect(callback.searchParams.get('redirect')).toBe(destination);
+    expect(callback.hash).toBe('');
+    callback.searchParams.set('apiKey', apiKey);
+    callback.searchParams.set('mode', 'signIn');
+    callback.searchParams.set('oobCode', 'e2e-email-action');
+
+    const otherBrowser = await browser.newContext();
+    let release!: () => void;
+    const cookiePending = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    try {
+      if (savedState !== 'none') {
+        await otherBrowser.addInitScript(
+          ({ savedState, email }) => {
+            localStorage.setItem('loginRedirectRoute', 'https://evil.example');
+            if (savedState === 'email') {
+              localStorage.setItem('emailForSignIn', email);
+            }
+          },
+          { savedState, email: existingUser.email },
+        );
+      }
+      const completing = await otherBrowser.newPage();
+      await completing.route(
+        '**/accounts:signInWithEmailLink?*',
+        async (route) => {
+          expect(route.request().postDataJSON().email).toBe(existingUser.email);
+          await route.fulfill({ json: authentication });
+        },
+      );
+      let cookiePosts = 0;
+      await completing.route(`**${SESSION_PATH}`, async (route) => {
+        if (route.request().method() === 'POST') {
+          cookiePosts++;
+          await cookiePending;
+        }
+        await route.continue();
+      });
+      await completing.goto(callback.href);
+      if (savedState !== 'email') {
+        expect(
+          await completing.evaluate(() =>
+            localStorage.getItem('emailForSignIn'),
+          ),
+        ).toBeNull();
+        await expect(completing.locator('#email-verify')).toBeVisible();
+        await completing.locator('#email-verify').fill(existingUser.email);
+        await completing
+          .getByRole('button', { name: /Vahvista linkki/ })
+          .click();
+      }
+      await expect.poll(() => cookiePosts).toBe(1);
+      await expect(completing).toHaveURL(callback.href);
+      release();
+      await expect(completing).toHaveURL(`${BASE_URL}${destination}`);
+      expect(cookiePosts).toBe(1);
+      expect(await hasSessionCookie(completing)).toBe(true);
+    } finally {
+      release();
+      await otherBrowser.close();
+    }
+  });
 }
 
 test('the anonymous rail login link opens the login form', async ({ page }) => {

@@ -20,6 +20,16 @@ workbox.precaching.precacheAndRoute([
 
 // Session status is never cached or replayed.
 const isSessionEndpoint = (url) => url.pathname === '/api/auth/session';
+const cacheableResponse = (response) =>
+  response?.status === 200 &&
+  !/\b(?:no-store|private)\b/i.test(response.headers.get('Cache-Control') ?? '')
+    ? response
+    : null;
+const publicResponsesOnly = {
+  cacheWillUpdate: ({ response }) => cacheableResponse(response),
+  cachedResponseWillBeUsed: ({ cachedResponse }) =>
+    cacheableResponse(cachedResponse),
+};
 
 // Cache API routes with network-first strategy
 workbox.routing.registerRoute(
@@ -28,6 +38,7 @@ workbox.routing.registerRoute(
     cacheName: 'api-cache',
     networkTimeoutSeconds: 3,
     plugins: [
+      publicResponsesOnly,
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 50,
         maxAgeSeconds: 5 * 60, // 5 minutes
@@ -80,6 +91,7 @@ workbox.routing.registerRoute(
     cacheName: 'pages-cache',
     networkTimeoutSeconds: 3,
     plugins: [
+      publicResponsesOnly,
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 50,
         maxAgeSeconds: 24 * 60 * 60, // 24 hours

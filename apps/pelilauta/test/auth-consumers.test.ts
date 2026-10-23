@@ -70,13 +70,13 @@ describe('route and resource guards through Astro middleware', () => {
       const response = await container.renderToResponse(page, {
         request: sessionRequest(cookie, '/protected'),
       });
-      expectPrivate(response, cookie ? 200 : 302);
+      expectPrivate(response, cookie ? 200 : 401);
       if (cookie) expect(await response.text()).toContain('Protected content');
       else {
-        expect(await response.text()).not.toContain('Protected content');
-        expect(response.headers.get('Location')).toBe(
-          '/login?redirect=%2Fprotected',
-        );
+        const body = await response.text();
+        expect(body).not.toContain('Protected content');
+        expect(response.headers.get('Location')).toBeNull();
+        expect(body).toContain('Recovery: /protected');
       }
     },
   );
@@ -105,7 +105,7 @@ describe('route and resource guards through Astro middleware', () => {
   });
 
   it.each(['session', 'admin', 'owner'])(
-    'redirects a missing session at the matched %s guard',
+    'recovers a missing session at the matched %s guard',
     async (guard) => {
       const response = await renderEndpoint(
         async (ctx) => {
@@ -119,20 +119,19 @@ describe('route and resource guards through Astro middleware', () => {
         },
         sessionRequest(undefined, '/tools/nested'),
       );
-      expectPrivate(response, 302);
-      expect(response.headers.get('Location')).toBe(
-        '/login?redirect=%2Ftools%2Fnested',
-      );
+      expectPrivate(response, 401);
+      expect(response.headers.get('Location')).toBeNull();
+      expect(await response.text()).toContain('Recovery: /tools/nested');
       expect(mocks.cookie).not.toHaveBeenCalled();
       expect(mocks.admin).not.toHaveBeenCalled();
     },
   );
 
   it.each([
-    'auth/session-cookie-revoked',
-    'app/network-timeout',
-    'auth/internal-error',
-  ])('retains login redirects for %s', async (code) => {
+    ['auth/session-cookie-revoked', 401],
+    ['app/network-timeout', 503],
+    ['auth/internal-error', 500],
+  ])('preserves classified document failure for %s', async (code, status) => {
     mocks.cookie.mockImplementation(async () => {
       throw { code };
     });
@@ -142,8 +141,82 @@ describe('route and resource guards through Astro middleware', () => {
       },
       sessionRequest('A', '/library'),
     );
+    expectPrivate(response, status as number);
+    expect(response.headers.get('Location')).toBeNull();
+    expect(await response.text()).toContain('Recovery: /library');
+  });
+
+  it('re-enters middleware without verifying during recovery rendering and preserves the original query', async () => {
+    let incomingResolver: unknown;
+    const response = await renderEndpoint(
+      async (ctx) => {
+        incomingResolver = ctx.locals.resolveSession;
+        const denied = (await requireSession(ctx)).denied;
+        expect(ctx.locals.resolveSession).not.toBe(incomingResolver);
+        return denied ?? new Response('protected');
+      },
+      sessionRequest(undefined, '/settings?view=list&redirect=%2Finbox'),
+    );
+    expectPrivate(response, 401);
+    expect(await response.text()).toContain(
+      'Recovery: /settings?view=list&amp;redirect=%2Finbox',
+    );
+    expect(mocks.cookie).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['auth/session-cookie-expired', 401],
+    ['auth/user-disabled', 401],
+    ['auth/user-not-found', 401],
+    ['app/network-timeout', 503],
+    ['auth/internal-error', 500],
+  ])(
+    'HEAD keeps failure classification %s without a recovery body',
+    async (code, status) => {
+      mocks.cookie.mockRejectedValueOnce({ code });
+      const response = await renderEndpoint(
+        async (ctx) =>
+          (await requireSession(ctx)).denied ?? new Response('protected'),
+        new Request('https://example.com/settings', {
+          method: 'HEAD',
+          headers: { Cookie: 'session=A' },
+        }),
+      );
+      expectPrivate(response, status as number);
+      expect(await response.text()).toBe('');
+      expect(response.headers.get('Location')).toBeNull();
+    },
+  );
+
+  it.each(['POST', 'PUT', 'DELETE'])(
+    'retains the existing denial for %s without rendering recovery',
+    async (method) => {
+      const response = await renderEndpoint(
+        async (ctx) =>
+          (await requireSession(ctx)).denied ?? new Response('protected'),
+        new Request('https://example.com/settings', {
+          method,
+          body: 'submitted data',
+        }),
+      );
+      expectPrivate(response, 302);
+      expect(response.headers.get('Location')).toBe(
+        '/login?redirect=%2Fsettings',
+      );
+      expect(await response.text()).not.toContain('Recovery:');
+    },
+  );
+
+  it('keeps API denials outside document recovery even when HTML is accepted', async () => {
+    const response = await renderEndpoint(
+      async (ctx) =>
+        (await requireSession(ctx)).denied ?? new Response('protected'),
+      new Request('https://example.com/api/private', {
+        headers: { Accept: 'text/html' },
+      }),
+    );
     expectPrivate(response, 302);
-    expect(response.headers.get('Location')).toBe('/login?redirect=%2Flibrary');
+    expect(await response.text()).not.toContain('Recovery:');
   });
 
   it('isolates overlapping status requests for different users', async () => {
