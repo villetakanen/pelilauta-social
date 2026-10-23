@@ -3,6 +3,21 @@ import type { Locale } from 'src/utils/i18n';
 export const login: Locale = {
   title: 'Kirjaudu',
   info: 'Jos et ole aiemmin kirjautunut Pelilaudalle, luomme sinulle uuden tunnuksen automaattisesti.',
+  recovery: {
+    title: 'Palautetaan kirjautuminen',
+    restoring: 'Tarkistetaan selaimen kirjautuminen…',
+    signedOut: 'Kirjaudu sisään jatkaaksesi.',
+    retry:
+      'Voit yrittää kirjautumisen palauttamista uudelleen tai kirjautua sisään.',
+    unavailable: 'Kirjautuminen ei ole nyt käytettävissä. Yritä uudelleen.',
+    failed:
+      'Kirjautumisen palauttaminen epäonnistui. Yritä uudelleen tai kirjaudu sisään.',
+    logoutIncomplete:
+      'Uloskirjautuminen jäi kesken. Yritä uudelleen tai kirjaudu sisään.',
+    retryAction: 'Yritä uudelleen',
+    noJavaScript:
+      'Selaimen kirjautumisen palauttaminen vaatii JavaScriptin. Voit jatkaa kirjautumissivulle.',
+  },
   withEmail: {
     title: 'Linkillä',
     info: 'Voit kirjautua sovellukseen sähköpostiosoitteen avulla. Syötä sähköpostiosoitteesi allaolevaan kenttään ja paina kirjaudu. Lähetämme sähköpostiisi maagisen linkin, jonka avulla voit kirjautua Pelilaudalle.',

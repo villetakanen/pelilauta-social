@@ -2,6 +2,7 @@
 import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppBar from '@design-system/components/CnAppBar.astro';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
+import AuthorizedDocument from '@pelilauta/base/server/AuthorizedDocument.astro';
 import { t } from 'src/utils/i18n';
 import BaseHead from '../components/server/BaseHead/BaseHead.astro';
 
@@ -31,6 +32,7 @@ const { title, shortTitle, description, image, backHref } = Astro.props;
 <html lang="fi">
   <BaseHead {title} {description} {image} noSharing={true} />
   <body>
+    <AuthorizedDocument />
     <CnAppChrome>
       <CnAppBar
         title={title ?? ''}

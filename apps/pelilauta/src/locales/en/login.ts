@@ -3,6 +3,18 @@ import type { Locale } from 'src/utils/i18n';
 export const login: Locale = {
   title: 'Sign In',
   info: "If you haven't signed in to Pelilauta before, we'll automatically create a new account for you.",
+  recovery: {
+    title: 'Restore sign-in',
+    restoring: 'Checking browser sign-in…',
+    signedOut: 'Sign in to continue.',
+    retry: 'Retry browser sign-in restoration or sign in again.',
+    unavailable: 'Sign-in is temporarily unavailable. Retry to continue.',
+    failed: 'Sign-in restoration failed. Retry or sign in again.',
+    logoutIncomplete: 'Sign-out did not complete. Retry or sign in again.',
+    retryAction: 'Retry',
+    noJavaScript:
+      'Browser sign-in restoration requires JavaScript. Continue to the sign-in page.',
+  },
   withEmail: {
     title: 'With Link',
     info: "You can sign in to the application using your email address. Enter your email in the field below and click sign in. We'll send a magic link to your email that you can use to sign in to Pelilauta.",

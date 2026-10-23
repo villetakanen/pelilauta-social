@@ -7,7 +7,7 @@ import {
   SUBSCRIPTIONS_FIRESTORE_PATH,
   type Subscription,
 } from '../../schemas/SubscriberSchema';
-import { uid } from '.';
+import { uid } from './state';
 
 export const $subscriber = persistentAtom<Subscription>(
   'subscriberStore',

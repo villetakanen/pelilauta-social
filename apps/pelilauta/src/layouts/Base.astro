@@ -7,6 +7,7 @@ import CnShareAction from '@design-system/components/CnShareAction.svelte';
 import BaseBar from '@pelilauta/base/chrome/BaseBar.astro';
 import BaseFooter from '@pelilauta/base/chrome/BaseFooter.astro';
 import BaseRail from '@pelilauta/base/chrome/BaseRail.astro';
+import AuthorizedDocument from '@pelilauta/base/server/AuthorizedDocument.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 import { t } from 'src/utils/i18n';
 
@@ -37,6 +38,7 @@ const { title, description, image, noSharing, search } = Astro.props;
     Pelilauta renders no specimens.
   */}
   <body data-cn-rail-scope>
+    <AuthorizedDocument />
     <CnAppChrome>
       <BaseBar>
         <slot name="app-bar" />

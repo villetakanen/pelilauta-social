@@ -70,7 +70,12 @@ export function pushSessionSnack(
  * arriving this way waits in the same queue as any other.
  */
 export function takeSessionSnack(): void {
-  const stored = window.sessionStorage.getItem(SESSION_KEY);
+  let stored: string | null;
+  try {
+    stored = window.sessionStorage.getItem(SESSION_KEY);
+  } catch {
+    return;
+  }
   if (stored === null) return;
 
   const snack = readStoredSnack(stored);

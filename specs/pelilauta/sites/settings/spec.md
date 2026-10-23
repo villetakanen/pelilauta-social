@@ -15,6 +15,8 @@ An owner manages site details, theming, index, and deletion at `/sites/{siteKey}
 `apps/pelilauta/src/pages/sites/[siteKey]/settings.astro` is a page of the site.
 `../spec.md` governs the layout and the address. `requireSiteOwner` answers a reader who is
 not an owner before the page renders.
+[Protected-document recovery](../../session/protected-recovery.md) governs rejected
+document authentication.
 `components/svelte/sites/settings/SettingsApp.svelte` renders the sections as a single
 island.
 
@@ -55,7 +57,8 @@ Feature: Site settings
   Scenario: No session
     Given a visitor without a server-side session
     When the visitor opens /sites/{siteKey}/settings
-    Then the server sends the visitor to /login with a redirect back to /sites/{siteKey}/settings
+    Then the server shows non-sensitive recovery content at /sites/{siteKey}/settings
+    And the response carries HTTP 401 and no site settings sections
 
   Scenario: Not an owner
     Given a logged-in member who is not an owner of the site

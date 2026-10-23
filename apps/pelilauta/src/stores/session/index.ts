@@ -1,50 +1,26 @@
 import { auth } from '@firebase/client';
-import { persistentAtom } from '@nanostores/persistent';
-import { pushSessionSnack, pushSnack } from '@utils/client/snackUtils';
+import { pushSnack } from '@utils/client/snackUtils';
 import { logDebug, logError, logWarn } from '@utils/logHelpers';
 import type { User } from 'firebase/auth';
-import { atom, computed } from 'nanostores';
+import { computed } from 'nanostores';
 import { appMeta } from 'src/stores/metaStore/metaStore';
 import {
   beginCookieSession,
-  blockCookieSynchronization,
-  resumeCookieSynchronization,
-  synchronizeSessionCookie,
-  waitForCookieSynchronization,
+  reconcileSessionCookie,
 } from 'src/utils/client/sessionCookie';
+import { $account, subscribe as subscribeToAccount } from './account';
+import { logout } from './logout';
+import { subscribeToProfile } from './profile';
 import {
-  $account,
-  subscribe as subscribeToAccount,
-  reset as unsubscribeFromAccount,
-} from './account';
-import { subscribeToProfile, unsubscribeFromProfile } from './profile';
-import { initSubscriberStore, resetSubscriberStore } from './subscriber';
+  authUser,
+  markSessionManagerStarted,
+  sessionState,
+  uid,
+} from './state';
+import { initSubscriberStore } from './subscriber';
 
-export const authUser = atom<User | null>(null);
-
-export type SessionState = 'initial' | 'loading' | 'active' | 'error';
-// Every page load starts at `initial`. Only this page's verification against the server session moves the state to `active`.
-export const sessionState = atom<SessionState>('initial');
-
-sessionState.subscribe((state, oldState) => {
-  if (state !== oldState) {
-    logDebug('sessionStore', 'sessionState changed', {
-      from: oldState,
-      to: state,
-    });
-  }
-});
-
-export const uid = persistentAtom<string>('session-uid', '');
-
-if (typeof document !== 'undefined') {
-  uid.subscribe((value) => {
-    document.documentElement.classList.toggle(
-      'has-session-uid',
-      Boolean(value),
-    );
-  });
-}
+export { logout } from './logout';
+export { authUser, type SessionState, sessionState, uid } from './state';
 
 export const active = computed(sessionState, (state) => state === 'active');
 
@@ -83,35 +59,9 @@ export { $profile, $profileMissing } from './profile';
  * preventing hook execution on subsequent listeners.
  */
 if (typeof window !== 'undefined') {
+  markSessionManagerStarted();
   auth.onAuthStateChanged(handleFirebaseAuthChange);
   logDebug('sessionStore', 'Subscribed to auth state changes');
-}
-
-/**
- * This function compares the server session cookie with the resolved Firebase user.
- * Only HTTP 401 or a response containing another UID requires repair. Other mismatches
- * leave agreement unconfirmed.
- */
-async function getServerSessionStatus(
-  userUid: string,
-): Promise<'match' | 'repair' | 'inconclusive'> {
-  try {
-    const response = await fetch('/api/auth/session');
-    if (response.status === 401) return 'repair';
-    if (response.status !== 200) return 'inconclusive';
-    const body = await response.json();
-    if (
-      typeof body?.uid !== 'string' ||
-      !body.uid ||
-      !Number.isInteger(body.expiresAt)
-    ) {
-      return 'inconclusive';
-    }
-    return body.uid === userUid ? 'match' : 'repair';
-  } catch (error) {
-    logWarn('sessionStore', 'Failed to check server session:', error);
-    return 'inconclusive';
-  }
 }
 
 let reconciliation = 0;
@@ -126,8 +76,8 @@ async function handleFirebaseAuthChange(user: User | null) {
     currentUid: uid.get(),
   });
   authUser.set(user);
-  // A replacement identity invalidates the verification of the previous one.
-  if (user && sessionState.get() === 'active' && uid.get() !== user.uid) {
+  // Each Firebase resolution requires current server agreement.
+  if (user && sessionState.get() === 'active') {
     sessionState.set('initial');
   }
 
@@ -141,11 +91,9 @@ async function handleFirebaseAuthChange(user: User | null) {
 
   // Persisted session state cannot substitute for server verification. Every resolved user requires verification against the session cookie.
   if (!current()) return;
-  await waitForCookieSynchronization();
-  if (!current()) return;
-  const status = await getServerSessionStatus(user.uid);
-  if (!current()) return;
-  if (status === 'inconclusive') {
+  const status = await reconcileSessionCookie(user, identityCurrent);
+  if (!current() || status === 'superseded') return;
+  if (status === 'unavailable') {
     // Agreement remains unconfirmed. Firebase authentication and persisted identity remain for subsequent verification.
     logWarn(
       'sessionStore',
@@ -157,30 +105,8 @@ async function handleFirebaseAuthChange(user: User | null) {
   }
 
   try {
-    if (status === 'repair') {
-      sessionState.set('loading');
-      let postStatus = 0;
-      try {
-        const response = await synchronizeSessionCookie(user, identityCurrent);
-        postStatus = response.status;
-      } catch (error) {
-        logWarn('sessionStore', 'Failed to post session token:', error);
-      }
-
-      if (!current()) return;
-      if (postStatus === 401) {
-        throw new Error('Session credentials rejected');
-      }
-      if (postStatus !== 200) {
-        // Transport failures and HTTP 5xx responses represent temporary errors. Subsequent checks retry repair.
-        logWarn(
-          'sessionStore',
-          'handleFirebaseAuthChange',
-          'Session repair failed temporarily. Not confirming session.',
-        );
-        sessionState.set('error');
-        return;
-      }
+    if (status === 'rejected') {
+      throw new Error('Session credentials rejected');
     }
 
     // The session subscribes to account and profile documents even when either document is absent.
@@ -228,61 +154,6 @@ async function login(newUid: string, current: () => boolean) {
   uid.set(newUid);
 
   await initSubscriberStore(newUid, current);
-}
-
-async function clear() {
-  logDebug('sessionStore', 'clear', 'Clearing session data');
-  uid.set('');
-  resetSubscriberStore();
-  unsubscribeFromAccount();
-  unsubscribeFromProfile();
-}
-
-let logoutInProgress: Promise<boolean> | undefined;
-
-/**
- * Logout deletes the session cookie first, clears local user data second, and
- * signs out of Firebase last. A failed step halts subsequent steps, sets state
- * to error, and notifies the reader. Concurrent callers share the active logout
- * operation. The operation resolves to true on completion and false on failure,
- * and never rejects.
- */
-export function logout(): Promise<boolean> {
-  if (!logoutInProgress) {
-    logoutInProgress = runLogout().finally(() => {
-      resumeCookieSynchronization();
-      logoutInProgress = undefined;
-    });
-  }
-  return logoutInProgress;
-}
-
-async function runLogout(): Promise<boolean> {
-  logDebug('sessionStore', 'logout', 'Starting logout process');
-  sessionState.set('loading');
-
-  try {
-    await blockCookieSynchronization();
-    const response = await fetch('/api/auth/session', { method: 'DELETE' });
-    if (!response.ok) {
-      throw new Error(`Session cookie deletion failed: ${response.status}`);
-    }
-    await clear();
-    await auth.signOut();
-  } catch (error) {
-    logError('sessionStore', 'logout', 'Logout did not complete', error);
-    sessionState.set('error');
-    try {
-      pushSessionSnack('snack:session.logoutIncomplete');
-    } catch (snackError) {
-      logWarn('sessionStore', 'logout', 'Could not notify reader', snackError);
-    }
-    return false;
-  }
-
-  sessionState.set('initial');
-  logDebug('sessionStore', 'logout', 'Logout complete');
-  return true;
 }
 
 export * from './account';

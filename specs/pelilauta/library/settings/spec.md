@@ -14,6 +14,8 @@ A logged-in member manages the account, profile, and session at `/settings`.
 
 `apps/pelilauta/src/pages/settings.astro` is a page of the library. `../spec.md` governs
 the layout, session guard, and address.
+[Protected-document recovery](../../session/protected-recovery.md) governs rejected
+document authentication.
 `components/svelte/settings/SettingsApp.svelte` renders the page sections as a single island.
 
 | Section | Purpose | Governed by |
@@ -80,7 +82,8 @@ Feature: Settings
   Scenario: No session
     Given a visitor without a server-side session
     When the visitor opens /settings
-    Then the server sends the visitor to /login with a redirect back to /settings
+    Then the server shows non-sensitive recovery content at /settings
+    And the response carries HTTP 401 and no account sections
 
   Scenario: Member data
     Given a logged-in member

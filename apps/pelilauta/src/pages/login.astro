@@ -4,26 +4,24 @@ import CnPosterCredits from '@design-system/components/CnPosterCredits.astro';
 import { t } from 'src/utils/i18n';
 import { verifySession } from 'src/utils/server/auth/verifySession';
 import { sanitizeRedirect } from 'src/utils/shared/sanitizeRedirect';
-import EmailLoginSection from '../components/svelte/login/EmailLoginSection.svelte';
-import PasswordLoginSection from '../components/svelte/login/PasswordLoginSection.svelte';
-import SyndicatedLoginSection from '../components/svelte/login/SyndicatedLoginSection.svelte';
+import EmailLoginSection from '../base/client/login/EmailLoginSection.svelte';
+import PasswordLoginSection from '../base/client/login/PasswordLoginSection.svelte';
+import RecoveryPanel from '../base/client/login/RecoveryPanel.svelte';
+import SyndicatedLoginSection from '../base/client/login/SyndicatedLoginSection.svelte';
 // The binding avoids `Login`: astro check's generated module for login.astro
 // collides with it on a case-insensitive filesystem (TS2440).
 import LoginLayout from '../layouts/Login.astro';
 
-// Move session verification to the very top, before any other logic
-const session = await verifySession(Astro);
+const recovery = Astro.locals.protectedRecovery;
+const session = recovery ? null : await verifySession(Astro);
+if (recovery) Astro.response.status = recovery.status;
 
 if (session) {
-  // If the user is logged in, redirect them to the redirect URL or the home page
   return Astro.redirect(
     sanitizeRedirect(Astro.url.searchParams.get('redirect')),
   );
 }
 
-/* A server side rendered login page: we only provide client side session, as all
- * reactive/interactive elements are handled by the client side solid apps.
- */
 // The flag serves the e2e suite, which runs against the local dev server.
 // The DEV guard keeps the section out of every deployed build, whatever the
 // deploy environment sets.
@@ -31,7 +29,9 @@ const showPasswordLoginFlag =
   import.meta.env.DEV &&
   import.meta.env.SECRET_FEATURE_FLAG_PASSWORD_LOGIN === 'true';
 
-const redirect = sanitizeRedirect(Astro.url.searchParams.get('redirect'));
+const redirect = sanitizeRedirect(
+  recovery?.destination ?? Astro.url.searchParams.get('redirect'),
+);
 ---
 <LoginLayout title={t('login:title')}>
   <div class="content-prose">
@@ -40,6 +40,18 @@ const redirect = sanitizeRedirect(Astro.url.searchParams.get('redirect'));
       <p>{t('login:info')}</p>
     </div>
 
+    { recovery ? (
+      <>
+        <RecoveryPanel client:only="svelte" {redirect} status={recovery.status} showPassword={showPasswordLoginFlag} />
+        <noscript>
+          {recovery.status !== 401 && <p>{t(`login:recovery.${recovery.status === 503 ? 'unavailable' : 'failed'}`)}</p>}
+          <p>{t('login:recovery.noJavaScript')}</p>
+          <a href={redirect}>{t('login:recovery.retryAction')}</a>
+          <a href={`/login?redirect=${encodeURIComponent(redirect)}`}>{t('login:title')}</a>
+        </noscript>
+      </>
+    ) : (
+      <>
     { showPasswordLoginFlag &&
       <div>
         <PasswordLoginSection client:only="svelte" redirect={redirect} />
@@ -51,6 +63,8 @@ const redirect = sanitizeRedirect(Astro.url.searchParams.get('redirect'));
     <div>
       <SyndicatedLoginSection client:only="svelte" redirect={redirect} />
     </div>
+      </>
+    ) }
   </div>
   <CnPoster
     slot="app-background-poster"

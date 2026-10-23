@@ -1,0 +1,10 @@
+---
+import { recoveryAttemptKey } from '../client/login/recovery';
+
+const key = recoveryAttemptKey(Astro.url.pathname + Astro.url.search);
+---
+{Astro.locals.protectedDocument && !Astro.locals.protectedRecovery && (
+  <script is:inline data-astro-rerun define:vars={{ key }}>
+    try { window.sessionStorage.removeItem(key); } catch {}
+  </script>
+)}

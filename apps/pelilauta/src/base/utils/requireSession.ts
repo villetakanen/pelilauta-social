@@ -1,19 +1,27 @@
-import { verifySession } from '@utils/server/auth/verifySession';
+import { checkSession } from '@utils/server/auth/verifySession';
+import { sanitizeRedirect } from '@utils/shared/sanitizeRedirect';
 import type { APIContext } from 'astro';
 
-/**
- * The guard a page takes where a reader without a session has no business. It
- * belongs to the base application because every application needs it.
- *
- * A page states the guard and returns what it answers with; the reader's uid
- * comes back with it, so the page verifies the session once.
- */
 type Guarded = { uid: string; denied: null } | { uid: null; denied: Response };
 
 export async function requireSession(astro: APIContext): Promise<Guarded> {
-  const session = await verifySession(astro);
+  const session = await checkSession(astro);
+  if (session.status === 'verified') {
+    astro.locals.protectedDocument = true;
+    return { uid: session.token.uid, denied: null };
+  }
 
-  if (!session?.uid) {
+  const status =
+    session.status === 'rejected'
+      ? 401
+      : session.status === 'unavailable'
+        ? 503
+        : 500;
+  const method = astro.request.method;
+  if (
+    (method !== 'GET' && method !== 'HEAD') ||
+    astro.routePattern.startsWith('/api/')
+  ) {
     return {
       uid: null,
       denied: astro.redirect(
@@ -21,6 +29,18 @@ export async function requireSession(astro: APIContext): Promise<Guarded> {
       ),
     };
   }
-
-  return { uid: session.uid, denied: null };
+  if (method === 'HEAD') {
+    return { uid: null, denied: new Response(null, { status }) };
+  }
+  if (astro.locals.protectedRecovery || astro.url.pathname === '/login') {
+    return {
+      uid: null,
+      denied: new Response('Authentication failed', { status }),
+    };
+  }
+  astro.locals.protectedRecovery = {
+    status,
+    destination: sanitizeRedirect(astro.url.pathname + astro.url.search),
+  };
+  return { uid: null, denied: await astro.rewrite('/login') };
 }

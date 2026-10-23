@@ -105,6 +105,46 @@ describe('completeAuthFlow', () => {
     expect(assign).toHaveBeenCalledWith('/channels');
   });
 
+  test.each([
+    'https://evil.example/path',
+    '//evil.example',
+    '/a/..//evil.example',
+    '/%0a/evil.example',
+    '/login?redirect=%2Fsettings',
+    '/sites/../%6cogin',
+  ])('revalidates destination %s before navigation', async (destination) => {
+    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    await completeAuthFlow(user, destination);
+    expect(assign).toHaveBeenCalledWith('/');
+  });
+
+  test('preserves a normalized pathname, query, and fragment', async () => {
+    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    await completeAuthFlow(user, '/sites/../threads/abc?view=list#latest');
+    expect(assign).toHaveBeenCalledWith('/threads/abc?view=list#latest');
+  });
+
+  test('reports no success or navigation while cookie creation is pending', async () => {
+    const post = deferred<Response>();
+    fetchMock.mockReturnValue(post.promise);
+    const signingIn = completeAuthFlow(user, '/threads/abc?view=list#latest');
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    expect(assign).not.toHaveBeenCalled();
+    expect(h.pushSessionSnack).not.toHaveBeenCalled();
+    post.resolve(new Response('{}', { status: 200 }));
+    await signingIn;
+    expect(assign).toHaveBeenCalledWith('/threads/abc?view=list#latest');
+  });
+
+  test('disabled tab storage does not prevent navigation after a successful exchange', async () => {
+    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    h.pushSessionSnack.mockImplementationOnce(() => {
+      throw new Error('Tab storage unavailable');
+    });
+    await completeAuthFlow(user, '/settings?view=list#latest');
+    expect(assign).toHaveBeenCalledWith('/settings?view=list#latest');
+  });
+
   test.each([401, 500])(
     'on %i rejects without hints or redirect',
     async (code) => {

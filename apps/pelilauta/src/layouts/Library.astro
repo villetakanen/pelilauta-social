@@ -4,6 +4,7 @@ import SnackbarHost from '@components/svelte/app/SnackbarHost.svelte';
 import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import BaseBar from '@pelilauta/base/chrome/BaseBar.astro';
 import BaseFooter from '@pelilauta/base/chrome/BaseFooter.astro';
+import AuthorizedDocument from '@pelilauta/base/server/AuthorizedDocument.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 import LibraryRail from '@pelilauta/library/chrome/LibraryRail.astro';
 import { t } from 'src/utils/i18n';
@@ -24,6 +25,7 @@ const { title, description } = Astro.props;
   <BaseHead {title} {description} noSharing />
   {/* The scope the tray's stylesheet reads; see Base.astro for why it sits here. */}
   <body data-cn-rail-scope>
+    <AuthorizedDocument />
     <CnAppChrome>
       <BaseBar>
         <slot name="app-bar" />

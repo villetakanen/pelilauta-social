@@ -1,12 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
-import type { APIContext } from 'astro';
+import type { APIRoute } from 'astro';
 import { GET } from 'src/pages/api/auth/session';
 import { verifySession } from 'src/utils/server/auth/verifySession';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  renderEndpoint,
+  sessionRequest,
+} from '../../helpers/renderWithMiddleware';
 
-// A plain function keeps vitest from tracking the thrown verifier errors.
+// A plain function prevents Vitest from tracking thrown verifier errors.
 const verifier = vi.hoisted(() => ({
   impl: async (_cookie: string, _checkRevoked: boolean): Promise<unknown> => {
     throw new Error('verifier not configured');
@@ -21,10 +25,13 @@ vi.mock('src/firebase/server', () => ({
 }));
 vi.mock('src/utils/logHelpers', () => ({ logDebug: vi.fn() }));
 
-const context = (cookie?: string) =>
-  ({
-    cookies: { get: () => (cookie ? { value: cookie } : undefined) },
-  }) as unknown as APIContext;
+async function protectedSession(cookie?: string) {
+  const response = await renderEndpoint(async (context) => {
+    const token = await verifySession(context);
+    return Response.json(token);
+  }, sessionRequest(cookie));
+  return response.json();
+}
 
 const fail = (code: string, message = 'detail') =>
   Object.assign(new Error(message), { code });
@@ -50,8 +57,9 @@ beforeEach(() => {
 });
 
 async function status(cookie?: string) {
-  const response = await (GET as (c: APIContext) => Promise<Response>)(
-    context(cookie),
+  const response = await renderEndpoint(
+    GET as APIRoute,
+    sessionRequest(cookie),
   );
   expect(response.headers.get('Cache-Control')).toBe('no-store');
   return response;
@@ -112,7 +120,7 @@ describe('GET /api/auth/session', () => {
 describe('verifySession', () => {
   it('returns the decoded token on success', async () => {
     setResult({ uid: 'A' });
-    expect(await verifySession(context('cookie'))).toEqual({ uid: 'A' });
+    expect(await protectedSession('cookie')).toEqual({ uid: 'A' });
   });
 
   it.each([
@@ -122,12 +130,12 @@ describe('verifySession', () => {
     new Error('boom'),
   ])('returns null for every verifier error', async (error) => {
     setFailure(error);
-    expect(await verifySession(context('cookie'))).toBeNull();
+    expect(await protectedSession('cookie')).toBeNull();
   });
 });
 
-// The key-fetch outage is told apart from a forged cookie by firebase-admin's
-// message text alone; an upgrade that rewords it fails here.
+// Only the message text in firebase-admin distinguishes a key-fetch outage from
+// a forged cookie.
 describe('firebase-admin key-fetch messages', () => {
   const lib = dirname(createRequire(import.meta.url).resolve('firebase-admin'));
   const source = (file: string) => readFileSync(join(lib, file), 'utf8');
