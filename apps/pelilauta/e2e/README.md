@@ -68,12 +68,19 @@ quota retries or authentication bypass.
 
 ## Netlify adapter checks
 
+Stop the development server before building. Starting `astro dev` replaces the
+generated `.netlify/v1/` output; rebuild before running generated-function checks.
+
 After building the app against `skaldbase-test` and restoring the fixtures, run
 `node apps/pelilauta/test/netlify/protected-recovery.mjs` from the repository root.
 The checks invoke the generated Netlify function with classified verifier results
 and assert recovery status, caching, middleware re-entry, owner denial, and production
 password-form exclusion. The script refuses builds targeting another Firebase project.
 It routes same-origin SSR fetches through the generated function without a development server. It replaces the verifier only within its Node process and restores it on completion.
+
+Run `node apps/pelilauta/test/netlify/cached-rss.mjs` against the same build to
+exercise the packaged RSS endpoint with a synthetic Blobs cache. This check
+contacts neither the platform cache nor a feed provider.
 
 ## Fixtures and Safety
 

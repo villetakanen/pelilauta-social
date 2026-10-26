@@ -4,6 +4,9 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.2.0
 
+- fix(deps): Upgrade both sites to Astro 7.2.8 and the app's Netlify adapter to 8.2.10, with patched Sharp, protobufjs, websocket-driver, and tar dependencies.
+- fix(build): Bundle Netlify Blobs and runtime helpers, and verify the complete SSR entry in an isolated function before accepting the build.
+- fix(deps): Upgrade Firebase Admin to 14.5 and migrate server initialization to modular APIs. The app requires Node 22 or later.
 - test(auth): Browser regressions reuse isolated copies of one authenticated Firebase session instead of verifying a password for every test. Email-action mocks reuse the setup token response.
 - feat(session): Protected pages restore browser sign-in at the requested address before rendering member content. Recovery preserves return destinations, bounds automatic retries, and distinguishes rejected credentials from temporary and unclassified server failures.
 - fix(cache): The service worker neither stores nor reuses responses marked no-store or private.

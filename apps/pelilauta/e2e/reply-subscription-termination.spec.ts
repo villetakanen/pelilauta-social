@@ -40,7 +40,9 @@ function trackReplyListens(page: Page) {
 
 test('an anonymous reader opens no reply subscription', async ({ page }) => {
   const listens = trackReplyListens(page);
-  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`);
+  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`, {
+    waitUntil: 'domcontentloaded',
+  });
   // Allow the session to resolve to anonymous before judging.
   await page.waitForTimeout(3000);
   expect(listens).toHaveLength(0);
@@ -50,7 +52,9 @@ test('a reply subscription terminates on sign-out', async ({ page }) => {
   await signIn(page);
 
   const listens = trackReplyListens(page);
-  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`);
+  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`, {
+    waitUntil: 'domcontentloaded',
+  });
   await expect.poll(() => listens.length).toBeGreaterThan(0);
 
   // Sign out in place, through the application's own session store, so the

@@ -20,7 +20,15 @@ assert.equal(
   'Adapter checks require a test-project build',
 );
 
-await render('/api/auth/session', { headers: { Cookie: 'session=malformed' } });
+assert.equal(
+  (
+    await render('/api/auth/session', {
+      headers: { Cookie: 'session=malformed' },
+    })
+  ).status,
+  401,
+  'The installed SDK must classify a malformed cookie as rejected',
+);
 const auth = getAuth();
 const original = auth.verifySessionCookie;
 const originalFetch = globalThis.fetch;
