@@ -4,6 +4,8 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
 ## 21.2.0
 
+- feat(footer): Add a Simple Analytics badge with last month's session count and light and dark variants.
+
 - fix(deps): Upgrade both sites to Astro 7.2.8 and the app's Netlify adapter to 8.2.10, with patched Sharp, protobufjs, websocket-driver, and tar dependencies.
 - fix(build): Bundle Netlify Blobs and runtime helpers, and verify the complete SSR entry in an isolated function before accepting the build.
 - fix(deps): Upgrade Firebase Admin to 14.5 and migrate server initialization to modular APIs. The app requires Node 22 or later.
