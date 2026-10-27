@@ -5,7 +5,7 @@ CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 ## 21.2.1
 
 - fix(runtime): Use Firebase Admin 13.10 to avoid the CommonJS-to-ESM loading failure in Netlify functions that disable require(ESM).
-- test(build): Import every generated function module in isolation so lazy API routes cannot hide broken runtime dependencies.
+- test(build): Load external imports from every generated module in isolation so lazy API routes cannot hide broken runtime dependencies.
 
 ## 21.2.0
 
