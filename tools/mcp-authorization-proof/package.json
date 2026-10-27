@@ -1,0 +1,19 @@
+{
+  "name": "pelilauta-mcp-authorization-proof",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-timeout=10000 proof.test.mjs firestore.safety.test.mjs",
+    "test:firestore": "node --test --test-timeout=120000 firestore.integration.test.mjs"
+  },
+  "dependencies": {
+    "@jmondi/oauth2-server": "5.0.0",
+    "@modelcontextprotocol/server": "2.3.1",
+    "dotenv": "16.5.0",
+    "firebase-admin": "14.5.0"
+  }
+}

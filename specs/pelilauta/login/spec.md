@@ -8,47 +8,63 @@ status: live
 
 ### Context
 
-A signed-out reader signs in and continues to where they were. The route serves that
-moment alone: a signed-in reader never sees the page, the `redirect` parameter carries
-the way back, and the page holds both sign-in flows, Firebase and email.
+A signed-out reader signs in and continues to the requested destination.
 
 ### Architecture
 
-The layout is `Login.astro` in `apps/pelilauta/src/layouts`, and the login page alone
-takes it. The page interrupts — a reader arrives to sign in and leave — so the layout
-carries the modal application bar with the back action and no rail. It mounts the
-background poster through the `app-background-poster` slot and the artist's credit
-through a footer taking `app-footer-credits` — the same slot names the application's
-other layouts use. No shared layout carries both the interruption and the poster, so
-login takes a bespoke one. It mounts no client-side session manager: the route
-verifies the session on the server, and a signed-in reader is redirected before the
-page renders.
+`apps/pelilauta/src/layouts/Login.astro` provides the layout for normal login and
+protected-document recovery. The layout carries the modal application bar with the back
+action and omits the navigation rail. The layout renders the background poster in the
+`app-background-poster` slot and the artist credit in the `app-footer-credits` footer
+slot. Normal login verifies the session on the server and redirects readers
+with verified cookies before rendering. The route mounts no client-side session manager.
+[Protected-document recovery](../session/protected-recovery.md) governs the recovery
+presentation. The matched guard supplies its mode and original destination; caller-supplied
+headers and query flags cannot select recovery mode.
+
+[Google sign-in](google/spec.md), [email-link sign-in](email-link/spec.md), and
+[development password sign-in](development-password/spec.md) govern the sign-in
+sub-features. This spec governs their shared completion and return destinations.
 
 ### Constraints
 
-The back action leads to the front page: a reader often arrives from outside the
-service, and returning through the session would take them back out of it.
+The back action navigates to the front page. Readers frequently arrive from external
+sites, so browser history would navigate away from the application.
 
-A caller states the destination in the `redirect` query parameter. Pages guarding a
-session already send readers here with it, so the name is a contract.
+Callers specify the target path in the `redirect` query parameter; existing session
+guards depend on this parameter name.
 
 ## Contract
 
-### Definition of Done
+### Required behavior
 
-- The login page takes `Login.astro`, and no other page does.
-- A signed-out reader sees the sign-in choices over the background poster, and the
-  credit in the footer.
-- A signed-in reader opening the route lands on the stated destination, or the front
-  page, without seeing the page.
+- Normal login and protected-document recovery use `Login.astro`.
+- Both presentations show Firebase and email sign-in options over the background
+  poster and the artist credit in the footer.
+- A reader with a verified cookie who opens normal login redirects to the stated
+  destination, or the front page, without rendering the login page.
+
+#### Shared sign-in completion
+
+Successful Firebase authentication completes the checked server-cookie exchange
+before reporting sign-in success or navigating. A failed exchange reports failure
+without success feedback or navigation. [Session](../session/spec.md) governs
+exchange sharing, identity replacement, and logout supersession.
 
 ### Regression Guardrails
 
 - The document carries `noindex, nofollow`.
-- No rail renders on the page.
-- The route reads the destination from the `redirect` query parameter, and follows it
-  only to a relative path inside the service; any other value falls back to the front
-  page.
+- The page renders no navigation rail.
+- Normal login reads the destination from the `redirect` query parameter. Recovery
+  uses the guard-supplied original address; a `redirect` query parameter within that
+  address remains destination data and does not override the original address.
+- Both presentations accept only relative paths within the service; any other value
+  falls back to the front page. Validate the destination before navigation, including
+  values recovered from browser storage, after URL normalization,
+  rejecting off-origin URLs, control characters, and recursive login or recovery
+  destinations. Preserve valid pathname, query, and fragment components across
+  provider sign-in, email completion, and retry. Recovery without JavaScript retains
+  only the pathname and query, as defined in Protected-document recovery.
 
 ### Scenarios
 
@@ -56,17 +72,17 @@ session already send readers here with it, so the name is a contract.
 Given a signed-out reader
 When the login route renders
 Then the sign-in choices stand over the background poster
-And the credit renders in the footer
+And the artist credit renders in the footer
 ```
 
 ```gherkin
-Given a signed-in reader
-When they open the login route with a stated destination
-Then they land on that destination without the page rendering
+Given a reader with a verified session cookie
+When the reader opens the normal login route with a stated destination
+Then the route redirects to that destination without rendering
 ```
 
 ```gherkin
 Given a reader on the login page
-When they take the back action
-Then they land on the front page
+When the reader selects the back action
+Then navigation returns to the front page
 ```

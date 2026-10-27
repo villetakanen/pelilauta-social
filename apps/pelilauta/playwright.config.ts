@@ -12,7 +12,9 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './e2e',
+  globalSetup: './e2e/authentication.setup.ts',
   testMatch: [
+    'authentication-state.spec.ts',
     'onboarding-callout-transition.spec.ts',
     'reply-subscription-termination.spec.ts',
     'read-replies-without-javascript.spec.ts',
@@ -24,6 +26,7 @@ export default defineConfig({
     'read-marking-awaits-subscription.spec.ts',
     'open-inbox-reply-notification.spec.ts',
     'session-agreement.spec.ts',
+    'protected-recovery.spec.ts',
   ],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

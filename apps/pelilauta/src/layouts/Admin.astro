@@ -5,6 +5,7 @@ import CnAppChrome from '@design-system/components/CnAppChrome.astro';
 import AdminBar from '@pelilauta/admin/chrome/AdminBar.astro';
 import AdminRail from '@pelilauta/admin/chrome/AdminRail.astro';
 import BaseFooter from '@pelilauta/base/chrome/BaseFooter.astro';
+import AuthorizedDocument from '@pelilauta/base/server/AuthorizedDocument.astro';
 import BaseHead from '@pelilauta/components/server/BaseHead/BaseHead.astro';
 
 // Every page taking this layout states the guard itself, and renders for a
@@ -23,6 +24,7 @@ const { title, description } = Astro.props;
   <BaseHead {title} {description} noSharing />
   {/* The scope the tray's stylesheet reads; see Base.astro for why it sits here. */}
   <body data-cn-rail-scope>
+    <AuthorizedDocument />
     <CnAppChrome>
       <AdminBar>
         <slot name="app-bar" />

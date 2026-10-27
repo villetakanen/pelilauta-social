@@ -1,15 +1,14 @@
 import type { APIRoute } from 'astro';
 import { checkSession } from 'src/utils/server/auth/verifySession';
-import { serverAuth } from '../../../firebase/server';
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
+  locals.authenticationDependent = true;
   const { token } = await request.json();
 
   try {
-    // Verify the ID token while checking if the token is revoked by passing true.
+    const { serverAuth } = await import('../../../firebase/server');
     await serverAuth.verifyIdToken(token, true);
 
-    // Set session cookie
     const sessionCookie = await serverAuth.createSessionCookie(token, {
       expiresIn: 60 * 60 * 24 * 5 * 1000,
     });
@@ -44,7 +43,8 @@ export const GET: APIRoute = async (context) => {
   return new Response(null, { status, headers: noStore });
 };
 
-export const DELETE: APIRoute = async ({ cookies }) => {
+export const DELETE: APIRoute = async ({ cookies, locals }) => {
+  locals.authenticationDependent = true;
   cookies.delete('session', { path: '/' });
   return new Response('OK', { status: 200 });
 };

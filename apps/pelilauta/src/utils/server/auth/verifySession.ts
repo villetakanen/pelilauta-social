@@ -1,15 +1,14 @@
 import type { APIContext } from 'astro';
 import type { DecodedIdToken } from 'firebase-admin/auth';
 import { logDebug } from 'src/utils/logHelpers';
-import { serverAuth } from '../../../firebase/server';
 
 export type SessionVerification =
   | { status: 'verified'; token: DecodedIdToken }
   | { status: 'rejected' | 'unavailable' | 'failed' };
 
-// Credential failures raised by verifySessionCookie(cookie, true) in
-// firebase-admin (utils/error.js, auth/token-verifier.js, auth/base-auth.js).
-// argument-error covers malformed tokens, bad signatures, and unknown key ids.
+// `verifySessionCookie(cookie, true)` in `firebase-admin` (`utils/error.js`,
+// `auth/token-verifier.js`, `auth/base-auth.js`) raises these credential failures.
+// The `argument-error` code covers malformed tokens, bad signatures, and unknown key IDs.
 const REJECTED_CODES = new Set([
   'auth/session-cookie-expired',
   'auth/session-cookie-revoked',
@@ -18,8 +17,8 @@ const REJECTED_CODES = new Set([
   'auth/user-not-found',
 ]);
 
-// Transport failures of the revocation lookup (utils/api-request.js) and of
-// the public key fetch (Node socket error codes).
+// The revocation lookup (`utils/api-request.js`) and the public key fetch
+// (Node socket error codes) raise these transport failures.
 const UNAVAILABLE_CODES = new Set([
   'app/network-error',
   'app/network-timeout',
@@ -32,8 +31,8 @@ const UNAVAILABLE_CODES = new Set([
   'EPIPE',
 ]);
 
-// A failed public key fetch surfaces as auth/argument-error whose message
-// keeps the fetcher's text (utils/jwt.js, auth/token-verifier.js).
+// A failed public key fetch produces an `auth/argument-error` error whose message
+// retains the text from the fetcher (`utils/jwt.js`, `auth/token-verifier.js`).
 const KEY_FETCH_MESSAGE =
   /^(Error fetching public keys|Error while making request)/;
 
@@ -54,24 +53,24 @@ function classify(error: unknown): 'rejected' | 'unavailable' | 'failed' {
   return REJECTED_CODES.has(code) ? 'rejected' : 'failed';
 }
 
-/**
- * Verifies the session cookie with revocation checking and classifies a
- * failure as rejected credentials, unavailable verification, or unclassified.
- */
-export async function checkSession(
-  astro: APIContext,
+export async function verifySessionCookie(
+  cookie: string | undefined,
 ): Promise<SessionVerification> {
-  const cookie = astro.cookies.get('session')?.value;
   if (!cookie) {
     return { status: 'rejected' };
   }
   try {
+    const { serverAuth } = await import('../../../firebase/server');
     const token = await serverAuth.verifySessionCookie(cookie, true);
     logDebug('auth', 'verifySession', 'Session cookie verified successfully');
     return { status: 'verified', token };
   } catch (error) {
     return { status: classify(error) };
   }
+}
+
+export function checkSession(astro: APIContext): Promise<SessionVerification> {
+  return astro.locals.resolveSession();
 }
 
 export async function verifySession(astro: APIContext) {

@@ -1,6 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-// Credentials live at the repository root, gitignored. See e2e/README.md.
-import { existingUser } from '../../../credentials.ts';
+import { restoreMemberSession as signIn } from './helpers/memberSession';
 
 /**
  * Scenario "Terminate a live subscription" in
@@ -39,19 +38,11 @@ function trackReplyListens(page: Page) {
   return seen;
 }
 
-async function signIn(page: Page) {
-  await page.goto(`${BASE_URL}/login`);
-  const emailField = page.locator('#password-email');
-  await emailField.waitFor({ state: 'visible' });
-  await emailField.fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
-  await page.getByRole('button', { name: 'Login' }).click();
-  await page.waitForURL(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
-}
-
 test('an anonymous reader opens no reply subscription', async ({ page }) => {
   const listens = trackReplyListens(page);
-  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`);
+  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`, {
+    waitUntil: 'domcontentloaded',
+  });
   // Allow the session to resolve to anonymous before judging.
   await page.waitForTimeout(3000);
   expect(listens).toHaveLength(0);
@@ -61,7 +52,9 @@ test('a reply subscription terminates on sign-out', async ({ page }) => {
   await signIn(page);
 
   const listens = trackReplyListens(page);
-  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`);
+  await page.goto(`${BASE_URL}/threads/${THREAD_KEY}`, {
+    waitUntil: 'domcontentloaded',
+  });
   await expect.poll(() => listens.length).toBeGreaterThan(0);
 
   // Sign out in place, through the application's own session store, so the

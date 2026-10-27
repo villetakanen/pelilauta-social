@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "sync:proprietary": "node scripts/sync-proprietary-assets.mjs",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/netlify": "^8.2.0",
+    "@astrojs/netlify": "^8.2.10",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/svelte": "^9.0.1",
     "@atproto/api": "^0.15.14",
@@ -33,11 +33,11 @@
     "@sentry/browser": "^10.8.0",
     "@vercel/analytics": "^1.5.0",
     "algoliasearch": "^5.37.0",
-    "astro": "^7.2.0",
+    "astro": "^7.2.8",
     "diff": "^8.0.2",
     "file-saver": "^2.0.5",
     "firebase": "^11.9.0",
-    "firebase-admin": "^13.3.0",
+    "firebase-admin": "^14.5.0",
     "front-matter": "^4.0.2",
     "jszip": "^3.10.1",
     "marked": "^15.0.11",

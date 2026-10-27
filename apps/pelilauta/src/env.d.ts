@@ -1,12 +1,22 @@
 /// <reference path="../.astro/types.d.ts" />
 
+declare namespace App {
+  interface Locals {
+    resolveSession: () => Promise<
+      import('./utils/server/auth/verifySession').SessionVerification
+    >;
+    authenticationDependent?: boolean;
+    protectedDocument?: boolean;
+    protectedRecovery?: {
+      status: 401 | 500 | 503;
+      destination: string;
+    };
+  }
+}
+
 interface ImportMetaEnv {
-  // Netlify cache purging configuration
   readonly NETLIFY_SITE_ID: string;
   readonly NETLIFY_PURGE_TOKEN: string;
-
-  // Add other environment variables as needed
-  // readonly PUBLIC_EXAMPLE_VAR: string;
 }
 
 interface ImportMeta {

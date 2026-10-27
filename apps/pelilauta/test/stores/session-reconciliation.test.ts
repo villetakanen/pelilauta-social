@@ -375,6 +375,26 @@ describe('verification on each page load', () => {
     expect(calls('GET')).toHaveLength(0);
   });
 
+  test('the same identity is unconfirmed while a new check and repair are pending', async () => {
+    fetchMock.mockResolvedValueOnce(matching());
+    await h.onChange?.(user);
+    expect(isActive.get()).toBe(true);
+    const get = deferred<Response>();
+    const post = deferred<Response>();
+    fetchMock
+      .mockReturnValueOnce(get.promise)
+      .mockReturnValueOnce(post.promise);
+    const verifying = h.onChange?.(user);
+    await vi.waitFor(() => expect(calls('GET')).toHaveLength(2));
+    expect(isActive.get()).toBe(false);
+    get.resolve(status(401));
+    await vi.waitFor(() => expect(calls('POST')).toHaveLength(1));
+    expect(isActive.get()).toBe(false);
+    post.resolve(status(200));
+    await verifying;
+    expect(isActive.get()).toBe(true);
+  });
+
   test('the previous UID does not present as active while a replacement identity is verified', async () => {
     fetchMock.mockResolvedValueOnce(matching());
     await h.onChange?.(user);

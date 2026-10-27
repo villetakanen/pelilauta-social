@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test';
-// Credentials live at the repository root, gitignored, never in the app. See
-// e2e/README.md.
-import { existingUser } from '../../../credentials.ts';
+import { restoreMemberSession } from './helpers/memberSession';
 
 /**
  * Regression for the fix in
@@ -38,17 +36,7 @@ test('onboarding invitation stays hidden after a view-transition return to the f
   const liveConfig = await configResponse.json();
   expect(liveConfig.projectId).toBe('skaldbase-test');
 
-  // Sign in through the real login form.
-  await page.goto(`${BASE_URL}/login`);
-  const emailField = page.locator('#password-email');
-  await emailField.waitFor({ state: 'visible' });
-  await emailField.fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
-  await page.getByRole('button', { name: 'Login' }).click();
-
-  // The password login flow completes with a full navigation (authUtils.ts
-  // calls `window.location.assign`), landing back on the front page.
-  await page.waitForURL(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+  await restoreMemberSession(page);
 
   const callout = page.locator('.onboarding-callout');
   await expect(callout).toBeAttached();

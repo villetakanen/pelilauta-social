@@ -158,6 +158,7 @@ try {
       '--input-type=module',
       '--eval',
       `
+      await import(${JSON.stringify(pathToFileURL(join(runtimeRoot, 'ssr.mjs')).href)});
       const module = await import(${JSON.stringify(isolatedMarkdown.href)});
       const render = Object.values(module).find(value => value.name === 'renderMarkdown');
       if (!render) throw new Error('Built Markdown renderer is missing');
@@ -171,7 +172,7 @@ try {
   );
   if (runtimeCheck.error || runtimeCheck.status !== 0) {
     throw new Error(
-      `Netlify SSR Markdown failed without require(ESM):\n${runtimeCheck.stderr || runtimeCheck.error}`,
+      `Netlify SSR runtime failed without require(ESM):\n${runtimeCheck.stderr || runtimeCheck.error}`,
     );
   }
 } finally {

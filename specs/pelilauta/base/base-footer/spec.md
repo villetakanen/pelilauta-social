@@ -57,6 +57,9 @@ when activity data exists. The documentation and RSS links are unconditionally p
 
 The `app-footer-credits` slot forwards its content to Block 3 beneath the version link.
 
+Block 3 displays a linked Simple Analytics badge below the version link.
+The badge requests last month’s session count and supports light and dark themes.
+
 ## Contract
 
 ### Definition of Done

@@ -13,6 +13,8 @@ in 21.2.0 if capacity permits, or defer it to 21.4.0 if critical work takes prec
 
 ## First task: authorization spike
 
+[Task #214](https://github.com/villetakanen/pelilauta-social/issues/214) carries the spike.
+
 Establish a separate Netlify development project that reproduces the local app setup
 against `skaldbase-test`. Use a generated, obscure `netlify.app` hostname and authorize
 that hostname in Firebase Auth for the test project. The operator approved this

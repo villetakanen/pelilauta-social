@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs';
-import { expect, type Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { cert, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 // Credentials live at the repository root, gitignored. See e2e/README.md.
 import { existingUser } from '../../../credentials.ts';
+import { restoreMemberSession as signIn } from './helpers/memberSession';
 
 /**
  * A live reply inserted between two others shifts the replies after it. Each
@@ -19,16 +20,6 @@ const SECOND_AUTHOR_UID = 'e2e-second-author';
 const SECOND_AUTHOR_NICK = 'E2E Second Author';
 const MEMBER_NICK = 'E2E Regression Member';
 const INSERTED_KEY = 'e2e-live-inserted-reply';
-
-async function signIn(page: Page) {
-  await page.goto(`${BASE_URL}/login`);
-  const emailField = page.locator('#password-email');
-  await emailField.waitFor({ state: 'visible' });
-  await emailField.fill(existingUser.email);
-  await page.locator('#password-password').fill(existingUser.password);
-  await page.getByRole('button', { name: 'Login' }).click();
-  await page.waitForURL(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
-}
 
 // Writes go to skaldbase-test only; the service account is checked before use.
 const serviceAccount = JSON.parse(
