@@ -1,5 +1,13 @@
 import { spawnSync } from 'node:child_process';
-import { cp, mkdtemp, readdir, readFile, rm, stat } from 'node:fs/promises';
+import {
+  cp,
+  mkdtemp,
+  readdir,
+  readFile,
+  rm,
+  stat,
+  writeFile,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -93,13 +101,17 @@ function stripComments(text) {
 }
 
 const required = new Set();
+const requiredImports = new Set();
 const builtModules = await collectMjs(buildDir);
 for (const file of builtModules) {
   const text = stripComments(await readFile(file, 'utf8'));
   for (const pattern of [FROM_IMPORT, DYNAMIC_IMPORT]) {
     for (const match of text.matchAll(pattern)) {
       const name = packageNameOf(match[1]);
-      if (name) required.add(name);
+      if (name) {
+        required.add(name);
+        requiredImports.add(match[1]);
+      }
     }
   }
 }
@@ -150,6 +162,18 @@ try {
   const isolatedMarkdown = pathToFileURL(
     join(runtimeRoot, relative(functionDir, fileURLToPath(markdownModule))),
   );
+  // Resolve from the packaged chunks, including their nested node_modules, without initializing the app.
+  const isolatedDependencies = new URL(
+    './runtime-dependencies-check.mjs',
+    isolatedMarkdown,
+  );
+  await writeFile(
+    isolatedDependencies,
+    [...requiredImports]
+      .sort()
+      .map((specifier) => `await import(${JSON.stringify(specifier)});`)
+      .join('\n'),
+  );
   // The deployed runtime disables require(ESM), which local Node enables by default.
   const runtimeCheck = spawnSync(
     process.execPath,
@@ -159,6 +183,7 @@ try {
       '--eval',
       `
       await import(${JSON.stringify(pathToFileURL(join(runtimeRoot, 'ssr.mjs')).href)});
+      await import(${JSON.stringify(isolatedDependencies.href)});
       const module = await import(${JSON.stringify(isolatedMarkdown.href)});
       const render = Object.values(module).find(value => value.name === 'renderMarkdown');
       if (!render) throw new Error('Built Markdown renderer is missing');
@@ -180,5 +205,5 @@ try {
 }
 
 console.log(
-  `OK: ${entry.pathname} (${required.size} imports checked, all resolvable)`,
+  `OK: ${entry.pathname} (${required.size} dependencies resolved, ${requiredImports.size} external imports loaded without require(ESM))`,
 );
