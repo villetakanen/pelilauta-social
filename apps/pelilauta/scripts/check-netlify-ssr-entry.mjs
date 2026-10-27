@@ -138,7 +138,8 @@ if (missing.length > 0) {
   );
 }
 
-const markdownModule = (await collectMjs(functionRoot)).find((file) =>
+const functionModules = await collectMjs(functionRoot);
+const markdownModule = functionModules.find((file) =>
   basename(file.pathname).startsWith('renderMarkdown_'),
 );
 if (!markdownModule) throw new Error('Netlify SSR Markdown chunk is missing');
@@ -150,6 +151,12 @@ try {
   const isolatedMarkdown = pathToFileURL(
     join(runtimeRoot, relative(functionDir, fileURLToPath(markdownModule))),
   );
+  const isolatedModules = functionModules.map(
+    (file) =>
+      pathToFileURL(
+        join(runtimeRoot, relative(functionDir, fileURLToPath(file))),
+      ).href,
+  );
   // The deployed runtime disables require(ESM), which local Node enables by default.
   const runtimeCheck = spawnSync(
     process.execPath,
@@ -159,6 +166,10 @@ try {
       '--eval',
       `
       await import(${JSON.stringify(pathToFileURL(join(runtimeRoot, 'ssr.mjs')).href)});
+      // The entry loads routes lazily; importing it alone misses their dependency failures.
+      for (const url of ${JSON.stringify(isolatedModules)}) {
+        await import(url);
+      }
       const module = await import(${JSON.stringify(isolatedMarkdown.href)});
       const render = Object.values(module).find(value => value.name === 'renderMarkdown');
       if (!render) throw new Error('Built Markdown renderer is missing');
@@ -180,5 +191,5 @@ try {
 }
 
 console.log(
-  `OK: ${entry.pathname} (${required.size} imports checked, all resolvable)`,
+  `OK: ${entry.pathname} (${required.size} dependencies resolved, ${functionModules.length} function modules imported without require(ESM))`,
 );
