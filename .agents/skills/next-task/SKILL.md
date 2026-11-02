@@ -23,7 +23,12 @@ Use lower effort to distinguish comparable benefits; identify when a small task
 would defer a more consequential need.
 
 For the selected problem, find the smallest increment with a usable outcome.
-Include the adoption, documentation, and verification needed for that outcome.
+Include the adoption and documentation needed for that outcome.
+Identify applicable spec requirements and `delivery.yaml` gates as completion
+checks, not additional issue deliverables. Apply the software-scope boundary in
+[epic-planning](../epic-planning/SKILL.md#rules) when assessing existing issues
+and proposing work; an issue's verification checklist does not establish an
+unmet software need.
 Follow [AGENTS.md](../../../AGENTS.md) for spec readiness and approval boundaries.
 If a decision blocks valuable work, propose the work needed to settle it.
 
