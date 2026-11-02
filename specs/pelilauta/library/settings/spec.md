@@ -8,127 +8,80 @@ status: live
 
 ### Context
 
-A logged-in member manages the account, profile, and session at `/settings`.
+A member needs to update public identity and control browser sign-in and
+continuing assistant access.
 
 ### Architecture
 
-`apps/pelilauta/src/pages/settings.astro` is a page of the library. `../spec.md` governs
-the layout, session guard, and address.
+[Library](../spec.md) governs the route, layout, and session guard.
 [Protected-document recovery](../../session/protected-recovery.md) governs rejected
-document authentication.
-`components/svelte/settings/SettingsApp.svelte` renders the page sections as a single island.
+authentication. `apps/pelilauta/src/pages/settings.astro` serves the page.
 
-| Section | Purpose | Governed by |
+| Section | Purpose | Governing capability |
 | :--- | :--- | :--- |
-| Profile | the profile as other members see it | (implicit) |
-| Profile tool | editing the avatar, bio, and links | (implicit) |
-| Actions | theme selection and signing out | `actions.md` |
-| Sign-in identity | data the sign-in provider passed to the service | (implicit) |
-| Remove account | deleting the profile and the account | (implicit) |
+| Profile | Displays the public member profile. | (implicit) |
+| Profile tool | Edits avatar, bio, and links. | (implicit) |
+| Actions | Selects themes and signs out. | [Actions](actions.md) |
+| Sign-in identity | Displays sign-in provider data. | (implicit) |
+| MCP connections | Inspects and revokes assistant access. | [Connections](mcp-connections/spec.md) |
+| Remove account | Deletes the profile and account. | (implicit) |
 
 ### Design
 
-The page title occupies a `content-prose` container. The Profile, Profile tool, and
-Actions sections follow in a `content-triad` container, in that order. Sign-in identity
-and Remove account follow the Triad in a `content-prose` container.
-
-The page offers its full content width to the Triad container.
+The title occupies `content-prose`. Profile, Profile tool, and Actions occupy a
+full-width `content-triad`, in that order. Sign-in identity, MCP connections, and
+Remove account follow in `content-prose` in that order.
 [Content Container Layouts](../../../design-system/content-container-layouts/spec.md)
-governs column measures, spacing, centring, and the transition to a single column.
-
-```text
-          +--------------------------------------------+
-          | Page title                                 |
-          +--------------------------------------------+
-
-+--------------------------+ +----------------+ +----------------+
-| Profile                  | | Profile tool   | | Actions        |
-|                          | |                | |                |
-+--------------------------+ +----------------+ +----------------+
-
-          +--------------------------------------------+
-          | Sign-in identity                           |
-          +--------------------------------------------+
-
-          +--------------------------------------------+
-          | Remove account                             |
-          +--------------------------------------------+
-```
-
-Loading and missing-profile messages occupy the Prose column in place of the sections.
-
-### Constraints
-
-`src/schemas/AccountSchema.ts` describes production data. Account writes use only fields
-the schema carries.
+governs the Medium/Small/Small Triad, measures, spacing, and responsive transition.
 
 ## Contract
 
-### Definition of Done
+### Required behavior
 
-- A logged-in member reaches every section from `/settings`.
-- The page preserves section order when the Triad changes between three columns and
-  one column.
+A verified member reaches every section. The page displays data only for the verified
+account and restricts account writes to fields in
+`apps/pelilauta/src/schemas/AccountSchema.ts`.
 
-### Regression Guardrails
-
-- No section writes an account field the shared schema does not carry.
+Until the profile loads, the page hides every section except MCP connections. Loading
+and missing-profile notices appear above MCP connection controls in the
+`content-prose` column. A missing profile offers a repair link to `/onboarding`.
+Connection controls remain usable. Loaded profile sections replace the message.
 
 ### Scenarios
 
 ```gherkin
-Feature: Settings
+Feature: Manage account settings
 
-  Scenario: No session
-    Given a visitor without a server-side session
+  Scenario: Open settings without a verified session
+    Given a visitor has no verified browser session
     When the visitor opens /settings
-    Then the server shows non-sensitive recovery content at /settings
-    And the response carries HTTP 401 and no account sections
+    Then the response carries HTTP 401 and non-sensitive recovery content
+    And no account sections appear
 
-  Scenario: Member data
-    Given a logged-in member
-    And the member's profile has loaded
-    When the member opens /settings
-    Then the page shows that member's profile, account, and sign-in identity
-    And the page shows no other member's data
-
-  Scenario: Sections in a wide container
-    Given a logged-in member whose profile has loaded
-    And the settings content area accommodates the Triad row
-    When the member opens /settings
-    Then the page title appears in a Prose column
-    And Profile, Profile tool, and Actions appear side by side in the Triad
-    And Profile occupies the Medium column
-    And Profile tool and Actions occupy the Small columns in that order
-    And Sign-in identity and Remove account stack in a Prose column below the Triad
-
-  Scenario: Sections in a narrow container
-    Given a logged-in member whose profile has loaded
-    And the settings content area cannot accommodate the Triad row
-    When the member opens /settings
-    Then the sections stack in this order:
+  Scenario Outline: Preserve section order across layouts
+    Given a verified member's profile has loaded
+    When the member opens settings in a <layout> container
+    Then sections appear in this order
       | Section          |
       | Profile          |
       | Profile tool     |
       | Actions          |
       | Sign-in identity |
+      | MCP connections  |
       | Remove account   |
-    And the first three sections fill the width offered to the Triad
-    And the remaining sections retain the Prose layout
+    And the sections contain no data from other accounts
 
-  Scenario: Profile loading
-    Given a logged-in member whose profile has not loaded
-    And the service has not reported the profile missing
-    When the member opens /settings
-    Then a loading indicator occupies the Prose column below the page title
-    And the settings sections do not render
+    Examples:
+      | layout |
+      | wide   |
+      | narrow |
+
+  Scenario: Load a missing profile without blocking connection control
+    Given a verified member's profile is missing
+    When the member opens settings
+    Then a missing-profile message links to `/onboarding`
+    And MCP connection controls remain available below that message
+    And all other sections remain hidden
     When the profile loads
-    Then the settings sections replace the loading indicator
-
-  Scenario: Profile missing
-    Given a logged-in member whose profile is missing
-    When the member opens /settings
-    Then a missing-profile message occupies the Prose column below the page title
-    And the message offers a repair link to /onboarding
-    And the settings sections do not render
+    Then all sections appear in the prescribed order
 ```
