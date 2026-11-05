@@ -22,11 +22,18 @@ carries the process; `docs/WRITING.md` carries the sentences.
    what must not regress, the boundaries, and the material unknowns.
 3. Create or edit the issue with `gh issue` and label it `epic`. Name the
    outcome rather than the release branch.
-4. Re-read for scope creep, hidden commitments, and task-shaped success
-   criteria.
+4. Re-read for scope creep, hidden commitments, task-shaped success criteria,
+   and verification activities presented as software deliverables.
 
 ## Rules
 
+- Issues define changes to Pelilauta software and the outcomes those changes
+  enable. Specs and `delivery.yaml` govern verification. Do not add client test
+  runs, evidence reports, or recorded verification results as issue deliverables.
+- External clients can exercise interoperability without defining product scope.
+  Name a client as a scope constraint only when the operator explicitly requires
+  client-specific software behavior. A verification finding creates work only
+  when it establishes a missing Pelilauta capability or defect within scope.
 - A candidate that needs a design-system capability names the spec the
   capability requires.
 - An unknown about the Firebase contract goes to Open

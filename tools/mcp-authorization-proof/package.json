@@ -7,7 +7,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test --test-timeout=10000 proof.test.mjs firestore.safety.test.mjs",
+    "test": "node --test --test-timeout=10000 proof.test.mjs firestore.safety.test.mjs spike-fixtures.test.mjs",
     "test:firestore": "node --test --test-timeout=120000 firestore.integration.test.mjs"
   },
   "dependencies": {

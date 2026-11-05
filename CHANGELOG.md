@@ -2,6 +2,11 @@
 
 CHANGELOG.md carries Pelilauta releases from 21.0.0-rc.2 onward.
 
+## 21.3.0
+
+- feat(mcp): Explicitly configured test deployments serve a read-only site MCP endpoint at `/mcp`. Members connect and disconnect through browser-session OAuth consent. Production leaves the routes disabled and keeps Astro's origin check. ([#214](https://github.com/villetakanen/pelilauta-social/issues/214))
+- docs(skills): Epic planning and task selection keep verification activities out of issue deliverables.
+
 ## 21.2.1
 
 - fix(runtime): Use Firebase Admin 13.10 to avoid the CommonJS-to-ESM loading failure in Netlify functions that disable require(ESM).

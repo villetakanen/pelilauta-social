@@ -1,10 +1,19 @@
 import { defineMiddleware } from 'astro:middleware';
+import { spikeOriginCheck } from './site/server/mcp/origin-check';
 import {
   type SessionVerification,
   verifySessionCookie,
 } from './utils/server/auth/verifySession';
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  const originDenied = spikeOriginCheck(
+    context.request,
+    context.url,
+    context.isPrerendered,
+    import.meta.env.MCP_SPIKE_ORIGIN_EXCEPTION,
+  );
+  if (originDenied) return originDenied;
+
   const cookie = context.cookies.get('session')?.value;
   let verification: Promise<SessionVerification> | undefined;
   context.locals.resolveSession = () => {

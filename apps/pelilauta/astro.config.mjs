@@ -5,6 +5,12 @@ import { defineConfig } from 'astro/config';
 import { visualizer } from 'rollup-plugin-visualizer';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { optionalProprietary } from '../../packages/design-system/vite/optional-proprietary.mjs';
+import { spikeOrigin } from './src/site/server/mcp/environment.mjs';
+
+const originException = spikeOrigin(
+  process.env,
+  process.env.NODE_ENV !== 'production',
+);
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,7 +23,14 @@ export default defineConfig({
 
   output: 'server',
 
+  // Astro has no route-level origin-check override; the test build uses middleware.
+  security: { checkOrigin: !originException },
+
   vite: {
+    define: {
+      'import.meta.env.MCP_SPIKE_ORIGIN_EXCEPTION':
+        JSON.stringify(originException),
+    },
     resolve: {
       alias: {
         '@design-system': fileURLToPath(
