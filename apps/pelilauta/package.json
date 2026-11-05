@@ -28,6 +28,8 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/svelte": "^9.0.1",
     "@atproto/api": "^0.15.14",
+    "@jmondi/oauth2-server": "5.0.0",
+    "@modelcontextprotocol/server": "2.3.1",
     "@nanostores/persistent": "^1.3.5",
     "@netlify/blobs": "^10.0.11",
     "@sentry/browser": "^10.8.0",
